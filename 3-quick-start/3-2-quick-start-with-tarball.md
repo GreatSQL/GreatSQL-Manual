@@ -108,6 +108,10 @@ $ systemctl daemon-reload
 
 编辑GreatSQL全局配置文件 `/etc/my.cnf`，加入下面内容：
 ```
+$ vim /etc/my.cnf
+[mysql]
+socket=/var/lib/mysql/mysql.sock
+
 [mysqld]
 user=mysql
 datadir=/var/lib/mysql
@@ -123,6 +127,24 @@ pid-file=/var/run/mysqld/mysqld.pid
 $ /sbin/groupadd mysql
 $ /sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
 ```
+
+
+
+创建相关文件夹，并修改用户组：
+
+```
+mkdir /var/run/mysqld/ /var/lib/mysql-files/ /var/lib/mysql/ 
+
+chown mysql:mysql /var/run/mysqld/ /var/lib/mysql-files/ /var/lib/mysql/ /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal/
+```
+
+
+
+编辑`mysqld_pre_systemd`脚本文件，修改程序目录：
+
+将文件中的 `/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/`改为实际安装目录。
+
+
 
 ## 启动GreatSQL
 
@@ -167,9 +189,17 @@ $ ls /var/lib/mysql
 
 ## 连接登入GreatSQL
 
-采用minimal二进制包安装GreatSQL后，MySQL管理员root的初始化密码是空的，可以直接登入。
+采用minimal二进制包安装GreatSQL后，通过log-error日志查看初始化密码，即可登入。
+
 ```
-$ mysql -uroot
+$ cat /var/log/mysqld.log|grep password
+[Note] [MY-010454] [Server] A temporary password is generated for root@localhost: NrkNcJya<9f6
+```
+
+
+
+```
+$ /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal/bin/mysql -uroot
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
 Server version: 8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
@@ -216,8 +246,17 @@ mysql> show databases;  #<--查看数据库列表
 +--------------------+
 4 rows in set (0.01 sec)
 
-mysql>
 ```
+
+
+
+登录后及时修改密码
+
+```
+ ALTER USER 'root'@'localhost' IDENTIFIED BY 'PASSWORD'
+```
+
+
 
 ## 关闭/重启GreatSQL
 
