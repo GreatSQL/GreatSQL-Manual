@@ -35,11 +35,12 @@ $ tar xf GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz
 ### 3.1 修改 /etc/my.cnf 配置文件
 
 [参考这份文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
+
 ```
-#my.cnf
+$ vim my.cnf
 [client]
 user = root
-datadir	= /data/GreatSQL/mysql.sock
+socket	= /data/GreatSQL/mysql.sock
 
 [mysqld]
 user	= mysql
@@ -50,7 +51,7 @@ port	= 3306
 server_id = 3306
 basedir = /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64
 datadir	= /data/GreatSQL
-socket	= mysql.sock
+socket	= /data/GreatSQL/mysql.sock
 pid-file = mysql.pid
 character-set-server = UTF8MB4
 skip_name_resolve = 1
@@ -143,13 +144,14 @@ loose-group_replication_autorejoin_tries = 288
 report_host = "172.16.16.10"
 
 #innodb settings
-innodb_buffer_pool_size = 64G
+innodb_buffer_pool_size = 2G
 innodb_buffer_pool_instances = 8
 innodb_data_file_path = ibdata1:12M:autoextend
 innodb_flush_log_at_trx_commit = 1
 innodb_log_buffer_size = 32M
 innodb_log_file_size = 2G
 innodb_log_files_in_group = 3
+innodb_redo_log_capacity = 6G
 innodb_max_undo_log_size = 4G
 # 根据您的服务器IOPS能力适当调整
 # 一般配普通SSD盘的话，可以调整到 10000 - 20000
@@ -193,14 +195,10 @@ parallel_default_dop = 8
 parallel_max_threads = 96
 temptable_max_ram = 8G
 
-#parallel load data
-greatedb_parallel_load = 1
-
 #pfs settings
 performance_schema = 1
 #performance_schema_instrument = '%memory%=on'
 performance_schema_instrument = '%lock%=on'
-
 ```
 
 ### 3.2 新建mysql用户

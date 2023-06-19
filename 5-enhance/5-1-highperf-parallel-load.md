@@ -65,6 +65,7 @@ LOAD /*parallel load worker(chunk_no:xxx)*/ DATA INFILE 'session_id:worker_no' I
 
 ## 7. 并行导入提升测试
 
+受限于master session的文件分割速度，并行导入速度可能区别较大。经过测试，在磁盘IO和CPU核心资源都充足的前提下启动32个worker，最大的加速比大概为20倍。
 
 
 **问题反馈**
@@ -78,4 +79,3 @@ LOAD /*parallel load worker(chunk_no:xxx)*/ DATA INFILE 'session_id:worker_no' I
 扫码关注微信公众号
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/141935_2ea2c196_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")
-受限于master session的文件分割速度，并行导入速度可能区别较大。经过测试，在磁盘IO和CPU核心资源都充足的前提下启动32个worker，最大的加速比大概为20倍。
