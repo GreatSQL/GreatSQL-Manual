@@ -19,13 +19,14 @@ GreatSQL具备**高性能**、**高可靠**、**高易用性**、**高安全**�
  - ## [1.7 社区治理](./1-docs-intro/1-8-community-toc.md)
  - ## [1.8 致谢](./1-docs-intro/1-7-thanks.md)
 
-# [2. 关于GreatSQL](./2-about-greatsql/2-about-greatsql.md)
- - ## [2.1 GreatSQL简介](./2-about-greatsql/2-1-greatsql-brief-intro.md)
- - ## [2.2 产品定位](./2-about-greatsql/2-2-greatsql-product-positioning.md)
- - ## [2.3 系统架构](./2-about-greatsql/2-3-greatsql-arch.md)
- - ## [2.4 使用限制](./2-about-greatsql/2-4-greatsql-limitations.md)
- - ## [2.5 术语表](./2-about-greatsql/2-5-greatsql-glossary.md)
- - ## [2.6 保留字、关键字](./2-about-greatsql/2-6-greatsql-keywords.md)
+# [2. GreatSQL系统架构](./2-about-greatsql/0-about-greatsql.md)
+ - ## [2.1 GreatSQL简介](./2-about-greatsql/1-greatsql-brief-intro.md)
+ - ## [2.2 产品定位](./2-about-greatsql/2-greatsql-product-positioning.md)
+ - ## [2.3 系统架构](./2-about-greatsql/3-greatsql-arch.md)
+ - ## [2.4 GreatSQL日志](./2-about-greatsql/4-greatsql-log.md)
+ - ## [2.5 使用限制](./2-about-greatsql/5-greatsql-limitations.md)
+ - ## [2.6 术语表](./2-about-greatsql/6-greatsql-glossary.md)
+ - ## [2.7 保留字、关键字](./2-about-greatsql/7-greatsql-keywords.md)
 
 # [3. 快速上手](./3-quick-start/3-quick-start.md)
  - ## [3.1 RPM安装](./3-quick-start/3-1-quick-start-with-rpm.md)
@@ -61,7 +62,7 @@ GreatSQL具备**高性能**、**高可靠**、**高易用性**、**高安全**�
  - ## [7.1 GreatSQL 5.7升级到8.0](./7-migrate-and-upgrade/7-1-upgrade-to-greatsql8.md)
  - ## [7.2 从MySQL迁移到GreatSQL](./7-migrate-and-upgrade/7-2-migrate-from-mysql-togreatsql.md)
  - ## [7.3 从Percona Server迁移到GreatSQL](./7-migrate-and-upgrade/7-3-migrate-from-percona-to-greatsql.md)
- 
+
 # [8. 高可用架构](./8-ha/8-ha.md)
  - ## [8.1 单机多实例高可用](./8-ha/8-1-ha-single-machine-multi-instance.md)
  - ## [8.2 单VLAN高可用](./8-ha/8-5-ha-single-vlan.md)
@@ -73,7 +74,7 @@ GreatSQL具备**高性能**、**高可靠**、**高易用性**、**高安全**�
  - ## [9.1 硬件、系统优化](./9-optimze/9-1-hardware-and-os-optimze.md)
  - ## [9.2 GreatSQL优化](./9-optimze/9-2-greatsql-optimze.md)
  - ## [9.3 性能测试](./9-optimze/9-3-performance-benchmark.md)
- 
+
 # [常见问题/FAQ](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/GreatSQL-FAQ.md)
 
 # 问题反馈
