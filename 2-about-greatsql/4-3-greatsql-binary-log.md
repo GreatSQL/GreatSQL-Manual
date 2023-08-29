@@ -53,18 +53,18 @@ greatsql> show variables like '%log_bin%';
 ```bash
 [mysqld]
 #启用二进制日志
-log-bin=atguigu-bin
+log-bin=greatsql-bin
 binlog_expire_logs_seconds= 600
 max_binlog_size=100M
 ```
 
 **提示:**
 
-1. **log-bin=mysql-bin**
+1. **log-bin=greatsql-bin**
 
-打开日志(主机需要打开)，这个mysql-bin也可以自定义，这里也可以加上路径
+打开日志(主机需要打开)，这个greatsql-bin也可以自定义，这里也可以加上路径
 
-如:`/home/www/mysql_bin_log/mysql-bin`
+如:`/home/www/mysql_bin_log/greatsql-bin`
 
 2. **binlog_expire_logs_seconds**
 
@@ -80,7 +80,7 @@ max_binlog_size=100M
 
 ```bash
 [mysqld]
-log-bin="/var/lib/mysql/binlog/atguigu-bin"
+log-bin="/var/lib/mysql/binlog/greatsql-bin"
 ```
 
 注意：新建的文件夹需要使用mysql用户，使用下面的命令即可。
@@ -194,17 +194,17 @@ greatsql> show binlog events [IN 'log_name'] [FROM pos] [LIMIT [offset,] row_cou
 #a、查询第一个最早的binlog日志:
 greatsql> show binlog events\G ;
 
-#b、指定查询mysql-bin.088802这个文件
-greatsql> show binlog events in 'atguigu-bin. 008002'\G;
+#b、指定查询greatsql-bin.088802这个文件
+greatsql> show binlog events in 'greatsql-bin.088802'\G;
 
-#c、指定查询mysql-bin. 080802这个文件，从pos点:391开始查起:
-greatsql> show binlog events in 'atguigu-bin.008802' from 391\G;
+#c、指定查询greatsql-bin.080802这个文件，从pos点:391开始查起:
+greatsql> show binlog events in 'greatsql-bin.080802' from 391\G;
 
-#d、指定查询mysql-bin.000802这个文件，从pos点:391开始查起，查询5条（即5条语句)
-greatsql> show binlog events in 'atguigu-bin.000882' from 391 limit 5\G
+#d、指定查询greatsql-bin.000802这个文件，从pos点:391开始查起，查询5条（即5条语句)
+greatsql> show binlog events in 'greatsql-bin.000802' from 391 limit 5\G
 
-#e、指定查询 mysql-bin.880002这个文件，从pos点:391开始查起，偏移2行〈即中间跳过2个）查询5条（即5条语句)。
-greatsql> show binlog events in 'atguigu-bin.088882' from 391 limit 2,5\G;
+#e、指定查询greatsql-bin.880002这个文件，从pos点:391开始查起，偏移2行〈即中间跳过2个）查询5条（即5条语句)。
+greatsql> show binlog events in 'greatsql-bin.880002' from 391 limit 2,5\G;
 ```
 
 binlog行格式查看
@@ -233,16 +233,15 @@ mysqlbinlog恢复数据的语法如下：
 $ mysqlbinlog [option] filename|mysql –uuser -ppass;
 ```
 
-这个命令可以这样理解：使用mysqlbinlog命令来读取filename中的内容，然后使用mysql命令将这些内容恢复到数据库中。
+这个命令可以这样理解：使用mysqlbinlog命令来读取filename中的内容，然后使用GreatSQL命令将这些内容恢复到数据库中。
 
 - filename：是日志文件名。
-
 - option：可选项，比较重要的两对option参数是start-date、stop-date 和 start-position、stop-position。
-
-- - start-date和stop-date：可以指定恢复数据库的起始时间点和结束时间点。
+  - start-date和stop-date：可以指定恢复数据库的起始时间点和结束时间点。
   - start-position和stop-position：可以指定恢复数据的开始位置和结束位置。
 
-注意：使用mysqlbinlog命令进行恢复操作时，必须是编号小的先恢复，例如atguigu-bin.000001必须在atguigu-bin.000002之前恢复。
+
+注意：使用mysqlbinlog命令进行恢复操作时，必须是编号小的先恢复，例如greatsql-bin.000001必须在greatsql-bin.000002之前恢复。
 
 ```sql
 greatsql> flush logs;
@@ -254,7 +253,7 @@ greatsql> show binary logs; # 显示有哪些binLog 文件
 恢复数据
 
 ```bash
-$ mysqlbinlog --no-defaults  --start-position=236  --stop-position=1071 --database=my_db1 /var/lib/mysql/lqhdb-bin.000002 | /usr/bin/mysql -root -p123456 -v my_db1
+$ mysqlbinlog --no-defaults  --start-position=236  --stop-position=1071 --database=my_db1 /var/lib/mysql/greatsql-bin.000002 | /usr/bin/mysql -root -p123456 -v my_db1
 ```
 
 ## 删除二进制日志
@@ -302,7 +301,7 @@ greatsql> SHOW BINARY LOGS;
 (2）执行mysqlbinlog命令查看二进制日志文件binlog.000005的内容
 
 ```sql
-$ mysqlbinlog --no-defaults "/var/lib/mysql/binlog/binlog.000005"
+$ mysqlbinlog --no-defaults "/var/lib/mysql/binlog.000005"
 ```
 
 (3）使用PURGE MASTER LOGS语句删除2023年3月17日前创建的所有日志文件
@@ -355,9 +354,17 @@ write和fsync的时机，可以由参数`sync_binlog`控制，默认是 0 。
 - 而 binlog 是`逻辑日志`，记录内容是语句的原始逻辑，类似于“给 ID=2 这一行的 c 字段加 1”，属于GreatSQL Server 层
 - 虽然它们都属于持久化的保证，但是则重点不同。
   - redo log让InnoDB存储引擎拥有了崩溃恢复能力。
-  - binlog保证了MySQL集群架构的数据一致性。
+  - binlog保证了GreatSQL集群架构的数据一致性。
+
+**问题反馈**
+---
+
+- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
 
 
-## 参考文章
+**联系我们**
+---
 
-- [《MySQL是怎样运行的--从根儿上理解MySQL》—小孩子4919](https://juejin.cn/book/6844733769996304392)
+扫码关注微信公众号
+
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/141935_2ea2c196_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")

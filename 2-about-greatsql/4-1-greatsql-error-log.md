@@ -150,6 +150,15 @@ $ install -omysql -gmysql -m0644 /dev/null /var/log/mysqld.log
 - 从GreatSQL 5.5.7开始，flush-logs只是重新打开日志文件，并不做日志备份和创建的操作。
 - 如果日志文件不存在，GreatSQL 启动或者执行flush-logs时会自动创建新的日志文件。重新创建错误日志，大小为0字节。
 
-## 参考文章
+**问题反馈**
+---
 
-- [《MySQL是怎样运行的--从根儿上理解MySQL》—小孩子4919](https://juejin.cn/book/6844733769996304392)
+- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+
+
+**联系我们**
+---
+
+扫码关注微信公众号
+
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/141935_2ea2c196_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")

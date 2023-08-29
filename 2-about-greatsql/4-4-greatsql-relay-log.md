@@ -91,6 +91,17 @@ greatsql> show variables like '%relay%';
 
 以上只是简单的介绍了每个参数的作用，这些参数具体的设置还是需要根据每个用户的实际系统情况进行设置的；
 
-## 参考文章
 
-- [《MySQL是怎样运行的--从根儿上理解MySQL》—小孩子4919](https://juejin.cn/book/6844733769996304392)
+
+**问题反馈**
+---
+
+- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+
+
+**联系我们**
+---
+
+扫码关注微信公众号
+
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/141935_2ea2c196_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")

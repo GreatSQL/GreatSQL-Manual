@@ -292,12 +292,15 @@ innodb_log_file_size=200M
 
 由于Redo LOG的内容知识过于庞大，由于篇幅限制，本文只做浅析，这边推荐几篇文章（详见参考文章），感兴趣的同学可以继续深入学习研究。
 
-## 参考文章
+**问题反馈**
+---
 
-- [《MySQL是怎样运行的--从根儿上理解MySQL》—小孩子4919](https://juejin.cn/book/6844733769996304392)
+- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
 
-- [MySQL · 引擎特性 · InnoDB redo log漫游](http://mysql.taobao.org/monthly/2015/05/01/)
 
-- [MySQL · 引擎特性 · 庖丁解InnoDB之REDO LOG](http://mysql.taobao.org/monthly/2020/02/01/)
+**联系我们**
+---
 
-- [MySQL · 引擎特性 · Redo Log record编码格式](http://mysql.taobao.org/monthly/2022/01/02/)
+扫码关注微信公众号
+
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/141935_2ea2c196_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")
