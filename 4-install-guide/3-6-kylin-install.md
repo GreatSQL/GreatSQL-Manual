@@ -13,6 +13,32 @@ $ yum clean all && yum makecache
 
 在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
 
+**提醒：**
+
+个别Kylin系统中默认的umask是**0077**，需要修改一下，否则新建的文件、目录权限控制太严格，可能导致启动异常：
+```
+$ umask
+0077
+
+$ touch /tmp/tmpfile
+$ ls -l /tmp/tmpfile
+-rw------- 1 root root 0 Aug 29 16:48 /tmp/tmpfile
+
+$ umask 0022
+$ rm -f /tmp/tmpfile ; touch /tmp/tmpfile
+$ ls -l /tmp/tmpfile
+-rw-r--r-- 1 root root 0 Aug 29 16:49 /tmp/tmpfile
+```
+可以看到tmpfile文件两次不同的权限模式。
+
+修改 `/etc/bashrc` 使之永久生效：
+```
+$ vim /etc/bashrc
+...
+umask 0022
+```
+保存退出。
+
 ### 1.2 选择下载GreatSQL二进制包
 一般而言，麒麟kylin系统环境下，也可以选择相应glibc版本的GreatSQL二进制安装包，基本上都能直接运行起来。
 
