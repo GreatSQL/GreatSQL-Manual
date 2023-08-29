@@ -30,6 +30,12 @@ $ curl -o GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz https://product.great
 $ tar xf GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz
 ```
 
+同时修改设置，将GreatSQL加入 `PATH` 环境变量：
+```
+$ echo 'export PATH=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-aarch64/bin:$PATH' >> ~/.bash_profile
+$ source ~/.bash_profile
+```
+
 **提示**：安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
 `yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5`
 更详细的请参考：[安装准备](/4-install-guide/4-1-install-prepare.md)。
