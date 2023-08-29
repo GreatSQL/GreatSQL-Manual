@@ -13,7 +13,7 @@ CentOS的systemd服务配置脚本存放在 `/usr/lib/systemd/` 目录下，并�
 
 如果是采用RPM方式安装，则会默认利用systemd来管理GreatSQL，服务名是 *mysql*，相应的服务配置文件是 `/lib/systemd/system/mysqld.service`。
 
-另一个服务配置文件 `/lib/systemd/system/mysqld@.service` 是用于管理单机多实例场景的，可以参考这篇文章：[利用systemd管理MySQL单机多实例](https://mp.weixin.qq.com/s/iJjXwd0z1a6isUJtuAAHtQ)。
+另一个服务配置文件 `/lib/systemd/system/mysqld@.service` 是用于管理单机多实例场景的，可以参考这篇文章：[单机多实例](../6-oper-guide/6-multi-instances.md)。
 
 如果是采用二进制包安装GreatSQL，需要手动编辑服务配置文件，例如：
 ```
