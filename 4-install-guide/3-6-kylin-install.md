@@ -379,18 +379,18 @@ Server version: 8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ...
-mysql> \s
+greatsql> \s
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
-mysql>
+greatsql>
 
 ```
 首次登入立刻提醒该密码已过期，需要修改，执行类似下面的命令修改即可：
 
 ```
-mysql> alter user user() identified by 'GreatSQL@2022';  #<--修改密码
+greatsql> alter user user() identified by 'GreatSQL@2022';  #<--修改密码
 Query OK, 0 rows affected (0.02 sec)
 
-mysql> \s
+greatsql> \s
 ...
 mysql  Ver 8.0.32-24 for Linux on x86_64 (GreatSQL, Release 24, Revision 3714067bc8c)
 
