@@ -154,6 +154,15 @@ greatsql> show variables like 'innodb_undo_logs';
 
 `innodb_undo_directory:`Undo日志存储的目录位置 innodb_undo_logs: 回滚的个数 默认128
 
-## 参考文章
+**问题反馈**
+---
 
-- [《MySQL是怎样运行的--从根儿上理解MySQL》—小孩子4919](https://juejin.cn/book/6844733769996304392)
+- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+
+
+**联系我们**
+---
+
+扫码关注微信公众号
+
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/141935_2ea2c196_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")
