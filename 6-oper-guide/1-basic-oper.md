@@ -34,6 +34,8 @@ $ systemctl status greatsql
 $ journalctl -ex
 ```
 
+更多关于利用systemd管理GreatSQL服务的内容请参考：[利用systemd管理GreatSQL](../4-install-guide/3-7-greatsql-with-systemd.md)。
+
 ## 2. 修改参数选项
 
 ### 2.1 SQL命令行修改并立即生效
@@ -432,6 +434,24 @@ Successfully altered `greatsql`.`sbtest1`.
 - [mysql-toolkit-sql](https://github.com/zhishutech/mysqldba/blob/master/mysql-tools/mysql-toolkit-sql.md)
 - [check_mysql.py](https://github.com/zhishutech/mysqldba/blob/master/mysql-tools/check_mysql.py)
 - [MySQL巡检怎么做](https://github.com/zhishutech/mysqldba/blob/master/mysql-tools/MySQL%E5%B7%A1%E6%A3%80%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F.md)
+
+### 3.7 配置MySQL客户端
+推荐采用下面的MySQL客户端配置参数：
+```
+$ vim /etc/my.cnf
+...
+[mysql]
+loose-skip-binary-as-hex
+prompt = "greatsql [\\u@\\h][\\d]>"
+no-auto-rehash
+[mysqld]
+...
+```
+其中，`no-auto-rehash`尤其重要，可以有效提高登入效率。
+
+因为MySQL客户端程序每次登入时，默认都会读取所有数据对象元数据信息，如果当前实例中，数据库对象特别多的话这个过程就会特别慢，甚至有时候还会导致发生MDL锁等待。
+
+更多关于MySQL客户端配置参数请参考：[MySQL客户端的进阶操作](https://mp.weixin.qq.com/s/dM_Kr23h-yXo61uSf8uPNQ)。
 
 **问题反馈**
 ---
