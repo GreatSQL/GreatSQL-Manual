@@ -77,9 +77,10 @@ $ source ~/.bash_profile
 
 ### 2.1 修改my.cnf
 
-建议参考下面这份my.cnf文档，并根据实际情况做些适当调整：
+建议参考下面这份my.cnf模板，并根据实际情况做些适当调整：
 
-- [my.cnf for GreatSQL 8.0.32-24](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24)
+[my.cnf for GreatSQL 8.0.32-24](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24)
+
 ```
 [client]
 socket    = /data/GreatSQL/mysql.sock
