@@ -64,6 +64,12 @@ vs
 ```
 注意到两个字符串列数据用引号"前后包围起来了，并且原数据中的单引号'、双引号"都做了转义（在其前面加上\，因为列之间已用双引号"包围，所以只需要转义双引号"，无需对单引号'做转义）。
 
+另外，由于 `OUTFILE` 是采用SELECT查询方式备份的，因此可以指定只备份部分列，或加上WHERE条件只备份部分数据。例如：
+```
+greatsql> SELECT c1,c2 INTO OUTFILE '/tmp/OUTFILE-t1.txt' FROM t1;
+```
+对表t1只备份其中的 c1,c2 两列数据，不备份 id 列数据，那么在后续的 `LOAD DATA` 导入恢复时就需要做额外处理了。
+
 ## 2. LOAD DATA导入恢复
 可以通过 `LOAD DATA` 将 `OUTFILE` 导出的文件恢复到数据库中。
 
@@ -91,6 +97,28 @@ greatsql> LOAD DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1
 **提醒：** 和`OUTFILE`一样，`LOAD DATA`指定的导入文件必须放在选项 `secure_file_priv` 指向的目录下，否则会报告类似下面的错误：
 ```
 ERROR 1290 (HY000): The MySQL server is running with the --secure-file-priv option so it cannot execute this statement
+```
+
+在上面我们演示了只备份部分列数据的场景，这个备份文件在导入时需要做额外处理，需要指定导入的对象列，例如：
+```
+greatsql> LOAD DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1(c1, c2);
+```
+因为主键列id定义成自增INT列，导入时如果不指定值也会实现自动填充。
+
+还可以在 `LOAD DATA` 导入时对某列进行动态赋值，例如：
+```
+greatsql> LOAD DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1(c1, c2) SET id=rand()*10240;
+```
+那么id列填充的就是随机INT值了，例如下面这样的：
+```
+greatsql> select * from t3;
++------+----+--------------------+
+| id   | c1 | c2                 |
++------+----+--------------------+
+| 1346 | c3 | 0.2928499125808942 |
+| 1965 | c1 | 0.4356319591734856 |
+| 3496 | c2 | 0.1"199'1518'5412  |
++------+----+--------------------+
 ```
 
 ## 3. LOAD DATA并行导入
