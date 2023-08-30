@@ -1,13 +1,13 @@
 # 日常管理
 ---
 
-本文档描述GreatSQL数据库的日常管理操作，主要包括服务管理、参数选项调整等。
+本文描述GreatSQL数据库的日常管理操作，主要包括服务管理、参数选项调整等。
 
 ## 1. 服务管理
 
 无论是RPM、二进制包还是Ansible等何种方式安装GreatSQL，都建议采用systemd来管理GreatSQL服务。在Docker容器环境中，无需利用systemd来管理GreatSQL，直接整个容器启停即可。
 
-如果是RPM包方式安装GreatSQL，则服务名为 `mysqld`，如果采用二进制包和Ansible方式安装，则服务名为 `greatsql`。为了方便，本文档中统一约定为 `greatsql`。
+如果是RPM包方式安装GreatSQL，则服务名为 `mysqld`，如果采用二进制包和Ansible方式安装，则服务名为 `greatsql`。为了方便，本文中统一约定为 `greatsql`。
 
 **启动服务**
 ```

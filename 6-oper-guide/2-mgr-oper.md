@@ -1,7 +1,7 @@
 # MGR管理维护
 ---
 
-本文档描述MGR集群的日常管理维护操作，包括主节点切换，单主&多主模式切换等，文档中的操作以MySQL Shell为主。
+本文描述MGR集群的日常管理维护操作，包括主节点切换，单主&多主模式切换等，文档中的操作以MySQL Shell为主。
 
 现在有个三节点的MGR集群：
 ```
@@ -256,7 +256,7 @@ The instance '172.16.16.13:3306' was successfully rejoined to the cluster.
 
 详情参考这篇文章：[万答#12，MGR整个集群挂掉后，如何才能自动选主，不用手动干预](https://mp.weixin.qq.com/s/07o1poO44zwQIvaJNKEoPA)
 
-本文档中涉及的MGR管理操作均通过MySQL Shell来实施，如果想采用手工方式管理，可参考文档：[MGR管理维护](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/deep-dive-mgr-05.md)。
+本文中涉及的MGR管理操作均通过MySQL Shell来实施，如果想采用手工方式管理，可参考文档：[MGR管理维护](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/deep-dive-mgr-05.md)。
 
 **问题反馈**
 ---

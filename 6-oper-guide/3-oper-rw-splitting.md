@@ -1,7 +1,7 @@
 # 读写分离
 ---
 
-本文档描述如何为MGR集群构建读写分离方案。
+本文描述如何为MGR集群构建读写分离方案。
 
 ## 1. InnoDB Cluster简介
 MySQL InnoDB Cluster（简称MIC）是MySQL推出的整套解决方案，由几个部分组成：

@@ -1,10 +1,10 @@
 # 备份恢复
 ---
 
-本文档介绍GreatSQL数据库的几种不同备份恢复方法，主要包括：
+本文介绍GreatSQL数据库的几种不同备份恢复方法，主要包括：
 
 1. 逻辑备份恢复
- - 1.1 mysqldump逻辑备份恢复
+ - 1.1 [mysqldump逻辑备份恢复](./5-1-mysqldump.md)
  - 1.2 outfile逻辑备份恢复
  - 1.3 MySQL Shell util逻辑备份恢复
  - 1.4 mydumper & myloader逻辑备份恢复
