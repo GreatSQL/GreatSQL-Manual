@@ -156,7 +156,6 @@ loose-parallel_default_dop = 8
 loose-parallel_max_threads = 64
 #并行执行时leader线程和worker线程使用的总内存大小上限，可以设置物理内存的5-10%左右
 loose-parallel_memory_limit = 12G
-[]
 #parallel load data
 loose-gdb_parallel_load_chunk_size = 4M
 
@@ -239,8 +238,7 @@ performance_schema_instrument = '%lock%=on'
 
 ```
 $ /sbin/groupadd mysql
-$ /sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
-/sbin/useradd -g mysql -M mysql -s /sbin/nologin
+$ /sbin/useradd -g mysql -M mysql -s /sbin/nologin
 ```
 
 ### 2.4 新建数据库主目录，并修改权限模式及属主

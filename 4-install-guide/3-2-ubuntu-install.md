@@ -60,7 +60,7 @@ $ tar xf GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz
 [参考这份文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
 ```Plain
-$ vim /etc/my.cnf
+$ vim /etc/mysql/my.cnf
 [client]
 user = root
 socket  = /data/GreatSQL/mysql.sock
