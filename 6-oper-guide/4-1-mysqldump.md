@@ -118,7 +118,7 @@ $ sed -n "100,200p" /backup/GreatSQL/greatsql-20230830.sql | mysql -f -S/data/Gr
 更多关于 `mysqldump` 更详细说明详见文档：[mysqldump](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html)。
 
 
-参考资料：
+**参考资料：**
 
 - [mysqldump](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html)
 - [如何从mysqldump全量备份中抽取部分库表用于恢复](https://imysql.com/2010/06/01/mysql-faq-how-to-extract-data-from-dumpfile.html)

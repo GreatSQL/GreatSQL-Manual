@@ -5,7 +5,7 @@
 
 1. 逻辑备份恢复
  - 1.1 [mysqldump逻辑备份恢复](./5-1-mysqldump.md)
- - 1.2 outfile逻辑备份恢复
+ - 1.2 OUTFILE逻辑备份恢复
  - 1.3 MySQL Shell util逻辑备份恢复
  - 1.4 mydumper & myloader逻辑备份恢复
 2. 物理备份恢复
