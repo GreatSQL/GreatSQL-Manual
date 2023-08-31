@@ -394,13 +394,71 @@ Threads: 2  Questions: 19  Slow queries: 0  Opens: 137  Flush tables: 3  Open ta
 ```
 GreatSQL数据库安装并初始化完毕。
 
-接下来安装MySQL Shell，以及进行MGR初始化等操作和用RPM包方式安装一样，这里就不赘述了。
+## 6. 安装MySQL Shell
 
-参考文档[RPM安装并构建MGR集群](./4-2-install-with-rpm.md#安装mysql-shell)，从“8. 安装MySQL Shell”这节开始及往后内容即可。
+为了支持仲裁节点特性，需要安装GreatSQL提供的MySQL Shell发行包。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-24)，找到 **7. GreateSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
 
+P.S，如果暂时不想使用仲裁节点特性的话，则可以继续使用相同版本的官方MySQL Shell安装包，可以直接用YUM方式安装，此处略过。
+
+本文场景中，选择下面的二进制包：
+
+- greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64.tar.xz
+
+将二进制文件包放在 `/usr/local` 目录下，解压缩：
+
+```
+$ cd /usr/local/
+$ tar xf greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64.tar.xz
+```
+
+修改家目录下的profile文件，加入PATH：
+
+```
+$ vim ~/.bash_profile
+
+...
+PATH=$PATH:$HOME/bin:/usr/local/greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64/bin
+
+export PATH
+```
+
+加载一下
+
+```
+$ source ~/.bash_profile
+```
+
+这样就可以直接执行 `mysqlsh`，而无需每次都加上全路径了。
+
+第一次启动mysqlsh时，可能会有类似下面的提示：
+
+```
+WARNING: Found errors loading plugins, for more details look at the log at: /root/.mysqlsh/mysqlsh.log
+```
+
+执行下面的指令安装certifi这个Python模块即可：
+
+```
+$ pip3.6 install --user certifi
+```
+接下来就可以直接使用mysqlsh了
+```bash
+$ mysqlsh
+MySQL Shell 8.0.25
+
+Copyright (c) 2016, 2021, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  Py >
+```
+
+MySQL Shell就可以正常使用，并继续构建MGR集群了。
 
 **问题反馈**
 ---
+
 - [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
 
 

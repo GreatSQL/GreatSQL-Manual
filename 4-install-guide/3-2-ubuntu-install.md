@@ -55,7 +55,7 @@ $ tar xf GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz
 
 ## **2.启动前准备**
 
-### **2.1 修改 /etc/my.cnf 配置文件**
+### **2.1 修改 my.cnf 配置文件**
 
 [参考这份文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
@@ -308,6 +308,33 @@ Threads: 4  Questions: 10  Slow queries: 0  Opens: 120  Flush tables: 3  Open ta
 ```
 
 GreatSQL数据库安装并初始化完毕。
+
+## 5.安装MySQL Shell
+
+接下来安装MySQL Shell，可以使用mysql-shell-8.0.32，但是要注意MGR中并不支持仲裁节点
+
+解压`mysql-shell-8.0.32-linux-glibc2.12-x86-64bit.tar.gz`
+
+```bash
+$ tar zxf mysql-shell-8.0.32-linux-glibc2.12-x86-64bit.tar.gz
+```
+
+直接运行即可
+
+```bash
+$ mysql-shell-8.0.32-linux-glibc2.12-x86-64bit/bin/mysqlsh
+
+MySQL Shell 8.0.32
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > 
+```
+
+MySQL Shell就可以正常使用，并继续构建MGR集群了。
 
 ## **问题反馈**
 
