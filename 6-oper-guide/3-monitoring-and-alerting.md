@@ -24,14 +24,14 @@ TPS、QPS好比高速公路收费站闸机每分钟能通过多少辆车，而SQ
 
 在GreatSQL中，可以利用 `benchmark()` 函数来衡量SQL平均响应耗时：
 ```
-mysql> \help benchmark
+greatsql> \help benchmark
 Name: 'BENCHMARK'
 Description:
 Syntax:
 BENCHMARK(count,expr)
 ...
 Examples:
-mysql> SELECT BENCHMARK(1000000,AES_ENCRYPT('hello','goodbye'));
+greatsql> SELECT BENCHMARK(1000000,AES_ENCRYPT('hello','goodbye'));
 +---------------------------------------------------+
 | BENCHMARK(1000000,AES_ENCRYPT('hello','goodbye')) |
 +---------------------------------------------------+
@@ -59,7 +59,7 @@ sys     0m0.004s
 
 ### 2.1 当前行锁数量
 ```
-mysql> select * from performance_schema.global_status where variable_name = 'Innodb_row_lock_current_waits';
+greatsql> select * from performance_schema.global_status where variable_name = 'Innodb_row_lock_current_waits';
 +-------------------------------+----------------+
 | VARIABLE_NAME                 | VARIABLE_VALUE |
 +-------------------------------+----------------+
@@ -70,7 +70,7 @@ mysql> select * from performance_schema.global_status where variable_name = 'Inn
 
 ### 2.2 IBP wait free
 ```
-mysql> select * from performance_schema.global_status where variable_name = 'Innodb_buffer_pool_wait_free';
+greatsql> select * from performance_schema.global_status where variable_name = 'Innodb_buffer_pool_wait_free';
 +-------------------------------+----------------+
 | VARIABLE_NAME                 | VARIABLE_VALUE |
 +-------------------------------+----------------+
@@ -81,7 +81,7 @@ mysql> select * from performance_schema.global_status where variable_name = 'Inn
 
 ### 2.3 InnoDB log wait
 ```
-mysql> select * from performance_schema.global_status where variable_name = 'Innodb_log_waits';
+greatsql> select * from performance_schema.global_status where variable_name = 'Innodb_log_waits';
 +------------------+----------------+
 | VARIABLE_NAME    | VARIABLE_VALUE |
 +------------------+----------------+
@@ -92,18 +92,18 @@ mysql> select * from performance_schema.global_status where variable_name = 'Inn
 
 ### 2.4 InnoDB Purge Lag
 ```
-mysql> SELECT `COUNT`,`COMMENT` FROM INFORMATION_SCHEMA.INNODB_METRICS WHERE NAME = 'trx_rseg_history_len';
+greatsql> SELECT `COUNT`,`COMMENT` FROM INFORMATION_SCHEMA.INNODB_METRICS WHERE NAME = 'trx_rseg_history_len';
 +-------+-------------------------------------+
 | COUNT | COMMENT                             |
 +-------+-------------------------------------+
 |    14 | Length of the TRX_RSEG_HISTORY list |
 +-------+-------------------------------------+
 
-mysql> pager cat - | grep -i 'History list length'
+greatsql> pager cat - | grep -i 'History list length'
 PAGER set to 'cat - | grep -i 'History list length''
 
 # 或者换一种方式查看
-mysql> show engine innodb status\G
+greatsql> show engine innodb status\G
 History list length 4
 ```
 当该值超过2000后，就要立即发出告警，表示当前等待被purge的队列较大，需要检查是否物理I/O存在瓶颈，或者有个大事务提交了。
@@ -117,13 +117,13 @@ History list length 4
 因此，需要关注运行中的大事务、长事务，一旦发现超过阈值，就应当发出告警。
 ```
 # 找到活跃时间最长的事务
-mysql> SELECT * FROM information_schema.innodb_trx ORDER BY trx_started ASC LIMIT 1;
+greatsql> SELECT * FROM information_schema.innodb_trx ORDER BY trx_started ASC LIMIT 1;
 
 # 找到等待时间最长的事务
-mysql> SELECT * FROM sys.innodb_lock_waits ORDER BY wait_age_secs DESC LIMIT 1;
+greatsql> SELECT * FROM sys.innodb_lock_waits ORDER BY wait_age_secs DESC LIMIT 1;
 
 # 找到特别需要关注的事务
-mysql> SELECT * FROM information_schema.innodb_trx WEHRE
+greatsql> SELECT * FROM information_schema.innodb_trx WEHRE
   trx_lock_structs >= 5 OR    -- 持有超过5把锁
   trx_rows_locked >= 100 OR   -- 超过100行被锁
   trx_rows_modified >= 100 OR -- 超过100行被修改
@@ -135,7 +135,7 @@ mysql> SELECT * FROM information_schema.innodb_trx WEHRE
 
 对MGR除了监控其服务状态外，更重要的是监控各节点间的事务延迟情况，以此判断各节点的事务处理能力，以及评估是否需要提升服务器配置等级。
 ```
-mysql> SELECT MEMBER_ID AS id, COUNT_TRANSACTIONS_IN_QUEUE AS trx_tobe_certified,
+greatsql> SELECT MEMBER_ID AS id, COUNT_TRANSACTIONS_IN_QUEUE AS trx_tobe_certified,
   COUNT_TRANSACTIONS_REMOTE_IN_APPLIER_QUEUE AS relaylog_tobe_applied,
   COUNT_TRANSACTIONS_CHECKED AS trx_chkd,
   COUNT_TRANSACTIONS_REMOTE_APPLIED AS trx_done,

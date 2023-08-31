@@ -128,7 +128,7 @@ protocol=classic
 $ mysql -h172.16.16.14 -uGreatSQL -p -P6446
 Enter password:
 ...
-mysql> select @@server_uuid;
+greatsql> select @@server_uuid;
 +--------------------------------------+
 | @@server_uuid                        |
 +--------------------------------------+
@@ -136,7 +136,7 @@ mysql> select @@server_uuid;
 +--------------------------------------+
 
 # 确实是连接的PRIMARY节点
-mysql> select MEMBER_ID,MEMBER_HOST,MEMBER_ROLE from performance_schema.replication_group_members;
+greatsql> select MEMBER_ID,MEMBER_HOST,MEMBER_ROLE from performance_schema.replication_group_members;
 +--------------------------------------+--------------+-------------+
 | MEMBER_ID                            | MEMBER_HOST  | MEMBER_ROLE |
 +--------------------------------------+--------------+-------------+
@@ -152,7 +152,7 @@ mysql> select MEMBER_ID,MEMBER_HOST,MEMBER_ROLE from performance_schema.replicat
 $ mysql -h172.16.16.14 -uGreatSQL -p -P6447
 Enter password:
 ...
-mysql> select @@server_uuid;
+greatsql> select @@server_uuid;
 +--------------------------------------+
 | @@server_uuid                        |
 +--------------------------------------+
@@ -208,9 +208,9 @@ The instance '172.16.16.11:3306' was successfully elected as primary.
 
 回到前面连接6446端口的那个会话，再次查询 **server_uuid**，此时会发现连接自动断开了：
 ```
-mysql> select @@server_uuid;
+greatsql> select @@server_uuid;
 ERROR 2013 (HY000): Lost connection to MySQL server during query
-mysql> select @@server_uuid;
+greatsql> select @@server_uuid;
 ERROR 2006 (HY000): MySQL server has gone away
 No connection. Trying to reconnect...
 Connection id:    157990

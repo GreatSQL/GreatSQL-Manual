@@ -5,7 +5,7 @@
 
 现在有个三节点的MGR集群：
 ```
-mysql> select * from performance_schema.replication_group_members;
+greatsql> select * from performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST  | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
@@ -110,7 +110,7 @@ The cluster successfully switched to Multi-Primary mode.
 
 手工启动仲裁节点：
 ```
-mysql> start group_replication;
+greatsql> start group_replication;
 ERROR 3092 (HY000): The server is not configured properly to be an active member of the group. Please see more details on error log.
 ```
 
@@ -121,14 +121,14 @@ ERROR 3092 (HY000): The server is not configured properly to be an active member
 这是因为，通过MySQL Shell管理MGR时，会跟随单主/多主模式的不同，动态修改选项 `group_replication_enforce_update_everywhere_checks` 的值。仲裁节点中，该选项值和其他节点不同，所以需要先手动修改： 
 ```
 # 先手动关闭单主模式
-mysql> set global group_replication_single_primary_mode=OFF;
+greatsql> set global group_replication_single_primary_mode=OFF;
 
 # 再修改选项值，和其他节点保持一致
-mysql> set global group_replication_enforce_update_everywhere_checks=ON;
+greatsql> set global group_replication_enforce_update_everywhere_checks=ON;
 ```
 而后再次启动MGR服务即可。
 ```
-mysql> start group_replication;
+greatsql> start group_replication;
 Query OK, 0 rows affected (2.65 sec)
 ```
 
@@ -164,11 +164,11 @@ The cluster successfully switched to Single-Primary mode.
 
 可以看到切换成功了，而且仲裁节点没有报错退出，如果还是有报错的话，重置上述两个选项，再次启动MGR服务即可：
 ```
-mysql> set global group_replication_enforce_update_everywhere_checks=OFF;
+greatsql> set global group_replication_enforce_update_everywhere_checks=OFF;
 
-mysql> set global group_replication_single_primary_mode=ON;
+greatsql> set global group_replication_single_primary_mode=ON;
 
-mysql> start group_replication;
+greatsql> start group_replication;
 Query OK, 0 rows affected (2.85 sec)
 ```
 

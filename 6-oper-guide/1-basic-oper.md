@@ -44,7 +44,7 @@ $ journalctl -ex
 
 首先，查看要修改的参数选项当前值：
 ```
-mysql> show global variables like 'innodb_buffer_pool_size';
+greatsql> show global variables like 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
 +-------------------------+------------+
@@ -55,11 +55,11 @@ mysql> show global variables like 'innodb_buffer_pool_size';
 执行SET命令修改该选项值：
 ```
 # 修改为8G
-mysql> set global innodb_buffer_pool_size = 8589934592;
+greatsql> set global innodb_buffer_pool_size = 8589934592;
 Query OK, 0 rows affected (0.00 sec)
 
 # 再次查看，确认生效
-mysql> show global variables like 'innodb_buffer_pool_size';
+greatsql> show global variables like 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
 +-------------------------+------------+
@@ -74,7 +74,7 @@ mysql> show global variables like 'innodb_buffer_pool_size';
 myqsl> set persist innodb_buffer_pool_size = 4294967296;
 Query OK, 0 rows affected (0.00 sec)
 
-mysql> show global variables like 'innodb_buffer_pool_size';
+greatsql> show global variables like 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
 +-------------------------+------------+
@@ -95,7 +95,7 @@ mysql> show global variables like 'innodb_buffer_pool_size';
 
 第二种是执行 `set persist_only` 修改，这时候只会将新的选项值记录到 `mysqld-auto.cnf` 中，并不会立即修改内存中的选项值。
 ```
-mysql> show global variables like 'innodb_buffer_pool_size';
+greatsql> show global variables like 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
 +-------------------------+------------+
@@ -103,10 +103,10 @@ mysql> show global variables like 'innodb_buffer_pool_size';
 +-------------------------+------------+
 1 row in set (0.01 sec)
 
-mysql> set persist_only innodb_buffer_pool_size = 4294967296;
+greatsql> set persist_only innodb_buffer_pool_size = 4294967296;
 Query OK, 0 rows affected (0.00 sec)
 
-mysql> show global variables like 'innodb_buffer_pool_size';
+greatsql> show global variables like 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
 +-------------------------+------------+
@@ -145,7 +145,7 @@ $ grep innodb_buffer_pool_size /data/GreatSQL/mysqld-auto.cnf
 数据库运行过程中，随着用户对数据库不断执行各种操作，binlog会不断增加，默认设置是30天（`binlog_expire_logs_seconds
 = 2592000`）才会自动清理，因此当可用磁盘空间较为紧张时，就需要手动执行清理binlog操作。例如：
 ```
-mysql> show binary logs;
+greatsql> show binary logs;
 show binary logs;
 +---------------------+------------+
 | Log_name            | File_size  |
@@ -160,12 +160,12 @@ show binary logs;
 
 # 可以看到共有42个binlog
 # 举例现在只想保留最近2个，其余都清除
-mysql> purge binary logs to 'greatsql-bin.001465';
+greatsql> purge binary logs to 'greatsql-bin.001465';
 Query OK, 0 rows affected (1.99 sec)
 
 # 再次查看
 # 当前对数据库正在做压测，所以又很快生成了很多binlog
-mysql> show binary logs;
+greatsql> show binary logs;
 +---------------------+------------+
 | Log_name            | File_size  |
 +---------------------+------------+
@@ -178,7 +178,7 @@ mysql> show binary logs;
 17 rows in set (0.00 sec)
 
 # 重新设置binlog自动清理周期为7天
-mysql> set persist binlog_expire_logs_seconds = 604800;
+greatsql> set persist binlog_expire_logs_seconds = 604800;
 ```
 **提醒：** 清理binlog前，请务必记得做好备份，避免影响后续的数据库恢复需要。
 
@@ -208,7 +208,7 @@ $ cp slow.log slow.log-`date +%Y%m%d`
 $ echo '' > slow.log
 
 # 再进入GreatSQL，执行SQL命令
-mysql> flush slow logs;
+greatsql> flush slow logs;
 ```
 这样就可以清空slow query log了。
 
@@ -216,9 +216,9 @@ mysql> flush slow logs;
 
 和清理slow query log差不多，也是先做好日志文件备份，然后执行SQL命令：
 ```
-mysql> flush general logs;
+greatsql> flush general logs;
 
-mysql> flush error logs;
+greatsql> flush error logs;
 ```
 
 详情参考文档：[FLUSH Statement](https://dev.mysql.com/doc/refman/8.0/en/flush.html)。
@@ -261,7 +261,7 @@ mysql> flush error logs;
 >
 
 ```
-mysql> set @statdb = 'greatsql';
+greatsql> set @statdb = 'greatsql';
 select 
 a.database_name ,
 a.table_name ,
@@ -341,7 +341,7 @@ order by stat_pct;
 
 在业务负载低谷时段执行下面的命令更新索引统计信息：
 ```
-mysql> analyze table t1;
+greatsql> analyze table t1;
 +-------------+---------+----------+----------+
 | Table       | Op      | Msg_type | Msg_text |
 +-------------+---------+----------+----------+
@@ -373,7 +373,7 @@ MySQL 8.0.24之前，如果该表上有请求还未结束，这时候再执行 `
 
 首先，执行下面的SQL命令查看哪些表碎片率可能较高：
 ```
-mysql> SELECT TABLE_SCHEMA as `db`, TABLE_NAME as `tbl`, 
+greatsql> SELECT TABLE_SCHEMA as `db`, TABLE_NAME as `tbl`, 
 1-(TABLE_ROWS*AVG_ROW_LENGTH)/(DATA_LENGTH + INDEX_LENGTH + DATA_FREE) AS `fragment_pct`,
 TABLE_ROWS
 FROM information_schema.TABLES WHERE 
@@ -392,7 +392,7 @@ TABLE_SCHEMA = 'greatsql' AND TABLE_ROWS >= 10000 ORDER BY fragment_pct DESC, TA
 
 如果表数据量较小，或者表空间文件较小，则可以直接执行下面的SQL命令重整表空间消除碎片：
 ```
-mysql> alter table sbtest1 engine = innodb;
+greatsql> alter table sbtest1 engine = innodb;
 ```
 
 如果表数据量较大，或者表空间文件较大，则**强烈建议**采用 `pt-online-schema-change` 工具重整表空间消除碎片，例如：

@@ -196,7 +196,7 @@ P.S，还可以利用pt-query-digest工具将慢查询SQL分析后写入数据�
 
 首先，查看该SQL的执行计划：
 ```
-mysql> explain select c, count(*) from t1 group by c\G
+greatsql> explain select c, count(*) from t1 group by c\G
            id: 1
   select_type: SIMPLE
         table: t1
@@ -214,10 +214,10 @@ possible_keys: NULL
 
 针对上述情况，且上面的SQL也比较简单，只需要对 `c` 列添加索引即可：
 ```
-mysql> alter table t1 add index (c );
+greatsql> alter table t1 add index (c );
 
 # 再次查看执行计划
-mysql> explain select c, count(*) from t1 group by c\G
+greatsql> explain select c, count(*) from t1 group by c\G
 *************************** 1. row ***************************
            id: 1
   select_type: SIMPLE
