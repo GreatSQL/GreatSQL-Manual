@@ -5,14 +5,20 @@
 本文档主要介绍MGR的基础知识,内容涵盖MGR简介、安装部署、维护管理、状态监控、构建高可用集群、数据一致性与安全性、性能优化、最佳实践参考以及MySQL Shell的使用。
 
 - ## [1 MGR 简介](./1-mgr-Introduction.md)
-- ## [2 MGR 安装部署](./7-2-migrate-from-mysql-togreatsql.md)
-- ## [3 MGR 维护管理](./7-3-migrate-from-percona-to-greatsql.md)
-- ## [4 MGR 维护管理](./7-3-migrate-from-percona-to-greatsql.md)
-- ## [5 MGR 维护管理](./7-3-migrate-from-percona-to-greatsql.md)
-- ## [6 MGR 维护管理](./7-3-migrate-from-percona-to-greatsql.md)
-- ## [7 MGR 维护管理](./7-3-migrate-from-percona-to-greatsql.md)
-- ## [8 MGR 维护管理](./7-3-migrate-from-percona-to-greatsql.md)
-- ## [9 MGR 维护管理](./7-3-migrate-from-percona-to-greatsql.md)
+
+- ## [2 MGR 安装部署](./2-mgr-Install-deploy.md)
+
+- ## [3 MGR 维护管理](./3-mgr-maintain-admin.md)
+
+- ## [4 MGR 状态监控](./4-mgr-status-monitor.md)
+
+- ## [5 MGR Router 构建读写分离集群](./5-mgr-readwrite-split.md)
+
+- ## [6 MGR MGR数据一致性安全性保障](./6-mgr-data-security.md)
+
+- ## [7 MGR 性能优化](./7-mgr-performance-tuning.md)
+
+- ## [8 MGR 最佳实践参考](./8-mgr-best-practices.md)
 
 **问题反馈**
 ---
