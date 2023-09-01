@@ -1,7 +1,7 @@
 # GreatSQL优化
 ---
 
-本文档主要介绍从GreatSQL数据库层的几个优化参考。
+本文主要介绍从GreatSQL数据库层的几个优化参考。
 
 通常情况下，运行GreatSQL数据库时，采用 [**这份my.cnf**](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24) 参考就足够了。
 
