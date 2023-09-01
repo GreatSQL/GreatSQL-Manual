@@ -223,21 +223,7 @@ greatsql> flush error logs;
 
 详情参考文档：[FLUSH Statement](https://dev.mysql.com/doc/refman/8.0/en/flush.html)。
 
-### 3.5 数据安全维护建议
-
-为了让GreatSQL数据库运行更安全，建议遵循以下几点规范：
-
-- 在应用端，所有用户请求及输入数据都要做预处理，不能直接提交到数据库，避免被SQL注入。
-- 定期扫描应用端用户请求日志，扫描异常请求并及时处理。
-- 应用服务器端部署防火墙，阻断用户非法请求。
-- 应用程序上线前，都需要进行必要安全扫描，避免常见SQL注入等风险。
-- 数据库端定期扫描请求特征，判断是否有符合安全隐患的请求，及时阻断处理。
-- 数据库端启用审计（AUDIT）、SQL防火墙等组件，及时发现并阻断非法请求。
-- 数据库中存储的敏感数据，务必先进行单向加密，避免被破解、信息泄漏。
-- 生产环境中的数据，导入开发测试环境前，要先进行转码脱敏操作，避免信息泄漏。
-- 做好连接请求检测和监控，发现有异常频繁请求时，及时阻断处理。
-
-### 3.6 例行维护表
+### 3.5 例行维护表
 
 通常来说，生产环境中的数据表是无需维护的，除非出现以下几种情况：
 
@@ -435,7 +421,7 @@ Successfully altered `greatsql`.`sbtest1`.
 - [check_mysql.py](https://github.com/zhishutech/mysqldba/blob/master/mysql-tools/check_mysql.py)
 - [MySQL巡检怎么做](https://github.com/zhishutech/mysqldba/blob/master/mysql-tools/MySQL%E5%B7%A1%E6%A3%80%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F.md)
 
-### 3.7 配置MySQL客户端
+### 3.6 配置MySQL客户端
 推荐采用下面的MySQL客户端配置参数：
 ```
 $ vim /etc/my.cnf
