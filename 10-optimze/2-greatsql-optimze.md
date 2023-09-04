@@ -1,8 +1,9 @@
 # GreatSQL优化
 ---
 
-本文主要介绍从GreatSQL数据库层的几个优化参考。
+本文主要介绍从GreatSQL数据库的几个优化参考。
 
+## 1. GreatSQL优化配置参考
 通常情况下，运行GreatSQL数据库时，采用 [**这份my.cnf**](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24) 参考就足够了。
 
 下面针对其中的几个关键参数选项稍作解读：
@@ -68,6 +69,16 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 
 - innodb_thread_concurrency = 0 
 不限制InnoDB并行线程数，使其发挥最大性能。但如果业务端发起的业务请求并行度总是超过服务器逻辑CPU数，则可能导致CPU调度频繁等待，此时可以考虑将本选项设置为逻辑CPU的数量。
+
+
+## 2. SQL优化参考
+- [2.1 Schema设计规范参考]()
+- [2.2 SQL开发优化参考]()
+- [2.3 慢查询SQL优化分析]()
+- [2.4 UPDATE执行慢排查分析]()
+- [2.5 行锁排查分析]()
+- [2.6 MDL锁排查分析]()
+
 
 **问题反馈**
 ---
