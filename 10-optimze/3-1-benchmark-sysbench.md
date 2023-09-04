@@ -1,4 +1,4 @@
-# 性能测试
+# sysbench性能测试
 ---
 
 本文主要介绍采用sysbench工具对GreatSQL进行性能测试的方法。
@@ -19,6 +19,7 @@ sysbench是一个基于 LuaJIT 的可编写脚本的多线程基准测试工具�
 
 ## 2. 安装sysbench
 **1. 下载sysbench**
+
 访问[sysbench github仓库](https://github.com/akopytov/sysbench/releases)，下载源码包。
 
 **2. 解压缩**
@@ -113,6 +114,8 @@ sysbench默认支持以下几种OLTP测试方案：
 - oltp_write_only
 
 如果有条件，可以把这几种方案全部跑一遍。
+
+此外，Percona在github上开源了一个[sysbench-tpcc项目](https://github.com/Percona-Lab/sysbench-tpcc/)，可利用sysbench模拟TPC-C测试，省去了单独安装TPC-C测试工具的麻烦。作为补充，也可以利用这个项目进行测试。
 
 ## 4. 执行压力测试
 
