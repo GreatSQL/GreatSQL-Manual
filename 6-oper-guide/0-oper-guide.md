@@ -11,7 +11,6 @@
 - ## [6.4 监控告警](./6-4-monitoring-and-alerting.md)
 - ## [6.5 备份恢复](./6-5-backup-and-restore.md)
 - ## [6.6 单机多实例](./6-6-multi-instances.md)
-- ## [6.7 慢查询SQL诊断](./6-7-slowlog-diag.md)
 
 **问题反馈**
 ---
