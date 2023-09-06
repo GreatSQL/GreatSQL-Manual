@@ -236,6 +236,11 @@ possible_keys: c
 
 生产环境中的业务SQL一般比这种更复杂，SQL优化需要根据实际情况灵活变化，通常不只是添加索引这么简单。
 
+**参考资料：**
+- [EXPLAIN执行计划中要重点关注哪些要素](https://mp.weixin.qq.com/s/CDKN_nPcIjzA_U5-xwAE5w)
+- [PROCESSLIST中哪些状态要引起关注](https://mp.weixin.qq.com/s/vhUmB9JO-Zt2P02gVk4mwg)
+
+
 
 **问题反馈**
 ---
