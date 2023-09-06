@@ -104,7 +104,7 @@ ERROR 1146 (42S02) at line 586: Table 'mysql.replication_group_member_actions' d
 
 **问题反馈**
 ---
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Doc/issues)
+- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
 
 
 **联系我们**
