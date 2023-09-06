@@ -144,7 +144,7 @@ greatsql> LOAD /*+ SET_VAR(gdb_parallel_load=ON) SET_VAR(gdb_parallel_load_chunk
 
 **问题反馈**
 ---
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Doc/issues)
+- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
 
 
 **联系我们**

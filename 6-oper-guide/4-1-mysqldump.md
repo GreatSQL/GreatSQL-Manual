@@ -127,7 +127,7 @@ $ sed -n "100,200p" /backup/GreatSQL/greatsql-20230830.sql | mysql -f -S/data/Gr
 
 **问题反馈**
 ---
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Doc/issues)
+- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
 
 
 **联系我们**

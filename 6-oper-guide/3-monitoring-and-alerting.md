@@ -160,7 +160,7 @@ greatsql> SELECT MEMBER_ID AS id, COUNT_TRANSACTIONS_IN_QUEUE AS trx_tobe_certif
 
 **问题反馈**
 ---
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Doc/issues)
+- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
 
 
 **联系我们**

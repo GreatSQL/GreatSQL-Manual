@@ -260,7 +260,7 @@ The instance '172.16.16.13:3306' was successfully rejoined to the cluster.
 
 **问题反馈**
 ---
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Doc/issues)
+- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
 
 
 **联系我们**
