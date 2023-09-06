@@ -176,7 +176,7 @@ Current database: *** NONE ***
 **问题反馈**
 ---
 
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Doc/issues)
+- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
 
 
 **联系我们**

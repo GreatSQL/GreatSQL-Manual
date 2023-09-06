@@ -67,7 +67,7 @@ MGR支持单主和多主两种模式，在单主模式下，各节点会自动�
 **问题反馈**
 ---
 
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Doc/issues)
+- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
 
 
 **联系我们**
