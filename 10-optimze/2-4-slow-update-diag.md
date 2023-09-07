@@ -1,6 +1,8 @@
 # UPDATE执行慢排查分析
 ---
 
+本文介绍在GreatSQL数据库中，如果UPDATE请求响应较慢如何进行排查分析。
+
 ## 1. 写在前面
 
 在开始分析排查先简单了解 UPDATE 请求在 MySQL/GreatSQL 中的生命周期是什么，以及如何执行一个事务。
@@ -13,11 +15,11 @@
 
 **1. 连接器**
 
-客户端发起一个 TCP 请求后，MySQL Server 端会负责通信协议处理、线程处理、账号认证、安全检查。
+客户端发起一个 TCP 请求后，MySQL/GrreatSQL Server 端会负责通信协议处理、线程处理、账号认证、安全检查。
 
 **2. 分析器**
 
-MySQL Server 端对一个 SQL 请求进行词法分析（识别 select、from），然后会对语法 进行分析判断语法是否正确。
+MySQL/GrreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select、from），然后会对语法 进行分析判断语法是否正确。
 
 **3. 优化器**
 
@@ -113,6 +115,8 @@ MySQL Server 端对一个 SQL 请求进行词法分析（识别 select、from）
 使用 `strace` 分析 MySQL/GreatSQL 内部哪里慢，哪个函数导致的。
 
 UPDATE慢的问题还不止于上面列举的这些情况，本文主要是提供一个排查分析的思路，更多原因还需要进一步具体分析。
+
+另外，本文以UPDATE请求为例，实际上INSERT和DELETE请求的情形也可以采用同样的排查分析思路进行。
 
 **参考资料：**
 - [技术分享 | Update更新慢、死锁等问题的排查思路分享](https://mp.weixin.qq.com/s/8EIWAWQD6BPS-j8gKt28Gw)
