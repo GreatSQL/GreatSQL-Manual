@@ -1,7 +1,7 @@
 # GreatSQL 5.7升级到8.0
 ---
 
-本文档介绍如何从GreatSQL 5.7/MySQL 5.7版本升级到GreatSQL 8.0版本。
+本文介绍如何从GreatSQL 5.7/MySQL 5.7版本升级到GreatSQL 8.0版本。
 
 ## 1. 为什么要升级
 
@@ -107,7 +107,7 @@ Checking if update is needed.
 从GreatSQL/MySQL 5.7升级到8.0需要注意以下几点变化：
 
 1. 升级前的版本要求是GA版本，即5.7.9之后的版本。如果不是的话，要先在5.7大版本内升级小版本。
-2. 建议先把当前的5.7升级到最新的子版本，截止本文档时间，最新版本是5.7.38。
+2. 建议先把当前的5.7升级到最新的子版本，截止本文时间，最新版本是5.7.43。
 3. 升级到8.0版本后，主要区别是默认密码验证插件(`default_authentication_plugin`)从 `mysql_native_password` 变成了 `caching_sha2_password`，会影响一些版本比较低的API/驱动，在创建用户时仍旧指定为 `mysql_native_password` 即可，或者在 `my.cnf` 中设置 `default_authentication_plugin=mysql_native_password`。
 4. 在8.0中，不能直接利用 `GRANT` 创建新用户，需要手动先 `CREATE USER` 才能 `GRANT`，对应 `SQL_MODE = NO_AUTO_CREATE_USER`。
 5. 在8.0中，除了InnoDB引擎，其他引擎表都不支持原生PARTITION特性。
@@ -202,6 +202,53 @@ upgrade = FORCE
 最后要注意检查升级过程中输出的日志是否有报错信息，如果没有就说明升级过程很顺利。
 
 确定升级完成后，记得注释掉 `my.cnf` 文件中的 `upgrade = FORCE` 选项，或者将其修改成 `upgrade = AUTO`。
+
+## 4. 升级GreatSQL 8.0.25到8.0.32 
+GreatSQL 8.0.32相对于8.0.25版本，新增了更多SQL语法兼容性、MGR层支持绑定VIP、支持并行LOAD DATA、在安全方面支持国密加密&备份加密等非常不错的特性，强烈建议升级到最新的GreatSQL 8.0.32版本。
+
+从GreatSQL 8.0.25升级到8.0.32版本过程较为简单：
+
+1. 下载最新[GreatSQL 8.0.32二进制包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-24)，并解压缩到相应目录下。
+
+2. 在数据库维护期间关闭GreatSQL 8.0.25版本数据库。关闭前，先执行 `SET GLOBAL innodb_fast_shutdown = 0`，确保停机时得到一份完整、干净的数据文件。
+
+3. 修改my.cnf，调整basedir，指向新版本二进制包路径。可参考这份[my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24)。
+
+4. 重启新的GreatSQL 8.0.32版本数据库服务进程，即可实现原地升级（in-place upgrade），可以看到日志中有类似下面的内容：
+```
+[Note] [MY-013327] [Server] MySQL server upgrading from version '80025' to '80032'.
+[Note] [MY-012357] [InnoDB] Reading DD tablespace files
+[Note] [MY-012356] [InnoDB] Scanned 7 tablespaces. Validated 7.
+[Note] [MY-010006] [Server] Using data dictionary with version '80023'.
+[Note] [MY-011323] [Server] Plugin mysqlx reported: 'X Plugin ready for connections. socket: '/tmp/mysqlx.sock''
+[System] [MY-013381] [Server] Server upgrade from '80025' to '80032' started.
+[Note] [MY-013386] [Server] Running queries to upgrade MySQL server.
+[Note] [MY-013387] [Server] Upgrading system table data.
+[Note] [MY-013385] [Server] Upgrading the sys schema.
+[Note] [MY-013400] [Server] Upgrade of help tables started.
+[Note] [MY-013400] [Server] Upgrade of help tables completed.
+[Note] [MY-013394] [Server] Checking 'mysql' schema.
+[Note] [MY-013394] [Server] Checking 'sys' schema.
+[System] [MY-013381] [Server] Server upgrade from '80025' to '80032' completed.
+```
+
+5. 如果设置选项 `innodb_print_ddl_logs=1`，则还能看到升级过程中有大量的DDL升级记录，例如：
+```
+[System] [MY-013381] [Server] Server upgrade from '80025' to '80032' started.
+[Note] [MY-013386] [Server] Running queries to upgrade MySQL server.
+[Note] [MY-012477] [InnoDB] DDL log insert : [DDL record: REMOVE CACHE, id=6, thread_id=6, table_id=1062, new_file_path=mysql/replication_group_member_actions]
+[Note] [MY-012478] [InnoDB] DDL log delete : 6
+[Note] [MY-012472] [InnoDB] DDL log insert : [DDL record: FREE, id=7, thread_id=6, space_id=4294967294, index_id=156, page_no=1111]
+...
+[Note] [MY-012479] [InnoDB] DDL log replay : [DDL record: FREE, id=792, thread_id=6, space_id=4294967294, index_id=259, page_n
+[Note] [MY-012486] [InnoDB] DDL log post ddl : end for thread id : 6
+[Note] [MY-013400] [Server] Upgrade of help tables completed.
+[Note] [MY-013394] [Server] Checking 'mysql' schema.
+[Note] [MY-013394] [Server] Checking 'sys' schema.
+[System] [MY-013381] [Server] Server upgrade from '80025' to '80032' completed.
+```
+这样就可以很方便完成原地升级GreatSQL版本。
+
 
 **参考文档**
 
