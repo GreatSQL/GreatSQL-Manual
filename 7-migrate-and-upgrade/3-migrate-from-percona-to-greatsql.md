@@ -1,7 +1,7 @@
 # 从Percona Server迁移/升级到GreatSQL
 ---
 
-本文档介绍如何从Percona迁移/升级到GreatSQL数据库。
+本文介绍如何从Percona迁移/升级到GreatSQL数据库。
 
 ## 1. 为什么要迁移/升级
 
