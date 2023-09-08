@@ -294,6 +294,7 @@ sql_kill_blocking_connection: KILL 13333        #<-- 解锁方法之二
 
 **参考资料**
 - [InnoDB Locking](https://dev.mysql.com/doc/refman/8.0/en/innodb-locking.html)
+- [InnoDB Standard Monitor and Lock Monitor Output](https://dev.mysql.com/doc/refman/8.0/en/innodb-standard-monitor.html)
 
 
 **问题反馈**
