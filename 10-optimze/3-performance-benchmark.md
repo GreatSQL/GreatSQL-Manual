@@ -3,9 +3,8 @@
 
 本文主要介绍对GreatSQL进行性能测试的几种不同方法，主要包括：
 
-1. [sysbench](./3-1-benchmark-sysbench.md)
-1. [TPC-C](./3-2-benchmark-tpcc.md)
-1. [TPC-H](./3-3-benchmark-tpch.md)
+1. [sysbench测试](./3-1-benchmark-sysbench.md)
+1. [TPC-H测试](./3-2-benchmark-tpch.md)
 
 可以根据实际情况和业务需要，选择定制不同的压测方案。
 
