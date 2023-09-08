@@ -72,13 +72,13 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 
 
 ## 2. SQL优化参考
-- [2.1 Schema设计规范参考]()
-- [2.2 SQL开发优化参考]()
-- [2.3 慢查询SQL优化分析]()
-- [2.4 UPDATE执行慢排查分析]()
-- [2.5 行锁及行锁等待分析]()
-- [2.6 死锁排查分析]()
-- [2.7 MDL锁排查分析]()
+- [2.1 Schema设计规范参考](./2-1-schema-design-refer.md)
+- [2.2 SQL开发优化参考](./2-2-sql-develop-refer.md)
+- [2.3 慢查询SQL优化分析](./2-3-slow-query-diag.md)
+- [2.4 UPDATE执行慢排查分析](./2-4-slow-update-diag.md)
+- [2.5 行锁及行锁等待分析](./2-5-rowlock-diag.md)
+- [2.6 死锁排查分析](./2-6-deadlock-diag.md)
+- [2.7 MDL锁排查分析](./2-7-mdllock-diag.md)
 
 
 **问题反馈**
