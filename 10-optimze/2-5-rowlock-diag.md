@@ -284,11 +284,11 @@ greatsql> select * from sys.innodb_locK_waits\G
 sql_kill_blocking_connection: KILL 13333        #<-- 解锁方法之二
 ```
 
-在上面的输出结果中，甚至还给出了解锁方法，即杀掉当前正在执行的SQL或连接，不过这种是比较粗暴的做法，最好是找到持有锁的那个事务，主动发起COMMIT/ROLLBACK结束这个事务，就可以释放相应的行锁了。
+在上面的输出结果中，甚至还给出了解锁方法，即KILL当前正在执行的SQL或连接。不过这种是比较粗暴的做法，最好是找到持有行锁的那个事务，主动发起COMMIT/ROLLBACK结束这个事务，就可以释放相应的行锁了。
 
 利用上述方法，就可以清晰观察InnoDB表当前存在的行锁以及行锁等待，同时建议针对行锁等待设置相应的监控告警规则，例如当行锁等待超过10秒就发出告警，更多关于监控告警的内容可参考：[监控告警](../6-oper-guide/3-monitoring-and-alerting.md)。
 
-## 4. 锁等待优化建议
+## 4. 行锁等待优化建议
 
 为了避免产生大量、长时间的行锁等待，建议适当调低行锁等待时长阈值 `innodb_lock_wait_timeout`，在[GreatSQL my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24)中，这个阈值设置为10(秒)，可根据实际情况适当调整，通常建议不超过120(秒)。
 
