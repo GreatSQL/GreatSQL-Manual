@@ -63,20 +63,13 @@ GreatSQL具备**高性能**、**高可靠**、**高易用性**、**高安全**�
  - ## [7.3 从Percona Server迁移到GreatSQL](./7-migrate-and-upgrade/3-migrate-from-percona-to-greatsql.md)
 
 # [8. MGR 基础](./8-mgr/0-mgr-fundamentals.md)
- - ## [8.1 MGR 简介](./8-mgr/1-mgr-Introduction.md)
-
- - ## [8.2 MGR 安装部署](./8-mgr/2-mgr-Install-deploy.md)
-
+ - ## [8.1 MGR 简介](./8-mgr/1-mgr-introduction.md)
+ - ## [8.2 MGR 安装部署](./8-mgr/2-mgr-install-deploy.md)
  - ## [8.3 MGR 维护管理](./8-mgr/3-mgr-maintain-admin.md)
-
  - ## [8.4 MGR 状态监控](./8-mgr/4-mgr-status-monitor.md)
-
  - ## [8.5 MGR Router构建读写分离集群](./8-mgr/5-mgr-readwrite-split.md)
-
  - ## [8.6 MGR 数据一致性安全性保障](./8-mgr/6-mgr-data-security.md)
-
  - ## [8.7 MGR 性能优化](./8-mgr/7-mgr-performance-tuning.md)
-
  - ## [8.8 MGR 最佳实践参考](./8-mgr/8-mgr-best-practices.md)
 
 # [9. 高可用架构](./9-ha/0-ha.md)
@@ -90,6 +83,13 @@ GreatSQL具备**高性能**、**高可靠**、**高易用性**、**高安全**�
  - ## [10.1 硬件、系统优化](./10-optimze/1-hardware-and-os-optimze.md)
  - ## [10.2 GreatSQL优化](./10-optimze/2-greatsql-optimze.md)
  - ## [10.3 性能测试](./10-optimze/3-performance-benchmark.md)
+
+# [11. FAQ](./11-faq/0-faq.md)
+ - ## [11.1 GreatSQL相关FAQ](./11-faq/1-faq-greatsql.md)
+ - ## [11.2 MGR运维部署FAQ](./11-faq/2-faq-mgr-oper.md)
+ - ## [11.3 基于MGR的架构方案](./11-faq/3-faq-mgr-arch.md)
+ - ## [11.4 MGR监控及故障处理FAQ](./11-faq/4-faq-mgr-monitor.md)
+ - ## [11.5 其他FAQ](./11-faq/5-faq-others.md)
 
 # [常见问题/FAQ](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/GreatSQL-FAQ.md)
 
