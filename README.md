@@ -91,8 +91,6 @@ GreatSQL具备**高性能**、**高可靠**、**高易用性**、**高安全**�
  - ## [11.4 MGR监控及故障处理FAQ](./11-faq/4-faq-mgr-monitor.md)
  - ## [11.5 其他FAQ](./11-faq/5-faq-others.md)
 
-# [常见问题/FAQ](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/GreatSQL-FAQ.md)
-
 # 问题反馈
 ---
 - [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
