@@ -37,7 +37,7 @@ GreatSQL具备**高性能**、**高可靠**、**高易用性**、**高安全**�
 # [4. 安装指南](./4-install-guide/4-install-guide.md)
  - ## [4.1 安装准备](./4-install-guide/4-1-install-prepare.md)
  - ## [4.2 RPM安装](./4-install-guide/4-2-install-with-rpm.md)
- - ## [4.3 二进制包安装](./4-install-guide/4-3-install-with-tarball.md)
+ - ## [4.3 二进制包安装](./4-install-guide/3-install-with-tarball.md)
  - ## [4.4 容器化安装](./4-install-guide/4-4-install-with-docker.md)
  - ## [4.5 Ansible安装](./4-install-guide/4-5-install-with-ansible.md)
  - ## [4.6 编译源码安装](./4-install-guide/4-6-install-with-source-code.md)
