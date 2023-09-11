@@ -3,7 +3,7 @@
 
 本文档主要介绍如何用二进制包方式安装GreatSQL数据库，假定本次安装是在CentOS 8.x x86_64环境中安装，并且是以root用户身份执行安装操作。
 
-在开始安装前，请根据文档 [安装准备](./4-1-install-prepare.md) 已经完成准备工作。
+在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
 
 ## 1. MGR集群规划
 
@@ -38,7 +38,7 @@ $ source ~/.bash_profile
 
 **提示**：安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
 `yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5`
-更详细的请参考：[安装准备](/4-install-guide/4-1-install-prepare.md)。
+更详细的请参考：[安装准备](./1-install-prepare.md)。
 
 
 ## 3. 启动前准备

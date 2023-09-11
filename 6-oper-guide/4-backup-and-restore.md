@@ -5,7 +5,7 @@
 
 1. 逻辑备份恢复
  - 1.1 [mysqldump逻辑备份恢复](./4-1-mysqldump.md)
- - 1.2 [OUTFILE逻辑备份恢复](./4-2-outfile)
+ - 1.2 [OUTFILE逻辑备份恢复](./4-2-outfile.md)
  - 1.3 [MySQL Shell util逻辑备份恢复](./4-3-shell-util.md)
 2. 物理备份恢复
  - 2.1 [物理备份恢复、xtrabackup备份恢复](./4-4-physical-backup.md)

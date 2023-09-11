@@ -3,7 +3,7 @@
 
 本文档主要介绍如何用RPM包方式安装GreatSQL数据库，假定本次安装是在CentOS 8.x x86_64环境中安装，并且是以root用户身份执行安装操作。
 
-在开始安装前，请根据文档 [安装准备](./4-1-install-prepare.md) 已经完成准备工作。
+在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
 
 ## 1. MGR集群规划
 
@@ -46,7 +46,7 @@ Updating / installing...
 **提示**：
 1. 安装GreatSQL RPM包需要先安装其他依赖包，可执行下面命令完成：
 `yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5`
-更详细的请参考：[安装准备](/4-install-guide/4-1-install-prepare.md)。
+更详细的请参考：[安装准备](./1-install-prepare.md)。
 
 其他部分依赖包，如果通过YUM还是无法安装，则加上 `--nodeps --force` 强制忽略即可，例如：
 ```
@@ -717,7 +717,7 @@ MySQL  172.16.16.10:3306 ssl  Py > c.status()
 ```
 可以看到一个包含仲裁节点的三节点MGR集群已经构建完毕。
 
-在后面的内容中，我们再介绍如何手工方式部署MGR集群，以及利用MySQL Router实现读写分离及读可扩展，详见：[读写分离](/6-oper-guide/6-3-oper-rw-splitting.md)。
+在后面的内容中，我们再介绍如何手工方式部署MGR集群，以及利用MySQL Router实现读写分离及读可扩展，详见：[读写分离](../6-oper-guide/2-oper-rw-splitting.md)。
 
 **问题反馈**
 ---

@@ -123,7 +123,7 @@ $ ls /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64
 bin    docs     lib      LICENSE.router  man                     mysql-test  README.md-test  run    support-files  var
 cmake  include  LICENSE  LICENSE-test    mysqlrouter-log-rotate  README.md   README.router   share  usr
 ```
-至此，GreatSQL二进制安装包就编译成功了，接下来可以参考文档[二进制包安装并构建MGR集群](./4-3-install-with-tarball.md)继续进行数据库的初始化，以及MGR集群构建等工作，这里不赘述。
+至此，GreatSQL二进制安装包就编译成功了，接下来可以参考文档[二进制包安装并构建MGR集群](./3-install-with-tarball.md)继续进行数据库的初始化，以及MGR集群构建等工作，这里不赘述。
 
 ## 4. 相关资源
 `greatsql_docker_build` 最新版本详见：[https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/greatsql_docker_build](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/greatsql_docker_build)。

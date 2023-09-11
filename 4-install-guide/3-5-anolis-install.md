@@ -14,7 +14,7 @@ $ getconf GNU_LIBC_VERSION
 glibc 2.28
 ```
 
-在开始安装前，请根据文档 [安装准备](https://gitee.com/GreatSQL/GreatSQL-Manual/blob/master/4-install-guide/4-1-install-prepare.md) 已经完成准备工作。
+在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
 
 ## **1.下载安装包**
 
@@ -258,9 +258,9 @@ $ mysqld --defaults-file=/etc/my.cnf&
 
 因为本文示例环境在Docker中，所以不采用systemd管理GreatSQL服务，但无论是RPM、二进制包还是Ansible等何种方式安装GreatSQL，都建议采用systemd来管理GreatSQL服务。在Docker容器环境中，无需利用systemd来管理GreatSQL，直接整个容器启停即可。
 
-参考文档：https://gitee.com/GreatSQL/GreatSQL-Manual/blob/master/4-install-guide/4-3-install-with-tarball.md
+参考文档：[二进制包安装](./3-install-with-tarball.md)。
 
-安装完成后加入systemd服务方法可以参考这篇文章：https://mp.weixin.qq.com/s/tSA-DrWT13GN45Csq2tQoA
+安装完成后加入systemd服务方法可以参考这篇文章：[将GreatSQL添加到系统systemd服务](https://mp.weixin.qq.com/s/tSA-DrWT13GN45Csq2tQoA)。
 
 ## 4.连接登入GreatSQL
 

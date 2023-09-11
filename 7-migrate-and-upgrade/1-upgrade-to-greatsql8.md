@@ -47,7 +47,7 @@ GreatSQL 8.0相对于5.7有着众多优秀新特性，包括且不仅限以下�
 1. 在8.0中，默认采用 `caching_sha2_password` 密码插件，这可能导致部分版本较早的连接驱动、连接客户端无法连接8.0的服务端，也需要同步升级。
 1. 在8.0中，默认采用 `utf8mb4` 字符集，而5.7版本默认字符集是 `utf8`（也是 `utf8mb3`），在做数据迁移时要注意前后对照校验。
 1. 在8.0中，启动时务必先设定好 `lower_case_table_names` 选项值，且实例启动后不可再更改，在个别不区分大小写的旧系统中前移时要特别谨慎。
-1. 新增保留字、关键字，详情请见：[2.6 保留字、关键字](/2-about-greatsql/2-6-greatsql-keywords.md)。
+1. 新增保留字、关键字，详情请见：[2.6 保留字、关键字](../2-about-greatsql/7-greatsql-keywords.md)。
 1. 除InnoDB、NDB外，其他引擎不再支持表分区。
 1. SQL Mode不再支持 `NO_AUTO_CREATE_USER`，也就是不能直接利用 `GRANT` 创建新用户并授权，需要先 `CREATE USER` 创建用户，再授权。
 1. 部分参数选项不再支持，例如：`innodb_locks_unsafe_for_binlog`, `old_passwords`, query cache相关参数等。

@@ -7,7 +7,7 @@
 
 从MySQL 5.7开始，官方默认采用 `systemd` 来管理mysqld服务，不建议再使用 `mysqld_safe` 这种守护进程方式了。
 
-单机单实例模式下，用 `systemd` 管理mysqld服务可参考这里：[增加GreatSQL系统服务](../4-install-guide/4-3-install-with-tarball.md#34-增加greatsql系统服务)。
+单机单实例模式下，用 `systemd` 管理mysqld服务可参考这里：[增加GreatSQL系统服务](../4-install-guide/3-install-with-tarball.md#34-增加GreatSQL系统服务)。
 
 无论是RPM还是二进制包方式安装的GreatSQL，都可以利用 `systemd` 管理多实例。
 
