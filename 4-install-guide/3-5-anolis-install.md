@@ -1,4 +1,6 @@
-# 龙蜥Anolis环境二进制包安装
+# 龙蜥Anolis系统中安装GreatSQL
+
+---
 
 本文档主要介绍如何用二进制包方式安装GreatSQL数据库，假定本次安装是在Anolis OS release 8.8 x86_64环境中安装，并且是以root用户身份执行安装操作。
 

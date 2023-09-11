@@ -10,6 +10,7 @@
 - 在MGR架构的从节点停机维护时，copy整个数据文件目录。
 
 **注意：** 
+
 1. 如果想要通过文件系统层进行物理备份，则在停机维护前，最好先设置 `innodb_fast_shutdown=0`，然后再关闭该实例，以确保可以获得一份干净的数据文件。
 2. 进行物理备份时，还要同时备份相应的my.cnf配置文件，因为在恢复时相关的参数选项要保持一致。
 3. 如果`datadir`目录下有`mysqld-auto.cnf`这个配置文件，也要备份。
@@ -24,13 +25,13 @@
 
 本文环境选择的是 `Xtrabackup 8.0.32-26` 版本。
 
-可根据个人喜好选择RPM包抑或二进制包，安装步骤略过。
+可根据个人喜好选择RPM包或二进制包，安装步骤略过。
 
 `Xtrabackup`备份的流程大致如下：
 
 1. 发起备份，初始化检查等；
 2. 备份系统表空间文件ibdata1及各表空间.ibd文件；
-3. 备份其他非InnoDB表；
+3. 备份其它非InnoDB表；
 4. 执行操作 `FLUSH NO_WRITE_TO_BINLOG BINARY LOGS`，刷新binlog；
 5. 从`p_s.log_status`中获取最新的redo log lsn，以及binlog点位信息；
 6. 备份最新的binlog文件（步骤4刷新后新产生的binlog文件）；
@@ -42,7 +43,7 @@
 
 而在Xtrabackup 2.X及更早的版本中，第5步这里直接执行FTWRL，不管是否只有InnoDB表。
 
-在MySQL 8.0中（XtraBackup也响应升级到8.x版本），仅存在InnoDB表的话，不再执行FTWRL，而是直接读元数据。
+在GreatSQL 8.0中（XtraBackup也相应升级到8.x版本），仅存在InnoDB表的话，不再执行FTWRL，而是直接读元数据。
 
 ### 2.1 常规全量备份
 
@@ -67,7 +68,7 @@ ibdata1         mysql          performance_schema             db2   xtrabackup_b
 备份完毕后，目标目录下的几个文件作用分别是：
 
 - backup-my.cnf，记录执行xtrabackup相关选项参数，用于后续恢复
-- xtrabackup_binlog_info，记录备份时的BINLOG及GTID信息，用于将数据恢复后作为从节点时设置主从复制相关选项
+- xtrabackup_binlog_info，记录备份时的binlog及GTID信息，用于将数据恢复后作为从节点时设置主从复制相关选项
 - xtrabackup_checkpoints，记录本次备份redo log的lsn及checkpoint信息，用于数据全量/增量恢复时的事务恢复点位判断
 - xtrabackup_info，记录本次备份常规信息
 
@@ -133,7 +134,7 @@ flushed_lsn = 98574369
 
 ### 2.6 全备还原
 
-XtraBackup备份文件不能直接用来拉起数据库，需要先做预处理：
+Xtrabackup备份文件不能直接用来拉起数据库，需要先做预处理：
 ```
 $ cd /backup/GreatSQL/full/`date +'%Y%m%d'`/
 $ xtrabackup --prepare --target-dir=./
@@ -227,7 +228,7 @@ $ xtrabackup --copy-back --target-dir=/backup/GreatSQL/full/20230825 --datadir=/
 ```
 
 **参考资料：**
-- [XtraBackup](https://docs.percona.com/percona-xtrabackup/latest/manual.html)
+- [XtraBackup](https://docs.percona.com/percona-xtrabackup/8.0/)
 
 
 **问题反馈**
