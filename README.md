@@ -76,7 +76,7 @@ GreatSQL具备**高性能**、**高可靠**、**高易用性**、**高安全**�
 
 # [9. 高可用架构](./9-ha/9-ha.md)
  - ## [9.1 单机多实例高可用](./9-ha/1-ha-single-machine-multi-instance.md)
- - ## [9.2 单VLAN高可用](./-ha/5-ha-single-vlan.md)
+ - ## [9.2 单VLAN高可用](./9-ha/5-ha-single-vlan.md)
  - ## [9.3 单IDC高可用](./9-ha/2-ha-single-idc.md)
  - ## [9.4 同城跨IDC高可用](./9-ha/3-ha-same-city-multi-idc.md)
  - ## [9.5 跨城多IDC高可用](./9-ha/4-ha-multi-city-multi-idc.md)

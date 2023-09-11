@@ -11,7 +11,7 @@ GreatSQL和MySQL一样，是个单机系统。同样地，GreatSQL也是三层�
 
 GreatSQL数据库区别于其他数据库的一个特点就是其可插拔的表存储引擎，特别需要注意的是，**存储引擎是基于表的，而不是数据库**。
 
-![图片](./3-greatsql-arch-01.png)
+![图片](./3-greatsql-arch-01.png#pic_center)
 
 <center>图2_GreatSQL8.0 版本体系架构图</center>
 
@@ -115,7 +115,7 @@ greatsql> SHOW ENGINES;
 
 所以可以把 GreatSQL 的架构图简化如下：
 
-![图片](./3-greatsql-arch-02.png)
+![图片](./3-greatsql-arch-02.png#pic_center)
 
 ## 基于传统主从复制架构
 ---
@@ -130,7 +130,7 @@ greatsql> SHOW ENGINES;
 
 经典主从单向复制架构如下图所示：
 
-![传统主从复制技术架构图](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/deep-dive-mgr-02-01.jpg)
+![传统主从复制技术架构图](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/deep-dive-mgr-02-01.jpg#pic_center)
 
 **架构说明**
 
@@ -151,7 +151,7 @@ greatsql> SHOW ENGINES;
 
 半同步复制架构如下图所示：
 
-![半同步复制技术架构图](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/deep-dive-mgr-02-02.jpg)
+![半同步复制技术架构图](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/deep-dive-mgr-02-02.jpg#pic_center)
 
 **架构说明**
 
@@ -191,7 +191,7 @@ MGR具备以下几个特点：
 
 首先来个MGR的技术架构图：
 
-![MGR技术架构图](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/deep-dive-mgr-02-03.jpg)
+![MGR技术架构图](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/deep-dive-mgr-02-03.jpg#pic_center)
 
 **架构说明**
 
@@ -215,14 +215,14 @@ MGR支持单主和多主两种模式，在单主模式下，各节点会自动�
 
 **单主（Single-Primary）模式**
 
-![MGR单主模式](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/single-primary-election.png)
+![MGR单主模式](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/single-primary-election.png#pic_center)
 **架构说明**
 
 如上图所示，一开始S1节点是Primary角色，提供读写服务。当它发生故障时，剩下的S2-S5节点会再投票选举出S2作为新的Primary角色提供读写服务，而S1节点在达到一定超时阈值后，就会被踢出。
 
 **多主（Multi-Primary）模式**
 
-![MGR多主模式](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/multi-primary.png)
+![MGR多主模式](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/multi-primary.png#pic_center)
 **架构说明**
 
 如上图所示，一开始S1-S5所有节点都是Primary角色，都可以提供读写服务，任何一个节点发生故障时，只需要把指向这个节点的流量切换下就行。

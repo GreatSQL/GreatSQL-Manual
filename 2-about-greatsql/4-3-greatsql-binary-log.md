@@ -17,7 +17,7 @@ Binlog即Binary Log，二进制日志文件，也叫作变更日志（Update Log
 
 可以说GreatSQL**数据库的数据备份、主备、单主、多主、MGR**都离不开Binary Log,需要依靠Binary Log来同步数据，保证数据一致性。
 
-![](./4-3-greatsql-binary-log-01.png)
+![](./4-3-greatsql-binary-log-01.png#pic_center)
 
 ## 查看默认情况
 
@@ -332,7 +332,7 @@ binlog的写入时机也非常简单，事务执行过程中，先把日志写�
 
 我们可以通过`binlog_cache_size`参数控制单个线程binlog cache大，如果存储内容超过了这个参数，就要暂存到磁盘(Swap)。binlog日志刷盘流程如下:
 
-![图片](./4-3-greatsql-binary-log-02.png)
+![图片](./4-3-greatsql-binary-log-02.png#pic_center)
 
 > 上图的write，是指把日志写入到文件系统的page cache，并没有把数据持久化到磁盘，所以速度比较快。
 
@@ -340,11 +340,11 @@ binlog的写入时机也非常简单，事务执行过程中，先把日志写�
 
 write和fsync的时机，可以由参数`sync_binlog`控制，默认是 0 。
 
-为 0 的时候，表示每次提交事务都只write，由系统自行判断什么时候执行fsync。虽然性能得到提升，但是机器宕机，page cache里面的binglog 会丢失。如下图：![图片](./4-3-greatsql-binary-log-03.png)
+为 0 的时候，表示每次提交事务都只write，由系统自行判断什么时候执行fsync。虽然性能得到提升，但是机器宕机，page cache里面的binglog 会丢失。如下图：![图片](./4-3-greatsql-binary-log-03.png#pic_center)
 
 为了安全起见，可以设置为 1 ，表示每次提交事务都会执行fsync，就如同 redo log 刷盘流程 一样。最后还有一种折中方式，可以设置为N(N>1)，表示每次提交事务都write，但累积N个事务后才fsync。
 
-![图片](./4-3-greatsql-binary-log-04.png)
+![图片](./4-3-greatsql-binary-log-04.png#pic_center)
 
 在出现IO瓶颈的场景里，将sync_binlog设置成一个比较大的值，可以提升性能。同样的，如果机器宕机，会丢失最近N个事务的binlog日志。
 
