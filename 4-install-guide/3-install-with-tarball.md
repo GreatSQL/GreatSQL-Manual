@@ -12,11 +12,11 @@
 
 - ## [4 统信UOS环境中安装](./3-4-uos-install.md)
 
-- ## [4.5 龙蜥Anolis环境安装](./3-5-anolis-install.md)
+- ## [5 龙蜥Anolis环境安装](./3-5-anolis-install.md)
 
-- ## [4.6 麒麟Kylin环境安装](./3-6-kylin-install.md)
+- ## [6 麒麟Kylin环境安装](./3-6-kylin-install.md)
 
-- ## [4.7 初始化测试数据库](./7-load-sampledb.md)
+- ## [7 初始化测试数据库](./7-load-sampledb.md)
 
 
 **问题反馈**
