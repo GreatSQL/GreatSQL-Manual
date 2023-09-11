@@ -7,7 +7,7 @@ GreatSQL支持在单主（Single-Primary）模式下，在读写节点绑定动�
 
 整体架构图如下所示：
 
-![跨城多IDC高可用方案](./8-5-ha-single-vlan01.png)
+![跨城多IDC高可用方案](./5-ha-single-vlan01.png)
 
 
 ## 启用内置vip插件

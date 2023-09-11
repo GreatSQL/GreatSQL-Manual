@@ -9,7 +9,7 @@
 
 整体架构图如下所示：
 
-![跨城多IDC高可用方案](./8-4-ha-multi-city-multi-idc01.png)
+![跨城多IDC高可用方案](./4-ha-multi-city-multi-idc01.png)
 
 
 **问题反馈**

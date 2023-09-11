@@ -8,15 +8,15 @@
 单IDC场景下的高可用方案也比较简单，一般可以选用以下几种：
 
 1. lvs/haproxy。
-2. mysql router中间件。
+2. MySQL Router中间件。
 
-本文重点讨论利用mysql router构建高可用的解决方案，lvs/haproxy方案请自行搜索。
+本文重点讨论利用MySQL Router构建高可用的解决方案，lvs/haproxy方案请自行搜索。
 
 ## 2. MySQL Router + GreatSQL MGR 实现单IDC内高可用
 
 首先，构建一个三节点的MGR集群，该集群包含Primary、Secondary、Arbitrator三种节点。
 ```
-mysql> select * from performance_schema.replication_group_members;
+greatsql> select * from performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST  | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
@@ -30,7 +30,7 @@ mysql> select * from performance_schema.replication_group_members;
 
 整体架构看起来像是这样：
 
-![MySQL Router + GreatSQL MGR 实现单IDC高可用方案](./8-2-ha-single-idc01.png)
+![MySQL Router + GreatSQL MGR 实现单IDC高可用方案](./2-ha-single-idc01.png)
 
 
 **问题反馈**

@@ -18,7 +18,7 @@
 
 首先，参考文档：[单机多实例](https://gitee.com/GreatSQL/GreatSQL-Manual/blob/master/6-oper-guide/6-6-multi-instances.md) 完成单机多实例环境部署，并构建MGR集群。
 ```
-mysql> select MEMBER_ID,MEMBER_HOST,MEMBER_PORT,MEMBER_ROLE from performance_schema.replication_group_members;
+greatsql> select MEMBER_ID,MEMBER_HOST,MEMBER_PORT,MEMBER_ROLE from performance_schema.replication_group_members;
 +--------------------------------------+-------------+-------------+-------------+
 | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_ROLE |
 +--------------------------------------+-------------+-------------+-------------+
@@ -40,7 +40,7 @@ MySQL Router的部署方法可以参考文档：[读写分离](https://gitee.com
 
 此时高可用架构图大致如下所示：
 
-![MySQL Router单机多实例高可用方案](./8-1-ha-single-machine-multi-instance01.png)
+![MySQL Router单机多实例高可用方案](./1-ha-single-machine-multi-instance01.png)
 
 在本案中，因为是单机多实例环境，因此直接把MySQL Router和数据库服务器部署在一起，没有分开。
 
