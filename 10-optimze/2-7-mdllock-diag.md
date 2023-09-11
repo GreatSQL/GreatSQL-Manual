@@ -108,7 +108,6 @@ OBJECT_INSTANCE_BEGIN: 139835167440320
 ```
 如果是 **LOCK READ** 请求则简单了很多，只有一个表级对象共享锁。
 
-
 **4. 发起一个DDL请求**
 
 会话1：
@@ -136,6 +135,7 @@ greatsql> select * from performance_schema.metadata_locks\G
 
 **5. 发起一个备份锁**
 会话1：
+
 ```
 greatsql> LOCK INSTANCE FOR BACKUP;
 ```
@@ -159,6 +159,7 @@ OBJECT_INSTANCE_BEGIN: 139835167443600
 
 **6. 发起FTWRL锁**
 会话1：
+
 ```
 greatsql> FLUSH TABLES WITH READ LOCK;
 ```
@@ -193,8 +194,7 @@ OBJECT_INSTANCE_BEGIN: 139835061536608
 ```
 看到除了GLOBAL锁，还有COMMIT锁。
 
-
-##5. 查看分析MDL锁等待
+## 3. 查看分析MDL锁等待
 
 MDL锁是比较粗粒度的锁，一旦出现写锁等待，不但当前操作会被阻塞，同时还会阻塞后续该表的所有操作，如下例所示：
 

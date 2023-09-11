@@ -118,7 +118,7 @@ InnoDB并行查询相关选项可在线动态调整，也可在每个SQL中单�
 确认InnoDB并行查询相关选项：
 
 ```SQL
-mysql> show global variables like '%parall%';
+greatsql> show global variables like '%parall%';
 +----------------------------------+----------------+
 | force_parallel_execute           | ON             |
 | parallel_cost_threshold          | 1000           |
@@ -296,7 +296,7 @@ done
 在运行查询SQL时，也要观察相关指标：
 
 ```SQL
-mysql> show global status like '%PQ%';
+greatsql> show global status like '%PQ%';
 +--------------------+-------+
 | Variable_name      | Value |
 +--------------------+-------+
@@ -307,8 +307,8 @@ mysql> show global status like '%PQ%';
 +--------------------+-------+
 4 rows in set (0.00 sec)
 
-mysql> show processlist;
-mysql> explain for connection **;
+greatsql> show processlist;
+greatsql> explain for connection **;
 ```
 
 ## 6. 测试结果

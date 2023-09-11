@@ -4,7 +4,7 @@
 本文主要介绍从GreatSQL数据库的几个优化参考。
 
 ## 1. GreatSQL优化配置参考
-通常情况下，运行GreatSQL数据库时，采用 [**这份my.cnf**](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24) 参考就足够了。
+通常情况下，运行GreatSQL数据库时，采用 [这份my.cnf](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24) 参考就足够了。
 
 下面针对其中的几个关键参数选项稍作解读：
 
