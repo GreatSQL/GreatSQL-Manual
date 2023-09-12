@@ -33,9 +33,12 @@ GreatSQL社区官网：[https://greatsql.cn](https://greatsql.cn)
 
 无论是更可靠的MGR还是性能更好的InnoDB，都值得将当前的MySQL或Percona Server升级到GreatSQL。
 
-目前GreatSQL最新版本是8.0.25-17，[可点击这里下载最新版本](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.25-17)。
+目前GreatSQL最新版本是8.0.32-24，[可点击这里下载最新版本](https://gitee.com/GreatSQL/GreatSQL/releases)
 
 关于GreatSQL的优势可阅读下面几篇文章：
+
+- [GreatSQL 8.0.32-24](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/greatsql-803224/changes-greatsql-8-0-32-24-20230605.md)
+
 - [GreatSQL 8.0.25-17](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-17-20230313.md)
 - [GreatSQL 8.0.25-16](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-16-20220516.md)
 - [GreatSQL 8.0.25-15](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-20210820.md)
@@ -45,7 +48,7 @@ GreatSQL社区官网：[https://greatsql.cn](https://greatsql.cn)
 
 ## 3. GreatSQL在哪里可以下载
 ### 二进制包、RPM包
-二进制包下载地址：[https://gitee.com/GreatSQL/GreatSQL/releases](https://gitee.com/GreatSQL/GreatSQL/releases)。
+二进制包下载地址：[https://gitee.com/GreatSQL/GreatSQL/releases](https://gitee.com/GreatSQL/GreatSQL/releases)
 
 目前提供CentOS 7、CentOS 8两种操作系统，以及X86和ARM两种不同架构下的二进制包、RPM包。
 
@@ -95,6 +98,8 @@ $ docker pull docker.io/greatsql/greatsql:8.0.25-aarch64
 一、文档
 目前GreatSQL相关文档全部发布在gitee上（[https://gitee.com/GreatSQL/GreatSQL-Doc/](https://gitee.com/GreatSQL/GreatSQL-Doc/)），主要有以下几部分
 1. GreatSQL历史版本说明
+- https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/greatsql-803224/changes-greatsql-8-0-32-24-20230605.md
+
 - [https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-17-20230313.md](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-17-20230313.md)
 - [https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-16-20220516.md](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-16-20220516.md)
 - [https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-20210820.md](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-20210820.md)
@@ -118,7 +123,12 @@ $ docker pull docker.io/greatsql/greatsql:8.0.25-aarch64
 3. 《零基础学习MySQL》
 - [https://space.bilibili.com/1363850082/channel/collectiondetail?sid=328292&ctype=0](https://space.bilibili.com/1363850082/channel/collectiondetail?sid=328292&ctype=0)
 
-4. 万里数据库工程师的公开分享
+4. 《GCA_GreatSQL课程》
+
+- https://www.bilibili.com/video/BV1qk4y1N7dB/?vd_source=ae1951b64ea7b9e6ba11f1d0bbcff0e4
+
+5. 万里数据库工程师的公开分享
+
 - [https://www.bilibili.com/medialist/detail/ml1406093582?type=1&spm_id_from=333.999.0.0](https://www.bilibili.com/medialist/detail/ml1406093582?type=1&spm_id_from=333.999.0.0)
 
 
@@ -130,6 +140,9 @@ GreatSQL不计划每个小版本都跟随，暂定奇数版本跟随方式，即
 目前已有的版本：<br/>
 
 **GreatSQL 8.0**
+
+- [GreatSQL 8.0.32-24](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/greatsql-803224/changes-greatsql-8-0-32-24-20230605.md)
+
 - [GreatSQL 8.0.25-17](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-17-20230313.md)
 - [GreatSQL 8.0.25-16](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-16-20220516.md)
 - [GreatSQL 8.0.25-15](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-20210820.md)

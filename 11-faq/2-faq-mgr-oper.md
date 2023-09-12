@@ -59,7 +59,7 @@ fe80::/10 prefix  - link-local unicast addresses
 ## 7. 怎么查看MGR当前是单主还是多主模式
 执行下面的命令：
 ```
-[root@GreatSQL]> SELECT * FROM performance_schema.replication_group_members;
+greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+-----------...-+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID ... | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+-----------...-+-------------+--------------+-------------+----------------+
@@ -71,9 +71,9 @@ fe80::/10 prefix  - link-local unicast addresses
 ```
 如果只看到一个节点的 `MEMBER_ROLE` 值为 **PRIMARY**，则表示这是单主模式。如果看到所有节点上该状态值均为 **PRIMARY**，则表示这是多主模式。
 
-另外，也可以通过查询MySQL选项值来确认：
+另外，也可以通过查询GreatSQL选项值来确认：
 ```
-[root@GreatSQL]# mysqladmin var|grep -i group_replication_single_primary_mode
+$ mysqladmin var|grep -i group_replication_single_primary_mode
 | group_replication_single_primary_mode        | ON
 ```
 值为 **ON**，这表示采用单主模式。如果该值为 **OFF**，则表示采用多主模式。
@@ -93,7 +93,7 @@ P.S，强烈建议采用单主模式，遇到bug或其他问题的概率更低�
 在MySQL客户端命令行模式下，执行下面的命令即可：
 ```
 -- 从单主切换为多主
-[root@GreatSQL]> SELECT group_replication_switch_to_multi_primary_mode();
+greatsql> SELECT group_replication_switch_to_multi_primary_mode();
 +--------------------------------------------------+
 | group_replication_switch_to_multi_primary_mode() |
 +--------------------------------------------------+
@@ -101,7 +101,7 @@ P.S，强烈建议采用单主模式，遇到bug或其他问题的概率更低�
 +--------------------------------------------------+
 
 -- 从多主切换为单主
-[root@GreatSQL]> SELECT group_replication_switch_to_single_primary_mode();
+greatsql> SELECT group_replication_switch_to_single_primary_mode();
 +---------------------------------------------------+
 | group_replication_switch_to_single_primary_mode() |
 +---------------------------------------------------+
@@ -110,7 +110,7 @@ P.S，强烈建议采用单主模式，遇到bug或其他问题的概率更低�
 ```
 **注意：** 切换时会重新选主，新的主节点有可能不是切换之前的那个，这时可以运行下面的命令来重新指定：
 ```
-[root@GreatSQL]> SELECT group_replication_set_as_primary('ed5fe7ba-37c2-11ec-8e12-70b5e873a570');
+greatsql> SELECT group_replication_set_as_primary('ed5fe7ba-37c2-11ec-8e12-70b5e873a570');
 +--------------------------------------------------------------------------+
 | group_replication_set_as_primary('ed5fe7ba-37c2-11ec-8e12-70b5e873a570') |
 +--------------------------------------------------------------------------+
@@ -163,10 +163,10 @@ P.S，强烈建议采用单主模式，遇到bug或其他问题的概率更低�
 在MySQL Router初始化部署时，添加 `--name`、`--directory` 及端口号等参数即可，例如：
 ```
 -- 部署第一个实例
-root@GreatSQL# mysqlrouter --bootstrap mymgr@192.168.1.1:3306 --name=MGR1 --directory=/etc/mysqlrouter/MGR1  --user=mysqlrouter --conf-base-port=6446 --https-port=8443
+$ mysqlrouter --bootstrap mymgr@192.168.1.1:3306 --name=MGR1 --directory=/etc/mysqlrouter/MGR1  --user=mysqlrouter --conf-base-port=6446 --https-port=8443
 
 -- 部署第二个实例
-root@GreatSQL# mysqlrouter --bootstrap mymgr@192.168.1.1:4306 --name=MGR2 --directory=/etc/mysqlrouter/MGR2  --user=mysqlrouter --conf-base-port=7446 --https-port=9443
+$ mysqlrouter --bootstrap mymgr@192.168.1.1:4306 --name=MGR2 --directory=/etc/mysqlrouter/MGR2  --user=mysqlrouter --conf-base-port=7446 --https-port=9443
 ```
 然后每个实例用各自目录下的 `start.sh` 和 `stop.sh` 脚本启停即可。
 
