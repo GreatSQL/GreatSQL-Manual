@@ -1,6 +1,6 @@
 # GreatSQL 8.0 用户手册
 
-最后更新: 2023-09-11
+最后更新: 2023-09-12
 
 本文档适用版本：[GreatSQL 8.0.32-24](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/greatsql-803224/changes-greatsql-8-0-32-24-20230605.md)
 

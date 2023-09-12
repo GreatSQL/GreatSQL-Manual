@@ -19,7 +19,7 @@
 
 该选项默认为60秒，可在线动态修改，例如：
 ```sql
-mysql> SET GLOBAL group_replication_flow_control_replay_lag_behind = 60;
+greatsql> SET GLOBAL group_replication_flow_control_replay_lag_behind = 60;
 ```
 正常情况下，该参数无需调整。
 

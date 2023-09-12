@@ -27,7 +27,7 @@ $ mysql -h172.17.0.3 -uroot -p
 二进制及Docker方式快速安装GreatSQL后，数据库中的管理员用户root默认是空密码，安全起见，可以先修改密码：
 ```
 # 先查看当前用户
-mysql> select user();
+greatsql> select user();
 +----------------+
 | user()         |
 +----------------+
@@ -35,7 +35,7 @@ mysql> select user();
 +----------------+
 
 # 修改密码
-mysql> alter user user() identified by 'GreatSQL@202X';
+greatsql> alter user user() identified by 'GreatSQL@202X';
 Query OK, 0 rows affected (0.02 sec)
 ```
 修改完成后，再次用root用户连入的话就可以用新密码了。
@@ -47,12 +47,12 @@ Query OK, 0 rows affected (0.02 sec)
 $ mysql -uroot 
 
 # 创建新用户
-mysql> CREATE USER GreatSQL@'172.17.0.0/16' IDENTIFIED BY 'GreatSQL-202X';
+greatsql> CREATE USER GreatSQL@'172.17.0.0/16' IDENTIFIED BY 'GreatSQL-202X';
 
 
 #创建一个新的用户库，并对GreatSQL用户授予读写权限
-mysql> CREATE DATABASE GreatSQL;
-mysql> GRANT ALL ON GreatSQL.* TO GreatSQL@'172.17.0.0/16';
+greatsql> CREATE DATABASE GreatSQL;
+greatsql> GRANT ALL ON GreatSQL.* TO GreatSQL@'172.17.0.0/16';
 ```
 
 切换到普通用户GreatSQL登入，创建测试表，写入数据：
@@ -60,15 +60,15 @@ mysql> GRANT ALL ON GreatSQL.* TO GreatSQL@'172.17.0.0/16';
 $ mysql -h172.17.0.3 -uGreatSQL -p'GreatSQL-202X'
 ...
 # 切换到GreatSQL数据库下
-mysql> use GreatSQL;
+greatsql> use GreatSQL;
 Database changed
 
 # 创建新表
-mysql> CREATE TABLE t1(id INT PRIMARY KEY);
+greatsql> CREATE TABLE t1(id INT PRIMARY KEY);
 Query OK, 0 rows affected (0.07 sec)
 
 # 查看都有哪些数据表
-mysql> SHOW TABLES;
+greatsql> SHOW TABLES;
 +--------------------+
 | Tables_in_GreatSQL |
 +--------------------+
@@ -77,12 +77,12 @@ mysql> SHOW TABLES;
 1 row in set (0.00 sec)
 
 # 写入测试数据
-mysql> INSERT INTO t1 SELECT RAND()*1024;
+greatsql> INSERT INTO t1 SELECT RAND()*1024;
 Query OK, 1 row affected (0.05 sec)
 Records: 1  Duplicates: 0  Warnings: 0
 
 # 查询数据
-mysql> SELECT * FROM t1;
+greatsql> SELECT * FROM t1;
 +-----+
 | id  |
 +-----+

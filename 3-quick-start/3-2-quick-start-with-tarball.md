@@ -209,7 +209,7 @@ Copyright (c) 2000, 2021, Oracle and/or its affiliates.
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-mysql> \s
+greatsql> \s
 --------------
 mysql  Ver 8.0.32-24 for Linux on x86_64 (GreatSQL, Release 24, Revision 3714067bc8c)
 
@@ -234,7 +234,7 @@ Uptime:            17 min 23 sec
 Threads: 2  Questions: 12  Slow queries: 0  Opens: 120  Flush tables: 3  Open tables: 36  Queries per second avg: 0.011
 --------------
 
-mysql> show databases;  #<--查看数据库列表
+greatsql> show databases;  #<--查看数据库列表
 +--------------------+
 | Database           |
 +--------------------+

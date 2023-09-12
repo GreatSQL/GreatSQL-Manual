@@ -183,13 +183,13 @@ Copyright (c) 2000, 2021, Oracle and/or its affiliates.
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-mysql> \s   #<--想执行一个命令，提示要先修改密码
+greatsql> \s   #<--想执行一个命令，提示要先修改密码
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 
-mysql> alter user user() identified by 'GreatSQL@202X';  #<--修改密码
+greatsql> alter user user() identified by 'GreatSQL@202X';  #<--修改密码
 Query OK, 0 rows affected (0.02 sec)
 
-mysql> \s   #<--就可以正常执行其他命令了
+greatsql> \s   #<--就可以正常执行其他命令了
 --------------
 mysql  Ver 8.0.32-24 for Linux on x86_64 (GreatSQL, Release 24, Revision 3714067bc8c)
 
@@ -214,7 +214,7 @@ Uptime:                 10 min 14 sec
 Threads: 2  Questions: 7  Slow queries: 0  Opens: 130  Flush tables: 3  Open tables: 46  Queries per second avg: 0.005
 --------------
 
-mysql> show databases;  #<--查看数据库列表
+greatsql> show databases;  #<--查看数据库列表
 +--------------------+
 | Database           |
 +--------------------+
@@ -225,7 +225,7 @@ mysql> show databases;  #<--查看数据库列表
 +--------------------+
 4 rows in set (0.01 sec)
 
-mysql>
+greatsql>
 ```
 
 ## 关闭/重启GreatSQL
