@@ -20,7 +20,7 @@
 
 **中继日志（Relay log）** 用于在主从复制环境中,记录主服务器上的所有数据变更语句。当主服务器上的数据库有更新时,这些更新语句会被记录到Relay Log中。从服务器会连接到主服务器,并读取Relay Log中的语句,将这些语句在自己的数据库中重新执行一次,以达到数据同步的目的。
 
-- ## [5 图解GreatSQL Redo Log](./4-5-greatsql-redo-Log.md)
+- ## [5 图解GreatSQL Redo Log](./4-5-greatsql-redo-log.md)
 
 **重做日志（Redo Log）** 记录了必须重做的修改,以保证事务的持久性。在事务提交时,只有Redo Log中的修改被持久化到数据文件。如果数据库崩溃,服务器重启时会重做Redo Log中的修改以恢复数据。
 

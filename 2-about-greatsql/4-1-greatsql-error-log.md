@@ -73,7 +73,7 @@ greatsql> SELECT @@GLOBAL.log_error_services;
 | 2                         | ERROR, WARNING               |
 | 3                         | ERROR, WARNING, INFORMATION  |
 
-- **在MGR中建议设置为`3`可以记录更多日志信息，便于跟踪问题。**
+- **在MGR中建议设置为 `3` 可以记录更多日志信息，便于跟踪问题。**
 
 ## log_timestamps控制日志显示时间
 
