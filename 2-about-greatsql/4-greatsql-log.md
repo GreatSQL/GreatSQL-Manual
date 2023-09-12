@@ -28,9 +28,9 @@
 
 **回滚日志（Undo Log）** 记录了必须回滚的修改,用于实现事务的原子性。如果事务只修改了部分数据就发生故障,可以通过Undo Log回滚事务的修改,将数据恢复到事务执行前的状态。
 
-- ## [7 图解GreatSQL Query Log](./4-7-greatsql-query-log.md)
+- ## [7 图解GreatSQL General Log](./4-7-greatsql-query-log.md)
 
-**通用查询日志（Query Log）** 记录了客户端向 GreatSQL 服务器发送的所有SQL语句。服务器会将收到的所有语句记录在日志文件中,查询日志对于定位问题的查询语句和调优SQL非常有用。
+**通用查询日志（General Log）** 记录了客户端向 GreatSQL 服务器发送的所有SQL语句。服务器会将收到的所有语句记录在日志文件中,查询日志对于定位问题的查询语句和调优SQL非常有用。
 
 **问题反馈**
 ---
