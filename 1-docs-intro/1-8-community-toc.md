@@ -106,7 +106,7 @@
  - 积极提出你的问题，参与 GreatSQL 的迭代和优化；
  - 参加社区活动（比如线上或线下 meetup 等社区活动），进一步了解相关知识，并在社区中与其他开发者交流；
  - 积极参与贡献者任务；
- 
+
  **权益**
  - 作为 Contributor 展示在 GreatSQL 官网贡献者名单；
  - 成为 Contributor 后可申请领取社区周边定制纪念品短袖T恤 1 件；
@@ -173,3 +173,16 @@
 针对这样的合作伙伴，GreatSQL 社区将面向合作伙伴的企业云提供端口与接入测试，并协助合作伙伴进行 GreatSQL 适配优化调试，以确保在合作伙伴的云端依旧平稳运行，为云厂商的行业客户提供更多选择。
 
 [def]: ./community-toc.jpg
+
+**问题反馈**
+---
+
+- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+
+
+**联系我们**
+---
+
+扫码关注微信公众号
+
+![greatsql-wx](D:\Sow\个人文件夹\工作\GreatSQL社区相关\gitlab\GreatSQL-Manual\greatsql-wx.jpg)

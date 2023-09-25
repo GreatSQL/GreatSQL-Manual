@@ -1,4 +1,4 @@
-# 5-MGR-MySQL Router构建读写分离集群
+# MGR MySQL Router构建读写分离集群
 
 ---
 
@@ -184,5 +184,5 @@ Current database: *** NONE ***
 
 扫码关注微信公众号
 
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/141935_2ea2c196_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")
+![greatsql-wx](../greatsql-wx.jpg)
 

@@ -95,7 +95,7 @@ sys.sys_config                                     OK
 test.sbtest1                                       OK
 Upgrade process completed successfully.
 Checking if update is needed.
-``` 
+```
 
 另外，推荐采用MySQL Shell提供的 `util.checkForServerUpgrade()` 方法做升级前的检查，它主要是从实例的基础数据本身来判定实例是否满足升级条件，譬如是否使用了移除的函数、表名是否存在冲突等。该工具的详细介绍可参考社区用户 **芬达** 的几篇文章：
 - [5.7 升级 8.0 的升级检查利器 util.checkForServerUpgrade 原理(1)](https://mp.weixin.qq.com/s/EuR7MSaVMOTnQTMh0_RsZQ)
@@ -268,4 +268,4 @@ GreatSQL 8.0.32相对于8.0.25版本，新增了更多SQL语法兼容性、MGR�
 
 扫码关注微信公众号
 
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/141935_2ea2c196_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")
+![greatsql-wx](../greatsql-wx.jpg)

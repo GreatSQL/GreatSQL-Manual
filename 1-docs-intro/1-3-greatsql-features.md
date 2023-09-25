@@ -10,9 +10,9 @@ GreatSQL具备**高性能**、**高可靠**、**高易用性**、**高安全**�
 - 支持并行load data，适用于频繁导入大批量数据的应用场景，性能可提升约20+倍。
 - 支持线程池（thread pool），降低了线程创建和销毁的代价，保证高并发下，性能稳定不会明显衰退。
 
-
 **2. 高可靠**
 GreatSQL针对MGR进行了大量改进和提升工作，进一步提升MGR的高可靠等级。
+
 - 地理标签，提升多机房架构数据可靠性。
 - 读写节点动态VIP，高可用切换更便捷。
 - 仲裁节点，用更低的服务器成本实现更高可用。
@@ -75,4 +75,4 @@ GreatSQL同时也是gitee（码云）平台上的GVP项目，详见：[https://g
 
 扫码关注微信公众号
 
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/141935_2ea2c196_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")
+![greatsql-wx](..\greatsql-wx.jpg)

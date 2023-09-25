@@ -91,4 +91,4 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 
 扫码关注微信公众号
 
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/141935_2ea2c196_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")
+![greatsql-wx](../greatsql-wx.jpg)
