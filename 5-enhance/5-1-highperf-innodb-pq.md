@@ -8,7 +8,7 @@
 
 使用限制：
 - 暂不支持子查询，可想办法改造成JOIN。
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0819/094317_1c0fb43a_8779455.jpeg "16292668686865.jpg")
+![输入图片说明](./5-1-highperf-innodb-pq-01.jpg)
 
 
 ## 2. 启用InnoDB PQ
