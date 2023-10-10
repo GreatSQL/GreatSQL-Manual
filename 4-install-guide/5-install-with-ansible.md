@@ -73,7 +73,7 @@ $ ansible greatsql_dbs -a "uptime"
 ```
 $ cd /opt/greatsql/; wget -c "https://gitee.com/xxx/GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal-ansible.tar.xz"
 
-$ tar zxf GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal-ansible.tar.xz
+$ tar -Jxvf GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal-ansible.tar.xz
 ```
 
 解压缩后，能看到除了 *GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal.tar.xz* 安装包之外，还有GreatSQL-ansible一键安装相关文件：
