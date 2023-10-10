@@ -12,7 +12,10 @@ MySQL InnoDB Cluster（简称MIC）是MySQL推出的整套解决方案，由几�
 MySQL Router是一个轻量级的中间件，它采用多端口的方案实现读写分离以及读负载均衡，而且同时支持mysql和mysql x协议。
 
 整体系统架构如下图所示：
-![MySQL InnoDB Cluser架构](https://images.gitee.com/uploads/images/2021/0623/172104_653e92d0_8779455.png "MySQL InnoDB Cluser架构")
+
+
+
+![MySQL InnoDB Cluser架构](./2-oper-rw-splitting-01.png)
 
 ## 2. MySQL Router安装&初始化
 
