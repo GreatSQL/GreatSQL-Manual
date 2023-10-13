@@ -58,7 +58,7 @@ GreatSQL针对MGR进行了大量改进和提升工作，进一步提升MGR的高
 |MyRocks引擎|✅|❎|
 |SQL兼容扩展|1.数据类型扩展<br/>2.SQL语法扩展<br/>共超过20个扩展新特性| ❎ |
 |MGR提升|1.地理标签<br/>2.仲裁节点<br/>3.读写节点绑定VIP<br/>4.快速单主模式<br/>5.智能选主机制<br/>6.全新流控算法|❎|
-|性能提升|1.InnoDB并行查询<br/>2.并行load data|❎|
+|性能提升|1.InnoDB并行查询<br/>2.并行load data<br/>3.InnoDB事务readview无锁优化<br/>4.InnoDB事务大锁拆分优化|❎|
 |安全提升|1.国密支持<br/>2.备份加密<br/>3.审计日志入库|❎|
 
 此外，GreatSQL 8.0.32-24基于Percona Server for MySQL 8.0.32-24版本，它在MySQL 8.0.32基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature_comparison.html#percona-server-for-mysql-feature-comparison)，这其中包括线程池、审计、数据脱敏等MySQL企业版才有的特性，以及PFS提升、IFS提升、性能和可扩展性提升、用户统计增强、processlist增强、slow log增强等大量改进和提升，这里不一一重复列出。
