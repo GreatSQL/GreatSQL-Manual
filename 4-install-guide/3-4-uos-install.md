@@ -31,9 +31,11 @@ $ ldd --version
 ldd (GNU libc) 2.28
 ```
 
-那么在这个环境下，可以选择`GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz`这个二进制包进行安装
+那么在这个环境下，既x86_64和libc2.28，可选`GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz`这个二进制包进行安装
 
 当然了，也可以选择相应的minimal包，minimal版本是对二进制文件进行strip后，所以文件尺寸较小，功能上没本质区别，但不支持gdb debug功能，可以放心使用。
+
+> 若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.0.32-24-uos-glibc2.28-aarch64.tar.xz`
 
 将下载的二进制包放到安装目录下，并解压缩：
 

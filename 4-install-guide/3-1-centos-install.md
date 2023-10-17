@@ -19,7 +19,7 @@
 
 ## 2. 下载安装包
 
-[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-24)下载最新的安装包，下载以下几个就可以：
+[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-24)下载最新的安装包，下载以下一个就可以：
 
 - GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz
 
@@ -32,7 +32,7 @@ $ tar xf GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz
 
 同时修改设置，将GreatSQL加入 `PATH` 环境变量：
 ```
-$ echo 'export PATH=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-aarch64/bin:$PATH' >> ~/.bash_profile
+$ echo 'export PATH=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
 $ source ~/.bash_profile
 ```
 
