@@ -1,3 +1,4 @@
+# 社区治理
 ![community-toc](./community-toc.jpg)
 
 社区技术观察委员会（TOC）
@@ -185,4 +186,4 @@
 
 扫码关注微信公众号
 
-![greatsql-wx](D:\Sow\个人文件夹\工作\GreatSQL社区相关\gitlab\GreatSQL-Manual\greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

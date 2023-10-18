@@ -25,10 +25,10 @@ $ mysqlsh --uri GreatSQL@172.16.16.10:3306
 
 ## 1. 切换主节点
 
-- [MySQL Shell for GreatSQL方式切换](#MySQL Shell for GreatSQL方式切换)
+- [MySQL Shell for GreatSQL方式切换主节点](#mysql-shell-for-greatsql方式切换主节点)
 - [手动方式切换](#手工方式切换)
 
-##### MySQL Shell for GreatSQL方式切换
+##### MySQL Shell for GreatSQL方式切换主节点
 
 当主节点需要进行维护时，或者执行滚动升级时，就可以对其进行切换，将主节点切换到其他节点。
 
@@ -129,10 +129,10 @@ greatsql> select * from performance_schema.replication_group_members;
 
 ## 2. 切换单主/多主模式
 
-- [MySQL Shell for GreatSQL方式切换](#MySQL Shell for GreatSQL方式切换)
+- [MySQL Shell for GreatSQL方式切换模式](#mysql-shell-for-greatsql方式切换模式)
 - [手动方式切换](#手动方式切换)
 
-##### MySQL Shell for GreatSQL方式切换
+##### MySQL Shell for GreatSQL方式切换模式
 
 调用函数 `switch_to_multi_primary_mode()` 和 `switch_to_single_primary_mode()` 可以实现切换到多主、单主模式。
 
@@ -258,7 +258,7 @@ greatsql> select group_replication_switch_to_single_primary_mode('af39db70-6850-
 
 ## 3. 添加新节点
 
-- [MySQL Shell for GreatSQL方式添加新节点](#MySQL Shell for GreatSQL方式添加新节点)
+- [MySQL Shell for GreatSQL方式添加新节点](#mysql-shell-for-greatsql方式添加新节点)
 - [手动方式添加新节点](#手动方式添加新节点)
 
 ##### MySQL Shell for GreatSQL方式添加新节点
@@ -333,7 +333,7 @@ greatsql> clone INSTANCE FROM GreatSQL@172.16.16.11:3306 IDENTIFIED BY 'GreatSQL
 
 ## 4. 删除节点
 
-- [MySQL Shell for GreatSQL方式删除新节点](#MySQL Shell for GreatSQL方式删除节点)
+- [MySQL Shell for GreatSQL方式删除新节点](#mysql-shell-for-greatsql方式删除节点)
 - [手动方式添加新节点](#手动方式删除节点)
 
 ##### MySQL Shell for GreatSQL方式删除节点

@@ -75,4 +75,4 @@ GreatSQL同时也是gitee（码云）平台上的GVP项目，详见：[https://g
 
 扫码关注微信公众号
 
-![greatsql-wx](..\greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)
