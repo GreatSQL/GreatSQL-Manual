@@ -26,7 +26,7 @@
 
 在这两个MGR集群间的主从复制可以采用异步复制，也可以采用半同步复制，主要取决于两个集群间的网络延迟情况及架构设计方案。这时候，整体架构方案类似下面这样：
 
--![两个MGR间构建M-S复制架构](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/docs/6.%E5%90%8C%E5%9F%8EMGR.png)
+-![两个MGR间构建M-S复制架构](./3-faq-mgr-arch-01.png)
 
 在这个架构下，两个MGR集群间是相互独立的，如果前端挂载MySQL Router的话，需要单独创建对应的连接。
 
