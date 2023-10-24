@@ -123,7 +123,7 @@ greatsql> SELECT * FROM information_schema.innodb_trx ORDER BY trx_started ASC L
 greatsql> SELECT * FROM sys.innodb_lock_waits ORDER BY wait_age_secs DESC LIMIT 1;
 
 # 找到特别需要关注的事务
-greatsql> SELECT * FROM information_schema.innodb_trx WEHRE
+greatsql> SELECT * FROM information_schema.innodb_trx WHERE
   trx_lock_structs >= 5 OR    -- 持有超过5把锁
   trx_rows_locked >= 100 OR   -- 超过100行被锁
   trx_rows_modified >= 100 OR -- 超过100行被修改

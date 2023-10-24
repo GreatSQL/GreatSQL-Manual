@@ -78,7 +78,7 @@ greatsql> show global variables like 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
 +-------------------------+------------+
-| innodb_buffer_pool_size | 6442450944 |
+| innodb_buffer_pool_size | 4294967296 |
 +-------------------------+------------+
 ```
 采用 `set persist` 方式修改选项值的话，除了会立即修改之外，还会在 `datadir/mysqld-auto.cnf` 中记录本次修改，并在下一次重启时加载该选项值使之生效。当然了，前提是选项值 `persisted_globals_load = ON`（默认值也是 ON）。
