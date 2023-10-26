@@ -211,6 +211,20 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  0  0     22    324    193  14132    0    0     0     0 14983 15155  2  3 95  0  0
 ```
 
+14. 新增ARBITRATOR节点时，一定要CLONE全量数据吗
+并不是必需的。
+
+当MGR中Primary节点已有用户数据时，无论是用shell还是手动加入一个新的仲裁节点（ARBITRATOR），首次加入都需要经过CLONE的过程（即便是在启动前已经设置 `group_replication_arbitrator = 1`）。
+
+
+变通办法是：
+1. 第一个加入的ARBITRATOR节点，可以在加入成功后，关闭ARBITRATOR角色，然后删除所有用户数据，这时候就变成一个空实例了，再次重启后，再开启ARBITRATOR角色，不会再次CLONE数据。
+2. 在上述第一个ARBITRATOR节点的基础上，在其关闭期间，做一次物理全备，然后这个备份就可以作为未来新的ARBITRATOR节点的datadir，再次加入MGR集群也不会再次CLONE数据。
+
+实际上，在加入MGR时，判断是否需要CLONE数据的依据是看 `gtid_purged`，因此还有第三个办法：
+
+3. 在完成实例初始化后，手动修改 gtid_purged，例如 `set global gtid_purged = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1:1-1449587416';` 也可以跳过数据CLONE。
+
 
 
 
