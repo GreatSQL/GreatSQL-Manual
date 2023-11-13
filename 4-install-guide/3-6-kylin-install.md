@@ -311,7 +311,6 @@ PermissionsStartOnly=true
 ExecStartPre=/usr/local/GreatSQL-8.0.32-24-kylin-glibc2.28-aarch64/bin/mysqld_pre_systemd
 ExecStart=/usr/local/GreatSQL-8.0.32-24-kylin-glibc2.28-aarch64/bin/mysqld $MYSQLD_OPTS
 EnvironmentFile=-/etc/sysconfig/mysql
-LimitNOFILE = 10000
 Restart=on-failure
 RestartPreventExitStatus=1
 Environment=MYSQLD_PARENT_PID=1
