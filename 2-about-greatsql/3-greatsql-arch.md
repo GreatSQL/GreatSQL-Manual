@@ -130,7 +130,7 @@ greatsql> SHOW ENGINES;
 
 经典主从单向复制架构如下图所示：
 
-![传统主从复制技术架构图](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/deep-dive-mgr-02-01.jpg#pic_center)
+![传统主从复制技术架构图](./3-greatsql-arch-03.png#pic_center)
 
 **架构说明**
 
@@ -151,7 +151,7 @@ greatsql> SHOW ENGINES;
 
 半同步复制架构如下图所示：
 
-![半同步复制技术架构图](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/deep-dive-mgr-02-02.jpg#pic_center)
+![半同步复制技术架构图](./3-greatsql-arch-04.png#pic_center)
 
 **架构说明**
 
@@ -191,7 +191,7 @@ MGR具备以下几个特点：
 
 首先来个MGR的技术架构图：
 
-![MGR技术架构图](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/deep-dive-mgr-02-03.jpg#pic_center)
+![MGR技术架构图](./3-greatsql-arch-05.png#pic_center)
 
 **架构说明**
 
@@ -215,14 +215,14 @@ MGR支持单主和多主两种模式，在单主模式下，各节点会自动�
 
 **单主（Single-Primary）模式**
 
-![MGR单主模式](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/single-primary-election.png#pic_center)
+![MGR单主模式](./3-greatsql-arch-06.png#pic_center)
 **架构说明**
 
 如上图所示，一开始S1节点是Primary角色，提供读写服务。当它发生故障时，剩下的S2-S5节点会再投票选举出S2作为新的Primary角色提供读写服务，而S1节点在达到一定超时阈值后，就会被踢出。
 
 **多主（Multi-Primary）模式**
 
-![MGR多主模式](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/deep-dive-mgr/multi-primary.png#pic_center)
+![MGR多主模式](./3-greatsql-arch-07.png#pic_center)
 **架构说明**
 
 如上图所示，一开始S1-S5所有节点都是Primary角色，都可以提供读写服务，任何一个节点发生故障时，只需要把指向这个节点的流量切换下就行。
