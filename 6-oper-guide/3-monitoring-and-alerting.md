@@ -156,6 +156,19 @@ greatsql> SELECT MEMBER_ID AS id, COUNT_TRANSACTIONS_IN_QUEUE AS trx_tobe_certif
 
 如果某个节点上的 `relaylog_tobe_applied` 值特别大，则要引起关注，检查该节点上的业务压力是否过大，或者服务器配置是否有问题。
 
+在GreatSQL中，针对MGR applier线程，新增以下几个状态变量：
+
+1. `group_replication_apply_queue_size`：applier线程中尚未处理的消息队列的大小。如果该值累计较大，说明当前节点可能存在较大的延迟，也即有较多事务数据尚未写入到Realy Log中。
+
+2. `group_replication_applied_messages`：applier线程累计应用的消息总量。包括用户数据的事务消息，和其它组复制运行过程中产生的各种消息。
+
+3. `group_replication_applied_data_messages`：applier线程累计应用的用户数据的事务消息的总量，即已经写入到Relay Log中的事务总量。通过和 `group_replication_applied_messages` 对比，即可分析事务消息的占比情况。
+
+4. `group_replication_applied_events`：applier线程累计应用的用户数据的事务的Binlog Events总量，通过和 `group_replication_applied_data_messages` 进行对比，可以估算平均一个事务大体写了多少个Binlog Event。
+
+5. `group_replication_io_buffered_events`：applier线程将事务数据写入Relay Log中，会进行批处理，降低刷盘次数，提高磁盘利用率。该变量表示累计被io buffer未进行刷盘的Binlog Events的数量。通过和 `group_replication_applied_events` 对比，可以估算大体多少个Event会进行一次刷盘，分析Relay Log磁盘利用情况。
+
+
 关于MGR监控，更多详情参考文档：[MGR状态监控](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/deep-dive-mgr-06.md)。
 
 **问题反馈**
