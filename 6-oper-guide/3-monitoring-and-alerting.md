@@ -168,6 +168,9 @@ greatsql> SELECT MEMBER_ID AS id, COUNT_TRANSACTIONS_IN_QUEUE AS trx_tobe_certif
 
 5. `group_replication_io_buffered_events`：applier线程将事务数据写入Relay Log中，会进行批处理，降低刷盘次数，提高磁盘利用率。该变量表示累计被io buffer未进行刷盘的Binlog Events的数量。通过和 `group_replication_applied_events` 对比，可以估算大体多少个Event会进行一次刷盘，分析Relay Log磁盘利用情况。
 
+6. `group_replication_before_commit_request_time`：用于统计事务commit阶段，消耗在mgr层面的时间；与之相关的还有一个 `group_replication_flow_control_time`，当开启流控时，统计所有事务commit阶段，因流控缘故消耗的总时间。`group_replication_before_commit_request_time` 是不包括 `group_replication_flow_control_time` 的这部分时间的，也就是mgr实际的总消耗时间是 `group_replication_before_commit_request_time` + `group_replication_flow_control_time`。
+
+
 
 关于MGR监控，更多详情参考文档：[MGR状态监控](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/deep-dive-mgr-06.md)。
 
