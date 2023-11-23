@@ -63,7 +63,7 @@ greatsql> show global variables like 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
 +-------------------------+------------+
-| innodb_buffer_pool_size | 4294967296 |
+| innodb_buffer_pool_size | 8589934592 |
 +-------------------------+------------+
 ```
 
