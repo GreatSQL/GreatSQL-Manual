@@ -1,8 +1,8 @@
 # GreatSQL 8.0 用户手册
 
-最后更新: 2023-10-24
+最后更新: 2023-11-23
 
-本文档适用版本：[GreatSQL 8.0.32-24](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/greatsql-803224/changes-greatsql-8-0-32-24-20230605.md)
+本文档适用版本：GreatSQL 8.0.32-25。
 
 GreatSQL是适用于金融级应用的国内自主开源数据库，具备高性能、高可靠、高易用性、高安全等多个核心特性，可以作为MySQL或Percona Server的可选替换，用于线上生产环境，且完全免费并兼容MySQL或Percona Server。
 
