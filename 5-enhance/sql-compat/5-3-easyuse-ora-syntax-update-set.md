@@ -45,6 +45,7 @@ UPDATE [LOW_PRIORITY] [IGNORE] table_reference
 ## 4. 示例
 
 创建测试表并初始化数据：
+
 ```sql
 greatsql> CREATE TABLE t1 (c1 INT NOT NULL AUTO_INCREMENT PRIMARY KEY, c2 VARCHAR(10) NOT NULL, c3 VARCHAR(10) NOT NULL);
 greatsql> CREATE TABLE t2 LIKE t1;
@@ -54,7 +55,7 @@ greatsql> INSERT INTO t2 VALUES (1, 'rt2c2', 'rt2c3');
 
 - 1. 示例1：多表更新
 
-```
+```sql
 greatsql> SET sql_mode = ORACLE;
 
 greatsql> UPDATE t2, t1 SET (t2.c1, t1.c1) = (2, 9);
@@ -77,7 +78,8 @@ greatsql> SELECT * FROM t2;
 ```
 
 - 2. 示例2：更新值源自子查询
-```
+
+```sql
 greatsql> SET sql_mode = ORACLE;
 
 -- 这么写也是可以的
@@ -103,7 +105,7 @@ greatsql> SELECT * FROM t2;
 
 - 3. 示例3：更新值源自子查询
 
-```
+```sql
 -- 对t1, t2表重新初始化
 greatsql> TRUNCATE TABLE t1;
 greatsql> INSERT INTO t1 VALUES (1, 'rt1c21', 'rt1c31');
