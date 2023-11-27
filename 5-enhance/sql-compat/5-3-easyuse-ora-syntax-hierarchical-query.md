@@ -56,7 +56,7 @@ graph TB
 
 ## 3. Oracle兼容说明
 
-- 1. 查询表输出结果的排序和Oracle可能不一致
+- 1、查询表输出结果的排序和Oracle可能不一致
      
 由于在遍历查询表数据方式与Oracle不一致，导致 `CONNECT BY` 单一层次内数据排序结果不一致。
 
@@ -172,21 +172,22 @@ SQL> select id, name, grade, level from student connect by prior id = grade;
 
 可以看到，由于第一个层级查询结果排序不一致，导致分层查询的结果顺序不一致。
     
-- 2. 与 `LISTAGG` 结合使用输出组合顺序时，`LISTAGG` 的实现依赖 `ORDER BY`，因此在内部查询的时候会根据 `GROUP BY` 进行排序。
+- 2、与 `LISTAGG` 结合使用输出组合顺序时，`LISTAGG` 的实现依赖 `ORDER BY`，因此在内部查询的时候会根据 `GROUP BY` 进行排序。
     
-- 3. 在 `ORACLE` 模式下，`SYSDATE` 的行为与Oralce一致，在 `DEFAULT` 模式下，循环查询可能导致错误。
+- 3、在 `ORACLE` 模式下，`SYSDATE` 的行为与Oralce一致，在 `DEFAULT` 模式下，循环查询可能导致错误。
     
-- 4. 与上一条类似，在自定义PACKAGE与FUNCTION中可能存在定义包含 `DETERMINISTIC` 的情况，也可能存在导致循环检查失效问题。
+- 4、与上一条类似，在自定义PACKAGE与FUNCTION中可能存在定义包含 `DETERMINISTIC` 的情况，也可能存在导致循环检查失效问题。
     
-- 5. 当 `CONNECT BY` 中存在永真的条件时，不管是否使用了 `PRIOR` 或 `CONNECT_BY_ROOT` 的条件，会报告死循环错误。
+- 5、当 `CONNECT BY` 中存在永真的条件时，不管是否使用了 `PRIOR` 或 `CONNECT_BY_ROOT` 的条件，会报告死循环错误。
     
-- 6. 数据表中可能含有特殊的数据会产生死循环，或者单次遍历的子节点非常多，会根据 `cte_max_recursion_depth` 选项限制迭代数据大小。
+- 6、数据表中可能含有特殊的数据会产生死循环，或者单次遍历的子节点非常多，会根据 `cte_max_recursion_depth` 选项限制迭代数据大小。
 
-- 7. 与 `ROWNUM` 伪列结合使用的时候，`ROWNUM` 在 `WHERE` 中作为查询条件结果会产生差异，如下例所示：
+- 7、与 `ROWNUM` 伪列结合使用的时候，`ROWNUM` 在 `WHERE` 中作为查询条件结果会产生差异，如下例所示：
      
 与Oracle区别：`ROWNUM` 的值会根据在 `CONNECT BY` 排序后的结果保存，而不重新计算。
 
   - 示例1：
+
 ```sql
 greatsql> SELECT LEVEL, ROWNUM FROM DUAL WHERE ROWNUM < 3 AND LEVEL = 2 CONNECT BY LEVEL <= 10;
 +-------+--------+
@@ -221,7 +222,7 @@ greatsql> SELECT LEVEL, SYS_CONNECT_BY_PATH(ROWNUM, '->') FROM DUAL WHERE
          2                                 ->1->1
 ```
 
-- 8. 在GreatSQL中，支持在 `CONNECT BY` 条件中含有 `BLOB` 列，而Oracle不支持。
+- 8、在GreatSQL中，支持在 `CONNECT BY` 条件中含有 `BLOB` 列，而Oracle不支持。
 
 
 ## 3. 分层查询伪列
@@ -305,9 +306,9 @@ greatsql> SELECT LEVEL, SYS_CONNECT_BY_PATH(ROWNUM, '->') FROM DUAL WHERE ROWNUM
 ```sql
 SQL> SELECT LEVEL, SYS_CONNECT_BY_PATH(ROWNUM, '->') FROM DUAL WHERE ROWNUM < 3 AND LEVEL=2 CONNECT BY LEVEL<=10;
 
-     LEVEL    SYS_CONNECT_BY_PATH(ROWNUM,'->
-----------   --------------------------------
-         2                             ->1->1
+     LEVEL    SYS_CONNECT_BY_PATH(ROWNUM,'->')
+----------   ----------------------------------
+         2                               ->1->1
 ```
 
 ## 6. 示例
