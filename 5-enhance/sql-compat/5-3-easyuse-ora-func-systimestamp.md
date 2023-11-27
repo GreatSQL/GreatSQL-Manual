@@ -1,4 +1,4 @@
-# Oracle兼容-函数-ADD_MONTHS()函数
+# Oracle兼容-函数-SYSTIMESTAMP()函数
 ---
 [toc]
 
