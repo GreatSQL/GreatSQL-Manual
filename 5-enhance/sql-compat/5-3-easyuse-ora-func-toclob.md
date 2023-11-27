@@ -47,6 +47,7 @@ greatsql> SHOW WARNINGS;
 **例1：日期类型转换**
 
 - 在Oracle中的输出为：
+
 ```sql
 SQL> SELECT SYSDATE, TO_CLOB(SYSDATE) FROM DUAL;
 
@@ -105,6 +106,7 @@ SQL> SELECT id,TO_CLOB(a),TO_CLOB(b) FROM t_clob;
 ```
 
 - 在GreatSQL上输出为：
+
 ```sql
 -- 初始化数据
 greatsql> SET sql_mode = ORACLE;
@@ -139,6 +141,7 @@ greatsql> SELECT id,TO_CLOB(a),TO_CLOB(b) FROM t_clob;
 如下例所示，执行 `SELECT TO_CLOB('\\') FROM DUAL;`，得到结果分别不同：
 
 - 在oracle上输出为：
+
 ```
 SQL> SELECT TO_CLOB('\\') FROM DUAL;
 
@@ -161,6 +164,7 @@ greatsql> SELECT TO_CLOB('\\') FROM DUAL;
 ```
 
 ## 4. 示例
+
 ```sql
 greatsql> SELECT TO_CLOB(123), TO_CLOB('ABC123\\'), TO_CLOB(123.456), TO_CLOB(1+1) FROM DUAL;
 +--------------+---------------------+------------------+--------------+
