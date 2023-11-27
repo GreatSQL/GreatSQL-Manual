@@ -85,8 +85,11 @@ ERROR 1235 (42000): This version of MySQL doesn't yet support 'ROWNUM & IN/ALL/A
 ```
 
 ### 3.3 查询结果与Oracle可能不一样
+
 1. 因数据输出顺序不一致，在此基础上做 `rownum` 过滤，会导致最终显示结果可能也不一样。
+
 2. 优化行为不一致，可能导致输出结果不同。例如下面几个案例：
+
 ```sql
 -- 下面这个SQL，GreatSQL和Oracle的结果一样
 greatsql> SELECT * FROM t1 LEFT JOIN t2 ON t1.r1=t2.r1; 
@@ -98,6 +101,7 @@ greatsql> SELECT * FROM t1 LEFT JOIN t2 ON t1.r1=t2.r1 WHERE rownum < t1.r1;
 -- 这并不符合原始语义
 greatsql> SELECT * FROM t1 LEFT JOIN t2 ON t1.r1=t2.r1 WHERE rownum < t1.r1;
 ```
+
 
 **问题反馈**
 ---
