@@ -28,7 +28,7 @@ GreatSQL在 `ORACLE` 模式下支持以下几种游标用法：
 - 1. 用法1：用 `FOR ... IN CURSOR() LOOP ... END LOOP` 语法循环读取数据到游标中。
 
 ```sql
-1. [ FOR rows IN
+[ FOR rows IN
   { cursor [ ( cursor_parameter_dec
                [ [,] cursor_parameter_dec ]... )]
   | ( select_statement )
