@@ -1,4 +1,4 @@
-# Oracle兼容-语法-
+# Oracle兼容-语法-MINUS
 ---
 [toc]
 
