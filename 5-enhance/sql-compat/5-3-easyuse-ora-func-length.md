@@ -11,7 +11,7 @@ LENGTH(data)
 
 针对上述差异，GreatSQL对 `LENGTH()` 函数做了扩展，以支持类似Oracle中的行为模式。
 
-## 3. ORACLE兼容说明
+## 3. Oracle兼容说明
 
 因为GreatSQL已原生支持 `LENGTH()` 函数，因此想要在GreatSQL中使用扩展后的 `LENGTH()` 函数时，需要先执行 `SET sql_mode = ORACLE;` 激活Oracle兼容模式。
 
