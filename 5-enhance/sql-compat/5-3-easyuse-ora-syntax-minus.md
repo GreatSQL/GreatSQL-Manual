@@ -1,4 +1,4 @@
-# Oracle兼容-语法-MINUS
+# Oracle兼容-语法-
 ---
 [toc]
 
@@ -13,6 +13,12 @@ SELECT ...
 ## 2. 定义和用法
 
 `MINUS` 语法的作用是对两个结果集进行差集计算，不包括重复行。其用法类似 `UNION`、`INTERSECT` 语法。
+用法同UNION操作，不支持右子树嵌套MINUS，如下：
+
+```sql
+SELECT 1 minus (SELECT 1 MINUS SELECT 1);
+ERROR 1235 (42000): This version of MySQL doesn't yet support 'nesting of unions at the right-hand side'
+```
 
 ## 3. 示例
 

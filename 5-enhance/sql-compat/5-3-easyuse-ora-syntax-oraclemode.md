@@ -13,9 +13,9 @@ SET SESSION sql_mode = 'ORACLE';
 
 修改`sql_mode` 为 `ORACLE`  的作用是切换到Oracle兼容模式，避免与GreatSQL现有模式（工作方式）产生冲突。
 
-如果不指定 `GLOBAL` 或 `SESSION`，则默认只修改 `SESSION` 级别的 `sql_mdoe`。
+如果不指定 `GLOBAL` 或 `SESSION`，则默认只修改 `SESSION` 级别的 `sql_mode`。
 
-想要修改 `GLOBAL` 级别的 `sql_mode` 时，需要具有 `SYSTEM_VARIABLES_ADMIN` 或 `SUPER` 权限才行。
+`GLOBAL` 级别的 `sql_mode` 变更，需具有 `SYSTEM_VARIABLES_ADMIN` 或 `SUPER` 权限。
 
 Oracle模式实际上是包含以下几个模式的组合：
 | 模式    | 功能    |

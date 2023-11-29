@@ -4,7 +4,7 @@
 
 ## 1. 语法
 
-在 `ORACLE` 模式下，GreatSQL客户端支持使用 `EXEC` 执行一个声明块。 
+在 `ORACLE` 模式下，GreatSQL客户端支持使用 `EXEC` 执行一个语句块。 
 
 ```sql
 SET sql_mode = ORACLE;
@@ -14,7 +14,7 @@ EXEC statement
 
 ## 2. 示例
 
-```
+```sql
 -- 新建存储过程
 greatsql> DROP PROCEDURE IF EXISTS `p1`;
 

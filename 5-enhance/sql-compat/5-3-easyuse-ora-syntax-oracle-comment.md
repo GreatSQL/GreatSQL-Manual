@@ -18,7 +18,7 @@ SET sql_mode = ORACLE;
 -- comment notes
 ```
 
-## 3. Oracle兼容说明
+## 2. Oracle兼容说明
 
 GreatSQL客户端在处理注释符后 **是否立即紧跟空格** 时有所区别：
 

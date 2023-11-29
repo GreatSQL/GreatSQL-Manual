@@ -40,7 +40,7 @@
 
 ## 3. Oracle兼容说明
 
-1. 在Oracle中不可以和 `FOR UPDATE` 同时使用，**但在GreatSQL中，允许 `LIMIT OFFSET` 与 `FOR UPDATE` 同时使用。
+1. 在Oracle中不可以和 `FOR UPDATE` 同时使用，**但在GreatSQL中，允许 `LIMIT OFFSET` 与 `FOR UPDATE` 同时使用。**
 
 2. 如果查询列表中包含了相同的名称的字段，则需要用别名区分。
 
