@@ -10,13 +10,13 @@ FOR var IN [REVERSE] expr1 .. expr2 LOOP .. END LOOP
 
 ## 2. 定义和用法
 
-在GreatSQL中支持用 `FOR ... IN expr1 .. expr2 LOOP ... END LOOP` 语法循环读取数据，并赋值给相应变量。
+在GreatSQL中支持用 `FOR .. IN expr1 .. expr2 LOOP .. END LOOP` 语法循环读取数据，并赋值给相应变量。
 
 ## 3. Oracle兼容说明
 
-在 `ORACLE` 模式下，GreatSQL存储过程支持 `FOR ... LOOP` 用法。该用法如下所述：
+在 `ORACLE` 模式下，GreatSQL存储过程支持 `FOR .. LOOP` 用法。该用法如下所述：
 
-1. 不需要事先声明 `FOR LOOP` 中的变量 `var`，直接使用 `FOR var IN expr1 ... expr2 LOOP` 语法即可。
+1. 不需要事先声明 `FOR LOOP` 中的变量 `var`，直接使用 `FOR var IN expr1 .. expr2 LOOP` 语法即可。
 
 2. 支持增加 `REVERSE` 关键字，可以实现倒序获取数据目的。
 
