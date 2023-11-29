@@ -10,7 +10,7 @@ EXIT (label) / EXIT (label) WHEN
 
 ## 2. 定义和用法
 
-GreatSQL存储过程中支持用 `EXIT (label)/EXIT (label) WHEN` 退出当前循环。该用法如下：
+GreatSQL存储过程中支持用 `EXIT (label)/EXIT (label) WHEN` 退出当前循环。该用法如下所述：
 
 1. 退出时可带标签，也可不带标签。
 
