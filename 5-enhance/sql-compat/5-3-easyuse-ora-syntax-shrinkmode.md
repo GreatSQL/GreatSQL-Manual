@@ -24,7 +24,7 @@ SET SESSION shrink_sql_mode = 'modes';
 ## 3. 示例
 
 
-```
+```sql
 -- 指定单个mode时，可不加引号
 greatsql> SET sql_mode = ORACLE;
 

@@ -5,7 +5,7 @@
 ## 1. 语法
 
 ```sql
-SET GLOBAL|SESSION sql_mode = SYSDATE_IS_NOW;
+SET [GLOBAL|SESSION] sql_mode = SYSDATE_IS_NOW;
 ```
 
 ## 2. 定义和用法

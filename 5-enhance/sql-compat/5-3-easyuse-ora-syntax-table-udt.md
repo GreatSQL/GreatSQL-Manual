@@ -5,14 +5,18 @@
 ## 1. 语法
 
 ```sql
-SET sql_mode = ORACLE;
 
-CREATE TABLE table_name(column_name type, column_name type ...) 
+1. CREATE TABLE table_name(column_name type, column_name type ...) 
   type：nomally type/udt type:[db.]type(不支持varray/table类型udt).
 
-INSERT INTO table_name VALUES(values) 
-  values:nomally value/udt value
-  udt value:[db.]udt_name(values)
+2. INSERT INTO table_name VALUES(values) 
+   values:nomally value/udt value
+   udt value:[db.]udt_name(values)
+
+3.  ALTER TABLE table_name DROP/ADD [column] column_name udt_type
+    udt_type:[db.]udt_name(values)
+
+4. set @@udt_format_result=['BINARY'/'DBA'];
 ```
 
 需要先切换到 `ORACLE` 模式下才能支持本语法。
@@ -25,7 +29,7 @@ GreatSQL支持用户自定义TABLE类型，支持以下几种用法：
 
 - 语法2：向UDT列插入UDT值。
 
-- 语法3：添加和删除UDT列。
+- 语法3：添加和删除UDT列(注：alter不支持modify操作)。
 
 - 语法4：可设置 `udt_format_result` 会话选项指定UDT类型数据的输出格式。
 

@@ -22,7 +22,7 @@ greatsql>  SELECT * FROM (SELECT 1 FROM DUAL), (SELECT 2 FROM DUAL);
 
 这个SQL请求如果是放在MySQL/Percona中执行，则会报告错误：
 ```
-greatsql> SELECT * FROM (SELECT 1 FROM DUAL), (SELECT 2 FROM DUAL);
+mysql> SELECT * FROM (SELECT 1 FROM DUAL), (SELECT 2 FROM DUAL);
 ERROR 1248 (42000): Every derived table must have its own alias
 ```
 
