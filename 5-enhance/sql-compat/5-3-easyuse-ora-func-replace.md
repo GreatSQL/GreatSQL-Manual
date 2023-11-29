@@ -19,7 +19,7 @@ REPLACE(char, search_string [, replace_string])
 当 `char`、`search_string`、`replace_string` 中包含转义字符（例如：`\0`、`\'`、`''`、`\"`、`\\`、`\b`、`\B`、`\n`、`\N`、`\r`、`\R`、`\t`、`\T`、`\z`、`\Z`）时，不会视为2个字符，而视为1个字符来处理。
 
 
-## 3. ORACLE兼容说明
+## 3. Oracle兼容说明
 
 因为GreatSQL已原生支持 `REPLACE()` 函数，因此想要在GreatSQL中使用扩展后的 `REPLACE()` 函数时，需要先执行 `SET sql_mode = ORACLE;` 激活Oracle兼容模式。
 
