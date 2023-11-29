@@ -259,7 +259,7 @@ greatsql> SET sql_mode = ORACLE;
 greatsql> DELIMITER //
 
 CREATE OR REPLACE PROCEDURE p1() AS
-  type dr_CURSOR is REF CURSOR;
+  TYPE dr_CURSOR IS REF CURSOR;
   cur1 dr_CURSOR;
   rtype t1%ROWTYPE;
 BEGIN
