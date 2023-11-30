@@ -5,7 +5,7 @@
 ## 1. 语法
 
 ```sql
-CREATE TRIGGER trigger_name
+1. CREATE TRIGGER trigger_name
   trigger_time trigger_event
   ON tbl_name FOR EACH ROW
   [trigger_order]
@@ -14,11 +14,15 @@ CREATE TRIGGER trigger_name
 trigger_time: { BEFORE | AFTER }
 
 trigger_event: { INSERT | UPDATE | DELETE | INSERT OR UPDATE | INSERT OR DELETE | UPDATE OR DELETE | INSERT OR UPDATE OR DELETE }
+
+2. ALTER TRIGGER trigger_name [enable|disable]
 ```
 
 ## 2. 定义和用法
 
 在 `ORACLE` 模式下，GreatSQL存储过程支持Oracle风格的触发器大部分语法。
+
+同时也支持在任何模式下启用和禁用触发器。
 
 ## 3. Oracle兼容说明
 
@@ -101,6 +105,8 @@ BEGIN
 END; //
 ```
 
+- 5. 示例5
+
 创建完上述4个触发器之后，再执行下面的测试：
 ```sql
 -- 在 `ORACLE` 模式下，相同触发事件只执行最后创建的触发器
@@ -174,6 +180,30 @@ greatsql> SELECT * FROM t1;
 | 5 | -trg_t1_before_update_or_insert UPDATE OR INSERT-trg_t1_before_insert_or_update INSERT OR UPDATE-trg_t1_before_insert INSERT-row5                     |
 +---+-------------------------------------------------------------------------------------------------------------------------------------------------------+
 ```
+
+- 6. 示例6：启用/禁用触发器
+
+```sql
+greatsql> SET sql_mode = ORACLE;
+
+greatsql> ALTER TRIGGER trg_t1_before_update_or_delete DISABLE;
+Query OK, 0 rows affected (0.00 sec)
+
+greatsql> ALTER TRIGGER trg_t1_before_update_or_delete ENABLE;
+Query OK, 0 rows affected (0.00 sec)
+
+
+greatsql> SET sql_mode = DEFAULT;
+
+greatsql> ALTER TRIGGER trg_t1_before_update_or_delete DISABLE;
+Query OK, 0 rows affected (0.00 sec)
+
+greatsql> ALTER TRIGGER trg_t1_before_update_or_delete ENABLE;
+Query OK, 0 rows affected (0.00 sec)
+```
+
+
+
 
 **问题反馈**
 ---
