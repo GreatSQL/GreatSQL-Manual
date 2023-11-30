@@ -87,7 +87,7 @@ greatsql> SET sql_mode = ORACLE;
 greatsql> DELIMITER //
 
 greatsql> CREATE OR REPLACE PROCEDURE p1(v_a INT) as
-  TYPE t1_record IS record(
+  TYPE t1_record IS RECORD(
     c1 INT := 1,
     c2 VARCHAR(20)
   );
@@ -139,7 +139,7 @@ greatsql> SELECT * FROM t2 //
 
 更多关联用法：
 - 1. [TYPE IS RECORD()]()
-- 2. [SELECT BULK INTO]()
+- 2. [BULK COLLECT](5-3-easyuse-ora-sp-bulk-collect.md)
 
 
 **问题反馈**
