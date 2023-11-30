@@ -137,7 +137,9 @@ greatsql> SELECT * FROM t2 //
 ```
 
 
-更多关联用法：《ora_sp_type_is_record.md》《ora_sp_ SELECT _bulk_into.md》
+更多关联用法：
+- 1. [TYPE IS RECORD()]()
+- 2. [SELECT BULK INTO]()
 
 
 **问题反馈**
