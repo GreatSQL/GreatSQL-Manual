@@ -5,7 +5,10 @@
 ## 1. 语法
 
 ```sql
-1. CREATE TRIGGER trigger_name
+1.
+SET sql_mode = ORACLE;
+
+CREATE TRIGGER trigger_name
   trigger_time trigger_event
   ON tbl_name FOR EACH ROW
   [trigger_order]
