@@ -230,7 +230,8 @@ greatsql> select @ret //
 1 row in set (0.00 sec)
 ```
 
-- 4. 示例4：不能跳转到CASE WHEN语句块
+- 4. 示例4：不能跳转到`CASE WHEN`语句块
+
 ```sql
 greatsql> SET sql_mode = ORACLE;
 greatsql> DELIMITER //
@@ -252,7 +253,8 @@ END; //
 ERROR 1308 (42000): GOTO with no matching label: label1
 ```
 
-- 5. 示例5：不能跳转到另一个CASE WHEN语句块
+- 5. 示例5：不能跳转到另一个 `CASE WHEN` 语句块
+
 ```sql
 greatsql> SET sql_mode = ORACLE;
 greatsql> DELIMITER //
