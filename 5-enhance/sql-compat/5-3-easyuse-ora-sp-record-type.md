@@ -215,7 +215,7 @@ greatsql> CREATE OR REPLACE TYPE udt1 AS OBJECT(id INT, c1 VARCHAR(20));
 greatsql> CREATE OR REPLACE TYPE udt_t1 AS TABLE OF udt1;
 greatsql> DELIMITER //
 
-greatsql> CREATE OR REPLACE PROCEDURE record_sp1 AS
+greatsql> CREATE OR REPLACE PROCEDURE record_sp3 AS
 TYPE t0_record IS RECORD(
   id INT := 1,
   c1 udt_t1,
@@ -235,7 +235,7 @@ BEGIN
   SELECT t1_record_val.t1_record_val1.c1(1).c1;
 END; //
 
-greatsql> CALL record_sp1() //
+greatsql> CALL record_sp3() //
 +---------------------------------------+---------------------------------------+
 | t1_record_val.t1_record_val1.c1(1).id | t1_record_val.t1_record_val1.c1(1).c1 |
 +---------------------------------------+---------------------------------------+
