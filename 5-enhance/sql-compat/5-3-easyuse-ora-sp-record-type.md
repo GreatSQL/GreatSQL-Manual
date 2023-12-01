@@ -49,38 +49,6 @@ var var_def
 1. 在存储过程中的 `TYPE` 作为保留关键字，不能用作变量名。
 
 
-TODO 有以下几点注意事项，直接用示例说明：
-```sql
-1. 
-type stu_record is record(
- id INT := 1,
- name_d  t_air,
- score FLOAT := 0); 
-
- rec1 stu_record; 
-
-这里rec1.name_d没有赋初始值，因此不能单独给rec1.name_d.id赋值，这个与oracle一致。name_d  t_air_varray与name_d t_air同理。
-
-
-2. 
-type tklist is table of stu_record index by binary_integer;
-stu_record_val tklist;
-
-stu_record_val不能赋值为null，这个与oracle一致。
-
-
-3. 
-record的名字与udt名字一致的情况下，在sp里面定义和赋值默认都为udt类型。比如：
-
-type stu_record is record(
-id INT := 1,
-name_d  t_air,
-score FLOAT := 0 );
-
-rec1 t_air ：= t_air(1,'aa'); 这里t_air默认为udt类型而不是自定义的record类型。 
-```
-
-
 ## 4. 示例
 
 
