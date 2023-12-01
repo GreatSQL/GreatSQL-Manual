@@ -52,7 +52,7 @@ var var_def
 ## 4. 示例
 
 
-- 1. 示例1：type is record/type is table
+- 1. 示例1：`TYPE IS RECORD/TYPE IS TABLE`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -62,34 +62,34 @@ greatsql> CREATE OR REPLACE PROCEDURE record_sp1 AS
 TYPE t1_record IS RECORD(
   id INT := 1,
   c1 VARCHAR(20),
-  c2 FLOAT := 0
+  c2 FLOAT := 33.06
 );
 TYPE t1_list IS TABLE OF t1_record INDEX BY BINARY_INTEGER;
 TYPE t1_record1 IS RECORD(
   v_i INT := 1,
-  t1_record_val1 t1_list
+  t1_record_v1 t1_list
 );
 t1_record_val t1_record1;
 BEGIN
-  t1_record_val.t1_record_val1(1).id := 1;
-  t1_record_val.t1_record_val1(2).c1 := 'row1';
-  t1_record_val.t1_record_val1(0).id := 2;
-  t1_record_val.t1_record_val1(3).c2 := 3.22;
+  t1_record_val.t1_record_v1(1).id := 1;
+  t1_record_val.t1_record_v1(2).c1 := 'row1';
+  t1_record_val.t1_record_v1(0).id := 2;
+  t1_record_val.t1_record_v1(3).c2 := 36.06;
 
-  SELECT t1_record_val.t1_record_val1(1).id,
-    t1_record_val.t1_record_val1(1).c1,
-    t1_record_val.t1_record_val1(0).id,
-    t1_record_val.t1_record_val1(3).c2;
+  SELECT t1_record_val.t1_record_v1(1).id,
+    t1_record_val.t1_record_v1(1).c1,
+    t1_record_val.t1_record_v1(0).id,
+    t1_record_val.t1_record_v1(3).c2;
 
   SELECT t1_record_val.v_i;
 END; //
 
 greatsql> CALL record_sp1() //
-+------------------------------------+------------------------------------+------------------------------------+------------------------------------+
-| t1_record_val.t1_record_val1(1).id | t1_record_val.t1_record_val1(1).c1 | t1_record_val.t1_record_val1(0).id | t1_record_val.t1_record_val1(3).c2 |
-+------------------------------------+------------------------------------+------------------------------------+------------------------------------+
-|                                  1 | NULL                               |                                  2 |                               3.22 |
-+------------------------------------+------------------------------------+------------------------------------+------------------------------------+
++----------------------------------+----------------------------------+----------------------------------+----------------------------------+
+| t1_record_val.t1_record_v1(1).id | t1_record_val.t1_record_v1(1).c1 | t1_record_val.t1_record_v1(0).id | t1_record_val.t1_record_v1(3).c2 |
++----------------------------------+----------------------------------+----------------------------------+----------------------------------+
+|                                1 | NULL                             |                                2 |                            36.06 |
++----------------------------------+----------------------------------+----------------------------------+----------------------------------+
 1 row in set (0.00 sec)
 
 +-------------------+
@@ -104,13 +104,13 @@ Query OK, 0 rows affected (0.00 sec)
 
 更多用法请参考：ora_type_is_table.md
 
-- 2. 示例2：TYPE IS RECORD default value
+- 2. 示例2：`TYPE RECORD` + 默认赋值
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
 greatsql> DELIMITER //
 
-greatsql> CREATE or replace PROCEDURE record_sp2() AS
+greatsql> CREATE OR REPLACE PROCEDURE record_sp2() AS
   v1 VARCHAR(20) := 'v1_str';
 
   TYPE t1_record IS RECORD(
@@ -133,7 +133,7 @@ greatsql> CALL record_sp2() //
 Query OK, 0 rows affected (0.00 sec)
 
 
-greatsql> CREATE or replace PROCEDURE record_sp2() AS
+greatsql> CREATE OR REPLACE PROCEDURE record_sp2() AS
   v1 VARCHAR(20) := 'v1_str';
 
   TYPE t1_record IS RECORD(
@@ -148,7 +148,7 @@ ERROR 1054 (42S22): Unknown column 'nullptr' in 'field list'
 
 
 
-greatsql> CREATE or replace PROCEDURE record_sp1() AS
+greatsql> CREATE OR REPLACE PROCEDURE record_sp1() AS
   TYPE t1_record IS RECORD(
     id INT := 1,
     v1 VARCHAR(20) := 'v1_str'
@@ -173,7 +173,7 @@ greatsql> CALL record_sp1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 3. 示例3：TYPE is udt TYPE and set default value
+- 3. 示例3：TYPE IS UDT TYPE AND SET DEFAULT VALUE
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -187,41 +187,41 @@ greatsql> CREATE OR REPLACE PROCEDURE record_sp3 AS
 TYPE t0_record IS RECORD(
   id INT := 1,
   c1 udt_t1,
-  c2 FLOAT := 0
+  c2 FLOAT := 33.06
 );
 TYPE t1_record IS RECORD(
   v_i INT := 1,
-  t1_record_val1 t0_record := t0_record(3, udt_t1(udt1(3, 'c1_row3')), 1.1)
+  t1_record_v1 t0_record := t0_record(3, udt_t1(udt1(3, 'c1_row3')), 36.06)
 );
 t1_record_val t1_record;
 
 BEGIN
-  SELECT t1_record_val.t1_record_val1.c1(1).id, t1_record_val.t1_record_val1.c1(1).c1;
+  SELECT t1_record_val.t1_record_v1.c1(1).id, t1_record_val.t1_record_v1.c1(1).c1;
 
-  t1_record_val.t1_record_val1.c1(1).c1 := 'c1_row30';
+  t1_record_val.t1_record_v1.c1(1).c1 := 'c1_row30';
 
-  SELECT t1_record_val.t1_record_val1.c1(1).c1;
+  SELECT t1_record_val.t1_record_v1.c1(1).c1;
 END; //
 
 greatsql> CALL record_sp3() //
-+---------------------------------------+---------------------------------------+
-| t1_record_val.t1_record_val1.c1(1).id | t1_record_val.t1_record_val1.c1(1).c1 |
-+---------------------------------------+---------------------------------------+
-|                                     3 | c1_row3                               |
-+---------------------------------------+---------------------------------------+
++-------------------------------------+-------------------------------------+
+| t1_record_val.t1_record_v1.c1(1).id | t1_record_val.t1_record_v1.c1(1).c1 |
++-------------------------------------+-------------------------------------+
+|                                   3 | c1_row3                             |
++-------------------------------------+-------------------------------------+
 1 row in set (0.00 sec)
 
-+---------------------------------------+
-| t1_record_val.t1_record_val1.c1(1).c1 |
-+---------------------------------------+
-| c1_row30                              |
-+---------------------------------------+
++-------------------------------------+
+| t1_record_val.t1_record_v1.c1(1).c1 |
++-------------------------------------+
+| c1_row30                            |
++-------------------------------------+
 1 row in set (0.00 sec)
 
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 4. 示例4：TYPE IS RECORD TYPE and set default value
+- 4. 示例4：TYPE IS RECORD TYPE AND SET DEFAULT VALUE
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -233,47 +233,47 @@ greatsql> CREATE OR REPLACE PROCEDURE record_sp4 AS
 TYPE t0_record IS RECORD(
   id INT := 1,
   c1 VARCHAR(20),
-  c2 FLOAT := 0
+  c2 FLOAT := 33.06
 );
 
 TYPE t1_record IS RECORD(
   id INT := 1,
   c1 t0_record,
-  c2 FLOAT := 0
+  c2 FLOAT := 33.06
 );
 
 TYPE t1_record1 IS RECORD(
   v_i INT := 1,
-  t1_record_val1 t1_record := t1_record(10, t0_record(10, 'c1_row10', 11), 1.1)
+  t1_record_v1 t1_record := t1_record(10, t0_record(10, 'c1_row10', 43.06), 43.06)
 );
 
 t1_record_val t1_record1;
 
 BEGIN
-  SELECT t1_record_val.t1_record_val1.id, t1_record_val.t1_record_val1.c1, t1_record_val.t1_record_val1.c2;
+  SELECT t1_record_val.t1_record_v1.id, t1_record_val.t1_record_v1.c1, t1_record_val.t1_record_v1.c2;
 
-  SELECT t1_record_val.t1_record_val1.c1.id, t1_record_val.t1_record_val1.c1.c1, t1_record_val.t1_record_val1.c1.c2;
+  SELECT t1_record_val.t1_record_v1.c1.id, t1_record_val.t1_record_v1.c1.c1, t1_record_val.t1_record_v1.c1.c2;
 END; //
 
 greatsql> CALL record_sp4() //
-+---------------------------------+---------------------------------+---------------------------------+
-| t1_record_val.t1_record_val1.id | t1_record_val.t1_record_val1.c1 | t1_record_val.t1_record_val1.c2 |
-+---------------------------------+---------------------------------+---------------------------------+
-|                              10 | id:10 | c1:c1_row10 | c2:11     |                             1.1 |
-+---------------------------------+---------------------------------+---------------------------------+
++-------------------------------+--------------------------------+-------------------------------+
+| t1_record_val.t1_record_v1.id | t1_record_val.t1_record_v1.c1  | t1_record_val.t1_record_v1.c2 |
++-------------------------------+--------------------------------+-------------------------------+
+|                            10 | id:10 | c1:c1_row10 | c2:43.06 |                         43.06 |
++-------------------------------+--------------------------------+-------------------------------+
 1 row in set (0.00 sec)
 
-+------------------------------------+------------------------------------+------------------------------------+
-| t1_record_val.t1_record_val1.c1.id | t1_record_val.t1_record_val1.c1.c1 | t1_record_val.t1_record_val1.c1.c2 |
-+------------------------------------+------------------------------------+------------------------------------+
-|                                 10 | c1_row10                           |                                 11 |
-+------------------------------------+------------------------------------+------------------------------------+
++----------------------------------+----------------------------------+----------------------------------+
+| t1_record_val.t1_record_v1.c1.id | t1_record_val.t1_record_v1.c1.c1 | t1_record_val.t1_record_v1.c1.c2 |
++----------------------------------+----------------------------------+----------------------------------+
+|                               10 | c1_row10                         |                            43.06 |
++----------------------------------+----------------------------------+----------------------------------+
 1 row in set (0.00 sec)
 
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 5. 示例5：TYPE is udt table TYPE and set default value
+- 5. 示例5：TYPE IS UDT TABLE TYPE AND SET DEFAULT VALUE
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -316,7 +316,7 @@ Query OK, 0 rows affected (0.00 sec)
 更多关联用法：
 - [BULK COLLECT](5-3-easyuse-ora-sp-bulk-collect.md)
 - [FORALL LOOP](5-3-easyuse-ora-sp-forall-loop.md)
-- [TYPE IS TABLE]()
+- [TYPE IS TABLE](5-3-easyuse-ora-sp-table-type.md)
 
 
 **问题反馈**
