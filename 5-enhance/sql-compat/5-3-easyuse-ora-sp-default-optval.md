@@ -154,6 +154,7 @@ greatsql> SELECT f1() //
 | NULL |
 +------+
 1 row in set (0.00 sec)
+```
 
 - 2. 示例2
 
