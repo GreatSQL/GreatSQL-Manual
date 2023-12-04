@@ -161,12 +161,14 @@ RAISE_APPLICATION_ERROR (ERROR_CODE, MESSAGE)
 ## 4. 示例
 
 创建测试表并初始化数据
+
 ```sql
 greatsql> CREATE TABLE t1 (a INT NOT NULL, b VARCHAR(20) NOT NULL);
 greatsql> INSERT INTO t1 VALUES(1, 'row1'), (2, 'row2'), (3,'row3') ;
 ```
 
 - 1. 示例1，使用预定义异常 `TOO_MANY_ROWS`、`NO_DATA_FOUND`
+
 ```sql
 greatsql> SET sql_mode = ORACLE;
 greatsql> DELIMITER //
@@ -366,6 +368,7 @@ ERROR 33306 (HY000): GreatSQL exception in sp
 ```
 
 - 6. 示例6，异常绑定错误号
+
 ```
 greatsql> SET sql_mode = ORACLE;
 greatsql> DELIMITER //
