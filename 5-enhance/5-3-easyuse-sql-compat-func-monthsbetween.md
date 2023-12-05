@@ -1,6 +1,6 @@
 # SQL兼容性 - MONTHS_BETWEEN()函数
 ---
-[toc]
+
 
 ## 1. 语法
 

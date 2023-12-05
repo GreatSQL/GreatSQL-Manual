@@ -1,6 +1,6 @@
 # SQL兼容性 - LENGTH()函数
 ---
-[toc]
+
 ## 1. 语法
 ```
 length(data)

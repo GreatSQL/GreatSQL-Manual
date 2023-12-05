@@ -1,6 +1,6 @@
 # SQL兼容性 - TO_NUMBER()函数
 ---
-[toc]
+
 ## 1. 语法
 
 ```sql

@@ -1,6 +1,6 @@
 # SQL兼容性 - SYSDATE()函数
 ---
-[toc]
+
 ## 1. 语法
 ```sql
 SYSDATE()

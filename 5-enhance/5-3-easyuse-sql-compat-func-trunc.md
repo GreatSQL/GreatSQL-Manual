@@ -1,6 +1,6 @@
 # SQL兼容性 - TRUNC()函数
 ---
-[toc]
+
 
 函数 `TRUNC()` 支持两种用法：
 - `TRUNC(date [, fmt ])`

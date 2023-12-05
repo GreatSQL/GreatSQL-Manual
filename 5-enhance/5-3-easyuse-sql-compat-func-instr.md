@@ -1,6 +1,6 @@
 # SQL兼容性 - INSTR()函数
 ---
-[toc]
+
 ## 1. 语法
 ```
 INSTR( string1, string2 [, start_position [, nth_appearance ] ] )
