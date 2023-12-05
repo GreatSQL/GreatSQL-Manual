@@ -1,6 +1,6 @@
 # Oracle兼容-语法-SELECT ... FOR UPDATE WAIT n
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -126,4 +126,4 @@ ERROR 1210 (HY000): Incorrect arguments to wait n
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

@@ -1,6 +1,6 @@
 # Oracle兼容-语法-SEQUENCE（序列）
 ---
-[toc]
+
 
 
 序列（`SEQUENCE`）是序列号生成器，可以为表中的行自动生成序列号，产生一组等间隔的数值（类型为数字）。不占用磁盘空间，但占用内存。
@@ -170,4 +170,4 @@ Query OK, 1 row affected (0.00 sec)
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

@@ -1,6 +1,6 @@
 # Oracle兼容-存储过程-基础结构改造说明
 ---
-[toc]
+
 
 
 GreatSQL支持Oracle风格的存储过程使用方式，部分存储过程/函数部分在 `ORACLE` 模式下做了基础结构改造，主要包括以下几点。
@@ -322,4 +322,4 @@ greatsql> CALL p1 //
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

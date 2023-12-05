@@ -1,6 +1,6 @@
 # Oracle兼容-存储过程-TYPE IS RECORD
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -329,4 +329,4 @@ Query OK, 0 rows affected (0.00 sec)
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

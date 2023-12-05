@@ -1,6 +1,6 @@
 # Oracle兼容-语法-存储过程名双引号引用
 ---
-[toc]
+
 
 GreatSQL支持在ORACLE模式（`sql_mode = ORACLE`）下，存储过程名用双引号括起来使用。
 
@@ -44,4 +44,4 @@ greatsql> call "p1"(4); //
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

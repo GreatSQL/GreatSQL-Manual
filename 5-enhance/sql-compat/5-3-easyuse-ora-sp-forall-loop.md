@@ -1,6 +1,6 @@
 # Oracle兼容-存储过程-FORALL LOOP
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -152,4 +152,4 @@ greatsql> SELECT * FROM t2 //
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

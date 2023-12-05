@@ -1,6 +1,6 @@
 # Oracle兼容-语法-索引中NULL视为相同值
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -80,4 +80,4 @@ greatsql> SELECT * FROM t1;
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

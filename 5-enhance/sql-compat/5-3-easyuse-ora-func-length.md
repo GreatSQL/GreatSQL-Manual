@@ -1,6 +1,6 @@
 # Oracle兼容-函数-LENGTH()函数
 ---
-[toc]
+
 ## 1. 语法
 ```
 LENGTH(data)
@@ -53,4 +53,4 @@ greatsql> SELECT LENGTH( _UTF8MB4 'GreatSQL数据库');
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

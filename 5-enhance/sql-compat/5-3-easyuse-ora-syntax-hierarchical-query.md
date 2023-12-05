@@ -1,7 +1,7 @@
 # Oracle兼容-语法-分层查询（Hierarchical Query）
 ---
 
-[toc]
+
 
 GreatSQL支持分层查询（Hierarchical Query）。
 
@@ -445,4 +445,4 @@ greatsql> SELECT id, grade, level, SYS_CONNECT_BY_PATH(id ,'->'), PRIOR name, CO
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

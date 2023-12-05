@@ -1,6 +1,6 @@
 # Oracle兼容-语法-CREATE TABLE OF TYPE
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -201,4 +201,4 @@ greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, ORDINAL_POSITION, DATA_T
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

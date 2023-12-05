@@ -1,6 +1,6 @@
 # Oracle兼容-语法-ANY/ALL
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -171,4 +171,4 @@ greatsql> SELECT * FROM t1 WHERE salary >= ANY (5000, 6000, 7000);
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

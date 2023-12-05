@@ -1,6 +1,6 @@
 # Oracle兼容-语法-TABLE FUNCTION
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -199,4 +199,4 @@ Message: /* select#1 */ select "greatsql"."udt_table_-5015528632416731088"."id" 
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

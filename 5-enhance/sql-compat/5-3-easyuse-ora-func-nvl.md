@@ -1,6 +1,6 @@
 # Oracle兼容-函数-NVL()函数
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -49,4 +49,4 @@ greatsql> SELECT @c1, @c2, NVL(@c1, 'ISNULL'), NVL(@c2, 'ISNULL') FROM DUAL;
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

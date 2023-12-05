@@ -1,6 +1,6 @@
 # Oracle兼容-语法-Oracle(+)语法
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -304,4 +304,4 @@ ERROR 7526 (HY000): OuterJoin: outer join operator (+) is not allowed here
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

@@ -1,6 +1,6 @@
 # Oracle兼容-函数-ADD_MONTHS()函数
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -43,4 +43,4 @@ greatsql> SELECT NOW(), ADD_MONTHS(SYSDATE(), -2), ADD_MONTHS(SYSDATE(), +2);
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

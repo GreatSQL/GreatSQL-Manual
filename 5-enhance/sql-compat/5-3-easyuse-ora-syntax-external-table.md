@@ -1,6 +1,6 @@
 # Oracle兼容-语法-EXTERNAL TABLE
 ---
-[toc]
+
 
 GreatSQL中支持外部表特性。
 
@@ -201,4 +201,4 @@ greatsql> SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'greatsql
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

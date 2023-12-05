@@ -1,6 +1,6 @@
 # Oracle兼容-语法-ORACLE MODE
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -154,4 +154,4 @@ greatsql> SHOW WARNINGS;
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

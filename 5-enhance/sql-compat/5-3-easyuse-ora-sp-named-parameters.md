@@ -1,6 +1,6 @@
 # Oracle兼容-存储过程-命名标记法（`named parameter`）
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -91,4 +91,4 @@ greatsql> EXPLAIN SELECT * FROM t1 WHERE a > f1(a=>2, b=>1);
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

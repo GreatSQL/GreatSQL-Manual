@@ -1,6 +1,6 @@
 # Oracle兼容-语法-PIVOT
 ---
-[toc]
+
 
 `PIVOT` 语法可以将查询以交叉表的形式显示，与一般查询相比，交叉表具有更多的列和较少的行。
 
@@ -151,4 +151,4 @@ greatsql> SELECT * FROM t2 PIVOT(SUM(c) FOR(a, d) IN((1,1), (2,2), (3,1), (4,2),
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

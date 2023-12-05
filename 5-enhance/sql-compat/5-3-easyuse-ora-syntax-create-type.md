@@ -1,6 +1,6 @@
 # Oracle兼容-语法-CREATE TYPE
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -257,4 +257,4 @@ greatsql> SELECT SPECIFIC_SCHEMA, SPECIFIC_NAME, ORDINAL_POSITION, PARAMETER_NAM
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

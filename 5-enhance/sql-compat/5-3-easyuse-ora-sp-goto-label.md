@@ -1,6 +1,6 @@
 # Oracle兼容-存储过程-GOTO
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -288,4 +288,4 @@ ERROR 1308 (42000): GOTO with no matching label: label1
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

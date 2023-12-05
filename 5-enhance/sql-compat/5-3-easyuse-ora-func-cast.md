@@ -1,6 +1,6 @@
 # Oracle兼容-函数-CAST()函数
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -42,4 +42,4 @@ greatsql> SHOW WARNINGS;
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

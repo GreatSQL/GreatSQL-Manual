@@ -1,6 +1,6 @@
 # Oracle兼容-语法-TABLE UDT
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -568,4 +568,4 @@ CHARACTER_MAXIMUM_LENGTH: 20
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

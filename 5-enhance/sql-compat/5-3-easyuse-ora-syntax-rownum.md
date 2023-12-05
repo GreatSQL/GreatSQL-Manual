@@ -1,7 +1,7 @@
 # Oracle兼容-语法-ROWNUM
 ---
 
-[toc]
+
 
 ## 1.语法
 
@@ -113,4 +113,4 @@ greatsql> SELECT * FROM t1 LEFT JOIN t2 ON t1.r1=t2.r1 WHERE rownum < t1.r1;
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

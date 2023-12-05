@@ -1,6 +1,6 @@
 # Oracle兼容-语法-Oracle COMMENT
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -176,4 +176,4 @@ greatsql> call p1() //
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

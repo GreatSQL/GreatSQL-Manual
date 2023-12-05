@@ -1,6 +1,6 @@
 # Oracle兼容-函数-INSTR()函数
 ---
-[toc]
+
 ## 1. 语法
 ```
 INSTR( string1, string2 [, start_position [, nth_appearance ] ] )
@@ -112,4 +112,4 @@ SELECT INSTR('thisisatestsentence','t',0.5,1)  FROM DUAL;
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

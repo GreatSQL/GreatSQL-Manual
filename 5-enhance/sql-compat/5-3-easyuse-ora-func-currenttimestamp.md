@@ -1,6 +1,6 @@
 # Oracle兼容-函数-CURRENT_TIMESTAMP()函数
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -121,4 +121,4 @@ greatsql> SELECT * FROM t1;
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

@@ -1,6 +1,6 @@
 # Oracle兼容-数据类型
 ---
-[toc]
+
 
 在GreatSQL中，除了原生的数据类型外，还支持包括CLOB、VARCHAR2、NUMBER、PLS_INTEGER等Oracle兼容数据类型。
 
@@ -174,4 +174,4 @@ greatsql> SELECT * FROM t_number;
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

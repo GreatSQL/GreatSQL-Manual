@@ -1,6 +1,6 @@
 # Oracle兼容-语法-Oracle ORDER BY兼容
 ---
-[toc]
+
 
 在GreatSQL中，切换到ORACLE模式后，即可支持Oracle风格的排序规则。
 
@@ -120,4 +120,4 @@ greatsql> SELECT * FROM t1 ORDER BY desc1 DESC NULLS LAST;
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

@@ -1,6 +1,6 @@
 # Oracle兼容-函数-TO_CHAR()函数
 ---
-[toc]
+
 
 ## 1. 语法
 ```sql
@@ -252,4 +252,4 @@ greatsql> SELECT TO_CHAR(111,'99');
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

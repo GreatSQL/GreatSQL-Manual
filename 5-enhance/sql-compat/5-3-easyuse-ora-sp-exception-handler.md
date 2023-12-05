@@ -1,6 +1,6 @@
 # Oracle兼容-存储过程-Exception Handler
 ---
-[toc]
+
 
 在存储过程/存储函数中，当发生异常时，支持以下几种不同处理方式：
 
@@ -426,4 +426,4 @@ ERROR 1172 (42000): Result consisted of more than one row
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

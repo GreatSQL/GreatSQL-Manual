@@ -1,6 +1,6 @@
 # Oracle兼容-函数-TRANSLATE()函数
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -39,4 +39,4 @@ greatsql> SELECT TRANSLATE('GreatSQL数据库''$%^2023', 'G数据3库''', 'gdbN'
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

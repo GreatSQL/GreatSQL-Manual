@@ -1,6 +1,6 @@
 # Oracle兼容-语法-空串''与NULL等价模式
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -94,4 +94,4 @@ ERROR 1048 (23000): Column 'c1' cannot be null
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

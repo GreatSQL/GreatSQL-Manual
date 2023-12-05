@@ -1,6 +1,6 @@
 # Oracle兼容-函数-INSTRB()函数
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -121,4 +121,4 @@ greatsql> SELECT INSTRB('GreatSQL is a branch of MySQL', 'S', 0.6, 1);
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

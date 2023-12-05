@@ -1,6 +1,6 @@
 # Oracle兼容-函数-SYSDATE()函数
 ---
-[toc]
+
 ## 1. 语法
 ```sql
 SYSDATE
@@ -48,4 +48,4 @@ greatsql> SELECT SYSDATE, SYSDATE() FROM DUAL;
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

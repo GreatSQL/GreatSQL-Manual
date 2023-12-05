@@ -1,6 +1,6 @@
 # Oracle兼容-函数-MONTHS_BETWEEN()函数
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -93,4 +93,4 @@ greatsql> SELECT MONTHS_BETWEEN(TO_DATE('2021-1-10', 'yyyy-mm-dd'), TO_DATE('202
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

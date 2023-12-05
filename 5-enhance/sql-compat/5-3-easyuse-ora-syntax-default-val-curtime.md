@@ -1,6 +1,6 @@
 # Oracle兼容-语法-字符串列设置CURRENT_TIMESTAMP默认值
 ---
-[toc]
+
 
 GreatSQL支持对 `VARCHAR/VARCHAR2` 类型列设置默认值为 `CURRENT_TIMESTAMP`。
 
@@ -63,4 +63,4 @@ greatsql> SELECT * FROM t1;
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

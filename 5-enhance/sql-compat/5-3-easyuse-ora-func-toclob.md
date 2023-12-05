@@ -1,6 +1,6 @@
 # Oracle兼容-函数-TO_CLOB()函数
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -186,4 +186,4 @@ greatsql> SELECT TO_CLOB(123), TO_CLOB('ABC123\\'), TO_CLOB(123.456), TO_CLOB(1+
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

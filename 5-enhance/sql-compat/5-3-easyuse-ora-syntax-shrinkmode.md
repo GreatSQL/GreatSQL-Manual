@@ -1,6 +1,6 @@
 # Oracle兼容-语法-shrink_sql_mode
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -53,4 +53,4 @@ greatsql> SELECT @@sql_mode;
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

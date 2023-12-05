@@ -1,6 +1,6 @@
 # Oracle兼容-语法-GLOBAL|PRIVATE TEMPORARY TABLE
 ---
-[toc]
+
 
 ## 1. 语法
 
@@ -258,4 +258,4 @@ TODO，暂停
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)
