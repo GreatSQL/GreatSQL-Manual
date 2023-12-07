@@ -127,4 +127,4 @@ global级别，由于总内存限制，导致未能执行并行执行的查询�
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

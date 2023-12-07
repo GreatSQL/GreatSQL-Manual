@@ -287,4 +287,4 @@ TODO 在GreatSQL中，定义触发器前设定SQL兼容模式或修改`sql_mode`
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

@@ -79,4 +79,4 @@ sched_affinity_purge_coordinator=20-30
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

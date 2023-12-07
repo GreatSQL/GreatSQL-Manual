@@ -23,4 +23,4 @@ GreatSQL支持逻辑备份加密、CLONE备份加密、审计日志入表、表�
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

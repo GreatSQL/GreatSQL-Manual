@@ -37,4 +37,4 @@ MySQL社区版的连接处理方法默认是为每个连接创建一个工作线
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

@@ -157,4 +157,4 @@ CREATE TEMPORARY TABLE `INNODB_ASYNC_PURGE_FILES` (
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

@@ -37,4 +37,4 @@ GreatSQL中新增地理标签特性，可以提升多机房架构数据可靠性
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

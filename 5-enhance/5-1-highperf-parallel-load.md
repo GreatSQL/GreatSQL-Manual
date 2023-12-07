@@ -78,4 +78,4 @@ LOAD /*parallel load worker(chunk_no:xxx)*/ DATA INFILE 'session_id:worker_no' I
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)
