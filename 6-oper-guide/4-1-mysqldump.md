@@ -135,4 +135,4 @@ $ sed -n "100,200p" /backup/GreatSQL/greatsql-20230830.sql | mysql -f -S/data/Gr
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

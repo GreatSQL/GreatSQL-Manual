@@ -152,4 +152,4 @@ greatsql> LOAD /*+ SET_VAR(gdb_parallel_load=ON) SET_VAR(gdb_parallel_load_chunk
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

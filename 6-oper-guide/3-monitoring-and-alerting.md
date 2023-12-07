@@ -184,4 +184,4 @@ greatsql> SELECT MEMBER_ID AS id, COUNT_TRANSACTIONS_IN_QUEUE AS trx_tobe_certif
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)
