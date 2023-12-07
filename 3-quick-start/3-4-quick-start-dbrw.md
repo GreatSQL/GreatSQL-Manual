@@ -27,7 +27,7 @@ $ mysql -h172.17.0.3 -uroot -p
 二进制及Docker方式快速安装GreatSQL后，数据库中的管理员用户root默认是空密码，安全起见，可以先修改密码：
 ```
 # 先查看当前用户
-greatsql> select user();
+greatsql> SELECT USER();
 +----------------+
 | user()         |
 +----------------+
@@ -35,7 +35,7 @@ greatsql> select user();
 +----------------+
 
 # 修改密码
-greatsql> alter user user() identified by 'GreatSQL@202X';
+greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@202X';
 Query OK, 0 rows affected (0.02 sec)
 ```
 修改完成后，再次用root用户连入的话就可以用新密码了。
@@ -60,7 +60,7 @@ greatsql> GRANT ALL ON GreatSQL.* TO GreatSQL@'172.17.0.0/16';
 $ mysql -h172.17.0.3 -uGreatSQL -p'GreatSQL-202X'
 ...
 # 切换到GreatSQL数据库下
-greatsql> use GreatSQL;
+greatsql> USE GreatSQL;
 Database changed
 
 # 创建新表

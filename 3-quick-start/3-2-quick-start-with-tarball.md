@@ -5,9 +5,9 @@
 
 ## 下载安装包
 
-[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-24)下载最新的安装包，下载以下文件：
+[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)下载最新的安装包，下载以下文件：
 
-- GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal.tar.xz    
+- GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal.tar.xz    
 
 ## 运行环境配置
 关闭selinux和防火墙
@@ -40,12 +40,12 @@ $ systemctl stop iptables
 ```
 # 下载
 $ cd /usr/local
-$ wget https://product.greatdb.com/GreatSQL-8.0.32-24/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal.tar.xz
+$ wget https://product.greatdb.com/GreatSQL-8.0.32-25/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal.tar.xz
 #或者用curl
-$ curl -o GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal.tar.xz https://product.greatdb.com/GreatSQL-8.0.32-24/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal.tar.xz
+$ curl -o GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal.tar.xz https://product.greatdb.com/GreatSQL-8.0.32-25/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal.tar.xz
 
 #解压缩
-$ tar xf GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal.tar.xz
+$ tar xf GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal.tar.xz
 ```
 
 编辑systemd系统服务文件，增加GreatSQL服务文件：
@@ -87,8 +87,8 @@ Group=mysql
 Type=notify
 TimeoutSec=0
 PermissionsStartOnly=true
-ExecStartPre=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd
-ExecStart=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal/bin/mysqld $MYSQLD_OPTS
+ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd
+ExecStart=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal/bin/mysqld $MYSQLD_OPTS
 EnvironmentFile=-/etc/sysconfig/mysql
 LimitNOFILE = 10000
 Restart=on-failure
@@ -134,14 +134,14 @@ $ /sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
 ```
 mkdir /var/run/mysqld/ /var/lib/mysql-files/ /var/lib/mysql/ 
 
-chown mysql:mysql /var/run/mysqld/ /var/lib/mysql-files/ /var/lib/mysql/ /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal/
+chown mysql:mysql /var/run/mysqld/ /var/lib/mysql-files/ /var/lib/mysql/ /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal/
 ```
 
 
 
 编辑`mysqld_pre_systemd`脚本文件，修改程序目录：
 
-将文件中的 `/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/`改为实际安装目录。
+将文件中的 `/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/`改为实际安装目录。
 
 
 
@@ -160,19 +160,19 @@ $ systemctl status greatsql
    Active: active (running) since Wed 2022-07-06 13:42:35 CST; 2min 42s ago
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
-  Process: 47924 ExecStartPre=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+  Process: 47924 ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
  Main PID: 47994 (mysqld)
    Status: "Server is operational"
     Tasks: 38 (limit: 149064)
    Memory: 444.5M
    CGroup: /system.slice/greatsql.service
-           └─47994 /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal/bin/mysqld
+           └─47994 /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal/bin/mysqld
 
 Jul 06 13:42:30 db170 systemd[1]: Starting GreatSQL Server...
 Jul 06 13:42:35 db170 systemd[1]: Started GreatSQL Server.
 
 $ ps -ef | grep mysqld
-mysql      47994       1  2 13:42 ?        00:00:03 /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal/bin/mysqld
+mysql      47994       1  2 13:42 ?        00:00:03 /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal/bin/mysqld
 
 $ ss -lntp | grep mysqld
 LISTEN 0      70                 *:33060            *:*    users:(("mysqld",pid=47994,fd=23))
@@ -198,10 +198,10 @@ $ cat /var/log/mysqld.log|grep password
 
 
 ```
-$ /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal/bin/mysql -uroot
+$ /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal/bin/mysql -uroot
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
-Server version: 8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
 
 Copyright (c) 2021-2023 GreatDB Software Co., Ltd
 Copyright (c) 2009-2021 Percona LLC and/or its affiliates
@@ -211,30 +211,30 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 greatsql> \s
 --------------
-mysql  Ver 8.0.32-24 for Linux on x86_64 (GreatSQL, Release 24, Revision 3714067bc8c)
+mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 3714067bc8c)
 
-Connection id:        8
+Connection id:          8
 Current database:
-Current user:        root@localhost
-SSL:            Not in use
-Current pager:        stdout
-Using outfile:        ''
-Using delimiter:    ;
-Server version:        8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
-Protocol version:    10
-Connection:        Localhost via UNIX socket
+Current user:           root@localhost
+SSL:                    Not in use
+Current pager:          stdout
+Using outfile:          ''
+Using delimiter:        ;
+Server version:         8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
+Protocol version:       10
+Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4
 Db     characterset:    utf8mb4
 Client characterset:    utf8mb4
 Conn.  characterset:    utf8mb4
-UNIX socket:        /var/lib/mysql/mysql.sock
-Binary data as:        Hexadecimal
-Uptime:            17 min 23 sec
+UNIX socket:            /var/lib/mysql/mysql.sock
+Binary data as:         Hexadecimal
+Uptime:                 17 min 23 sec
 
 Threads: 2  Questions: 12  Slow queries: 0  Opens: 120  Flush tables: 3  Open tables: 36  Queries per second avg: 0.011
 --------------
 
-greatsql> show databases;  #<--查看数据库列表
+greatsql> SHOW DATABASES;  #<--查看数据库列表
 +--------------------+
 | Database           |
 +--------------------+

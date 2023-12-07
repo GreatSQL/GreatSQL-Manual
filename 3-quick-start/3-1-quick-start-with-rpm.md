@@ -5,15 +5,15 @@
 
 ## 下载安装包
 
-[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-24)下载最新的安装包，至少下载以下几个RPM包文件：
+[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)下载最新的安装包，至少下载以下几个RPM包文件：
 
-- greatsql-client-8.0.32-24.1.el8.x86_64.rpm 
-- greatsql-devel-8.0.32-24.1.el8.x86_64.rpm  
-- greatsql-icu-data-files-8.0.32-24.1.el8.x86_64.rpm
-- greatsql-shared-8.0.32-24.1.el8.x86_64.rpm
-- greatsql-server-8.0.32-24.1.el8.x86_64.rpm 
+- greatsql-client-8.0.32-25.1.el8.x86_64.rpm 
+- greatsql-devel-8.0.32-25.1.el8.x86_64.rpm  
+- greatsql-icu-data-files-8.0.32-25.1.el8.x86_64.rpm
+- greatsql-shared-8.0.32-25.1.el8.x86_64.rpm
+- greatsql-server-8.0.32-25.1.el8.x86_64.rpm 
 
-**提示**：建议直接下载RPM集中打包文件，例如 greatsql-8.0.32-24.1.el8.x86_64.rpm-bundle.tar.xz，就无需每个文件单独下载了。
+**提示**：建议直接下载RPM集中打包文件，例如 greatsql-8.0.32-25.1.el8.x86_64.rpm-bundle.tar.xz，就无需每个文件单独下载了。
 
 ## 运行环境配置
 关闭selinux和防火墙
@@ -49,11 +49,11 @@ $ rpm -ivh --nodeps greatsql*rpm
 Verifying...                          ################################# [100%]
 Preparing...                          ################################# [100%]
 Updating / installing...
-   1:greatsql-shared-8.0.32-24.1.el8  ################################# [ 20%]
-   2:greatsql-client-8.0.32-24.1.el8  ################################# [ 40%]
-   3:greatsql-icu-data-files-8.0.32-24################################# [ 60%]
-   4:greatsql-server-8.0.32-24.1.el8  ################################# [ 80%]
-   5:greatsql-devel-8.0.32-24.1.el8   ################################# [100%]
+   1:greatsql-shared-8.0.32-25.1.el8  ################################# [ 20%]
+   2:greatsql-client-8.0.32-25.1.el8  ################################# [ 40%]
+   3:greatsql-icu-data-files-8.0.32-25################################# [ 60%]
+   4:greatsql-server-8.0.32-25.1.el8  ################################# [ 80%]
+   5:greatsql-devel-8.0.32-25.1.el8   ################################# [100%]
 ```
 这就安装成功了。
 
@@ -66,25 +66,25 @@ Updating / installing...
 ```
 $ rpm -ivh greatsql*rpm
 error: Failed dependencies:
-        perl(Lmo) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
-        perl(Lmo::Meta) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
-        perl(Lmo::Object) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
-        perl(Lmo::Types) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
-        perl(Lmo::Utils) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
-        perl(Percona::Toolkit) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
-        perl(Quoter) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
-        perl(Transformers) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
+        perl(Lmo) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Lmo::Meta) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Lmo::Object) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Lmo::Types) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Lmo::Utils) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Percona::Toolkit) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Quoter) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Transformers) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
 
 #上述这些依赖包可以先忽略，不影响GreatSQL正常使用
 
 $ rpm -ivh --nodeps --force greatsql*rpm
 Preparing...                          ################################# [100%]
 Updating / installing...
-   1:greatsql-shared-8.0.32-24.1.el7  ################################# [ 20%]
-   2:greatsql-client-8.0.32-24.1.el7  ################################# [ 40%]
-   3:greatsql-icu-data-files-8.0.32-24################################# [ 60%]
-   4:greatsql-server-8.0.32-24.1.el7  ################################# [ 80%]
-   5:greatsql-devel-8.0.32-24.1.el7   ################################# [100%]
+   1:greatsql-shared-8.0.32-25.1.el7  ################################# [ 20%]
+   2:greatsql-client-8.0.32-25.1.el7  ################################# [ 40%]
+   3:greatsql-icu-data-files-8.0.32-25################################# [ 60%]
+   4:greatsql-server-8.0.32-25.1.el7  ################################# [ 80%]
+   5:greatsql-devel-8.0.32-25.1.el7   ################################# [100%]
 ```
 
 2. 正式安装GreatSQL RPM包时，可能还需要依赖Perl等其他软件包，此处为快速演示，因此加上 `--nodeps` 参数，忽略相应的依赖关系检查。安装完毕后，如果因为依赖关系无法启动，请再行安装相应软件依赖包。
@@ -175,7 +175,7 @@ $ mysql -uroot -p
 Enter password:     #<--这个地方粘贴上面复制的随机密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
-Server version: 8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
 
 Copyright (c) 2021-2023 GreatDB Software Co., Ltd
 Copyright (c) 2009-2021 Percona LLC and/or its affiliates
@@ -186,12 +186,12 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 greatsql> \s   #<--想执行一个命令，提示要先修改密码
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 
-greatsql> alter user user() identified by 'GreatSQL@202X';  #<--修改密码
+greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@202X';  #<--修改密码
 Query OK, 0 rows affected (0.02 sec)
 
 greatsql> \s   #<--就可以正常执行其他命令了
 --------------
-mysql  Ver 8.0.32-24 for Linux on x86_64 (GreatSQL, Release 24, Revision 3714067bc8c)
+mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 3714067bc8c)
 
 Connection id:          11
 Current database:
@@ -200,7 +200,7 @@ SSL:                    Not in use
 Current pager:          stdout
 Using outfile:          ''
 Using delimiter:        ;
-Server version:         8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
+Server version:         8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
 Protocol version:       10
 Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4
@@ -214,7 +214,7 @@ Uptime:                 10 min 14 sec
 Threads: 2  Questions: 7  Slow queries: 0  Opens: 130  Flush tables: 3  Open tables: 46  Queries per second avg: 0.005
 --------------
 
-greatsql> show databases;  #<--查看数据库列表
+greatsql> SHOW DATABASES;  #<--查看数据库列表
 +--------------------+
 | Database           |
 +--------------------+
