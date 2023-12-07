@@ -147,7 +147,7 @@ greatsql> SELECT COUNT(*) FROM countrylanguage;
 greatsql> SOURCE /tmp/testdb/sakila-db/sakila-schema.sql;
 greatsql> SOURCE /tmp/testdb/sakila-db/sakila-data.sql;
 greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE, ENGINE, TABLE_ROWS 
-  FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = 'sakila';
+  FROM information_schema.TABLES WHERE table_schema = 'sakila';
 +--------------+----------------------------+------------+--------+------------+
 | TABLE_SCHEMA | TABLE_NAME                 | TABLE_TYPE | ENGINE | TABLE_ROWS |
 +--------------+----------------------------+------------+--------+------------+

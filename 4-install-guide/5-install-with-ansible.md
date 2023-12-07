@@ -221,7 +221,7 @@ Jul 13 15:46:21 GreatSQL-01 systemd[1]: Started GreatSQL Server.
 
 检查MGR服务运行状态：
 ```
-[root@GreatSQL][(none)]> SELECT * FROM PERFORMANCE_SCHEMA.replication_group_members;
+[root@GreatSQL][(none)]> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+

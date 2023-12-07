@@ -197,7 +197,7 @@ Uptime:            1 min 38 sec
 Threads: 11  Questions: 52  Slow queries: 0  Opens: 145  Flush tables: 3  Open tables: 62  Queries per second avg: 0.530
 --------------
 
-(Tue Jul 12 14:28:05 2022)[root@GreatSQL][(none)]> SELECT * FROM PERFORMANCE_SCHEMA.replication_group_members;
+(Tue Jul 12 14:28:05 2022)[root@GreatSQL][(none)]> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
@@ -293,7 +293,7 @@ $ docker-compse -f /data/docker/mgr-multi-primary.yml up -d
 $ docker exec -it mgr2 bash
 $ mysql
 ...
-[root@GreatSQL][(none)]> SELECT * FROM PERFORMANCE_SCHEMA.replication_group_members;
+[root@GreatSQL][(none)]> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION | MEMBER_COMMUNICATION_STACK |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
