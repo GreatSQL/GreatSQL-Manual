@@ -70,14 +70,14 @@ mysqldump: Couldn't execute 'SELECT /*!40001 SQL_NO_CACHE */ * FROM `t4` WHERE i
 
 在mysql客户端工具里，执行 `source` 指令导入SQL文件，这种方式的缺点是终端会一直输出执行的结果，很不友好。用法是：
 ```
-> use db;
-> source path/file.sql;
+> USE db;
+> SOURCE path/file.sql;
 ```
 
 例如：
 ```
-greatsql> use greatsql;
-greatsql> source /backup/GreatSQL/greatsql-20230830.sql;
+greatsql> USE greatsql;
+greatsql> SOURCE /backup/GreatSQL/greatsql-20230830.sql;
 ```
 **提示：** 如果要恢复的SQL文件中不包含 `use db` 这样切换到指定库名的话，就需要先自己手动执行 `use db` 这个操作。
 
@@ -117,7 +117,7 @@ $ sed -n "100,200p" /backup/GreatSQL/greatsql-20230830.sql | mysql -f -S/data/Gr
 
 更多关于 `mysqldump` 更详细说明详见文档：[mysqldump](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html)。
 
-从GreatSQL 8.0.32-24版本开始，`mysqldump`支持加密备份，详情见文档：[mysqldump备份加密](../5-enhance/5-4-security-mysqldump-encrypt.md)。
+从GreatSQL 8.0.32-24版本开始，`mysqldump`支持加密备份，详情见文档：[mysqldump备份加密](/5-enhance/5-4-security-mysqldump-encrypt.md)。
 
 **参考资料：**
 

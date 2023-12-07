@@ -23,17 +23,17 @@ MySQL Router最好和应用服务器部署在一起，所以本次将MySQL Route
 
 将MySQL Router和应用服务器部署在一起的好处在于，当某个后端数据库服务器发生宕机并下线及导致MGR发生切换时，部署在应用程序端的router程序能通过MGR的metadata信息感知到这个变化，并自动更新MGR拓扑结构，无需在应用程序上做任何变更，也无需针对router再次部署高可用切换方案。
 
-[戳此下载MySQL Router RPM安装包](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-24)，选择下面的安装包：
+[戳此下载MySQL Router RPM安装包](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，选择下面的安装包：
 
-- greatsql-mysql-router-8.0.32-24.1.el8.x86_64.rpm
+- greatsql-mysql-router-8.0.32-25.1.el8.x86_64.rpm
 
 下载到本地后，执行安装：
 ```
-$ rpm -ivh greatsql-mysql-router-8.0.32-24.1.el8.x86_64.rpm
+$ rpm -ivh greatsql-mysql-router-8.0.32-25.1.el8.x86_64.rpm
 Verifying...                          ################################# [100%]
 Preparing...                          ################################# [100%]
 Updating / installing...
-   1:greatsql-mysql-router-8.0.32-24.1################################# [100%]
+   1:greatsql-mysql-router-8.0.32-25.1################################# [100%]
 ```
 
 MySQL Router对应的服务器端程序文件是 `/usr/bin/mysqlrouter`，第一次启动时要先进行初始化：
@@ -131,7 +131,7 @@ protocol=classic
 $ mysql -h172.16.16.14 -uGreatSQL -p -P6446
 Enter password:
 ...
-greatsql> select @@server_uuid;
+greatsql> SELECT @@server_uuid;
 +--------------------------------------+
 | @@server_uuid                        |
 +--------------------------------------+
@@ -139,7 +139,7 @@ greatsql> select @@server_uuid;
 +--------------------------------------+
 
 # 确实是连接的PRIMARY节点
-greatsql> select MEMBER_ID,MEMBER_HOST,MEMBER_ROLE from performance_schema.replication_group_members;
+greatsql> SELECT MEMBER_ID,MEMBER_HOST,MEMBER_ROLE FROM performance_schema.replication_group_members;
 +--------------------------------------+--------------+-------------+
 | MEMBER_ID                            | MEMBER_HOST  | MEMBER_ROLE |
 +--------------------------------------+--------------+-------------+
@@ -155,7 +155,7 @@ greatsql> select MEMBER_ID,MEMBER_HOST,MEMBER_ROLE from performance_schema.repli
 $ mysql -h172.16.16.14 -uGreatSQL -p -P6447
 Enter password:
 ...
-greatsql> select @@server_uuid;
+greatsql> SELECT @@server_uuid;
 +--------------------------------------+
 | @@server_uuid                        |
 +--------------------------------------+
@@ -211,9 +211,9 @@ The instance '172.16.16.11:3306' was successfully elected as primary.
 
 回到前面连接6446端口的那个会话，再次查询 **server_uuid**，此时会发现连接自动断开了：
 ```
-greatsql> select @@server_uuid;
+greatsql> SELECT @@server_uuid;
 ERROR 2013 (HY000): Lost connection to MySQL server during query
-greatsql> select @@server_uuid;
+greatsql> SELECT @@server_uuid;
 ERROR 2006 (HY000): MySQL server has gone away
 No connection. Trying to reconnect...
 Connection id:    157990

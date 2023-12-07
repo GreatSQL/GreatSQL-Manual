@@ -44,7 +44,7 @@ $ journalctl -ex
 
 首先，查看要修改的参数选项当前值：
 ```
-greatsql> show global variables like 'innodb_buffer_pool_size';
+greatsql> SHOW GLOBAL VARIABLES LIKE 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
 +-------------------------+------------+
@@ -55,11 +55,11 @@ greatsql> show global variables like 'innodb_buffer_pool_size';
 执行SET命令修改该选项值：
 ```
 # 修改为8G
-greatsql> set global innodb_buffer_pool_size = 8589934592;
+greatsql> SET GLOBAL innodb_buffer_pool_size = 8589934592;
 Query OK, 0 rows affected (0.00 sec)
 
 # 再次查看，确认生效
-greatsql> show global variables like 'innodb_buffer_pool_size';
+greatsql> SHOW GLOBAL VARIABLES LIKE 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
 +-------------------------+------------+
@@ -71,17 +71,17 @@ greatsql> show global variables like 'innodb_buffer_pool_size';
 
 因此，建议用另一种方式修改：
 ```
-greatsql> set persist innodb_buffer_pool_size = 4294967296;
+greatsql> SET PERSIST innodb_buffer_pool_size = 4294967296;
 Query OK, 0 rows affected (0.00 sec)
 
-greatsql> show global variables like 'innodb_buffer_pool_size';
+greatsql> SHOW GLOBAL VARIABLES LIKE 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
 +-------------------------+------------+
 | innodb_buffer_pool_size | 4294967296 |
 +-------------------------+------------+
 ```
-采用 `set persist` 方式修改选项值的话，除了会立即修改之外，还会在 `datadir/mysqld-auto.cnf` 中记录本次修改，并在下一次重启时加载该选项值使之生效。当然了，前提是选项值 `persisted_globals_load = ON`（默认值也是 ON）。
+采用 `SET PERSIST` 方式修改选项值的话，除了会立即修改之外，还会在 `datadir/mysqld-auto.cnf` 中记录本次修改，并在下一次重启时加载该选项值使之生效。当然了，前提是选项值 `persisted_globals_load = ON`（默认值也是 ON）。
 
 这样就不担心只修改当前值而忘记修改 `my.cnf` 中的选项值了。
 
@@ -93,9 +93,9 @@ greatsql> show global variables like 'innodb_buffer_pool_size';
 
 第一种是直接修改 `my.cnf` 文件，保存退出，数据库下次重启时就会生效了。
 
-第二种是执行 `set persist_only` 修改，这时候只会将新的选项值记录到 `mysqld-auto.cnf` 中，并不会立即修改内存中的选项值。
+第二种是执行 `SET PERSIST_ONLY` 修改，这时候只会将新的选项值记录到 `mysqld-auto.cnf` 中，并不会立即修改内存中的选项值。
 ```
-greatsql> show global variables like 'innodb_buffer_pool_size';
+greatsql> SHOW GLOBAL VARIABLES LIKE 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
 +-------------------------+------------+
@@ -103,10 +103,10 @@ greatsql> show global variables like 'innodb_buffer_pool_size';
 +-------------------------+------------+
 1 row in set (0.01 sec)
 
-greatsql> set persist_only innodb_buffer_pool_size = 4294967296;
+greatsql> SET PERSIST_ONLY innodb_buffer_pool_size = 4294967296;
 Query OK, 0 rows affected (0.00 sec)
 
-greatsql> show global variables like 'innodb_buffer_pool_size';
+greatsql> SHOW GLOBAL VARIABLES LIKE 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
 +-------------------------+------------+
@@ -145,8 +145,7 @@ $ grep innodb_buffer_pool_size /data/GreatSQL/mysqld-auto.cnf
 数据库运行过程中，随着用户对数据库不断执行各种操作，binlog会不断增加，默认设置是30天（`binlog_expire_logs_seconds
 = 2592000`）才会自动清理，因此当可用磁盘空间较为紧张时，就需要手动执行清理binlog操作。例如：
 ```
-greatsql> show binary logs;
-show binary logs;
+greatsql> SHOW BINARY LOGS;
 +---------------------+------------+
 | Log_name            | File_size  |
 +---------------------+------------+
@@ -160,12 +159,12 @@ show binary logs;
 
 # 可以看到共有42个binlog
 # 举例现在只想保留最近2个，其余都清除
-greatsql> purge binary logs to 'greatsql-bin.001465';
+greatsql> PURGE BINARY LOGS TO 'greatsql-bin.001465';
 Query OK, 0 rows affected (1.99 sec)
 
 # 再次查看
 # 当前对数据库正在做压测，所以又很快生成了很多binlog
-greatsql> show binary logs;
+greatsql> SHOW BINARY LOGS;
 +---------------------+------------+
 | Log_name            | File_size  |
 +---------------------+------------+
@@ -178,7 +177,7 @@ greatsql> show binary logs;
 17 rows in set (0.00 sec)
 
 # 重新设置binlog自动清理周期为7天
-greatsql> set persist binlog_expire_logs_seconds = 604800;
+greatsql> SET PERSIST binlog_expire_logs_seconds = 604800;
 ```
 **提醒：** 清理binlog前，请务必记得做好备份，避免影响后续的数据库恢复需要。
 
@@ -208,7 +207,7 @@ $ cp slow.log slow.log-`date +%Y%m%d`
 $ echo '' > slow.log
 
 # 再进入GreatSQL，执行SQL命令
-greatsql> flush slow logs;
+greatsql> FLUSH SLOW LOGS;
 ```
 这样就可以清空slow query log了。
 
@@ -216,9 +215,9 @@ greatsql> flush slow logs;
 
 和清理slow query log差不多，也是先做好日志文件备份，然后执行SQL命令：
 ```
-greatsql> flush general logs;
+greatsql> FLUSH GENERAL LOGS;
 
-greatsql> flush error logs;
+greatsql> FLUSH ERROR LOGS;
 ```
 
 详情参考文档：[FLUSH Statement](https://dev.mysql.com/doc/refman/8.0/en/flush.html)。
@@ -247,71 +246,71 @@ greatsql> flush error logs;
 >
 
 ```
-greatsql> set @statdb = 'greatsql';
-select 
+greatsql> SET @statdb = 'greatsql';
+SELECT 
 a.database_name ,
 a.table_name ,
 a.index_name ,
 a.stat_value SK,
 b.stat_value PK, 
 round((a.stat_value/b.stat_value)*100,2) stat_pct
-from 
+FROM 
 (
-select 
+SELECT 
 b.database_name  ,
 b.table_name  ,
 b.index_name ,  
 b.stat_value
-from 
+FROM 
 (
-select database_name  ,
+SELECT database_name  ,
 table_name  ,
 index_name ,  
 max(stat_name) stat_name 
-from innodb_index_stats 
-where   database_name = @statdb
-and stat_name not in ( 'size' ,'n_leaf_pages' )
-group by 
+FROM innodb_index_stats 
+WHERE database_name = @statdb
+AND stat_name NOT IN ( 'size' ,'n_leaf_pages' )
+GROUP BY 
 database_name  ,
 table_name  ,
 index_name   
-) a join innodb_index_stats b on a.database_name=b.database_name
-and a.table_name=b.table_name
-and a.index_name=b.index_name
-and a.stat_name=b.stat_name 
-and b.index_name !='PRIMARY'
-) a left join 
+) a JOIN innodb_index_stats b ON a.database_name=b.database_name
+AND a.table_name=b.table_name
+AND a.index_name=b.index_name
+AND a.stat_name=b.stat_name 
+AND b.index_name !='PRIMARY'
+) a LEFT JOIN 
 (
-select 
+SELECT 
 b.database_name  ,
 b.table_name  ,
 b.index_name ,  
 b.stat_value
-from 
+FROM 
 (
-select database_name  ,
+SELECT database_name  ,
 table_name  ,
 index_name ,  
-max(stat_name) stat_name 
-from innodb_index_stats 
-where   database_name = @statdb
-and stat_name not in ( 'size' ,'n_leaf_pages' )
-group by 
+MAX(stat_name) stat_name 
+FROM innodb_index_stats 
+WHERE database_name = @statdb
+AND stat_name NOT IN ( 'size' ,'n_leaf_pages' )
+GROUP BY 
 database_name  ,
 table_name  ,
 index_name   
-) a join innodb_index_stats b 
-on a.database_name=b.database_name
-and a.table_name=b.table_name
-and a.index_name=b.index_name
-and a.stat_name=b.stat_name
-and b.index_name ='PRIMARY'
+) a JOIN innodb_index_stats b 
+ON a.database_name=b.database_name
+AND a.table_name=b.table_name
+AND a.index_name=b.index_name
+AND a.stat_name=b.stat_name
+AND b.index_name ='PRIMARY'
 ) b 
-on a.database_name=b.database_name
-and a.table_name=b.table_name
-where b.stat_value is not null 
-and  a.stat_value >0
-order by stat_pct;
+ON a.database_name=b.database_name
+AND a.table_name=b.table_name
+WHERE b.stat_value IS NOT NULL 
+AND  a.stat_value >0
+ORDER BY stat_pct;
 
 +---------------+-------------------+--------------+--------+--------+----------+
 | database_name | table_name        | index_name   | SK     | PK     | stat_pct |
@@ -327,7 +326,7 @@ order by stat_pct;
 
 在业务负载低谷时段执行下面的命令更新索引统计信息：
 ```
-greatsql> analyze table t1;
+greatsql> ANALYZE TABLE t1;
 +-------------+---------+----------+----------+
 | Table       | Op      | Msg_type | Msg_text |
 +-------------+---------+----------+----------+
@@ -340,11 +339,11 @@ greatsql> analyze table t1;
 
 不过当该表已被加上MDL锁，则会被阻塞，所以执行前最好检查下。
 
-执行 `analyze table` 期间会对数据表加上只读锁，因为还需要将该表从 `table definition cache` 中移除，所以还需要加上 `flush` 锁。
+执行 `ANALYZE TABLE` 期间会对数据表加上只读锁，因为还需要将该表从 `table definition cache` 中移除，所以还需要加上 `FLUSH` 锁。
 
-MySQL 8.0.24之前，如果该表上有请求还未结束，这时候再执行 `analyze table`，那么之后对该表的其他请求也会被阻塞，这个情况在8.0.24之后得到解决。
+MySQL 8.0.24之前，如果该表上有请求还未结束，这时候再执行 `ANALYZE TABLE`，那么之后对该表的其他请求也会被阻塞，这个情况在8.0.24之后得到解决。
 
-另外，执行 `analyze table` 操作还会写入binlog，所以从节点也会跟着做一遍。如果不想让其写入binlog，可以加上 `NO_WRITE_TO_BINLOG` 关键字。
+另外，执行 `ANALYZE TABLE` 操作还会写入binlog，所以从节点也会跟着做一遍。如果不想让其写入binlog，可以加上 `NO_WRITE_TO_BINLOG` 关键字。
 
 参考文档：
 
@@ -378,7 +377,7 @@ TABLE_SCHEMA = 'greatsql' AND TABLE_ROWS >= 10000 ORDER BY fragment_pct DESC, TA
 
 如果表数据量较小，或者表空间文件较小，则可以直接执行下面的SQL命令重整表空间消除碎片：
 ```
-greatsql> alter table sbtest1 engine = innodb;
+greatsql> ALTER TABLE sbtest1 ENGINE = innodb;
 ```
 
 如果表数据量较大，或者表空间文件较大，则**强烈建议**采用 `pt-online-schema-change` 工具重整表空间消除碎片，例如：

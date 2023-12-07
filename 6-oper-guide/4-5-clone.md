@@ -55,11 +55,11 @@ greatsql> GRANT CLONE_ADMIN, BACKUP_ADMIN ON *.* TO clone_user@'%';
 
 开始备份前，先在当前实例中，新建一个MyISAM表，并写入几行数据：
 ```
-greatsql> use greatsql;
-greatsql> create table t4 (id int primary key)engine=myisam;
-greatsql> insert into t4 select rand()*10240;
-greatsql> insert into t4 select rand()*10240;
-greatsql> insert into t4 select rand()*10240;
+greatsql> USE greatsql;
+greatsql> CREATE TABLE t4 (id INT PRIMARY KEY)ENGINE=myisam;
+greatsql> INSERT INTO t4 SELECT RAND()*10240;
+greatsql> INSERT INTO t4 SELECT RAND()*10240;
+greatsql> INSERT INTO t4 SELECT RAND()*10240;
 ```
 
 ### 2.2 CLONE备份本地数据
@@ -108,7 +108,7 @@ $ ls -la /data/GreatSQL-restore/greatsql
 ### 2.3 CLONE备份远程数据
 在开始备份远程节点数据前，需要先在recipient节点设置 `clone_valid_donor_list` 选项，指定donor节点：
 ```
-greatsql> set global clone_valid_donor_list = '172.16.16.10:3306';
+greatsql> SET GLOBAL clone_valid_donor_list = '172.16.16.10:3306';
 ```
 否则在执行CLONE备份时会报告下面的错误：
 ```
@@ -129,7 +129,7 @@ Current database: *** NONE ***
 Uptime:                 1 sec    #<-- 可以看到实例被重启了
 ...
 
-greatsql> show grants for repl;
+greatsql> SHOW GRANTS FOR repl;
 +-----------------------------------------+
 | Grants for repl@%                       |
 +-----------------------------------------+
@@ -145,7 +145,7 @@ greatsql> show grants for repl;
 在CLONE过程中，还支持实时查看其状态和进度：
 ```
 # 查看状态
-greatsql> select * from performance_schema.clone_status\G
+greatsql> SELECT * FROM performance_schema.clone_status\G
 *************************** 1. row ***************************
              ID: 1
             PID: 12
@@ -161,7 +161,7 @@ BINLOG_POSITION: 0
   GTID_EXECUTED:
 
 # 查看进度
-greatsql> select * from performance_schema.clone_progress;
+greatsql> SELECT * FROM performance_schema.clone_progress;
 +------+-----------+-------------+----------------------------+----------------------------+---------+-------------+-------------+-------------+------------+---------------+
 | ID   | STAGE     | STATE       | BEGIN_TIME                 | END_TIME                   | THREADS | ESTIMATE    | DATA        | NETWORK     | DATA_SPEED | NETWORK_SPEED |
 +------+-----------+-------------+----------------------------+----------------------------+---------+-------------+-------------+-------------+------------+---------------+
@@ -176,31 +176,31 @@ greatsql> select * from performance_schema.clone_progress;
 
 # 经过处理后可读性更好的视图
 
-greatsql> select STATE, CAST(BEGIN_TIME AS DATETIME) as "START TIME",
+greatsql> SELECT STATE, CAST(BEGIN_TIME AS DATETIME) AS "START TIME",
 CASE WHEN END_TIME IS NULL THEN
 LPAD(sys.format_time(POWER(10,12) * (UNIX_TIMESTAMP(now()) - UNIX_TIMESTAMP(BEGIN_TIME))), 10, ' ')
 ELSE
 LPAD(sys.format_time(POWER(10,12) * (UNIX_TIMESTAMP(END_TIME) - UNIX_TIMESTAMP(BEGIN_TIME))), 10, ' ')
-END as DURATION
-from performance_schema.clone_status;
+END AS DURATION
+FROM performance_schema.clone_status;
 +-------------+---------------------+------------+
 | STATE       | START TIME          | DURATION   |
 +-------------+---------------------+------------+
 | In Progress | 2023-08-31 16:22:52 |     5.26 m |
 +-------------+---------------------+------------+
 
-greatsql> SELECT STAGE, STATE, CAST(BEGIN_TIME AS TIME) as "START TIME",
+greatsql> SELECT STAGE, STATE, CAST(BEGIN_TIME AS TIME) AS "START TIME",
   CASE WHEN END_TIME IS NULL THEN
   LPAD(sys.format_time(POWER(10,12) * (UNIX_TIMESTAMP(now()) - UNIX_TIMESTAMP(BEGIN_TIME))), 10, ' ')
   ELSE
   LPAD(sys.format_time(POWER(10,12) * (UNIX_TIMESTAMP(END_TIME) - UNIX_TIMESTAMP(BEGIN_TIME))), 10, ' ')
-  END as DURATION,
-  LPAD(CONCAT(FORMAT(ROUND(ESTIMATE/1024/1024,0), 0), " MB"), 16, ' ') as "Estimate",
+  END AS DURATION,
+  LPAD(CONCAT(FORMAT(ROUND(ESTIMATE/1024/1024,0), 0), " MB"), 16, ' ') AS "Estimate",
   CASE WHEN BEGIN_TIME IS NULL THEN LPAD('0%', 7, ' ')
   WHEN ESTIMATE > 0 THEN
   LPAD(CONCAT(CAST(ROUND(DATA*100/ESTIMATE, 0) AS BINARY), "%"), 7, ' ')
   WHEN END_TIME IS NULL THEN LPAD('0%', 7, ' ')
-  ELSE LPAD('100%', 7, ' ') END as "Done(%)"
+  ELSE LPAD('100%', 7, ' ') END AS "Done(%)"
   FROM performance_schema.clone_progress;
 +-----------+-------------+------------+------------+------------------+---------+
 | STAGE     | STATE       | START TIME | DURATION   | Estimate         | Done(%) |
@@ -218,7 +218,7 @@ greatsql> SELECT STAGE, STATE, CAST(BEGIN_TIME AS TIME) as "START TIME",
 
 **提醒：** 
 1. 在CLONE过程中，如果被强行KILL终止的话，recipient节点上的数据会被清空，只剩下接近刚初始化完的新实例，请谨慎操作。
-2. 从GreatSQL 8.0.32-24版本开始，CLONE支持加密备份及解密，详情请见文档：[CLONE备份加密](../5-enhance/5-4-security-clone-encrypt.md)。
+2. 从GreatSQL 8.0.32-24版本开始，CLONE支持加密备份及解密，详情请见文档：[CLONE备份加密](/5-enhance/5-4-security-clone-encrypt.md)。
 
 在recipient节点上完成CLONE备份后，就等同于在recipient也做了一次数据恢复，这个节点还可以作为主从复制的从节点，也可以作为MGR组复制的新节点，一举多得。
 
@@ -226,7 +226,7 @@ greatsql> SELECT STAGE, STATE, CAST(BEGIN_TIME AS TIME) as "START TIME",
 
 - [The Clone Plugin](https://dev.mysql.com/doc/refman/8.0/en/clone-plugin.html)
 - [Clone: Create MySQL instance replica](https://dev.mysql.com/blog-archive/clone-create-mysql-instance-replica/)
-- [CLONE加密备份](../5-enhance/5-4-security-clone-encrypt.md)
+- [CLONE加密备份](/5-enhance/5-4-security-clone-encrypt.md)
 
 
 **问题反馈**

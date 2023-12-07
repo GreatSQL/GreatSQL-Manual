@@ -107,11 +107,11 @@ greatsql> LOAD DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1(c1, c2);
 
 还可以在 `LOAD DATA` 导入时对某列进行动态赋值，例如：
 ```
-greatsql> LOAD DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1(c1, c2) SET id=rand()*10240;
+greatsql> LOAD DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1(c1, c2) SET id=RAND()*10240;
 ```
 那么id列填充的就是随机INT值了，例如下面这样的：
 ```
-greatsql> select * from t3;
+greatsql> SELECT * FROM t3;
 +------+----+--------------------+
 | id   | c1 | c2                 |
 +------+----+--------------------+
@@ -132,14 +132,14 @@ greatsql> LOAD /*+ SET_VAR(gdb_parallel_load=ON) */ DATA INFILE '/tmp/outfile-t1
 greatsql> LOAD /*+ SET_VAR(gdb_parallel_load=ON) SET_VAR(gdb_parallel_load_chunk_size=65536) SET_VAR(gdb_parallel_load_workers=16) */ DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1;
 ```
 
-更多关于并行LOAD DATA的详细信息请参考文档：[并行LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md)。
+更多关于并行LOAD DATA的详细信息请参考文档：[并行LOAD DATA](/5-enhance/5-1-highperf-parallel-load.md)。
 
 
 **参考资料：**
 
 - [SELECT ... INTO OUTFILE](https://dev.mysql.com/doc/refman/8.0/en/select-into.html)
 - [LOAD DATA](https://dev.mysql.com/doc/refman/8.0/en/load-data.html)
-- [GreatSQL增强特性之：并行LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md)
+- [GreatSQL增强特性之：并行LOAD DATA](/5-enhance/5-1-highperf-parallel-load.md)
 
 
 **问题反馈**
