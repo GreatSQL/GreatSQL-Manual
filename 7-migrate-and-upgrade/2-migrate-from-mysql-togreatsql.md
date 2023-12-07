@@ -7,29 +7,65 @@
 
 GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以下：
 
-| 特性 | GreatSQL 8.0.32-24 | MySQL 8.0.32 |
-| --- | --- | --- |
-| 开源 | ✅| ✅|
-|ACID完整性|✅|✅|
-|MVCC特性|✅    |✅|
-|支持行锁|✅|✅|
-|Crash自动修复|✅|✅|
-|表分区(Partitioning)|✅|✅|
-|视图(Views)    |✅|✅|
-|子查询(Subqueries)|✅|✅|
-|触发器(Triggers)|✅|✅|
-|存储过程(Stored Procedures)|✅|✅|
-|外键(Foreign Keys)|✅|✅|
-|窗口函数(Window Functions)|✅|✅|
-|通用表表达式CTE|✅|✅|
-|地理信息(GIS)|✅|✅|
-|基于GTID的复制|✅|✅|
-|组复制(MGR)|✅|✅|
-|MyRocks引擎|✅|❎|
-|SQL兼容扩展|1.数据类型扩展<br/>2.SQL语法扩展<br/>共超过20个扩展新特性| ❎ |
-|MGR提升|1.地理标签<br/>2.仲裁节点<br/>3.读写节点绑定VIP<br/>4.快速单主模式<br/>5.智能选主机制<br/>6.全新流控算法|❎|
-|性能提升|1.InnoDB并行查询<br/>2.并行load data|❎|
-|安全提升|1.国密支持<br/>2.备份加密<br/>3.审计日志入库|❎|
+| **2. 性能提升扩展** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
+| :--- | :---: | :---: |
+|AP引擎| :heavy_check_mark: | 仅云上HeatWave |
+|InnODB并行查询| :heavy_check_mark: | 仅主键扫描 |
+|并行LOAD DATA| :heavy_check_mark: | ❌ |
+|InnoDB事务ReadView无锁优化| :heavy_check_mark: | ❌ |
+|InnoDB事务大锁拆分优化| :heavy_check_mark: | ❌ |
+|InnoDB Mutexes拆分优化| :heavy_check_mark: | ❌ |
+|MEMORY引擎优化| :heavy_check_mark: | ❌ |
+|InnoDB Flushing优化| :heavy_check_mark: | ❌ |
+|InnoDB快速索引创建优化| :heavy_check_mark: | ❌ |
+|VARCHAR/BLOB/JSON类型存储单列压缩| :heavy_check_mark: | ❌ |
+|数据字典中存储单列压缩信息| :heavy_check_mark: | ❌ |
+| **3. 面向开发者提升改进** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
+|InnoDB全文搜索改进| :heavy_check_mark: | ❌ |
+|更多Hash/Digest函数| :heavy_check_mark: | ❌ |
+|Oracle兼容性-数据类型| :heavy_check_mark: | ❌ |
+|Oracle兼容性-函数| :heavy_check_mark: | ❌ |
+|Oracle兼容性-SQL语法| :heavy_check_mark: | ❌ |
+|Oracle兼容性-存储程序| :heavy_check_mark: | ❌ |
+| **4. 基础特性提升改进** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
+|MGR提升-地理标签| :heavy_check_mark: | ❌ |
+|MGR提升-仲裁节点| :heavy_check_mark: | ❌ |
+|MGR提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
+|MGR提升-快速单主模式| :heavy_check_mark: | ❌ |
+|MGR提升-智能选主机制| :heavy_check_mark: | ❌ |
+|MGR提升-全新流控算法| :heavy_check_mark: | ❌ |
+|information_schema表数量|95|65|
+|全局性能和状态指标|853|434|
+|Per-Table性能指标| :heavy_check_mark: | ❌ |
+|Per-Index性能指标| :heavy_check_mark: | ❌ |
+|Per-User性能指标| :heavy_check_mark: | ❌ |
+|Per-Client性能指标| :heavy_check_mark: | ❌ |
+|Per-Thread性能指标| :heavy_check_mark: | ❌ |
+|全局查询相应耗时统计| :heavy_check_mark: | ❌ |
+|SHOW INNODB ENGINE STATUS增强| :heavy_check_mark: | ❌ |
+|回滚段信息增强| :heavy_check_mark: | ❌ |
+|临时表信息增强| :heavy_check_mark: | ❌ |
+|用户统计信息增强| :heavy_check_mark: | ❌ |
+|Slow log信息增强| :heavy_check_mark: | ❌ |
+| ** 5.安全性提升** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
+|国密支持| :heavy_check_mark: | ❌ |
+|备份加密| :heavy_check_mark: | ❌ |
+|审计日志入库| :heavy_check_mark: | ❌ |
+|记录最后一次登录信息| :heavy_check_mark: | ❌ |
+|PAM认证插件| :heavy_check_mark: | 仅企业版 |
+|审计插件| :heavy_check_mark: | 仅企业版 |
+|Keyring存储在Hashicorp Vault中| :heavy_check_mark: | 仅企业版 |
+|二进制日志加密| :heavy_check_mark: | ❌ |
+|临时文件加密| :heavy_check_mark: | ❌ |
+|强制加密| :heavy_check_mark: | ❌ |
+| **6. 运维便利性提升** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
+|线程池(Threadpool)| :heavy_check_mark: | 仅企业版 |
+|备份锁| :heavy_check_mark: | ❌ |
+|SHOW GRANTS扩展| :heavy_check_mark: | ❌ |
+|表损坏动作扩展| :heavy_check_mark: | ❌ |
+|杀掉不活跃事务| :heavy_check_mark: | ❌ |
+|START TRANSACTION WITH CONSISTENT SNAPSHOT扩展| :heavy_check_mark: | ❌ |
+
 
 ## 2. 迁移/升级前准备
 
@@ -112,4 +148,4 @@ ERROR 1146 (42S02) at line 586: Table 'mysql.replication_group_member_actions' d
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

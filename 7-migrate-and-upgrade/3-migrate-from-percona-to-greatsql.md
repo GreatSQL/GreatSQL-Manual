@@ -9,32 +9,32 @@ GreatSQL是在Percona Server的基础上Fork的开源分支，专注于提升MGR
 
 GreatSQL相对于Percona Server有着众多优秀特性，包括且不仅限以下：
 
-| 特性 | GreatSQL| Percona Server|
-|---| --- | --- |
-| 投票节点/仲裁节点 | ✅ | ❎ |
-| 读写节点绑定VIP | ✅ | ❎ |
-| 快速单主模式 | ✅ | ❎ |
-| 地理标签 | ✅ | ❎ |
-| 只能选主机制 | ✅ | ❎ |
-| 全新流控算法 | ✅ | ❎ |
-| InnoDB并行查询优化 | ✅ | ❎ |
-| 并行load data优化 | ✅ | ❎ |
-| 安全：国密支持 | ✅ | ❎ |
-| 安全：备份加密 | ✅ | ❎ |
-| 安全：审计日志入库 | ✅ | ❎ |
-| SQL兼容性扩展 | ✅ | ❎ |
-| InnoDB事务锁优化 | ✅ | ❎ |
-| 网络分区异常应对 |  ⭐️⭐️⭐️⭐️⭐️ | ⭐️ | 
-| 完善节点异常退出处理 |   ⭐️⭐️⭐️⭐️⭐️ | ⭐️ | 
-| 一致性读性能 |   ⭐️⭐️⭐️⭐️⭐️ | ⭐️ | 
-| 提升MGR吞吐量 |⭐️⭐️⭐️⭐️⭐️ | ⭐️ | 
-| 大事务处理 |   ⭐️⭐️⭐️⭐️ | ⭐️ | 
-| 修复多写模式下可能丢数据风险 | ⭐️⭐️⭐️⭐️⭐️ | /  | 
-| 修复单主模式下切主丢数据风险 | ⭐️⭐️⭐️⭐️⭐️ | / | 
-| MGR集群启动效率提升 | ⭐️⭐️⭐️⭐️⭐️ |  / | 
-| 集群节点磁盘满处理 |   ⭐️⭐️⭐️⭐️⭐️ | /  | 
-| 修复TCP self-connect问题| ⭐️⭐️⭐️⭐️⭐️ | / | 
-| PROCESSLIST增强 | ⭐️⭐️⭐️⭐️⭐️ | /  | 
+| **2. 性能提升扩展** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
+| :--- | :---: | :---: |
+|AP引擎| :heavy_check_mark: | 仅云上HeatWave |
+|InnODB并行查询| :heavy_check_mark: | 仅主键扫描 |
+|并行LOAD DATA| :heavy_check_mark: | ❌ |
+|InnoDB事务ReadView无锁优化| :heavy_check_mark: | ❌ |
+|InnoDB事务大锁拆分优化| :heavy_check_mark: | ❌ |
+| **3. 面向开发者提升改进** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
+|Oracle兼容性-数据类型| :heavy_check_mark: | ❌ |
+|Oracle兼容性-函数| :heavy_check_mark: | ❌ |
+|Oracle兼容性-SQL语法| :heavy_check_mark: | ❌ |
+|Oracle兼容性-存储程序| :heavy_check_mark: | ❌ |
+| **4. 基础特性提升改进** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
+|MGR提升-地理标签| :heavy_check_mark: | ❌ |
+|MGR提升-仲裁节点| :heavy_check_mark: | ❌ |
+|MGR提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
+|MGR提升-快速单主模式| :heavy_check_mark: | ❌ |
+|MGR提升-智能选主机制| :heavy_check_mark: | ❌ |
+|MGR提升-全新流控算法| :heavy_check_mark: | ❌ |
+| ** 5.安全性提升** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
+|国密支持| :heavy_check_mark: | ❌ |
+|备份加密| :heavy_check_mark: | ❌ |
+|审计日志入库| :heavy_check_mark: | ❌ |
+|记录最后一次登录信息| :heavy_check_mark: | ❌ |
+
+
 
 ## 2. 迁移/升级前准备
 
@@ -78,4 +78,4 @@ GreatSQL相对于Percona Server有着众多优秀特性，包括且不仅限以�
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)
