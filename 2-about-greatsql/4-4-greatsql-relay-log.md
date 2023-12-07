@@ -49,7 +49,7 @@ CD95YCABAAAAKAAAAGgDAAAAAFsAAAAAAAEAAgAB/wABAAAAfATkBw==
 通过语句：`show variables like '%relay%'` 查看先骨干的relay的所有相关参数如下：
 
 ```sql
-greatsql> show variables like '%relay%';
+greatsql> SHOW VARIABLES LIKE '%relay%';
 +---------------------------+---------------------------------------+
 | Variable_name             | Value                                 |
 +---------------------------+---------------------------------------+

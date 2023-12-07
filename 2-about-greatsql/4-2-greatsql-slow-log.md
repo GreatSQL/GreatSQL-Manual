@@ -16,14 +16,14 @@ GreatSQL 的慢查询日志，用来记录在 GreatSQL 中响应时间超过阀�
 
 ```sql
 # 开启慢查询
-greatsql> set global slow_query_log='ON';
+greatsql> SET GLOBAL slow_query_log='ON';
 Query OK, 0 rows affected (0.12 sec)
 ```
 
 然后我们再来查看下慢查询日志是否开启，以及慢查询日志文件的位置：
 
 ```sql
-greatsql> show variables like '%slow_query_log%';
+greatsql> SHOW VARIABLES LIKE '%slow_query_log%';
 +-----------------------------------+--------------------------------+
 | Variable_name                     | Value                          |
 +-----------------------------------+--------------------------------+
@@ -42,7 +42,7 @@ greatsql> show variables like '%slow_query_log%';
 接下来我们来看下慢查询的时间阈值设置，使用如下命令：
 
 ```sql
-greatsql> show variables like '%long_query_time%';
+greatsql> SHOW VARIABLES LIKE '%long_query_time%';
 +-----------------+-----------+
 | Variable_name   | Value     |
 +-----------------+-----------+
@@ -54,7 +54,7 @@ greatsql> show variables like '%long_query_time%';
 意思就是超过10秒的SQL语句就会被记录慢查询日志中，那要如何修改这个阈值呢？
 
 ```sql
-greatsql> set global long_query_time = 1;
+greatsql> SET GLOBAL long_query_time = 1;
 ```
 
 或修改 my.cnf 文件，[mysqld]下增加或修改参数`long_query_time`、`slow_query_log`和`slow_query_log_file`后，然后重启MySQL服务器。
@@ -81,7 +81,7 @@ log_output=FILE
 这个变量的意思是，查询扫描过的**最少记录数**。这个变量和查询执行时间，共同组成了判别一个查询是否是慢查询的条件。如果查询扫描过的记录数大于等于这个变量的值，并且查询执行时间超过`long_query_time`的值，那么，这个查询就被记录到慢查询日志中; 反之，则不被记录到慢查询日志中。
 
 ```sql
-greatsql> show variables like 'min%';
+greatsql> SHOW VARIABLES LIKE 'min%';
 +------------------------+-------+
 | Variable_name          | Value |
 +------------------------+-------+
@@ -142,14 +142,14 @@ greatsql> show variables like 'min%';
 
 ```SQL
 #开启慢查询日志
-greatsql> set global slow_query_log='ON';
+greatsql> SET GLOBAL slow_query_log='ON';
 Query OK, 0 rows affected (0.00 sec)
 
 #时间阈值超过1秒就记录
-greatsql> set global long_query_time = 1;
+greatsql> SET GLOBAL long_query_time = 1;
 Query OK, 0 rows affected (0.01 sec)
 
-greatsql> show variables like '%long_query_time%';
+greatsql> SHOW VARIABLES LIKE '%long_query_time%';
 +-----------------+----------+
 | Variable_name   | Value    |
 +-----------------+----------+
@@ -253,7 +253,7 @@ greatsql> SET GLOBAL slow_query_log=off;
 ## 删除慢查询日志
 
 ```sql
-greatsql> show variables like '%slow_query_log%';
+greatsql> SHOW VARIABLES LIKE '%slow_query_log%';
 +-----------------------------------+--------------------------------+
 | Variable_name                     | Value                          |
 +-----------------------------------+--------------------------------+

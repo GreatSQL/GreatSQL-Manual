@@ -24,7 +24,7 @@ Binlog即Binary Log，二进制日志文件，也叫作变更日志（Update Log
 查看记录二进制日志是否开启：在GreatSQL 8.0 中默认情况下，二进制文件是开启的。
 
 ```sql
-greatsql> show variables like '%log_bin%';
+greatsql> SHOW VARIABLES LIKE '%log_bin%';
 +---------------------------------+-----------------------------+
 | Variable_name                   | Value                       |
 +---------------------------------+-----------------------------+
@@ -97,7 +97,7 @@ $ chown -R -v mysql:mysql binlog
 
 ```sql
 # global 级别,已取消
-greatsql> set global sql_log_bin= 0 ;
+greatsql> SET GLOBAL sql_log_bin= 0 ;
 ERROR 1228 (HY000): Variable 'sql_log_bin' is a SESSION variable and can`t be used with SET GLOBAL
 
 # session级别
@@ -180,7 +180,7 @@ $ mysqlbinlog --no-defaults --base64-output=decode-rows -vv binlog.000028 |grep 
 上面这种办法读取出binlog日志的全文内容比较多，不容易分辨查看到pos点信息，下面介绍一种更为方便的查询命令：
 
 ```sql
-greatsql> show binlog events [IN 'log_name'] [FROM pos] [LIMIT [offset,] row_count];
+greatsql> SHOW BINLOG EVENTS [IN 'log_name'] [FROM pos] [LIMIT [offset,] row_count];
 ```
 
 - `IN 'log_name'：`指定要查询的binlog文件名（不指定就是第一个binlog文件）
@@ -192,25 +192,25 @@ greatsql> show binlog events [IN 'log_name'] [FROM pos] [LIMIT [offset,] row_cou
 
 ```sql
 #a、查询第一个最早的binlog日志:
-greatsql> show binlog events\G ;
+greatsql> SHOW BINLOG EVENTS\G ;
 
 #b、指定查询greatsql-bin.088802这个文件
-greatsql> show binlog events in 'greatsql-bin.088802'\G;
+greatsql> SHOW BINLOG EVENTS IN 'greatsql-bin.088802'\G;
 
 #c、指定查询greatsql-bin.080802这个文件，从pos点:391开始查起:
-greatsql> show binlog events in 'greatsql-bin.080802' from 391\G;
+greatsql> SHOW BINLOG EVENTS IN 'greatsql-bin.080802' FROM 391\G;
 
 #d、指定查询greatsql-bin.000802这个文件，从pos点:391开始查起，查询5条（即5条语句)
-greatsql> show binlog events in 'greatsql-bin.000802' from 391 limit 5\G
+greatsql> SHOW BINLOG EVENTS IN 'greatsql-bin.000802' FROM 391 LIMIT 5\G
 
 #e、指定查询greatsql-bin.880002这个文件，从pos点:391开始查起，偏移2行〈即中间跳过2个）查询5条（即5条语句)。
-greatsql> show binlog events in 'greatsql-bin.880002' from 391 limit 2,5\G;
+greatsql> SHOW BINLOG EVENTS IN 'greatsql-bin.880002' FROM 391 LIMIT 2,5\G;
 ```
 
 binlog行格式查看
 
 ```sql
-greatsql> show variables like 'binlog_format';
+greatsql> SHOW VARIABLES LIKE 'binlog_format';
 +---------------+-------+
 | Variable_name | Value |
 +---------------+-------+
@@ -244,10 +244,10 @@ $ mysqlbinlog [option] filename|mysql –uuser -ppass;
 注意：使用mysqlbinlog命令进行恢复操作时，必须是编号小的先恢复，例如greatsql-bin.000001必须在greatsql-bin.000002之前恢复。
 
 ```sql
-greatsql> flush logs;
+greatsql> FLUSH LOGS;
 #可以生成新的binLog 文件，不然这个文件边恢复边变大是不行的。
 
-greatsql> show binary logs; # 显示有哪些binLog 文件
+greatsql> SHOW BINARY LOGS; # 显示有哪些binLog 文件
 ```
 
 恢复数据
@@ -281,7 +281,7 @@ greatsql> SHOW BINARY LOGS;
 (2）执行PURGE MASTER LOGS语句删除创建时间比binlog.000005早的所有日志
 
 ```sql
-greatsql> purge master logs to 'binlog.000005';
+greatsql> PURGE MASTER LOGS TO 'BINLOG.000005';
 ```
 
 (3）显示二进制日志文件列表
@@ -307,15 +307,15 @@ $ mysqlbinlog --no-defaults "/var/lib/mysql/binlog.000005"
 (3）使用PURGE MASTER LOGS语句删除2023年3月17日前创建的所有日志文件
 
 ```sql
-greatsql> purge master logs before "20220317";
+greatsql> PURGE MASTER LOGS BEFORE "20220317";
 ```
 
-2022年01月05号之前的二进制日志文件都已经被删除，最后一个没有删除，是因为当前在用，还未记录最后的时间，所以未被删除。
+2022年01月05日之前的二进制日志文件都已经被删除，最后一个没有删除，是因为当前在用，还未记录最后的时间，所以未被删除。
 
 **2.RESET MASTER 删除所有二进制日志文件**
 
 ```sql
-greatsql> reset master;
+greatsql> RESET MASTER;
 ```
 
 ## 其它场景

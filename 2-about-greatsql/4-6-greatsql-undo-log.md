@@ -43,7 +43,7 @@ InnoDB对Undo Log的管理采用段的方式，也就是`回滚段（rollback se
 从1.1版本开始InnoDB支持最大**128个rollback segment**，故其支持同时在线的事务限制提高到了**`128\*1024`**。
 
 ```sql
-greatsql> show variables like 'innodb_undo_logs';
+greatsql> SHOW VARIABLES LIKE 'innodb_undo_logs';
 +------------------+-------+
 | Variable_name    | Value |
 +------------------+-------+

@@ -35,7 +35,7 @@ GreatSQL错误日志是以文本文件形式存储的，可以使用文本编辑
 查询错误日志的存储路径：
 
 ```sql
-greatsql> show variables like 'log_err%';
+greatsql> SHOW VARIABLES LIKE 'log_err%';
 +----------------------------+----------------------------------------+
 | Variable_name              | Value                                  |
 +----------------------------+----------------------------------------+
@@ -78,6 +78,7 @@ greatsql> SELECT @@GLOBAL.log_error_services;
 ## log_timestamps控制日志显示时间
 
 在GreatSQL 5.7.2 新增了 `log_timestamps` 这个参数，该参数主要是控制 `error log`、`genera log`，等等记录日志的显示时间参数。
+
 在 5.7.2 之后改参数为默认 UTC 这样会导致日志中记录的时间比中国这边的慢，导致查看日志不方便。
 
 ```sql
@@ -98,7 +99,7 @@ greatsql> SHOW GLOBAL VARIABLES LIKE 'log_timestamps';
 
 
 ```sql
-greatsql> set global log_timestamps=system;
+greatsql> SET GLOBAL log_timestamps=system;
 ```
 
   修改后可以再配置文件中添加
@@ -111,7 +112,7 @@ greatsql> set global log_timestamps=system;
 - GreatSQL 8.0 修改
 
 ```sql
-greatsql> set global log_timestamps=system;
+greatsql> SET GLOBAL log_timestamps=system;
 ```
 
 - 小节结论

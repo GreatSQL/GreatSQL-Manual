@@ -20,7 +20,7 @@ greatsql> CREATE TABLE `interval`(begin INT, end INT);
 Query OK, 0 rows affected (0.08 sec)
 ```
 
-另外，要注意的是，从GreatSQL 8.0.32-24开始，开启SQL兼容模式后，对象名都需要特殊处理才行，例如：
+另外，要注意的是，从GreatSQL 8.0.32-24开始，开启Oracle兼容模式（`SET sql_mode = ORACLE`）后，对象名都需要特殊处理才行，例如：
 ```
 greatsql> CREATE TABLE `interval`(`begin` INT, `end` INT);
 Query OK, 0 rows affected (0.02 sec)
@@ -34,9 +34,9 @@ Query OK, 0 rows affected (0.02 sec)
 
 综上，强烈建议在SQL开发、编写SQL语句时，对象名都用 **"** 或 **`** 将其引用起来，避免报SQL语法错误，保证应用程序的容错性。
 
-通过查询视图 `information_schema.keywords` 也可以找到保留字和关键字的信息（其中RESERVED=1的表示是保留字，其余是关键字）：
+通过查询视图 `INFORMATION_SCHEMA.KEYWORDS` 也可以找到保留字和关键字的信息（其中RESERVED=1的表示是保留字，其余是关键字）：
 ```
-greatsql> select * from information_schema.keywords where word like '%int%';
+greatsql> SELECT * FROM INFORMATION_SCHEMA.KEYWORDS WHERE WORD LIKE '%int%';
 +----------------------------------------+----------+
 | WORD                                   | RESERVED |
 +----------------------------------------+----------+

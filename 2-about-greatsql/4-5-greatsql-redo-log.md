@@ -89,7 +89,7 @@ Redo Log可以简单分为以下两个部分：
 Redo Log Buffer 的大小，默认为 `16M` ，最大值是`4096M`，最小值为 `1M` 。
 
 ```sql
-greatsql> show variables like '%innodb_log_buffer_size%';
+greatsql> SHOW VARIABLES LIKE '%innodb_log_buffer_size%';
 +------------------------+----------+
 | Variable_name          | Value    |
 +------------------------+----------+
@@ -148,7 +148,7 @@ Redo Log的写入并不是直接写入磁盘的，InnoDB引擎会在写Redo Log�
 
 ```sql
 #查看刷盘策略
-greatsql> show variables like 'innodb_flush_log_at_trx_commit';
+greatsql> SHOW VARIABLES LIKE 'innodb_flush_log_at_trx_commit';
 +--------------------------------+-------+
 | Variable_name                  | Value |
 +--------------------------------+-------+
@@ -230,7 +230,7 @@ GreatSQL把对底层页面中的一次原子访问的过程称之为一个`Mini-
 - `innodb_log_files_in_group：`指明Redo Log File的个数，命名方式如：ib_logfile0，iblogfile1…iblogfilen。默认2个，最大100个。
 
 ```sql
-greatsql> show variables like 'innodb_log_files_in_group';
+greatsql> SHOW VARIABLES LIKE 'innodb_log_files_in_group';
 +---------------------------+-------+
 | Variable_name             | Value |
 +---------------------------+-------+
@@ -244,7 +244,7 @@ greatsql> show variables like 'innodb_log_files_in_group';
 - `innodb_log_file_size：`单个 Redo Log 文件设置大小，默认值为 48M 。最大值为512G，注意最大值指的是整个 Redo Log 系列文件之和，即`（innodb_log_files_in_group * innodb_log_file_size ）`不能大于最大值512G。
 
 ```sql
-greatsql> show variables like 'innodb_log_file_size';
+greatsql> SHOW VARIABLES LIKE 'innodb_log_file_size';
 +----------------------+----------+
 | Variable_name        | Value    |
 +----------------------+----------+
