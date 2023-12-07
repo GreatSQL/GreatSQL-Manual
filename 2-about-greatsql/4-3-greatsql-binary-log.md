@@ -367,4 +367,4 @@ write和fsync的时机，可以由参数`sync_binlog`控制，默认是 0 。
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

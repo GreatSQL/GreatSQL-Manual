@@ -46,4 +46,4 @@ GreatSQL针对MGR进行了大量改进和提升工作，进一步提升MGR的高
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

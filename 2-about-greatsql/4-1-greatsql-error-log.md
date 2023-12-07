@@ -161,4 +161,4 @@ $ install -omysql -gmysql -m0644 /dev/null /var/log/mysqld.log
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)
