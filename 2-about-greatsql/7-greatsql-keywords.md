@@ -34,9 +34,9 @@ Query OK, 0 rows affected (0.02 sec)
 
 综上，强烈建议在SQL开发、编写SQL语句时，对象名都用 **"** 或 **`** 将其引用起来，避免报SQL语法错误，保证应用程序的容错性。
 
-通过查询视图 `INFORMATION_SCHEMA.KEYWORDS` 也可以找到保留字和关键字的信息（其中RESERVED=1的表示是保留字，其余是关键字）：
+通过查询视图 `information_schema.KEYWORDS` 也可以找到保留字和关键字的信息（其中RESERVED=1的表示是保留字，其余是关键字）：
 ```
-greatsql> SELECT * FROM INFORMATION_SCHEMA.KEYWORDS WHERE WORD LIKE '%int%';
+greatsql> SELECT * FROM information_schema.KEYWORDS WHERE WORD LIKE '%int%';
 +----------------------------------------+----------+
 | WORD                                   | RESERVED |
 +----------------------------------------+----------+
