@@ -42,9 +42,10 @@ GreatSQL针对MGR进行了大量改进和提升工作，进一步提升MGR的高
 
 下面是GreatSQL 和 MySQL社区版本的对比表格：
 
+**1.主要特性**
 
 | 主要特性 | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
-| --- | --- | --- |
+| :--- | :---: | :---: |
 | 开源 |  :heavy_check_mark: |  :heavy_check_mark: |
 |ACID完整性| :heavy_check_mark: | :heavy_check_mark: |
 |MVCC特性| :heavy_check_mark:     | :heavy_check_mark: |
@@ -63,9 +64,10 @@ GreatSQL针对MGR进行了大量改进和提升工作，进一步提升MGR的高
 |组复制(MGR)| :heavy_check_mark: | :heavy_check_mark: |
 |MyRocks引擎| :heavy_check_mark: | |
 
+**2. 性能提升扩展**
 
 | 性能提升扩展 | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
-| --- | --- | --- |
+| :--- | :---: | :---: |
 |AP引擎| :heavy_check_mark: | 仅云上HeatWave |
 |InnODB并行查询| :heavy_check_mark: | 仅主键扫描 |
 |并行LOAD DATA| :heavy_check_mark: | ❌ |
@@ -82,9 +84,10 @@ GreatSQL针对MGR进行了大量改进和提升工作，进一步提升MGR的高
 |VARCHAR/BLOB/JSON类型存储单列压缩| :heavy_check_mark: | ❌ |
 |数据字典中存储单列压缩信息| :heavy_check_mark: | ❌ |
 
+**3. 面向开发者提升改进**
 
-| 开发者提升改进 | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
-| --- | --- | --- |
+| 面向开发者提升改进 | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
+| :--- | :---: | :---: |
 |X API| :heavy_check_mark: | :heavy_check_mark: |
 |JSON| :heavy_check_mark: | :heavy_check_mark: |
 |NoSQL Socket-Level接口| :heavy_check_mark: | :heavy_check_mark: |
@@ -95,17 +98,16 @@ GreatSQL针对MGR进行了大量改进和提升工作，进一步提升MGR的高
 |Oracle兼容性-SQL语法| :heavy_check_mark: | ❌ |
 |Oracle兼容性-存储程序| :heavy_check_mark: | ❌ |
 
+**4. 基础特性提升改进**
 
 | 基础特性提升改进 | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
-| --- | --- | --- |
+| :--- | :---: | :---: |
 |MGR提升-地理标签| :heavy_check_mark: | ❌ |
 |MGR提升-仲裁节点| :heavy_check_mark: | ❌ |
 |MGR提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
 |MGR提升-快速单主模式| :heavy_check_mark: | ❌ |
 |MGR提升-智能选主机制| :heavy_check_mark: | ❌ |
 |MGR提升-全新流控算法| :heavy_check_mark: | ❌ |
-
-
 |INFORMATION_SCHEMA表数量|95|65|
 |全局性能和状态指标|853|434|
 |优化器直方图(Histograms)| :heavy_check_mark: | :heavy_check_mark: |
@@ -121,9 +123,10 @@ GreatSQL针对MGR进行了大量改进和提升工作，进一步提升MGR的高
 |用户统计信息增强| :heavy_check_mark: | ❌ |
 |Slow log信息增强| :heavy_check_mark: | ❌ |
 
+** 5.安全性提升**
 
 | 安全性提升 | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
-| --- | --- | --- |
+| :--- | :---: | :---: |
 |国密支持| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
 |审计日志入库| :heavy_check_mark: | ❌ |
@@ -142,8 +145,10 @@ GreatSQL针对MGR进行了大量改进和提升工作，进一步提升MGR的高
 |临时文件加密| :heavy_check_mark: | ❌ |
 |强制加密| :heavy_check_mark: | ❌ |
 
+**6. 运维便利性提升**
+
 | 运维便利性提升 | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
-| --- | --- | --- |
+| :--- | :---: | :---: |
 |DDL原子性| :heavy_check_mark: | :heavy_check_mark: |
 |数据字典存储InnoDB表| :heavy_check_mark: | :heavy_check_mark: |
 |快速DDL| :heavy_check_mark: | :heavy_check_mark: |
