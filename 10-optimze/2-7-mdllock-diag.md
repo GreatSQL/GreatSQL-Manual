@@ -339,4 +339,4 @@ MDL锁等待超时阈值由选项 `lock_wait_timeout` 定义，默认值是 **31
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

@@ -163,4 +163,4 @@ GreatSQL不计划每个小版本都跟随，暂定奇数版本跟随方式，即
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

@@ -23,7 +23,7 @@
 5. 调整CPU设置，修改为最大性能模式。
 6. 如果计划构建MGR集群，则通常要使用不低于千兆网络的条件，如果有条件甚至可以使用万兆网络，或者InfiniBand网络。
 
-详情参考文档：[安装准备](../4-install-guide/1-install-prepare.md#1-硬件环境)。
+详情参考文档：[安装准备](/4-install-guide/1-install-prepare.md#1-硬件环境)。
 
 ## 2. 操作系统层优化
 
@@ -34,7 +34,7 @@
 5. 调整mysql用户使用资源上限，避免报告文件数不够等限制错误。
 6. 其他内核参数优化。
 
-详情参考文档：[安装准备](../4-install-guide/1-install-prepare.md#2-系统环境)。
+详情参考文档：[安装准备](/4-install-guide/1-install-prepare.md#2-系统环境)。
 
 **问题反馈**
 ---
@@ -46,4 +46,4 @@
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

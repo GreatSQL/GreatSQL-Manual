@@ -265,7 +265,7 @@ greatsql> select group_replication_switch_to_single_primary_mode('af39db70-6850-
 
 首先，启动一个全新的空实例，确保可以用root账户连接登入。
 
-参考文档：[MGR节点预检查](../4-install-guide/2-install-with-rpm.md#91mgr节点预检查)，先利用 MySQL Shell for GreatSQL，调用函数 `dba.configure_instance()` 完成初始化检查工作。
+参考文档：[MGR节点预检查](/4-install-guide/2-install-with-rpm.md#91mgr节点预检查)，先利用 MySQL Shell for GreatSQL，调用函数 `dba.configure_instance()` 完成初始化检查工作。
 
 而后切换到连接主节点的那个MySQL Shell for GreatSQL终端上，进行添加新节点操作：
 
@@ -395,4 +395,4 @@ P.S，第一个节点启动完毕后，记得重置选项 `group_replication_boo
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

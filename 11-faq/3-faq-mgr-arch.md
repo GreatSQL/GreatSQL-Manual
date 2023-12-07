@@ -72,4 +72,4 @@ MySQL Router通过两个端口来区分读写服务请求，默认是 6446端口
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

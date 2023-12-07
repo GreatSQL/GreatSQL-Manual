@@ -116,4 +116,4 @@ Record lock, heap no 2 PHYSICAL RECORD: n_fields 5; compact format; info bits 0
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

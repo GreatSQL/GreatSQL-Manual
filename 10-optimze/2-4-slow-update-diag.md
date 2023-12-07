@@ -134,4 +134,4 @@ UPDATE慢的问题还不止于上面列举的这些情况，本文主要是提�
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)
