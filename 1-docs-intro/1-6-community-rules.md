@@ -50,4 +50,4 @@ GreatSQL社区遵守开源社区[《贡献者公约》](https://gitee.com/link?t
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

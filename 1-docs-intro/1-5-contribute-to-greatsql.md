@@ -32,5 +32,5 @@ GreatSQL社区欢迎所有人参与到社区中进行贡献，我们的目标是
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)
 
