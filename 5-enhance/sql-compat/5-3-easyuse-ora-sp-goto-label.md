@@ -158,7 +158,7 @@ AS
 BEGIN
 <<label1>>
   BEGIN
-    SELECT a INTO a FROM INFORMATION_SCHEMA.TABLES LIMIT n;
+    SELECT a INTO a FROM information_schema.TABLES LIMIT n;
   EXCEPTION
     WHEN TOO_MANY_ROWS THEN
       BEGIN
@@ -169,7 +169,7 @@ BEGIN
       BEGIN
         ret := ret||'--- no_data_found cought 1 ---';
         n := 2;
-        SELECT a INTO a FROM INFORMATION_SCHEMA.TABLES LIMIT n;
+        SELECT a INTO a FROM information_schema.TABLES LIMIT n;
       EXCEPTION
         WHEN TOO_MANY_ROWS THEN
           BEGIN

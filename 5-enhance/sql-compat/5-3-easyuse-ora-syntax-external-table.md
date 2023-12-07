@@ -178,7 +178,7 @@ ERROR 1031 (HY000): Table storage engine for 'extt_t1' doesn't have this option
 
 ```sql
 -- 查询ENGINE = 'DLK'的表
-greatsql> SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'greatsql' AND ENGINE = 'DLK';
+greatsql> SELECT * FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'greatsql' AND ENGINE = 'DLK';
 +---------------+--------------+------------+------------+--------+---------+------------+------------+----------------+-------------+-----------------+--------------+-----------+----------------+---------------------+-------------+------------+--------------------+----------+----------------+---------------+
 | TABLE_CATALOG | TABLE_SCHEMA | TABLE_NAME | TABLE_TYPE | ENGINE | VERSION | ROW_FORMAT | TABLE_ROWS | AVG_ROW_LENGTH | DATA_LENGTH | MAX_DATA_LENGTH | INDEX_LENGTH | DATA_FREE | AUTO_INCREMENT | CREATE_TIME         | UPDATE_TIME | CHECK_TIME | TABLE_COLLATION    | CHECKSUM | CREATE_OPTIONS | TABLE_COMMENT |
 +---------------+--------------+------------+------------+--------+---------+------------+------------+----------------+-------------+-----------------+--------------+-----------+----------------+---------------------+-------------+------------+--------------------+----------+----------------+---------------+

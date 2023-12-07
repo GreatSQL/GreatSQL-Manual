@@ -97,9 +97,9 @@ greatsql> ALTER TABLE db2.t1 ADD c2 udt_type1;
 
 15. 在类似 `SELECT * FROM t1 WHERE udt_type1 [<|=|>] udt_type2` 的比较查询中，由于 `udt_type1` 的 `udt name` 不等于 `udt_type2` 的 `udt name`，所以会报错；而Oracle是在等于查询的时候直接返回空值，这点与Oracle不一致。
 
-16. 通过查询系统表 `INFORMATION_SCHEMA.COLUMNS` 的 `extra` 列中是否带有 `udt_name` 信息，就可知道哪些表的列带有udt类型。例如：
+16. 通过查询系统表 `information_schema.COLUMNS` 的 `extra` 列中是否带有 `udt_name` 信息，就可知道哪些表的列带有udt类型。例如：
 ```sql
-greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, DATA_TYPE, EXTRA FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'udt_t1';
+greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, DATA_TYPE, EXTRA FROM information_schema.COLUMNS WHERE TABLE_NAME = 'udt_t1';
 +--------------+------------+-------------+-----------+-----------------+
 | TABLE_SCHEMA | TABLE_NAME | COLUMN_NAME | DATA_TYPE | EXTRA           |
 +--------------+------------+-------------+-----------+-----------------+
@@ -481,8 +481,8 @@ greatsql> SELECT * FROM udt_t1;
 ## 5. TABLE UDT数据字典
 
 ```sql
--- 1. 查询 INFORMATION_SCHEMA.ROUTINES 查看所有 UDT
-greatsql> SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = 'UDT1'\G
+-- 1. 查询 information_schema.ROUTINES 查看所有 UDT
+greatsql> SELECT * FROM information_schema.ROUTINES WHERE ROUTINE_NAME = 'UDT1'\G
 *************************** 1. row ***************************
            SPECIFIC_NAME: udt1
          ROUTINE_CATALOG: def
@@ -517,8 +517,8 @@ CHARACTER_MAXIMUM_LENGTH: NULL
       DATABASE_COLLATION: utf8mb4_0900_ai_ci
 1 row in set (0.00 sec)
 
--- 2. 查询 INFORMATION_SCHEMA.PARAMETERS 查看UDT定义
-greatsql> SELECT * FROM INFORMATION_SCHEMA.PARAMETERS WHERE SPECIFIC_NAME = 'udt1'\G
+-- 2. 查询 information_schema.PARAMETERS 查看UDT定义
+greatsql> SELECT * FROM information_schema.PARAMETERS WHERE SPECIFIC_NAME = 'udt1'\G
 *************************** 1. row ***************************
         SPECIFIC_CATALOG: def
          SPECIFIC_SCHEMA: greatsql

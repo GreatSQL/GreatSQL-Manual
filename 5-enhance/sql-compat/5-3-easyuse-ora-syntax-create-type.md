@@ -221,8 +221,8 @@ greatsql> SELECT my_vchar('1', 'GreatSQL', 'GreatSQL is a branch of MySQL');
 ## 5. TABLE UDT数据字典
 
 ```sql
--- 1. 查询 INFORMATION_SCHEMA.ROUTINES 查看所有 UDT
-greatsql> SELECT ROUTINE_SCHEMA, ROUTINE_NAME, ROUTINE_TYPE FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME LIKE 'UDT%';
+-- 1. 查询 information_schema.ROUTINES 查看所有 UDT
+greatsql> SELECT ROUTINE_SCHEMA, ROUTINE_NAME, ROUTINE_TYPE FROM information_schema.ROUTINES WHERE ROUTINE_NAME LIKE 'UDT%';
 +----------------+--------------+--------------+
 | ROUTINE_SCHEMA | ROUTINE_NAME | ROUTINE_TYPE |
 +----------------+--------------+--------------+
@@ -232,9 +232,9 @@ greatsql> SELECT ROUTINE_SCHEMA, ROUTINE_NAME, ROUTINE_TYPE FROM INFORMATION_SCH
 | greatsql       | udt1_table   | TYPE         |
 +----------------+--------------+--------------+
 
--- 2. 查询 INFORMATION_SCHEMA.PARAMETERS 查看UDT定义
+-- 2. 查询 information_schema.PARAMETERS 查看UDT定义
 greatsql> SELECT SPECIFIC_SCHEMA, SPECIFIC_NAME, ORDINAL_POSITION, PARAMETER_NAME, DATA_TYPE, CHARACTER_OCTET_LENGTH
-  FROM INFORMATION_SCHEMA.PARAMETERS WHERE SPECIFIC_NAME LIKE 'UDT%';
+  FROM information_schema.PARAMETERS WHERE SPECIFIC_NAME LIKE 'UDT%';
 +-----------------+---------------+------------------+----------------+-----------+------------------------+
 | SPECIFIC_SCHEMA | SPECIFIC_NAME | ORDINAL_POSITION | PARAMETER_NAME | DATA_TYPE | CHARACTER_OCTET_LENGTH |
 +-----------------+---------------+------------------+----------------+-----------+------------------------+

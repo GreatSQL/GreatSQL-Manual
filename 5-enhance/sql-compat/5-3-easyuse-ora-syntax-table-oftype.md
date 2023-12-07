@@ -164,11 +164,11 @@ Create Table: CREATE TABLE "tf_t2" (
 ## 5. TABLE TYPE数据字典
 
 ```sql
--- 1. 查询 INFORMATION_SCHEMA.TABLES 查看所有 TABLE
+-- 1. 查询 information_schema.TABLES 查看所有 TABLE
 
 -- 查询结果中，CREATE_OPTIONS包含udt_name关键字的表
 greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_OPTIONS, TABLE_COMMENT
-  FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'greatsql';
+  FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'greatsql';
 +--------------+------------+-----------------+---------------+
 | TABLE_SCHEMA | TABLE_NAME | CREATE_OPTIONS  | TABLE_COMMENT |
 +--------------+------------+-----------------+---------------+
@@ -176,9 +176,9 @@ greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_OPTIONS, TABLE_COMMENT
 | greatsql     | tf_t2      |                 |               |
 +--------------+------------+-----------------+---------------+
 
--- 2. 查询 INFORMATION_SCHEMA.COLUMNS 查看表中所有列
+-- 2. 查询 information_schema.COLUMNS 查看表中所有列
 greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, ORDINAL_POSITION, DATA_TYPE, EXTRA
-  FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'greatsql';
+  FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = 'greatsql';
 +--------------+------------+-------------+------------------+-----------+-----------------+
 | TABLE_SCHEMA | TABLE_NAME | COLUMN_NAME | ORDINAL_POSITION | DATA_TYPE | EXTRA           |
 +--------------+------------+-------------+------------------+-----------+-----------------+
