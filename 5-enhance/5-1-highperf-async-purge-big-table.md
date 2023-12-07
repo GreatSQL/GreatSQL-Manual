@@ -106,9 +106,9 @@
 ## 开启异步删除大表特性
 
 开启异步清理功能，需要同时满足以下要求，否则直接删除文件：
-1. session级别 `innodb_data_file_async_purge=ON` 或者文件大小达到 `innodb_data_force_async_purge_file_size`；
+1. SESSION级别 `innodb_data_file_async_purge=ON` 或者文件大小达到 `innodb_data_force_async_purge_file_size`；
 2. 要清理的表为独立表空间；
-3. 表为 InnoDB 引擎；
+3. 表为InnoDB 引擎；
 4. 不是TEMPORARY table。
 
 满足以上要求，支持异步清理的操作有：`drop table`、`drop partition`、`truncate table`、`truncate partition`、`drop database`。

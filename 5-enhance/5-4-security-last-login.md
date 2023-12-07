@@ -7,14 +7,14 @@
 
 启用该特性
 ```sql
-greatsql> set global enable_last_login_info=1;
+greatsql> SET GLOBAL enable_last_login_info=1;
 ```
 
 启用后，新建立的连接就会被记录下来。
 
 查询最后登录信息：
 ```sql
-greatsql> select * from sys_audit.greatdb_login_info;
+greatsql> SELECT * FROM sys_audit.greatdb_login_info;
 +-----------+---------------------+------------+------------+-----------+-----------+--------------+
 | Thread_id | Login_time          | Login_host | Login_user | Priv_host | Priv_user | Failed_times |
 +-----------+---------------------+------------+------------+-----------+-----------+--------------+

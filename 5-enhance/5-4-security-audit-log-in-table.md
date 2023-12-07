@@ -81,13 +81,13 @@ greatsql> SHOW variables LIKE 'audit%';
 ```
 -- 排除管理用户的操作记录
 -- 注意，这里只是排除，而不是禁止管理员的操作
-greatsql> set persist audit_log_exclude_accounts = 'root@localhost, admin@%, app_adm@%';
+greatsql> SET PERSIST audit_log_exclude_accounts = 'root@localhost, admin@%, app_adm@%';
 
 — 重置排除名单，注意这里要设置 = NULL，而不是 = 'NULL'
-greatsql> set persist audit_log_exclude_accounts = NULL;
+greatsql> SET PERSIST audit_log_exclude_accounts = NULL;
 
 -- 查看审计日志（按时间倒序）
-greatsql> select * from sys_audit.audit_log order by timestamp desc limit 10;
+greatsql> SELECT * FROM sys_audit.audit_log ORDER BY timestamp DESC LIMIT 10;
 ```
 
 **问题反馈**

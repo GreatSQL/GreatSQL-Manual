@@ -61,7 +61,7 @@ greatsql> \s
 SSL:                    Cipher in use is TLS_SM4_GCM_SM3
 
 # 确认相关配置选项正确性
-greatsql> select * from performance_schema.global_variables where variable_name in ('require_secure_transport', 'tls_ciphersuites', 'tls_version');
+greatsql> SELECT * FROM PERFORMANCE_SCHEMA.global_variables WHERE variable_name IN ('require_secure_transport', 'tls_ciphersuites', 'tls_version');
 +--------------------------+---------------------------------+
 | VARIABLE_NAME            | VARIABLE_VALUE                  |
 +--------------------------+---------------------------------+
@@ -94,7 +94,7 @@ greatsql> INSTALL PLUGIN keyring_file soname 'keyring_file.so';
 ```
 重启GreatSQL，确认这个plugin已启用，并且相关选项也是生效的：
 ```
-greatsql> select * from information_schema.PLUGINS where plugin_name = 'keyring_file'\G
+greatsql> SELECT * FROM INFORMATION_SCHEMA.PLUGINS WHERE plugin_name = 'keyring_file'\G
 *************************** 1. row ***************************
            PLUGIN_NAME: keyring_file
         PLUGIN_VERSION: 1.0
@@ -108,7 +108,7 @@ PLUGIN_LIBRARY_VERSION: 1.10
         PLUGIN_LICENSE: GPL
            LOAD_OPTION: ON
            
-greatsql> select * from performance_schema.global_variables where variable_name in ('keyring_file_data');
+greatsql> SELECT * FROM PERFORMANCE_SCHEMA.global_variables WHERE variable_name IN ('keyring_file_data');
 +-------------------+--------------------------------------+
 | VARIABLE_NAME     | VARIABLE_VALUE                       |
 +-------------------+--------------------------------------+
@@ -130,16 +130,16 @@ greatsql> system ls -la /opt/GreatSQL/keyring/master_keyring
 接下来就可以对多种数据库对象（库、表、表空间）设置是否加密。
 ```
 -- 设置该库下新建的表默认加密
-greatsql> alter database test encryption = 'Y';
+greatsql> ALTER DATABASE test encryption = 'Y';
 
-greatsql> show create database test\G
+greatsql> SHOW CREATE DATABASE test\G
 *************************** 1. row ***************************
        Database: test
 Create Database: CREATE DATABASE `test` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='Y' */
 
-greatsql> create table t1(id int primary key) ENCRYPTION='Y';
+greatsql> CREATE TABLE t1(id INT PRIMARY KEY) ENCRYPTION='Y';
 
-greatsql> show create table t1\G
+greatsql> SHOW CREATE TABLE t1\G
 *************************** 1. row ***************************
        Table: t2
 Create Table: CREATE TABLE `t2` (
@@ -147,16 +147,16 @@ Create Table: CREATE TABLE `t2` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ENCRYPTION='Y'
 
-greatsql> alter table t1 ENCRYPTION='N';  -- 取消加密
+greatsql> ALTER TABLE t1 ENCRYPTION='N';  -- 取消加密
 ```
 **注意：** keyring文件需要做好备份，万一不慎被删除、修改或移走，都会导致被加密的数据库对象无法被正确读取，这时就可以将备份文件恢复回去。
 
 ## 5. 查看元数据
-可以在 `performance_schema` 和 `information_schema` 中查看加密相关元数据信息：
+可以在 `PERFORMANCE_SCHEMA` 和 `INFORMATION_SCHEMA` 中查看加密相关元数据信息：
 
 ```
 -- 查看当前的master key
-greatsql> SELECT * FROM performance_schema.keyring_keys;
+greatsql> SELECT * FROM PERFORMANCE_SCHEMA.keyring_keys;
 +--------------------------------------------------+-----------+----------------+
 | KEY_ID                                           | KEY_OWNER | BACKEND_KEY_ID |
 +--------------------------------------------------+-----------+----------------+
@@ -172,7 +172,7 @@ greatsql> SELECT SPACE, NAME, SPACE_TYPE, ENCRYPTION FROM INFORMATION_SCHEMA.INN
 +-------+---------+------------+------------+
 
 -- 查看有哪些表被加密
-greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_OPTIONS FROM INFORMATION_SCHEMA.TABLES  WHERE CREATE_OPTIONS LIKE '%ENCRYPTION%'; -- table
+greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_OPTIONS FROM INFORMATION_SCHEMA.TABLES WHERE CREATE_OPTIONS LIKE '%ENCRYPTION%'; -- table
 +--------------+------------+----------------+
 | TABLE_SCHEMA | TABLE_NAME | CREATE_OPTIONS |
 +--------------+------------+----------------+
@@ -180,7 +180,7 @@ greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_OPTIONS FROM INFORMATION_SCHEM
 +--------------+------------+----------------+
 
 -- 查看哪些库被加密
-SELECT SCHEMA_NAME, DEFAULT_ENCRYPTION FROM INFORMATION_SCHEMA.SCHEMATA   WHERE DEFAULT_ENCRYPTION='YES';
+SELECT SCHEMA_NAME, DEFAULT_ENCRYPTION FROM INFORMATION_SCHEMA.SCHEMATA WHERE DEFAULT_ENCRYPTION='YES';
 +-------------+--------------------+
 | SCHEMA_NAME | DEFAULT_ENCRYPTION |
 +-------------+--------------------+

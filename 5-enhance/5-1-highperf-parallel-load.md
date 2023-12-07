@@ -5,7 +5,7 @@
 
 MySQL原生的load data采用单线程读取本地文件（或收取client传来的网络数据包），逐行获取内容并调用数据库write_row()接口插入数据。当导入的单个文件很大时，单线程处理模式无法充分利用数据库的资源，导致执行时间很长。又由于load data导入的数据在一个事务内，当binlog事务超过2G时，无法使用binlog在MGR集群间同步。
 
-## 2. GreatSQL parallel load data
+## 2. GreatSQL并行`LOAD DATA`
 
 为解决上述两个问题，GreatSQL新增parallel load data并行导入特性。开启并行导入特性后，GreatSQL会自动将导入的文件切分文件成多个小块（块大小可配置），然后启动多个worker线程（数量可配置）导入文件块。
 
@@ -15,21 +15,21 @@ MySQL原生的load data采用单线程读取本地文件（或收取client传来
 
 | 变量名| 含义| 取值范围及单位 | 默认值 |
 | --- | --- | ---- | --- |
-| gdb_parallel_load| 是否开启并行导入(session only) |ON/OFF|OFF|
-|gdb_parallel_load_chunk_size | 并行导入时，文件切割的大小|64k-128M，字节|1M|
+| gdb_parallel_load| 是否开启并行导入(SESSION级设置) |ON/OFF|OFF|
+| gdb_parallel_load_chunk_size | 并行导入时，文件切割的大小|64k-128M，字节|1M|
 | gdb_parallel_load_workers| 并行导入最大worker线程数       | 1-32| 8|
 
-## 4. 启用并行load data
+## 4. 启用并行`LOAD DATA`
 
 可采用两种方式启用并行load data：
 
-1. **设置session级变量启用**
+1. **设置SESSION级变量启用**
 
 连接数据库，执行 `SET SESSION gdb_parallel_load=ON`。
 
 如需调整文件块大小或线程数，执行 `SET SESSION gdb_parallel_load_chunk_size=65536` 或 `SET SESSION gdb_parallel_load_workers=16`。
 
-然后执行load data语句导入文件。
+然后执行 `LOAD DATA` 语句导入文件。
 ```
 LOAD DATA INFILE '/tmp/load.txt' INTO TABLE t1;
 ```

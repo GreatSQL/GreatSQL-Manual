@@ -21,8 +21,8 @@ loose-greatdb_ha_mgr_exit_primary_kill_connection_mode = 1
 或者在GreatSQL启动后，手动启用
 
 ```
-greatsql> install plugin greatdb_ha soname 'greatdb_ha.so';
-greatsql> set global greatdb_ha_mgr_exit_primary_kill_connection_mode = 1;
+greatsql> INSTALL PLUGIN greatdb_ha SONAME 'greatdb_ha.so';
+greatsql> SET GLOBAL greatdb_ha_mgr_exit_primary_kill_connection_mode = 1;
 ```
 
 ## 其他
