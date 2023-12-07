@@ -94,7 +94,7 @@ GreatSQL针对MGR进行了大量改进和提升工作，进一步提升MGR的高
 |MGR提升-快速单主模式| :heavy_check_mark: | ❌ |
 |MGR提升-智能选主机制| :heavy_check_mark: | ❌ |
 |MGR提升-全新流控算法| :heavy_check_mark: | ❌ |
-|INFORMATION_SCHEMA表数量|95|65|
+|information_schema表数量|95|65|
 |全局性能和状态指标|853|434|
 |优化器直方图(Histograms)| :heavy_check_mark: | :heavy_check_mark: |
 |Per-Table性能指标| :heavy_check_mark: | ❌ |
@@ -140,7 +140,7 @@ GreatSQL针对MGR进行了大量改进和提升工作，进一步提升MGR的高
 |START TRANSACTION WITH CONSISTENT SNAPSHOT扩展| :heavy_check_mark: | ❌ |
 
 
-此外，GreatSQL 8.0.32-25基于Percona Server for MySQL 8.0.32版本，它在MySQL 8.0.32基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等MySQL企业版才有的特性，以及PERFORMANCE_SCHEMA提升、INFORMATION_SCHEMA提升、性能和可扩展性提升、用户统计增强、PROCESSLIST增强、Slow log增强等大量改进和提升，这里不一一重复列出。
+此外，GreatSQL 8.0.32-25基于Percona Server for MySQL 8.0.32版本，它在MySQL 8.0.32基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等MySQL企业版才有的特性，以及performance_schema提升、information_schema提升、性能和可扩展性提升、用户统计增强、PROCESSLIST增强、Slow log增强等大量改进和提升，这里不一一重复列出。
 
 GreatSQL同时也是gitee（码云）平台上的GVP项目，详见：[https://gitee.com/gvp/database-related](https://gitee.com/gvp/database-related) **数据库相关**类目。
 
