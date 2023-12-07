@@ -19,20 +19,20 @@
 
 ## 2. 下载安装包
 
-[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-24)下载最新的安装包，下载以下一个就可以：
+[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)下载最新的安装包，下载以下一个就可以：
 
-- GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz
+- GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 
 将下载的二进制包放到安装目录下，并解压缩：
 ```
 $ cd /usr/local
-$ curl -o GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz https://product.greatdb.com/GreatSQL-8.0.32-24/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz
-$ tar xf GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz
+$ curl -o GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz https://product.greatdb.com/GreatSQL-8.0.32-25/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
+$ tar xf GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 同时修改设置，将GreatSQL加入 `PATH` 环境变量：
 ```
-$ echo 'export PATH=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
+$ echo 'export PATH=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
 $ source ~/.bash_profile
 ```
 
@@ -45,7 +45,7 @@ $ source ~/.bash_profile
 
 ### 3.1 修改 /etc/my.cnf 配置文件
 
-[参考这份文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
+[参考这份文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
 ```
 $ vim my.cnf
@@ -60,7 +60,7 @@ port	= 3306
 #另外，实例启动时会生成 auto.cnf，里面的 server_uuid 值也要不同
 #server_uuid的值还可以自己手动指定，只要符合uuid的格式标准就可以
 server_id = 3306
-basedir = /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64
+basedir = /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64
 datadir	= /data/GreatSQL
 socket	= /data/GreatSQL/mysql.sock
 pid-file = mysql.pid
@@ -263,8 +263,8 @@ Group=mysql
 Type=notify
 TimeoutSec=0
 PermissionsStartOnly=true
-ExecStartPre=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
-ExecStart=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
+ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
+ExecStart=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
 EnvironmentFile=-/etc/sysconfig/mysql
 Restart=on-failure
 RestartPreventExitStatus=1
@@ -296,16 +296,16 @@ $ systemctl status greatsql
    Active: failed (Result: exit-code) since Fri 2023-06-30 10:02:03 CST; 1min 14s ago
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
-  Process: 1258165 ExecStart=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS (code=exited, status=1/FAILURE)
-  Process: 1257969 ExecStartPre=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+  Process: 1258165 ExecStart=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS (code=exited, status=1/FAILURE)
+  Process: 1257969 ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
  Main PID: 1258165 (code=exited, status=1/FAILURE)
    Status: "Server shutdown complete"
 
 systemd[1]: Starting GreatSQL Server...
 mysqld_pre_systemd[1257969]: mktemp: failed to create file via template ‘/var/lib/mysql-files/install-validate-password-plugin.XXXXXX.sql’: No such file or directory
 mysqld_pre_systemd[1257969]: chmod: cannot access '': No such file or directory
-mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 43: : No such file or directory
-mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 44: $initfile: ambiguous redirect
+mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 43: : No such file or directory
+mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 44: $initfile: ambiguous redirect
 systemd[1]: greatsql.service: Main process exited, code=exited, status=1/FAILURE
 systemd[1]: greatsql.service: Failed with result 'exit-code'.
 systemd[1]: Failed to start GreatSQL Server.
@@ -324,19 +324,19 @@ $ systemctl status greatsql
    Active: active (running) since Tue 2022-07-12 10:08:06 CST; 6min ago
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
-  Process: 60129 ExecStartPre=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+  Process: 60129 ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
  Main PID: 60231 (mysqld)
    Status: "Server is operational"
     Tasks: 49 (limit: 149064)
    Memory: 5.6G
    CGroup: /system.slice/greatsql.service
-           └─60231 /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld
+           └─60231 /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
 
 Jul 12 10:07:58 db170 systemd[1]: Starting GreatSQL Server...
 Jul 12 10:08:06 db170 systemd[1]: Started GreatSQL Server.
 
 $ ps -ef | grep mysqld
-mysql      60231       1  2 10:08 ?        00:00:10 /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld
+mysql      60231       1  2 10:08 ?        00:00:10 /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
 
 $ ss -lntp | grep mysqld
 LISTEN 0      70                 *:33060            *:*    users:(("mysqld",pid=60231,fd=38))
@@ -362,34 +362,34 @@ $ ls /data/GreatSQL
 $ mysql -uroot 
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 11
-Server version: 8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-greatsql> alter user user() identified by 'GreatSQL@2022';  #<--修改密码
+greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@2022';  #<--修改密码
 Query OK, 0 rows affected (0.02 sec)
 
 greatsql> \s
 --------------
-mysql  Ver 8.0.32-24 for Linux on x86_64 (GreatSQL, Release 24, Revision 3714067bc8c)
+mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 3714067bc8c)
 
-Connection id:        8
+Connection id:          8
 Current database:
-Current user:        root@localhost
-SSL:            Not in use
-Current pager:        stdout
-Using outfile:        ''
-Using delimiter:    ;
-Server version:        8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
-Protocol version:    10
-Connection:        Localhost via UNIX socket
+Current user:           root@localhost
+SSL:                    Not in use
+Current pager:          stdout
+Using outfile:          ''
+Using delimiter:        ;
+Server version:         8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
+Protocol version:       10
+Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4
 Db     characterset:    utf8mb4
 Client characterset:    utf8mb4
 Conn.  characterset:    utf8mb4
-UNIX socket:        /data/GreatSQL/mysql.sock
-Binary data as:        Hexadecimal
-Uptime:            20 min 8 sec
+UNIX socket:            /data/GreatSQL/mysql.sock
+Binary data as:         Hexadecimal
+Uptime:                 20 min 8 sec
 
 Threads: 2  Questions: 19  Slow queries: 0  Opens: 137  Flush tables: 3  Open tables: 53  Queries per second avg: 0.020
 --------------
@@ -398,7 +398,7 @@ GreatSQL数据库安装并初始化完毕。
 
 ## 6. 安装MySQL Shell
 
-为了支持仲裁节点特性，需要安装GreatSQL提供的MySQL Shell发行包。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-24)，找到 **7. GreateSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
+为了支持仲裁节点特性，需要安装GreatSQL提供的MySQL Shell发行包。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，找到 **7. GreateSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
 
 P.S，如果暂时不想使用仲裁节点特性的话，则可以继续使用相同版本的官方MySQL Shell安装包，可以直接用YUM方式安装，此处略过。
 

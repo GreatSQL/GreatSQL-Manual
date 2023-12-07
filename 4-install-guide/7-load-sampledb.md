@@ -58,7 +58,7 @@ data_load_time_diff
 
 导入完成后，还可以执行校验程序，确认导入的结果无误：
 ```
-greatsql> source /tmp/testdb/test_db/test_employees_md5.sql;
+greatsql> SOURCE /tmp/testdb/test_db/test_employees_md5.sql;
 +----------------------+
 | INFO                 |
 +----------------------+
@@ -116,23 +116,23 @@ greatsql> source /tmp/testdb/test_db/test_employees_md5.sql;
 ### 2.2 导入world数据集
 执行下面的命令导入world数据集：
 ```
-greatsql> source /tmp/testdb/world-db/world.sql;
+greatsql> SOURCE /tmp/testdb/world-db/world.sql;
 ...
-greatsql> select count(*) from city;
+greatsql> SELECT COUNT(*) FROM city;
 +----------+
 | count(*) |
 +----------+
 |     4079 |
 +----------+
 
-greatsql> select count(*) from country;
+greatsql> SELECT COUNT(*) FROM country;
 +----------+
 | count(*) |
 +----------+
 |      239 |
 +----------+
 
-greatsql> select count(*) from countrylanguage;
+greatsql> SELECT COUNT(*) FROM countrylanguage;
 +----------+
 | count(*) |
 +----------+
@@ -144,10 +144,10 @@ greatsql> select count(*) from countrylanguage;
 ### 2.3 导入Sakila数据集
 执行下面的命令初始化Sakila测试数据库：
 ```
-greatsql> source /tmp/testdb/sakila-db/sakila-schema.sql;
-greatsql> source /tmp/testdb/sakila-db/sakila-data.sql;
-greatsql> select TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE, ENGINE, TABLE_ROWS 
-from information_schema.tables where table_schema = 'sakila';
+greatsql> SOURCE /tmp/testdb/sakila-db/sakila-schema.sql;
+greatsql> SOURCE /tmp/testdb/sakila-db/sakila-data.sql;
+greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE, ENGINE, TABLE_ROWS 
+  FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = 'sakila';
 +--------------+----------------------------+------------+--------+------------+
 | TABLE_SCHEMA | TABLE_NAME                 | TABLE_TYPE | ENGINE | TABLE_ROWS |
 +--------------+----------------------------+------------+--------+------------+

@@ -68,20 +68,20 @@ $ ansible greatsql_dbs -a "uptime"
 
 打开GreatSQL-Ansible项目主页：[https://gitee.com/GreatSQL/GreatSQL-Ansible](https://gitee.com/GreatSQL/GreatSQL-Ansible)
 
-找到页面右侧“发行版”，进入，选择 " **GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal-ansible.tar.xz** " 这个二进制包下载到服务器上：
+找到页面右侧“发行版”，进入，选择 " **GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal-ansible.tar.xz** " 这个二进制包下载到服务器上：
 
 ```
-$ cd /opt/greatsql/; wget -c "https://gitee.com/xxx/GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal-ansible.tar.xz"
+$ cd /opt/greatsql/; wget -c "https://gitee.com/xxx/GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal-ansible.tar.xz"
 
-$ tar -Jxvf GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal-ansible.tar.xz
+$ tar -Jxvf GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal-ansible.tar.xz
 ```
 
-解压缩后，能看到除了 *GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal.tar.xz* 安装包之外，还有GreatSQL-ansible一键安装相关文件：
+解压缩后，能看到除了 *GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal.tar.xz* 安装包之外，还有GreatSQL-ansible一键安装相关文件：
 ```
-$ cd /opt/greatsql/GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal-ansible
+$ cd /opt/greatsql/GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal-ansible
 $ ls -la
 -rw-r--r-- 1 root root      333 Aug  8 11:04 check_mysql.yml
--rw-r--r-- 1 root root 46324036 Aug  8 11:09 GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal.tar.xz
+-rw-r--r-- 1 root root 46324036 Aug  8 11:09 GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal.tar.xz
 -rw-r--r-- 1 root root     8920 Aug  8 12:41 greatsql.yml
 drwxr-xr-x 3 root root      103 Aug  8 11:07 mysql-support-files
 -rw-r--r-- 1 root root      869 Aug  8 11:04 README.en.md
@@ -89,7 +89,7 @@ drwxr-xr-x 3 root root      103 Aug  8 11:07 mysql-support-files
 -rw-r--r-- 1 root root      413 Aug  8 14:03 vars.yml
 ```
 几个文件作用分别介绍下：
-- GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal.tar.xz，GreatSQL二进制minimal安装包。
+- GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal.tar.xz，GreatSQL二进制minimal安装包。
 - greatsql.yml，ansible一键安装脚本。
 - check_mysql.yml，MySQL进程、端口预检查脚本。
 - vars.yml，定义一些变量的脚本，里面的变量名有些需要修改以适应各自不同的安装环境。
@@ -100,11 +100,11 @@ drwxr-xr-x 3 root root      103 Aug  8 11:07 mysql-support-files
 
 在开始安装前，要先修改 `vars.yml` 这个Ansbile安装剧本中的几个配置选项：
 ```
-work_dir: /opt/greatsql/GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal-ansible
+work_dir: /opt/greatsql/GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal-ansible
 extract_dir: /usr/local
 data_dir: /data/GreatSQL
-file_name: GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal.tar.xz
-base_dir: /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal
+file_name: GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal.tar.xz
+base_dir: /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal
 my_cnf: /etc/my.cnf
 mysql_user: mysql
 mysql_port: 3306
@@ -122,8 +122,8 @@ wait_for_start: 60
 |work_dir|/opt/greatsql|工作目录，将下载的安装包放在本目录，可根据需要自行调整|
 |extract_dir|/usr/local|GreatSQL二进制包解压缩后放在 /usr/local下，【不建议调整】|
 |data_dir|/data/GreatSQL|GreatSQL运行时的datadir，【不建议调整】|
-|file_name|GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal.tar.xz|GreatSQL二进制包文件名，【不建议调整】|
-|base_dir|/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal|GreatSQL的basedir，【不建议调整】|
+|file_name|GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal.tar.xz|GreatSQL二进制包文件名，【不建议调整】|
+|base_dir|/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal|GreatSQL的basedir，【不建议调整】|
 |my_cnf|/etc/my.cnf|my.cnf配置文件路径，【不建议调整】|
 |mysql_user|mysql|运行GreatSQL对应的user、group，【不建议调整】|
 |mysql_port|3306|GreatSQL运行时的监听端口，【不建议调整】|
@@ -141,10 +141,10 @@ wait_for_start: 60
 
 执行下面的命令一键完成GreatSQL的安装、初始化，加入systemd服务、以及MGR初始化等所有工作：
 ```
-$ cd /opt/greatsql/GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal-ansible
+$ cd /opt/greatsql/GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal-ansible
 $ ls -la
 -rw-r--r-- 1 root root      333 Aug  8 11:04 check_mysql.yml
--rw-r--r-- 1 root root 46324036 Aug  8 11:09 GreatSQL-8.0.32-24-Linux-glibc2.17-x86_64-minimal.tar.xz
+-rw-r--r-- 1 root root 46324036 Aug  8 11:09 GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal.tar.xz
 -rw-r--r-- 1 root root     8920 Aug  8 12:41 greatsql.yml
 drwxr-xr-x 3 root root      103 Aug  8 11:07 mysql-support-files
 -rw-r--r-- 1 root root      869 Aug  8 11:04 README.en.md
@@ -207,13 +207,13 @@ $ systemctl status greatsql
    Active: active (running) since Tue 2023-08-08 12:26:08 CST; 1h 58min ago
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
-  Process: 77972 ExecStartPre=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+  Process: 77972 ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
  Main PID: 78043 (mysqld)
    Status: "Server is operational"
     Tasks: 38 (limit: 149064)
    Memory: 367.7M
    CGroup: /system.slice/greatsql.service
-           └─78043 /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64-minimal/bin/mysqld
+           └─78043 /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal/bin/mysqld
 
 Jul 13 15:46:17 GreatSQL-01 systemd[1]: Starting GreatSQL Server...
 Jul 13 15:46:21 GreatSQL-01 systemd[1]: Started GreatSQL Server.
@@ -221,7 +221,7 @@ Jul 13 15:46:21 GreatSQL-01 systemd[1]: Started GreatSQL Server.
 
 检查MGR服务运行状态：
 ```
-[root@GreatSQL][(none)]> select * from performance_schema.replication_group_members;
+[root@GreatSQL][(none)]> SELECT * FROM PERFORMANCE_SCHEMA.replication_group_members;
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+

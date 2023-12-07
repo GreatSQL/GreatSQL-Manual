@@ -62,9 +62,9 @@ $ docker exec -it greatsql /bin/bash
 [root@greatsql /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 12
-Server version: 8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
 ...
-Server version:        8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
+Server version:        8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
 ...
 
 Threads: 2  Questions: 18  Slow queries: 0  Opens: 119  Flush tables: 3  Open tables: 36  Queries per second avg: 0.243
@@ -184,20 +184,20 @@ $ docker exec -it mgr2 bash
 [root@mgr2 /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 30
-Server version: 8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-(Tue Jul 12 14:28:00 2022)[root@GreatSQL][(none)]>\s
+(Tue Jul 12 14:28:00 2022)[root@GreatSQL][(none)]> \s
 --------------
-mysql  Ver 8.0.32-24 for Linux on x86_64 (GreatSQL, Release 24, Revision 3714067bc8c)
+mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 3714067bc8c)
 ...
 Uptime:            1 min 38 sec
 
 Threads: 11  Questions: 52  Slow queries: 0  Opens: 145  Flush tables: 3  Open tables: 62  Queries per second avg: 0.530
 --------------
 
-(Tue Jul 12 14:28:05 2022)[root@GreatSQL][(none)]>select * from performance_schema.replication_group_members;
+(Tue Jul 12 14:28:05 2022)[root@GreatSQL][(none)]> SELECT * FROM PERFORMANCE_SCHEMA.replication_group_members;
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
@@ -293,7 +293,7 @@ $ docker-compse -f /data/docker/mgr-multi-primary.yml up -d
 $ docker exec -it mgr2 bash
 $ mysql
 ...
-[root@GreatSQL][(none)]>select * from performance_schema.replication_group_members;
+[root@GreatSQL][(none)]> SELECT * FROM PERFORMANCE_SCHEMA.replication_group_members;
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION | MEMBER_COMMUNICATION_STACK |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+

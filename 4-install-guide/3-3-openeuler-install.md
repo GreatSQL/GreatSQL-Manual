@@ -40,7 +40,7 @@ $ ldd --version
 ldd (GNU libc) 2.28
 ```
 
-那么在这个环境下，可以选择`GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz`这个二进制包进行安装
+那么在这个环境下，可以选择`GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz`这个二进制包进行安装
 
 当然了，也可以选择相应的minimal包，minimal版本是对二进制文件进行strip后，所以文件尺寸较小，功能上没本质区别，但不支持gdb debug功能，可以放心使用。
 
@@ -48,13 +48,13 @@ ldd (GNU libc) 2.28
 
 ```
 $ cd /usr/local
-$ tar xf GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz
+$ tar xf GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 同时修改设置，将GreatSQL加入 `PATH` 环境变量：
 
 ```
-$ echo 'export PATH=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
+$ echo 'export PATH=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
 $ source ~/.bash_profile
 ```
 
@@ -66,7 +66,7 @@ $ source ~/.bash_profile
 
 建议参考下面这份my.cnf模板，并根据实际情况做些适当调整：
 
-[my.cnf for GreatSQL 8.0.32-24](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24)
+[my.cnf for GreatSQL 8.0.32-25](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25)
 
 ```
 [client]
@@ -79,7 +79,7 @@ no-auto-rehash
 user    = mysql
 port    = 3306
 server_id = 3306
-basedir = /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64
+basedir = /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64
 datadir    = /data/GreatSQL
 socket    = /data/GreatSQL/mysql.sock
 pid-file = mysql.pid
@@ -297,8 +297,8 @@ Group=mysql
 Type=simple
 TimeoutSec=0
 PermissionsStartOnly=true
-ExecStartPre=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
-ExecStart=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
+ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
+ExecStart=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
 EnvironmentFile=-/etc/sysconfig/mysql
 Restart=on-failure
 RestartPreventExitStatus=1
@@ -334,15 +334,15 @@ $ systemctl status greatsql
    Active: failed (Result: exit-code) since Wed 2023-08-30 14:02:14 CST; 2s ago
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
-  Process: 790866 ExecStartPre=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
-  Process: 791426 ExecStart=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS (code=exited, status=1/FAILURE)
+  Process: 790866 ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+  Process: 791426 ExecStart=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS (code=exited, status=1/FAILURE)
  Main PID: 791426 (code=exited, status=1/FAILURE)
 
 8月 30 14:02:03 gip systemd[1]: Starting GreatSQL Server...
 8月 30 14:02:03 gip mysqld_pre_systemd[790895]: mktemp: failed to create file via template ‘/var/lib/mysql-files/install-validate-password-plugin.XXXXXX.sql’: No such file or direct>
 8月 30 14:02:03 gip mysqld_pre_systemd[790896]: chmod: cannot access '': No such file or directory
-8月 30 14:02:03 gip mysqld_pre_systemd[790894]: /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 43: : No such file or directory
-8月 30 14:02:03 gip mysqld_pre_systemd[790894]: /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 44: $initfile: ambiguous redirect
+8月 30 14:02:03 gip mysqld_pre_systemd[790894]: /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 43: : No such file or directory
+8月 30 14:02:03 gip mysqld_pre_systemd[790894]: /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 44: $initfile: ambiguous redirect
 8月 30 14:02:10 gip systemd[1]: Started GreatSQL Server.
 8月 30 14:02:14 gip systemd[1]: greatsql.service: Main process exited, code=exited, status=1/FAILURE
 8月 30 14:02:14 gip systemd[1]: greatsql.service: Failed with result 'exit-code'.
@@ -364,17 +364,17 @@ $ systemctl status greatsql
    Active: active (running) since Wed 2023-08-30 14:02:36 CST; 4s ago
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
-  Process: 793576 ExecStartPre=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+  Process: 793576 ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
  Main PID: 793606 (mysqld)
    Memory: 2.5G
    CGroup: /system.slice/greatsql.service
-           └─793606 /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld
+           └─793606 /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
 
 8月 30 14:02:36 gip systemd[1]: Starting GreatSQL Server...
 8月 30 14:02:36 gip systemd[1]: Started GreatSQL Server.
 
 $ ps -ef | grep mysqld
-mysql     818929       1  4 14:08 ?        00:00:07 /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld
+mysql     818929       1  4 14:08 ?        00:00:07 /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
 
 $ ss -lntp | grep mysqld
 LISTEN 0      70                 *:33060            *:*    users:(("mysqld",pid=60231,fd=38))
@@ -401,7 +401,7 @@ $ grep -i root /data/GreatSQL/error.log
 $ mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 11
-Server version: 8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ...
@@ -412,12 +412,12 @@ ERROR 1820 (HY000): You must reset your password using ALTER USER statement befo
 首次登入立刻提醒该密码已过期，需要修改，执行类似下面的命令修改即可：
 
 ```sql
-greatsql> alter user user() identified by 'GreatSQL@2022';  #<--修改密码
+greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@2022';  #<--修改密码
 Query OK, 0 rows affected (0.02 sec)
 
 greatsql> \s
 ...
-mysql  Ver 8.0.32-24 for Linux on x86_64 (GreatSQL, Release 24, Revision 3714067bc8c)
+mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 3714067bc8c)
 
 Connection id:          9
 Current database:       
@@ -426,7 +426,7 @@ SSL:                    Not in use
 Current pager:          stdout
 Using outfile:          ''
 Using delimiter:        ;
-Server version:         8.0.32-24
+Server version:         8.0.32-25
 Protocol version:       10
 Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4

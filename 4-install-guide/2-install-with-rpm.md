@@ -19,13 +19,13 @@
 
 ## 2. 下载安装包
 
-[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-24)下载最新的安装包，下载以下几个就可以：
+[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)下载最新的安装包，下载以下几个就可以：
 
-- greatsql-client-8.0.32-24.1.el8.x86_64.rpm 
-- greatsql-devel-8.0.32-24.1.el8.x86_64.rpm  
-- greatsql-icu-data-files-8.0.32-24.1.el8.x86_64.rpm
-- greatsql-shared-8.0.32-24.1.el8.x86_64.rpm
-- greatsql-server-8.0.32-24.1.el8.x86_64.rpm 
+- greatsql-client-8.0.32-25.1.el8.x86_64.rpm 
+- greatsql-devel-8.0.32-25.1.el8.x86_64.rpm  
+- greatsql-icu-data-files-8.0.32-25.1.el8.x86_64.rpm
+- greatsql-shared-8.0.32-25.1.el8.x86_64.rpm
+- greatsql-server-8.0.32-25.1.el8.x86_64.rpm 
 
 ## 3. 安装GreatSQL RPM包
 
@@ -35,11 +35,11 @@ $ rpm -ivh greatsql*rpm
 Verifying...                          ################################# [100%]
 Preparing...                          ################################# [100%]
 Updating / installing...
-   1:greatsql-shared-8.0.32-24.1.el8  ################################# [ 20%]
-   2:greatsql-client-8.0.32-24.1.el8  ################################# [ 40%]
-   3:greatsql-icu-data-files-8.0.32-24################################# [ 60%]
-   4:greatsql-server-8.0.32-24.1.el8  ################################# [ 80%]
-   5:greatsql-devel-8.0.32-24.1.el8   ################################# [100%]
+   1:greatsql-shared-8.0.32-25.1.el8  ################################# [ 20%]
+   2:greatsql-client-8.0.32-25.1.el8  ################################# [ 40%]
+   3:greatsql-icu-data-files-8.0.32-25################################# [ 60%]
+   4:greatsql-server-8.0.32-25.1.el8  ################################# [ 80%]
+   5:greatsql-devel-8.0.32-25.1.el8   ################################# [100%]
 ```
 这就安装成功了。
 
@@ -52,25 +52,25 @@ Updating / installing...
 ```
 $ rpm -ivh greatsql*rpm
 error: Failed dependencies:
-        perl(Lmo) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
-        perl(Lmo::Meta) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
-        perl(Lmo::Object) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
-        perl(Lmo::Types) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
-        perl(Lmo::Utils) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
-        perl(Percona::Toolkit) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
-        perl(Quoter) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
-        perl(Transformers) is needed by greatsql-server-8.0.32-24.1.el8.x86_64
+        perl(Lmo) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Lmo::Meta) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Lmo::Object) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Lmo::Types) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Lmo::Utils) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Percona::Toolkit) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Quoter) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Transformers) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
 
 #上述这些依赖包可以先忽略，不影响GreatSQL正常使用
 
 $ rpm -ivh --nodeps --force greatsql*rpm
 Preparing...                          ################################# [100%]
 Updating / installing...
-   1:greatsql-shared-8.0.32-24.1.el7  ################################# [ 20%]
-   2:greatsql-client-8.0.32-24.1.el7  ################################# [ 40%]
-   3:greatsql-icu-data-files-8.0.32-24################################# [ 60%]
-   4:greatsql-server-8.0.32-24.1.el7  ################################# [ 80%]
-   5:greatsql-devel-8.0.32-24.1.el7   ################################# [100%]
+   1:greatsql-shared-8.0.32-25.1.el7  ################################# [ 20%]
+   2:greatsql-client-8.0.32-25.1.el7  ################################# [ 40%]
+   3:greatsql-icu-data-files-8.0.32-25################################# [ 60%]
+   4:greatsql-server-8.0.32-25.1.el7  ################################# [ 80%]
+   5:greatsql-devel-8.0.32-25.1.el7   ################################# [100%]
 ```
 
 2. 正式安装GreatSQL RPM包时，可能还需要依赖Perl等其他软件包，此处为快速演示，因此加上 `--nodeps` 参数，忽略相应的依赖关系检查。安装完毕后，如果因为依赖关系无法启动，请再行安装相应软件依赖包。
@@ -79,7 +79,7 @@ Updating / installing...
 
 ### 4.1、修改 /etc/my.cnf 配置文件
 
-[参考这份文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
+[参考这份文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 ```
 #my.cnf
 [client]
@@ -349,7 +349,7 @@ $ mysql -uroot -p
 Enter password:     #<--这个地方粘贴上面复制的随机密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
-Server version: 8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
 
 Copyright (c) 2021-2023 GreatDB Software Co., Ltd
 Copyright (c) 2009-2021 Percona LLC and/or its affiliates
@@ -360,35 +360,35 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 greatsql> \s   #<--想执行一个命令，提示要先修改密码
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 
-greatsql> alter user user() identified by 'GreatSQL@202X';  #<--修改密码
+greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@202X';  #<--修改密码
 Query OK, 0 rows affected (0.02 sec)
 
 greatsql> \s   #<--就可以正常执行其他命令了
 --------------
-mysql  Ver 8.0.32-24 for Linux on x86_64 (GreatSQL, Release 24, Revision 3714067bc8c)
+mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 3714067bc8c)
 
-Connection id:        8
+Connection id:          8
 Current database:
-Current user:        root@localhost
-SSL:            Not in use
-Current pager:        stdout
-Using outfile:        ''
-Using delimiter:    ;
-Server version:         8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
-Protocol version:    10
-Connection:        Localhost via UNIX socket
+Current user:           root@localhost
+SSL:                    Not in use
+Current pager:          stdout
+Using outfile:          ''
+Using delimiter:        ;
+Server version:         8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
+Protocol version:       10
+Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4
 Db     characterset:    utf8mb4
 Client characterset:    utf8mb4
 Conn.  characterset:    utf8mb4
-UNIX socket:        /data/GreatSQL/mysql.sock
-Binary data as:        Hexadecimal
-Uptime:            20 min 8 sec
+UNIX socket:            /data/GreatSQL/mysql.sock
+Binary data as:         Hexadecimal
+Uptime:                 20 min 8 sec
 
 Threads: 2  Questions: 7  Slow queries: 0  Opens: 130  Flush tables: 3  Open tables: 46  Queries per second avg: 0.005
 --------------
 
-greatsql> show databases;  #<--查看数据库列表
+greatsql> SHOW DATABASES;  #<--查看数据库列表
 +--------------------+
 | Database           |
 +--------------------+
@@ -418,7 +418,7 @@ GreatSQL数据库安装并初始化完毕。
 
 ## 8. 安装MySQL Shell
 
-为了支持仲裁节点特性，需要安装GreatSQL提供的MySQL Shell发行包。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-24)，找到 **7. GreateSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
+为了支持仲裁节点特性，需要安装GreatSQL提供的MySQL Shell发行包。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，找到 **7. GreateSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
 
 P.S，如果暂时不想使用仲裁节点特性的话，则可以继续使用相同版本的官方MySQL Shell安装包，可以直接用YUM方式安装，此处略过。
 
@@ -481,7 +481,7 @@ Please provide the password for 'root@.%2Fmysql.sock': ********  <-- 输入root�
 Save password for 'root@.%2Fmysql.sock'? [Y]es/[N]o/Ne[v]er (default No): yes  <-- 提示是否存储密码（视各公司安全规则而定，这里为了方便选择了存储密码）
 MySQL Shell 8.0.25
 ...
-Server version: 8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
 No default schema selected; type \use <schema> to set one.
 WARNING: Found errors loading plugins, for more details look at the log at: /root/.mysqlsh/mysqlsh.log
  MySQL  localhost  Py >
@@ -535,7 +535,7 @@ Please provide the password for 'GreatSQL@172.16.16.10:3306': *************
 Save password for 'GreatSQL@172.16.16.10:3306'? [Y]es/[N]o/Ne[v]er (default No): yes
 MySQL Shell 8.0.25
 ...
-Server version: 8.0.32-24 GreatSQL, Release 24, Revision 3714067bc8c
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
 No default schema selected; type \use <schema> to set one.
 
 # 选定GreatSQL-01节点作为PRIMARY，开始创建MGR集群

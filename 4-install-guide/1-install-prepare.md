@@ -215,7 +215,7 @@ $ grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
 
 如果采用手动方式启动GreatSQL服务进程，还可以在启动时加上 `numactl --interleave=all`，例如：
 ```
-$ numactl --interleave=all /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld &
+$ numactl --interleave=all /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld &
 ```
 
 如果采用 `systemd` 来启动 GreatSQL服务进程，则可以修改 `/etc/systemd/system.conf` 配置文件，增加一行：
