@@ -108,4 +108,4 @@ $ systemctl start greatsql
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)

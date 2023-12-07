@@ -24,4 +24,4 @@ GreatSQL支持单机、主从复制、MGR集群等多种部署方式，本章文
 
 扫码关注微信公众号
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](/greatsql-wx.jpg)
