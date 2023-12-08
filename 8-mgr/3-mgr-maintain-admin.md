@@ -309,7 +309,7 @@ The instance '172.16.16.13:3306' was successfully added to the cluster.
 
 ##### 手动方式添加新节点
 
-首先，要先完成MySQL Server初始化，创建好MGR专用账户、设置好MGR服务通道等前置工作，这部分的操作可以参考前文 [**3. 安装部署MGR集群**](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/x)。
+首先，要先完成MySQL Server初始化，创建好MGR专用账户、设置好MGR服务通道等前置工作，这部分的操作可以参考前文 [**3. 安装部署MGR集群**](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/deep-dive-mgr-03.md)。
 
 接下来，直接执行命令 `start group_replication` 启动MGR服务即可，新增的节点会进入分布式恢复这个步骤，它会从已有节点中自动选择一个作为捐献者（donor），并自行决定是直接读取binlog进行恢复，还是利用Clone进行全量恢复。
 
