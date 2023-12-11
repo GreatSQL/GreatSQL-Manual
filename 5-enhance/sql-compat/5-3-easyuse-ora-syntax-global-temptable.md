@@ -55,7 +55,7 @@ GreatSQL中支持创建 `GLOBAL|PRIVATE` 两种不同的临时表。
 1. 临时表的维护及使用，是基于GreatSQL的临时表。因此任一临时表都只能在当前语句中被引用一次。例如：t1是临时表，则 `SELECT * FROM t1 UNION SELECT * FROM t1` 会报错，见下方详细案例。
 2. 在MGR环境中，其中一个节点创建临时表实例时，在其他节点的DDL操作并不会被锁阻塞，只会依照目前MGR环境中的DDL操作规则，对临时表定义进行操作。
 3. 与GreatSQL临时表相同，`SHOW TABLES` 命令不会显示已创建的 `GLOBAL|PRIVATE TEMPORARY TABLE` 临时表实例。
-4. TODO: 如果同时使用 MySQL TEMPORARY TABLE 创建同名的 GLOBAL TEMPORARY TABLE，会让后续SQL语句以当前的 MySQL TEMPORARY TABLE为主。
+4. 如果同时使用GreatSQL原生的 `TEMPORARY TABLE` 创建同名的 `GLOBAL TEMPORARY TABLE`，会让后续SQL语句以原生的 `TEMPORARY TABLE` 为主。
 5. 与GreatSQL常规临时表支持的数据类型一致，当临时表中包含 `BLOB` 类型列时不会报错。
 6. 不支持对 `GLOBAL TEMPORARY TABLE` 创建触发器。但触发器及视图内可以引用 `GLOBAL TEMPORARY TABLE`。
 7. 执行 `RENAME TABLE` 与 `ALTER TABLE .. RENAME` 语句时，必须当时没有 `GLOBAL TEMPORARY TABLE` 临时表同名实例(Oracle 沒有這個限制)。
@@ -244,9 +244,6 @@ Create Table: CREATE TEMPORARY TABLE "gtt2" (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 ```
 
-TODO，暂停
-1. bug http://zbox.greatdb.com/zentao/bug-view-9135.html
-2. 没有PRIVATE TEMPORARY TABLE的文档内容
 
 **问题反馈**
 ---

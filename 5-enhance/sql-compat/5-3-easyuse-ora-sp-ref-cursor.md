@@ -93,7 +93,7 @@ GreatSQL在兼容性差异主要有以下几点：
 
 1. 只支持在存储过程/存储函数内部中使用 `SYS_REFCURSOR`，也支持作为参数传入和输出。
 
-TODO 2. `REF CURSOR` 和 `SYS_REFCURSOR` 的参数也作为存储过程/存储函数的参数，因此不能再定义同名参数。
+2. `REF CURSOR` 和 `SYS_REFCURSOR` 的参数也作为存储过程/存储函数的参数，因此不能再定义同名参数。
 
 3. 如果只定义了 `REF CURSOR` 或 `SYS_REFCURSOR` 而没有定义具体SQL语句，则这个游标无法使用。
 

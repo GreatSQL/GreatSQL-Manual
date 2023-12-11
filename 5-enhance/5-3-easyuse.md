@@ -273,7 +273,7 @@ greatsql> SELECT 'after test 1', LENGTH('测试'), @@sql_mode;
 
 ### 6.3 可以在触发器（trigger）和事件（event）中切换SQL兼容模式吗
 
-TODO 在GreatSQL中，定义触发器前设定SQL兼容模式或修改`sql_mode`将影响触发器内SQL语法或函数的兼容风格，但由于GreatSQL的触发器和事件兼容功能尚未发布，因此触发器和事件本身的语法还是使用GreatSQL原生的方式。
+在GreatSQL中，定义触发器前设定SQL兼容模式或修改`sql_mode`将影响触发器内SQL语法或函数的兼容风格。
 
 
 
