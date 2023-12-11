@@ -61,7 +61,8 @@ GreatSQL中支持创建 `GLOBAL|PRIVATE` 两种不同的临时表。
 7. 执行 `RENAME TABLE` 与 `ALTER TABLE .. RENAME` 语句时，必须当时没有 `GLOBAL TEMPORARY TABLE` 临时表同名实例(Oracle 沒有這個限制)。
 8. 每个 `GLOBAL TEMPORARY TABLE` 实例的 `AUTO_INCREMENT` 字段都一律由1开始（Oracle没这个约束）。
 9. 当创建临时表实例后，在任何会话中删除 `GLOBAL TEMPORARY TABLE` 所在的数据库时，该临时表实例会继续存在。若之后继续创建同名的数据库及同名的 `GLOBAL TEMPORARY TABLE`，并不会对已经生成的临时表实例有影响。
-10. 执行 `TRUNCATE` 语句会终止当前事务，会对当前事务中创建的临时表有影响。
+10. 由于在 `PRIVATE TEMPORARY TABLE` 中是不支持指定主键的，因此在创建 `PRIVATE TEMPORARY TABLE` 时不能显式指定主键，也必须设置 `sql_generate_invisible_primary_key=0`，避免隐式创建主键，否则会提示不支持该用法。
+11. 执行 `TRUNCATE` 语句会终止当前事务，会对当前事务中创建的临时表有影响。
 
 
 ## 4. 示例
@@ -242,6 +243,118 @@ Create Table: CREATE TEMPORARY TABLE "gtt2" (
   "c1" varchar(16) DEFAULT NULL,
   PRIMARY KEY ("id")
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+
+-- 3. 创建PRIVATE TEMPORARY TABLE，指定不同的ON COMMIT子句，
+-- 3.1 指定PRESERVE DEFINITION子句
+greatsql> SET sql_mode = ORACLE;
+greatsql> CREATE PRIVATE TEMPORARY TABLE ora$ptt_s1(
+id INT,
+c1 VARCHAR(30)
+)ON COMMIT PRESERVE DEFINITION;
+
+greatsql> INSERT INTO ora$ptt_s1 VALUES (1, 'ora$ptt_s1-1');
+greatsql> INSERT INTO ora$ptt_s1 VALUES (2, 'ora$ptt_s1-2');
+
+-- 查看table
+greatsql> SHOW CREATE TABLE ora$ptt_s1\G
+*************************** 1. row ***************************
+       Table: ora$ptt_s1
+Create Table: CREATE PRIVATE TEMPORARY TABLE "ora$ptt_s1" (
+  "id" int DEFAULT NULL,
+  "c1" varchar(30) DEFAULT NULL
+) ON COMMIT PRESERVE DEFINITION ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+-- 查询数据
+greatsql> SELECT * FROM ora$ptt_s1;
++------+--------------+
+| id   | c1           |
++------+--------------+
+|    1 | ora$ptt_s1-1 |
+|    2 | ora$ptt_s1-2 |
++------+--------------+
+2 rows in set (0.00 sec)
+
+-- 3.2 指定DROP DEFINITION子句
+
+-- 开始事务
+greatsql> BEGIN;
+-- 不指定ON COMMIT子句默认使用DROP DEFINITION
+greatsql> CREATE PRIVATE TEMPORARY TABLE ora$ptt_t0(
+id INT,
+c1 VARCHAR(30)
+);
+
+greatsql> CREATE PRIVATE TEMPORARY TABLE ora$ptt_t1(
+id INT,
+c1 VARCHAR(30)
+) ON COMMIT DROP DEFINITION;
+
+-- 写入数据
+greatsql> INSERT INTO ora$ptt_t0 VALUES (10, 'ora$ptt_t0-10');
+greatsql> INSERT INTO ora$ptt_t0 VALUES (20, 'ora$ptt_t0-20');
+greatsql> INSERT INTO ora$ptt_t1 VALUES (100, 'ora$ptt_t1-100');
+greatsql> INSERT INTO ora$ptt_t1 VALUES (200, 'ora$ptt_t1-200');
+
+-- 查看表DDL
+greatsql> SHOW CREATE TABLE ora$ptt_t0\G
+*************************** 1. row ***************************
+       Table: ora$ptt_t0
+Create Table: CREATE PRIVATE TEMPORARY TABLE "ora$ptt_t0" (
+  "id" int DEFAULT NULL,
+  "c1" varchar(30) DEFAULT NULL
+) ON COMMIT DROP DEFINITION ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+greatsql> SHOW CREATE TABLE ora$ptt_t1\G
+*************************** 1. row ***************************
+       Table: ora$ptt_t1
+Create Table: CREATE PRIVATE TEMPORARY TABLE "ora$ptt_t1" (
+  "id" int DEFAULT NULL,
+  "c1" varchar(30) DEFAULT NULL
+) ON COMMIT DROP DEFINITION ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+-- 查询数据
+greatsql> SELECT * FROM ora$ptt_t1;
++------+----------------+
+| id   | c1             |
++------+----------------+
+|  100 | ora$ptt_t1-100 |
+|  200 | ora$ptt_t1-200 |
++------+----------------+
+2 rows in set (0.00 sec)
+
+-- 提交事务
+greatsql> COMMIT;
+
+-- 查询数据
+greatsql> SELECT * FROM ora$ptt_s1;
++------+--------------+
+| id   | c1           |
++------+--------------+
+|    1 | ora$ptt_s1-1 |
+|    2 | ora$ptt_s1-2 |
++------+--------------+
+2 rows in set (0.00 sec)
+
+-- 事务提交后，PRIVATE TEMPORARY TABLE会被删除
+greatql> SELECT * FROM ora$ptt_t0;
+ERROR 1146 (42S02): Table 'greatsql.ora$ptt_t0' doesn't exist
+
+greatsql> SELECT * FROM ora$ptt_t1;
+ERROR 1146 (42S02): Table 'greatsql.ora$ptt_t1' doesn't exist
+
+-- 显式指定PRIMARY KEY，或者当sql_generate_invisible_primary_key=1时会报告不支持
+greatsql> CREATE PRIVATE TEMPORARY TABLE ora$ptt_t1(
+id INT,
+c1 VARCHAR(30),
+PRIMARY KEY(id));
+ERROR 7561 (HY000): unsupported feature with temporary table
+
+greatsql> SET sql_generate_invisible_primary_key = 1;
+greatsql> CREATE PRIVATE TEMPORARY TABLE ora$ptt_t1(
+id INT,
+c1 VARCHAR(30));
+ERROR 7561 (HY000): unsupported feature with temporary table
 ```
 
 
