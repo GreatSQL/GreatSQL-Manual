@@ -4,11 +4,13 @@
 
 以下是GreatSQL项目感谢列表（成员排名不分先后）：
 
+- [ATOMDB](https://atomdb.com)
+- [ruyi1024](https://gitee.com/ruyi1024)
+- [芬达](https://gitee.com/fanderchan)
 - entei(fhl113190247)
 - 佛福(liufofu)
 - 忆雨林枫(yiyulinfeng)
 - 月城(david058)
-- [芬达](https://gitee.com/fanderchan)
 - [Ethan_LY](https://gitee.com/ethan-ly)
 - 戴先森(daixijun4020)
 - Think(zzsuuid)
@@ -18,7 +20,6 @@
 - bz(bzhao66234)
 - 姚良-James.Yao(james-yao)
 - 李强(saga1015)
-- POLARBOY(zzu_xiuxiu)
 - 茹憶(Ruyi-1024)
 - 八怪(gp_22389860)
 - 田帅萌(tian786376668)
