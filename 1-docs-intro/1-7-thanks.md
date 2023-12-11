@@ -4,6 +4,8 @@
 
 以下是GreatSQL项目感谢列表（成员排名不分先后）：
 
+- [gitee](https://gitee.com/)
+- [OSCHINA](https://www.oschina.net/)
 - [ATOMDB](https://atomdb.com)
 - [ruyi1024](https://gitee.com/ruyi1024)
 - [芬达](https://gitee.com/fanderchan)
