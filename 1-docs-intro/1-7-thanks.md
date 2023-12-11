@@ -9,24 +9,23 @@
 - [ATOMDB](https://atomdb.com)
 - [ruyi1024](https://gitee.com/ruyi1024)
 - [芬达](https://gitee.com/fanderchan)
-- entei(fhl113190247)
-- 佛福(liufofu)
-- 忆雨林枫(yiyulinfeng)
-- 月城(david058)
+- entei
+- liufofu
+- 忆雨林枫
+- 月城
 - [Ethan_LY](https://gitee.com/ethan-ly)
-- 戴先森(daixijun4020)
-- Think(zzsuuid)
-- C_zitong(czt-20160211)
-- 李涛(alitao)
-- ASDF(Lee6496)
-- bz(bzhao66234)
-- 姚良-James.Yao(james-yao)
-- 李强(saga1015)
-- 茹憶(Ruyi-1024)
-- 八怪(gp_22389860)
-- 田帅萌(tian786376668)
-- Paddy Zhang - 张充(paddyzc)
-- Dillon(wx_dillonchen)
+- 戴先森
+- Think
+- C_zitong
+- alitao
+- Lee6496
+- bz
+- 姚良-James.Yao
+- 李强
+- 八怪
+- 田帅萌
+- Paddy Zhang
+- Dillon
 - [zjjxxl](https://gitee.com/zjjxxl)
 - [lirulei90](https://gitee.com/lirulei90)
 - [xiongyu-net](https://gitee.com/xiongyu-net)
@@ -36,10 +35,10 @@
 - [704793286](https://gitee.com/704793286)
 - [chengli258](https://gitee.com/chengli258)
 - [mlovewt](https://gitee.com/mlovewt)
-- 19LA(W19LAG)
-- G.L.(gavinlee_2010)
-- 是我的海(louis880322)
-- Sky凌乱(Sky__Love__Dy)
+- W19LAG
+- G.L.
+- 是我的海
+- Sky凌乱
 
 
 **问题反馈**
