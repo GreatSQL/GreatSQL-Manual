@@ -160,6 +160,20 @@ greatsql> DROP SEQUENCE seq1;
 Query OK, 1 row affected (0.00 sec)
 ```
 
+## 4. `SEQUENCE` 数据字典
+
+```sql
+-- 1. 查询 information_schema.SEQUENCES 查看所有SEQUENCE
+greatsql> select * from information_schema.SEQUENCES;
++----------+------+------------+----------+------------------------------+-----------+------------+-----------+------------+
+| DB       | NAME | START_WITH | MINVALUE | MAXVALUE                     | INCREMENT | CYCLE_FLAG | CACHE_NUM | ORDER_FLAG |
++----------+------+------------+----------+------------------------------+-----------+------------+-----------+------------+
+| greatsql | seq1 |          1 |        1 | 9999999999999999999999999999 |         1 |          0 |        20 |          0 |
++----------+------+------------+----------+------------------------------+-----------+------------+-----------+------------+
+1 row in set (0.00 sec)
+```
+
+
 **问题反馈**
 ---
 - [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
