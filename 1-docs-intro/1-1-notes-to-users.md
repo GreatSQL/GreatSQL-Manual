@@ -1,6 +1,7 @@
 # 用户须知
 ---
-GreatSQL是适用于金融级应用的国内自主开源数据库，具备高性能、高可靠、高易用性、高安全等多个核心特性，可以作为MySQL或Percona Server的可选替换，用于线上生产环境，且完全免费并兼容MySQL或Percona Server。
+
+GreatSQL数据库是一款**开源免费**数据库，可在普通硬件上满足金融级应用场景，具有**高可用**、**高性能**、**高兼容**、**高安全**等特性，可作为MySQL或Percona Server for MySQL的理想可选替换。
 
 GreatSQL和MySQL一样，采用[GPLv2协议](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)。
 
