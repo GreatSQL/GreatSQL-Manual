@@ -23,10 +23,10 @@ GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以�
 | **3. 面向开发者提升改进** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
 |InnoDB全文搜索改进| :heavy_check_mark: | ❌ |
 |更多Hash/Digest函数| :heavy_check_mark: | ❌ |
-|Oracle兼容性-数据类型| :heavy_check_mark: | ❌ |
-|Oracle兼容性-函数| :heavy_check_mark: | ❌ |
-|Oracle兼容性-SQL语法| :heavy_check_mark: | ❌ |
-|Oracle兼容性-存储程序| :heavy_check_mark: | ❌ |
+|Oracle兼容-数据类型| :heavy_check_mark: | ❌ |
+|Oracle兼容-函数| :heavy_check_mark: | ❌ |
+|Oracle兼容-SQL语法| :heavy_check_mark: | ❌ |
+|Oracle兼容-存储程序| :heavy_check_mark: | ❌ |
 | **4. 基础特性提升改进** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
 |MGR提升-地理标签| :heavy_check_mark: | ❌ |
 |MGR提升-仲裁节点| :heavy_check_mark: | ❌ |

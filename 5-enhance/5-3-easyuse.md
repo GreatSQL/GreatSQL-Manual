@@ -1,15 +1,15 @@
 # GreatSQL高易用性之Oracle兼容
 ---
 
-从GreatSQL 8.0.32-25版本开始，在Oracle兼容性方面有了巨大提升，除去OCI之外，几乎支持绝大多数常用的Oracle语法、数据类型、函数、存储过程等功能。
+从GreatSQL 8.0.32-25版本开始，在Oracle兼容方面有了巨大提升，除去OCI、DBlink、包之外，几乎支持绝大多数常用的Oracle语法、数据类型、函数、存储过程等功能。
 
-## 1. Oracle兼容性设计思路概述
-GreatSQL的Oracle的兼容性处理的优先原则如下：
+## 1. Oracle兼容设计思路概述
+GreatSQL的Oracle的兼容处理的优先原则如下：
 1. GreatSQL风格的SQL和存储过程可以直接在默认SQL MODE模式下工作。
 2. 与GreatSQL风格的SQL和存储过程**不冲突**的Oracle兼容功能也可以直接在默认SQL MODE模式下工作。
 3. 与GreatSQL风格的SQL和存储过程**存在语法或语义冲突**的功能，需要用户显式切换到Oracle MODE模式下才能工作。
 
-GreatSQL对Oracle的兼容性主要通过以下三种不同方案来实现：
+GreatSQL对Oracle的兼容主要通过以下三种不同方案来实现：
 - 原生模式：Oracle、GreatSQL都支持或部分支持通用的SQL标准，对于部分简单语句，无需调整即可兼容。
 - 兼容扩展：GreatSQL对于部分Oracle独有的函数和语法，在GreatSQL的Server层实现对其扩展，如：`MERGE INTO`、`CONNECT BY`，这写类型的兼容特性无需额外设定SQL MODE，直接使用即可。
 - 兼容模式：在GreatSQL中设置 `SET sql_mode = ORACLE;` 即可将当前会话切换到Oracle兼容模式。在该模式下，当Oracle语法与GreatSQL语法存在语法或语义上的冲突时，GreatSQL会自行选择Oracle兼容模式。

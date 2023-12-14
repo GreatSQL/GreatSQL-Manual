@@ -24,10 +24,10 @@ GreatSQL 8.0相对于5.7有着众多优秀新特性，包括且不仅限以下�
 |MGR提升-网络分区异常处理 |  :heavy_check_mark: | ❌ |
 |MGR提升-节点异常退出处理 | :heavy_check_mark: | ❌ |
 |MGR提升-节点磁盘满处理 | :heavy_check_mark: | ❌ |
-|Oracle兼容性-数据类型| :heavy_check_mark: | ❌ |
-|Oracle兼容性-函数| :heavy_check_mark: | ❌ |
-|Oracle兼容性-SQL语法| :heavy_check_mark: | ❌ |
-|Oracle兼容性-存储程序| :heavy_check_mark: | ❌ |
+|Oracle兼容-数据类型| :heavy_check_mark: | ❌ |
+|Oracle兼容-函数| :heavy_check_mark: | ❌ |
+|Oracle兼容-SQL语法| :heavy_check_mark: | ❌ |
+|Oracle兼容-存储程序| :heavy_check_mark: | ❌ |
 | Hash Join|  :heavy_check_mark: | ❌ |
 | Anti Join优化 |  :heavy_check_mark: | ❌ |
 | 直方图 |  :heavy_check_mark: | ❌ |
