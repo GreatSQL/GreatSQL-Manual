@@ -28,7 +28,7 @@ GreatSQL相对于Percona Server有着众多优秀特性，包括且不仅限以�
 |MGR提升-快速单主模式| :heavy_check_mark: | ❌ |
 |MGR提升-智能选主机制| :heavy_check_mark: | ❌ |
 |MGR提升-全新流控算法| :heavy_check_mark: | ❌ |
-| ** 5.安全性提升** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
+| **5.安全性提升** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
 |国密支持| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
 |审计日志入库| :heavy_check_mark: | ❌ |
