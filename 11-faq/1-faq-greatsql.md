@@ -37,12 +37,11 @@ GreatSQL社区官网：[https://greatsql.cn](https://greatsql.cn)
 
 关于GreatSQL的优势可阅读下面几篇文章：
 
-- [GreatSQL 8.0.32-24](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/greatsql-803224/changes-greatsql-8-0-32-24-20230605.md)
-
-- [GreatSQL 8.0.25-17](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-17-20230313.md)
-- [GreatSQL 8.0.25-16](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [GreatSQL 8.0.25-15](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-20210820.md)
-- [GreatSQL 5.7.36-39](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-5-7-36-20220407.md)
+- [Changes in MySQL 8.0.32-24 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
+- [Changes in MySQL 8.0.25-17 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
+- [Changes in MySQL 8.0.25-16 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
+- [Changes in MySQL 8.0.25-15 (2021-8-26)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.md)
+- [Changes in MySQL 5.7.36-39 (2022-4-7)](/1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.md)
 - [GreatSQL重磅特性，InnoDB并行并行查询优化测试](https://mp.weixin.qq.com/s/_LeEtwJlfyvIlxzLoyNVdA)
 - [面向金融级应用的GreatSQL正式开源](https://mp.weixin.qq.com/s/cI_wPKQJuXItVWpOx_yNTg)
 
@@ -97,30 +96,36 @@ $ docker pull docker.io/greatsql/greatsql:8.0.25-aarch64
 
 一、文档
 目前GreatSQL相关文档全部发布在gitee上（[https://gitee.com/GreatSQL/GreatSQL-Doc/](https://gitee.com/GreatSQL/GreatSQL-Doc/)），主要有以下几部分
-1. GreatSQL历史版本说明
-- https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/greatsql-803224/changes-greatsql-8-0-32-24-20230605.md
 
-- [https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-17-20230313.md](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-17-20230313.md)
-- [https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-16-20220516.md](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-20210820.md](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-20210820.md)
-- [https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-5-7-36-20220407.md](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-5-7-36-20220407.md)
+1. GreatSQL历史版本说明
+
+- [Changes in MySQL 8.0.32-24 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
+- [Changes in MySQL 8.0.25-17 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
+- [Changes in MySQL 8.0.25-16 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
+- [Changes in MySQL 8.0.25-15 (2021-8-26)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.md)
+- [Changes in MySQL 5.7.36-39 (2022-4-7)](/1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.md)
 
 2. 《深入浅出MGR》系列
+
 - [https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/deep-dive-mgr](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/deep-dive-mgr)
 
 3. 《GreatSQL手册》系列，地址
+
 - [https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/user-manual](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/user-manual)
 
 二、视频
 目前GreatSQL相关视频全部发布在B站上（[https://space.bilibili.com/1363850082](https://space.bilibili.com/1363850082)），主要有以下几部分
 
 1. 《实战MGR》
+
 - [https://space.bilibili.com/1363850082/channel/seriesdetail?sid=488623&ctype=0](https://space.bilibili.com/1363850082/channel/seriesdetail?sid=488623&ctype=0)
 
 2. 《深入浅出MGR》
+
 - [https://space.bilibili.com/1363850082/channel/collectiondetail?sid=343928&ctype=0](https://space.bilibili.com/1363850082/channel/collectiondetail?sid=343928&ctype=0)
 
 3. 《零基础学习MySQL》
+
 - [https://space.bilibili.com/1363850082/channel/collectiondetail?sid=328292&ctype=0](https://space.bilibili.com/1363850082/channel/collectiondetail?sid=328292&ctype=0)
 
 4. 《GCA_GreatSQL课程》
@@ -140,16 +145,13 @@ GreatSQL不计划每个小版本都跟随，暂定奇数版本跟随方式，即
 目前已有的版本：<br/>
 
 **GreatSQL 8.0**
-
-- [GreatSQL 8.0.32-24](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/greatsql-803224/changes-greatsql-8-0-32-24-20230605.md)
-
-- [GreatSQL 8.0.25-17](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-17-20230313.md)
-- [GreatSQL 8.0.25-16](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [GreatSQL 8.0.25-15](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-8-0-25-20210820.md)
+- [Changes in MySQL 8.0.32-24 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
+- [Changes in MySQL 8.0.25-17 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
+- [Changes in MySQL 8.0.25-16 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
+- [Changes in MySQL 8.0.25-15 (2021-8-26)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.md)
 
 **GreatSQL 5.7**
-- [GreatSQL 5.7.36-39](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/changes-greatsql-5-7-36-20220407.md)
-
+- [Changes in MySQL 5.7.36-39 (2022-4-7)](/1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.md)
 
 
 
