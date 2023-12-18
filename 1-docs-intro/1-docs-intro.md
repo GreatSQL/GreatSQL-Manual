@@ -4,7 +4,7 @@
 
 - ## [1 用户须知](./1-1-notes-to-users.md)
 - ## [2 版本历史](./1-2-release-history.md)
-- ## [3 特性介绍](./1-3-greatsql-features.md)
+- ## [3 优势特性](./1-3-greatsql-features.md)
 - ## [4 已知问题](./1-4-issues-known.md)
 - ## [5 参与贡献](./1-5-contribute-to-greatsql.md)
 - ## [6 社区行为守则](./1-6-community-rules.md)
