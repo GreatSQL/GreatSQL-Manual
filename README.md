@@ -1,6 +1,6 @@
 # GreatSQL 8.0 用户手册
 
-最后更新: 2023-12-11
+最后更新: 2023-12-18。
 
 本文档适用版本：[GreatSQL 8.0.32-24](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/relnotes/greatsql-803224/changes-greatsql-8-0-32-24-20230605.md)
 
@@ -12,7 +12,7 @@ GreatSQL具备**高性能**、**高可靠**、**高易用性**、**高安全**�
 # [1. 发行说明](./1-docs-intro/1-docs-intro.md)
  - ## [1.1 用户须知](./1-docs-intro/1-1-notes-to-users.md)
  - ## [1.2 版本历史](./1-docs-intro/1-2-release-history.md)
- - ## [1.3 特性介绍](./1-docs-intro/1-3-greatsql-features.md)
+ - ## [1.3 优势特性](./1-docs-intro/1-3-greatsql-features.md)
  - ## [1.4 已知问题](./1-docs-intro/1-4-issues-known.md)
  - ## [1.5 参与贡献](./1-docs-intro/1-5-contribute-to-greatsql.md)
  - ## [1.6 社区行为守则](./1-docs-intro/1-6-community-rules.md)
