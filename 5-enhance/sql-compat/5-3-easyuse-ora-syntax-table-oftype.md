@@ -5,7 +5,7 @@
 ## 1. 语法
 
 ```sql
-SET sql_mode = ORACLE:
+SET sql_mode = ORACLE;
 
 CREATE TABLE [IF NOT EXISTS] table_name OF type_name [table options]
 ```
@@ -187,6 +187,15 @@ greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, ORDINAL_POSITION, DATA_T
 | greatsql     | tf_t2      | id          |                1 | int       |                 |
 | greatsql     | tf_t2      | c1          |                2 | udt1      | udt_name="udt1" |
 +--------------+------------+-------------+------------------+-----------+-----------------+
+```
+
+## 6. 导出备份
+
+由于 `CREATE TABLE OF TYPE` 需要从 `UDT` 中继承用户自定义的数据类型，因此在使用 `mysqldump` 导出数据时，还需要再指定 `--routines` 选项（默认为关闭），把UDT也一并导出，否则会导致在恢复数据时失败。
+
+示例：
+```
+mysqldump -S/data/GreatSQL/mysql.sock -uroot -pxxx -B greatsql --routines > /data/backup/GreatSQL/greatsql-ddl.sql
 ```
 
 
