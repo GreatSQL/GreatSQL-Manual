@@ -187,6 +187,17 @@ greatsql> SHOW WARNINGS\G
 Message: /* select#1 */ select "greatsql"."udt_table_-5015528632416731088"."id" AS "id","greatsql"."udt_table_-5015528632416731088"."c1" AS "c1" from table(ud_varray1(ud_type1(1,'c1_rowa'),ud_type1(2,'c1_rowb'))) "udt_table_-5015528632416731088"
 ```
 
+## 4. 导出备份
+
+在使用 `mysqldump` 导出数据时，可通过指定 `--routines` 选项（默认为关闭），导出TABLE FUNCTION对象。
+
+示例：
+```
+mysqldump -S/data/GreatSQL/mysql.sock -uroot -pxxx -B greatsql -d --routines > /data/backup/GreatSQL/greatsql-ddl.sql
+```
+
+
+
 
 
 **问题反馈**
