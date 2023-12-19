@@ -64,7 +64,7 @@ CREATE SEQUENCE schema_name.sequence_name
 
 ### 2.2 使用 `SEQUENCE`
 
-- 1. 支持创建/删除/修改 操作
+- 1. 创建/删除/修改
 
 GreatSQL支持的SEQUENCE操作有 `CREATE`、`DROP`、`ALTER`，暂未支持 `RENAME`。
 
@@ -76,14 +76,14 @@ GreatSQL支持的SEQUENCE操作有 `CREATE`、`DROP`、`ALTER`，暂未支持 `R
 
 `SEQUENCE` 对象名与表名、视图名互斥。同一个 `SCHEMA` 下无法创建同名的序列、表、视图。
 
-- 2. 支持查看操作
+- 2. 查看
 
 可通过 `SHOW CREATE SEQUENCE seq_name` 语句展示 `SEQUENCE` 创建的DDL。
 
 还可通过`SHOW [FULL] SEQUENCES [FROM|IN schema_name] [LIKE seq_name] [WHERE where_condition]` 展示指定schema中的所有序列。
 
 
-- 3. 支持导出操作
+- 3. 导出备份
 
 在使用 `mysqldump` 导出数据时，可通过增加 `--sequences` 选项（默认为关闭），导出序列对象。导出时，序列的 `START WITH` 是下一个有效值。
 
