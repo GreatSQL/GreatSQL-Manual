@@ -246,6 +246,15 @@ greatsql> SELECT SPECIFIC_SCHEMA, SPECIFIC_NAME, ORDINAL_POSITION, PARAMETER_NAM
 ```
 
 
+## 6. 导出备份
+
+在使用 `mysqldump` 导出数据时，可通过指定 `--routines` 选项（默认为关闭），导出UDT对象。
+
+示例：
+```
+mysqldump -S/data/GreatSQL/mysql.sock -uroot -pxxx -B greatsql -d --routines > /data/backup/GreatSQL/greatsql-ddl.sql
+```
+
 
 **问题反馈**
 ---
