@@ -19,7 +19,7 @@
 - 备份用途类型表名加上 "bak\_" 前缀。
 - 临时用途类型表名加上 "tmp\_" 前缀。
 - 以日期时间作为分库分表的对象名，可以加上日期时间后缀，示例：`trans_log_2023`。
-- 要避免使用保留字和关键字，详情参考：[保留字、关键字](/2-about-greatsql/7-greatsql-keywords.md)。
+- 要避免使用保留字和关键字，详情参考：[保留字、关键字](../2-about-greatsql/7-greatsql-keywords.md)。
 - 尽可能使用 `id` 作为表的主键列名，如果主键索引包括多个列，每个列也都尽量带上 `_id` 关键字，例如：(city_id, user_id)。
 - 普通索引名带上前缀 "idx\_"。
 - 主键约束加上 "pk\+" 前缀。
@@ -80,4 +80,4 @@
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

@@ -85,7 +85,7 @@ select /*+ PQ(16) */
     l_returnflag,
     l_linestatus,
 ```
-更多关于GreatSQL中InnoDB并行查询特性的介绍详见文档：[InnoDB并行查询](/5-enhance/5-1-highperf-innodb-pq.md)。
+更多关于GreatSQL中InnoDB并行查询特性的介绍详见文档：[InnoDB并行查询](../5-enhance/5-1-highperf-innodb-pq.md)。
 
 
 也可参考下面的方法手动生成22个TPC-H测试查询SQL：
@@ -246,7 +246,7 @@ $ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch
 $ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/lineitem.tbl' into table lineitem FIELDS TERMINATED BY '|'; analyze table lineitem;" tpch
 ```
 
-还可以进一步设置并行load data的并行线程数以及分片大小，详情参考文档：[并行load data](/5-enhance/5-1-highperf-parallel-load.md)。
+还可以进一步设置并行load data的并行线程数以及分片大小，详情参考文档：[并行load data](../5-enhance/5-1-highperf-parallel-load.md)。
 
 ### 5.3 开始TPC-H测试
 
@@ -314,7 +314,7 @@ greatsql> explain for connection **;
 ## 6. 测试结果
 在GreatSQL中引入了InnoDB查询特性，对轻量级TPC-H查询有很好的优化效果，可支持的查询SQL类型也在不断增加中。
 
-关于TPC-H测试结果可参考：[InnoDB并行查询（InnoDB Parallel Query, InnoDB PQ）](/5-enhance/5-1-highperf-innodb-pq.md)。
+关于TPC-H测试结果可参考：[InnoDB并行查询（InnoDB Parallel Query, InnoDB PQ）](../5-enhance/5-1-highperf-innodb-pq.md)。
 
 
 **参考资料**
@@ -334,4 +334,4 @@ greatsql> explain for connection **;
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

@@ -286,7 +286,7 @@ sql_kill_blocking_connection: KILL 13333        #<-- 解锁方法之二
 
 在上面的输出结果中，甚至还给出了解锁方法，即KILL当前正在执行的SQL或连接。不过这种是比较粗暴的做法，最好是找到持有行锁的那个事务，主动发起COMMIT/ROLLBACK结束这个事务，就可以释放相应的行锁了。
 
-利用上述方法，就可以清晰观察InnoDB表当前存在的行锁以及行锁等待，同时建议针对行锁等待设置相应的监控告警规则，例如当行锁等待超过10秒就发出告警，更多关于监控告警的内容可参考：[监控告警](/6-oper-guide/3-monitoring-and-alerting.md)。
+利用上述方法，就可以清晰观察InnoDB表当前存在的行锁以及行锁等待，同时建议针对行锁等待设置相应的监控告警规则，例如当行锁等待超过10秒就发出告警，更多关于监控告警的内容可参考：[监控告警](../6-oper-guide/3-monitoring-and-alerting.md)。
 
 ## 4. 行锁等待优化建议
 
@@ -307,4 +307,4 @@ sql_kill_blocking_connection: KILL 13333        #<-- 解锁方法之二
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)
