@@ -60,7 +60,7 @@ GreatSQL 8.0相对于GreatSQL 5.7有着众多优秀新特性，包括且不仅�
 1. 在8.0中，默认采用 `caching_sha2_password` 密码插件，这可能导致部分版本较早的连接驱动、连接客户端无法连接8.0的服务端，也需要同步升级。
 1. 在8.0中，默认采用 `utf8mb4` 字符集，而5.7版本默认字符集是 `utf8`（也是 `utf8mb3`），在做数据迁移时要注意前后对照校验。
 1. 在8.0中，启动时务必先设定好 `lower_case_table_names` 选项值，且实例启动后不可再更改，在个别不区分大小写的旧系统中前移时要特别谨慎。
-1. 新增保留字、关键字，详情请见：[2.6 保留字、关键字](/2-about-greatsql/7-greatsql-keywords.md)。
+1. 新增保留字、关键字，详情请见：[2.6 保留字、关键字](../2-about-greatsql/7-greatsql-keywords.md)。
 1. 除InnoDB、NDB外，其他引擎不再支持表分区。
 1. SQL Mode不再支持 `NO_AUTO_CREATE_USER`，也就是不能直接利用 `GRANT` 创建新用户并授权，需要先 `CREATE USER` 创建用户，再授权。
 1. 部分参数选项不再支持，例如：`innodb_locks_unsafe_for_binlog`, `old_passwords`, query cache相关参数等。
@@ -71,7 +71,7 @@ GreatSQL 8.0相对于GreatSQL 5.7有着众多优秀新特性，包括且不仅�
 ### 2.2 升级准备
 
 
-首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-24版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-24)，至于选择RPM还是二进制包看具体情况及个人喜好。
+首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-25版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，至于选择RPM还是二进制包看具体情况及个人喜好。
 
 本文假定升级前后都是二进制包方式安装。
 
@@ -282,4 +282,4 @@ GreatSQL 8.0.32相对于8.0.25版本，新增了更多SQL语法兼容性、MGR�
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)
