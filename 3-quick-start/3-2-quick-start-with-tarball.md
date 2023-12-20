@@ -31,7 +31,7 @@ $ systemctl stop iptables
 
 安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
 `yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5`
-更详细的请参考：[安装准备](/4-install-guide/1-install-prepare.md)。
+更详细的请参考：[安装准备](../4-install-guide/1-install-prepare.md)。
 
 
 ## 下载二进制包并安装
@@ -281,4 +281,4 @@ $ systemctl restart greatsql
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

@@ -92,4 +92,4 @@ Threads: 2  Questions: 6  Slow queries: 0  Opens: 119  Flush tables: 3  Open tab
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)
