@@ -152,4 +152,4 @@ GreatSQL相对于MySQL官方社区版本有非常大的性能提升，尤其是�
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)
