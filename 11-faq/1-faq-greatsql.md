@@ -100,11 +100,12 @@ $ docker pull docker.io/greatsql/greatsql:8.0.25-aarch64
 
 1. GreatSQL历史版本说明
 
-- [Changes in MySQL 8.0.32-24 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
-- [Changes in MySQL 8.0.25-17 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [Changes in MySQL 8.0.25-16 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [Changes in MySQL 8.0.25-15 (2021-8-26)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.md)
-- [Changes in MySQL 5.7.36-39 (2022-4-7)](/1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.md)
+- [Changes in MySQL 8.0.32-25 (2023-12-29)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231229.md)
+- [Changes in MySQL 8.0.32-24 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
+- [Changes in MySQL 8.0.25-17 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
+- [Changes in MySQL 8.0.25-16 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
+- [Changes in MySQL 8.0.25-15 (2021-8-26)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.md)
+- [Changes in MySQL 5.7.36-39 (2022-4-7)](../1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.md)
 
 2. 《深入浅出MGR》系列
 
@@ -146,13 +147,14 @@ GreatSQL不计划每个小版本都跟随，暂定奇数版本跟随方式，即
 目前已有的版本：<br/>
 
 **GreatSQL 8.0**
-- [Changes in MySQL 8.0.32-24 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
-- [Changes in MySQL 8.0.25-17 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [Changes in MySQL 8.0.25-16 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [Changes in MySQL 8.0.25-15 (2021-8-26)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.md)
+- [Changes in MySQL 8.0.32-25 (2023-12-29)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231229.md)
+- [Changes in MySQL 8.0.32-24 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
+- [Changes in MySQL 8.0.25-17 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
+- [Changes in MySQL 8.0.25-16 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
+- [Changes in MySQL 8.0.25-15 (2021-8-26)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.md)
 
 **GreatSQL 5.7**
-- [Changes in MySQL 5.7.36-39 (2022-4-7)](/1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.md)
+- [Changes in MySQL 5.7.36-39 (2022-4-7)](../1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.md)
 
 
 
