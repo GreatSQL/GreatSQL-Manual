@@ -75,4 +75,4 @@ MGR支持单主和多主两种模式，在单主模式下，各节点会自动�
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

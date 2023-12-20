@@ -265,7 +265,7 @@ greatsql> select group_replication_switch_to_single_primary_mode('af39db70-6850-
 
 首先，启动一个全新的空实例，确保可以用root账户连接登入。
 
-参考文档：[MGR节点预检查](/4-install-guide/2-install-with-rpm.md#91mgr节点预检查)，先利用 MySQL Shell for GreatSQL，调用函数 `dba.configure_instance()` 完成初始化检查工作。
+参考文档：[MGR节点预检查](../4-install-guide/2-install-with-rpm.md#91mgr节点预检查)，先利用 MySQL Shell for GreatSQL，调用函数 `dba.configure_instance()` 完成初始化检查工作。
 
 而后切换到连接主节点的那个MySQL Shell for GreatSQL终端上，进行添加新节点操作：
 
@@ -382,7 +382,7 @@ The instance '172.16.16.13:3306' was successfully rejoined to the cluster.
 
 P.S，第一个节点启动完毕后，记得重置选项 `group_replication_bootstrap_group=OFF`，避免在后续的操作中导致MGR集群分裂。
 
-如果是用MySQL Shell for GreatSQL重启MGR集群，调用 `rebootClusterFromCompleteOutage()` 函数即可，它会自动判断各节点的状态，选择其中一个作为Primary节点，然后拉起各节点上的MGR服务，完成MGR集群重启。可以参考这篇文章：[万答#12，MGR整个集群挂掉后，如何才能自动选主，不用手动干预](https://gitee.com/link?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2F07o1poO44zwQIvaJNKEoPA)https://mp.weixin.qq.com/s/07o1poO44zwQIvaJNKEoPA)
+如果是用MySQL Shell for GreatSQL重启MGR集群，调用 `rebootClusterFromCompleteOutage()` 函数即可，它会自动判断各节点的状态，选择其中一个作为Primary节点，然后拉起各节点上的MGR服务，完成MGR集群重启。可以参考这篇文章：[万答#12，MGR整个集群挂掉后，如何才能自动选主，不用手动干预](https://mp.weixin.qq.com/s/07o1poO44zwQIvaJNKEoPA)
 
 **问题反馈**
 ---
@@ -395,4 +395,4 @@ P.S，第一个节点启动完毕后，记得重置选项 `group_replication_boo
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

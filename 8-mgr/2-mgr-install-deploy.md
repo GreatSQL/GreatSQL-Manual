@@ -4,7 +4,7 @@
 
 本文介绍如何利用手动方式和MySQL Shell方式用`GreatSQL-8.0.32-24`构建一个三节点的MGR集群
 
-[点击此处查看使用MySQL Shell方式构建三节点MGR集群](#test2)
+[点击此处查看使用MySQL Shell方式构建三节点MGR集群](#二使用mysql-shell构建mgr)
 
 ## 一、利用手动方式构建MGR
 
@@ -62,7 +62,7 @@ $ /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld --defaults-fil
 ```
 如果不出意外，则能正常启动GreatSQL。用同样的方法也完成对另外两个节点的初始化。
 
-此外，建议把GreatSQL加入系统systemd服务中，方便管理。具体方法可以参考这篇文章：[将GreatSQL添加到系统systemd服务](https://mp.weixin.qq.com/s/tSA-DrWT13GN45Csq2tQoA)。
+此外，建议把GreatSQL加入系统systemd服务中，方便管理。具体方法可以参考这篇文章：[利用systemd管理GreatSQL](./8-greatsql-with-systemd.md)。
 
 ### 3. 初始化MGR第一个节点
 接下来准备初始化MGR的第一个节点，也称之为 **引导节点**。
@@ -468,4 +468,4 @@ Pager has been set to 'less -i -n -S'.
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)
