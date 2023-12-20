@@ -177,4 +177,4 @@ ERROR 3568 (HY000): Unresolved table name `a`.`c10` in locking clause.
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

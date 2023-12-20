@@ -36,4 +36,4 @@ ERROR 1248 (42000): Every derived table must have its own alias
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

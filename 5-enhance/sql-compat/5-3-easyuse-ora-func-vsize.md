@@ -82,4 +82,4 @@ greatsql> SELECT VSIZE(STR_TO_DATE(SYSDATE(), '%Y-%m-%d %H:%i:%s')), STR_TO_DATE
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

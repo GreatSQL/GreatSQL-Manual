@@ -170,4 +170,4 @@ greatsql> SELECT sideb, sidea, RATIO_TO_REPORT(sideb) OVER (PARTITION BY sidea) 
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

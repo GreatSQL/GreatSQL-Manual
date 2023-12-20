@@ -80,4 +80,4 @@ ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that 
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

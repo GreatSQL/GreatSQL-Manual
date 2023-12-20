@@ -426,4 +426,4 @@ ERROR 1172 (42000): Result consisted of more than one row
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

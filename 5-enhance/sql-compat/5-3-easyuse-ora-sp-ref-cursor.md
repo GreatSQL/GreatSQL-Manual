@@ -58,7 +58,7 @@ FOR rows IN
 LOOP statement... END LOOP [label] ;
 ```
 
-更多关于 `FOR rows IN CURSOR` 用法参考：[Oracle兼容-存储过程-游标（`CURSOR`）](5-3-easyuse-ora-sp-ref-cursor.md)。
+更多关于 `FOR rows IN CURSOR` 用法参考：[Oracle兼容-存储过程-游标（`CURSOR`）](./5-3-easyuse-ora-sp-ref-cursor.md)。
 
 
 - 5. 语法5：`FUNCTION RETURN SYS_REFCURSOR` 支持函数返回 `REF CURSOR` 类型数据。对于 `FUNCTION` 不支持变量中包含 `SYS_REFCURSOR` 类型参数。
@@ -813,4 +813,4 @@ Query OK, 0 rows affected (0.00 sec)
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

@@ -138,8 +138,8 @@ greatsql> SELECT * FROM t2 //
 
 
 更多关联用法：
-- 1. [TYPE IS RECORD()]()
-- 2. [BULK COLLECT](5-3-easyuse-ora-sp-bulk-collect.md)
+- 1. [TYPE IS RECORD](./5-3-easyuse-ora-sp-record-type.md)
+- 2. [BULK COLLECT](./5-3-easyuse-ora-sp-bulk-collect.md)
 
 
 **问题反馈**
@@ -152,4 +152,4 @@ greatsql> SELECT * FROM t2 //
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

@@ -201,4 +201,4 @@ greatsql> SELECT * FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'greatsql
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

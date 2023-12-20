@@ -47,4 +47,4 @@ greatsql> SELECT DECODE(NULL, 1, 'one', NULL, 'NULL');
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

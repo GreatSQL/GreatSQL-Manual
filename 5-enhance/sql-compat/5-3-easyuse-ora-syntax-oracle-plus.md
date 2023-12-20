@@ -304,4 +304,4 @@ ERROR 7526 (HY000): OuterJoin: outer join operator (+) is not allowed here
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

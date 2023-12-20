@@ -43,7 +43,7 @@ Oracle模式实际上是包含以下几个模式的组合：
 
 - 5. 数据类型声明时要严格遵循规范，不规范的数据类型会导致报错。
 
-如果有需要，想要从 ORACLE 模式中去掉个别模式，还可以通过设置 `shrink_sql_mode` 参数进行调整，详情参考[shrink_sql_mode]()
+如果有需要，想要从 ORACLE 模式中去掉个别模式，还可以通过设置 `shrink_sql_mode` 参数进行调整，详情参考[shrink_sql_mode](./5-3-easyuse-ora-syntax-shrinkmode.md)
 
 **提醒：** 若已设置 GLOBAL 级 `sql_mode = ORACLE`，则在某个会话中修改 `sql_mode = DEFAULT`，该会话的 `sql_mode` 仍为 `ORACLE`，而不是GreatSQL原生默认的模式。如下所示：
 ```
@@ -154,4 +154,4 @@ greatsql> SHOW WARNINGS;
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

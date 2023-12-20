@@ -208,8 +208,8 @@ Query OK, 0 rows affected (0.00 sec)
 
 
 更多关联用法：
-- 1. [TYPE IS RECORD()]()
-- 2. [FORALL LOOP](5-3-easyuse-ora-sp-forall-loop.md)
+- 1. [TYPE IS RECORD](./5-3-easyuse-ora-sp-record-type.md)
+- 2. [FORALL LOOP](./5-3-easyuse-ora-sp-forall-loop.md)
 
 
 
@@ -223,4 +223,4 @@ Query OK, 0 rows affected (0.00 sec)
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

@@ -44,5 +44,5 @@ greatsql> SET GLOBAL greatdb_ha_mgr_exit_primary_kill_connection_mode = 1;
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)
 

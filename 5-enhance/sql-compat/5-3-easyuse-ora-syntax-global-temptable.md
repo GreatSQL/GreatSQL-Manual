@@ -368,4 +368,4 @@ ERROR 7561 (HY000): unsupported feature with temporary table
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)
