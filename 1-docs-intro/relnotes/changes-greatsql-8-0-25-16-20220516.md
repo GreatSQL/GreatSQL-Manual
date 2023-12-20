@@ -212,13 +212,16 @@ GreatSQL中增加一个新的工作模式：**单主快速模式**，在这个�
 
 ## 6. GreatSQL Release Notes
 ### GreatSQL 8.0
-- [Changes in MySQL 8.0.32-24 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
-- [Changes in MySQL 8.0.25-17 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [Changes in MySQL 8.0.25-16 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [Changes in MySQL 8.0.25-15 (2021-8-26)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.md)
+- [Changes in MySQL 8.0.32-25 (2023-12-29)](changes-greatsql-8-0-32-25-20231229.md)
+- [Changes in MySQL 8.0.32-24 (2023-6-5)](changes-greatsql-8-0-32-24-20230605.md)
+- [Changes in MySQL 8.0.25-17 (2023-3-13)](changes-greatsql-8-0-25-17-20230313.md)
+- [Changes in MySQL 8.0.25-16 (2022-5-16)](changes-greatsql-8-0-25-16-20220516.md)
+- [Changes in MySQL 8.0.25-15 (2021-8-26)](changes-greatsql-8-0-25-20210820.md)
 
 ### GreatSQL 5.7
-- [Changes in MySQL 5.7.36-39 (2022-4-7)](/1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.md)
+- [Changes in MySQL 5.7.36-39 (2022-4-7)](changes-greatsql-5-7-36-20220407.md)
+
+
 
 
 **问题反馈**
@@ -231,4 +234,4 @@ GreatSQL中增加一个新的工作模式：**单主快速模式**，在这个�
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)
