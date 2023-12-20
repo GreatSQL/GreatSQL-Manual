@@ -16,7 +16,7 @@
 
 ## 2. 单机多实例部署MGR集群
 
-首先，参考文档：[单机多实例](/6-oper-guide/5-multi-instances.md) 完成单机多实例环境部署，并构建MGR集群。
+首先，参考文档：[单机多实例](../6-oper-guide/5-multi-instances.md) 完成单机多实例环境部署，并构建MGR集群。
 ```
 greatsql> select MEMBER_ID,MEMBER_HOST,MEMBER_PORT,MEMBER_ROLE from performance_schema.replication_group_members;
 +--------------------------------------+-------------+-------------+-------------+
@@ -32,9 +32,9 @@ greatsql> select MEMBER_ID,MEMBER_HOST,MEMBER_PORT,MEMBER_ROLE from performance_
 
 ## 3. 部署MySQL Router
 
-在前文 [读写分离](/6-oper-guide/2-oper-rw-splitting.md) 中介绍过，MySQL Router最好是和应用程序端部署在一起。
+在前文 [读写分离](../6-oper-guide/2-oper-rw-splitting.md) 中介绍过，MySQL Router最好是和应用程序端部署在一起。
 
-MySQL Router的部署方法可以参考文档：[读写分离](/6-oper-guide/2-oper-rw-splitting.md)。
+MySQL Router的部署方法可以参考文档：[读写分离](../6-oper-guide/2-oper-rw-splitting.md)。
 
 应用程序端只需连接到router的读写分离端口，而无需关注后端数据库实际拓扑结构，当Primary节点发生切换时，或者某个Secondary节点下线时，都不影响应用程序端的使用。
 
@@ -54,4 +54,4 @@ MySQL Router的部署方法可以参考文档：[读写分离](/6-oper-guide/2-o
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)
