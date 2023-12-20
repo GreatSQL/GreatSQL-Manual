@@ -717,7 +717,7 @@ MySQL  172.16.16.10:3306 ssl  Py > c.status()
 ```
 可以看到一个包含仲裁节点的三节点MGR集群已经构建完毕。
 
-在后面的内容中，我们再介绍如何手工方式部署MGR集群，以及利用MySQL Router实现读写分离及读可扩展，详见：[读写分离](/6-oper-guide/2-oper-rw-splitting.md)。
+在后面的内容中，我们再介绍如何手工方式部署MGR集群，以及利用MySQL Router实现读写分离及读可扩展，详见：[读写分离](../6-oper-guide/2-oper-rw-splitting.md)。
 
 **问题反馈**
 ---
@@ -729,4 +729,4 @@ MySQL  172.16.16.10:3306 ssl  Py > c.status()
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

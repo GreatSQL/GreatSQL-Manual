@@ -243,4 +243,4 @@ Jul 13 15:46:21 GreatSQL-01 systemd[1]: Started GreatSQL Server.
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

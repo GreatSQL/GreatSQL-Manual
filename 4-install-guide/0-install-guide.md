@@ -12,6 +12,7 @@ GreatSQL支持单机、主从复制、MGR集群等多种部署方式，本章文
 - ## [5 Ansible安装](./5-install-with-ansible.md)
 - ## [6 编译源码安装](./6-install-with-source-code.md)
 - ## [7 初始化测试数据库](./7-load-sampledb.md)
+- ## [8 利用systemd管理GreatSQL](./8-greatsql-with-systemd.md)
 
 
 **问题反馈**
@@ -24,4 +25,4 @@ GreatSQL支持单机、主从复制、MGR集群等多种部署方式，本章文
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

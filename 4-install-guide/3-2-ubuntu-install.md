@@ -266,7 +266,7 @@ $ mysqld --defaults-file=/etc/mysql/my.cnf&
 
 参考文档：[二进制包安装](./3-install-with-tarball.md)。
 
-安装完成后加入systemd服务方法可以参考这篇文章：[将GreatSQL添加到系统systemd服务](https://mp.weixin.qq.com/s/tSA-DrWT13GN45Csq2tQoA)。
+安装完成后加入systemd服务方法可以参考这篇文章：[利用systemd管理GreatSQL](./8-greatsql-with-systemd.md)。
 
 ## 4.连接登入GreatSQL
 
@@ -346,4 +346,4 @@ MySQL Shell就可以正常使用，并继续构建MGR集群了。
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)
