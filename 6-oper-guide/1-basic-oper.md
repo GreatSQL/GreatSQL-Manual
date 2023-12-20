@@ -34,7 +34,7 @@ $ systemctl status greatsql
 $ journalctl -ex
 ```
 
-更多关于利用systemd管理GreatSQL服务的内容请参考：[利用systemd管理GreatSQL](/4-install-guide/3-7-greatsql-with-systemd.md)。
+更多关于利用systemd管理GreatSQL服务的内容请参考：[利用systemd管理GreatSQL](../4-install-guide/3-7-greatsql-with-systemd.md)。
 
 ## 2. 修改参数选项
 
@@ -448,4 +448,4 @@ no-auto-rehash
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

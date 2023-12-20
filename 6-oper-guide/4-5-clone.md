@@ -218,7 +218,7 @@ greatsql> SELECT STAGE, STATE, CAST(BEGIN_TIME AS TIME) AS "START TIME",
 
 **提醒：** 
 1. 在CLONE过程中，如果被强行KILL终止的话，recipient节点上的数据会被清空，只剩下接近刚初始化完的新实例，请谨慎操作。
-2. 从GreatSQL 8.0.32-24版本开始，CLONE支持加密备份及解密，详情请见文档：[CLONE备份加密](/5-enhance/5-4-security-clone-encrypt.md)。
+2. 从GreatSQL 8.0.32-24版本开始，CLONE支持加密备份及解密，详情请见文档：[CLONE备份加密](../5-enhance/5-4-security-clone-encrypt.md)。
 
 在recipient节点上完成CLONE备份后，就等同于在recipient也做了一次数据恢复，这个节点还可以作为主从复制的从节点，也可以作为MGR组复制的新节点，一举多得。
 
@@ -226,7 +226,7 @@ greatsql> SELECT STAGE, STATE, CAST(BEGIN_TIME AS TIME) AS "START TIME",
 
 - [The Clone Plugin](https://dev.mysql.com/doc/refman/8.0/en/clone-plugin.html)
 - [Clone: Create MySQL instance replica](https://dev.mysql.com/blog-archive/clone-create-mysql-instance-replica/)
-- [CLONE加密备份](/5-enhance/5-4-security-clone-encrypt.md)
+- [CLONE加密备份](../5-enhance/5-4-security-clone-encrypt.md)
 
 
 **问题反馈**
@@ -239,4 +239,4 @@ greatsql> SELECT STAGE, STATE, CAST(BEGIN_TIME AS TIME) AS "START TIME",
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

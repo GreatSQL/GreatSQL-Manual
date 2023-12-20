@@ -132,14 +132,14 @@ greatsql> LOAD /*+ SET_VAR(gdb_parallel_load=ON) */ DATA INFILE '/tmp/outfile-t1
 greatsql> LOAD /*+ SET_VAR(gdb_parallel_load=ON) SET_VAR(gdb_parallel_load_chunk_size=65536) SET_VAR(gdb_parallel_load_workers=16) */ DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1;
 ```
 
-更多关于并行LOAD DATA的详细信息请参考文档：[并行LOAD DATA](/5-enhance/5-1-highperf-parallel-load.md)。
+更多关于并行LOAD DATA的详细信息请参考文档：[并行LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md)。
 
 
 **参考资料：**
 
 - [SELECT ... INTO OUTFILE](https://dev.mysql.com/doc/refman/8.0/en/select-into.html)
 - [LOAD DATA](https://dev.mysql.com/doc/refman/8.0/en/load-data.html)
-- [GreatSQL增强特性之：并行LOAD DATA](/5-enhance/5-1-highperf-parallel-load.md)
+- [GreatSQL增强特性之：并行LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md)
 
 
 **问题反馈**
@@ -152,4 +152,4 @@ greatsql> LOAD /*+ SET_VAR(gdb_parallel_load=ON) SET_VAR(gdb_parallel_load_chunk
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

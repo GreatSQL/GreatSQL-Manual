@@ -186,4 +186,4 @@ Util.importTable: [Worker002] greatsql@t1@@0.tsv.zst: MySQL Error 1146 (42S02): 
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

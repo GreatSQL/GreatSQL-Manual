@@ -117,7 +117,7 @@ $ sed -n "100,200p" /backup/GreatSQL/greatsql-20230830.sql | mysql -f -S/data/Gr
 
 更多关于 `mysqldump` 更详细说明详见文档：[mysqldump](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html)。
 
-从GreatSQL 8.0.32-24版本开始，`mysqldump`支持加密备份，详情见文档：[mysqldump备份加密](/5-enhance/5-4-security-mysqldump-encrypt.md)。
+从GreatSQL 8.0.32-24版本开始，`mysqldump`支持加密备份，详情见文档：[mysqldump备份加密](../5-enhance/5-4-security-mysqldump-encrypt.md)。
 
 **参考资料：**
 
@@ -135,4 +135,4 @@ $ sed -n "100,200p" /backup/GreatSQL/greatsql-20230830.sql | mysql -f -S/data/Gr
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)
