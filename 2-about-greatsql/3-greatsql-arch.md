@@ -250,4 +250,4 @@ GreatSQL数据库架构通常有以下几种方案：
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

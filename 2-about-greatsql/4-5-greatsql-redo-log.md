@@ -48,7 +48,7 @@ InnoDB存储引擎是以**页**为单位来管理存储空间的。在真正访�
 
 InnoDB引擎的事务采用了`WAL技术(Write-Ahead Logging)`，这种技术的思想就是先写日志，再写磁盘，只有日志写入成功，才算事务提交成功，这里的日志就是Redo Log。当发生宕机且数据未刷到磁盘的时候，可以通过Redo Log来恢复，保证ACID中的D，这就是Redo Log的作用。
 
-![图片](./4-5-greatsql-redo-Log-01.png)
+![Redo log作用](./4-5-greatsql-redo-Log-01.png)
 
 ## Redo日志记录了什么
 
@@ -82,7 +82,7 @@ Redo Log可以简单分为以下两个部分：
   保存在内存中，是易失的。
   在服务器启动时就向操作系统申请了一大片称之为`Redo Log Buffer`的连续内存空间，翻译成中文就是**Redo日志缓冲区**。这片内存空间被划分成若干个连续的`Redo Log Block`。一个Redo Log Block占用**512字节**大小。
 
-![图片](./4-5-greatsql-redo-Log-02.png)
+![Redo log buffer](./4-5-greatsql-redo-Log-02.png)
 
 - 参数设置`innodb_log_buffer_size：`
 
@@ -101,13 +101,13 @@ greatsql> SHOW VARIABLES LIKE '%innodb_log_buffer_size%';
 
 REDO日志文件如图所示，其中的`ib_logfile0`和`ib_logfile1`即为Redo Log日志。
 
-![图片](./4-5-greatsql-redo-Log-03.png)
+![事务Redo log流程](./4-5-greatsql-redo-Log-03.png)
 
 ## Redo的整体流程
 
 以一个更新事务为例，Redo Log 流转过程，如下图所示：
 
-![图片](./4-5-greatsql-redo-Log-04.png)
+![Redo log刷盘流程](./4-5-greatsql-redo-Log-04.png)
 
 流程说明：
 
@@ -120,7 +120,7 @@ REDO日志文件如图所示，其中的`ib_logfile0`和`ib_logfile1`即为Redo 
 
 Redo Log的写入并不是直接写入磁盘的，InnoDB引擎会在写Redo Log的时候先写`Redo Log Buffer`，之后以**一定的频率**刷入到真正的`Redo Log File`中。这里的一定频率怎么规定的呢？这就是我们要说的刷盘策略。
 
-![图片](./4-5-greatsql-redo-Log-05.png)
+![tr_commit不同设置区别](./4-5-greatsql-redo-Log-05.png)
 
 > 问题：什么时候刷盘呢？
 
@@ -143,7 +143,7 @@ Redo Log的写入并不是直接写入磁盘的，InnoDB引擎会在写Redo Log�
 
 下图表示了不同配置值的持久化程度：
 
-![图片](./4-5-greatsql-redo-Log-06.png)
+![Redo log buffer刷盘](./4-5-greatsql-redo-Log-06.png)
 显然对性能的影响是随着持久化程度的增加而增加的。通常我们建议在日常场景将该值设置为 1 ，但在系统高峰期临时修改成 2 以应对大负载。
 
 ```sql
@@ -159,11 +159,11 @@ greatsql> SHOW VARIABLES LIKE 'innodb_flush_log_at_trx_commit';
 
 另外，InnoDB存储引擎有一个后台线程，**每隔1秒**，就会把 Redo Log Buffer 中的内容写到文件系统缓存( page cache )，然后调用刷盘操作。
 
-![图片](./4-5-greatsql-redo-Log-07.png)
+![Redo log buffer刷盘](./4-5-greatsql-redo-Log-07.png)
 
 也就是说，一个没有提交事务的Redo Log记录，也可能会刷盘。因为在事务执行过程Redo Log记录是会写入Redo Log Buffer 中，这些Redo Log记录会被**后台线程刷盘**。
 
-![图片](./4-5-greatsql-redo-Log-08.png)
+![Redo log buffer刷盘](./4-5-greatsql-redo-Log-08.png)
 
 除了后台线程每秒`1次`的轮询操作，还有一种情况，当`Redo Log Buffer`占用的空间即将达到`innodb_log_buffer_size`(这个参数默认是16M)的一半的时候，后台线程会主动刷盘。
 
@@ -175,13 +175,13 @@ GreatSQL把对底层页面中的一次原子访问的过程称之为一个`Mini-
 
 一个事务可以包含若干条语句，每一条语句其实是由若干个 mtr 组成，每一个 mtr 又可以包含若干条Redo日志，画个图表示它们的关系就是这样：
 
-![图片](./4-5-greatsql-redo-Log-09.png)
+![InnoDB mtr](./4-5-greatsql-redo-Log-09.png)
 
 ### 2.Redo 日志写入Log Buffer
 
 向`log buffer`中写入Redo日志的过程是顺序的，也就是先往前边的block中写，当该block的空闲空间用完之后再往下一个block中写。当我们想往`log buffer`中写入Redo日志时，第一个遇到的问题就是应该写在哪个block的哪个偏移量处，所以InnoDB的设计者特意提供了一个称之为`buf_free`的全局变量，该变量指明后续写入的Redo日志应该写入到`log buffer`中的哪个位置，如图所示:
 
-![图片](./4-5-greatsql-redo-Log-10.png)
+![Redo log buffer](./4-5-greatsql-redo-Log-10.png)
 
 一个 mtr 执行过程中可能产生若干条Redo日志，**这些Redo日志是一个不可分割的组**，所以其实并不是每生成一条Redo日志，就将其插入到log buffer中，而是每个 mtr 运行过程中产生的日志先暂时存到一个地方，当该 mtr 结束的时候，将过程中产生的一组Redo日志再全部复制到log buffer中。我们现在假设有两个名为T1、T2的事务，每个事务都包含2个 mtr ，我们给这几个 mtr 命名一下:
 
@@ -190,11 +190,11 @@ GreatSQL把对底层页面中的一次原子访问的过程称之为一个`Mini-
 
 每个 mtr 都会产生一组Redo日志，用示意图来描述一下这些 mtr 产生的日志情况：
 
-![图片](./4-5-greatsql-redo-Log-11.png)
+![InnoDB mtr](./4-5-greatsql-redo-Log-11.png)
 
 不同的事务可能是 `并发` 执行的，所以 `T1` 、 `T2` 之间的 `mtr` 可能是 `交替执行` 的。每当一个mtr执行完成时，伴随该mtr生成的一组Redo日志就需要被复制到log buffer中，也就是说不同事务的mtr可能是交替写入log buffer的，我们画个示意图(为了美观，我们把一个mtr中产生的所有的Redo日志当作一个整体来画):
 
-![图片](./4-5-greatsql-redo-Log-12.png)
+![Redo log buffer结构示意图](./4-5-greatsql-redo-Log-12.png)
 
 有的mtr产生的Redo日志量非常大，比如mtr_t1_2产生的Redo日志占用空间比较大，占用了3个block来存储。
 
@@ -205,11 +205,11 @@ GreatSQL把对底层页面中的一次原子访问的过程称之为一个`Mini-
 - 为什么一个block设计成512字节?
   这个和磁盘的扇区有关，机械磁盘默认的扇区就是512字节，如果你要写入的数据大于512字节，那么要写入的扇区肯定不止一个，这时就要涉及到盘片的转动，找到下一个扇区，假设现在需要写入两个扇区A和B，如果扇区A写入成功，而扇区B写入失败，那么就会出现**非原子性**的写入，而如果每次只写入和扇区的大小一样的512字节，那么每次的写入都是原子性的。
 
-![图片](./4-5-greatsql-redo-Log-13.png)
+![Redo log block](./4-5-greatsql-redo-Log-13.png)
 
 真正的Redo日志都是存储到占用`496`字节大小的`log block body`中，图中的`log block header`和`logblock trailer`存储的是一些管理信息。我们来看看这些所谓的管理信息都有什么。
 
-![图片](./4-5-greatsql-redo-Log-14.png)
+![Redo log block header](./4-5-greatsql-redo-Log-14.png)
 
 - `log block header`的属分别如下：
 
@@ -267,7 +267,7 @@ innodb_log_file_size=200M
 
 在将Redo日志写入日志文件组时，是从`ib_logfile0`开始写，如果`ib_logfile0`写满了，就接着`ib_logfile1`写。同理,`ib_logfile1`.写满了就去写`ib_logfile2`，依此类推。如果写到最后一个文件该咋办?那就重新转到`ib_logfile0`继续写，所以整个过程如下图所示:
 
-![图片](./4-5-greatsql-redo-Log-15.png)
+![Redo log file group](./4-5-greatsql-redo-Log-15.png)
 
 总共的Redo日志文件大小其实就是：`innodb_log_file_size × innodb_log_files_in_group` 。
 
@@ -282,11 +282,11 @@ innodb_log_file_size=200M
 
 每次刷盘Redo Log记录到日志文件组中，write pos位置就会后移更新。每次GreatSQL加载日志文件组恢复数据时，会清空加载过的Redo Log记录，并把 checkpoint后移更新。write pos和checkpoint之间的还空着的部分可以用来写入新的Redo Log记录。
 
-![图片](./4-5-greatsql-redo-Log-16.png)
+![Redo checkpoint](./4-5-greatsql-redo-Log-16.png)
 
 如果 write pos 追上 checkpoint ，表示 **日志文件组** 满了，这时候不能再写入新的 Redo Log 记录，GreatSQL 得停下来，清空一些记录，把 checkpoint 推进一下。
 
-![图片](./4-5-greatsql-redo-Log-17.png)
+![Redo checkpoint](./4-5-greatsql-redo-Log-17.png)
 
 ## 结尾
 
@@ -303,4 +303,4 @@ innodb_log_file_size=200M
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

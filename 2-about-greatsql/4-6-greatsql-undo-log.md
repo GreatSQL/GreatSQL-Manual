@@ -93,7 +93,7 @@ greatsql> SHOW VARIABLES LIKE 'innodb_undo_logs';
 
 - **Undo Log日志的存储机制**
 
-![图片](./4-6-greatsql-undo-log-01.png)
+![Undo Log日志的存储机制](./4-6-greatsql-undo-log-01.png)
 
 如上图，可以看到，Undo Log日志里面不仅存放着数据更新前的记录，还记录着`RowID`、`事务ID`、`回滚指针`。其中事务ID每次递增，回滚指针第一次如果是INSERT语句的话，回滚指针为NULL，第二次UPDATE之后的Undo Log的回滚指针就会指向刚刚那一条Undo Log日志，以此类推，就会形成一条Undo Log的回滚链，方便找到该条记录的历史版本。
 
@@ -101,7 +101,7 @@ greatsql> SHOW VARIABLES LIKE 'innodb_undo_logs';
 
 在更新数据之前，GreatSQL会提前生成Undo Log日志，当事务提交的时候，并不会立即删除Undo Log，因为后面可能需要进行回滚操作，要执行回滚（ROLLBACK）操作时，从缓存中读取数据。Undo Log日志的删除是通过通过后台purge线程进行回收处理的。
 
-![图片](./4-6-greatsql-undo-log-02.png)
+![Undo Log的工作原理](./4-6-greatsql-undo-log-02.png)
 
 - 1、事务A执行UPDATE操作，此时事务还没提交，会将数据进行备份到对应的Undo Buffer，然后由Undo Buffer持久化到磁盘中的Undo Log文件中，此时Undo Log保存了未提交之前的操作日志，接着将操作的数据，也就是test表的数据持久保存到InnoDB的数据文件IBD。
 - 2、此时事务B进行查询操作，直接从Undo Buffer缓存中进行读取，这时事务A还没提交事务，如果要回滚（ROLLBACK）事务，是不读磁盘的，先直接从Undo Buffer缓存读取。
@@ -142,7 +142,7 @@ greatsql> SHOW VARIABLES LIKE 'innodb_undo_logs';
 
 - 若在9之后系统宕机，内存映射中变更的数据还来不及刷回磁盘，那么系统恢复之后，可以根据Redo Log把数据刷回磁盘。
 
-流程图：![图片](./4-6-greatsql-undo-log-03.png)
+流程图：![Undo log刷盘流程](./4-6-greatsql-undo-log-03.png)
 
 ## Undo Log的配置参数
 
@@ -165,4 +165,4 @@ greatsql> SHOW VARIABLES LIKE 'innodb_undo_logs';
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)
