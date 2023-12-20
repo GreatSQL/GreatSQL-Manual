@@ -13,39 +13,39 @@
 - VARCHAR2
 
 #### 1.1.2 SQL语法
-- [DATETIME 运算](/5-enhance/sql-compat/5-3-easyuse-ora-syntax-datetime-arithmetic.md)
-- [ROWNUM](/5-enhance/sql-compat/5-3-easyuse-ora-syntax-rownum.md)
-- [子查询无别名](/5-enhance/sql-compat/5-3-easyuse-ora-syntax-subquery-without-alias.md)
-- [EXPLAIN PLAN FOR](/5-enhance/sql-compat/5-3-easyuse-ora-syntax-explain-plan-for.md)
+- [DATETIME 运算](../../5-enhance/sql-compat/5-3-easyuse-ora-syntax-datetime-arithmetic.md)
+- [ROWNUM](../../5-enhance/sql-compat/5-3-easyuse-ora-syntax-rownum.md)
+- [子查询无别名](../../5-enhance/sql-compat/5-3-easyuse-ora-syntax-subquery-without-alias.md)
+- [EXPLAIN PLAN FOR](../../5-enhance/sql-compat/5-3-easyuse-ora-syntax-explain-plan-for.md)
 
 #### 1.1.3 函数
-- [ADD_MONTHS()](/5-enhance/sql-compat/5-3-easyuse-ora-func-addmonths.md)
-- [CAST()](/5-enhance/sql-compat/5-3-easyuse-ora-func-cast.md)
-- [DECODE()](/5-enhance/sql-compat/5-3-easyuse-ora-func-decode.md)
-- [INSTR()](/5-enhance/sql-compat/5-3-easyuse-ora-func-instr.md)
-- [LENGTH()](/5-enhance/sql-compat/5-3-easyuse-ora-func-length.md)
-- [LENGTHB()](/5-enhance/sql-compat/5-3-easyuse-ora-func-lengthb.md)
-- [MONTHS_BETWEEN()](/5-enhance/sql-compat/5-3-easyuse-ora-func-monthsbetween.md)
-- [NVL()](/5-enhance/sql-compat/5-3-easyuse-ora-func-nvl.md)
-- [SUBSTRB()](/5-enhance/sql-compat/5-3-easyuse-ora-func-substrb.md)
-- [SYSDATE()](/5-enhance/sql-compat/5-3-easyuse-ora-func-sysdate.md)
-- [TO_CHAR()](/5-enhance/sql-compat/5-3-easyuse-ora-func-tochar.md)
-- [TO_DATE()](/5-enhance/sql-compat/5-3-easyuse-ora-func-todate.md)
-- [TO_NUMBER()](/5-enhance/sql-compat/5-3-easyuse-ora-func-tonumber.md)
-- [TO_TIMESTAMP()](/5-enhance/sql-compat/5-3-easyuse-ora-func-totimestamp.md)
-- [TRANSLATE()](/5-enhance/sql-compat/5-3-easyuse-ora-func-translate.md)
-- [TRUNC()](/5-enhance/sql-compat/5-3-easyuse-ora-func-trunc.md)
-- [SYS_GUID()](/5-enhance/sql-compat/5-3-easyuse-ora-func-sysguid.md)
+- [ADD_MONTHS()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-addmonths.md)
+- [CAST()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-cast.md)
+- [DECODE()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-decode.md)
+- [INSTR()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-instr.md)
+- [LENGTH()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-length.md)
+- [LENGTHB()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-lengthb.md)
+- [MONTHS_BETWEEN()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-monthsbetween.md)
+- [NVL()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-nvl.md)
+- [SUBSTRB()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-substrb.md)
+- [SYSDATE()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-sysdate.md)
+- [TO_CHAR()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-tochar.md)
+- [TO_DATE()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-todate.md)
+- [TO_NUMBER()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-tonumber.md)
+- [TO_TIMESTAMP()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-totimestamp.md)
+- [TRANSLATE()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-translate.md)
+- [TRUNC()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-trunc.md)
+- [SYS_GUID()](../../5-enhance/sql-compat/5-3-easyuse-ora-func-sysguid.md)
 
 
-更多信息详见文档：[GreatSQL中的SQL兼容性](/5-enhance/5-3-easyuse.md)。
+更多信息详见文档：[GreatSQL中的SQL兼容性](../../5-enhance/5-3-easyuse.md)。
 
 ### 1.2 MGR
 
 #### 1.2.1 MGR内置动态VIP
 在GreatSQL 8.0.32-24中，新增MGR读写节点支持绑定VIP（虚拟IP）特性。利用该特性，使得MGR在单主模式下运行时，能自动识别读写节点并绑定VIP，支持应用端即可通过VIP对数据库发起读写请求，当读写节点角色发生变化时，VIP也会随之自动漂移并重新绑定，应用端无需修改VIP配置。
 
-更多信息详见文档：[GreatSQL中MGR支持内置vip特性](/5-enhance/5-2-ha-mgr-vip.md)。
+更多信息详见文档：[GreatSQL中MGR支持内置vip特性](../../5-enhance/5-2-ha-mgr-vip.md)。
 
 #### 1.2.2 新增applier queue批处理机制
 新增相应选项 `group_replication_applier_batch_size_threshold`。当MGR中的并发事务太大，或者个别Secondary节点（磁盘I/O）性能较差时，可能会导致applier queue堆积越来越大，一直无法及时跟上Primary节点。
@@ -99,7 +99,7 @@ MySQL原生的load data采用单线程读取本地文件（或收取client传来
 
 为解决上述两个问题，GreatSQL支持了load data并行导入。开启并行导入后，会自动切分文件成小块（可配置），然后启动多个worker线程（数量可配置）导入文件块。并行导入与engine无关，理论上支持任何存储引擎。
 
-更多信息详见文档：[GreatSQL中的并行load data特性](/5-enhance/5-1-highperf-parallel-load.md)。
+更多信息详见文档：[GreatSQL中的并行load data特性](../../5-enhance/5-1-highperf-parallel-load.md)。
 
 #### 1.3.2 优化器优化
 - 优化了执行计划，使得benchmark tpcc测试吞吐量更高，也更加稳定。
@@ -108,14 +108,14 @@ MySQL原生的load data采用单线程读取本地文件（或收取client传来
 #### 1.4.1 mysqldump备份加密
 GreatSQL 8.0.32-24支持在mysqldump进行逻辑备份时产生加密备份文件，并且也支持对加密后的备份文件解密导入。
 
-更多信息详见文档：[GreatSQL中的逻辑备份加密特性](/5-enhance/5-4-security-mysqldump-encrypt.md)。
+更多信息详见文档：[GreatSQL中的逻辑备份加密特性](../../5-enhance/5-4-security-mysqldump-encrypt.md)。
 
 #### 1.4.2 审计日志入表
 GreatSQL支持将审计日志写入数据表中，并且设置审计日志入表规则，以便达到不同的审计需求。
 
 审计内容将包括操作账户、客户端ip、被操作的数据库对象、操作的完整语句、操作结果。
 
-更多信息详见文档：[GreatSQL中的审计日志入表特性](/5-enhance/5-4-security-audit-log-in-table.md)。
+更多信息详见文档：[GreatSQL中的审计日志入表特性](../../5-enhance/5-4-security-audit-log-in-table.md)。
 
 #### 1.4.3 表空间国密加密
 
@@ -126,12 +126,12 @@ GreatSQL支持将审计日志写入数据表中，并且设置审计日志入表
 CREATE TABLE test.t1(c1 INT, c2 INT) ENGINE = InnoDB ENCRYPTION = 'Y';
 ```
 
-更多信息详见文档：[GreatSQL中的表空间加密国密支持](/5-enhance/5-4-security-innodb-tablespace-encrypt.md)。
+更多信息详见文档：[GreatSQL中的表空间加密国密支持](../../5-enhance/5-4-security-innodb-tablespace-encrypt.md)。
 
 #### 1.4.4 CLONE备份加密
 GreatSQL支持在利用CLONE备份时同步进行加密操作，提升备份文件安全性，避免备份文件被盗或泄漏时造成损失。
 
-更多信息详见文档：[CLONE备份加密](/5-enhance/5-4-security-clone-encrypt.md)。
+更多信息详见文档：[CLONE备份加密](../../5-enhance/5-4-security-clone-encrypt.md)。
 
 ## 2.稳定性提升
 ## 3.其他调整
@@ -182,13 +182,14 @@ GreatSQL支持在利用CLONE备份时同步进行加密操作，提升备份文�
 
 ## 6. GreatSQL Release Notes
 ### GreatSQL 8.0
-- [Changes in MySQL 8.0.32-24 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
-- [Changes in MySQL 8.0.25-17 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [Changes in MySQL 8.0.25-16 (2022-5-16)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [Changes in MySQL 8.0.25-15 (2021-8-26)](/1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.md)
+- [Changes in MySQL 8.0.32-25 (2023-12-29)](changes-greatsql-8-0-32-25-20231229.md)
+- [Changes in MySQL 8.0.32-24 (2023-6-5)](changes-greatsql-8-0-32-24-20230605.md)
+- [Changes in MySQL 8.0.25-17 (2023-3-13)](changes-greatsql-8-0-25-17-20230313.md)
+- [Changes in MySQL 8.0.25-16 (2022-5-16)](changes-greatsql-8-0-25-16-20220516.md)
+- [Changes in MySQL 8.0.25-15 (2021-8-26)](changes-greatsql-8-0-25-20210820.md)
 
 ### GreatSQL 5.7
-- [Changes in MySQL 5.7.36-39 (2022-4-7)](/1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.md)
+- [Changes in MySQL 5.7.36-39 (2022-4-7)](changes-greatsql-5-7-36-20220407.md)
 
 
 
@@ -202,4 +203,4 @@ GreatSQL支持在利用CLONE备份时同步进行加密操作，提升备份文�
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)
