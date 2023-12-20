@@ -373,7 +373,7 @@ Query OK, 150000000 rows affected (3 min 14.04 sec)
 
 在上述两种场景下，仍旧采用原生默认的执行方式即可。
 
-
+**延伸阅读**：[innodb_parallel_read_threads](https://dev.mysql.com/doc/refman/8.0/en/innodb-parameters.html#sysvar_innodb_parallel_read_threads)。
 
 
 **问题反馈**
