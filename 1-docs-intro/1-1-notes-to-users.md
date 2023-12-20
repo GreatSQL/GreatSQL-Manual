@@ -23,4 +23,4 @@ GreatSQL版本号采用点分位命名规则（X.Y.Z-R）模式，其中
 
 扫码关注微信公众号
 
-![greatsql-wx](/greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)
