@@ -51,8 +51,6 @@ greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/20230515';
 greatsql> CLONE INSTANCE FROM bkuser@172.17.140.10:3306 IDENTIFIED BY 'bkuser' DATA DIRECTORY = '/data/backup/20230515';
 ```
 
-**特别提醒**：执行CLONE加密备份时，如果是将远程实例数据备份并覆盖本地实例的模式，那么接收实例中 `innodb_flush_method` 选项不要设置为 `O_DIRECT` 模式。因为在执行CLONE加密备份时，采用512字节加密（这样可以同时处理redo和ibd文件）一次并落盘，这时如果 `innodb_flush_method = O_DIRECT` 会极大增加刷盘的次数，导致备份耗时特别久。这时可以采用默认值即可。
-
 查看加密备份文件：
 ```shell
 # 进入数据备份目录
