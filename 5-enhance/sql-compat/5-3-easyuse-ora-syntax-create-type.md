@@ -201,7 +201,7 @@ greatsql> SELECT udt1_varray(udt1(1, 'c1_row1'));
 ```sql
 greatsql> CREATE OR REPLACE TYPE my_int IS VARRAY(100) OF INT;
 
-greatsql> select my_int('1', 0, 1);
+greatsql> SELECT my_int('1', 0, 1);
 +-------------------+
 | my_int('1', 0, 1) |
 +-------------------+
