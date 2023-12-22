@@ -23,7 +23,7 @@ GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引
 
 - 支持异步删除InnoDB大表，删除10G以上大表时对系统负载几乎没影响，有效提高InnoDB引擎运行时性能的稳定性。更详细内容参考：[异步删除InnoDB大表](../../5-enhance/5-1-highperf-async-purge-big-table.md)。
 
-- 支持NUMA调度优化，通过将线程分类以及绑定CPU核心等方式，减少跨NUMA的访问，提升GreatSQL运行时性能的稳定性。更详细内容参考：[NUMA调度优化](5-1-highperf-numa-affinity.md)。
+- 支持NUMA调度优化，通过将线程分类以及绑定CPU核心等方式，减少跨NUMA的访问，提升GreatSQL运行时性能的稳定性。更详细内容参考：[NUMA调度优化](../../5-enhance/5-1-highperf-numa-affinity.md)。
 
 - 提升InnoDB PQ能力，支持TPC-H Q21查询优化能力。
 
