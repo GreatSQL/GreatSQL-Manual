@@ -5,15 +5,13 @@
 
 在删除InnoDB大表（通常是指超过10G的表）时，由于InnoDB引擎的I/O操作会受到OS层删除文件的影响，进而导致InnoDB的稳定性出现波动。
 
-为了避免此问题，解决思路是启动一个后台线程来异步缓慢地清理数据文件。
+为了避免此问题，解决思路是启动一个后台线程来异步缓慢地删除数据文件。
 
-此外，在删除InnoDB表时，会将对应的数据文件先重命名为临时文件，并使用DDL LOG保证crash safe，删除表空间操作立即返回结果，清除线程将异步、缓慢地清理临时文件。
+此外，在删除InnoDB表时，会将对应的数据文件先重命名为临时文件，并使用DDL LOG保证crash safe，删除表空间操作立即返回结果，清除线程将异步、缓慢地删除临时文件。
+
+通过修改系统选项的方式开启异步删除大表的功能，可以通过查询系统表展示临时文件清理进度。
 
 目前只有InnoDB引擎支持异步删除大表特性。
-
-通过修改系统变量的方式开启异步删除大表的功能。
-
-通过查询系统表展示临时文件清理进度。
 
 ## 新增系统选项
 
@@ -28,7 +26,7 @@
 | Type                | bool                             |
 | Default value       | OFF                              |
 
-是否启用异步清除策略，可在session、global级别进行设置。
+是否启用异步删除策略，可在session、global级别进行设置。
 
 - `innodb_data_file_async_purge_all_at_shutdown`
 
@@ -73,21 +71,6 @@
 
 清理时间间隔，单位：ms，为0表示两次清理之间没有间隔。
 
-- `innodb_data_force_async_purge_file_size`
-
-| Property            | Value                                            |
-| ------------------- | ------------------------------------------------ |
-| Command-Line Format | innodb_data_force_async_purge_file_size=N        |
-| System Variable     | innodb_data_force_async_purge_file_size          |
-| Scope               | Global                                           |
-| Dynamic             | Yes                                              |
-| Type                | unsigned long long                               |
-| Default value       | 10737418240                                      |
-| Min value           | 1                                                |
-| Max value           | 18446744073709551615                             |
-
-文件大小超过此值，强制启用异步清除策略，单位：byte。
-
 - `innodb_data_file_async_purge_max_size`
 
 | Property            | Value                                            |
@@ -101,17 +84,35 @@
 | Min value           | 1                                                |
 | Max value           | 18446744073709551615                             |
 
-每次清理单个文件大小的最大值，单位：byte。
+异步清除线程会循环清理大文件，每次清理的大小由 `innodb_data_file_async_purge_max_size` 指定，单位：byte，默认值256MB。
+
+如果物理I/O能力较低，可以适当调低该选项值，降低清理期间对系统负载的影响。
+
+- `innodb_data_force_async_purge_file_size`
+
+| Property            | Value                                            |
+| ------------------- | ------------------------------------------------ |
+| Command-Line Format | innodb_data_force_async_purge_file_size=N        |
+| System Variable     | innodb_data_force_async_purge_file_size          |
+| Scope               | Global                                           |
+| Dynamic             | Yes                                              |
+| Type                | unsigned long long                               |
+| Default value       | 10737418240                                      |
+| Min value           | 1                                                |
+| Max value           | 18446744073709551615                             |
+
+当要被删除的InnoDB表空间文件大小超过此值时，即便此时 `innodb_data_file_async_purge = OFF`，也会强制启用异步删除策略。单位：byte，默认值10GB。也就是说，当要被删除的表空间文件大于 `innodb_data_force_async_purge_file_size` 选项值时，总是采用异步删除策略。
+
 
 ## 开启异步删除大表特性
 
-开启异步清理功能，需要同时满足以下要求，否则直接删除文件：
+开启异步删除功能，需要同时满足以下要求，否则直接删除文件：
 1. SESSION级别 `innodb_data_file_async_purge=ON` 或者文件大小达到 `innodb_data_force_async_purge_file_size`；
-2. 要清理的表为独立表空间；
-3. 表为InnoDB 引擎；
-4. 不是TEMPORARY table。
+2. 要删除的表为独立表空间；
+3. 表为InnoDB引擎；
+4. 不是TEMPORARY TABLE。
 
-满足以上要求，支持异步清理的操作有：`drop table`、`drop partition`、`truncate table`、`truncate partition`、`drop database`。
+满足以上要求，支持异步删除的操作有：`DROP TABLE`、`DROP PARTITION`、`TRUNCATE TABLE`、`TRUNCATE PARTITION`、`DROP DATABASE`。
 
 ## 临时文件存放目录
 
@@ -119,9 +120,9 @@
 
 临时文件命名格式：**#FP_进程启动时间戳_程序启动后递增的序列号**，例如：`#FP_1683256209_0`。
 
-## 查询异步清理进度
+## 查询异步删除进度
 
-新增系统表 `information_schema.innodb_async_purge_files`，展示临时文件清理进度。
+新增系统表 `information_schema.INNODB_ASYNC_PURGE_FILES`，展示临时文件清理进度。
 
 ```
 # 表结构
