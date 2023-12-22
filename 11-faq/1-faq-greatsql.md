@@ -37,7 +37,7 @@ GreatSQL社区官网：[https://greatsql.cn](https://greatsql.cn)
 
 关于GreatSQL的优势可阅读下面几篇文章：
 
-- [Changes in GreatSQL 8.0.32-25 (2023-12-29)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231229.md)
+- [Changes in GreatSQL 8.0.32-25 (2023-12-28)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231228.md)
 - [Changes in GreatSQL 8.0.32-24 (2023-6-5)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
 - [Changes in GreatSQL 8.0.25-17 (2023-3-13)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-17-20230313.md)
 - [Changes in GreatSQL 8.0.25-16 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
@@ -100,7 +100,7 @@ $ docker pull docker.io/greatsql/greatsql:8.0.25-aarch64
 
 1. GreatSQL历史版本说明
 
-- [Changes in GreatSQL 8.0.32-25 (2023-12-29)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231229.md)
+- [Changes in GreatSQL 8.0.32-25 (2023-12-28)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231228.md)
 - [Changes in GreatSQL 8.0.32-24 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
 - [Changes in GreatSQL 8.0.25-17 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
 - [Changes in GreatSQL 8.0.25-16 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
@@ -147,7 +147,7 @@ GreatSQL不计划每个小版本都跟随，暂定奇数版本跟随方式，即
 目前已有的版本：<br/>
 
 **GreatSQL 8.0**
-- [Changes in GreatSQL 8.0.32-25 (2023-12-29)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231229.md)
+- [Changes in GreatSQL 8.0.32-25 (2023-12-29)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231228.md)
 - [Changes in GreatSQL 8.0.32-24 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
 - [Changes in GreatSQL 8.0.25-17 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
 - [Changes in GreatSQL 8.0.25-16 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)

@@ -51,7 +51,7 @@
 
 ## 6. GreatSQL Release Notes
 ### GreatSQL 8.0
-- [Changes in GreatSQL 8.0.32-25 (2023-12-29)](changes-greatsql-8-0-32-25-20231229.md)
+- [Changes in GreatSQL 8.0.32-25 (2023-12-28)](changes-greatsql-8-0-32-25-20231228.md)
 - [Changes in GreatSQL 8.0.32-24 (2023-6-5)](changes-greatsql-8-0-32-24-20230605.md)
 - [Changes in GreatSQL 8.0.25-17 (2023-3-13)](changes-greatsql-8-0-25-17-20230313.md)
 - [Changes in GreatSQL 8.0.25-16 (2022-5-16)](changes-greatsql-8-0-25-16-20220516.md)
