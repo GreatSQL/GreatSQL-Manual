@@ -5,7 +5,7 @@
 ## 1. 语法
 
 ```sql
-SET GLBOAL sql_mode = 'ORACLE';
+SET GLOBAL sql_mode = 'ORACLE';
 SET SESSION sql_mode = 'ORACLE';
 ```
 
