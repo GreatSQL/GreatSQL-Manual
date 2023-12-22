@@ -43,7 +43,7 @@ BEGIN
 SELECT v2;
 END; //
 
-CALL while_loop_sp() //
+greatsql> CALL while_loop_sp() //
 +-----------------------------------+
 | v2                                |
 +-----------------------------------+

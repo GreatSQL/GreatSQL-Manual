@@ -106,6 +106,10 @@ rowtype_attribute: db_table_or_view %ROWTYPE
 
 ## 4. 示例
 
+修改 `sql_generate_invisible_primary_key` 选项设定，因为下面案例中创建的表没有显式主键，关闭该选项可以避免自动创建隐式主键 `my_row_id`，可能会对下面的案例造成影响。
+```sql
+greatsql> SET SESSION sql_generate_invisible_primary_key = 0;
+```
 
 - 1. 示例1：`TYPE IS RECORD/TYPE IS TABLE`
 

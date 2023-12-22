@@ -29,6 +29,11 @@ FORALL var IN expr1 .. expr2 INSERT INTO .. VALUES var(n)
 
 ## 4. 示例
 
+修改 `sql_generate_invisible_primary_key` 选项设定，因为下面案例中创建的表没有显式主键，关闭该选项可以避免自动创建隐式主键 `my_row_id`，可能会对下面的案例造成影响。
+```sql
+greatsql> SET SESSION sql_generate_invisible_primary_key = 0;
+```
+
 创建测试表并初始化数据
 ```sql
 greatsql> CREATE TABLE t1 (a INT NOT NULL, b VARCHAR(20) NOT NULL);
