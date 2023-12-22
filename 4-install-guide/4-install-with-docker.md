@@ -62,9 +62,9 @@ $ docker exec -it greatsql /bin/bash
 [root@greatsql /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 12
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
 ...
-Server version:        8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
+Server version:        8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
 ...
 
 Threads: 2  Questions: 18  Slow queries: 0  Opens: 119  Flush tables: 3  Open tables: 36  Queries per second avg: 0.243
@@ -184,13 +184,13 @@ $ docker exec -it mgr2 bash
 [root@mgr2 /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 30
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 (Tue Jul 12 14:28:00 2022)[root@GreatSQL][(none)]> \s
 --------------
-mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 3714067bc8c)
+mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 0ce93c62130)
 ...
 Uptime:            1 min 38 sec
 

@@ -122,7 +122,7 @@ greatsql> SELECT * FROM t3;
 ```
 
 ## 3. LOAD DATA并行导入
-从GreatSQL 8.0.32-24版本开始，`LOAD DATA`执行并行导入，只需在导入时加上HINT `SET_VAR(gdb_parallel_load=ON)` 即可，例如：
+从GreatSQL 8.0.32-25版本开始，`LOAD DATA`执行并行导入，只需在导入时加上HINT `SET_VAR(gdb_parallel_load=ON)` 即可，例如：
 ```
 greatsql> LOAD /*+ SET_VAR(gdb_parallel_load=ON) */ DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1;
 ```

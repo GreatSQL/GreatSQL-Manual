@@ -74,7 +74,7 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 (Wed Jul  6 14:42:39 2022)[root@GreatSQL][(none)]>\s
 --------------
 ...
-Server version:        8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
+Server version:        8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
 ...
 Threads: 2  Questions: 6  Slow queries: 0  Opens: 119  Flush tables: 3  Open tables: 36  Queries per second avg: 0.017
 ```

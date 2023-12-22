@@ -3,7 +3,7 @@
 
 
 
-GreatSQL 8.0.32-24支持在执行CLONE备份时加密备份文件，以及对加密后的备份文件解密。
+GreatSQL 8.0.32-25支持在执行CLONE备份时加密备份文件，以及对加密后的备份文件解密。
 
 ## 1. CLONE备份加密
 在执行clone前，先设置选项 `clone_encrypt_key_path` 开启加密功能。
@@ -78,7 +78,7 @@ $ ls -a
 $ cat /data/backup/clone_decrypt_files.sh
 # 调用 mysqldecrypt 工具解密整个目录
 #!/bin/sh
-export PATH=$PATH:/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin
+export PATH=$PATH:/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin
 cd /data/backup
 
 # 先做一次全量备份
@@ -100,7 +100,7 @@ mysqldecrypt --clone-decrypt \
 $ cat /data/backup/clone_decrypt_dir.sh
 # 调用 mysqldecrypt 工具对加密文件逐个解密
 #!/bin/sh
-export PATH=$PATH:/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin
+export PATH=$PATH:/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin
 cd /data/backup
 
 # 先做一次全量备份

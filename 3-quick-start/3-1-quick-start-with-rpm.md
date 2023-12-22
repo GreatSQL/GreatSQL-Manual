@@ -175,7 +175,7 @@ $ mysql -uroot -p
 Enter password:     #<--这个地方粘贴上面复制的随机密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
 
 Copyright (c) 2021-2023 GreatDB Software Co., Ltd
 Copyright (c) 2009-2021 Percona LLC and/or its affiliates
@@ -191,7 +191,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 greatsql> \s   #<--就可以正常执行其他命令了
 --------------
-mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 3714067bc8c)
+mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 0ce93c62130)
 
 Connection id:          11
 Current database:
@@ -200,7 +200,7 @@ SSL:                    Not in use
 Current pager:          stdout
 Using outfile:          ''
 Using delimiter:        ;
-Server version:         8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
+Server version:         8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
 Protocol version:       10
 Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4

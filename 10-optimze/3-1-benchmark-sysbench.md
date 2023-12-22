@@ -32,7 +32,7 @@ $ tar xf sysbench-1.0.20.tar.gz
 
 在开始编译前，已经将GreatSQL二进制包安装到 /usr/local 目录下，并且先对 `libperconaserverclient.so` 文件做个软链接：
 ```
-$ cd /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/lib/
+$ cd /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/
 $ ls -la
 drwxr-xr-x  6 root root      298 Aug 21 09:36 .
 drwxrwxr-x 14 root root     4096 Aug 21 09:37 ..
@@ -54,7 +54,7 @@ $ ln -s libperconaserverclient.so.21.2.32 libmysqlclient.so
 
 否则在下面的编译中可能会提示报错：
 ```
-configure: error: cannot find MySQL client libraries in /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/lib/
+configure: error: cannot find MySQL client libraries in /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/
 ```
 
 另外，编译安装sysbench需要提前安装 gcc/automake/libtool 等必要的工具。
@@ -65,8 +65,8 @@ $ cd sysbench-1.0.20
 $ ./autogen.sh
 $ ./configure --prefix=/usr/local/sysbench \
 --with-mysql \
---with-mysql-includes=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/include/ \
---with-mysql-libs=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/lib/ \
+--with-mysql-includes=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/include/ \
+--with-mysql-libs=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/ \
 && make && make install
 ```
 
@@ -81,7 +81,7 @@ $ ./configure --prefix=/usr/local/sysbench \
 **4. 运行sysbench，确认可用**
 在开始运行sysbench前，要先修改 `LD_LIBRARY_PATH` 环境变量，加上GreatSQL二进制文件包的lib目录：
 ```
-$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/lib/
+$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/
 ```
 
 要不然可能会报错，提示找不到客户端动态库文件：
@@ -94,7 +94,7 @@ $ cd /usr/local/sysbench/bin
 $ cp -rf ../share/sysbench/* .
 $ ldd ./sysbench  #<-- 确认可以找到所有动态库文件
 ...
-        libperconaserverclient.so.21 => /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/lib/libperconaserverclient.so.21 (0x00007f6bbcd9d000)
+        libperconaserverclient.so.21 => /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/libperconaserverclient.so.21 (0x00007f6bbcd9d000)
 ...
 $ ./sysbench --version
 sysbench 1.0.20 

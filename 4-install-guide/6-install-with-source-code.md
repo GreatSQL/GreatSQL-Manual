@@ -29,20 +29,20 @@ boost_1_77_0.tar.gz  Dockerfile  greatsql-automake.sh  greatsql-docker-build.sh 
 
 ### 1.2 下载GreatSQL源码
 
-[戳此下载](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-24)GreatSQL源码压缩包，解压缩后放在 `/opt` 目录下。
+[戳此下载](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)GreatSQL源码压缩包，解压缩后放在 `/opt` 目录下。
 
 ## 2. 构建Docker编译环境
 
 执行脚本 `greatsql_docker_build.sh` 开始构建Docker编译环境：
 ```
 $ cd /opt/greatsql_docker_build
-$ sh ./greatsql-docker-build.sh /opt/greatsql-8.0.32-24
+$ sh ./greatsql-docker-build.sh /opt/greatsql-8.0.32-25
 ```
 
-执行脚本后面带的参数 `/opt/greatsql-8.0.32-24` 是指GreatSQL源码所在目录。
+执行脚本后面带的参数 `/opt/greatsql-8.0.32-25` 是指GreatSQL源码所在目录。
 之后就会自动开始构建Docker环境了：
 ```
-$ sh ./greatsql-docker-build.sh /opt/greatsql-8.0.32-24
+$ sh ./greatsql-docker-build.sh /opt/greatsql-8.0.32-25
 Sending build context to Docker daemon  411.9MB
 Step 1/14 : FROM centos
  ---> 5d0da3dc9764
@@ -56,14 +56,14 @@ Successfully built 55a506d50850
 Successfully tagged greatsql_build_env:latest
 Docker build success!you can run it:
 
-docker run -d -v /opt/greatsql-8.0.32-24:/opt/greatsql-8.0.32-24 greatsql_build_env
+docker run -d -v /opt/greatsql-8.0.32-25:/opt/greatsql-8.0.32-25 greatsql_build_env
 ```
 
 ## 3. 进入Docker容器编译GreatSQL
 
 根据上面的提示，创建一个新容器用于编译GreatSQL：
 ```
-$ docker run -d -v /opt/greatsql-8.0.32-24:/opt/greatsql-8.0.32-24 greatsql_build_env
+$ docker run -d -v /opt/greatsql-8.0.32-25:/opt/greatsql-8.0.32-25 greatsql_build_env
 cc6500484dad5c905f00167e274f833bb722eff83269a51a2eb058013aaccfb4
 ```
 
@@ -76,7 +76,7 @@ $ docker exec -it cc6500484dad bash
 [root@cc6500484dad /]#
 [root@cc6500484dad /]# cd /opt
 [root@cc6500484dad opt]# ls
-boost_1_77_0.tar.gz  greatsql-8.0.32-24  greatsql-automake.sh  rh
+boost_1_77_0.tar.gz  greatsql-8.0.32-25  greatsql-automake.sh  rh
 [root@cc6500484dad opt]# tar zxf boost_1_77_0.tar.gz
 ```
 
@@ -87,7 +87,7 @@ MAJOR_VERSION=8
 MINOR_VERSION=0
 PATCH_VERSION=32
 RELEASE=24
-REVISION=3714067bc8c
+REVISION=0ce93c62130
 GLIBC=`ldd --version | head -n 1 | awk '{print $NF}'`
 ARCH=`uname -p`
 OS=`grep '^ID=' /etc/os-release | sed 's/.*"\{.*\)".*/\1/ig'`
@@ -111,15 +111,15 @@ CMake Deprecation Warning at cmake/cmake_policies.cmake:54 (CMAKE_POLICY):
   The OLD behavior for policy CMP0075 will be removed from a future version
   of CMake.
 ...
--- Up-to-date: /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/man/man8/mysqld.8
--- Up-to-date: /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/man/man1/mysqlrouter.1
--- Up-to-date: /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/man/man1/mysqlrouter_passwd.1
--- Up-to-date: /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/man/man1/mysqlrouter_plugin_info.1
+-- Up-to-date: /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/man/man8/mysqld.8
+-- Up-to-date: /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/man/man1/mysqlrouter.1
+-- Up-to-date: /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/man/man1/mysqlrouter_passwd.1
+-- Up-to-date: /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/man/man1/mysqlrouter_plugin_info.1
 ```
 
 编译过程中如果没问题，就会在 `/usr/local` 目录下生成GreatSQL二进制安装文件，例如：
 ```
-$ ls /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64
+$ ls /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64
 bin    docs     lib      LICENSE.router  man                     mysql-test  README.md-test  run    support-files  var
 cmake  include  LICENSE  LICENSE-test    mysqlrouter-log-rotate  README.md   README.router   share  usr
 ```

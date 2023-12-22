@@ -201,7 +201,7 @@ $ cat /var/log/mysqld.log|grep password
 $ /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal/bin/mysql -uroot
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
 
 Copyright (c) 2021-2023 GreatDB Software Co., Ltd
 Copyright (c) 2009-2021 Percona LLC and/or its affiliates
@@ -211,7 +211,7 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 greatsql> \s
 --------------
-mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 3714067bc8c)
+mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 0ce93c62130)
 
 Connection id:          8
 Current database:
@@ -220,7 +220,7 @@ SSL:                    Not in use
 Current pager:          stdout
 Using outfile:          ''
 Using delimiter:        ;
-Server version:         8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
+Server version:         8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
 Protocol version:       10
 Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4

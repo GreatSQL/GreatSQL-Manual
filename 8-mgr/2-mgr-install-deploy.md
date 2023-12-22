@@ -2,7 +2,7 @@
 
 ---
 
-本文介绍如何利用手动方式和MySQL Shell方式用`GreatSQL-8.0.32-24`构建一个三节点的MGR集群
+本文介绍如何利用手动方式和MySQL Shell方式用`GreatSQL-8.0.32-25`构建一个三节点的MGR集群
 
 [点击此处查看使用MySQL Shell方式构建三节点MGR集群](#二使用mysql-shell构建mgr)
 
@@ -22,11 +22,11 @@
 
 下载GreatSQL二进制文件包，下载地址：*https://gitee.com/GreatSQL/GreatSQL/releases* 。
 
-本文以 CentOS x86_64 环境为例，下载的二进制包名为： `GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz`，放在 `/usr/local` 目录下并解压缩：
+本文以 CentOS x86_64 环境为例，下载的二进制包名为： `GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz`，放在 `/usr/local` 目录下并解压缩：
 ```bash
 $ cd /usr/local
-$ tar xf GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64.tar.xz
-$ cd GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64
+$ tar xf GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
+$ cd GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64
 $ ls
 bin    COPYING-jemalloc  include  LICENSE         LICENSE-test  mysqlrouter-log-rotate  README.router  run    support-files
 cmake  docs              lib      LICENSE.router  man           README                  README-test    share  var
@@ -38,7 +38,7 @@ cmake  docs              lib      LICENSE.router  man           README          
 #/etc/my.cnf
 [mysqld]
 user = mysql
-basedir=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64
+basedir=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64
 datadir=/data/GreatSQL
 port=3306
 server_id=103306
@@ -52,13 +52,13 @@ enforce_gtid_consistency=ON
 先初始化GreatSQL：
 ```
 $ mkdir -p /data/GreatSQL && chown -R mysql:mysql /data/GreatSQL
-$ /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf --initialize-insecure
+$ /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf --initialize-insecure
 ```
 **注意**：不要在生产环境中使用 `--initialize-insecure` 选项进行初始化安装，因为这么做的话，超级管理员root账号默认是空密码，任何人都可以使用该账号登录数据库，存在安全风险，本文中只是为了演示方便才这么做。
 
 启动GreatSQL：
 ```
-$ /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf &
+$ /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf &
 ```
 如果不出意外，则能正常启动GreatSQL。用同样的方法也完成对另外两个节点的初始化。
 
@@ -134,7 +134,7 @@ greatsql> select * from performance_schema.replication_group_members;
 #my.cnf
 [mysqld]
 user = mysql
-basedir=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64
+basedir=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64
 datadir=/data/GreatSQL
 port=3306
 server_id=113306
@@ -226,7 +226,7 @@ greatsql> select * from t1;
 
 确保三个节点间的网络是可以互通的，并且没有针对3306和33061端口的防火墙拦截规则。
 
-首先我们先下载MySQL Shell for GreatSQL，下载地址在GreatSQL的gitee仓库，和我们的GreatSQL 8.0.32-24新版本放在一起：https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-24
+首先我们先下载MySQL Shell for GreatSQL，下载地址在GreatSQL的gitee仓库，和我们的GreatSQL 8.0.32-25新版本放在一起：https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25
 
 进入下载文件列表最下方就是我们的MySQL Shell for GreatSQL，大家按机器和架构下载对应版本~
 

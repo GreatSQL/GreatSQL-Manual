@@ -76,8 +76,8 @@ Group=mysql
 Type=notify
 TimeoutSec=0
 PermissionsStartOnly=true
-ExecStartPre=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
-ExecStart=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
+ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
+ExecStart=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
 EnvironmentFile=-/etc/sysconfig/mysql
 LimitNOFILE = 10000
 Restart=on-failure
@@ -94,19 +94,19 @@ AmbientCapabilities=CAP_NET_ADMIN CAP_NET_RAW
 2. 通过setcap命令为mysqld二进制文件添加 `CAP_NET_ADMIN` 和 `CAP_NET_RAW` 的capability。具体命令如下：
 ```shell
 #执行该命令需要sudo权限或root
-$ setcap CAP_NET_ADMIN,CAP_NET_RAW+ep /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld
+$ setcap CAP_NET_ADMIN,CAP_NET_RAW+ep /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
 ```
 
 然后将GreatSQL二进制包的`lib/private`子目录加载到`LD_LIBRARY_PATH`中：
 ```
 $ cat /etc/ld.so.conf.d/greatsql.conf
-/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/lib/private
+/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/private
 ```
 
 执行 `ldconfig && ldconfig -p | grep -i libpro` 确认配置无误：
 ```
 $ ldconfig && ldconfig -p | grep -i 'libprotobuf.so'
-	libprotobuf.so.3.19.4 (libc6,x86-64) => /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/lib/private/libprotobuf.so.3.19.4
+	libprotobuf.so.3.19.4 (libc6,x86-64) => /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/private/libprotobuf.so.3.19.4
 ```
 
 之后启动GreatSQL即可。

@@ -290,7 +290,7 @@ sql_kill_blocking_connection: KILL 13333        #<-- 解锁方法之二
 
 ## 4. 行锁等待优化建议
 
-为了避免产生大量、长时间的行锁等待，建议适当调低行锁等待时长阈值 `innodb_lock_wait_timeout`，在[GreatSQL my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24)中，这个阈值设置为10(秒)，可根据实际情况适当调整，通常建议不超过120(秒)。
+为了避免产生大量、长时间的行锁等待，建议适当调低行锁等待时长阈值 `innodb_lock_wait_timeout`，在[GreatSQL my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25)中，这个阈值设置为10(秒)，可根据实际情况适当调整，通常建议不超过120(秒)。
 
 **参考资料**
 - [InnoDB Locking](https://dev.mysql.com/doc/refman/8.0/en/innodb-locking.html)

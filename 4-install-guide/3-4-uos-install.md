@@ -396,7 +396,7 @@ $ grep -i root /data/GreatSQL/error.log
 $ mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 11
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision 3714067bc8c
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ...
@@ -412,7 +412,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 greatsql> \s
 ...
-mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 3714067bc8c)
+mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 0ce93c62130)
 
 Connection id:          12
 Current database:       

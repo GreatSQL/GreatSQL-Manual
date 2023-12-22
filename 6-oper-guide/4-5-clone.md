@@ -32,7 +32,7 @@ CLONE操作的流程大致如下：
 - 不能跨版本间CLONE，比如5.7.x和8.0.x之间，以及8.0.25和8.0.32之间（版本号必须完全一致），并且只支持8.0.17及以上版本。
 - 不支持CLONE binlog文件。
 - 只能CLONE数据，不能同时CLONE系统配置（也就是说不能CLONE my.cnf及mysqld-auto.cnf等系统配置文件）。
-- 在MySQL 8.0.27版本之前，CLONE期间donor节点上会阻塞所有DDL操作，包括`TRUNCATE TABLE`操作；从8.0.27版本（对应到GreatSQL的版本号是8.0.32-24）开始，CLONE期间不会阻塞DDL操作，详情请参考文档：[Cloning and Concurrent DDL](https://dev.mysql.com/doc/refman/8.0/en/clone-plugin-concurrent-ddl.html)。
+- 在MySQL 8.0.27版本之前，CLONE期间donor节点上会阻塞所有DDL操作，包括`TRUNCATE TABLE`操作；从8.0.27版本（对应到GreatSQL的版本号是8.0.32-25）开始，CLONE期间不会阻塞DDL操作，详情请参考文档：[Cloning and Concurrent DDL](https://dev.mysql.com/doc/refman/8.0/en/clone-plugin-concurrent-ddl.html)。
 - 一个donor节点同时只能为一个recipient节点提供数据，不能同时响应多个recipient节点的CLONE请求。
 - 不支持通过MySQL Router连接时发起CLONE请求，也就是说只能是两个数据库实例间直接相互连接时才能发起CLONE请求。
 - 当通用表空间（general tablespaces）创建时指定绝对路径，那么在CLONE备份到本地存储时会产生文件冲突报错（因为用了绝对路径的缘故）。
@@ -218,7 +218,7 @@ greatsql> SELECT STAGE, STATE, CAST(BEGIN_TIME AS TIME) AS "START TIME",
 
 **提醒：** 
 1. 在CLONE过程中，如果被强行KILL终止的话，recipient节点上的数据会被清空，只剩下接近刚初始化完的新实例，请谨慎操作。
-2. 从GreatSQL 8.0.32-24版本开始，CLONE支持加密备份及解密，详情请见文档：[CLONE备份加密](../5-enhance/5-4-security-clone-encrypt.md)。
+2. 从GreatSQL 8.0.32-25版本开始，CLONE支持加密备份及解密，详情请见文档：[CLONE备份加密](../5-enhance/5-4-security-clone-encrypt.md)。
 
 在recipient节点上完成CLONE备份后，就等同于在recipient也做了一次数据恢复，这个节点还可以作为主从复制的从节点，也可以作为MGR组复制的新节点，一举多得。
 

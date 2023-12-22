@@ -154,7 +154,7 @@ upgrade = FORCE
 [System] [MY-013381] [Server] Server upgrade from '50700' to '80025' started.
 [System] [MY-013381] [Server] Server upgrade from '50700' to '80025' completed.
 ...
-[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-24'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 24, Revision 3714067bc8c.
+[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-25'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 25, Revision 0ce93c62130.
 ```
 
 是不是觉得有点惊喜，有点意外，怎么怎么简单，事实的确如此。
@@ -202,7 +202,7 @@ upgrade = FORCE
 [Note] [MY-013394] [Server] Checking 'sys' schema.
 [System] [MY-013381] [Server] Server upgrade from '50700' to '80025' completed.
 ...
-[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-24'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 24, Revision 3714067bc8c.
+[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-25'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 25, Revision 0ce93c62130.
 ```
 这样就完成升级了，非常便捷省事。
 
@@ -221,11 +221,11 @@ GreatSQL 8.0.32相对于8.0.25版本，新增了更多SQL语法兼容性、MGR�
 
 从GreatSQL 8.0.25升级到8.0.32版本过程较为简单：
 
-1. 下载最新[GreatSQL 8.0.32二进制包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-24)，并解压缩到相应目录下。
+1. 下载最新[GreatSQL 8.0.32二进制包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)，并解压缩到相应目录下。
 
 2. 在数据库维护期间关闭GreatSQL 8.0.25版本数据库。关闭前，先执行 `SET GLOBAL innodb_fast_shutdown = 0`，确保停机时得到一份完整、干净的数据文件。
 
-3. 修改my.cnf，调整basedir，指向新版本二进制包路径。可参考这份[my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24)。
+3. 修改my.cnf，调整basedir，指向新版本二进制包路径。可参考这份[my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25)。
 
 4. 重启新的GreatSQL 8.0.32版本数据库服务进程，即可实现原地升级（in-place upgrade），可以看到日志中有类似下面的内容：
 ```

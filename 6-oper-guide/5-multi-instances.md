@@ -35,12 +35,12 @@ TimeoutSec=0
 PermissionsStartOnly=true
 
 #for single instance
-#ExecStartPre=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
-#ExecStart=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
+#ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
+#ExecStart=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
 
 #for multi instance
-ExecStartPre=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd %I
-ExecStart=/usr/local/GreatSQL-8.0.32-24-Linux-glibc2.28-x86_64/bin/mysqld --defaults-group-suffix=@%I $MYSQLD_OPTS
+ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd %I
+ExecStart=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-group-suffix=@%I $MYSQLD_OPTS
 
 EnvironmentFile=-/etc/sysconfig/mysql
 LimitNOFILE = 10000

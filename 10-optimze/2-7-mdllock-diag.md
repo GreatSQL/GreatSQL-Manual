@@ -314,7 +314,7 @@ sql_kill_blocking_connection: KILL 13366
 
 ## 4. MDL锁等待优化建议
 
-MDL锁等待超时阈值由选项 `lock_wait_timeout` 定义，默认值是 **31536000** 秒（即：一年），这个值太大了，建议调低，在 [GreatSQL my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24) 中的建议参考值是 **3600**。
+MDL锁等待超时阈值由选项 `lock_wait_timeout` 定义，默认值是 **31536000** 秒（即：一年），这个值太大了，建议调低，在 [GreatSQL my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25) 中的建议参考值是 **3600**。
 
 除此外，还应该定期监控MDL锁及MDL锁等待状态，一旦发现有超过设定阈值时长的MDL锁等待发生，应立即发出告警，通知DBA及时检查处理。
 

@@ -93,7 +93,7 @@ GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以�
 
 GreatSQL数据库是不支持直接原地(in-place)降级的，因此需要采用 **逻辑备份+导入** 的方式完成迁移。
 
-如果是直接在MySQL 8.0.33及以上版本的datadir下，指定GreatSQL 8.0.32-24版本的mysqld二进制文件启动，则可能会报告类似下面的错误：
+如果是直接在MySQL 8.0.33及以上版本的datadir下，指定GreatSQL 8.0.32-25版本的mysqld二进制文件启动，则可能会报告类似下面的错误：
 ```
 [ERROR] [MY-012530] [InnoDB] Unknown redo log format (5). Please follow the instructions at http://dev.mysql.com/doc/refman/8.0/en/ upgrading-downgrading.html.
 [ERROR] [MY-012930] [InnoDB] Plugin initialization aborted with error Generic error.
