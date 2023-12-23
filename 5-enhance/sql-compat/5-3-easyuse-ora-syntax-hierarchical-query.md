@@ -37,22 +37,7 @@ GreatSQL支持分层查询（Hierarchical Query）。
 
 示例：
 
-```mermaid
-graph TB
-
-%% root
-1(("1"))-->2(("2"))
-1-->7(("7"))
-1-->9(("9"))
-2-->3(("3"))
-2-->4(("4"))
-4-->5(("5"))
-4-->6(("6"))
-7-->8(("8"))
-9-->10(("10"))
-10-->11(("11"))
-9-->12(("12"))
-```
+![分层查询Hierarchical Query](./5-3-easyuse-ora-syntax-hierarchical-query.png)
 
 ## 3. Oracle兼容说明
 
