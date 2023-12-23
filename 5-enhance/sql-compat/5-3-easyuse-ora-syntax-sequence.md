@@ -164,7 +164,7 @@ Query OK, 1 row affected (0.00 sec)
 
 ```sql
 -- 1. 查询 information_schema.SEQUENCES 查看所有SEQUENCE
-greatsql> select * from information_schema.SEQUENCES;
+greatsql> SELECT * FROM information_schema.SEQUENCES;
 +----------+------+------------+----------+------------------------------+-----------+------------+-----------+------------+
 | DB       | NAME | START_WITH | MINVALUE | MAXVALUE                     | INCREMENT | CYCLE_FLAG | CACHE_NUM | ORDER_FLAG |
 +----------+------+------------+----------+------------------------------+-----------+------------+-----------+------------+

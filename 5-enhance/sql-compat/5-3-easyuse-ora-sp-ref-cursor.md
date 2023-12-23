@@ -268,9 +268,9 @@ CREATE OR REPLACE PROCEDURE p1() AS
   cur1 dr_CURSOR;
   rtype t1%ROWTYPE;
 BEGIN
-  -- 这里可以改写成sql1 := 'SELECT * FROM t1 where a<3';
+  -- 这里可以改写成sql1 := 'SELECT * FROM t1 WHERE a<3';
   -- OPEN cur1 FOR sql1;sql1需要提前声明。
-  OPEN cur1 FOR SELECT * FROM t1 where a<3;
+  OPEN cur1 FOR SELECT * FROM t1 WHERE a<3;
 
   LOOP
     FETCH cur1 INTO rtype;
@@ -307,7 +307,7 @@ greatsql> DELIMITER //
 use db1;
 set sql_mode="oracle";
 CREATE TABLE t1 (a INT, b VARCHAR(3));
-insert INTO t1 values(1,'aa'),(2,'bb'),(3,'cc') ;
+INSERT INTO t1 VALUES(1,'aa'),(2,'bb'),(3,'cc') ;
 DELIMITER //
 CREATE OR REPLACE PROCEDURE p1() AS
   rtype int;

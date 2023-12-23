@@ -99,7 +99,7 @@ greatsql> CREATE TABLE t3 LIKE t1;
 greatsql> INSERT INTO t3 SELECT * FROM t1;
 
 -- 等同于 t3 left join t2 left join t1
-greatsql> EXPLAIN SELECT * FROM t1, t2, t3 WHERE t1.c1(+) = t2.c1 and t2.c1(+) = t3.c1;
+greatsql> EXPLAIN SELECT * FROM t1, t2, t3 WHERE t1.c1(+) = t2.c1 AND t2.c1(+) = t3.c1;
 +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------------------+
 | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra                                      |
 +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------------------+
@@ -120,7 +120,7 @@ greatsql> CREATE TABLE t4 LIKE t1;
 greatsql> INSERT INTO t4 SELECT * FROM t1;
 
 -- 等同于 (t2 left join t1) join (t3 left join t4)
-greatsql> EXPLAIN SELECT * FROM t1, t2, t3, t4 WHERE t1.c1(+) = t2.c1 and t3.c1 = t4.c1(+);
+greatsql> EXPLAIN SELECT * FROM t1, t2, t3, t4 WHERE t1.c1(+) = t2.c1 AND t3.c1 = t4.c1(+);
 +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------------------+
 | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra                                      |
 +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------------------+
@@ -227,7 +227,7 @@ ERROR 7526 (HY000): OuterJoin: a predicate may reference only one outer-joined t
 - 5. 包含 `(+)` 操作符的 `WHERE` 条件不能与其它条件使用 `OR` 操作符组合。
 
 ```sql
-greatsql> SELECT * FROM t1, t2 WHERE t1.c1+t2.c1(+) < t1.c1 or t1.c1 = 5;
+greatsql> SELECT * FROM t1, t2 WHERE t1.c1+t2.c1(+) < t1.c1 OR t1.c1 = 5;
 ERROR 7526 (HY000): OuterJoin: outer join operator (+) not allowed in operand of OR or IN
 
 greatsql> SELECT * FROM t1, t2 WHERE t1.c1(+) in (t2.c1, t2.c1);

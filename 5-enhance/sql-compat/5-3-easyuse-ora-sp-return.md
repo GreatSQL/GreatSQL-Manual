@@ -31,7 +31,7 @@ BEGIN
   END IF;
 END; //
 
-greatsql> call return_sp(1)//
+greatsql> CALL return_sp(1)//
 +------+
 | n    |
 +------+
@@ -41,7 +41,7 @@ greatsql> call return_sp(1)//
 
 Query OK, 0 rows affected (0.00 sec)
 
-greatsql> call return_sp(4)//
+greatsql> CALL return_sp(4)//
 Query OK, 0 rows affected (0.00 sec)
 ```
 

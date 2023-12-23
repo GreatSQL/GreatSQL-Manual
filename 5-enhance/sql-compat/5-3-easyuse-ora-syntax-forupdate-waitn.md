@@ -110,7 +110,7 @@ ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction
 
 ```
 -- 参数n值超限
-greatsql> select * from t12 where c1=12 for update wait 31536001;
+greatsql> SELECT * FROM t12 WHERE c1=12 FOR UPDATE WAIT 31536001;
 ERROR 1210 (HY000): Incorrect arguments to wait n
 ```
 

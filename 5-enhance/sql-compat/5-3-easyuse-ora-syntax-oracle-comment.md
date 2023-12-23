@@ -157,7 +157,7 @@ greatsql> CREATE OR REPLACE PROCEDURE p1 AS--SELECT SYSDATE AS D1 FROM DUAL
  end;--SELECT SYSDATE AS D8 FROM DUAL
 //
 
-greatsql> call p1() //
+greatsql> CALL p1() //
 +---+---+---+
 | a | b | c |
 +---+---+---+

@@ -188,7 +188,7 @@ END; //
 greatsql> CALL goto_sp3(0, @ret) //
 Query OK, 0 rows affected (0.00 sec)
 
-greatsql> select @ret //
+greatsql> SELECT @ret //
 +--------------------------------------------------------------------------------------------+
 | @ret                                                                                       |
 +--------------------------------------------------------------------------------------------+
@@ -199,7 +199,7 @@ greatsql> select @ret //
 greatsql> CALL goto_sp3(0, @ret) //
 Query OK, 0 rows affected (0.00 sec)
 
-greatsql> select @ret //
+greatsql> SELECT @ret //
 +--------------------------------------------------------------------------------------------+
 | @ret                                                                                       |
 +--------------------------------------------------------------------------------------------+
@@ -210,7 +210,7 @@ greatsql> select @ret //
 greatsql> CALL goto_sp3(3, @ret) //
 Query OK, 0 rows affected (0.00 sec)
 
-greatsql> select @ret //
+greatsql> SELECT @ret //
 +--------------------------------+
 | @ret                           |
 +--------------------------------+
@@ -221,7 +221,7 @@ greatsql> select @ret //
 greatsql> CALL goto_sp3(1, @ret) //
 Query OK, 1 row affected (0.00 sec)
 
-greatsql> select @ret //
+greatsql> SELECT @ret //
 +---------+
 | @ret    |
 +---------+

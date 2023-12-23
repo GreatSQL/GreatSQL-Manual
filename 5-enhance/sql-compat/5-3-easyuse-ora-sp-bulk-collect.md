@@ -115,7 +115,7 @@ BEGIN
 
   -- 目前FORALL后面只支持INSERT操作
   FORALL i IN t1_record_val.FIRST .. t1_record_val.LAST 
-    INSERT INTO t2 values t1_record_val(i);
+    INSERT INTO t2 VALUES t1_record_val(i);
 
   CLOSE c;
 END; //

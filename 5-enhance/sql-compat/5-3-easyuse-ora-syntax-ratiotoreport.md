@@ -67,7 +67,7 @@ greatsql> SELECT * FROM t1;
 greatsql> SET sql_mode = ORACLE;
 
 -- 查看 @@div_precision_increment 值
-greatsql> select @@div_precision_increment;
+greatsql> SELECT @@div_precision_increment;
 +---------------------------+
 | @@div_precision_increment |
 +---------------------------+

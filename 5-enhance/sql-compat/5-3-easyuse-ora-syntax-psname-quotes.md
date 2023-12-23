@@ -24,7 +24,7 @@ BEGIN
   SELECT i;
 END; //
 
-greatsql> call "p1"(4); //
+greatsql> CALL "p1"(4); //
 +------+
 | i    |
 +------+

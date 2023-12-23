@@ -144,7 +144,7 @@ Query OK, 0 rows affected (0.00 sec)
 greatsql> SET sql_mode = ORACLE;
 greatsql> DELIMITER //
 
-greatsql> CREATE or REPLACE PROCEDURE sp2_cur_rowtype() AS 
+greatsql> CREATE OR REPLACE PROCEDURE sp2_cur_rowtype() AS 
   CURSOR cur1 IS SELECT * FROM t;
 
   rec1 cur1%ROWTYPE;   -- 用 CURSOR%ROWTYPE 继承数据类型
@@ -195,7 +195,7 @@ Query OK, 0 rows affected (0.00 sec)
 greatsql> SET sql_mode = ORACLE;
 greatsql> DELIMITER //
 
-greatsql> CREATE or REPLACE PROCEDURE sp3_cur_var() AS
+greatsql> CREATE OR REPLACE PROCEDURE sp3_cur_var() AS
  vid INT;
 
  -- 定义游标时带参数
@@ -242,7 +242,7 @@ greatsql> INSERT INTO udt_t1 VALUES(2, udt1(20, 'c1_row20'));
 
 greatsql> SET udt_format_result = 'DBA';
 
-greatsql> CREATE or REPLACE PROCEDURE sp4_cur_udt() AS
+greatsql> CREATE OR REPLACE PROCEDURE sp4_cur_udt() AS
   CURSOR cur1 (vid INT) IS SELECT * FROM udt_t1 WHERE id = vid;
   rec1 udt_t1.c2%TYPE;
 BEGIN

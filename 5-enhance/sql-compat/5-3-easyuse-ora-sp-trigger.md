@@ -141,7 +141,7 @@ greatsql> UPDATE t1 SET a = -3, b = '-row3' WHERE a = 3;
 Query OK, 1 row affected (0.00 sec)
 Rows matched: 1  Changed: 1  Warnings: 0
 
-greatsql> select * from t1;
+greatsql> SELECT * from t1;
 +---+-------------------------------------------------------+
 | a | b                                                     |
 +---+-------------------------------------------------------+

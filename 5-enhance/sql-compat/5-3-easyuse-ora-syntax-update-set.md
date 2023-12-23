@@ -14,7 +14,7 @@ UPDATE [LOW_PRIORITY] [IGNORE] table_reference
     [LIMIT row_count]
 
 UPDATE [LOW_PRIORITY] [IGNORE] table_reference
-    SET (assignment_list) = (select stmt)
+    SET (assignment_list) = (SELECT stmt)
     [WHERE where_condition]
     [ORDER BY ...]
     [LIMIT row_count]

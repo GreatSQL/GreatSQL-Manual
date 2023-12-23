@@ -73,7 +73,7 @@ greatsql> SELECT * FROM student;
 -- 此种情况下，GreatSQL和Oracle查询结果数据顺序一致
 greatsql> SELECT id, name, grade, LEVEL FROM student CONNECT BY PRIOR id = grade;
 +------+-------+-------+-------+
-| id   | name  | grade | level |
+| id   | name  | grade | LEVEL |
 +------+-------+-------+-------+
 |    1 | John  |    -1 |     1 |
 |    2 | Paul  |     1 |     2 |
@@ -123,9 +123,9 @@ greatsql> SELECT * FROM student;
 4 rows in set (0.00 sec)
 
 -- 此种情况下，GreatSQL和Oracle查询结果数据顺序不一致
-greatsql> select id, name, grade, LEVEL FROM student CONNECT BY PRIOR id = grade;
+greatsql> SELECT id, name, grade, LEVEL FROM student CONNECT BY PRIOR id = grade;
 +------+-------+-------+-------+
-| id   | name  | grade | level |
+| id   | name  | grade | LEVEL |
 +------+-------+-------+-------+
 |    3 | Nancy |     1 |     1 |
 |    4 | Sarah |     2 |     1 |
@@ -139,7 +139,7 @@ greatsql> select id, name, grade, LEVEL FROM student CONNECT BY PRIOR id = grade
 8 rows in set (0.00 sec)
 
 -- 在Oracle中查询得到的结果如下，二者不一致（建表和写入数据过程略过）
-SQL> select id, name, grade, level from student connect by prior id = grade;
+SQL> SELECT id, name, grade, LEVEL FROM student CONNECT BY PRIOR id = grade;
 
         ID NAME                      GRADE      LEVEL
 ---------- -------------------- ---------- ----------
@@ -315,7 +315,7 @@ greatsql> INSERT INTO student VALUES (1, 'John', -1), (2, 'Paul', 1), (3, 'Nancy
 ```sql
 greatsql> SELECT id, name, grade, LEVEL FROM student CONNECT BY PRIOR id = grade;
 +------+-------+-------+-------+
-| id   | name  | grade | level |
+| id   | name  | grade | LEVEL |
 +------+-------+-------+-------+
 |    1 | John  |    -1 |     1 |
 |    2 | Paul  |     1 |     2 |
@@ -402,9 +402,9 @@ greatsql> SELECT id, name, grade, CONNECT_BY_ISLEAF FROM student CONNECT BY NOCY
 +------+-------+-------+-------------------+
 7 rows in set (0.01 sec)
 
-greatsql> SELECT id, grade, level, SYS_CONNECT_BY_PATH(id ,'->'), PRIOR name, CONNECT_BY_ROOT id FROM student CONNECT BY PRIOR id = grade;
+greatsql> SELECT id, grade, LEVEL, SYS_CONNECT_BY_PATH(id ,'->'), PRIOR name, CONNECT_BY_ROOT id FROM student CONNECT BY PRIOR id = grade;
 +------+-------+-------+-------------------------------+------------+--------------------+
-| id   | grade | level | SYS_CONNECT_BY_PATH(id ,'->') | PRIOR name | CONNECT_BY_ROOT id |
+| id   | grade | LEVEL | SYS_CONNECT_BY_PATH(id ,'->') | PRIOR name | CONNECT_BY_ROOT id |
 +------+-------+-------+-------------------------------+------------+--------------------+
 |    1 |    -1 |     1 | ->1                           | NULL       |                  1 |
 |    2 |     1 |     2 | ->1->2                        | John       |                  1 |

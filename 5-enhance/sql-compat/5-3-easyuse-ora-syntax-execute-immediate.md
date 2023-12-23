@@ -71,7 +71,7 @@ AS
   i:= 10;
 END;
 
-EXECUTE IMMEDIATE 'call p1(?)' USING OUT a; 
+EXECUTE IMMEDIATE 'CALL p1(?)' USING OUT a; 
 ```
 
 在GreatSQL中允许这种方式运行，而在Oracle中会报错，要求 `USING IN OUT var` 或者 `USING IN var`; 

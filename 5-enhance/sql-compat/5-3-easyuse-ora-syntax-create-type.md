@@ -101,7 +101,7 @@ Query OK, 0 rows affected (0.00 sec)
 ```
 use db1;
 set sql_mode="Oracle";
-create or replace type udt1 as object(id INT ,c1 VARCHAR(20));
+CREATE OR REPLACE TYPE udt1 AS OBJECT(id INT ,c1 VARCHAR(20));
 ```
 
 

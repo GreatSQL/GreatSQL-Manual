@@ -218,7 +218,7 @@ greatsql> CREATE VIEW v1 AS SELECT * FROM udt_t1;
 greatsql> SHOW CREATE VIEW v1\G
 *************************** 1. row ***************************
                 View: v1
-         Create View: CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v1` AS select `udt_t1`.`id` AS `id`,`udt_t1`.`c1` AS `c1` from `udt_t1`
+         Create View: CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v1` AS SELECT `udt_t1`.`id` AS `id`,`udt_t1`.`c1` AS `c1` from `udt_t1`
 character_set_client: utf8mb4
 collation_connection: utf8mb4_0900_ai_ci
 ```
@@ -251,7 +251,7 @@ greatsql> SELECT * FROM udt_t1 WHERE c1 = udt1(1, 'c1_row1');
 +------+-------------------+
 1 row in set (0.00 sec)
 
-greatsql> select c1 || udt1(3, 'c1_row3') FROM udt_t1;
+greatsql> SELECT c1 || udt1(3, 'c1_row3') FROM udt_t1;
 ERROR 1235 (42000): This version of MySQL doesn't yet support 'udt type columns used in function'
 
 greatsql> SELECT c1 FROM udt_t1 GROUP BY c1;
@@ -373,7 +373,7 @@ BEGIN
   END LOOP;
 END; //
 
-greatsql> call p1() //
+greatsql> CALL p1() //
 +--------+-------------------+
 | rec.id | rec.c1            |
 +--------+-------------------+
@@ -413,12 +413,12 @@ BEGIN
   LOOP
     FETCH cur INTO v_c1;
     EXIT WHEN cur%NOTFOUND;
-    select v_c1;
+    SELECT v_c1;
   END LOOP;
   CLOSE cur;
 END; //
 
-greatsql> call p1(1,10) //
+greatsql> CALL p1(1,10) //
 +-------------------+
 | v_c1              |
 +-------------------+
@@ -449,7 +449,7 @@ Binary data as:         Hexadecimal
 ...
 
 -- 参数udt_format_result默认值为BINARY
-greatsql> select @@udt_format_result;
+greatsql> SELECT @@udt_format_result;
 +---------------------+
 | @@udt_format_result |
 +---------------------+

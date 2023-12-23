@@ -50,7 +50,7 @@ ERROR 1235 (42000): This version of MySQL doesn't yet support 'FULL JOIN with US
 - 2. 不支持与外连接符号 `(+)` 同时使用
 
 ```
-greatsql> select * from t1 full join t2 on t1.c1=t2.c1(+);
+greatsql> SELECT * FROM t1 FULL JOIN t2 ON t1.c1=t2.c1(+);
 ERROR 1235 (42000): This version of MySQL doesn't yet support 'Full join used together with outer join sign '(+)''
 ```
 
