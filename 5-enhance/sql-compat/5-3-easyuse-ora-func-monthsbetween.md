@@ -60,7 +60,7 @@ greatsql> SHOW WARNINGS;
 ## 4. 示例
 
 ```sql
-greatsql> SELECT MONTHS_BETWEEN(TO_DATE('2021-3-21', 'yyyy-mm-dd'), TO_DATE('2021-1-10', 'yyyy-mm-dd')) as MT1 FROM DUAL
+greatsql> SELECT MONTHS_BETWEEN(TO_DATE('2021-3-21', 'yyyy-mm-dd'), TO_DATE('2021-1-10', 'yyyy-mm-dd')) AS MT1 FROM DUAL
  UNION ALL
  SELECT MONTHS_BETWEEN('2021-3-21', '2021-1-10') FROM DUAL;
 +--------------------+

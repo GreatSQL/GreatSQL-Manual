@@ -50,7 +50,7 @@ greatsql> INSERT INTO t1 VALUES(1, 'row1'), (2, 'row2'), (3,'row3') ;
 greatsql> SET sql_mode = ORACLE;
 greatsql> DELIMITER //
 
-greatsql> CREATE OR REPLACE PROCEDURE vtype_sp1() as
+greatsql> CREATE OR REPLACE PROCEDURE vtype_sp1() AS
   v_id t1.a%TYPE;
   v_vchar VARCHAR(100) := 'varchar_type';
 

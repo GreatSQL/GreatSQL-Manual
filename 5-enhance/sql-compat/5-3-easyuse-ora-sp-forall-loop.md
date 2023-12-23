@@ -49,7 +49,7 @@ greatsql> INSERT INTO t2 VALUES(1, 't2_row1'), (2, 't2_row2'), (3,'t2_row3') ;
 greatsql> SET sql_mode = ORACLE;
 greatsql> DELIMITER //
 
-greatsql> CREATE OR REPLACE PROCEDURE p1() as
+greatsql> CREATE OR REPLACE PROCEDURE p1() AS
   TYPE udt1 IS TABLE OF t1%ROWTYPE INDEX BY BINARY_INTEGER;
   udt_t1 udt1;
 begin
@@ -91,7 +91,7 @@ greatsql> SELECT * FROM t2; //
 greatsql> SET sql_mode = ORACLE;
 greatsql> DELIMITER //
 
-greatsql> CREATE OR REPLACE PROCEDURE p1(v_a INT) as
+greatsql> CREATE OR REPLACE PROCEDURE p1(v_a INT) AS
   TYPE t1_record IS RECORD(
     c1 INT := 1,
     c2 VARCHAR(20)
