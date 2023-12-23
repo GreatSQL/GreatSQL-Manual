@@ -12,7 +12,7 @@
 
 ##  特性增强
 
-GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级；大幅增加Oracle兼容特性，支持更多数据类型、SQL语法、函数及存储过程等；支持异步删除InnoDB大表及NUMA调度优化；支持在MGR主节点切换VIP时主动断开当前连接，缩短应用端不可用时长。
+GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级；大幅增加Oracle兼容特性，支持更多数据类型、SQL语法、函数及存储过程等；支持异步删除InnoDB大表；支持在MGR主节点切换VIP时主动断开当前连接，缩短应用端不可用时长。
 
 ### 高可用
 - 支持在MGR单主（Single Primary）模式下，读写节点绑定VIP后，当主节点切换时会主动关闭当前活跃连接，缩短应用端不可用时长。更详细内容参考：[MGR切主后断开应用连接](../../5-enhance/5-2-ha-mgr-kill-conn-after-switch.md)。
@@ -23,12 +23,10 @@ GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引
 
 - 支持异步删除InnoDB大表，删除10G以上大表时对系统负载几乎没影响，有效提高InnoDB引擎运行时性能的稳定性。更详细内容参考：[异步删除InnoDB大表](../../5-enhance/5-1-highperf-async-purge-big-table.md)。
 
-- 支持NUMA调度优化，通过将线程分类以及绑定CPU核心等方式，减少跨NUMA的访问，提升GreatSQL运行时性能的稳定性。更详细内容参考：[NUMA调度优化](../../5-enhance/5-1-highperf-numa-affinity.md)。
-
 - 提升InnoDB PQ能力，支持TPC-H Q21查询优化能力。
 
 ### 高兼容
-- 从GreatSQL 8.0.32-25版本开始，在Oracle兼容方面有了巨大提升，除了OCI、DBlink、Packages之外，支持大多数常用的SQL语法、数据类型、函数、存储过程、触发器、视图等功能。支持CLOB、NUMA、VARCHAR2、PLS_INTEGER等数据类型，支持ADD_MONTHS、CHR、DUMP等函数，支持ANY、ALL、Hierarchical Query、FULL JOIN等SQL语法，支持存储过程、触发器、视图等兼容性。
+- 从GreatSQL 8.0.32-25版本开始，在Oracle兼容方面有了巨大提升，除了OCI、DBlink、Packages之外，支持大多数常用的SQL语法、数据类型、函数、存储过程、触发器、视图等功能。支持CLOB、NUMBER、VARCHAR2、PLS_INTEGER等数据类型，支持ADD_MONTHS、CHR、DUMP等函数，支持ANY、ALL、Hierarchical Query、FULL JOIN等SQL语法，支持存储过程、触发器、视图等兼容性。
 
 
 ## 缺陷修复
