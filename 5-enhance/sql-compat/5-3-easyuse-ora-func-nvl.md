@@ -5,7 +5,7 @@
 ## 1. 语法
 
 ```sql
-NVL(expr1，expr2)
+NVL(expr1, expr2)
 ```
 
 ## 2. 定义和用法
