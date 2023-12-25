@@ -51,7 +51,6 @@ GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以�
 |国密支持| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
 |审计日志入库| :heavy_check_mark: | ❌ |
-|记录最后一次登录信息| :heavy_check_mark: | ❌ |
 |PAM认证插件| :heavy_check_mark: | 仅企业版 |
 |审计插件| :heavy_check_mark: | 仅企业版 |
 |Keyring存储在Hashicorp Vault中| :heavy_check_mark: | 仅企业版 |
@@ -130,6 +129,13 @@ ERROR 1146 (42S02) at line 586: Table 'mysql.replication_group_member_actions' d
 ```
 如果数据量较大的话，逻辑备份+导入过程耗时较久，要有心理准备。
 
+
+## 4. 注意事项
+
+在MySQL 8.0.26中引入MGR组视图UUID特性（[`group_replication_view_change_uuid`](https://dev.mysql.com/doc/refman/8.0/en/group-replication-system-variables.html#sysvar_group_replication_view_change_uuid)）。因此，如果当前有个MGR集群的版本是8.0.25及以下，则无法实现平滑升级迁移到8.0.26版本。需要申请一次停机维护时间，对MGR集群中的各个节点实施in-place升级，完成从8.0.25到8.0.26及更高版本的升级。
+
+详情请参考：[将MGR集群从GreatSQL-8.0.25平滑升级到GreatSQL-8.0.32](https://greatsql.cn/thread-530-1-1.html)。
+
 **参考文档**
 
 - [Percona Server for MySQL In-Place Upgrading Guide: From 5.7 to 8.0](https://docs.percona.com/percona-server/latest/upgrading_guide.html)
@@ -137,6 +143,7 @@ ERROR 1146 (42S02) at line 586: Table 'mysql.replication_group_member_actions' d
 - [Before You Begin](https://dev.mysql.com/doc/refman/8.0/en/upgrade-before-you-begin.html)
 - [What the MySQL Upgrade Process Upgrades](https://dev.mysql.com/doc/refman/8.0/en/upgrading-what-is-upgraded.html)
 - [MySQL 5.7 MGR平滑升级到GreatSQL 5.7](https://mp.weixin.qq.com/s/u0UAijfM8jHH948ml1PREg)
+
 
 **问题反馈**
 ---

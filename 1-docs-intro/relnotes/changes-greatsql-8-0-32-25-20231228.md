@@ -112,7 +112,6 @@ GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引
 |国密支持| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
 |审计日志入库| :heavy_check_mark: | ❌ |
-|记录最后一次登录信息| :heavy_check_mark: | ❌ |
 |SQL Roles| :heavy_check_mark: | :heavy_check_mark: |
 |SHA-2密码Hashing| :heavy_check_mark: | :heavy_check_mark: |
 |密码轮换策略| :heavy_check_mark: | :heavy_check_mark: |

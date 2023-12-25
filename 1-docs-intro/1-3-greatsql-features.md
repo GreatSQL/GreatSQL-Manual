@@ -41,7 +41,7 @@ GreatSQL数据库是一款**开源免费**数据库，可在普通硬件上满�
 
 ### 4. 高安全
 
-支持逻辑备份加密、CLONE备份加密、审计日志入表、表空间国密加密、记录最后一次登录信息等多个安全提升特性，进一步保障业务数据安全，更适用于金融级应用场景。
+支持逻辑备份加密、CLONE备份加密、审计日志入表、表空间国密加密等多个安全提升特性，进一步保障业务数据安全，更适用于金融级应用场景。
 
 更多信息详见文档：[高安全](../5-enhance/5-4-security.md)。
 
@@ -117,7 +117,6 @@ GreatSQL数据库是一款**开源免费**数据库，可在普通硬件上满�
 |国密支持| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
 |审计日志入库| :heavy_check_mark: | ❌ |
-|记录最后一次登录信息| :heavy_check_mark: | ❌ |
 |SQL Roles| :heavy_check_mark: | :heavy_check_mark: |
 |SHA-2密码Hashing| :heavy_check_mark: | :heavy_check_mark: |
 |密码轮换策略| :heavy_check_mark: | :heavy_check_mark: |
