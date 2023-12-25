@@ -1,9 +1,9 @@
 # GreatSQL高可用特性之MGR切主后断开应用连接
 ---
 
-在启用 [内置动态VIP](./5-2-ha-mgr-vip.md) 特性后，当读写节点VIP发生切换漂移时，旧Primary节点上已创建的应用端连接并不会自动断开和漂移，需要应用端进行异常状态判断或设置响应超时控制机制，这会造成应用端短暂不可用。
+在单主模式的MGR集群中，当Primary节点发生切换时，旧Primary节点上已创建的应用端连接并不会自动断开，需要应用端进行异常状态判断或设置响应超时控制机制，这会造成应用端短暂不可用。
 
-从GreatSQL 8.0.32-25版本开始，新增选项 `greatdb_ha_mgr_exit_primary_kill_connection_mode` 用于设置在MGR发生Primary节点切换且VIP漂移时，是否主动断开旧Primary节点上的所有连接。该选项默认值为 **1/ON**，即默认会自动断开旧Primary节点上的所有应用连接。
+从GreatSQL 8.0.32-25版本开始，新增选项 `greatdb_ha_mgr_exit_primary_kill_connection_mode` 用于设置在MGR发生Primary节点切换时，是否主动断开旧Primary节点上的所有连接。该选项默认值为 **1/ON**，即默认会自动断开旧Primary节点上的所有应用连接。
 
 ## 启用特性
 
