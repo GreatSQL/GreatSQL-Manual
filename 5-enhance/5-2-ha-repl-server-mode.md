@@ -8,19 +8,34 @@
 
 ## 新增系统选项
 
-
 | System Variable Name  | replicate_server_mode |
 | --- | --- |
 | Command-Line Format | replicate_server_mode[={0\|1}] |
 | System Variable     | replicate_server_mode     |
 | Variable Scope        | Global |
-| Dynamic Variable      | YES |
+| Dynamic Variable      | No |
 | Type                | bool                             |
 | Permitted Values |    [0, 1] |
 | Default       | 0 |
 
-
 设置为1表示只应用只应用多源复制管道内临近主节点上产生的binlog，不会应>用其他的非临近节点产生的binlog；设置为0表示应用binlog时不做此约束。
+
+**提醒**：该选项是个全局选项，且不可在线动态修改，因此需要在实例启动前就设置好。尝试在线修改的话，会提示报错，例如：
+```sql
+greatsql> select @@session.replicate_server_mode;
+ERROR 1238 (HY000): Variable 'replicate_server_mode' is a GLOBAL variable
+
+greatsql> select @@global.replicate_server_mode;
++--------------------------------+
+| @@global.replicate_server_mode |
++--------------------------------+
+|                              0 |
++--------------------------------+
+1 row in set (0.00 sec)
+
+greatsql> set global replicate_server_mode = 0;
+ERROR 1238 (HY000): Variable 'replicate_server_mode' is a read only variable
+```
 
 更多关于该特性的应用案例请参考：[基于GreatSQL的跨机房多通道主主复制容灾切换实战演练](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/multi-idc-multi-channel-dul-replication-ha.md)、[基于MySQL多通道主主复制的机房容灾方案](https://mp.weixin.qq.com/s/1f8cTzQ_KZiBw9VeadO7KA)。
 
