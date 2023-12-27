@@ -4,19 +4,19 @@
 
 - 发布时间：2023年12月28日
 
-- 版本号：8.0.32-25, Revision 0ce93c62130
+- 版本号：8.0.32-25, Revision db07cc5cb73
 
-- 下载链接：[RPM包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-24)、[TAR包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-24)、[源码包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-24)
+- 下载链接：[RPM包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)、[TAR包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)、[源码包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)
 
-- 用户手册：[GreatSQL 8.0.32-25 User Manual](https://greatsql.cn/docs/803225)
+- 用户手册：[GreatSQL 8.0.32-25 User Manual](https://greatsql.cn/docs/8032-25)
 
 ##  特性增强
 
-GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级；大幅增加Oracle兼容特性，支持更多数据类型、SQL语法、函数及存储过程等；支持异步删除InnoDB大表；支持在MGR主节点切换VIP时主动断开当前连接，缩短应用端不可用时长。
+GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级；大幅增加Oracle兼容特性，支持更多数据类型、SQL语法、函数及存储过程等；支持异步删除InnoDB大表；支持在MGR主节点切换时主动断开当前连接，缩短应用端不可用时长。
 
 ### 高可用
-- 支持在MGR单主（Single Primary）模式下，读写节点绑定VIP后，当主节点切换时会主动关闭当前活跃连接，缩短应用端不可用时长。更详细内容参考：[MGR切主后断开应用连接](../../5-enhance/5-2-ha-mgr-kill-conn-after-switch.md)。
-- 在跨机房容灾场景，同时开启多源复制和主主复制时，可能出现数据回路问题。新增 replicate_server_mode 选项用于控制只应用多源复制管道内临近主节点上产生的binlog，不会应用其他的非临近节点产生的binlog，避免出现数据回路问题。多通道主主复制能减少机房容灾演练和切换时的主从配置变更，该特性由中移智家DBA团队（徐良）贡献代码。更多详细内容参考：[GreatSQL高可用特性之主主复制防止回路](5-2-ha-repl-server-mode.md)。
+- 支持在MGR单主（Single Primary）模式下，当主节点切换时会主动关闭当前活跃连接，缩短应用端不可用时长。更详细内容参考：[MGR切主后断开应用连接](../../5-enhance/5-2-ha-mgr-kill-conn-after-switch.md)。
+- 在跨机房容灾场景，同时开启多源复制和主主复制时，可能出现数据回路问题。新增 replicate_server_mode 选项用于控制只应用多源复制管道内临近主节点上产生的binlog，不会应用其他的非临近节点产生的binlog，避免出现数据回路问题。多通道主主复制能减少机房容灾演练和切换时的主从配置变更，该特性由中移智家DBA团队（徐良）贡献代码。更多详细内容参考：[GreatSQL高可用特性之主主复制防止回路](../../5-enhance/5-2-ha-repl-server-mode.md)。
 
 ### 高性能
 - 支持类似MySQL HeatWave的大规模并行、高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级。在32C64G测试机环境下，TPC-H 100G测试中22条SQL总耗时仅需不到80秒。更详细内容参考：[Rapid引擎]()。
