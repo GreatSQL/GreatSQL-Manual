@@ -38,7 +38,12 @@ $ tar xf GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 
 **提示**：安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
 
-安装GreatSQL需要先安装其他依赖包，可执行下面命令完成： `yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel perl-Data-Dumper perl-Digest-MD5`
+安装GreatSQL需要先安装其他依赖包，可执行下面命令完成： 
+
+```
+$ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
+
+如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](./1-install-prepare.md)。
 
 选择安装`jemalloc jemalloc-devel`jemalloc并库不是必须的，用它的好处是可以优化内存管理性能等，有条件的话尽量启用。
 

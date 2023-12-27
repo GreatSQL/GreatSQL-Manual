@@ -37,9 +37,10 @@ $ systemctl stop iptables
 
 安装GreatSQL RPM包时，要先安装这些相关依赖包。
 ```
-$ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5
+$ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
 ```
-更详细的请参考：[安装准备](../4-install-guide/1-install-prepare.md)。
+
+如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](../4-install-guide/1-install-prepare.md)。
 
 ## 安装RPM包
 
@@ -59,8 +60,11 @@ Updating / installing...
 
 **提示**：
 1. 安装GreatSQL RPM包需要先安装其他依赖包，可执行下面命令完成：
-`yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5`
-更详细的请参考：[安装准备](../4-install-guide/1-install-prepare.md)。
+
+```
+$ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
+
+如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](../4-install-guide/1-install-prepare.md)。
 
 其他部分依赖包，如果通过YUM还是无法安装，则加上 `--nodeps --force` 强制忽略即可，例如：
 ```

@@ -242,9 +242,9 @@ $ systemctl daemon-reload
 
 安装GreatSQL RPM包时，要先安装这些相关依赖包。
 ```
-$ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel
+$ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
 ```
-如果有更多依赖包需要安装，请自行添加。
+如果有更多依赖包需要安装，请自行添加。如果报告个别依赖包安装失败或者找不到就删掉，然后重试。
 
 添加/修改系统文件 `/etc/sysconfig/mysql`：
 ```
