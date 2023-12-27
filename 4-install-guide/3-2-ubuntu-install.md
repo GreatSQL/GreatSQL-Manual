@@ -276,7 +276,7 @@ $ mysqld --defaults-file=/etc/mysql/my.cnf&
 $ mysql -uroot
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 11
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
@@ -285,7 +285,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 greatsql> \s
 --------------
-mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 0ce93c62130)
+mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision db07cc5cb73)
 
 Connection id:          11
 Current database:       
@@ -294,7 +294,7 @@ SSL:                    Not in use
 Current pager:          stdout
 Using outfile:          ''
 Using delimiter:        ;
-Server version:         8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
+Server version:         8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
 Protocol version:       10
 Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4

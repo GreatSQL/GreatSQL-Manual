@@ -12,7 +12,7 @@ MySQL Shell中提供了Utilities工具包，可用于对数据库进行备份和
 $ mysqlsh -S/data/GreatSQL/mysql.sock -uroot -p
 MySQL Shell 8.0.32
 ...
-Server version: 8.0.32-25  GreatSQL, Release 25, Revision 0ce93c62130
+Server version: 8.0.32-25  GreatSQL, Release 25, Revision db07cc5cb73
 No default schema selected; type \use <schema> to set one.
  MySQL  localhost  JS >
 ```

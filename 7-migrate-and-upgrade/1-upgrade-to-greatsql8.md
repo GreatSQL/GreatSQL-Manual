@@ -153,7 +153,7 @@ upgrade = FORCE
 [System] [MY-013381] [Server] Server upgrade from '50700' to '80025' started.
 [System] [MY-013381] [Server] Server upgrade from '50700' to '80025' completed.
 ...
-[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-25'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 25, Revision 0ce93c62130.
+[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-25'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 25, Revision db07cc5cb73.
 ```
 
 是不是觉得有点惊喜，有点意外，怎么怎么简单，事实的确如此。
@@ -201,7 +201,7 @@ upgrade = FORCE
 [Note] [MY-013394] [Server] Checking 'sys' schema.
 [System] [MY-013381] [Server] Server upgrade from '50700' to '80025' completed.
 ...
-[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-25'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 25, Revision 0ce93c62130.
+[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-25'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 25, Revision db07cc5cb73.
 ```
 这样就完成升级了，非常便捷省事。
 

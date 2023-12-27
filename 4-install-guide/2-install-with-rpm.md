@@ -352,7 +352,7 @@ $ mysql -uroot -p
 Enter password:     #<--这个地方粘贴上面复制的随机密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
 
 Copyright (c) 2021-2023 GreatDB Software Co., Ltd
 Copyright (c) 2009-2021 Percona LLC and/or its affiliates
@@ -368,7 +368,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 greatsql> \s   #<--就可以正常执行其他命令了
 --------------
-mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 0ce93c62130)
+mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision db07cc5cb73)
 
 Connection id:          8
 Current database:
@@ -377,7 +377,7 @@ SSL:                    Not in use
 Current pager:          stdout
 Using outfile:          ''
 Using delimiter:        ;
-Server version:         8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
+Server version:         8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
 Protocol version:       10
 Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4
@@ -484,7 +484,7 @@ Please provide the password for 'root@.%2Fmysql.sock': ********  <-- 输入root�
 Save password for 'root@.%2Fmysql.sock'? [Y]es/[N]o/Ne[v]er (default No): yes  <-- 提示是否存储密码（视各公司安全规则而定，这里为了方便选择了存储密码）
 MySQL Shell 8.0.25
 ...
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
 No default schema selected; type \use <schema> to set one.
 WARNING: Found errors loading plugins, for more details look at the log at: /root/.mysqlsh/mysqlsh.log
  MySQL  localhost  Py >
@@ -538,7 +538,7 @@ Please provide the password for 'GreatSQL@172.16.16.10:3306': *************
 Save password for 'GreatSQL@172.16.16.10:3306'? [Y]es/[N]o/Ne[v]er (default No): yes
 MySQL Shell 8.0.25
 ...
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision 0ce93c62130
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
 No default schema selected; type \use <schema> to set one.
 
 # 选定GreatSQL-01节点作为PRIMARY，开始创建MGR集群

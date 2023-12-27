@@ -87,7 +87,7 @@ MAJOR_VERSION=8
 MINOR_VERSION=0
 PATCH_VERSION=32
 RELEASE=24
-REVISION=0ce93c62130
+REVISION=db07cc5cb73
 GLIBC=`ldd --version | head -n 1 | awk '{print $NF}'`
 ARCH=`uname -p`
 OS=`grep '^ID=' /etc/os-release | sed 's/.*"\{.*\)".*/\1/ig'`
