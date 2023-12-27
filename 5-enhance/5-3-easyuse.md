@@ -1,4 +1,4 @@
-# GreatSQL高兼容之Oracle兼容
+# GreatSQL高兼容
 ---
 
 从GreatSQL 8.0.32-25版本开始，在Oracle兼容方面有了巨大提升，除了OCI、DBlink、包之外，几乎支持绝大多数常用的Oracle语法、数据类型、函数、存储过程等功能。
