@@ -9,7 +9,7 @@ GreatSQL支持在单主（Single-Primary）模式下，在读写节点（以下�
 
 **特别提醒**：
 
-1. 动态VIP解绑以后，通过读写VIP与MGR Primary节点建立的连接会被主动kill掉，前提是需要添加配置 `bind_address = "*"`（默认配置） 或 `bind_address="0.0.0.0"`；如果绑定某个固定IP地址，则无法实现MGR Primary节点切换后主动kill连接。该特性可参考：[MGR切主后断开应用连接](./5-2-ha-mgr-kill-conn-after-switch.md)。
+1. 动态VIP解绑以后，通过读写VIP与MGR Primary节点建立的连接会被主动kill掉，前提是需要添加配置 `bind_address="0.0.0.0"`；如果绑定某个固定IP地址，则无法实现MGR Primary节点切换后主动kill连接。该特性可参考：[MGR切主后断开应用连接](./5-2-ha-mgr-kill-conn-after-switch.md)。
 
 2. 为了保证MGR节点间能正常通信，需要在各个MGR节点的系统 `/etc/hosts` 文件中配置各个节点的host和ip对应关系，**更推荐的做法是在每个MGR节点中都配置 `report_host`**，以确保能够通过 `performance_schema.REPLICATION_GROUP_MEMBERS` 表中的 `MEMBER_HOST` 列连接到其他节点，否则有可能导致MGR节点角色切换时VIP漂移绑定失败。
 
