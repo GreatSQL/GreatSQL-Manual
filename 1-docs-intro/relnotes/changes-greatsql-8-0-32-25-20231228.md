@@ -8,7 +8,7 @@
 
 - 下载链接：[RPM包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)、[TAR包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)、[源码包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)
 
-- 用户手册：[GreatSQL 8.0.32-25 User Manual](https://greatsql.cn/docs/8032-25)
+- 用户手册：[GreatSQL 8.0.32-25 User Manual](https://greatsql.cn/docs/8032-25/)
 
 ##  特性增强
 
@@ -18,6 +18,7 @@ GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引
 - 支持在MGR单主（Single Primary）模式下，对只读节点绑定VIP，业务可以通过该VIP来访问只读节点，实现只读节点的动态VIP漂移。更详细内容参考：[MGR绑定动态VIP](../../5-enhance/5-2-ha-mgr-vip.md)。
 - 支持在MGR单主（Single Primary）模式下，当主节点切换时会主动关闭当前活跃连接，缩短应用端不可用时长。更详细内容参考：[MGR切主后断开应用连接](../../5-enhance/5-2-ha-mgr-kill-conn-after-switch.md)。
 - 在跨机房容灾场景，同时开启多源复制和主主复制时，可能出现数据回路问题。新增 replicate_server_mode 选项用于控制只应用多源复制管道内临近主节点上产生的binlog，不会应用其他的非临近节点产生的binlog，避免出现数据回路问题。多通道主主复制能减少机房容灾演练和切换时的主从配置变更，该特性由中移智家DBA团队（徐良）贡献代码。更多详细内容参考：[GreatSQL高可用特性之主主复制防止回路](../../5-enhance/5-2-ha-repl-server-mode.md)。
+- 更多信息详见文档：[高可用](../../5-enhance/5-2-ha.md)。
 
 ### 高性能
 - 支持类似MySQL HeatWave的大规模并行、高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级。在32C64G测试机环境下，TPC-H 100G测试中22条SQL总耗时仅需不到80秒。更详细内容参考：[Rapid引擎]()。
@@ -26,8 +27,12 @@ GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引
 
 - 提升InnoDB PQ能力，支持TPC-H Q21查询优化能力。
 
+- 更多信息详见文档：[高性能](../../5-enhance/5-1-highperf.md)。
+
 ### 高兼容
 - 从GreatSQL 8.0.32-25版本开始，在Oracle兼容方面有了巨大提升，除了OCI、DBlink、Packages之外，支持大多数常用的SQL语法、数据类型、函数、存储过程、触发器、视图等功能。支持CLOB、NUMBER、VARCHAR2、PLS_INTEGER等数据类型，支持ADD_MONTHS、CHR、DUMP等函数，支持ANY、ALL、Hierarchical Query、FULL JOIN等SQL语法，支持存储过程、触发器、视图等兼容性。
+
+- 更多信息详见文档：[高兼容](../../5-enhance/5-3-easyuse.md)。
 
 
 ## 缺陷修复
