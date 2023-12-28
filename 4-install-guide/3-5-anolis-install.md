@@ -42,6 +42,7 @@ $ tar xf GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 
 ```
 $ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
+```
 
 如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](./1-install-prepare.md)。
 
