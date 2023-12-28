@@ -1,6 +1,5 @@
 # Changes in GreatSQL 8.0.32-24 (2023-6-5)
 
-[toc]
 
 > GreatSQL 8.0.32-24版本发布，增加并行load data、（逻辑 & CLONE）备份加密、MGR读写节点可绑定动态VIP、Oracle兼容扩展、审计日志增强等重磅特性。
 

@@ -1,6 +1,5 @@
 # Changes in GreatSQL 8.0.25-16（2022-5-16）
 ---
-[toc]
 
 ## 1.新增特性
 ### 1.1 新增仲裁节点（投票节点）角色
@@ -13,7 +12,7 @@
 
 当集群中只剩下 Arbitrator 节点时，则会自动退出。
 ```
-mysql> select * from performance_schema.replication_group_members;
+greatsql> select * from performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+----------------------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST  | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION | MEMBER_COMMUNICATION_STACK |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+----------------------------+
