@@ -101,7 +101,6 @@ loose-greatdb_ha_enable_mgr_vip = ON
 loose-greatdb_ha_mgr_vip_ip = "172.17.140.250"
 loose-greatdb_ha_mgr_vip_mask = "255.255.255.0"
 loose-greatdb_ha_mgr_vip_nic = "eth0"
-loose-greatdb_ha_mgr_vip_broad = '172.17.140.250'
 loose-greatdb_ha_port = 33062
 loose-greatdb_ha_mgr_read_vip_ips = "172.17.140.251"
 #loose-greatdb_ha_mgr_read_vip_ips = "172.17.140.251,172.17.140.252"
