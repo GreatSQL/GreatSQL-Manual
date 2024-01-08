@@ -2,6 +2,21 @@
 ---
 我们衷心地感谢参与和协助GreatSQL项目的所有成员。是你们的辛勤付出使得版本顺利发布，也为GreatSQL更好地发展提供可能。
 
+## 开发贡献
+
+ #### 中信建投证券股份有限公司信息技术部（Ethan_LY）
+ - [两个Oracle兼容函数 sys_guid()、decode()](https://gitee.com/GreatSQL/GreatSQL/pulls/7)
+
+ #### 中移智家DBA团队（zjjxxl）
+ - **跨机房容灾场景，同时开启多源复制和主主复制，存在数据回路问题**（[issue#I8E8QB](https://gitee.com/GreatSQL/GreatSQL/issues/I8E8QB)）<br>
+ 详细文档请参见：[GreatSQL高可用特性之主主复制防止回路](https://greatsql.cn/docs/8032-25/user-manual/5-enhance/5-2-ha-repl-server-mode.html)
+
+## 文档贡献
+ 敬请期待~<br>
+ [我要参与编写文档！](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+
+## 感谢列表
+
 以下是GreatSQL项目感谢列表（成员排名不分先后）：
 
 - [gitee](https://gitee.com/)
