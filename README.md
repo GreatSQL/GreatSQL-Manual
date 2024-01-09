@@ -42,6 +42,7 @@ GreatSQL数据库是一款**开源免费**数据库，可在普通硬件上满�
  - ## [1.6 社区行为守则](./1-docs-intro/1-6-community-rules.md)
  - ## [1.7 社区治理](./1-docs-intro/1-8-community-toc.md)
  - ## [1.8 致谢](./1-docs-intro/1-7-thanks.md)
+ - ## [1.9 认证人员名单](./1-docs-intro/1-9-greatsql-certified.md)
 
 # [2. GreatSQL系统架构](./2-about-greatsql/0-about-greatsql.md)
  - ## [2.1 GreatSQL简介](./2-about-greatsql/1-greatsql-brief-intro.md)
