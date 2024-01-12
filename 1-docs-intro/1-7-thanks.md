@@ -55,6 +55,7 @@
 - 是我的海
 - Sky凌乱
 - Yan ᯤ
+- [iTransit](https://gitee.com/iTransit)
 
 
 **问题反馈**
