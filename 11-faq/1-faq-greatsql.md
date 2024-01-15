@@ -92,7 +92,9 @@ GreatSQL提供Ansible一键安装包，可在gitee或github下载：
 
 ## 4. 使用GreatSQL遇到问题时找谁
 
-使用GreatSQL过程中如果遇到问题，可将问题细节整理清楚后，联系GreatSQL社区寻求帮助。
+使用GreatSQL过程中如果遇到问题，可将问题细节整理清楚后，发布到GreatSQL社区论坛上，论坛地址：[https://greatsql.cn/forum.php](https://greatsql.cn/forum.php)。
+
+也可以联系GreatSQL社区寻求帮助。
 
 扫码添加GreatSQL社区助手：<br/>
 -![扫码添加GreatSQL社区助手](greatsql-wx-assist.jpg)
@@ -100,7 +102,9 @@ GreatSQL提供Ansible一键安装包，可在gitee或github下载：
 或扫码加入GreatSQL社区QQ群（533341697）：<br/>
 -![或扫码加入GreatSQL社区QQ群533341697](greatsql-qqqun.jpg)
 
-此外，我们已经在B站发布MGR相关系列视频，可以前往学习，视频链接：[https://space.bilibili.com/1363850082](https://space.bilibili.com/1363850082) 。
+您也可以先自行查阅GreatSQL用户手册，手册地址：[https://greatsql.cn/docs/](https://greatsql.cn/docs/)。
+
+我们也发布了大量配套视频资源，视频观看地址：[视频资料](https://greatsql.cn/smx_course-lesson.html?op=video)。
 
 ## 5. GreatSQL相关资源有哪些
 
