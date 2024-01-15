@@ -155,9 +155,17 @@ GreatSQL中增加一个新的工作模式：**单主快速模式**，在这个�
 3. 完善MGR中的外键约束机制，降低或避免从节点报错退出MGR的风险。
 
 ## 3.其他调整
-1. 选项 `group_replication_flow_control_replay_lag_behind` 默认值由60秒调整为600秒，以适应更多业务场景。该选项用于控制MGR主从节点复制延迟阈值，当MGR主从节点因为大事务等原因延迟超过阈值时，就会触发流控机制。
-2. 新增选项 `group_replication_communication_flp_timeout`（单位：秒）。当多数派节点超过该阈值为收到某节点发送的消息时，会将该节点判定为可疑节点。在网络条件较差的环境中，可以适当调大该阈值，以避免频繁抖动。
-3. 新增选项 `group_replication_zone_id_sync_mode`（类型：布尔型，可选值：ON/OFF，默认值：ON）。如果设置了 `group_replication_zone_id` 启用地理标签功能，需要保证所有节点都同步数据。但当 `group_replication_zone_id_sync_mode = OFF` 时，地理标签就只是个标记，不再保证各节点都同步数据。
+1. 新增选项 `group_replication_communication_flp_timeout`（单位：秒，默认值：5）。当多数派节点超过该阈值为收到某节点发送的消息时，会将该节点判定为可疑节点。在网络条件较差的环境中，可以适当调大该阈值，以避免频繁抖动。
+
+在MySQL MGR中，MGR节点间会定期交换消息，当超过5秒（固定值）还没收到某个节点的任何消息时，就会将这个节点标记为可疑状态（SUSPICION）。当故障节点确定可疑状态后，会继续等待`group_replication_member_expel_timeout`秒后再报告超时，并将该节点驱逐出MGR。
+
+在GreatSQL新增 `group_replication_communication_flp_timeout` 选项，用于控制检测可疑状态的超时时间，替换官方固定的5秒时间值。
+
+将该参数值设小后，可以更快的检测到节点的可疑状态；同时配合 `group_replication_member_expel_timeout` 选项，可以更快的驱逐故障节点。
+
+一般场景下，无需配置该参数值。
+2. 新增选项 `group_replication_zone_id_sync_mode`（类型：布尔型，可选值：ON/OFF，默认值：ON）。如果设置了 `group_replication_zone_id` 启用地理标签功能，需要保证所有节点都同步数据。但当 `group_replication_zone_id_sync_mode = OFF` 时，地理标签就只是个标记，不再保证各节点都同步数据。
+3. 选项 `group_replication_flow_control_replay_lag_behind` 默认值由60秒调整为600秒，以适应更多业务场景。该选项用于控制MGR主从节点复制延迟阈值，当MGR主从节点因为大事务等原因延迟超过阈值时，就会触发流控机制。
 
 
 ## 4.bug修复
