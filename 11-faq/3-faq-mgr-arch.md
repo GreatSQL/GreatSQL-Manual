@@ -7,6 +7,7 @@
 ## 1. GreatSQL支持读写分离吗
 可以利用MySQL Router来实现读写分离。
 
+也可以利用GreatSQL MGR支持对读写节点、只读节点分别绑定VIP特性实现读写分离需求，详见：[GreatSQL高可用特性之内置动态VIP](../5-enhance/5-2-ha-mgr-vip.md)。
 
 ## 2. MGR支持读负载均衡吗
 支持的。可以在MGR集群的前端挂载MySQL Router，即可实现读负载均衡。

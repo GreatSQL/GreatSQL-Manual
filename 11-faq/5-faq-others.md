@@ -4,9 +4,11 @@
 其他FAQ。
 
 ## 1. 使用MGR有什么限制吗
+
 下面是关于MGR使用的一些限制：
+
 - 所有表必须是InnoDB引擎。可以创建非InnoDB引擎表，但无法写入数据，在利用Clone构建新节点时也会报错。
-- 所有表都必须要有主键。同上，能创建没有主键的表，但无法写入数据，在利用Clone构建新节点时也会报错。
+- 所有表最好都要有主键(建议全局设置选项 `sql_require_primary_key=ON`)。同上，能创建没有主键的表，但无法写入数据，在利用Clone构建新节点时也会报错（例外情况：在创建表之前，设置选项 `sql_generate_invisible_primary_key=ON`，这样InnoDB就会自动为该表创建一个不可见主键，详见：[Generated Invisible Primary Keys](https://dev.mysql.com/doc/refman/8.0/en/create-table-gipks.html)）。
 - 不要使用大事务，默认地，事务超过150MB会报错，最大可支持2GB的事务（在GreatSQL未来的版本中，会增加对大事务的支持，提高大事务上限）。
 - 如果是从旧版本进行升级，则不能选择 MINIMAL 模式升级，建议选择 AUTO 模式，即 `upgrade=AUTO`。
 - 由于MGR的事务认证线程不支持 `gap lock`，因此建议把所有节点的事务隔离级别都改成 `READ COMMITTED`。基于相同的原因，MGR集群中也不要使用 `table lock` 及 `name lock`（即 `GET_LOCK()` 函数 ）。
@@ -68,8 +70,11 @@ Cluster.addInstance: Instance check failed (RuntimeError)
 
 从上面的错误提示也能看出来，如果创建一个和主键等价的唯一索引（且要求不允许为NULL），该唯一索引可用做InnoDB表的聚集索引，就不会再报错了，业务也能正常写入数据。
 
+最好是在创建表之前，设置选项 `sql_generate_invisible_primary_key=ON`，这样InnoDB就会自动为该表创建一个不可见主键，详见：[Generated Invisible Primary Keys](https://dev.mysql.com/doc/refman/8.0/en/create-table-gipks.html)。
+
 ## 4. GreatSQL怎么备份
-可以利用GreatSQL安装包中提供的mysqldump工具执行逻辑备份。
+可以利用GreatSQL安装包中提供的mysqldump工具执行逻辑备份。GreatSQL中的mysqldump备份工具支持加密备份，详见：[mysqldump备份加密](../5-enhance/5-4-security-mysqldump-encrypt.md)。
+
 也可以利用相同版本号的Percona Xtrabackup执行物理备份，例如利用Percona XtraBackup 8.0.25-17备份GreatSQL 8.0.25-15、GreatSQL 8.0.25-16版本，利用Percona XtraBackup 2.4备份GreatSQL 5.7.36-39版本。
 
 ## 5. 用MySQL Shell创建MGR时新增的 mysql_innodb_cluster_* 账号是干嘛用的

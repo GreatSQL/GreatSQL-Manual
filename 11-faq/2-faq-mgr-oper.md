@@ -5,32 +5,33 @@
 
 
 ## 1. 可以使用MySQL Shell来管理GreatSQL吗
+
 是可以的，最好采用相同版本号的MySQL Shell即可。
 
-GreatSQL 8.0.25-16起，如果有仲裁节点，则需要用GreatSQL MySQL Shell版本才能管理，否则只能在MySQL命令行下管理。
+GreatSQL 8.0.25-16起，如果有仲裁节点，则需要用MySQL Shell for GreatSQL版本才能管理，否则只能在命令行下管理。
 
-GreatSQL MySQL Shell下载链接 [https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.25-16](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.25-16)
+MySQL Shell for GreatSQL下载链接 [https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.25-16](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.25-16)
 。
-
 
 ## 2. MGR最多可支持多少个节点
 MGR最多可支持9个节点，无论是单主还是多主模式。
 
 ## 3. MGR可以设置为自启动吗
-设置参数 `group_replication_start_on_boot = ON` 即可。但是当MGR第一个节点初始化启动时，或者整个MGR集群都关闭再重启时，第一个节点都必须先采用引导模式 `group_replication_bootstrap_group = ON`。
+设置选项 `group_replication_start_on_boot = ON` 即可。但是当MGR第一个节点初始化启动时，或者整个MGR集群都关闭再重启时，第一个节点都必须先采用引导模式 `group_replication_bootstrap_group = ON`。
 
+当整个MGR集群都关闭再重启时，也可以用MySQL Shell实现一键自动快速拉起，详见：[万答#12，MGR整个集群挂掉后，如何才能自动选主，不用手动干预](https://mp.weixin.qq.com/s/07o1poO44zwQIvaJNKEoPA)。
 
 ## 4. 为什么启动MGR后，多了个33061端口
-当启用MGR服务后，MySQL会监听33061端口，该端口用于MGR节点间的通信。因此当服务器间有防火墙策略时，记得针对该端口开放。
+当启用MGR服务后，GreatSQL默认会监听33061端口，该端口用于MGR节点间的通信。因此当服务器间有防火墙策略时，记得针对该端口开放。
 
-当然了，可自行定义该端口，例如 `group_replication_local_address=192.168.0.1:33062`。
+也可以自行定义该端口，例如 `group_replication_local_address=192.168.0.1:33062`。
 
 ## 5. 部署MGR时，务必对所有节点都设置hostname吗
 这个不是必须的。
 
 之所以要在每个节点上都加上各节点的hostname对照表，是因为在MGR节点间通信过程中，可能收到的主机名和本地实际配置的不一致。
 
-这种情况下，也可以在每个节点上自行设置 `report_host` 及 `report_port` 来解决这个问题。
+这种情况下，也可以在每个节点上自行设置 `report_host` 及 `report_port` 来解决这个问题。如果想启用GreatSQL MGR支持绑定动态VIP特性，也建议要设置 `report_host` 和 `report_port`，详见：[GreatSQL高可用特性之内置动态VIP](../5-enhance/5-2-ha-mgr-vip.md)。
 
 ## 6. 可以跨公网部署MGR吗
 可以的，但非常不推荐。
@@ -63,10 +64,10 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+-----------...-+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID ... | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+-----------...-+-------------+--------------+-------------+----------------+
-| group_replication_applier | 4ebd3504-1... |        3306 | ONLINE       | SECONDARY   | 8.0.25         |
-| group_replication_applier | 549b92bf-1... |        3307 | ONLINE       | SECONDARY   | 8.0.25         |
-| group_replication_applier | 5596116c-1... |        3308 | ONLINE       | SECONDARY   | 8.0.25         |
-| group_replication_applier | ed5fe7ba-3... |        3309 | ONLINE       | PRIMARY     | 8.0.25         |
+| group_replication_applier | 4ebd3504-1... |        3306 | ONLINE       | SECONDARY   | 8.0.32         |
+| group_replication_applier | 549b92bf-1... |        3307 | ONLINE       | SECONDARY   | 8.0.32         |
+| group_replication_applier | 5596116c-1... |        3308 | ONLINE       | SECONDARY   | 8.0.32         |
+| group_replication_applier | ed5fe7ba-3... |        3309 | ONLINE       | PRIMARY     | 8.0.32         |
 +---------------------------+-----------...-+-------------+--------------+-------------+----------------+
 ```
 如果只看到一个节点的 `MEMBER_ROLE` 值为 **PRIMARY**，则表示这是单主模式。如果看到所有节点上该状态值均为 **PRIMARY**，则表示这是多主模式。
@@ -90,7 +91,7 @@ MySQL  GreatSQL:3306 ssl  JS > c.describe() /* 或者 c.status() */
 P.S，强烈建议采用单主模式，遇到bug或其他问题的概率更低，运行MGR更稳定可靠。
 
 ## 8. 怎么切换单主或多主
-在MySQL客户端命令行模式下，执行下面的命令即可：
+在GreatSQL客户端命令行模式下，执行下面的命令即可：
 ```
 -- 从单主切换为多主
 greatsql> SELECT group_replication_switch_to_multi_primary_mode();
@@ -172,12 +173,12 @@ $ mysqlrouter --bootstrap mymgr@192.168.1.1:4306 --name=MGR2 --directory=/etc/my
 
 关于MySQL Router多实例部署的方法，可以参考这篇参考文档：[**《叶问》38期，MGR整个集群挂掉后，如何才能自动选主，不用手动干预**](https://mp.weixin.qq.com/s/9eLnQ2EJIMQnZuEvScIhiw)。
 
-## 10. MySQL Shell 8.0能管理MySQL 5.7的MGR集群吗
+## 10. MySQL Shell 8.0能管理MySQL/GreatSQL 5.7的MGR集群吗
 答案是肯定的。
 
-不过由于MySQL 5.7里没有MGR管理的几个UDF，因此在MySQL Shell里调用 `setPrimaryInstance()`、`switchToMultiPrimaryMode()` 等函数时会报错，是不支持的。
+不过由于MySQL/GreatSQL 5.7里没有MGR管理的几个UDF，因此在MySQL Shell里调用 `setPrimaryInstance()`、`switchToMultiPrimaryMode()` 等函数时会报错，是不支持的。
 
-所以说，还是尽量升级到MySQL 8.0吧。
+所以说，还是尽量升级到MySQL/GreatSQL 8.0吧。
 
 ## 11. GreatSQL 支持ARBITRATOR节点冗余（多个ARBITRATOR节点）吗
 
@@ -186,7 +187,7 @@ $ mysqlrouter --bootstrap mymgr@192.168.1.1:4306 --name=MGR2 --directory=/etc/my
 ## 12. 当ARBITRATOR节点异常退出后剩下的两个节点会有脑裂风险吗
 是的，当ARBITRATOR节点退出后，只剩下两个节点，存在脑裂风险。因此当ARBITRATOR节点异常退出时，应当尽快重新拉起，做好监控及自愈处理。
 
-## 13. 多个mgr集群，是否可以共用ARBITRATOR节点
+## 13. 多个MGR集群，是否可以共用ARBITRATOR节点
 不可以，不同集群的ARBITRATOR节点可以交叉部署，同一集群不能放一起。也可以在一台专属服务器上部署多实例，专门用作ARBITRATOR节点。
 仲裁节点对系统负载的影响很小，可以参考下面的数据：
 ```#Primary节点

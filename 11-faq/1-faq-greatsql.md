@@ -4,56 +4,66 @@
 本文内容主要是GreatSQL相关的FAQ。
 
 ## 1. GreatSQL简介
-GreatSQL开源数据库是适用于金融级应用的国内自主MySQL版本，专注于提升MGR可靠性及性能，支持InnoDB并行查询等特性，可以作为MySQL或Percona Server的可选替换，用于线上生产环境，且完全免费并兼容MySQL或Percona Server。
-
-GreatSQL除了提升MGR性能及可靠性，还引入InnoDB事务锁优化及并行查询优化等特性，以及众多BUG修复。
+GreatSQL数据库是一款**开源免费**数据库，可在普通硬件上满足金融级应用场景，具有**高可用**、**高性能**、**高兼容**、**高安全**等特性，可作为MySQL或Percona Server for MySQL的理想可选替换。
 
 GreatSQL社区官网：[https://greatsql.cn](https://greatsql.cn)
 
 ## 2. GreatSQL的特色有哪些
 
-相较于MySQL/Percona Server，GreatSQL主要增加几个特性：
-1. **地理标签**
-1. **仲裁节点**
-1. **快速单主**
-1. **智能选主**
-1. **并行查询**
+GreatSQL主要有以下几个核心特性。
 
-选用GreatSQl主要有以下几点优势：
+### 2.1 高可用
 
-- 专注于提升MGR可靠性及性能，支持InnoDB并行查询特性
-- 是适用于金融级应用的MySQL分支版本
-- 地理标签，提升多机房架构数据可靠性
-- 仲裁节点，用更低的服务器成本实现更高可用
-- 单主模式下更快，选主机制更完善
-- InnoDB表也支持并行查询，让CPU资源不再浪费
-- 全新流控机制，让MGR运行更流畅不频繁抖动
-- 相对官方社区版，MGR运行更稳定、可靠
-- 其他...
+针对MGR进行了大量改进和提升工作，新增支持**地理标签**、**仲裁节点**、**读写节点可绑定动态IP**、**快速单主模式**、**智能选主**，并针对**流控算法**、**事务认证队列清理算法**、**节点加入&退出机制**、**recovery机制**等多项MGR底层工作机制算法进行深度优化，进一步提升优化了MGR的高可用保障及性能稳定性。
 
-无论是更可靠的MGR还是性能更好的InnoDB，都值得将当前的MySQL或Percona Server升级到GreatSQL。
+- 支持地理标签特性，提升多机房架构数据可靠性。
+- 支持仲裁节点特性，用更低的服务器成本实现更高可用。
+- 支持读写节点动态VIP特性，高可用切换更便捷。
+- 支持快速单主模式，在单主模式下更快，性能更高。
+- 支持智能选主特性，高可用切换选主机制更合理。
+- 采用全新流控算法，使得事务更平稳，避免剧烈抖动。
+- 优化了节点加入、退出时可能导致性能剧烈抖动的问题。
+- 优化事务认证队列清理算法，高负载下不不复存在每60秒性能抖动问题。
+- 解决了个别节点上磁盘空间爆满时导致MGR集群整体被阻塞的问题。
+- 解决了长事务造成无法选主的问题。
+- 修复了recovery过程中长时间等待的问题。
 
-目前GreatSQL最新版本是8.0.32-25，[可点击这里下载最新版本](https://gitee.com/GreatSQL/GreatSQL/releases)
+更多信息详见文档：[高可用](../5-enhance/5-2-ha.md)。
 
-关于GreatSQL的优势可阅读下面几篇文章：
+### 2.2 高性能
+相对MySQL及Percona Server For MySQL的性能表现更稳定优异，支持**高性能的内存查询加速AP引擎**、**InnoDB并行查询**、**并行LOAD DATA**、**事务无锁化**、**线程池等**特性，在TPC-C测试中相对MySQL性能提升超过30%，在TPC-H测试中的性能表现是MySQL的十几倍甚至上百倍。
 
-- [Changes in GreatSQL 8.0.32-25 (2023-12-28)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231228.md)
-- [Changes in GreatSQL 8.0.32-24 (2023-6-5)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
-- [Changes in GreatSQL 8.0.25-17 (2023-3-13)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-17-20230313.md)
-- [Changes in GreatSQL 8.0.25-16 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [Changes in GreatSQL 8.0.25-15 (2021-8-26)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.md)
-- [Changes in GreatSQL 5.7.36-39 (2022-4-7)](../1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.md)
-- [GreatSQL重磅特性，InnoDB并行并行查询优化测试](https://mp.weixin.qq.com/s/_LeEtwJlfyvIlxzLoyNVdA)
-- [面向金融级应用的GreatSQL正式开源](https://mp.weixin.qq.com/s/cI_wPKQJuXItVWpOx_yNTg)
+- 支持类似MySQL HeatWave的大规模并行、高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级。
+- 支持InnoDB并行查询，适用于轻量级OLAP应用场景，在TPC-H测试中平均提升15倍，最高提升40+倍。
+- 优化InnoDB事务系统，实现了大锁拆分及无锁化等多种优化方案，OLTP场景整体性能提升约20%。
+- 支持并行LOAD DATA，适用于频繁导入大批量数据的应用场景，性能可提升约20+倍。
+- 支持线程池(Threadpool)，降低了线程创建和销毁的代价，保证高并发下，性能稳定不会明显衰退。
+
+更多信息详见文档：[高性能](../5-enhance/5-1-highperf.md)。
+
+### 2.3 高兼容
+
+支持大多数常见Oracle用法，包括数据类型、函数、SQL语法、存储程序等兼容性用法。
+
+更多信息详见文档：[高兼容](../5-enhance/5-3-easyuse.md)。
+
+### 2.4 高安全
+
+支持逻辑备份加密、CLONE备份加密、审计日志入表、表空间国密加密等多个安全提升特性，进一步保障业务数据安全，更适用于金融级应用场景。
+
+更多信息详见文档：[高安全](../5-enhance/5-4-security.md)。
+
+综上，GreatSQL数据库是一款**开源免费**数据库，可在普通硬件上满足金融级应用场景，具有**高可用**、**高性能**、**高兼容**、**高安全**等特性，可作为MySQL或Percona Server for MySQL的理想可选替换。
 
 ## 3. GreatSQL在哪里可以下载
-### 二进制包、RPM包
+### 3.1 二进制包、RPM包
 二进制包下载地址：[https://gitee.com/GreatSQL/GreatSQL/releases](https://gitee.com/GreatSQL/GreatSQL/releases)
 
-目前提供CentOS 7、CentOS 8两种操作系统，以及X86和ARM两种不同架构下的二进制包、RPM包。
+GreatSQL至少提供CentOS 7、CentOS 8两种操作系统，以及X86和ARM两种不同架构下的二进制包、RPM包。
 
-带 **minimal** 关键字的安装包是对二进制文件进行strip后，所以文件尺寸较小，功能上没本质区别，仅是不支持gdb debug功能，可以放心使用。
-### 源码
+除此外，GreatSQL还提供适用于国产化操作系统的二进制包或RPM包。
+
+### 3.2 源码
 可以直接用git clone的方式下载GreatSQL源码，例如：
 ```
 # 可从gitee下载
@@ -62,24 +72,23 @@ $ git clone https://gitee.com/GreatSQL/GreatSQL.git
 # 或从github下载
 $ git clone https://github.com/GreatSQL/GreatSQL.git
 ```
-
-### Ansible安装包
-GreatSQL提供Ansible一键安装包，可在gitee或github下载：
-- https://gitee.com/GreatSQL/GreatSQL-Ansible/releases
-- https://github.com/GreatSQL/GreatSQL-Ansible/releases
-
-### Docker镜像
+### 3.3 Docker镜像
 GreatSQL提供Docker镜像，可直接从docker hub拉取：
 ```
 # 直接下载最新版本
 $ docker pull docker.io/greatsql/greatsql
 
 # 或自行指定版本
-$ docker pull docker.io/greatsql/greatsql:8.0.25
+$ docker pull docker.io/greatsql/greatsql:8.0.32-25
 
 # 或指定ARM版本
-$ docker pull docker.io/greatsql/greatsql:8.0.25-aarch64
+$ docker pull docker.io/greatsql/greatsql:8.0.32-25-aarch64
 ```
+
+### 3.4 Ansible安装包
+GreatSQL提供Ansible一键安装包，可在gitee或github下载：
+- https://gitee.com/GreatSQL/GreatSQL-Ansible/releases
+- https://github.com/GreatSQL/GreatSQL-Ansible/releases
 
 ## 4. 使用GreatSQL遇到问题时找谁
 
@@ -98,63 +107,61 @@ $ docker pull docker.io/greatsql/greatsql:8.0.25-aarch64
 一、文档
 目前GreatSQL相关文档全部发布在gitee上（[https://gitee.com/GreatSQL/GreatSQL-Doc/](https://gitee.com/GreatSQL/GreatSQL-Doc/)），主要有以下几部分
 
-1. GreatSQL历史版本说明
+1. GreatSQL历史版本
 
-- [Changes in GreatSQL 8.0.32-25 (2023-12-28)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231228.md)
-- [Changes in GreatSQL 8.0.32-24 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
-- [Changes in GreatSQL 8.0.25-17 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [Changes in GreatSQL 8.0.25-16 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [Changes in GreatSQL 8.0.25-15 (2021-8-26)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.md)
-- [Changes in GreatSQL 5.7.36-39 (2022-4-7)](../1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.md)
+- [历史版本变更说明](../1-docs-intro/1-2-release-history.md)
 
 2. 《深入浅出MGR》系列
 
-- [https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/deep-dive-mgr](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/deep-dive-mgr)
+- 专栏文章：[https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/deep-dive-mgr](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/deep-dive-mgr)
 
-3. 《GreatSQL手册》系列，地址
+3. 《GreatSQL用户手册》
 
-- [https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/user-manual](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/user-manual)
+- [GreatSQL用户手册](https://greatsql.cn/docs/)
 
 二、视频
-目前GreatSQL相关视频全部发布在B站上（[https://space.bilibili.com/1363850082](https://space.bilibili.com/1363850082)），主要有以下几部分
 
 1. 《实战MGR》
 
-- [https://space.bilibili.com/1363850082/channel/seriesdetail?sid=488623&ctype=0](https://space.bilibili.com/1363850082/channel/seriesdetail?sid=488623&ctype=0)
+- [实战MGR](https://greatsql.cn/smx_course-lesson.html?op=video&ids=5)
 
 2. 《深入浅出MGR》
 
-- [https://space.bilibili.com/1363850082/channel/collectiondetail?sid=343928&ctype=0](https://space.bilibili.com/1363850082/channel/collectiondetail?sid=343928&ctype=0)
+- [深入浅出MGR](https://greatsql.cn/smx_course-lesson.html?op=video&ids=6)
 
 3. 《零基础学习MySQL》
 
-- [https://space.bilibili.com/1363850082/channel/collectiondetail?sid=328292&ctype=0](https://space.bilibili.com/1363850082/channel/collectiondetail?sid=328292&ctype=0)
+- [零基础学习MySQL](https://greatsql.cn/smx_course-lesson.html?op=video&ids=7)
 
-4. 《GCA_GreatSQL课程》
+4. 《GreatSQL GCA课程》
 
-- https://www.bilibili.com/video/BV1qk4y1N7dB/?vd_source=ae1951b64ea7b9e6ba11f1d0bbcff0e4
+- [GreatSQL GCA课程](https://greatsql.cn/smx_course-lesson.html?op=video&ids=10)
 
-5. 万里数据库工程师的公开分享
+5. 《GreatSQL GCP课程》
 
-- [https://www.bilibili.com/medialist/detail/ml1406093582?type=1&spm_id_from=333.999.0.0](https://www.bilibili.com/medialist/detail/ml1406093582?type=1&spm_id_from=333.999.0.0)
+- [GreatSQL GCP课程](https://greatsql.cn/smx_course-lesson.html?op=video&ids=11)
+
+6. GreatSQL新版本发布会
+
+- [GreatSQL新版本发布会](https://greatsql.cn/smx_course-lesson.html?op=video&ids=9)
+
+7. 其他公开分享
+
+- [其他公开分享](https://greatsql.cn/smx_course-lesson.html?op=video&ids=4)
 
 
 ## 6. GreatSQL版本计划是怎样的
-GreatSQL不计划每个小版本都跟随，暂定奇数版本跟随方式，即 8.0.25、8.0.27、8.0.29 ... 以此类推。
 
-未来若有版本计划变更我们再更新。
+GreatSQL和MySQL一样，采用[GPLv2协议](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)。
 
-目前已有的版本：<br/>
+GreatSQL版本号采用点分位命名规则（X.Y.Z-R）模式，其中
+- X表示大版本号：MYSQL_VERSION_MAJOR，例如3.x、4.x、5.x、8.x等
+- Y表示小版本号：MYSQL_VERSION_MINOR，例如3.23.x、4.0.x、4.1.x、5.0.x、5.1.x、5.5.x、5.6.x、5.7.x、8.0.x等
+- Z表示补丁版本：MYSQL_VERSION_PATCH，例如3.23.58、4.0.30、4.1.25、5.0.96、5.1.73、5.5.62、5.6.51、5.7.37、8.0.29等
+- R表示修订版本：MYSQL_VERSION_REVISION，例如5.7.36-39、8.0.25-16、8.0.32-25等
 
-**GreatSQL 8.0**
-- [Changes in GreatSQL 8.0.32-25 (2023-12-29)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231228.md)
-- [Changes in GreatSQL 8.0.32-24 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
-- [Changes in GreatSQL 8.0.25-17 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [Changes in GreatSQL 8.0.25-16 (2022-5-16)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [Changes in GreatSQL 8.0.25-15 (2021-8-26)](../1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.md)
+正常情况下，GreatSQL每年会发布两次版本，一般是上半年、下半年各发布一个新版本。
 
-**GreatSQL 5.7**
-- [Changes in GreatSQL 5.7.36-39 (2022-4-7)](../1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.md)
 
 
 
