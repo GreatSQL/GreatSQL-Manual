@@ -141,8 +141,8 @@ greatsql> CREATE TABLE t1(id INT PRIMARY KEY) ENCRYPTION='Y';
 
 greatsql> SHOW CREATE TABLE t1\G
 *************************** 1. row ***************************
-       Table: t2
-Create Table: CREATE TABLE `t2` (
+       Table: t1
+Create Table: CREATE TABLE `t1` (
   `id` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ENCRYPTION='Y'
