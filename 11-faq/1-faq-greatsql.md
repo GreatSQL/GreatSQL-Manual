@@ -97,10 +97,10 @@ GreatSQL提供Ansible一键安装包，可在gitee或github下载：
 也可以联系GreatSQL社区寻求帮助。
 
 扫码添加GreatSQL社区助手：<br/>
--![扫码添加GreatSQL社区助手](greatsql-wx-assist.jpg)
+-![扫码添加GreatSQL社区助手](./greatsql-wx-assist.jpg)
 
 或扫码加入GreatSQL社区QQ群（533341697）：<br/>
--![或扫码加入GreatSQL社区QQ群533341697](greatsql-qqqun.jpg)
+-![或扫码加入GreatSQL社区QQ群533341697](./greatsql-qqqun.jpg)
 
 您也可以先自行查阅GreatSQL用户手册，手册地址：[https://greatsql.cn/docs/](https://greatsql.cn/docs/)。
 
