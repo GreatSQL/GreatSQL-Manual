@@ -73,7 +73,7 @@ log_error_verbosity=3
     - `slave_parallel_type = LOGICAL_CLOCK`
     - `slave_parallel_workers = N`，N>0，可以设置为逻辑CPU数的2倍
     - `binlog_transaction_dependency_tracking = WRITESET`
-- `slave_preserve_commit_order = 1`
+    - `slave_preserve_commit_order = 1`
     - `slave_checkpoint_period = 2`
 
 
