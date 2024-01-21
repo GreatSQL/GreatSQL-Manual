@@ -57,6 +57,7 @@
 - Yan ᯤ
 - [iTransit](https://gitee.com/iTransit)
 - 沿河而下
+- [ShawnYan](https://gitee.com/shawnyan)
 
 
 **问题反馈**
