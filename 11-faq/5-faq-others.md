@@ -93,7 +93,31 @@ scheme of mysql_innodb_cluster_r[10_numbers].
 这种情况下是不支持的。
 目前GreatSQL 的 InnoDB并行查询还不支持子查询，未来会增加支持。
 
-## 7. MySQL 5.7可以和GreatSQL 5.7混用datadir吗
+## 7. 为什么InnoDB并行查询(PQ)不可用
+可能原因有几种：
+1. 优化器认为没必要走并行，比如因为cost太小了。
+2. 不支持的SQL类型，目前还不支持子查询。
+3. 优化器认为可用资源不足，"无法"使用并行查询。
+
+例如，有个场景是因为 `parallel_memory_limit` 设置过低，优化器判断SQL的cost较大，所以只是尝试去使用并行，但没发挥最大优势
+```
+greatsql> show global status like 'PQ_%';
+| PQ_memory_refused  | 0     |
+| PQ_memory_used     | 0     |  <-- 没真正用上，因为可用buffer不够
+| PQ_threads_refused | 82    |
+| PQ_threads_running | 4     |  <-- 尝试并行
+```
+
+在调大 `parallel_memory_limit` 之后就好了
+```
+greatsql> show global status like 'PQ_%';
+| PQ_memory_refused  | 0       |
+| PQ_memory_used     | 4801552 |  <-- PQ消耗的内存
+| PQ_threads_refused | 82      |
+| PQ_threads_running | 4       |  <-- 并行线程4
+```
+
+## 8. MySQL 5.7可以和GreatSQL 5.7混用datadir吗
 是可以的。
 
 不过也提醒下：如果有是在原有MySQL datadir上直接启动GreatSQL的话，记得执行mysql_upgrade哦，要不然是没有MEMBER_ROLE列的。
@@ -106,7 +130,7 @@ scheme of mysql_innodb_cluster_r[10_numbers].
 
 但还不支持5.7和8.0跨版本混跑。
 
-## 8. MGR里推荐用哪个事务隔离级别
+## 9. MGR里推荐用哪个事务隔离级别
 
 在GreatSQL MGR FAQ中提到一个限制条件：
 
@@ -137,7 +161,7 @@ scheme of mysql_innodb_cluster_r[10_numbers].
 
 综上，在MGR中，即便本地节点选择的事RR级别，依然无法跨节点实现gap lock加锁，因此也就无法跨节点保证RR级别。但**如果写入事务都在同一个节点的话，则设置RR是有意义的**。
 
-## 9. GreatSQL性能表现如何
+## 10. GreatSQL性能表现如何
 
 GreatSQL相对于MySQL官方社区版本有非常大的性能提升，尤其是引入了InnoDB并行查询特性，在TPC-H测试中，平均提升15倍以上，最高提升43倍，表现非常优异。
 

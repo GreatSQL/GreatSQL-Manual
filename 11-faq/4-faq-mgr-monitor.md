@@ -29,8 +29,6 @@ RECEIVED_TRANSACTION_SET: 6cfb873b-573f-11ec-814a-d08e7908bcb1:1-3078139
 ```
 可以看到，接收到的事务 GTID 已经到了 3124520，而本地只执行到 3078139，二者的差距是 46381。可以顺便持续关注这个差值的变化情况，估算出本地节点是否能追平延迟，还是会加大延迟。
 
-
-
 ## 2. 三节点的MGR集群，有两个节点宕机后还能正常工作吗
 要看具体是哪种情况。
 
@@ -50,34 +48,6 @@ RECEIVED_TRANSACTION_SET: 6cfb873b-573f-11ec-814a-d08e7908bcb1:1-3078139
 7. 没设置正确的allowlist。有可能加入MGR各节点的IP不在默认的allowlist中，可参考这篇文章：[MySQL Group Replication集群对IP地址的限制导致的一些问题与解决办法](https://mp.weixin.qq.com/s/sbYufrlOx4cKiT8sV3hCaw)。
 8. 个别节点的本地事务更多，例如误操作写入数据，也会无法加入MGR，这种情况需要重建本地节点。
 9. 个别节点的本地事务缺失太多，且加入MGR时无法自动完成恢复，这种情况比较少见，需要手动执行clone复制数据，或者其他类似操作。
-
-## 4. 为什么InnoDB并行查询(PQ)不可用
-可能原因有几种：
-1. 优化器认为没必要走并行，比如因为cost太小了。
-2. 不支持的SQL类型，目前还不支持子查询。
-3. 优化器认为可用资源不足，"无法"使用并行查询。
-
-例如，有个场景是因为 `parallel_memory_limit` 设置过低，优化器判断SQL的cost较大，所以只是尝试去使用并行，但没发挥最大优势
-```
-greatsql> show global status like 'PQ_%';
-| PQ_memory_refused  | 0     |
-| PQ_memory_used     | 0     |  <-- 没真正用上，因为可用buffer不够
-| PQ_threads_refused | 82    |
-| PQ_threads_running | 4     |  <-- 尝试并行
-```
-
-在调大 `parallel_memory_limit` 之后就好了
-```
-greatsql> show global status like 'PQ_%';
-| PQ_memory_refused  | 0       |
-| PQ_memory_used     | 4801552 |  <-- PQ消耗的内存
-| PQ_threads_refused | 82      |
-| PQ_threads_running | 4       |  <-- 并行线程4
-```
-
-
-
-
 
 
 **问题反馈**
