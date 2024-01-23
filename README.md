@@ -148,14 +148,14 @@ $ systemctl status mysqld
 # 版本历史
 ---
 ## GreatSQL 8.0
-- [Changes in GreatSQL 8.0.32-25 (2023-12-28)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231228.md)
-- [Changes in GreatSQL 8.0.32-24 (2023-6-5)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md)
-- [Changes in GreatSQL 8.0.25-17 (2023-3-13)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-25-17-20230313.md)
-- [Changes in GreatSQL 8.0.25-16 (2022-5-16)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.md)
-- [Changes in GreatSQL 8.0.25-15 (2021-8-26)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.md)
+- [Changes in GreatSQL 8.0.32-25 (2023-12-28)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231228.html)
+- [Changes in GreatSQL 8.0.32-24 (2023-6-5)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.html)
+- [Changes in GreatSQL 8.0.25-17 (2023-3-13)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-25-17-20230313.html)
+- [Changes in GreatSQL 8.0.25-16 (2022-5-16)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.html)
+- [Changes in GreatSQL 8.0.25-15 (2021-8-26)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.html)
 
 ## GreatSQL 5.7
-- [Changes in GreatSQL 5.7.36-39 (2022-4-7)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.md)
+- [Changes in GreatSQL 5.7.36-39 (2022-4-7)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.html)
 
 
 # 用户手册及学习资料
