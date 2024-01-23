@@ -177,7 +177,7 @@ $ systemctl status mysqld
 - [一文掌握GreatSQL MGR集群的部署和运维](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/using-greatsql-to-build-mgr-and-node-manage.md)
 - [在Docker中部署GreatSQL并构建MGR集群](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/install-greatsql-with-docker.md)
 - [MySQL InnoDB Cluster+GreatSQL部署MGR集群](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/mysql-innodb-cluster-with-greatsql.md)
-- [GreatSQL MGR FAQ](https://gitee.com/GreatSQL/GreatSQL-Manual/blob/master/11-faq/0-faq.md)
+- [GreatSQL MGR FAQ](https://greatsql.cn/docs/8032-25/user-manual/11-faq/0-faq.html)
 
 # 其他GreatSQL相关资源仓库
 - [GreatSQL用户手册](https://gitee.com/GreatSQL/GreatSQL-Manual)，最新版本GreatSQL用户手册
