@@ -88,7 +88,7 @@ Updating / installing...
 #my.cnf
 [client]
 user = root
-datadir	= /data/GreatSQL/mysql.sock
+socket	= /data/GreatSQL/mysql.sock
 
 [mysqld]
 user	= mysql
