@@ -20,7 +20,14 @@ glibc 2.35
 
 在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
 
-## **1.下载安装包**
+## 1.下载安装包
+
+查看机器的glibc版本，以选择正确的安装包：
+```bash
+$ getconf GNU_LIBC_VERSION
+glibc 2.35
+```
+如果您的glibc版本为2.28或更高版本，请选择带有"glibc2.28"标识的安装包；如果您的glibc版本为2.17，请选择带有"glibc2.17"标识的安装包。
 
 [点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)下载最新的安装包，下载以下二进制包就可以：
 
@@ -34,7 +41,7 @@ $ curl -o GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz https://product.great
 $ tar xf GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 ```
 
-**提示**：安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
+**提示** 安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
 
 > 包名称在centos和Ubuntu上是不同的,若要安装其它依赖包请使用`apt search <包名>`查找
 
@@ -55,9 +62,9 @@ $ tar xf GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 
 进入到`GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin`目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其它信息则已经不缺必要软件包
 
-## **2.启动前准备**
+## 2.启动前准备
 
-### **2.1 修改 my.cnf 配置文件**
+### 2.1 修改 my.cnf 配置文件
 
 [参考这份文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 

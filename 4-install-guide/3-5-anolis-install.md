@@ -16,13 +16,19 @@ glibc 2.28
 
 在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
 
-## **1.下载安装包**
+## 1.下载安装包
 
 先安装wget
 
 ```bash
 $ yum install -y wget
 ```
+查看机器的glibc版本，以选择正确的安装包：
+```bash
+$ ldd --version
+ldd (GNU libc) 2.28
+```
+如果您的glibc版本为2.28或更高版本，请选择带有"glibc2.28"标识的安装包；如果您的glibc版本为2.17，请选择带有"glibc2.17"标识的安装包。
 
 [点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)下载最新的安装包，下载以下二进制包就可以：
 
