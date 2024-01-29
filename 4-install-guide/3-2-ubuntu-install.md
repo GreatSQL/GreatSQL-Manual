@@ -116,7 +116,7 @@ loose-sql_generate_invisible_primary_key = ON
 
 #log settings
 log_timestamps = SYSTEM
-log_error = error.log
+log_error = /data/GreatSQL/error.log
 log_error_verbosity = 3
 slow_query_log = 1
 log_slow_extra = 1

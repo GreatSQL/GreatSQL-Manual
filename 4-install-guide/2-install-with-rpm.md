@@ -139,7 +139,7 @@ loose-sql_generate_invisible_primary_key = ON
 
 #log settings
 log_timestamps = SYSTEM
-log_error = error.log
+log_error = /data/GreatSQL/error.log
 log_error_verbosity = 3
 slow_query_log = 1
 log_slow_extra = 1
@@ -349,7 +349,7 @@ mysqld  52003 mysql  mem       REG              253,0     608096   68994440 /usr
 
 RPM方式安装GreatSQL后，会随机生成管理员root的密码，通过搜索日志文件获取：
 ```
-$ grep -i root /var/log/mysqld.log
+$ grep -i root /data/GreatSQL/error.log
 2022-07-08T14:10:09.670473+08:00 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: ahaA(ACmw8wy
 ```
 可以看到，root账户的密码是："ahaA(ACmw8wy" (不包含双引号)，复制到粘贴板里。
