@@ -267,9 +267,10 @@ greatsql> select group_replication_switch_to_single_primary_mode('af39db70-6850-
 
 参考文档：[MGR节点预检查](../4-install-guide/2-install-with-rpm.md#91mgr节点预检查)，先利用 MySQL Shell for GreatSQL，调用函数 `dba.configure_instance()` 完成初始化检查工作。
 
-而后切换到连接主节点的那个MySQL Shell for GreatSQL终端上，进行添加新节点操作：
+后切换到连接主节点的MySQL Shell for GreatSQL终端上，首先获取cluster对象，再进行添加新节点操作：
 
-```
+```sql
+MySQL  172.16.16.10:3306 ssl  Py > c=dba.get_cluster()
 MySQL  172.16.16.10:3306 ssl  Py > c.add_instance("GreatSQL@172.16.16.13:3306")
 
 NOTE: The target instance '172.16.16.13:3306' has not been pre-provisioned (GTID set is empty). The Shell is unable to decide whether incremental state recovery can correctly provision it.
