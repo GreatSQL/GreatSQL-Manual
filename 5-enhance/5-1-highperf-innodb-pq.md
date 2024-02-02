@@ -72,7 +72,7 @@ parallel_default_dop = 4;
 | Dynamic Variable	| YES |
 | Permitted Values |	[0, 1024] |
 | Default	| 4 |
-| Description	| 设置每个SQL语句的并行查询的最大并发度。<br/>SQL语句的查询并发度会根据表的大小来动态调整，如果表的二叉树太小（表的切片划分数小于并行度），则会根据表的切片划分数来设置该查询的并发度。每一个查询的最大并行度都不会超过parallel_default_dop参数设置的值。 |
+| Description	| 设置每个SQL语句的并行查询的最大并发度。<br/>SQL语句的查询并发度会根据表的大小来动态调整，如果表的二叉树太小（表的切片划分数小于并行度），则会根据表的切片划分数来设置该查询的并发度。每一个查询的最大并行度都不会超过parallel_default_dop参数设置的值。<br/>当设置为0时，表示并行度为0，也即不启用并行查询特性。|
 
 <br/>
 
