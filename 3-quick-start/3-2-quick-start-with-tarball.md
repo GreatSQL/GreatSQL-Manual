@@ -197,8 +197,12 @@ $ ls /var/lib/mysql
 $ cat /var/log/mysqld.log|grep password
 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: NrkNcJya<9f6
 ```
-
-
+> 若使用了GreatSQL推荐的my.cnf则错误日志路径发生改变，请使用以下命令查看初始化密码
+```sql
+$ $ grep -i root /data/GreatSQL/error.log
+... A temporary password is generated for root@localhost: ji!pjndiw5sJ
+```
+复制密码即可登入GreatSQL
 
 ```
 $ /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal/bin/mysql -uroot

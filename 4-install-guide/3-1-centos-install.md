@@ -367,43 +367,41 @@ $ ls /data/GreatSQL
 
 ## 5. 连接登入GreatSQL
 
-二进制包方式安装GreatSQL后，初始化的root密码是空的，可以直接登入并修改成安全密码：
+在上面进行GreatSQL初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
+
+```bash
+$ grep -i root /data/GreatSQL/error.log
+... A temporary password is generated for root@localhost: ji!pjndiw5sJ
 ```
-$ mysql -uroot 
+
+复制该密码，将用于首次登入GreatSQL所需。
+
+部分GreatSQL二进制包方式安装后，有可能初始化的root密码是空的，这种情况下可以直接登入并修改成安全密码。
+
+```sql
+$ mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 11
 Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+...
+greatsql> \s
+ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
+```
 
+首次登入立刻提醒该密码已过期，需要修改，执行类似下面的命令修改即可：
+
+```sql
 greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@2022';  #<--修改密码
 Query OK, 0 rows affected (0.02 sec)
 
 greatsql> \s
---------------
-mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision db07cc5cb73)
-
-Connection id:          8
-Current database:
-Current user:           root@localhost
-SSL:                    Not in use
-Current pager:          stdout
-Using outfile:          ''
-Using delimiter:        ;
-Server version:         8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
-Protocol version:       10
-Connection:             Localhost via UNIX socket
-Server characterset:    utf8mb4
-Db     characterset:    utf8mb4
-Client characterset:    utf8mb4
-Conn.  characterset:    utf8mb4
-UNIX socket:            /data/GreatSQL/mysql.sock
-Binary data as:         Hexadecimal
-Uptime:                 20 min 8 sec
-
-Threads: 2  Questions: 19  Slow queries: 0  Opens: 137  Flush tables: 3  Open tables: 53  Queries per second avg: 0.020
---------------
+...
+Server version:         8.0.32-25
+...
 ```
+
 GreatSQL数据库安装并初始化完毕。
 
 ## 6. 安装MySQL Shell
