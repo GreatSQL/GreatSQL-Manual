@@ -21,7 +21,7 @@ GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引
 - 更多信息详见文档：[高可用](../../5-enhance/5-2-ha.md)。
 
 ### 高性能
-- 支持类似MySQL HeatWave的大规模并行、高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级。在32C64G测试机环境下，TPC-H 100G测试中22条SQL总耗时仅需不到80秒。更详细内容参考：Rapid引擎（AP引擎会尚在内测中，会延迟发布，敬请期待）。
+- 支持类似MySQL HeatWave的大规模并行、高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级。在32C64G测试机环境下，TPC-H 100G测试中22条SQL总耗时仅需不到80秒。更详细内容参考：[Rapid引擎](../../5-enhance/5-1-highperf-rapid-engine.md)。
 
 - 支持异步删除InnoDB大表，删除10G以上大表时对系统负载几乎没影响，有效提高InnoDB引擎运行时性能的稳定性。更详细内容参考：[异步删除InnoDB大表](../../5-enhance/5-1-highperf-async-purge-big-table.md)。
 
