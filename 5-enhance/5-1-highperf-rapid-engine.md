@@ -302,7 +302,7 @@ greatsql> SELECT /*+ SET_VAR(use_secondary_engine=1 SET_VAR(secondary_engine_cos
 
 其余类型的SQL语法暂时还不支持。
 
-Rapid引擎暂时不支持表分区（partition）。
+Rapid引擎暂时不支持表分区（partition），不支持外键（foreign key）。
 
 ## 3. 数据导入
 
