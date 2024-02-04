@@ -754,6 +754,7 @@ GreatSQL Rapid引擎性能表现优异，在32C64G测试机环境下，TPC-H 100
 ## 8. 注意事项
 
 - 当前Rapid引擎的动态库文件仅支持运行在X86/ARM架构下的CentOS 7/8系统，或对应glibc版本分别是2.17和2.28，其他环境暂不支持。
+- 用户数据表主引擎只能是InnoDB引擎，不支持MyISAM等其他引擎。
 - 当前Rapid引擎还处于Alpha版本阶段，尚未达到GA（General Availability）阶段，重要线上生产环境中使用需谨慎。
 - 数据库实例重启后，查询个别Rapid引擎表可能会提示无法使用Rapid引擎加速，这时可以尝试执行 `ALTER TABLE ... SECONDARY_LOAD` 将该表再次加载到Rapid引擎中，实际上无需重新加载一次，速度非常快，之后就可以使用Rapid引擎了。
 
