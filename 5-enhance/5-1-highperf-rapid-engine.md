@@ -510,7 +510,7 @@ Rapid引擎整体架构如下图所示
 
 - Rapid引擎的核心代码是采用C++11开发，该引擎没有任何其他的依赖。
 - Rapid引擎适用于OLAP场景，它采用向量化计算技术，充分利用CPU SIMD技术。
-- Rapid引擎内部采用DataBlocks存储结构，这是一种兼顾OLTP和OLAP的压缩存储结构。
+- Rapid引擎内部采用DataBlocks存储结构，这是一种兼顾OLTP和OLAP的压缩存储结构。其数据存储的基本格式：RowGroup based Storage。存储引擎将一个表的数据按行划分为多个RowGroup的组合，每个RowGroup最大存储122880行，内部数据按列进行存储。
 - Rapid内部是一个基于矢量化推送的模型（vectorized push-based model），在执行过程中，向量（vector）会在各个操作符之间流转，而不是一个个元组（tuple），采用了 Morsel驱动并行实现方式，将一个执行计划切分成多个管道（pipeline），每个管道采用 push-based的方式进行数据传递和调用。
 
 启用Rapid引擎后，会在数据库主目录`datadir`中产生一些新文件/目录，主要有：
