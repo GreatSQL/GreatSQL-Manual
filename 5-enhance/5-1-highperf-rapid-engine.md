@@ -506,7 +506,7 @@ COMMITTED_GTID_SET: 4fb86f5b-b028-11ee-92b8-d08e7908bcb1:1-339
 ## 4. 解读Rapid引擎
 ### 4.1 体系结构
 Rapid引擎整体架构如下图所示
-![GreatSQL Rapid引擎体系结构图](./GreatSQL-Rapid-arch.png)
+![GreatSQL Rapid引擎体系结构图](./5-1-highperf-GreatSQL-Rapid-arch.png)
 
 - Rapid引擎的核心代码是采用C++11开发，该引擎没有任何其他的依赖。
 - Rapid引擎适用于OLAP场景，它采用向量化计算技术，充分利用CPU SIMD技术。
@@ -731,7 +731,7 @@ greatsql> EXPLAIN FORMAT=TREE  SELECT * FROM t1;
 
 ### 6.1 TPC-H测试表现
 GreatSQL Rapid引擎性能表现优异，在32C64G测试机环境下，TPC-H 100G测试中22条SQL总耗时仅需不到80秒。下面是和其他类似产品的对比数据，仅供参考（测试时间：2024.1.31）：
-![tpch100g-rapid-vs-stonedb-starrocks](./tpch100g-rapid-vs-stonedb-starrocks.png)
+![tpch100g-rapid-vs-stonedb-starrocks](./5-1-highperf-greatsql-tpch100g.png)
 
 ### 6.2 数据压缩率
 
