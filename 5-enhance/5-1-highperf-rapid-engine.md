@@ -757,6 +757,7 @@ GreatSQL Rapid引擎性能表现优异，在32C64G测试机环境下，TPC-H 100
 - 用户数据表主引擎只能是InnoDB引擎，不支持MyISAM等其他引擎。
 - 当前Rapid引擎还处于Alpha版本阶段，尚未达到GA（General Availability）阶段，重要线上生产环境中使用需谨慎。
 - 数据库实例重启后，查询个别Rapid引擎表可能会提示无法使用Rapid引擎加速，这时可以尝试执行 `ALTER TABLE ... SECONDARY_LOAD` 将该表再次加载到Rapid引擎中，实际上无需重新加载一次，速度非常快，之后就可以使用Rapid引擎了。
+- 由于底层存储结构的差异，用户从InnoDB主引擎和Rapid辅助引擎分别读取数据时，如果不加相同的排序规则，则读取到的数据顺序可能不一致。
 
 
 
