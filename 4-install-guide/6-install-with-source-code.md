@@ -36,12 +36,9 @@ $ wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/
 $ yum clean all
 $ yum makecache
 ```
-安装 Docker，并启动 Docker 进程
+安装 Docker，启动 Docker 并验证版本
 ```bash
 $ yum install -y docker-ce docker-ce-cli containerd.io
-```
-启动 Docker 并验证版本
-```bash
 $ systemctl start docker
 $ docker --version
 Docker version 25.0.3, build 4debf41
@@ -52,13 +49,10 @@ Docker version 25.0.3, build 4debf41
 $ yum install -y git
 ```
 
-## 2. 下载GreatSQL源码及Docker压缩包
+## 2. 拉取 GreatSQL-Docker 仓库
 
-### 2.1 下载Docker编译环境压缩包
+直接拉取[GreatSQL-Docker 仓库](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Build)，将仓库拉取到 `/opt/` 目录下：
 
-到GreatSQL-Docker仓库下载GreatSQL Docker编译环境需要文件 [戳此下载](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Build)
-
-将仓库内文件下载后放在 `/opt/` 目录下：
 ```
 $ cd /opt/
 $ git clone https://gitee.com/GreatSQL/GreatSQL-Docker.git
@@ -67,11 +61,14 @@ $ cd GreatSQL-Build
 $ ls
 Dockerfile  README.md  docker-entrypoint.sh  greatsql-automake.sh  patchelf-0.14.5.tar.gz  rpcgen-1.3.1-4.el8.x86_64.rpm
 ```
+或是只下载 GreatSQL-Docker 仓库 GreatSQL-Build 文件夹下的 Dockerfile 文件也行，Dockerfile 文件会自动从服务器上下载相应文件。
+
 ## 3. GreatSQL Build Docker镜像构建
+
 ```bash
 $ docker build -t greatsql/greatsql_build .
 ```
-上述命令会查找当前目录下的 Dockerfile 文件，并构建名为 greatsql/greatsql_build 的Docker 镜像。
+上述命令会查找当前目录下的 Dockerfile 文件，并构建名为 greatsql/greatsql_build 的 Docker 镜像。
 
 在构建镜像时，会自动从服务器上下载相应的源码包文件、初始化脚本等文件，并全自动化方式完成镜像构建工作。
 
@@ -91,9 +88,11 @@ drwxrwxr-x 13 mysql mysql       293 Feb 18 08:29 GreatSQL-8.0.32-25-centos-glibc
 /opt/GreatSQL-8.0.32-25-centos-glibc2.28-x86_64/bin/mysqld  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 79f57097e3f)
 4. entering /bin/bash
 ```
-> 由于编译过程需要大量计算资源，根据机器配置不同,可能需要的时间也不同，请耐心等待。
+出现`4. entering /bin/bash`表示已经完成编译
 
-可以看到已经完成编译，如果需要的话，可以将Docker容器中的二进制包文件拷贝到宿主机上，例如：
+> 由于编译过程需要大量计算资源，根据机器配置不同，可能需要的时间也不同，请耐心等待。
+
+如果需要的话，可以将Docker容器中的二进制包文件拷贝到宿主机上，例如：
 
 ```bash
 $ docker cp greatsql_build:/opt/GreatSQL-8.0.32-25-centos-glibc2.28-x86_64 /usr/local/
@@ -120,10 +119,11 @@ CMD ["bash"]
 
 至此，GreatSQL二进制安装包就编译成功了，接下来可以参考文档[二进制包安装并构建MGR集群](./3-install-with-tarball.md)继续进行数据库的初始化，以及MGR集群构建等工作，这里不赘述。
 
-## 4. 相关资源
+## 5. 相关资源和延伸阅读
 `greatsql_docker_build` 仓库地址详见：[https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Build](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Build)
 
 **延伸阅读**
+
 - [在Linux下源码编译安装GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source.md)
 - [麒麟OS+龙芯环境编译GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source-under-kylin-and-loongson.md)
 - [openEuler、龙蜥Anolis、统信UOS系统下编译GreatSQL二进制包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-under-openeuler-anolis-uos.md)
