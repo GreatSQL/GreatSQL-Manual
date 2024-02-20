@@ -1,132 +1,127 @@
 # 编译源码安装
 ---
 
-本次介绍如何利用Docker来编译GreatSQL源码。
+本文介绍如何利用Docker来(自动)编译GreatSQL源码并生成对应GreatSQL二进制包
 
-## 1. 下载GreatSQL源码及Docker压缩包
+若需要生成RPM包，可以参考这个文档[在CentOS环境下编译GreatSQL RPM包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-rpm-under-centos.md)
 
-### 1.1 下载Docker编译环境压缩包
+本文介绍的运行环境是CentOS 8 x86_64，更多环境适配请自行修改Dockerfile及相关脚本中的参数。
+```bash
+$ cat /etc/redhat-release
+CentOS Linux release 8.5.2111
 
-[戳此下载](https://product.greatdb.com/GreatSQL/greatsql_docker_build-8032.tar.xz)GreatSQL Docker编译环境压缩包[greatsql_docker_build.tar.xz](https://product.greatdb.com/GreatSQL/greatsql_docker_build-8032.tar.xz)。
+$ uname -a
+Linux gip 4.18.0-348.el8.x86_64 #1 SMP Tue Oct 19 15:14:17 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+```
+## 1. 准备工作
+### 1.1 配置 Yum 源
+开始编译之前，建议先配置好 Yum 源，方便安装一些工具
+```bash
+# 直接替换yum源文件，并替换部分资源
+$ curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo
+$ sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo
 
-将压缩包放在 `/opt/` 目录下：
+# 删除其他无用的yum源文件
+$ rm -f /etc/yum.repos.d/CentOS-Linux-*
+
+#替换完后，更新缓存
+$ yum clean all
+$ yum makecache
+```
+
+### 1.2 安装 Docker
+下载 Docker 的 Yum 源，并清理生成新的 Yum 缓存
+```bash
+$ wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo
+$ yum clean all
+$ yum makecache
+```
+安装 Docker，并启动 Docker 进程
+```bash
+$ yum install -y docker-ce docker-ce-cli containerd.io
+```
+启动 Docker 并验证版本
+```bash
+$ systemctl start docker
+$ docker --version
+Docker version 25.0.3, build 4debf41
+```
+### 1.3 安装 Git
+安装Git方便拉取仓库
+```bash
+$ yum install -y git
+```
+
+## 2. 下载GreatSQL源码及Docker压缩包
+
+### 2.1 下载Docker编译环境压缩包
+
+到GreatSQL-Docker仓库下载GreatSQL Docker编译环境需要文件 [戳此下载](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Build)
+
+将仓库内文件下载后放在 `/opt/` 目录下：
 ```
 $ cd /opt/
-$ tar xf greatsql_docker_build-8032.tar.xz
-$ cd greatsql_docker_build
+$ git clone https://gitee.com/GreatSQL/GreatSQL-Docker.git
+$ cd GreatSQL-Docker
+$ cd GreatSQL-Build
 $ ls
-Dockerfile  greatsql-automake.sh  greatsql-docker-build.sh  patchelf-0.12.tar.gz  rpcsvc-proto-1.4.tar.gz
+Dockerfile  README.md  docker-entrypoint.sh  greatsql-automake.sh  patchelf-0.14.5.tar.gz  rpcgen-1.3.1-4.el8.x86_64.rpm
 ```
-
-下载 boost_1_77_0 源码包：
+## 3. GreatSQL Build Docker镜像构建
+```bash
+$ docker build -t greatsql/greatsql_build .
 ```
-$ pwd
-/opt/greatsql_docker_build
-$ curl -o boost_1_77_0.tar.gz https://nchc.dl.sourceforge.net/project/boost/boost/1.77.0/boost_1_77_0.tar.gz
-$ ls
-boost_1_77_0.tar.gz  Dockerfile  greatsql-automake.sh  greatsql-docker-build.sh  patchelf-0.12.tar.gz  rpcsvc-proto-1.4.tar.gz
+上述命令会查找当前目录下的 Dockerfile 文件，并构建名为 greatsql/greatsql_build 的Docker 镜像。
+
+在构建镜像时，会自动从服务器上下载相应的源码包文件、初始化脚本等文件，并全自动化方式完成镜像构建工作。
+
+> 由于镜像构建需要下载基础镜像并进行层层构建，受限于当前机器配置和网络环境，整个构建过程可能需要一定时间，请耐心等待。
+## 4. GreatSQL Build Docker镜像使用
+```bash
+# 创建新容器
+$ docker run -itd --hostname greatsql_build --name greatsql_build greatsql/greatsql_build bash
+
+# 查看自动编译进展
+$ docker logs greatsql_build
+
+1. compile patchelf
+2. entering greatsql automake
+3. greatsql automake completed
+drwxrwxr-x 13 mysql mysql       293 Feb 18 08:29 GreatSQL-8.0.32-25-centos-glibc2.28-x86_64
+/opt/GreatSQL-8.0.32-25-centos-glibc2.28-x86_64/bin/mysqld  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 79f57097e3f)
+4. entering /bin/bash
 ```
+> 由于编译过程需要大量计算资源，根据机器配置不同,可能需要的时间也不同，请耐心等待。
 
-### 1.2 下载GreatSQL源码
+可以看到已经完成编译，如果需要的话，可以将Docker容器中的二进制包文件拷贝到宿主机上，例如：
 
-[戳此下载](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)GreatSQL源码压缩包，解压缩后放在 `/opt` 目录下。
-
-## 2. 构建Docker编译环境
-
-执行脚本 `greatsql_docker_build.sh` 开始构建Docker编译环境：
+```bash
+$ docker cp greatsql_build:/opt/GreatSQL-8.0.32-25-centos-glibc2.28-x86_64 /usr/local/
 ```
-$ cd /opt/greatsql_docker_build
-$ sh ./greatsql-docker-build.sh /opt/greatsql-8.0.32-25
-```
+如果宿主机环境也是CentOS 8 x86_64的话，这就可以在宿主机环境下直接使用该二进制文件包了。
 
-执行脚本后面带的参数 `/opt/greatsql-8.0.32-25` 是指GreatSQL源码所在目录。
-之后就会自动开始构建Docker环境了：
-```
-$ sh ./greatsql-docker-build.sh /opt/greatsql-8.0.32-25
-Sending build context to Docker daemon  411.9MB
-Step 1/14 : FROM centos
- ---> 5d0da3dc9764
-Step 2/14 : ENV container docker
- ---> Using cache
- ---> 49a38409329a
+如果需要自定义编译参数，可以在 `greatsql-automake.sh` 脚本自行修改，然后删除 Dockerfile 第50行附近，在最后改成 COPY 方式，把在本地修改后的文件拷贝到Docker容器中，类似下面这样：
+```bash
+FROM centos:8
+ENV LANG en_US.utf8
+
 ...
-Step 14/14 : COPY boost_1_77_0.tar.gz /opt/
- ---> 55a506d50850
-Successfully built 55a506d50850
-Successfully tagged greatsql_build_env:latest
-Docker build success!you can run it:
-
-docker run -d -v /opt/greatsql-8.0.32-25:/opt/greatsql-8.0.32-25 greatsql_build_env
-```
-
-## 3. 进入Docker容器编译GreatSQL
-
-根据上面的提示，创建一个新容器用于编译GreatSQL：
-```
-$ docker run -d -v /opt/greatsql-8.0.32-25:/opt/greatsql-8.0.32-25 greatsql_build_env
-cc6500484dad5c905f00167e274f833bb722eff83269a51a2eb058013aaccfb4
-```
-
-找到正确的容器ID，进入该容器，准备开始编译：
-```
-$ docker ps -a | grep greatsql_build
-cc6500484dad   greatsql_build_env    "/usr/sbin/init"         2 minutes ago   Up 2 minutes                                           strange_borg
-
-$ docker exec -it cc6500484dad bash
-[root@cc6500484dad /]#
-[root@cc6500484dad /]# cd /opt
-[root@cc6500484dad opt]# ls
-boost_1_77_0.tar.gz  greatsql-8.0.32-25  greatsql-automake.sh  rh
-[root@cc6500484dad opt]# tar zxf boost_1_77_0.tar.gz
-```
-
-编辑 `/opt/greatsql-automake.sh` 脚本，确认其中文件目录、版本号等信息是否正确：
-```
-#!/bin/bash
-MAJOR_VERSION=8
-MINOR_VERSION=0
-PATCH_VERSION=32
-RELEASE=24
-REVISION=db07cc5cb73
-GLIBC=`ldd --version | head -n 1 | awk '{print $NF}'`
-ARCH=`uname -p`
-OS=`grep '^ID=' /etc/os-release | sed 's/.*"\{.*\)".*/\1/ig'`
-#OS=Linux
-PKG_NAME=GreatSQL-${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}-${RELEASE}-${OS}-glibc${GLIBC}-${ARCH}
-BASE_DIR=/usr/local/${PKG_NAME}
-BOOST_VERSION=1_77_0
-SOURCE_DIR=greatsql-${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}-${RELEASE}
+dnf install -y ${GREATSQL_BUILD_DOWNLOAD_URL}/${RPCGEN} > /dev/null 2>&1 && \
+curl -o /${ENTRYPOINT} ${GREATSQL_BUILD_DOWNLOAD_URL}/${ENTRYPOINT} > /dev/null 2>&1 && \
 ...
+chmod +x /docker-entrypoint.sh
+
+#删除curl下载greatsql-automake.sh脚本工作，改成COPY
+COPY ${GREATSQL_MAKESH} ${OPT_DIR}
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["bash"]
 ```
 
-确认都没问题的话，就可以执行该脚本开始编译源码了：
-```
-# 记得执行这步，切换到gcc 10/11编译环境下
-$ source ~/.bash_profile
-$ time sh /opt/greatsql-automake.sh
-
--- Running cmake version 3.20.2
--- Found Git: /usr/bin/git (found version "2.27.0")
-CMake Deprecation Warning at cmake/cmake_policies.cmake:54 (CMAKE_POLICY):
-  The OLD behavior for policy CMP0075 will be removed from a future version
-  of CMake.
-...
--- Up-to-date: /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/man/man8/mysqld.8
--- Up-to-date: /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/man/man1/mysqlrouter.1
--- Up-to-date: /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/man/man1/mysqlrouter_passwd.1
--- Up-to-date: /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/man/man1/mysqlrouter_plugin_info.1
-```
-
-编译过程中如果没问题，就会在 `/usr/local` 目录下生成GreatSQL二进制安装文件，例如：
-```
-$ ls /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64
-bin    docs     lib      LICENSE.router  man                     mysql-test  README.md-test  run    support-files  var
-cmake  include  LICENSE  LICENSE-test    mysqlrouter-log-rotate  README.md   README.router   share  usr
-```
 至此，GreatSQL二进制安装包就编译成功了，接下来可以参考文档[二进制包安装并构建MGR集群](./3-install-with-tarball.md)继续进行数据库的初始化，以及MGR集群构建等工作，这里不赘述。
 
 ## 4. 相关资源
-`greatsql_docker_build` 最新版本详见：[https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/greatsql_docker_build](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/greatsql_docker_build)。
+`greatsql_docker_build` 仓库地址详见：[https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Build](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Build)
 
 **延伸阅读**
 - [在Linux下源码编译安装GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source.md)
