@@ -464,7 +464,7 @@ greatsql> SELECT TABLE_NAME, STATUS, COMMITTED_GTID_SET, READ_GTID, READ_BINLOG_
 
 当增量导入任务停止后，查询状态结果如下所示：
 ```sql
-greatsql> select * from information_schema.SECONDARY_ENGINE_INCREMENT_LOAD_TASK\G
+greatsql> SELECT * FROM information_schema.SECONDARY_ENGINE_INCREMENT_LOAD_TASK\G
 *************************** 1. row ***************************
            DB_NAME: tpch1g
         TABLE_NAME: t1
@@ -593,7 +593,7 @@ Rapid引擎相关的选项设置主要包括系统选项和插件选项两类：
 新增状态变量 `Secondary_engine_execution_count` 用于统计辅助引擎表上执行查询的次数。例如：
 ```sql
 -- 查看全局状态变量
-greatsql> show global status like 'Secondary_engine_execution_count';
+greatsql> SHOW GLOBAL STATUS LIKE 'Secondary_engine_execution_count';
 +----------------------------------+-------+
 | Variable_name                    | Value |
 +----------------------------------+-------+
@@ -601,7 +601,7 @@ greatsql> show global status like 'Secondary_engine_execution_count';
 +----------------------------------+-------+
 
 -- 查看session级状态变量
-greatsql> show status like 'Secondary_engine_execution_count';
+greatsql> SHOW STATUS LIKE 'Secondary_engine_execution_count';
 +----------------------------------+-------+
 | Variable_name                    | Value |
 +----------------------------------+-------+
@@ -609,7 +609,7 @@ greatsql> show status like 'Secondary_engine_execution_count';
 +----------------------------------+-------+
 
 -- 查看执行计划，确认可以走Rapid引擎
-greatsql> explain select * from t1;
+greatsql> EXPLAIN SELECT * FROM t1;
 +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+------------------------------+
 | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra                        |
 +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+------------------------------+
@@ -618,17 +618,17 @@ greatsql> explain select * from t1;
 1 row in set, 1 warning (0.00 sec)
 
 -- 执行一次查询
-greatsql> select * from t1;
+greatsql> SELECT * FROM t1;
 
 -- 再次查看全局/session级状态变量，发现分别都增加了1
-greatsql> show global status like 'Secondary_engine_execution_count';
+greatsql> SHOW GLOBAL STATUS LIKE 'Secondary_engine_execution_count';
 +----------------------------------+-------+
 | Variable_name                    | Value |
 +----------------------------------+-------+
 | Secondary_engine_execution_count | 38    |
 +----------------------------------+-------+
 
-greatsql> show status like 'Secondary_engine_execution_count';
+greatsql> SHOW STATUS LIKE 'Secondary_engine_execution_count';
 +----------------------------------+-------+
 | Variable_name                    | Value |
 +----------------------------------+-------+
@@ -726,6 +726,46 @@ greatsql> EXPLAIN FORMAT=TREE  SELECT * FROM t1;
 ```
 
 目前，Rapid引擎不支持 `EXPLAIN ANALYZE` 用法。
+
+### 5.7 元数据
+
+可以执行下面的SQL，查询当前有哪些表使用了Rapid引擎：
+
+```sql
+greatsql> SELECT * FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'tpch100' AND CREATE_OPTIONS LIKE '%Rapid%';
++---------------+----------------+------------+------------+--------+---------+------------+------------+----------------+-------------+-----------------+--------------+-----------+----------------+---------------------+-------------+------------+--------------------+----------+---------------------------------------------+---------------+
+| TABLE_CATALOG | TABLE_SCHEMA   | TABLE_NAME | TABLE_TYPE | ENGINE | VERSION | ROW_FORMAT | TABLE_ROWS | AVG_ROW_LENGTH | DATA_LENGTH | MAX_DATA_LENGTH | INDEX_LENGTH | DATA_FREE | AUTO_INCREMENT | CREATE_TIME         | UPDATE_TIME | CHECK_TIME | TABLE_COLLATION    | CHECKSUM | CREATE_OPTIONS                              | TABLE_COMMENT |
++---------------+----------------+------------+------------+--------+---------+------------+------------+----------------+-------------+-----------------+--------------+-----------+----------------+---------------------+-------------+------------+--------------------+----------+---------------------------------------------+---------------+
+| def           | tpch100g_rapid | customer   | BASE TABLE | InnoDB |      10 | Dynamic    |   14854987 |            210 |  3124756480 |               0 |    330219520 |         0 |           NULL | 2024-01-30 21:23:08 | NULL        | NULL       | utf8mb4_0900_ai_ci |     NULL | SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1" |               |
+| def           | tpch100g_rapid | lineitem   | BASE TABLE | InnoDB |      10 | Dynamic    |  582868392 |            168 | 98148810752 |               0 |  30295408640 |         0 |           NULL | 2024-01-30 21:23:08 | NULL        | NULL       | utf8mb4_0900_ai_ci |     NULL | SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1" |               |
+| def           | tpch100g_rapid | nation     | BASE TABLE | InnoDB |      10 | Dynamic    |         25 |            655 |       16384 |               0 |        16384 |         0 |           NULL | 2024-01-30 21:23:08 | NULL        | NULL       | utf8mb4_0900_ai_ci |     NULL | SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1" |               |
+| def           | tpch100g_rapid | orders     | BASE TABLE | InnoDB |      10 | Dynamic    |  148492582 |            146 | 21699231744 |               0 |   3329179648 |   6291456 |           NULL | 2024-01-30 21:23:08 | NULL        | NULL       | utf8mb4_0900_ai_ci |     NULL | SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1" |               |
+| def           | tpch100g_rapid | part       | BASE TABLE | InnoDB |      10 | Dynamic    |   19943155 |            176 |  3525312512 |               0 |            0 |         0 |           NULL | 2024-01-30 21:23:08 | NULL        | NULL       | utf8mb4_0900_ai_ci |     NULL | SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1" |               |
+| def           | tpch100g_rapid | partsupp   | BASE TABLE | InnoDB |      10 | Dynamic    |   79832625 |            226 | 18117296128 |               0 |   3886923776 |         0 |           NULL | 2024-01-30 21:23:08 | NULL        | NULL       | utf8mb4_0900_ai_ci |     NULL | SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1" |               |
+| def           | tpch100g_rapid | region     | BASE TABLE | InnoDB |      10 | Dynamic    |          5 |           3276 |       16384 |               0 |            0 |         0 |           NULL | 2024-01-30 21:23:08 | NULL        | NULL       | utf8mb4_0900_ai_ci |     NULL | SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1" |               |
+| def           | tpch100g_rapid | supplier   | BASE TABLE | InnoDB |      10 | Dynamic    |     989416 |            186 |   184369152 |               0 |     20496384 |         0 |           NULL | 2024-01-30 21:23:08 | NULL        | NULL       | utf8mb4_0900_ai_ci |     NULL | SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1" |               |
++---------------+----------------+------------+------------+--------+---------+------------+------------+----------------+-------------+-----------------+--------------+-----------+----------------+---------------------+-------------+------------+--------------------+----------+---------------------------------------------+---------------+
+8 rows in set (0.01 sec)
+```
+
+执行下面的SQL，可以查询当前增量数据导入状态：
+```sql
+greatsql> SELECT * FROM information_schema.SECONDARY_ENGINE_INCREMENT_LOAD_TASK\G
+*************************** 1. row ***************************
+           DB_NAME: tpch1g
+        TABLE_NAME: t1
+        START_TIME: 2024-01-26 15:14:31
+        START_GTID: 4fb86f5b-b028-11ee-92b8-d08e7908bcb1:1-337
+COMMITTED_GTID_SET: 4fb86f5b-b028-11ee-92b8-d08e7908bcb1:1-339
+         READ_GTID: 4fb86f5b-b028-11ee-92b8-d08e7908bcb1:339
+  READ_BINLOG_FILE: ./binlog.000002
+   READ_BINLOG_POS: 3591515
+             DELAY: 6
+            STATUS: NOT RUNNING
+          END_TIME: 2024-01-26 15:35:18
+              INFO: NORMAL EXIT
+1 row in set (0.00 sec)
+```
 
 ## 6. 性能表现参考
 
