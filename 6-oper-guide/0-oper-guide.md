@@ -10,7 +10,8 @@
 - ## [3 监控告警](./3-monitoring-and-alerting.md)
 - ## [4 备份恢复](./4-backup-and-restore.md)
 - ## [5 单机多实例](./5-multi-instances.md)
-- ## [6 防范误操作及快速恢复](./6-avoid-mistakes.md)
+- ## [6 运维特性增强](./6-feature-enhancement.md)
+- ## [7 防范误操作及快速恢复](./7-avoid-mistakes.md)
 
 **问题反馈**
 ---
