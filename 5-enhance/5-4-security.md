@@ -11,6 +11,8 @@ GreatSQL支持逻辑备份加密、CLONE备份加密、审计日志入表、表�
 
 4. 支持在MySQL原有keyring架构下，通过国密算法，增强GreatSQL的安全性。更详细内容参考：[InnoDB表空间国密加密](./5-4-security-innodb-tablespace-encrypt.md)。
 
+5. 支持数据脱敏插件，能够对敏感数据进行脱敏处理，确保数据的安全性，有效预防数据泄露的风险。更详细内容参考：[数据脱敏](./5-4-security-data-masking.md)。
+
 
 **问题反馈**
 ---
