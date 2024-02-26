@@ -1,12 +1,21 @@
 # 性能测试
 ---
 
+## 性能测试方法
+
 本文主要介绍对GreatSQL进行性能测试的几种不同方法，主要包括：
 
 1. [sysbench测试](./3-1-benchmark-sysbench.md)
 1. [TPC-H测试](./3-2-benchmark-tpch.md)
 
 可以根据实际情况和业务需要，选择定制不同的压测方案。
+
+## 性能测试报告
+
+以下是GreatSQL基准性能测试报告：
+
+- GreatSQL TPC-H 性能测试报告：[在线报告](./3-3-benchmark-greatsql-tpch-report.md)、[PDF文档下载](./3-3-benchmark-greatsql-tpch-report-20240228.pdf)
+
 
 **参考资料：**
 - [利用sysbench执行测试](https://mp.weixin.qq.com/s/QPzlrrt7z0ui1ShtA2_P2Q)
