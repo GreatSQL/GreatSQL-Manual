@@ -7,7 +7,7 @@ GreatSQL支持逻辑备份加密、CLONE备份加密、审计日志入表、表�
 
 2. 支持在利用CLONE备份时同步进行加密操作，提升备份文件安全性，避免备份文件被盗或泄漏时造成损失。更详细内容参考：[CLONE备份加密](./5-4-security-clone-encrypt.md)。
 
-3. 支持将审计日志写入数据表中，并且设置审计日志入表规则，以便达到不同的审计需求。更详细内容参考：[审计日志入表](./5-4-security-audit-log-in-table.md)。
+3. 支持审计功能，并将审计日志写入数据表中，以及设置审计日志入表规则，达到不同的审计需求。更详细内容参考：[审计](./5-4-security-audit.md)。
 
 4. 支持在MySQL原有keyring架构下，通过国密算法，增强GreatSQL的安全性。更详细内容参考：[InnoDB表空间国密加密](./5-4-security-innodb-tablespace-encrypt.md)。
 
