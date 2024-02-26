@@ -19,6 +19,9 @@ GreatSQL支持审计功能，并将审计日志写入数据表中，并且设置
 -- 安装插件
 greatsql> INSTALL PLUGIN audit_log SONAME 'audit_log.so';
 
+-- 启用审计功能
+greatsql> SET GLOBAL audit_log_enabled = 1;
+
 -- 启用审计入表特性
 greatsql> SET GLOBAL audit_log_to_table = 1;
 
@@ -65,30 +68,59 @@ $ cat audit.log
 审计功能相关新增参数/选项有
 
 ```sql
-greatsql> SHOW variables LIKE 'audit%';
-+-----------------------------+---------------+
-| Variable_name               | Value         |
-+-----------------------------+---------------+
-| audit_log_buffer_size       | 1048576       |
-| audit_log_exclude_accounts  |               |
-| audit_log_exclude_commands  |               |
-| audit_log_exclude_databases |               |
-| audit_log_file              | audit.log     |
-| audit_log_flush             | OFF           |
-| audit_log_format            | OLD           |
-| audit_log_handler           | FILE          |
-| audit_log_include_accounts  |               |
-| audit_log_include_commands  |               |
-| audit_log_include_databases |               |
-| audit_log_policy            | ALL           |
-| audit_log_rotate_on_size    | 0             |
-| audit_log_rotations         | 0             |
-| audit_log_strategy          | ASYNCHRONOUS  |
-| audit_log_syslog_facility   | LOG_USER      |
-| audit_log_syslog_ident      | percona-audit |
-| audit_log_syslog_priority   | LOG_INFO      |
-+-----------------------------+---------------+
+greatsql> SHOW VARIABLES LIKE 'audit%';
++-----------------------------+----------------+
+| Variable_name               | Value          |
++-----------------------------+----------------+
+| audit_log_buffer_size       | 1048576        |
+| audit_log_enabled           | 1              |
+| audit_log_exclude_accounts  |                |
+| audit_log_exclude_commands  |                |
+| audit_log_exclude_databases |                |
+| audit_log_file              | audit.log      |
+| audit_log_flush             | OFF            |
+| audit_log_format            | OLD            |
+| audit_log_handler           | FILE           |
+| audit_log_include_accounts  |                |
+| audit_log_include_commands  |                |
+| audit_log_include_databases |                |
+| audit_log_max_rows          | 2147483647     |
+| audit_log_policy            | ALL            |
+| audit_log_rotate_on_size    | 0              |
+| audit_log_rotations         | 0              |
+| audit_log_strategy          | ASYNCHRONOUS   |
+| audit_log_syslog_facility   | LOG_USER       |
+| audit_log_syslog_ident      | percona-audit  |
+| audit_log_syslog_priority   | LOG_INFO       |
+| audit_log_to_table          | 1              |
++-----------------------------+----------------+
+21 rows in set (0.00 sec)
 ```
+- audit_log_enabled
+
+| System Variable Name | audit_log_enabled                   |
+| -------------------- | ----------------------------------- |
+| Command-line         | Yes                                 |
+| Scope                | Global                              |
+| Dynamic              | Yes                                 |
+| Data type            | Boolean                             |
+| Default value        | 1                                   |
+| Allowed values       | 1(ON), 0(OFF)                       |
+
+审计日志功能总开关，设置是否启用该功能。
+
+- audit_log_to_table
+
+| System Variable Name | audit_log_to_table                  |
+| -------------------- | ----------------------------------- |
+| Command-line         | Yes                                 |
+| Scope                | Global                              |
+| Dynamic              | Yes                                 |
+| Data type            | Boolean                             |
+| Default value        | 0                                   |
+| Allowed values       | 1(ON), 0(OFF)                       |
+
+审计日志是否写入到数据表开关，设置是否启用该特性。
 
 - audit_log_strategy
 
@@ -176,6 +208,17 @@ greatsql> SHOW variables LIKE 'audit%';
 | Data type            | String                              |
 
 用于指定应用“按数据库筛选”时的排除数据库列表。该值可以是NULL或逗号分隔的数据库列表。如果设置了此变量，则不能同时设置 `audit_log_include_databases`，反之亦然。
+
+- audit_log_max_rows
+
+| System Variable Name | audit_log_max_rows                  |
+| -------------------- | ----------------------------------- |
+| Command-line         | Yes                                 |
+| Scope                | Global                              |
+| Dynamic              | Yes                                 |
+| Data type            | Numeric                             |
+| Default value        | 2147483647                          |
+| Allowed values       | [0, ULONG]                          |
 
 - audit_log_format
 
