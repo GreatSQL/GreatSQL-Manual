@@ -97,6 +97,8 @@ Create Table: CREATE TABLE `t1` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci SECONDARY_ENGINE=rapid
 ```
 
+从MySQL 8.0.18开始，为了支持`SECONDARY ENGINE`属性，新增选项 `show_create_table_skip_secondary_engine` 用于设置在执行 `SHOW CREATE TABLE` 显示表结构DDL时是否要同时显示`SECONDARY ENGINE`属性，其默认值是OFF，即默认要显示。此外，`mysqldump`中也新增相应选项 `show-create-table-skip-secondary-engine`，默认值是FALSE（和OFF一样），其作用相同。
+
 接下来，执行下面SQL命令，写入一些数据：
 ```sql
 greatsql> INSERT INTO t1 SELECT 0, RAND()*1024000, RAND()*1024000;
