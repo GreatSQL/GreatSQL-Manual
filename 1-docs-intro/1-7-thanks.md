@@ -11,6 +11,12 @@
  - **跨机房容灾场景，同时开启多源复制和主主复制，存在数据回路问题**（[issue#I8E8QB](https://gitee.com/GreatSQL/GreatSQL/issues/I8E8QB)）<br>
  详细文档请参见：[GreatSQL高可用特性之主主复制防止回路](https://greatsql.cn/docs/8032-25/user-manual/5-enhance/5-2-ha-repl-server-mode.html)
 
+ #### [earl86](https://gitee.com/earl86)
+ - 提供了MySQL Shell for GreatSQL编译时对V8库（JS语法）支持的解决方法，以及对CentOS 7（x86_64）编译环境的支持。详见 [GreatSQL-Shell-Build分支](https://gitee.com/earl86/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build)。
+
+ #### [xiongyu](https://gitee.com/xiongyu-net)
+ - 提供了在Rocky Linux编译环境下构建MySQL Shell for GreatSQL的方案。详见 [GreatSQL-Shell-Build分支](https://gitee.com/xiongyu-net/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build)。
+
 ## 文档贡献
  敬请期待~<br>
  [我要参与编写文档！](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
