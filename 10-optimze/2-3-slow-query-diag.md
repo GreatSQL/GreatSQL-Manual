@@ -236,9 +236,17 @@ possible_keys: c
 
 生产环境中的业务SQL一般比这种更复杂，SQL优化需要根据实际情况灵活变化，通常不只是添加索引这么简单。
 
+另外，在GreatSQL中还支持通过设置以下几个参数来实现自动轮转slow query log功能：
+
+- max_slowlog_size，设置每个slow query log文件大小，默认值为0，即表示不自动轮转。
+- max_slowlog_files，设置开启slow query log自动乱转后，最多保留的文件数目。
+
+启用slow query log自动轮转后，每个slow query log都会添加和binlog文件类似的序号后缀，例如：`slow_query_log_file.000001`。
+
 **参考资料：**
 - [EXPLAIN执行计划中要重点关注哪些要素](https://mp.weixin.qq.com/s/CDKN_nPcIjzA_U5-xwAE5w)
 - [PROCESSLIST中哪些状态要引起关注](https://mp.weixin.qq.com/s/vhUmB9JO-Zt2P02gVk4mwg)
+- [Slow query log rotation and expiration](https://docs.percona.com/percona-server/8.0/slowlog-rotation.html)
 
 
 
