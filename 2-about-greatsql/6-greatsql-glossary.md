@@ -19,7 +19,7 @@
 | pq | parallel query（并行查询）的缩写。GreatSQL合并了华为鲲鹏计算团队贡献的Patch，实现了InnoDB并行查询特性。详情参考文档：[InnoDB并行查询优化参考](../5-enhance/5-1-highperf-innodb-pq.md)。|
 | VIP | GreatSQL中支持读写节点绑定动态VIP，高可用切换更便捷。详情参考文档：[MGR内置动态VIP](../5-enhance/5-2-ha-mgr-vip.md)。|
 | Oracle Compat | GreatSQL中支持多个Oracle兼容特性，包括数据类型、函数、SQL语法、存储过程等。详情参考文档：[高兼容](../5-enhance/5-3-easyuse.md)。|
-| Audit | GreatSQL支持开启审计功能，并且还支持将审计日志写入数据库中，方便管理员查询。详情参考文档：[审计日志入表](../5-enhance/5-4-security-audit-log-in-table.md)。|
+| Audit | GreatSQL支持开启审计功能，并且还支持将审计日志写入数据库中，方便管理员查询。详情参考文档：[审计日志入表](../5-enhance/5-4-security-audit.md)。 |
 | Encryption | GreatSQL支持mysqldump备份加密、CLONE备份加密，以及InnoDB表空间国密加密等功能。详情参考文档：[高安全](../1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md#14-%E5%AE%89%E5%85%A8)。|
 
 

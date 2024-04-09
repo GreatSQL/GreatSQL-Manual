@@ -62,7 +62,7 @@ $ /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-fil
 ```
 如果不出意外，则能正常启动GreatSQL。用同样的方法也完成对另外两个节点的初始化。
 
-此外，建议把GreatSQL加入系统systemd服务中，方便管理。具体方法可以参考这篇文章：[利用systemd管理GreatSQL](./8-greatsql-with-systemd.md)。
+此外，建议把GreatSQL加入系统systemd服务中，方便管理。具体方法可以参考这篇文章：[利用systemd管理GreatSQL](../4-install-guide/8-greatsql-with-systemd.md)。
 
 ### 3. 初始化MGR第一个节点
 接下来准备初始化MGR的第一个节点，也称之为 **引导节点**。
