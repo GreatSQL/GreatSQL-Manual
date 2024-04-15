@@ -126,6 +126,16 @@ greatsql> ALTER TABLE t1 SECONDARY_LOAD;
 
 2. 用户数据表中用到了暂时还不支持的数据类型，目前支持BOOL\INT\FLOAT\DOUBLE\DECIMAL\等数据类型，其他数据类型暂不支持。
 
+3. 用户SQL请求中包含了暂时还不支持的函数。
+
+4. 用户数据表中包含隐藏自增列，需要在建表前设置 `sql_generate_invisible_primary_key=OFF`。
+
+5. 优化器评估认为未达到 `secondary_engine_cost_threshold` 选项定义的阈值（其默认值为100000）。
+
+6. 不支持MyISAM存储引擎，不支持DDL语法。
+
+7. 其他情况。
+
 另外，使用Rapid引擎时还有几个注意事项：
 - 用户数据表主引擎只能是InnoDB引擎，不支持MyISAM等其他引擎。
 - 数据库实例重启后，查询个别Rapid引擎表可能会提示无法使用Rapid引擎加速，这时可以尝试执行 ALTER TABLE ... SECONDARY_LOAD 将该表再次加载到Rapid引擎中，实际上无需重新加载一次，速度非常快，之后就可以使用Rapid引擎了。
