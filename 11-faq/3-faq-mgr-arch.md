@@ -1,9 +1,6 @@
 # FAQ - 基于MGR的架构方案
 ---
 
-本文内容主要是MGR架构方案相关的FAQ。
-
-
 ## 1. GreatSQL支持读写分离吗
 可以利用MySQL Router来实现读写分离。
 

@@ -1,8 +1,6 @@
 # FAQ - 其他问题
 ---
 
-其他FAQ。
-
 ## 1. 使用MGR有什么限制吗
 
 下面是关于MGR使用的一些限制：
@@ -26,7 +24,7 @@
 - binlog format务必是row模式，即 `binlog_format=ROW`。
 - 每个节点的 `server_id` 及 `server_uuid` 不能相同。
 - 在8.0.20之前，要求 `binlog_checksum=NONE`，但是从8.0.20后，可以设置 `binlog_checksum=CRC32`。
-- 要求启用 GTID，即设置 `gtid_mode=ON`。
+- 要求启用 GTID，即设置 `gtid_mode=ON` 和 `enforce_gtid_consistency = ON`。
 - 要求 `master_info_repository=TABLE` 及 `relay_log_info_repository=TABLE`，不过从MySQL 8.0.23开始，这两个选项已经默认设置TABLE，因此无需再单独设置。
 - 所有节点上的表名大小写参数 `lower_case_table_names` 设置要求一致。
 - 最好在局域网内部署MGR，而不要跨公网，网络延迟太大的话，会导致MGR性能很差或很容易出错。
@@ -117,6 +115,21 @@ greatsql> show global status like 'PQ_%';
 | PQ_threads_running | 4       |  <-- 并行线程4
 ```
 
+## 8. 为什么一个表已经设置了SECONDARY_ENGINE=rapid却还无法使用Rapid引擎加速查询
+
+可能存在以下几种原因导致无法使用Rapid引擎加速查询：
+
+1. 可能是因为该表还没有做一次全量加载到Rapid引擎的操作，需要执行类似下面的命令来完成：
+```sql
+greatsql> ALTER TABLE t1 SECONDARY_LOAD;
+```
+
+2. 用户数据表中用到了暂时还不支持的数据类型，目前支持BOOL\INT\FLOAT\DOUBLE\DECIMAL\等数据类型，其他数据类型暂不支持。
+
+另外，使用Rapid引擎时还有几个注意事项：
+- 用户数据表主引擎只能是InnoDB引擎，不支持MyISAM等其他引擎。
+- 数据库实例重启后，查询个别Rapid引擎表可能会提示无法使用Rapid引擎加速，这时可以尝试执行 ALTER TABLE ... SECONDARY_LOAD 将该表再次加载到Rapid引擎中，实际上无需重新加载一次，速度非常快，之后就可以使用Rapid引擎了。
+
 ## 8. MySQL 5.7可以和GreatSQL 5.7混用datadir吗
 是可以的。
 
@@ -165,10 +178,13 @@ greatsql> show global status like 'PQ_%';
 
 GreatSQL相对于MySQL官方社区版本有非常大的性能提升，尤其是引入了InnoDB并行查询特性，在TPC-H测试中，平均提升15倍以上，最高提升43倍，表现非常优异。
 
+从GreatSQL 8.0.32-25版本开始，支持类似MySQL HeatWave的大规模并行、高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级。在32C64G测试机环境下，TPC-H 100G测试中22条SQL总耗时仅需不到80秒。更详细内容参考：[Rapid引擎](../5-enhance/5-1-highperf-rapid-engine.md)。
+
 更多关于GreatSQL性能提升方面的内容可以参考下面几个测评报告：
 - [GreatSQL重磅特性，InnoDB并行并行查询优化测试](https://mp.weixin.qq.com/s/pK90W9xT_V59yvgxRwcn8A)
 - [GreatSQL & NVIDIA InfiniBand NVMe SSD性能测试](https://mp.weixin.qq.com/s/F9804_7H1WiJ6xD0E1AueQ)
 - [GreatSQL & DapuStor Roealsen5 NVMe SSD性能测试](https://mp.weixin.qq.com/s/QrIZ8Fu69Bzq5MvNZwtTww)
+- GreatSQL TPC-H 性能测试报告：[在线报告](../10-optimze/3-3-benchmark-greatsql-tpch-report.md)、[PDF文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/Presentations/27%E3%80%81benchmark-greatsql-tpch-report-20240228.pdf)
 
 
 **问题反馈**

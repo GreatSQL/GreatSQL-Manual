@@ -1,8 +1,6 @@
 # FAQ - GreatSQL相关
 ---
 
-本文内容主要是GreatSQL相关的FAQ。
-
 ## 1. GreatSQL简介
 GreatSQL数据库是一款**开源免费**数据库，可在普通硬件上满足金融级应用场景，具有**高可用**、**高性能**、**高兼容**、**高安全**等特性，可作为MySQL或Percona Server for MySQL的理想可选替换。
 
@@ -10,10 +8,11 @@ GreatSQL社区官网：[https://greatsql.cn](https://greatsql.cn)
 
 ## 2. GreatSQL的特色有哪些
 
+GreatSQL数据库是一款**开源免费**数据库，可在普通硬件上满足金融级应用场景，具有**高可用**、**高性能**、**高兼容**、**高安全**等特性，可作为MySQL或Percona Server for MySQL的理想可选替换。
+
 GreatSQL主要有以下几个核心特性。
 
-### 2.1 高可用
-
+### 1. 高可用
 针对MGR进行了大量改进和提升工作，新增支持**地理标签**、**仲裁节点**、**读写节点可绑定动态IP**、**快速单主模式**、**智能选主**，并针对**流控算法**、**事务认证队列清理算法**、**节点加入&退出机制**、**recovery机制**等多项MGR底层工作机制算法进行深度优化，进一步提升优化了MGR的高可用保障及性能稳定性。
 
 - 支持地理标签特性，提升多机房架构数据可靠性。
@@ -30,7 +29,7 @@ GreatSQL主要有以下几个核心特性。
 
 更多信息详见文档：[高可用](../5-enhance/5-2-ha.md)。
 
-### 2.2 高性能
+### 2. 高性能
 相对MySQL及Percona Server For MySQL的性能表现更稳定优异，支持**高性能的内存查询加速AP引擎**、**InnoDB并行查询**、**并行LOAD DATA**、**事务无锁化**、**线程池等**特性，在TPC-C测试中相对MySQL性能提升超过30%，在TPC-H测试中的性能表现是MySQL的十几倍甚至上百倍。
 
 - 支持类似MySQL HeatWave的大规模并行、高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级。
@@ -41,19 +40,19 @@ GreatSQL主要有以下几个核心特性。
 
 更多信息详见文档：[高性能](../5-enhance/5-1-highperf.md)。
 
-### 2.3 高兼容
+### 3. 高兼容
 
 支持大多数常见Oracle用法，包括数据类型、函数、SQL语法、存储程序等兼容性用法。
 
 更多信息详见文档：[高兼容](../5-enhance/5-3-easyuse.md)。
 
-### 2.4 高安全
+### 4. 高安全
 
 支持逻辑备份加密、CLONE备份加密、审计日志入表、表空间国密加密等多个安全提升特性，进一步保障业务数据安全，更适用于金融级应用场景。
 
 更多信息详见文档：[高安全](../5-enhance/5-4-security.md)。
 
-综上，GreatSQL数据库是一款**开源免费**数据库，可在普通硬件上满足金融级应用场景，具有**高可用**、**高性能**、**高兼容**、**高安全**等特性，可作为MySQL或Percona Server for MySQL的理想可选替换。
+更多关于GreatSQL的优势特性详见：[GreatSQL优势特性](../1-docs-intro/1-3-greatsql-features.md)。
 
 ## 3. GreatSQL在哪里可以下载
 ### 3.1 二进制包、RPM包
@@ -78,17 +77,16 @@ GreatSQL提供Docker镜像，可直接从docker hub拉取：
 # 直接下载最新版本
 $ docker pull docker.io/greatsql/greatsql
 
-# 或自行指定版本
+# 或自行指定版本号
 $ docker pull docker.io/greatsql/greatsql:8.0.32-25
-
-# 或指定ARM版本
-$ docker pull docker.io/greatsql/greatsql:8.0.32-25-aarch64
 ```
 
 ### 3.4 Ansible安装包
 GreatSQL提供Ansible一键安装包，可在gitee或github下载：
 - https://gitee.com/GreatSQL/GreatSQL-Ansible/releases
 - https://github.com/GreatSQL/GreatSQL-Ansible/releases
+
+从GreatSQL 8.0.32-25版本开始，GreatSQL Ansible暂停更新，如果您需要通过Ansible安装GreatSQL，可以采用芬达老师提供的**dbops**，详见：[dbops](https://gitee.com/fanderchan/dbops)。
 
 ## 4. 使用GreatSQL遇到问题时找谁
 
@@ -153,6 +151,8 @@ GreatSQL提供Ansible一键安装包，可在gitee或github下载：
 
 - [其他公开分享](https://greatsql.cn/smx_course-lesson.html?op=video&ids=4)
 
+您学习完上述课程后，还可以报名参加GreatSQL GCA或GCP认证考试，详见：[GreatSQL GCA/GCP培训认证](../1-docs-intro/1-9-greatsql-certified.md)。
+
 
 ## 6. GreatSQL版本计划是怎样的
 
@@ -163,10 +163,22 @@ GreatSQL版本号采用点分位命名规则（X.Y.Z-R）模式，其中
 - Y表示小版本号：MYSQL_VERSION_MINOR，例如3.23.x、4.0.x、4.1.x、5.0.x、5.1.x、5.5.x、5.6.x、5.7.x、8.0.x等
 - Z表示补丁版本：MYSQL_VERSION_PATCH，例如3.23.58、4.0.30、4.1.25、5.0.96、5.1.73、5.5.62、5.6.51、5.7.37、8.0.29等
 - R表示修订版本：MYSQL_VERSION_REVISION，例如5.7.36-39、8.0.25-16、8.0.32-25等
+- GreatSQL版本号与Percona Server for MySQL/Oracle MySQL版本号对应。
 
 正常情况下，GreatSQL每年会发布两次版本，一般是上半年、下半年各发布一个新版本。
 
 
+## 7. 我可以免费使用GreatSQL吗
+
+是的。
+
+在遵循[GPLv2协议](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)的基础上，您可以完全免费使用GreatSQL。
+
+如果您需要商业服务支持，也可以扫描页面下方二维码联系我们。
+
+## 8. GreatSQL具有XC资质吗
+
+GreatSQL数据库是一款**开源免费**数据库，没有XC资质。如果您需要有XC资质的数据库产品，可以扫描页面下方二维码联系我们。
 
 
 **问题反馈**

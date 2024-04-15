@@ -1,9 +1,6 @@
 # FAQ - MGR监控及故障处理
 ---
 
-本文内容主要是MGR监控及故障处理相关的FAQ。
-
-
 ## 1. 怎么查看MGR从节点是否有延迟
 首先，可以执行下面的命令查看当前除了 **PRIMARY** 节点外，其他节点的 `trx_tobe_certified` 或 `relaylog_tobe_applied` 值是否较大：
 ```

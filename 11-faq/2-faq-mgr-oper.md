@@ -1,9 +1,6 @@
 # FAQ - MGR运维部署
 ---
 
-本文内容主要是MGR运维部署相关的FAQ。
-
-
 ## 1. 可以使用MySQL Shell来管理GreatSQL吗
 
 是可以的，最好采用相同版本号的MySQL Shell即可。
