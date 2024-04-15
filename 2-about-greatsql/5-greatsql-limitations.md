@@ -8,7 +8,7 @@
 - binlog format务必是row模式，即 `binlog_format=ROW`。
 - 每个节点的 `server_id` 及 `server_uuid` 不能相同。
 - 在8.0.20之前，要求 `binlog_checksum=NONE`，但是从8.0.20后，可以设置 `binlog_checksum=CRC32`。
-- 要求启用 GTID，即设置 `gtid_mode=ON`。
+- 要求启用 GTID，即设置 `gtid_mode=ON` 和 `enforce_gtid_consistency = ON`。
 - 要求 `master_info_repository=TABLE` 及 `relay_log_info_repository=TABLE`，不过从MySQL 8.0.23开始，这两个选项已经默认设置TABLE，因此无需再单独设置。
 - 所有节点上的表名大小写参数 `lower_case_table_names` 设置要求一致。
 - 所有表必须是InnoDB引擎。可以创建非InnoDB引擎表，但无法写入数据，在利用Clone构建新节点时也会报错。
