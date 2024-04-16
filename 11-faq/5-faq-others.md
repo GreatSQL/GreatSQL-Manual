@@ -140,7 +140,7 @@ greatsql> ALTER TABLE t1 SECONDARY_LOAD;
 - 用户数据表主引擎只能是InnoDB引擎，不支持MyISAM等其他引擎。
 - 数据库实例重启后，查询个别Rapid引擎表可能会提示无法使用Rapid引擎加速，这时可以尝试执行 ALTER TABLE ... SECONDARY_LOAD 将该表再次加载到Rapid引擎中，实际上无需重新加载一次，速度非常快，之后就可以使用Rapid引擎了。
 
-## 8. MySQL 5.7可以和GreatSQL 5.7混用datadir吗
+## 9. MySQL 5.7可以和GreatSQL 5.7混用datadir吗
 是可以的。
 
 不过也提醒下：如果有是在原有MySQL datadir上直接启动GreatSQL的话，记得执行mysql_upgrade哦，要不然是没有MEMBER_ROLE列的。
@@ -153,7 +153,7 @@ greatsql> ALTER TABLE t1 SECONDARY_LOAD;
 
 但还不支持5.7和8.0跨版本混跑。
 
-## 9. MGR里推荐用哪个事务隔离级别
+## 10. MGR里推荐用哪个事务隔离级别
 
 在GreatSQL MGR FAQ中提到一个限制条件：
 
@@ -184,7 +184,7 @@ greatsql> ALTER TABLE t1 SECONDARY_LOAD;
 
 综上，在MGR中，即便本地节点选择的事RR级别，依然无法跨节点实现gap lock加锁，因此也就无法跨节点保证RR级别。但**如果写入事务都在同一个节点的话，则设置RR是有意义的**。
 
-## 10. GreatSQL性能表现如何
+## 11. GreatSQL性能表现如何
 
 GreatSQL相对于MySQL官方社区版本有非常大的性能提升，尤其是引入了InnoDB并行查询特性，在TPC-H测试中，平均提升15倍以上，最高提升43倍，表现非常优异。
 
@@ -196,6 +196,33 @@ GreatSQL相对于MySQL官方社区版本有非常大的性能提升，尤其是�
 - [GreatSQL & DapuStor Roealsen5 NVMe SSD性能测试](https://mp.weixin.qq.com/s/QrIZ8Fu69Bzq5MvNZwtTww)
 - GreatSQL TPC-H 性能测试报告：[在线报告](../10-optimze/3-3-benchmark-greatsql-tpch-report.md)、[PDF文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/Presentations/27%E3%80%81benchmark-greatsql-tpch-report-20240228.pdf)
 
+## 12. 运行GreatSQL时，必须先安装jemalloc包吗
+
+不是必须的。
+
+我们推荐安装 jemalloc 包以提升GreatSQL内存分配管理效率，但这并不是必须的。
+
+
+## 13. GreatSQL支持数据脱敏吗
+
+是的，支持，详情参考：[数据脱敏](../5-enhance/5-4-security-data-masking.md)。
+
+## 14. 为什么在GreatSQL中运行一些查询SQL会被hang住一直无响应
+
+可能是因为触发了InnoDB并行查询的bug，请尝试升级到GreatSQL 8.0.32-25版本，或者修改选项 `force_parallel_execute=OFF` 临时关闭InnoDB并行查询特性。
+
+可以参考下面的案例：
+
+- [mysqldump导出108353886字节的数据后，hang](https://greatsql.cn/thread-522-1-1.html)
+- [greatsql执行sql卡死](https://greatsql.cn/thread-422-1-1.html)
+
+## 14. 为什么在GreatSQL中运行一些SQL后数据库crash了，该怎么办
+
+可能是因为触发了某些bug，请尝试升级到GreatSQL 8.0.32-25版本，或者参考文章 [MySQL报障之coredump收集处理流程](https://mp.weixin.qq.com/s/CrV9kgIUnUd4GEru93xjdA) 提到的方法，打包收集相应的coredump文件、my.cnf配置文件、错误日志文件以及能稳定复现的方法，然后联系我们报告bug。
+
+可以参考下面的案例：
+
+- [执行某些 SQL 导致数据库重启](https://greatsql.cn/thread-529-1-1.html)
 
 **问题反馈**
 ---

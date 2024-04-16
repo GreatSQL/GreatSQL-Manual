@@ -209,7 +209,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  0  0     22    324    193  14132    0    0     0     0 14983 15155  2  3 95  0  0
 ```
 
-14. 新增ARBITRATOR节点时，一定要CLONE全量数据吗
+## 14. 新增ARBITRATOR节点时，一定要CLONE全量数据吗
 并不是必需的。
 
 当MGR中Primary节点已有用户数据时，无论是用shell还是手动加入一个新的仲裁节点（ARBITRATOR），首次加入都需要经过CLONE的过程（即便是在启动前已经设置 `group_replication_arbitrator = 1`）。
@@ -224,7 +224,72 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 3. 在完成实例初始化后，手动修改 gtid_purged，例如 `set global gtid_purged = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1:1-1449587416';` 也可以跳过数据CLONE。
 
 
+## 15. 为什么在用MySQL Router构建读写分离架构时会提示schemadoes not exist
 
+这通常是因为缺少 `mysql_innodb_cluster_metadata` 这个必须的元数据信息库。
+
+这是需试用GreatSQL Shell接管MGR集群，它会创建 `mysql_innodb_cluster_metadata` 这个元数据Schema，然后就可以用Router接入了。
+
+详情参考：[MySQL Shell接管现存的MGR集群](../8-mgr/2-mgr-install-deploy.md#3-mysql-shell接管现存的mgr集群)。
+
+
+## 16. 有个成员节点无法加入MGR集群，且报错Old incarnation，这是什么情况
+
+这是因为该成员节点曾经加入过MGR集群，但因为节点异常/网络异常/网络分区等原因该成员节点状态异常，且尚未被正式驱逐出MGR集群，MGR组视图中还保留该成员节点的相关信息，因此会提示类似下面的错误：
+```
+[Warning] [MY-011735] [Repl] Plugin group_replication reported: '[GCS] Old incarnation found while trying to add node ...
+```
+
+可以尝试以下几种方法解决：
+
+1. 在有问题的成员节点上执行 `stop group_replication` 操作，并观察MGR成员列表信息中是否不再显示该节点；
+
+2. 在正常的成员节点上执行一次Primary节点切换操作，在切换过程中会更新MGR组视图，就有可能会清除有问题的旧节点信息；
+
+3. 在正常的成员节点上用GreatSQL Shell执行一次 `removeInstance()` 操作，将有问题的成员节点从MGR集群中手动清除；
+
+4. 如果以上操作都无法解决问题，可以尝试在正常的成员节点上设置 `group_replication_force_members` 选项，更新MGR成员列表，详情参考：[15. 故障检测与网络分区](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/deep-dive-mgr-15.md#3-多数派成员失联时)。
+
+
+## 17. 怎么将MGR集群从8.0.25升级到8.0.32版本
+
+由于8.0.26版本中新增 `group_replication_view_change_uuid` 选项，所以不支持MGR集群跨8.0.26版本平滑升级，可以采用类似下面的方法升级：
+
+1. 关闭所有成员节点mysqld进程，设置 `super_read_only=ON` 并关闭业务应用程序，避免再有新事务写入；
+
+2. 做好Primary成员节点数据文件物理备份，以防出现升级失败的情况；
+
+3. 修改my.cnf配置文件的 `basedir`，将其指向8.0.32版本安装目录（若采用systemd管理服务，也要修改相应配置），并修改 `group_replication_bootstrap_group=OFF` 和 `group_replication_start_on_boot=OFF`，避免各节点自动启动MGR服务；
+
+4. 逐个启动所有成员节点mysqld进程，由于 `upgrade` 选项默认值是 **AUTO**，会自动完成从8.0.25到8.0.32版本的升级；
+
+5. 手动启动MGR集群（先启动Primary节点，后启动Secondary节点），更推荐用GreatSQL Shell启动MGR集群，详情参考：[重启MGR集群，如何自动选主](https://mp.weixin.qq.com/s/07o1poO44zwQIvaJNKEoPA)；
+
+## 18. 为什么手动搭建MGR时报caching_sha2_password错，或某个节点状态一直处于RECOVERING
+
+这是由于8.0.4中新引入 `caching_sha2_password` 身份验证插件，它对密码安全性要求更高，要求用户认证过程中在网络传输的密码是加密的，所以导致的这个问题的出现。
+
+可以在手动搭建MGR执行 `CHANGE MASTER TO` 前先修改选项设置 `group_replication_recovery_get_public_key=ON`，这样就可以了。
+
+详情参考：[MGR新节点RECOVERING状态的分析与解决：caching_sha2_password验证插件的影响](https://mp.weixin.qq.com/s/G9bpThAR-fYHHZsA8l4uuw)。
+
+## 19. 某个MGR成员节点发生报错Duplicate entry...Error_code: 1062; handler error HA_ERR_FOUND_DUPP_KEY (1062)，怎么处理
+
+这是因为该成员节点上应用事务时发生重复冲突报错了，可能是该节点有部分数据由于手动操作或误操作等原因造成不一致。
+
+这种情况下，如果数据量较小，则建议直接重建该节点后再加入MGR集群；如果数据量较大，则考虑手动修复不一致的数据后再加入MGR集群，数据修复可以考虑采用 [gt-checksum工具](https://gitee.com/GreatSQL/gt-checksum)。
+
+## 20. 某个MGR成员节点发生报错This member has more executed transactions than those present in the group，怎么处理
+
+这是因为该成员节点有部分本地事务，和MGR全局事务产生冲突，较大可能是该节点有由于手动操作或误操作等原因造成。
+
+这种情况下，如果数据量较小，则建议直接重建该节点后再加入MGR集群；如果数据量较大，则考虑手动修复不一致的数据后再加入MGR集群，数据修复可以考虑采用 [gt-checksum工具](https://gitee.com/GreatSQL/gt-checksum)。
+
+## 21. 为什么用GreatSQL Shell创建/接管MGR集群时报错，提示Access denied
+
+请用管理员创建MGR服务专用账户时，加上 `WITH GRANT OPTION` 选项。
+
+另外，也不能用 `root@localhost` 这个最高管理员账户连接GreatSQL Shell后再创建/接管MGR集群。
 
 
 **问题反馈**

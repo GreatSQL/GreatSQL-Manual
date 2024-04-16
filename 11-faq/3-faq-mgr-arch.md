@@ -55,8 +55,27 @@ MySQL Router通过两个端口来区分读写服务请求，默认是 6446端口
 更多关于 MySQL Router 可用的策略请参见文档 **[routing_strategy参数/选项](https://dev.mysql.com/doc/mysql-router/8.0/en/mysql-router-conf-options.html#option_mysqlrouter_routing_strategy)**。
 
 
+## 7. 可以用MySQL Shell来管理GreatSQL MGR集群吗
+
+只要大版本一样就可以，例如用MySQL Shell 8.0.32版本管理GreatSQL 8.0.32-24/8.0.32-25版本构建的MGR集群都可以。
+
+要注意的是，当GreatSQL MGR集群中存在Arbitrator（仲裁）节点时，MySQL Shell无法识别，这时只能使用GreatSQL Shell来管理了。
 
 
+## 8. 为什么推荐单主架构的MGR，为何不推荐多主架构呢
+
+简单说，单主更简单，性能更好。
+
+多主更复杂，性能更差，且容易造成多节点写入引发事务冲突，需要在应用端配合做好控制，比如区分不同业务在不同节点写入。
+
+
+## 9. 为什么在配置MGR时，建议加上report-host选项
+
+有两个原因。
+
+1. 因为MGR节点成员所在服务器可能有多个不同主机名，这时为了避免发生混淆或重复，需要在每个服务器上编辑 `/etc/hosts` 设置好相应的主机名，或者设置 `report-host` 选项。
+
+2. 如果想使用GreatSQL的动态绑定VIP特性，也需要依赖 `report-host` 设置，详见：[内置动态VIP](../5-enhance/5-2-ha-mgr-vip.md)。
 
 
 
