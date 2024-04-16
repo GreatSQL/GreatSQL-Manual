@@ -224,7 +224,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 3. 在完成实例初始化后，手动修改 gtid_purged，例如 `set global gtid_purged = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1:1-1449587416';` 也可以跳过数据CLONE。
 
 
-## 15. 为什么在用MySQL Router构建读写分离架构时会提示schemadoes not exist
+## 15. 为什么在用MySQL Router构建读写分离架构时会提示schema does not exist
 
 这通常是因为缺少 `mysql_innodb_cluster_metadata` 这个必须的元数据信息库。
 
