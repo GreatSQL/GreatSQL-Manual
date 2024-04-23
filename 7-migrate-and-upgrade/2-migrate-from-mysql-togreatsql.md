@@ -1,4 +1,4 @@
-# 从MySQL迁移/升级到GreatSQL
+# MySQL迁移/升级到GreatSQL
 ---
 
 本文介绍如何从MySQL迁移/升级到GreatSQL数据库。
