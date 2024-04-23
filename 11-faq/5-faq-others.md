@@ -224,6 +224,33 @@ GreatSQL相对于MySQL官方社区版本有非常大的性能提升，尤其是�
 
 - [执行某些 SQL 导致数据库重启](https://greatsql.cn/thread-529-1-1.html)
 
+## 15. 什么是双1 或 双0？
+
+通常地，事务提交后为了保证用户数据不丢失，或者保证在mysqld进程意外crash后不丢失已提交的数据，需要确认以下两个选项值均设置为1，这称为 **双1**：
+- sync_binlog = 1
+- innodb_flush_log_at_trx_commit = 1
+
+在一些测试环境或离线分析等特殊场合，对数据安全要求没那么高的时候，就可以将上述两个选项值修改为0，这称为 **双0**：
+- sync_binlog = 0
+- innodb_flush_log_at_trx_commit = 0
+
+在修改成双0后，事务提交/数据写入性能通常会有较大幅度提升。
+
+上述这两个选项只能修改全局设置，不能只在某个会话（session）中修改，例如：
+```sql
+-- 修改全局设置
+greatsql> SET GLOBAL sync_binlog = 1;
+greatsql> SET GLOBAL innodb_flush_log_at_trx_commit = 1;
+
+-- 修改会话内设置
+greatsql> SET sync_binlog = 1;
+ERROR 1229 (HY000): Variable 'sync_binlog' is a GLOBAL variable and should be set with SET GLOBAL
+
+greatsql> SET innodb_flush_log_at_trx_commit = 1;
+ERROR 1229 (HY000): Variable 'innodb_flush_log_at_trx_commit' is a GLOBAL variable and should be set with SET GLOBAL
+```
+
+
 **问题反馈**
 ---
 - [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
