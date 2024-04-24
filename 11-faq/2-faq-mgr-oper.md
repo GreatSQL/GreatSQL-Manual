@@ -187,7 +187,8 @@ $ mysqlrouter --bootstrap mymgr@192.168.1.1:4306 --name=MGR2 --directory=/etc/my
 ## 13. 多个MGR集群，是否可以共用ARBITRATOR节点
 不可以，不同集群的ARBITRATOR节点可以交叉部署，同一集群不能放一起。也可以在一台专属服务器上部署多实例，专门用作ARBITRATOR节点。
 仲裁节点对系统负载的影响很小，可以参考下面的数据：
-```#Primary节点
+```
+#Primary节点
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  3  1      0    894    206  12238    0    0     0 27186 32669 44745 12  8 68 13  0

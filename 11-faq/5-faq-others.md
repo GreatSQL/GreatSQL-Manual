@@ -216,7 +216,7 @@ GreatSQL相对于MySQL官方社区版本有非常大的性能提升，尤其是�
 - [mysqldump导出108353886字节的数据后，hang](https://greatsql.cn/thread-522-1-1.html)
 - [greatsql执行sql卡死](https://greatsql.cn/thread-422-1-1.html)
 
-## 14. 为什么在GreatSQL中运行一些SQL后数据库crash了，该怎么办
+## 15. 为什么在GreatSQL中运行一些SQL后数据库crash了，该怎么办
 
 可能是因为触发了某些bug，请尝试升级到GreatSQL 8.0.32-25版本，或者参考文章 [MySQL报障之coredump收集处理流程](https://mp.weixin.qq.com/s/CrV9kgIUnUd4GEru93xjdA) 提到的方法，打包收集相应的coredump文件、my.cnf配置文件、错误日志文件以及能稳定复现的方法，然后联系我们报告bug。
 
@@ -224,7 +224,7 @@ GreatSQL相对于MySQL官方社区版本有非常大的性能提升，尤其是�
 
 - [执行某些 SQL 导致数据库重启](https://greatsql.cn/thread-529-1-1.html)
 
-## 15. 什么是双1 或 双0？
+## 16. 什么是双1 或 双0？
 
 通常地，事务提交后为了保证用户数据不丢失，或者保证在mysqld进程意外crash后不丢失已提交的数据，需要确认以下两个选项值均设置为1，这称为 **双1**：
 - sync_binlog = 1
