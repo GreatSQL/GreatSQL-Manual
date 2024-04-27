@@ -250,6 +250,50 @@ greatsql> SET innodb_flush_log_at_trx_commit = 1;
 ERROR 1229 (HY000): Variable 'innodb_flush_log_at_trx_commit' is a GLOBAL variable and should be set with SET GLOBAL
 ```
 
+## 17. 为什么GreatSQL数据库无缘无故停掉或重启了？
+
+以下几种情况的可能性较大：
+
+- 发生了OOM Killer（out-of-memory killer）
+
+简单说，就是被系统判定为内存占用太多，触发OOM KIller机制，杀掉mysqld进程以释放内存。
+
+可以查看操作系统日志文件 `/var/log/messages`，通常会有类似下面的日志内容
+
+```shell
+kernel: Out of memory: Kill process 6033 (mysqld) score 615 or sacrifice child
+kernel: Killed process 6033, UID 498, (mysqld) total-vm:56872260kB, anon-rss:3202560kB, file-rss:40kB
+```
+
+当发生OOM Killer事件时，可以选择适当调低部分设计内存的参数选项，例如 `innodb_buffer_pool_size` 等，也可以适当加大操作系统的物理内存。
+
+此外，如果不想保护mysqld进程不被OOM Killer机制杀掉，可以调整相应进程的 `oom_score_adj` 设置，将其修改为 -1000，例如：
+```shell
+$ ps -ef | grep mysqld
+ps -ef | grep mysqld | grep -v grep
+mysql     597099   1  9 Apr27 ?        21:16:54 /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf
+
+$ cat /proc/597099/oom_score_adj
+0
+
+$ echo -1000 > /proc/597099/oom_score_adj
+
+$ cat /proc/597099/oom_score_adj
+-1000
+```
+
+关于 `oom_score_adj` 的值定义如下：
+- 默认为0，表示不调整分数。
+- 如果改为负数，表示尽量不要被Kill。
+- 如果改为正数，表示可以优先被Kill。
+
+更多关于OOM Killer的内容请参考：[深入理解Linux内核OOM killer机制](https://zhuanlan.zhihu.com/p/560714542)。
+
+
+- 管理员意外执行kill -9，杀掉mysqld进程。
+
+- 操作系统意外重启。
+
 
 **问题反馈**
 ---
