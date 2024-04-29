@@ -323,7 +323,9 @@ trx_mysql_thread_id: 0
 
 出现这种情况，是因为这些事务都是 XA 事务，且处于 PREPARE 状态，所以这些事务的 `trx_mysql_thread_id` 值为 0。
 
-这是可以执行 `XA RECOVER` 或 `XA RECOVER CONVERT XID` 查看这些事务列表，并对它们进行提交或回滚。
+从上面查看事务状态中的 `recovered trx` 关键字也能发现这一点。
+
+这时可以执行 `XA RECOVER` 或 `XA RECOVER CONVERT XID` 查看这些事务列表，并对它们进行提交或回滚。
 
 更多详情请参考
 - [事务控制](../12-dev-guide/12-6-1-trx-control.md)
