@@ -295,6 +295,42 @@ $ cat /proc/597099/oom_score_adj
 - 操作系统意外重启。
 
 
+## 18. 为什么我有事务被阻塞了，却查不到源头
+
+当前有大量事务被阻塞，产生很多表锁、行锁，例如
+
+
+```sql
+greatsql> SHOW ENGINE INNODB STATUS\G
+...
+---TRANSACTION 402851757, ACTIVE (PREPARED) 93 sec recovered trx
+1 lock struct(s), heap size 1136, 0 row lock(s), undo log entries 5
+TABLE LOCK table `db1`.`t1` trx id 402851757 lock mode IX
+---TRANSACTION 402851749, ACTIVE (PREPARED) 93 sec recovered trx
+1 lock struct(s), heap size 1136, 0 row lock(s), undo log entries 7
+TABLE LOCK table `db1`.`t1` trx id 402851749 lock mode IX
+...
+```
+
+但是在查询 `information_schema.INNODB_TRX` 时，发现这个事务对应的 `trx_mysql_thread_id` 值却为 0
+
+```sql
+greatsql> SELECT trx_mysql_thread_id FROM information_schema.innodb_trx WHERE trx_id = 402851749\G
+*************************** 1. row ***************************
+trx_mysql_thread_id: 0
+1 row in set (0.00 sec)
+```
+
+出现这种情况，是因为这些事务都是 XA 事务，且处于 PREPARE 状态，所以这些事务的 `trx_mysql_thread_id` 值为 0。
+
+这是可以执行 `XA RECOVER` 或 `XA RECOVER CONVERT XID` 查看这些事务列表，并对它们进行提交或回滚。
+
+更多详情请参考
+- [事务控制](../12-dev-guide/12-6-1-trx-control.md)
+- [表锁住了,而且无法解锁](https://greatsql.cn/thread-487-1-1.html)
+
+
+
 **问题反馈**
 ---
 - [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
