@@ -6,7 +6,8 @@
 - ## [1 RPM安装](./3-1-quick-start-with-rpm.md)
 - ## [2 二进制包安装](./3-2-quick-start-with-tarball.md)
 - ## [3 容器化安装](./3-3-quick-start-with-docker.md)
-- ## [4 访问数据库](./3-4-quick-start-dbrw.md)
+- ## [4 my.cnf参考模板](./3-4-quick-start-with-cnf.md)
+- ## [5 访问数据库](./3-5-quick-start-dbrw.md)
 
 
 **问题反馈**
