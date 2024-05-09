@@ -114,7 +114,7 @@ GreatSQL支持将审计日志写入数据表中，并且设置审计日志入表
 
 审计内容将包括操作账户、客户端ip、被操作的数据库对象、操作的完整语句、操作结果。
 
-更多信息详见文档：[GreatSQL中的审计日志入表特性](../../5-enhance/5-4-security-audit-log-in-table.md)。
+更多信息详见文档：[GreatSQL中的审计日志入表特性](../../5-enhance/5-4-security-audit.md)。
 
 #### 1.4.3 表空间国密加密
 
