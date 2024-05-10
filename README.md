@@ -4,7 +4,7 @@
 [![](https://img.shields.io/badge/License-GPL_v2.0-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)
 [![](https://img.shields.io/badge/release-8.0.32_25-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)
 
-最后更新：2024-05-09。
+最后更新：2024-05-10。
 
 本文档适用版本：GreatSQL 8.0.32-25。
 
@@ -289,14 +289,8 @@ $ systemctl status mysqld
 
 GreatSQL同时也是gitee（码云）平台上的GVP项目，详见：[https://gitee.com/gvp/database-related](https://gitee.com/gvp/database-related) **数据库相关**类目。
 
-# 问题反馈
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
+- **扫码关注微信公众号**
 
-# 联系我们
----
-
-扫码关注微信公众号
-
-![输入图片说明](./greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)
