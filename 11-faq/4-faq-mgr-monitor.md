@@ -47,14 +47,8 @@ RECEIVED_TRANSACTION_SET: 6cfb873b-573f-11ec-814a-d08e7908bcb1:1-3078139
 9. 个别节点的本地事务缺失太多，且加入MGR时无法自动完成恢复，这种情况比较少见，需要手动执行clone复制数据，或者其他类似操作。
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

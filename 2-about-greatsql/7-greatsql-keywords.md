@@ -82,14 +82,8 @@ greatsql> SELECT * FROM information_schema.KEYWORDS WHERE WORD LIKE '%int%';
 在使用过程中请注意上述保留字、关键字，默认都用 **"** 或 **`** 将其引用起来，避免报SQL语法错误，保证应用程序的容错性。
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

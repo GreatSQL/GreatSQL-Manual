@@ -24,14 +24,8 @@
 - [GreatSQL重磅特性，InnoDB并行并行查询优化测试](https://mp.weixin.qq.com/s/_LeEtwJlfyvIlxzLoyNVdA)
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

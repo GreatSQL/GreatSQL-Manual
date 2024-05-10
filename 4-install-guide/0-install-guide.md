@@ -15,14 +15,8 @@ GreatSQL支持单机、主从复制、MGR集群等多种部署方式，本章文
 - ## [8 利用systemd管理GreatSQL](./8-greatsql-with-systemd.md)
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

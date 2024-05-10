@@ -83,14 +83,8 @@ greatsql> SELECT MONTHS_BETWEEN(TO_DATE('2021-1-10', 'yyyy-mm-dd'), TO_DATE('202
 
 **注意**：函数 `MONTHS_BETWEEN()` 使用相关注意事项可参考[函数 `TO_DATE()` 中的规则](./5-3-easyuse-ora-func-todate.md)。
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
+- **扫码关注微信公众号**
 
-**联系我们**
----
-
-扫码关注微信公众号
-
-![greatsql-wx](../../greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

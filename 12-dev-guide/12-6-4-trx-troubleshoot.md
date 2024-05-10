@@ -93,14 +93,8 @@ Trx read view will not see trx with id >= 2801, sees < 2800
 通过上面几个措施，相信可以有效降低行锁等待时长以及死锁发生的概率。
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

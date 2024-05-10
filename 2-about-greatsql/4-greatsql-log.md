@@ -32,15 +32,8 @@
 
 **通用查询日志（General Log）** 记录了客户端向 GreatSQL 服务器发送的所有SQL语句。服务器会将收到的所有语句记录在日志文件中,查询日志对于定位问题的查询语句和调优SQL非常有用。
 
-**问题反馈**
----
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
-
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

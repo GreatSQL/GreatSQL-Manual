@@ -64,14 +64,8 @@ greatsql> START TRANSACTION WITH CONSISTENT SNAPSHOT;
 以上是 GreatSQL 数据库中常用的事务控制语句及其用法，可以根据具体业务需求来合理应用。
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

@@ -128,14 +128,8 @@ done
 - `--clone-decrypt-dir`，设置要解密的备份文件目录。
 - `--remove-original`，设置是否在完成解密后删除原文件，可选项 FALSE|TRUE，默认值 FALSE。
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

@@ -136,14 +136,8 @@ greatsql> SELECT DUMP('GreatSQL', 16, 99, 3);
 
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
+- **扫码关注微信公众号**
 
-**联系我们**
----
-
-扫码关注微信公众号
-
-![greatsql-wx](../../greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

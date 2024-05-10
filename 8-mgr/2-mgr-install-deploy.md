@@ -457,15 +457,8 @@ Pager has been set to 'less -i -n -S'.
 
 在用MySQL Shell for GreatSQL连接时，也可以加上 `--dba-log-sql=2 --log-level=debug3` 参数，以启用debug模式，并记录运行过程中实际调用的SQL命令，默认日志文件是 `~/.mysqlsh/mysqlsh.log`。
 
-**问题反馈**
----
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
-
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

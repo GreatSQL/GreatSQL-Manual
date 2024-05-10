@@ -438,14 +438,8 @@ no-auto-rehash
 
 更多关于客户端配置参数请参考：[客户端的进阶操作](https://mp.weixin.qq.com/s/dM_Kr23h-yXo61uSf8uPNQ)
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

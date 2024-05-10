@@ -83,14 +83,8 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 **注意：** 在有仲裁节点的情况下，将单主切换成多主模式时，需要把投票节点先关闭再机型切换，否则可能会导致切换失败，并且仲裁节点报错退出MGR。
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

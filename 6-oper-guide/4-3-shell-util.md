@@ -176,14 +176,8 @@ Util.importTable: [Worker002] greatsql@t1@@0.tsv.zst: MySQL Error 1146 (42S02): 
 - [myloader导入更快吗？并没有。。。](https://mp.weixin.qq.com/s/bTxXjNvCktUVu4el8kO7Sg)
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

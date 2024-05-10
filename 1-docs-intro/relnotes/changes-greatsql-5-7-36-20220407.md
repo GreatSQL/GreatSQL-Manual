@@ -158,14 +158,8 @@ ERROR 3100 (HY000): Error on observer while running replication hook 'before_com
 
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
+- **扫码关注微信公众号**
 
-**联系我们**
----
-
-扫码关注微信公众号
-
-![greatsql-wx](../../greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

@@ -181,14 +181,8 @@ GreatSQL版本号采用点分位命名规则（X.Y.Z-R）模式，其中
 GreatSQL数据库是一款**开源免费**数据库，没有XC资质。如果您需要有XC资质的数据库产品，可以扫描页面下方二维码联系我们。
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

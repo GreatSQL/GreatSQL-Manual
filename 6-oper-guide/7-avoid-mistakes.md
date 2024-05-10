@@ -55,14 +55,8 @@
 - [《叶问》34期，延迟从库加上MASTER_DELAY，主库宕机后如何快速恢复服务](https://mp.weixin.qq.com/s/7ejpu9ysQhbYB2j_4-WtRQ)
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

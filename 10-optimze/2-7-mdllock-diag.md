@@ -329,14 +329,8 @@ MDL锁等待超时阈值由选项 `lock_wait_timeout` 定义，默认值是 **31
 - [Metadata Locking](https://dev.mysql.com/doc/refman/8.0/en/metadata-locking.html)
 - [The metadata_locks Table](https://dev.mysql.com/doc/refman/8.0/en/performance-schema-metadata-locks-table.html)
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

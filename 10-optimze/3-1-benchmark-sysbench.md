@@ -239,14 +239,8 @@ Threads fairness:
 - [联合评测 | GreatSQL 开源数据库在 DapuStor Roealsen5 NVMe SSD 中的应用探索](https://mp.weixin.qq.com/s/QrIZ8Fu69Bzq5MvNZwtTww)
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

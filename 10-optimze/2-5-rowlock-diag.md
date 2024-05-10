@@ -297,14 +297,8 @@ sql_kill_blocking_connection: KILL 13333        #<-- 解锁方法之二
 - [InnoDB Standard Monitor and Lock Monitor Output](https://dev.mysql.com/doc/refman/8.0/en/innodb-standard-monitor.html)
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

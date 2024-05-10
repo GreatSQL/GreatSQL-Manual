@@ -10,14 +10,8 @@ EXPLAIN PLAN FOR
 
 与Oracle区别：会直接显示EXPLAIN结果。
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
+- **扫码关注微信公众号**
 
-**联系我们**
----
-
-扫码关注微信公众号
-
-![greatsql-wx](../../greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

@@ -371,14 +371,8 @@ MySQL 8.0.26开始，可以为view change单独指定一个GTID前缀，避免�
 
 更多关于如何利用Docker/Docker-Compose完成GreatSQL初始化并构建MGR集群的详情请查看 [**GreatSQL-Docker项目**](https://gitee.com/GreatSQL/GreatSQL-Docker)。
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

@@ -168,14 +168,8 @@ Global级别，该状态变量显示池中的线程数。
 
 参考资料：[线程池详解 - 鹅厂架构师](https://zhuanlan.zhihu.com/p/425570523)。
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

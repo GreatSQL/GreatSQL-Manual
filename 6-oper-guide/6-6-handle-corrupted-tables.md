@@ -34,14 +34,8 @@
 
 启用 `innodb_file_per_table` 并使用 salvage 值会导致 InnoDB 允许读取损坏的表空间，但忽略任何损坏的页面。
 
-## 问题反馈
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
-
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

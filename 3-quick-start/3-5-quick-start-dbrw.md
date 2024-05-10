@@ -94,14 +94,8 @@ greatsql> SELECT * FROM t1;
 
 更多相关SQL命令/语法详见手册：[SQL Statements](https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html)。
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

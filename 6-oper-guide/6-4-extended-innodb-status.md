@@ -213,14 +213,8 @@ LIST OF TRANSACTIONS FOR EACH SESSION:
 - Innodb_purge_trx_id:此变量显示其记录尚未清除的最旧的事务 ID
 - Innodb_purge_undo_no:记录undo日志的purge操作数量
 
-## 问题反馈
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
-
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

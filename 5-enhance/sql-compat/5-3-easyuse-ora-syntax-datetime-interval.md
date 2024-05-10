@@ -452,14 +452,8 @@ TO_DATE('0001-01-01 00:00:00')  - INTERVAL '100 10' DAY(3) TO HOUR
 
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
+- **扫码关注微信公众号**
 
-**联系我们**
----
-
-扫码关注微信公众号
-
-![greatsql-wx](../../greatsql-wx.jpg)
+![greatsql-wx](../greatsql-wx.jpg)

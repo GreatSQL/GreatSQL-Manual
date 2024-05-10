@@ -13,14 +13,8 @@
 - ## [6 运维特性增强](./6-feature-enhancement.md)
 - ## [7 防范误操作及快速恢复](./7-avoid-mistakes.md)
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

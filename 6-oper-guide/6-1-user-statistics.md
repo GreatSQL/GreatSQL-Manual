@@ -85,15 +85,8 @@ greatsql> SET GLOBAL userstat = ON;
 
 `Com_show_user_statistics` 语句计数器变量指示语句 `SHOW USER_STATISTICS` 的执行次数。
 
-**问题反馈**
----
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
-
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

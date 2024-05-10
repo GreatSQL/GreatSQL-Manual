@@ -19,14 +19,8 @@
 
 > 建议将此参数设置为300，既自动杀掉超过5分钟不活跃事务，避免行锁被长时间持有
 
-## 问题反馈
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
-
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

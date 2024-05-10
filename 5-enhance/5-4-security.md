@@ -14,14 +14,8 @@ GreatSQL支持逻辑备份加密、CLONE备份加密、审计日志入表、表�
 5. 支持数据脱敏插件，能够对敏感数据进行脱敏处理，确保数据的安全性，有效预防数据泄露的风险。更详细内容参考：[数据脱敏](./5-4-security-data-masking.md)。
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

@@ -30,15 +30,9 @@ GreatSQL中支持多种智能选主模式，使得高可用切换选主机制更
 | Description    | 当MGR集群需要投票选主时，采用何种投票策略。|
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
 
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)
-

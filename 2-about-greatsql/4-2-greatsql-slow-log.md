@@ -274,15 +274,8 @@ greatsql> SHOW VARIABLES LIKE '%slow_query_log%';
 >
 > 如果 GreatSQL 日志文件被其他进程打开或被锁定，`flush-logs` 操作可能会失败
 
-**问题反馈**
----
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
-
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

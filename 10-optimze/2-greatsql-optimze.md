@@ -81,14 +81,8 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 - [2.7 MDL锁排查分析](./2-7-mdllock-diag.md)
 
 
-**问题反馈**
----
-- [问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-
-**联系我们**
----
-
-扫码关注微信公众号
+- **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)
