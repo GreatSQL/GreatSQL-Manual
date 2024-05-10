@@ -86,4 +86,4 @@ greatsql> SELECT RAWTOHEX(UNHEX('A')) FROM DUAL;
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

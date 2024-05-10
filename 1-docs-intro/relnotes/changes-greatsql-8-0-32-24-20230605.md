@@ -196,4 +196,4 @@ GreatSQL支持在利用CLONE备份时同步进行加密操作，提升备份文�
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

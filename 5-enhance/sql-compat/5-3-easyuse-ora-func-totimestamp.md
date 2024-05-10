@@ -107,4 +107,4 @@ greatsql> SELECT TO_TIMESTAMP('03-01-02 8:11:2.123456', 'YY-MM-DD HH24:MI:SS.FF'
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

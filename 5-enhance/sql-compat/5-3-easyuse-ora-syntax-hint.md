@@ -294,4 +294,4 @@ greatsql> EXPLAIN SELECT /*+ INDEX_ASC(t0 idx1,idx2) */ * FROM t0 WHERE c2='1593
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

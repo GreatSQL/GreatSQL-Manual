@@ -145,4 +145,4 @@ greatsql> SELECT * FROM t2 PIVOT(SUM(c) FOR(a, d) IN((1,1), (2,2), (3,1), (4,2),
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

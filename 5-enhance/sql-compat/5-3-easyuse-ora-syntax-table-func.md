@@ -204,4 +204,4 @@ mysqldump -S/data/GreatSQL/mysql.sock -uroot -pxxx -B greatsql -d --routines > /
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

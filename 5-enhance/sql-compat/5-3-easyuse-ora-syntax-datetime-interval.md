@@ -456,4 +456,4 @@ TO_DATE('0001-01-01 00:00:00')  - INTERVAL '100 10' DAY(3) TO HOUR
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

@@ -405,4 +405,4 @@ ERROR HY000: Misplaced INTO clause, INTO is not allowed inside EXECUTE IMMEDIATE
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

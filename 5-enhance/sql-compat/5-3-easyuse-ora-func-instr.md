@@ -106,4 +106,4 @@ SELECT INSTR('thisisatestsentence','t',0.5,1)  FROM DUAL;
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

@@ -58,4 +58,4 @@ greatsql> SELECT HEX(SUBSTRB(c1, -10, 4)), CONCAT(SUBSTRB(c1, -10, 4), '|'), c1 
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

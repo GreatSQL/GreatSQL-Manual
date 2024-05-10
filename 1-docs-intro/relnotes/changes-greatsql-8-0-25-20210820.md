@@ -133,4 +133,4 @@ GreatSQL版本中对此进行优化后，只会产生约1~3秒的性能小抖动
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

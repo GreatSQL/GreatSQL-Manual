@@ -116,4 +116,4 @@ greatsql> SELECT dept_id, SUM(salary) KEEP(DENSE_RANK FIRST ORDER BY age) FROM t
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

@@ -142,4 +142,4 @@ greatsql> SELECT empName, REGEXP_REPLACE (empName, 'John', 'Jane') AS REGEXP_REP
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

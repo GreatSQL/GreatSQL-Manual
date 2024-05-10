@@ -94,4 +94,4 @@ greatsql> SELECT * FROM t1 FULL JOIN (t2 FULL JOIN t3 ON t2.c1=t3.c1) ON t1.c1=t
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)

@@ -54,4 +54,4 @@ greatsql> SELECT * FROM t1 MINUS SELECT * FROM t2;
 
 - **扫码关注微信公众号**
 
-![greatsql-wx](../greatsql-wx.jpg)
+![greatsql-wx](../../greatsql-wx.jpg)
