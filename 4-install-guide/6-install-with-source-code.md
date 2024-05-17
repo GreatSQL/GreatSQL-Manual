@@ -13,8 +13,8 @@ CentOS Linux release 8.5.2111
 $ uname -a
 Linux gip 4.18.0-348.el8.x86_64 #1 SMP Tue Oct 19 15:14:17 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 ```
-## 1. 准备工作
-### 1.1 配置 Yum 源
+##  准备工作
+###  配置 Yum 源
 开始编译之前，建议先配置好 Yum 源，方便安装一些工具
 ```bash
 # 直接替换yum源文件，并替换部分资源
@@ -29,7 +29,7 @@ $ yum clean all
 $ yum makecache
 ```
 
-### 1.2 安装 Docker
+###  安装 Docker
 下载 Docker 的 Yum 源，并清理生成新的 Yum 缓存
 ```bash
 $ wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo
@@ -43,13 +43,13 @@ $ systemctl start docker
 $ docker --version
 Docker version 25.0.3, build 4debf41
 ```
-### 1.3 安装 Git
+###  安装 Git
 安装Git方便拉取仓库
 ```bash
 $ yum install -y git
 ```
 
-## 2. 拉取 GreatSQL-Docker 仓库
+##  拉取 GreatSQL-Docker 仓库
 
 直接拉取[GreatSQL-Docker 仓库](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Build)，将仓库拉取到 `/opt/` 目录下：
 
@@ -63,7 +63,7 @@ Dockerfile  README.md  docker-entrypoint.sh  greatsql-automake.sh  patchelf-0.14
 ```
 或是只下载 GreatSQL-Docker 仓库 GreatSQL-Build 文件夹下的 Dockerfile 文件也行，Dockerfile 文件会自动从服务器上下载相应文件。
 
-## 3. GreatSQL Build Docker镜像构建
+##  GreatSQL Build Docker镜像构建
 
 ```bash
 $ docker build -t greatsql/greatsql_build .
@@ -73,7 +73,7 @@ $ docker build -t greatsql/greatsql_build .
 在构建镜像时，会自动从服务器上下载相应的源码包文件、初始化脚本等文件，并全自动化方式完成镜像构建工作。
 
 > 由于镜像构建需要下载基础镜像并进行层层构建，受限于当前机器配置和网络环境，整个构建过程可能需要一定时间，请耐心等待。
-## 4. GreatSQL Build Docker镜像使用
+##  GreatSQL Build Docker镜像使用
 ```bash
 # 创建新容器
 $ docker run -itd --hostname greatsql_build --name greatsql_build greatsql/greatsql_build bash
@@ -119,7 +119,7 @@ CMD ["bash"]
 
 至此，GreatSQL二进制安装包就编译成功了，接下来可以参考文档[二进制包安装并构建MGR集群](./3-install-with-tarball.md)继续进行数据库的初始化，以及MGR集群构建等工作，这里不赘述。
 
-## 5. 相关资源和延伸阅读
+##  相关资源和延伸阅读
 `greatsql_docker_build` 仓库地址详见：[https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Build](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Build)
 
 **延伸阅读**

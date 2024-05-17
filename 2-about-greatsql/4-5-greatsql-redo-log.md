@@ -1,4 +1,4 @@
-# 图解GreatSQL Redo Log(重做日志)
+# 图解GreatSQL Redo Log（重做日志）
 
 ## 前言
 
@@ -169,7 +169,7 @@ greatsql> SHOW VARIABLES LIKE 'innodb_flush_log_at_trx_commit';
 
 ## 写入Redo Log Buffer 过程
 
-### 1.Mini-Transaction
+### Mini-Transaction
 
 GreatSQL把对底层页面中的一次原子访问的过程称之为一个`Mini-Transaction`，简称`mtr`，比如，向某个索引对应的B+树中插入一条记录的过程就是一个`Mini-Transaction`。一个所谓的mtr可以包含一组Redo日志，在进行崩溃恢复时这一组Redo日志作为一个不可分割的整体。
 
@@ -177,7 +177,7 @@ GreatSQL把对底层页面中的一次原子访问的过程称之为一个`Mini-
 
 ![InnoDB mtr](./4-5-greatsql-redo-Log-09.png)
 
-### 2.Redo 日志写入Log Buffer
+### Redo 日志写入Log Buffer
 
 向`log buffer`中写入Redo日志的过程是顺序的，也就是先往前边的block中写，当该block的空闲空间用完之后再往下一个block中写。当我们想往`log buffer`中写入Redo日志时，第一个遇到的问题就是应该写在哪个block的哪个偏移量处，所以InnoDB的设计者特意提供了一个称之为`buf_free`的全局变量，该变量指明后续写入的Redo日志应该写入到`log buffer`中的哪个位置，如图所示:
 
@@ -198,7 +198,7 @@ GreatSQL把对底层页面中的一次原子访问的过程称之为一个`Mini-
 
 有的mtr产生的Redo日志量非常大，比如mtr_t1_2产生的Redo日志占用空间比较大，占用了3个block来存储。
 
-### 3. Redo Log Block的结构图
+### Redo Log Block的结构图
 
 一个Redo Log Block是由**日志头**、**日志体**、**日志尾**组成。日志头占用**12字节**，日志尾占用**4字节**，所以一个block真正能存储的数据就是`512-12-4=496字节`。
 

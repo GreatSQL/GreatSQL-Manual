@@ -20,7 +20,7 @@ glibc 2.35
 
 在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
 
-## 1.下载安装包
+## 下载安装包
 
 查看机器的glibc版本，以选择正确的安装包：
 ```bash
@@ -62,9 +62,9 @@ $ tar xf GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 
 进入到`GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin`目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其它信息则已经不缺必要软件包
 
-## 2.启动前准备
+## 启动前准备
 
-### 2.1 修改 my.cnf 配置文件
+### 修改 my.cnf 配置文件
 
 [参考这份文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
@@ -232,14 +232,14 @@ performance_schema = 1
 performance_schema_instrument = '%lock%=on'
 ```
 
-###  2.2 新建mysql用户
+###  新建mysql用户
 
 ```Plain
 $ /sbin/groupadd mysql
 $ /sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
 ```
 
-###  2.3 新建数据库主目录，并修改权限模式及属主
+###  新建数据库主目录，并修改权限模式及属主
 
 ```Plain
 $ mkdir -p /data/GreatSQL
@@ -247,7 +247,7 @@ $ chown -R mysql:mysql /data/GreatSQL
 $ chmod -R 700 /data/GreatSQL
 ```
 
-## 3.启动GreatSQL
+## 启动GreatSQL
 
 把GreatSQL添加进环境变量
 
@@ -275,7 +275,7 @@ $ mysqld --defaults-file=/etc/mysql/my.cnf&
 
 安装完成后加入systemd服务方法可以参考这篇文章：[利用systemd管理GreatSQL](./8-greatsql-with-systemd.md)。
 
-## 4.连接登入GreatSQL
+## 连接登入GreatSQL
 
 在上面进行GreatSQL初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
 
@@ -314,7 +314,7 @@ Server version:         8.0.32-25
 
 GreatSQL数据库安装并初始化完毕。
 
-## 5.安装MySQL Shell
+## 安装MySQL Shell
 
 接下来安装MySQL Shell，可以使用mysql-shell-8.0.32，但是要注意MGR中并不支持仲裁节点
 

@@ -3,13 +3,13 @@
 
 无论是在CentOS、Ubuntu，还是openEuler、Anolis、UOS等系统环境下，都推荐采用systemd来管理GreatSQL数据库。
 
-## 1. 关于systemd
+##  关于systemd
 
 systemd 是Linux系统启动和服务器守护进程管理器，负责在系统启动或运行时，激活系统资源，服务器进程和其它进程，systemd被设计用来改进原来sysvinit中的多个缺点。
 
 CentOS的systemd服务配置脚本存放在 `/usr/lib/systemd/` 目录下，并区分 system 和 user，每一个服务配置脚本以 **.service** 结尾，例如 `/usr/lib/systemd/system/sshd.service`。
 
-## 2. 编辑systemd服务配置脚本
+##  编辑systemd服务配置脚本
 
 如果是采用RPM方式安装，则会默认利用systemd来管理GreatSQL，服务名是 *mysql*，相应的服务配置文件是 `/lib/systemd/system/mysqld.service`。
 

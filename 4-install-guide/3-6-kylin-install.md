@@ -1,9 +1,9 @@
 # 麒麟Kylin系统中安装GreatSQL
 ---
 
-## 1. 准备工作
+##  准备工作
 
-### 1.1 配置yum源
+###  配置yum源
 开始编译之前，建议先配置好yum源，方便安装一些工具以及必要的依赖包。
 
 这里采用系统安装后默认的YUM源，并生成缓存。
@@ -39,7 +39,7 @@ umask 0022
 ```
 保存退出。
 
-### 1.2 选择下载GreatSQL二进制包
+###  选择下载GreatSQL二进制包
 一般而言，麒麟kylin系统环境下，也可以选择相应glibc版本的GreatSQL二进制安装包，基本上都能直接运行起来。
 
 例如，本文使用的Kylin系统如下：
@@ -73,9 +73,9 @@ $ source ~/.bash_profile
 
 接下来准备开始安装GreatSQL二进制包。
 
-## 2. 安装GreatSQL
+##  安装GreatSQL
 
-### 2.1 修改my.cnf
+###  修改my.cnf
 
 建议参考下面这份my.cnf模板，并根据实际情况做些适当调整：
 
@@ -255,20 +255,20 @@ performance_schema_instrument = '%lock%=on'
 ```
 一般修改 *basedir/datadir/innodb_buffer_pool_size* 等几个选项就可以，修改完后保存退出。
 
-### 2.3 新建mysql用户
+###  新建mysql用户
 ```
 $ /sbin/groupadd mysql
 $ /sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
 ```
 
-### 2.4 新建数据库主目录，并修改权限模式及属主
+###  新建数据库主目录，并修改权限模式及属主
 ```
 $ mkdir -p /data/GreatSQL 
 $ chown -R mysql:mysql /data/GreatSQL
 $ chmod -R 700 /data/GreatSQL
 ```
 
-### 2.5 配置GreatSQL systemd服务
+###  配置GreatSQL systemd服务
 推荐采用systemd来管理GreatSQL服务，可参考这份文件，或根据实际安装目录编辑文件：
 ```
 $ vim /lib/systemd/system/greatsql.service
@@ -325,7 +325,7 @@ $ systemctl daemon-reload
 
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
 
-## 3. 启动GreatSQL
+##  启动GreatSQL
 执行下面的命令启动GreatSQL服务
 ```
 $ systemctl start greatsql
@@ -390,7 +390,7 @@ LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=
 可以看到，GreatSQL服务已经正常启动了。
 
 
-## 4. 连接登入GreatSQL
+##  连接登入GreatSQL
 在上面进行GreatSQL初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
 ```
 $ grep -i root /data/GreatSQL/error.log
@@ -446,7 +446,7 @@ Threads: 2  Questions: 19  Slow queries: 0  Opens: 137  Flush tables: 3  Open ta
 ```
 GreatSQL数据库安装并初始化完毕。
 
-## 5. 安装MySQL Shell
+##  安装MySQL Shell
 
 下载MySQL Shell for GreatSQL二进制包 *greatsql-shell-8.0.25-16-Linux-glibc2.28-aarch64.tar.xz*，在Kylin系统下也可以正常运行。
 

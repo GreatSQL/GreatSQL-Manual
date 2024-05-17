@@ -1,7 +1,7 @@
 # Changes in GreatSQL 5.7.36 (2022-4-7)
 
-## 1.新增特性
-### 1.2 新增MGR角色列
+## 新增特性
+### 新增MGR角色列
 在MySQL 5.7中，查询 `performance_schema.replication_group_members` 时，没有 `MEMBER_ROLE` 这个列，这很不便于快速查看哪个节点是Primary Node。
 
 在GreatSQL中，增加了这个列，查看节点角色更便利了，对一些中间件支持也更友好。
@@ -16,7 +16,7 @@ mysql> select * from performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+
 ```
 
-### 1.2 采用全新的流控机制
+### 采用全新的流控机制
 原生的流控算法有较大缺陷，触发流控阈值后，会有短暂的流控停顿动作，之后继续放行事务，这会造成1秒的性能抖动，且没有真正起到持续流控的作用。
 
 在GreatSQL中，重新设计了流控算法，增加主从延迟时间来计算流控阈值，并且同时考虑了大事务处理和主从节点的同步，流控粒度更细致，不会出现MySQL社区版本的1秒小抖动问题。
@@ -37,7 +37,7 @@ mysql> SET GLOBAL group_replication_flow_control_replay_lag_behind = 600;
 ```
 正常情况下，该参数无需调整。
 
-### 1.3 新增MGR网络开销阈值
+### 新增MGR网络开销阈值
 新增相应选项 `group_replication_request_time_threshold`。
 
 在MGR结构中，一个事务的开销包含网络层以及本地资源（例如CPU、磁盘I/O等）开销，GreatSQL针对MGR的网络层开销进行了多项优化工作，因此在网络层的开销通常不会成为瓶颈。
@@ -58,7 +58,7 @@ mysql> SET GLOBAL group_replication_flow_control_replay_lag_behind = 600;
 | Default	| 0 |
 | Description	|单位：微秒。<br/>设置阈值，当一个事务的MGR层网络开销超过该阈值时，会在error log中输出一条记录。<br/>设置为0时，表示不启用。<br/>当怀疑可能因为MGR通信耗时过久成为事务性能瓶颈时，再开启，平时不建议开启。|
 
-### 1.4 调整MGR大事务限制
+### 调整MGR大事务限制
 调整MGR事务限制选项 `group_replication_transaction_size_limit`，其默认值为150000000（同时也是最大值）。
 
 在MySQL 5.7中，MGR事务没有进行分片处理，执行大事务很容易造成超时（并反复重发事务数据），最终导致节点报错并退出集群。
@@ -119,16 +119,16 @@ ERROR 3100 (HY000): Error on observer while running replication hook 'before_com
 | Default	| 150000000 |
 | Description	|设置大事务阈值，当一个MGR事务超过该阈值时，会在error log中输出一条记录|
 
-## 2.稳定性提升
+## 稳定性提升
 1. 修复了在异常情况下（节点崩溃，关闭节点，网络分区）的剧烈性能抖动问题。
 2. 提升数个大事务造成的长时间阻塞的问题。
 
-## 3.性能提升
+## 性能提升
 1. 重新设计事务认证队列清理算法。MySQL社区版本中，对事务认证队列清理时采用了类似全表扫描的算法，清理效率较低，性能抖动较大。在GreatSQL版本中，对事务认证队列增加了类似索引机制，并控制每次清理的时间，可以有效解决清理效率低、性能抖动大的问题。
 2. 提升了Secondary节点上大事务并发应用回放的速度。
 3. 增加xcom cache条目，提升了在网络延迟较大或事务应用较慢场景下的性能。
 
-## 4.bug修复
+## bug修复
 01. 修复了在启用dns或hostname的情况下，bind意外失败问题。
 02. 修复了协程调度不合理的问题，该问题可能会造成在大事务时系统错误判断为网络错误。
 03. 修复了新加入节点在追paxos数据时，由于write超时导致连接提前关闭的问题。
@@ -145,7 +145,7 @@ ERROR 3100 (HY000): Error on observer while running replication hook 'before_com
 14. 修复了在特殊场景下组视图异常的问题。
 
 
-## 5. GreatSQL Release Notes
+## GreatSQL Release Notes
 ### GreatSQL 8.0
 - [Changes in GreatSQL 8.0.32-25 (2023-12-28)](changes-greatsql-8-0-32-25-20231228.md)
 - [Changes in GreatSQL 8.0.32-24 (2023-6-5)](changes-greatsql-8-0-32-24-20230605.md)

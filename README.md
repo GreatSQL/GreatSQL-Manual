@@ -8,31 +8,31 @@
 
 本文档适用版本：GreatSQL 8.0.32-25。
 
-# 关于 GreatSQL
+## 关于 GreatSQL
 ---
 
 GreatSQL数据库是一款**开源免费**数据库，可在普通硬件上满足金融级应用场景，具有**高可用**、**高性能**、**高兼容**、**高安全**等特性，可作为MySQL或Percona Server for MySQL的理想可选替换。
 
 ![GreatSQL LOGO](./GreatSQL-logo-01.png "GreatSQL LOGO")
 
-# 下载GreatSQL
+## 下载GreatSQL
 ---
 
-## GreatSQL 8.0
+### GreatSQL 8.0
 - [GreatSQL 8.0.32-25](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)
 - [GreatSQL 8.0.32-24](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-24)
 - [GreatSQL 8.0.25-17](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.25-17)
 - [GreatSQL 8.0.25-16](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.25-16)
 - [GreatSQL 8.0.25-15](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.25-15)
 
-## GreatSQL 5.7
+### GreatSQL 5.7
 - [GreatSQL 5.7.36](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-5.7.36-39)
 
 
-# GreatSQL核心特性
+## GreatSQL核心特性
 ---
 
-## 1. 高可用
+### 高可用
 针对MGR进行了大量改进和提升工作，新增支持**地理标签**、**仲裁节点**、**读写节点可绑定动态IP**、**快速单主模式**、**智能选主**，并针对**流控算法**、**事务认证队列清理算法**、**节点加入&退出机制**、**recovery机制**等多项MGR底层工作机制算法进行深度优化，进一步提升优化了MGR的高可用保障及性能稳定性。
 
 - 支持地理标签特性，提升多机房架构数据可靠性。
@@ -49,7 +49,7 @@ GreatSQL数据库是一款**开源免费**数据库，可在普通硬件上满�
 
 更多信息详见文档：[高可用](https://greatsql.cn/docs/8032-25/user-manual/5-enhance/5-2-ha.html)。
 
-## 2. 高性能
+### 高性能
 相对MySQL及Percona Server For MySQL的性能表现更稳定优异，支持**高性能的内存查询加速AP引擎**、**InnoDB并行查询**、**并行LOAD DATA**、**事务无锁化**、**线程池等**特性，在TPC-C测试中相对MySQL性能提升超过30%，在TPC-H测试中的性能表现是MySQL的十几倍甚至上百倍。
 
 - 支持类似MySQL HeatWave的大规模并行、高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级。
@@ -60,19 +60,19 @@ GreatSQL数据库是一款**开源免费**数据库，可在普通硬件上满�
 
 更多信息详见文档：[高性能](https://greatsql.cn/docs/8032-25/user-manual/5-enhance/5-1-highperf.html)。
 
-## 3. 高兼容
+### 高兼容
 
 支持大多数常见Oracle用法，包括数据类型、函数、SQL语法、存储程序等兼容性用法。
 
 更多信息详见文档：[高兼容](https://greatsql.cn/docs/8032-25/user-manual/5-enhance/5-3-easyuse.html)。
 
-## 4. 高安全
+### 高安全
 
 支持逻辑备份加密、CLONE备份加密、审计日志入表、表空间国密加密等多个安全提升特性，进一步保障业务数据安全，更适用于金融级应用场景。
 
 更多信息详见文档：[高安全](https://greatsql.cn/docs/8032-25/user-manual/5-enhance/5-4-security.html)。
 
-# 注意事项
+## 注意事项
 ---
 运行GreatSQL可能需要依赖jemalloc库（推荐5.2.1+版本），因此请先先安装上
 ```
@@ -93,7 +93,7 @@ yum -y install jemalloc jemalloc-devel
 ```
 jemalloc下载地址：https://centos.pkgs.org/8/epel-x86_64/jemalloc-5.2.1-2.el8.x86_64.rpm.html
 
-# 安装GreatSQL
+## 安装GreatSQL
 
 推荐安装GreatSQL RPM包。
 
@@ -130,7 +130,7 @@ $ systemctl status mysqld
 ...
 ```
 
-# my.cnf参考
+## my.cnf参考
 
 - [my.cnf for GreatSQL 8.0.32-25](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25)
 - [my.cnf for GreatSQL 8.0.32-24](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-24)
@@ -141,27 +141,27 @@ $ systemctl status mysqld
 
 就可以正常启动GreatSQL服务了。
 
-# 编译GreatSQL二进制包
+## 编译GreatSQL二进制包
 
 推荐利用Docker环境快速编译GreatSQL二进制包，可参考方法：[编译源码安装GreatSQL](https://greatsql.cn/docs/8032-25/user-manual/4-install-guide/6-install-with-source-code.html)。
 
-# 版本历史
+## 版本历史
 ---
-## GreatSQL 8.0
+### GreatSQL 8.0
 - [Changes in GreatSQL 8.0.32-25 (2023-12-28)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231228.html)
 - [Changes in GreatSQL 8.0.32-24 (2023-6-5)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.html)
 - [Changes in GreatSQL 8.0.25-17 (2023-3-13)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-25-17-20230313.html)
 - [Changes in GreatSQL 8.0.25-16 (2022-5-16)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-25-16-20220516.html)
 - [Changes in GreatSQL 8.0.25-15 (2021-8-26)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-8-0-25-20210820.html)
 
-## GreatSQL 5.7
+### GreatSQL 5.7
 - [Changes in GreatSQL 5.7.36-39 (2022-4-7)](https://greatsql.cn/docs/8032-25/user-manual/1-docs-intro/relnotes/changes-greatsql-5-7-36-20220407.html)
 
 
-# 用户手册及学习资料
+## 用户手册及学习资料
 ---
 
-## GreatSQL编译构建相关
+### GreatSQL编译构建相关
 - [利用Docker环境快速编译GreatSQL相关资源](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/greatsql_docker_build)
 - [利用Docker环境快速编译MySQL Shell for GreatSQL相关资源](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/greatsql_shell_docker_build)
 - [用于编译GreatSQL RPM包的Spec文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/build-gs/greatsql.spec)
@@ -169,7 +169,7 @@ $ systemctl status mysqld
 - [在麒麟OS+龙芯环境下源码编译安装GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source-under-kylin-and-loongson.md)
 - [在openEuler、龙蜥Anolis、统信UOS系统下编译GreatSQL二进制包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-under-openeuler-anolis-uos.md)
 
-## GreatSQL管理运维使用相关
+### GreatSQL管理运维使用相关
 - [GCA认证课程学习视频](https://greatsql.cn/smx_course-lesson.html?op=video&ids=10)，GreatSQL认证数据库专员培训视频课程
 - [实战MGR专栏视频](https://greatsql.cn/smx_course-lesson.html?op=video&ids=5)，适合新手入门的MGR学习实操视频内容
 - [深入浅出MGR专栏文章](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr)，深入浅出MGR相关知识点、运维管理实操
@@ -179,12 +179,12 @@ $ systemctl status mysqld
 - [MySQL InnoDB Cluster+GreatSQL部署MGR集群](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/mysql-innodb-cluster-with-greatsql.md)
 - [GreatSQL MGR FAQ](https://greatsql.cn/docs/8032-25/user-manual/11-faq/0-faq.html)
 
-# 其他GreatSQL相关资源仓库
+## 其他GreatSQL相关资源仓库
 - [GreatSQL用户手册](https://gitee.com/GreatSQL/GreatSQL-Manual)，最新版本GreatSQL用户手册
 - [GreatSQL-Docker](https://gitee.com/GreatSQL/GreatSQL-Docker)，在Docker中运行GreatSQL
 - [GreatSQL-Ansible](https://gitee.com/GreatSQL/GreatSQL-Ansible)，利用Ansible一键安装GreatSQL并完成MGR集群部署
 
-# GreatSQL vs MySQL
+## GreatSQL vs MySQL
 
 下面是GreatSQL 和 MySQL社区版本的对比表格：
 

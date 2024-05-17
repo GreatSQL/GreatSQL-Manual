@@ -2,9 +2,9 @@
 
 ---
 
-## 1. 准备工作
+##  准备工作
 
-### 1.1 配置yum源
+###  配置yum源
 
 开始编译之前，建议先配置好yum源，方便安装一些工具以及必要的依赖包。
 
@@ -16,7 +16,7 @@ $ yum clean all && yum makecache
 
 在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
 
-### 1.2 选择下载GreatSQL二进制包
+###  选择下载GreatSQL二进制包
 
 本文使用的统信UOS系统如下：
 
@@ -53,9 +53,9 @@ $ source ~/.bash_profile
 
 接下来准备开始安装GreatSQL二进制包。
 
-## 2. 安装GreatSQL
+##  安装GreatSQL
 
-### 2.1 修改my.cnf
+###  修改my.cnf
 
 建议参考下面这份my.cnf模板，并根据实际情况做些适当调整：
 
@@ -235,14 +235,14 @@ performance_schema_instrument = '%lock%=on'
 
 一般修改 *basedir/datadir/innodb_buffer_pool_size* 等几个选项就可以，修改完后保存退出。
 
-### 2.3 新建mysql用户
+###  新建mysql用户
 
 ```
 $ /sbin/groupadd mysql
 $ /sbin/useradd -g mysql -M mysql -s /sbin/nologin
 ```
 
-### 2.4 新建数据库主目录，并修改权限模式及属主
+###  新建数据库主目录，并修改权限模式及属主
 
 ```
 $ mkdir -p /data/GreatSQL 
@@ -250,7 +250,7 @@ $ chown -R mysql:mysql /data/GreatSQL
 $ chmod -R 700 /data/GreatSQL
 ```
 
-### 2.5 配置GreatSQL systemd服务
+###  配置GreatSQL systemd服务
 
 推荐采用systemd来管理GreatSQL服务，可参考这份文件，或根据实际安装目录编辑文件：
 
@@ -311,7 +311,7 @@ $ systemctl daemon-reload
 
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
 
-## 3. 启动GreatSQL
+##  启动GreatSQL
 
 执行下面的命令启动GreatSQL服务
 
@@ -379,7 +379,7 @@ LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=
 可以看到，GreatSQL服务已经正常启动了。
 
 
-## 4. 连接登入GreatSQL
+##  连接登入GreatSQL
 
 在上面进行GreatSQL初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
 
@@ -437,7 +437,7 @@ Threads: 4  Questions: 11  Slow queries: 0  Opens: 130  Flush tables: 3  Open ta
 
 GreatSQL数据库安装并初始化完毕。
 
-## 5. 安装MySQL Shell
+##  安装MySQL Shell
 
 下载MySQL Shell for GreatSQL二进制包*greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64.tar.xz*，在统信UOS系统下也可以正常运行。
 

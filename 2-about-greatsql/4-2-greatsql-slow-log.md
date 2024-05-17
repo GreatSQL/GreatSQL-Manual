@@ -1,4 +1,4 @@
-# 图解GreatSQL Slow Log（慢查询日志）
+# 图解GreatSQL Slow Query Log（慢查询日志）
 
 ## 什么是慢查询日志
 

@@ -4,17 +4,17 @@
 
 推荐使用这份[**my.cnf配置参考**](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.25-17)。
 
-## 1.新增特性
+## 新增特性
 
-## 2.稳定性提升
+## 稳定性提升
 
-## 3.其他调整
+## 其他调整
 
 
-## 4.bug修复
+## bug修复
 01. 修复GreatSQL中InnoDB并行查询可能导致查询hang住，甚至crash的问题。
 
-## 5. GreatSQL VS MySQL社区版
+## GreatSQL VS MySQL社区版
 
 | 特性 | GreatSQL 8.0.25-17| MySQL 8.0.25 社区版 |
 |---| --- | --- |
@@ -49,7 +49,7 @@
 | PROCESSLIST增强 | ⭐️⭐️⭐️⭐️⭐️ | /  | 
 
 
-## 6. GreatSQL Release Notes
+## GreatSQL Release Notes
 ### GreatSQL 8.0
 - [Changes in GreatSQL 8.0.32-25 (2023-12-28)](changes-greatsql-8-0-32-25-20231228.md)
 - [Changes in GreatSQL 8.0.32-24 (2023-6-5)](changes-greatsql-8-0-32-24-20230605.md)

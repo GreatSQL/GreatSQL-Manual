@@ -3,7 +3,7 @@
 
 本文详细介绍如何在Docker中部署GreatSQL，并且构建一个MGR集群。
 
-## 1. 安装Docker
+##  安装Docker
 直接用yum/dnf安装Docker，非常省事
 ```
 $ yum install -y docker
@@ -15,8 +15,8 @@ $ systemctl enable docker
 $ systemctl start docker
 ```
 
-## 2. 拉取GreatSQL镜像，并创建容器
-### 2.1 拉取镜像
+##  拉取GreatSQL镜像，并创建容器
+###  拉取镜像
 拉取GreatSQL官方镜像
 ```
 $ docker pull greatsql/greatsql
@@ -40,7 +40,7 @@ REPOSITORY                    TAG                 IMAGE ID            CREATED   
 docker.io/greatsql/greatsql   latest              a930afc72d88        8 weeks ago         923 MB
 ```
 
-### 2.2 创建新容器
+###  创建新容器
 
 之后，就可以直接创建一个新的容器了，先用常规方式
 ```
@@ -58,7 +58,7 @@ $ docker ps -a | grep greatsql
 ```
 看到容器状态是Up的，表示已正常启动了。
 
-### 2.3 容器管理
+###  容器管理
 
 进入容器查看
 ```
@@ -76,7 +76,7 @@ Threads: 2  Questions: 18  Slow queries: 0  Opens: 119  Flush tables: 3  Open ta
 
 看到容器已经完成初始化，并且可以直接无密码登入。
 
-## 3. 利用Docker-compose创建Docker容器并构建MGR集群（单主模式）
+##  利用Docker-compose创建Docker容器并构建MGR集群（单主模式）
 
 手工管理Docker比较麻烦，建议采用 `docker-compose` ，它可以更方便的管理docker容器。
 
@@ -213,7 +213,7 @@ Threads: 11  Questions: 52  Slow queries: 0  Opens: 145  Flush tables: 3  Open t
 ```
 可以看到，包含仲裁节点的三节点MGR集群已自动构建完毕。
 
-## 4. 利用Docker-compose创建Docker容器并构建MGR集群（多主模式）
+##  利用Docker-compose创建Docker容器并构建MGR集群（多主模式）
 
 下面是一个docker-compose的配置文件参考 `/data/docker/mgr-multi-primary.yml`:
 ```
@@ -308,7 +308,7 @@ $ mysql
 ```
 可以看到，一个三节点的MGR集群已自动构建完毕，运行模式为多主模式。
 
-## 5. Docker-Compose环境变量/参数介绍
+##  Docker-Compose环境变量/参数介绍
 - **MYSQL_ROOT_PASSWORD**
 设置MySQL root账号的密码。如果下面指定了MYSQL_ALLOW_EMPTY_PASSWORD=1，则本参数无效。
 

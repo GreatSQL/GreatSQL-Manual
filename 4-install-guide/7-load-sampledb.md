@@ -6,7 +6,7 @@
 - world sample database
 - Sakila sample database
 
-## 1. 下载测试数据集压缩包
+##  下载测试数据集压缩包
 上述三个测试数据集下载地址分别是：
 - https://github.com/datacharmer/test_db
 - https://downloads.mysql.com/docs/world-db.tar.gz
@@ -24,8 +24,8 @@ drwxr-xr-x 2  500  500       60 Aug  1 06:06 world-db   #<--world 测试数据�
 -rw------- 1 root root    92916 Aug  1 06:06 world-db.tar.gz
 ```
 
-## 2. 导入测试数据集
-### 2.1 导入employees数据集
+##  导入测试数据集
+###  导入employees数据集
 employees测试数据文件包中提供了导入方法说明，基本上照着做就行：
 ```
 $ cd /tmp/testdb/test_db
@@ -113,7 +113,7 @@ greatsql> SOURCE /tmp/testdb/test_db/test_employees_md5.sql;
 ```
 看起来验证无误。
 
-### 2.2 导入world数据集
+###  导入world数据集
 执行下面的命令导入world数据集：
 ```
 greatsql> SOURCE /tmp/testdb/world-db/world.sql;
@@ -141,7 +141,7 @@ greatsql> SELECT COUNT(*) FROM countrylanguage;
 ```
 导入完毕。
 
-### 2.3 导入Sakila数据集
+###  导入Sakila数据集
 执行下面的命令初始化Sakila测试数据库：
 ```
 greatsql> SOURCE /tmp/testdb/sakila-db/sakila-schema.sql;

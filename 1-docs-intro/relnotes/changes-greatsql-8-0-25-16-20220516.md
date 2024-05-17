@@ -1,8 +1,8 @@
 # Changes in GreatSQL 8.0.25-16（2022-5-16）
 ---
 
-## 1.新增特性
-### 1.1 新增仲裁节点（投票节点）角色
+## 新增特性
+### 新增仲裁节点（投票节点）角色
 该节点仅参与MGR投票仲裁，不存放实际数据，也无需执行DML操作，因此可以用一般配置级别的服务器，在保证MGR可靠性的同时还能降低服务器成本。
 
 新增参数```group_replication_arbitrator```用于设置仲裁节点。
@@ -82,7 +82,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 **注意：** 在有仲裁节点的情况下，将单主切换成多主模式时，需要把投票节点先关闭再机型切换，否则可能会导致切换失败，并且仲裁节点报错退出MGR。
 
-### 1.2 新增快速单主模式
+### 新增快速单主模式
 GreatSQL中增加一个新的工作模式：**单主快速模式**，在这个模式下，不再采用MySQL MGR原有的认证数据库方式。新增选项 `group_replication_single_primary_fast_mode` 用于设置是否启用，以及具体采用哪种模式。
 
 快速单主模式特别适合在跨机房部署，压力测试以及内存要求不高等多种场景。这种模式弱于传统的异步复制，但强于半同步复制，且没有MGR默认的认证数据库可能消耗较大内存的问题。
@@ -105,7 +105,7 @@ GreatSQL中增加一个新的工作模式：**单主快速模式**，在这个�
 **提醒：** MySQL 8.0.27起新增**single leader**模式（对应 `group_replication_paxos_single_leader` 选项），请勿启用该特性，因为启用该特性后可能会导致MGR集群整体崩溃风险。在GreatSQL针对MGR所做的优化工作已包含这方面的优化工作。 
 
 
-### 1.3 新增MGR网络开销阈值
+### 新增MGR网络开销阈值
 新增相应选项 `group_replication_request_time_threshold`。
 
 在MGR结构中，一个事务的开销包含网络层以及本地资源（例如CPU、磁盘I/O等）开销。当事务响应较慢想要分析性能瓶颈时，可以先确定是网络层的开销还是本地性能瓶颈导致的。通过设置选项 `group_replication_request_time_threshold` 即可记录超过阈值的事件，便于进一步分析。输出的内容记录在error log中，例如：
@@ -124,7 +124,7 @@ GreatSQL中增加一个新的工作模式：**单主快速模式**，在这个�
 | Default    | 0 |
 | Description    |单位：毫秒。<br/>设置阈值，当一个事务的MGR层网络开销超过该阈值时，会在error log中输出一条记录。<br/>设置为0时，表示禁用。<br/>当怀疑可能因为MGR通信耗时过久成为事务性能瓶颈时，再开启，平时不建议开启。|
 
-### 1.4 自定义选主模式
+### 自定义选主模式
 完善自动选主机制，增加基于最新GTID判断来选主，避免自动选择没有最新GTID的节点作为新主。
 
 默认地，MGR根据以下规则选主：
@@ -149,12 +149,12 @@ GreatSQL中增加一个新的工作模式：**单主快速模式**，在这个�
 | Default    | WEIGHT_ONLY |
 | Description    | 当MGR集群需要投票选主时，采用何种投票策略。|
 
-## 2.稳定性提升
+## 稳定性提升
 1. 优化了加入节点时可能导致性能剧烈抖动的问题。
 2. 优化手工选主机制，解决了长事务造成无法选主的问题。
 3. 完善MGR中的外键约束机制，降低或避免从节点报错退出MGR的风险。
 
-## 3.其他调整
+## 其他调整
 1. 新增选项 `group_replication_communication_flp_timeout`（单位：秒，默认值：5）。当多数派节点超过该阈值为收到某节点发送的消息时，会将该节点判定为可疑节点。在网络条件较差的环境中，可以适当调大该阈值，以避免频繁抖动。
 
 在MySQL MGR中，MGR节点间会定期交换消息，当超过5秒（固定值）还没收到某个节点的任何消息时，就会将这个节点标记为可疑状态（SUSPICION）。当故障节点确定可疑状态后，会继续等待`group_replication_member_expel_timeout`秒后再报告超时，并将该节点驱逐出MGR。
@@ -168,7 +168,7 @@ GreatSQL中增加一个新的工作模式：**单主快速模式**，在这个�
 3. 选项 `group_replication_flow_control_replay_lag_behind` 默认值由60秒调整为600秒，以适应更多业务场景。该选项用于控制MGR主从节点复制延迟阈值，当MGR主从节点因为大事务等原因延迟超过阈值时，就会触发流控机制。
 
 
-## 4.bug修复
+## bug修复
 01. 修复了InnoDB并行查询crash的问题（[issue#I4J1IH](https://gitee.com/GreatSQL/GreatSQL/issues/I4J1IH)）。
 02. 修复了在启用dns或hostname的情况下，bind意外失败问题。
 03. 修复了协程调度不合理的问题，该问题可能会造成在大事务时系统错误判断为网络错误。
@@ -183,7 +183,7 @@ GreatSQL中增加一个新的工作模式：**单主快速模式**，在这个�
 12. 修复了将传统主从环境下产生的binlog导入MGR可能引起死循环的问题。
 13. 修复了因为大事务内存分配失败导致的崩溃问题。
 
-## 5. GreatSQL VS MySQL社区版
+## GreatSQL VS MySQL社区版
 
 | 特性 | GreatSQL 8.0.25-16| MySQL 8.0.25 社区版 |
 |---| --- | --- |
@@ -217,7 +217,7 @@ GreatSQL中增加一个新的工作模式：**单主快速模式**，在这个�
 | 修复TCP self-connect问题| ⭐️⭐️⭐️⭐️⭐️ | / | 
 | PROCESSLIST增强 | ⭐️⭐️⭐️⭐️⭐️ | /  | 
 
-## 6. GreatSQL Release Notes
+## GreatSQL Release Notes
 ### GreatSQL 8.0
 - [Changes in GreatSQL 8.0.32-25 (2023-12-28)](changes-greatsql-8-0-32-25-20231228.md)
 - [Changes in GreatSQL 8.0.32-24 (2023-6-5)](changes-greatsql-8-0-32-24-20230605.md)
