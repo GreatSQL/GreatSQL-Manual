@@ -1,7 +1,7 @@
 # 通过GreatSQL客户端连接
-[toc]
+---
 
-连接到GreatSQL客户端之前，请确认GreatSQL正常运行
+连接到GreatSQL客户端之前，请确认GreatSQL正常运行。
 
 ```bash
 $ systemctl status greatsql

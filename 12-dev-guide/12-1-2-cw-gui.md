@@ -1,6 +1,7 @@
 # 通过GUI客户端连接
+---
 
-通过GUI客户端连接需要修改用户的当前主机配置信息
+通过GUI客户端连接需要修改用户的当前主机配置信息。
 
 ```sql
 greatsql> SELECT Host,User FROM mysql.user; 

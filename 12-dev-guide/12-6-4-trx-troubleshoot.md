@@ -1,8 +1,6 @@
 # 事务错误处理
 ---
 
-[[toc]]
-
 本节介绍事务错误处理相关内容。
 
 ## 锁等待超时
@@ -57,17 +55,17 @@ Trx read view will not see trx with id >= 2801, sees < 2800
 遇到上述长时间锁等待问题时，可以查询 `sys.innodb_lock_waits` 确认锁等待源头，将造成锁等待的源头事务提交，或根据 `sql_kill_blocking_query` 或 `sql_kill_blocking_connection` 提供的建议，杀掉相应的连接，回滚该事务，避免造成更多锁阻塞，影响更多业务系统。
 
 更重要的是，要及时监控长事务或造成很多锁的事务，详情参考以下内容
-- [锁、等待事件](../6-oper-guide/3-monitoring-and-alerting.md#2.\ 锁、等待事件)
+- [锁、等待事件](../6-oper-guide/3-monitoring-and-alerting.md#_2-锁、等待事件)
 - [行锁观测监控](./12-6-3-trx-mvcc-and-locking.md#行锁观测监控) 
 
 
 ## 找不到活跃事务对应的线程
 
-查询 `information_schema.INNODB_TRX` 表，列出所有活跃事务时，发现部分事务对应的 `trx_mysql_thread_id` 值为 0，找不到相应的 PROCESSLIST ID。
+查询 `information_schema.INNODB_TRX` 表，列出所有活跃事务时，发现部分事务对应的 `trx_mysql_thread_id` 值为 0，找不到相应的 `PROCESSLIST ID`。
 
 出现这种情况通常是因为这些是进入 PREPARE 状态的 XA 事务，可以用 `XA RECOVER` 查看 XA 事务列表，然后执行 `XA COMMIT` 或 `XA ROLLBACK` 提交/回滚。
 
-具体可参考：[XA 事务](./12-6-1-trx-control.md#XA\ 事务)。
+具体可参考：[XA 事务](./12-6-1-trx-control.md#xa-事务)。
 
 ## 事务提交很慢，或无法提交
 
@@ -76,7 +74,7 @@ Trx read view will not see trx with id >= 2801, sees < 2800
 - 低效 SQL 太多，也就是所谓的慢 SQL，会导致系统负载升高，影响到其他事务；
 - 选项 `innodb_thread_concurrency` 值设置为非 0，当前的事务并发又非常高，导致有些事务总是要进入排队等待状态；
 - 磁盘空间满了，这种情况下事务无法提交； 
-- 可能由于开启了半同步复制（Semisynchronous Replication），或者组提交（group commit），导致事务提交慢；
+- 可能由于开启了半同步复制（**Semisynchronous Replication**），或者组提交（**group commit**），导致事务提交慢；
 - 其他情况。
 
 ## 发生死锁
