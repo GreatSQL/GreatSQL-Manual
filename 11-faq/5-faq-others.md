@@ -331,6 +331,33 @@ trx_mysql_thread_id: 0
 - [事务控制](../12-dev-guide/12-6-1-trx-control.md)
 - [表锁住了,而且无法解锁](https://greatsql.cn/thread-487-1-1.html)
 
+## 19. 为什么设置 innodb_numa_interleave = ON 时，启动就会比较慢，像卡住了似的
+
+设置 `innodb_numa_interleave = ON` 时，启动过程可能变慢并且看起来像卡（qiǎ）住了，这是因为 NUMA（非统一内存访问）系统的内存分配机制的复杂性。
+
+- NUMA（非统一内存访问）简介
+
+NUMA 是一种用于多处理器系统的内存设计，旨在提高系统性能。NUMA 系统将内存划分成多个节点，每个节点由一个或多个处理器和其专属的内存组成。在这种架构下，处理器访问其本地节点的内存速度更快，而访问其他节点的内存则会稍慢。
+
+- `innodb_numa_interleave` 选项
+
+`innodb_numa_interleave` 选项控制 InnoDB 是否在 NUMA 系统中跨多个内存节点分配内存。当设置为 `ON` 时，InnoDB 会尝试在所有可用的 NUMA 节点之间平均分配内存。这有助于平衡内存访问的负载，但也会引入一些开销。
+
+- 启动慢的原因
+
+当 `innodb_numa_interleave = ON` 时，GreatSQL 启动过程中会进行以下操作：
+
+1. **内存分配**：InnoDB 需要分配大块内存，并且这些内存需要均匀分布在所有 NUMA 节点上。这种分配方式比单节点内存分配更复杂，因此需要更多时间。
+
+2. **页初始化**：InnoDB 初始化内存页，确保它们在物理上分布在不同的 NUMA 节点。这一步涉及大量的内存读写操作，进一步增加了启动时间。
+
+3. **NUMA 拓扑发现和设置**：InnoDB 需要发现系统的 NUMA 拓扑结构，并配置内存策略。这些操作在 NUMA 系统中比在统一内存访问（UMA）系统中复杂得多。
+
+虽然启用 `innodb_numa_interleave` 可以带来一些性能优势，但如果启动时间过慢且影响到系统的可用性，可以考虑以下方法：
+- 评估是否需要启用 NUMA，可以先进行基准测试，如果在你的服务器上启用 NUMA 对性能影响不大，则可以考虑关闭。
+- 调低 `innodb_buffer_pool_size` 选项初始设置值，待到启动成功后再在线动态调大。
+
+通过以上方法，应该可以在一定程度上缓解 `innodb_numa_interleave = ON` 造成的启动变慢问题。
 
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
