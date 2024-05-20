@@ -3,7 +3,7 @@
 
 本文档主要介绍在单IDC场景中，如何基于GreatSQL+MySQL Router构建高可用架构。
 
-## 1. 单IDC高可用方案选择
+## 单IDC高可用方案选择
 
 单IDC场景下的高可用方案也比较简单，一般可以选用以下几种：
 
@@ -12,7 +12,7 @@
 
 本文重点讨论利用MySQL Router构建高可用的解决方案，lvs/haproxy方案请自行搜索。
 
-## 2. MySQL Router + GreatSQL MGR 实现单IDC内高可用
+## MySQL Router + GreatSQL MGR 实现单IDC内高可用
 
 首先，构建一个三节点的MGR集群，该集群包含Primary、Secondary、Arbitrator三种节点。
 ```
