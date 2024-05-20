@@ -13,7 +13,7 @@
 
 假定现在已经实现了用 `systemd` 管理mysqld单实例，接下来要实现管理多实例。
 
-## 1. 添加systemd服务文件
+##  添加systemd服务文件
 
 手动编辑systemd服务文件：
 ```
@@ -51,7 +51,7 @@ PrivateTmp=false
 ```
 注意到系统服务文件名相比单实例服务文件名多了 "@" 符，并且文件中 `ExecStartPre` 和 `ExecStart` 的内容也略有不同。
 
-## 2. 编辑 /etc/my.cnf 配置文件
+##  编辑 /etc/my.cnf 配置文件
 
 可以直接利用原来的 `/etc/my.cnf` 配置文件，将 `datadir`、`port`、`socket`、`server_id` 等几个选项注释掉，然后在文件末尾再加入类似下面的内容：
 ```

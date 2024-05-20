@@ -17,8 +17,8 @@ No default schema selected; type \use <schema> to set one.
  MySQL  localhost  JS >
 ```
 
-## 1. 实例级备份恢复
-### 1.1 备份整个实例
+##  实例级备份恢复
+### 备份整个实例
 调用 `util.dumpInstance` 方法备份整个实例：
 ```
  MySQL  localhost  JS > util.dumpInstance("/data/backup/20230830")
@@ -74,7 +74,7 @@ Util.dumpInstance: Cannot proceed with the dump, the specified directory '/data/
 ```
 见名知意，分别对应即可，这里不赘述。
 
-### 1.2 恢复到全新实例
+### 恢复到全新实例
 
 先初始化一个全新实例，再利用上面的备份完成恢复。
 
@@ -123,29 +123,29 @@ Util.loadDump: While 'Scanning metadata': Duplicate objects found in destination
 ```
 这时要么先将目标实例中对应的数据对象删除，要么加上 `excludeSchemas` 参数设置忽略规则。
 
-## 2. Schema级备份恢复
-### 2.1 备份整个Schema
+##  Schema级备份恢复
+### 备份整个Schema
 调用 `util.dumpSchema` 方法备份单个Schema：
 ```
  MySQL  localhost  greatsql  JS > util.dumpSchemas(["greatsql"], "/data/backup/20230830/greatsql")
 ```
 
-### 2.2 恢复整个Schema
+### 恢复整个Schema
 调用 `util.loadDump` 方法恢复Schema：
 ```
  MySQL  localhost  JS > util.loadDump("/data/backup/20230830", {includeSchemas: ["greatsql"]})
 ```
 可以看到，和恢复整个实例时调用的方法是一样的，只不过是指定了 `includeSchemas` 参数，也就是只恢复该Schema，其余的忽略。
 
-## 3. Table级备份恢复
-### 3.1 备份单个Table
+##  Table级备份恢复
+### 备份单个Table
 调用 `util.dumpTables` 方法备份单个Table：
 ```
  MySQL  localhost  greatsql  JS > util.dumpTables("greatsql", ["t1", "t2", "t3"], "/data/backup/20230830/greatsql")
 ```
 上述命令的作用是导出数据库 *greatsql* 中的 *t1/t2/t3* 三个表。
 
-### 3.2 恢复单个Table
+### 恢复单个Table
 调用 `util.loadDump` 或 `util.importTable` 方法恢复单个Table：
 ```
  MySQL  localhost  JS > util.loadDump("/data/backup/20230830/greatsql/", { includeTables: ["greatsql.t1", "greatsql.t2", "greatsql.t3"]})

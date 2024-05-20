@@ -12,7 +12,7 @@
 
 下面我们针对这几个不同监控维度进行详细介绍。
 
-## 1. SQL平均响应耗时
+## SQL平均响应耗时
 
 除了TPS、QPS外，SQL平均响应耗时也是衡量数据库性能的重要指标之一。
 
@@ -55,9 +55,9 @@ sys     0m0.004s
 
 这就可以得到耗时是 0.024s，即可认为当前SQL平均响应耗时是及24ms，通过监控系统在不同时段获取该值，即可知道这个指标的变化波动幅度了。
 
-## 2. 锁、等待事件
+## 锁、等待事件
 
-### 2.1 当前行锁数量
+### 当前行锁数量
 ```
 greatsql> SELECT * FROM performance_schema.global_status WHERE variable_name = 'Innodb_row_lock_current_waits';
 +-------------------------------+----------------+
@@ -68,7 +68,7 @@ greatsql> SELECT * FROM performance_schema.global_status WHERE variable_name = '
 ```
 当该值大于0的时候，就要立即发出告警，表示当前存在行锁等待事件，要检查是否有事务持有行锁未释放。
 
-### 2.2 IBP wait free
+### IBP wait free
 ```
 greatsql> SELECT * FROM performance_schema.global_status WHERE variable_name = 'Innodb_buffer_pool_wait_free';
 +-------------------------------+----------------+
@@ -79,7 +79,7 @@ greatsql> SELECT * FROM performance_schema.global_status WHERE variable_name = '
 ```
 当该值大于0的时候，就要立即发出告警，表示InnoDB Buffer Pool严重不够用，如果物理内存足够，则适当加大，或者迁移到更高内存的服务器上。
 
-### 2.3 InnoDB log wait
+### InnoDB log wait
 ```
 greatsql> SELECT * FROM performance_schema.global_status WHERE variable_name = 'Innodb_log_waits';
 +------------------+----------------+
@@ -90,7 +90,7 @@ greatsql> SELECT * FROM performance_schema.global_status WHERE variable_name = '
 ```
 当该值大于0的时候，就要立即发出告警，表示InnoDB Log Buffer严重不够用，如果物理内存足够，则适当加大，或者迁移到更高内存的服务器上。
 
-### 2.4 InnoDB Purge Lag
+### InnoDB Purge Lag
 ```
 greatsql> SELECT `COUNT`,`COMMENT` FROM information_schema.INNODB_METRICS WHERE NAME = 'trx_rseg_history_len';
 +-------+-------------------------------------+
@@ -108,7 +108,7 @@ History list length 4
 ```
 当该值超过2000后，就要立即发出告警，表示当前等待被purge的队列较大，需要检查是否物理I/O存在瓶颈，或者有个大事务提交了。
 
-## 3. 大事务
+## 大事务
 
 在生产环境中，可能因为种种原因产生大事务，或者运行很长时间的事务。
 
@@ -131,7 +131,7 @@ greatsql> SELECT * FROM information_schema.INNODB_TRX WHERE
 ```
 以上阈值可根据实际情况进行调整，需要对生产环境中的活跃大事务保持关注，避免造成连锁影响。
 
-## 4. MGR监控
+## MGR监控
 
 对MGR除了监控其服务状态外，更重要的是监控各节点间的事务延迟情况，以此判断各节点的事务处理能力，以及评估是否需要提升服务器配置等级。
 ```

@@ -3,7 +3,7 @@
 
 本文介绍GreatSQL数据库如何采进行物理备份恢复。
 
-## 1. 文件层物理备份恢复
+## 文件层物理备份恢复
 可以采用多种方式在文件系统层进行物理备份：
 - 在停机维护时，通过文件系统层copy整个数据文件目录，即`datadir`指向的目录，包括ibdata1、redo、undo等文件。
 - 在主从复制架构的从节点停机维护时，copy整个数据文件目录。
@@ -18,7 +18,7 @@
 
 需要恢复时，直接将物理备份文件copy到相应目录下，修改文件属主及权限模式，确认相应的my.cnf中的配置无误后，直接启动GreatSQL服务进程即可。
 
-## 2. xtrabackup备份恢复
+## xtrabackup备份恢复
 `Xtrabackup` 是由Percona公司出品的开源免费备份工具，它能很方便的对MySQL数据库进行在线热备，并且支持压缩、加密、流式备份等多种方式。
 
 这是`Xtrabackup`安装包[下载地址](https://www.percona.com/downloads/Percona-XtraBackup-LATEST/)，这是[文档地址](https://docs.percona.com/percona-xtrabackup)。
@@ -45,7 +45,7 @@
 
 在GreatSQL 8.0中（XtraBackup也相应升级到8.x版本），仅存在InnoDB表的话，不再执行FTWRL，而是直接读元数据。
 
-### 2.1 常规全量备份
+### 常规全量备份
 
 ```
 $ xtrabackup --backup --datadir=/data/GreatSQL/ --target-dir=/backup/GreatSQL/full/`date +'%Y%m%d'`/
@@ -72,7 +72,7 @@ ibdata1         mysql          performance_schema             db2   xtrabackup_b
 - xtrabackup_checkpoints，记录本次备份redo log的lsn及checkpoint信息，用于数据全量/增量恢复时的事务恢复点位判断
 - xtrabackup_info，记录本次备份常规信息
 
-### 2.2 只备份部分库表
+### 只备份部分库表
 
 ```
 $ xtrabackup --backup --datadir=/data/GreatSQL/ --tables="db1.t_user_*,db2.t_log_*" --target-dir=/backup/GreatSQL/partial/`date +'%Y%m%d'`/
@@ -85,7 +85,7 @@ backup-my.cnf   ibdata1        binlog.index  db1  undo_001  xtrabackup_binlog_in
 ib_buffer_pool  binlog.000006  mysql.ibd     db2  undo_002  xtrabackup_checkpoints  xtrabackup_logfile
 ```
 
-### 2.3 压缩备份
+### 压缩备份
 
 在原来的基础上增加 `--compress` 选项即可，例如：
 ```
@@ -93,13 +93,13 @@ $ xtrabackup --backup --compress --datadir=/data/GreatSQL/ --target-dir=/backup/
 ```
 通常而言，大概有4倍左右的压缩比。
 
-### 2.4 并行压缩，并且流式备份
+### 并行压缩，并且流式备份
 ```
 $ xtrabackup --backup --stream=xbstream --compress --compress-threads=4 --datadir=/data/GreatSQL/ > /backup/GreatSQL/full/xbk-`date +'%Y%m%d'`.xbstream
 ```
 并发4个线程压缩，并且采用流文件方式备份。
 
-### 2.5 增量备份
+### 增量备份
 
 Xtrabackup还支持增量备份，即在上一次备份的基础上，只备份发生新变化的数据。
 
@@ -132,7 +132,7 @@ flushed_lsn = 98574369
 
 **建议：** 增量备份总是基于上一次全量备份的基础，不要基于上一次增量备份，这样在还原时会更方便。例如每天0点做一次全量备份，每小时做一次增量备份，执行增备时指定基于0点的全备。
 
-### 2.6 全备还原
+### 全备还原
 
 Xtrabackup备份文件不能直接用来拉起数据库，需要先做预处理：
 ```
@@ -165,7 +165,7 @@ $ xtrabackup --move-back --target-dir=./ --datadir=/data/GreatSQL
 230825 17:02:01 completed OK!
 ```
 
-### 2.7 全量压缩备份还原
+### 全量压缩备份还原
 
 先将流式文件恢复成正常压缩文件
 ```
@@ -183,7 +183,7 @@ $ xtrabackup --decompress --target-dir=.
 
 P.S，解压缩过程中需要安装 `qpress`，可以从[这里下载源码或二进制文件](https://github.com/PierreLvx/qpress)。
 
-### 2.8 增量备份还原
+### 增量备份还原
 
 假定每天0点做一次全备，每小时做一次相对0点的增备，现在需要还原到当天8:00的增备时间点。可以像下面这么做：
 

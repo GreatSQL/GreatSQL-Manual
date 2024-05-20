@@ -31,15 +31,15 @@ greatsql> SET GLOBAL userstat = ON;
 
 ## 该功能新增的INFORMATION_SCHEMA表
 
-### 1.客户端统计-[INFORMATION_SCHEMA.CLIENT_STATISTICS](./6-1-1-client-statistics.md)
+### 客户端统计-[INFORMATION_SCHEMA.CLIENT_STATISTICS](./6-1-1-client-statistics.md)
 
-### 2.索引统计-[INFORMATION_SCHEMA.INDEX_STATISTICS](./6-1-2-index-statistics.md)
+### 索引统计-[INFORMATION_SCHEMA.INDEX_STATISTICS](./6-1-2-index-statistics.md)
 
-### 3.表统计-[INFORMATION_SCHEMA.TABLE_STATISTICS](./6-1-3-table-statistics.md)
+### 表统计-[INFORMATION_SCHEMA.TABLE_STATISTICS](./6-1-3-table-statistics.md)
 
-### 4.线程统计-[INFORMATION_SCHEMA.THREAD_STATISTICS](./6-1-4-thread-statistics.md)
+### 线程统计-[INFORMATION_SCHEMA.THREAD_STATISTICS](./6-1-4-thread-statistics.md)
 
-### 5.用户统计-[INFORMATION_SCHEMA.USER_STATISTICS](./6-1-5-user-statistics.md)
+### 用户统计-[INFORMATION_SCHEMA.USER_STATISTICS](./6-1-5-user-statistics.md)
 
 ## 新增的命令
 

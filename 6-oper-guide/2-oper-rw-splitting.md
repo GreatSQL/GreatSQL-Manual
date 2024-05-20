@@ -3,7 +3,7 @@
 
 本文描述如何为MGR集群构建读写分离方案。
 
-## 1. InnoDB Cluster简介
+## InnoDB Cluster简介
 MySQL InnoDB Cluster（简称MIC）是MySQL推出的整套解决方案，由几个部分组成：
 - MySQL Server，核心是Group Replication（组复制），简称MGR。
 - MySQL Shell，可编程的高级客户端，支持标准SQL语法、JavaScript语法、Python语法，以及API接口，可以更方便的管理和使用MySQL服务器。
@@ -17,7 +17,7 @@ MySQL Router是一个轻量级的中间件，它采用多端口的方案实现�
 
 ![MySQL InnoDB Cluser架构](./2-oper-rw-splitting-01.png)
 
-## 2. MySQL Router安装&初始化
+## MySQL Router安装&初始化
 
 MySQL Router最好和应用服务器部署在一起，所以本次将MySQL Router安装在另一个服务器上，IP地址是 *172.16.16.14*。
 
@@ -97,7 +97,7 @@ tcp        0      0 0.0.0.0:8443            0.0.0.0:*               LISTEN      
 ```
 可以看到 mysqlrouter 服务正常启动了。
 
-## 3. MySQL Router配置
+## MySQL Router配置
 
 MySQL Router初始化时自动生成的配置文件是 `/etc/mysqlrouter/mysqlrouter.conf`，主要是关于R/W、RO不同端口以及请求转发规则等配置，例如：
 ```
@@ -124,7 +124,7 @@ protocol=classic
 
 修改完配置后，重启mysqlrouter服务即可。
 
-## 4. 确认读写分离
+## 确认读写分离
 
 现在，用客户端连接到6446（读写）端口，确认连接的是PRIMARY节点：
 ```
@@ -187,7 +187,7 @@ protocol=classic
 ```
 由于直接指定了只读节点列表，就无法再使用 *round-robin-with-fallback* 策略了，可以改成 *round-roubin* 策略。
 
-## 5. 确认故障自动转移
+## 确认故障自动转移
 
 如果PRIMARY节点宕机或切换，mysqlrouter也能实现自动故障转移，应用端不需要做任何变更，只需最多尝试重连或重新发起请求。
 

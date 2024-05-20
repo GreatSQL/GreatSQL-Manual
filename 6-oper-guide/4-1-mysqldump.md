@@ -5,7 +5,7 @@
 
 `mysqldump` 是GreatSQL数据库自带的逻辑备份工具，可以实现对整个数据库、单库、单表，以及表中部分数据进行备份等多种方式。
 
-## 1. 全库备份
+##  全库备份
 运行 `mysqldump` 时指定 `-A / --all-databases` 参数可以备份全库数据，如果还要备份存储过程、存储函数、视图、event时，还需要再指定 `--triggers --routines --events` 这三个参数：
 ```
 $ mysqldump -S/data/GreatSQL/mysql.sock -A --triggers --routines --events > /backup/GreatSQL/fullbackup-`date +'%Y%m%d'`.sql
@@ -19,7 +19,7 @@ $ mysqldump -S/data/GreatSQL/mysql.sock -A --triggers --routines --events > /bac
 $ mysqldump -S/data/GreatSQL/mysql.sock -A --triggers --routines --events | gzip > /backup/GreatSQL/fullbackup-`date +'%Y%m%d'`.sql.gz
 ```
 
-## 2. 单库备份
+##  单库备份
 
 ```
 $ export db="greatsql"
@@ -35,7 +35,7 @@ Warning: A partial dump from a server that has GTIDs will by default include the
 
 这个选项建议不要加上，如果本次的逻辑备份文件用于后面的恢复时，再利用sed去掉 `gtid_purged` 信息，或者恢复之前先记录当时的 `gtid_purged` 信息，恢复结束后再还原回去。
 
-## 3. 单表备份
+##  单表备份
 
 ```
 $ export db="greatsql"
@@ -43,7 +43,7 @@ $ export table="t1"
 $ mysqldump -S/data/GreatSQL/mysql.sock --triggers --routines --events ${db} ${table} | gzip > /backup/GreatSQL/${db}-${table}-`date +'%Y%m%d'`.sql.gz
 ```
 
-## 4. 只备份部分数据
+##  只备份部分数据
 
 运行 `mysqldump` 时，加上 `-w / --where` 选项，可以指定 WHERE过滤条件，达到只备份某一部分数据的目的，例如：
 ```
@@ -64,7 +64,7 @@ mysqldump: Couldn't execute 'SELECT /*!40001 SQL_NO_CACHE */ * FROM `t4` WHERE i
 
 加上选项 `-f / --force` 后，备份任务依然可以继续，不影响后面其他表的备份。
 
-## 5. 逻辑备份恢复
+##  逻辑备份恢复
 
 `mysqldump` 逻辑备份文件恢复时很简单，只需调用mysql客户端执行恢复，有两种方式：
 

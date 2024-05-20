@@ -3,7 +3,7 @@
 
 本文介绍GreatSQL数据库如何采用CLONE进行备份恢复。
 
-## 1. 关于CLONE
+## 关于CLONE
 在GreatSQL中，CLONE是以插件（Plugin）方式运行的，也就是说可以在线启用和关闭。
 
 利用CLONE插件，只需几行命令，即可很方便地实现备份GreatSQL数据库本地实例，也可以将远程实例备份到本地存储。
@@ -37,8 +37,8 @@ CLONE操作的流程大致如下：
 - 不支持通过MySQL Router连接时发起CLONE请求，也就是说只能是两个数据库实例间直接相互连接时才能发起CLONE请求。
 - 当通用表空间（general tablespaces）创建时指定绝对路径，那么在CLONE备份到本地存储时会产生文件冲突报错（因为用了绝对路径的缘故）。
 
-## 2. 使用CLONE备份数据
-### 2.1 准备工作
+## 使用CLONE备份数据
+###  准备工作
 上面提到，CLONE是以插件方式工作的，所以在开始用之前要先安装该插件：
 ```
 greatsql> INSTALL PLUGIN clone SONAME 'mysql_clone.so';
@@ -62,7 +62,7 @@ greatsql> INSERT INTO t4 SELECT RAND()*10240;
 greatsql> INSERT INTO t4 SELECT RAND()*10240;
 ```
 
-### 2.2 CLONE备份本地数据
+###  CLONE备份本地数据
 
 执行下面的命令即可实现对本地实例的CLONE备份：
 ```
@@ -105,7 +105,7 @@ $ ls -la /data/GreatSQL-restore/greatsql
 上面仅处于测试目的创建MyISAM表，实际生产环境中强烈建议大家只使用InnoDB表。
 
 
-### 2.3 CLONE备份远程数据
+###  CLONE备份远程数据
 在开始备份远程节点数据前，需要先在recipient节点设置 `clone_valid_donor_list` 选项，指定donor节点：
 ```
 greatsql> SET GLOBAL clone_valid_donor_list = '172.16.16.10:3306';
@@ -141,7 +141,7 @@ greatsql> SHOW GRANTS FOR repl;
 
 在CLONE结束后，recipient节点实例会被自动执行 `SHUTDOWN` 关闭，如果该实例无法实现自动重启的话，就需要自行手动再次启动。因此建议采将数据库加入systemd服务管理中。
 
-### 2.4 查看CLONE备份进度
+###  查看CLONE备份进度
 在CLONE过程中，还支持实时查看其状态和进度：
 ```
 # 查看状态

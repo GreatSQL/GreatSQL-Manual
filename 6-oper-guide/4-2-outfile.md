@@ -7,7 +7,7 @@
 
 `OUTFILE` 导出的文件，可以利用 `LOAD DATA` 再恢复到数据库中。
 
-## 1. OUTFILE导出备份
+##  OUTFILE导出备份
 执行 `SELECT ... INTO OUTFILE` 可以将本次查询结果导出到外部文件中，例如：
 ```
 greatsql> SELECT * INTO OUTFILE '/tmp/OUTFILE-t1.txt' FROM t1;
@@ -70,7 +70,7 @@ greatsql> SELECT c1,c2 INTO OUTFILE '/tmp/OUTFILE-t1.txt' FROM t1;
 ```
 对表t1只备份其中的 c1,c2 两列数据，不备份 id 列数据，那么在后续的 `LOAD DATA` 导入恢复时就需要做额外处理了。
 
-## 2. LOAD DATA导入恢复
+##  LOAD DATA导入恢复
 可以通过 `LOAD DATA` 将 `OUTFILE` 导出的文件恢复到数据库中。
 
 在上面的例子中，导出数据存储在文件 `/tmp/OUTFILE-t1.txt` 中，可以执行下面的命令完成导入恢复：
@@ -121,7 +121,7 @@ greatsql> SELECT * FROM t3;
 +------+----+--------------------+
 ```
 
-## 3. LOAD DATA并行导入
+##  LOAD DATA并行导入
 从GreatSQL 8.0.32-25版本开始，`LOAD DATA`执行并行导入，只需在导入时加上HINT `SET_VAR(gdb_parallel_load=ON)` 即可，例如：
 ```
 greatsql> LOAD /*+ SET_VAR(gdb_parallel_load=ON) */ DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1;
