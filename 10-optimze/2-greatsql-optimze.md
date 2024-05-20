@@ -71,16 +71,6 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 不限制InnoDB并行线程数，使其发挥最大性能。但如果业务端发起的业务请求并行度总是超过服务器逻辑CPU数，则可能导致CPU调度频繁等待，此时可以考虑将本选项设置为逻辑CPU的数量。
 
 
-## SQL优化参考
-- [Schema设计规范参考](./2-1-schema-design-refer.md)
-- [SQL开发优化参考](./2-2-sql-develop-refer.md)
-- [慢查询SQL优化分析](./2-3-slow-query-diag.md)
-- [UPDATE执行慢排查分析](./2-4-slow-update-diag.md)
-- [行锁及行锁等待分析](./2-5-rowlock-diag.md)
-- [死锁排查分析](./2-6-deadlock-diag.md)
-- [MDL锁排查分析](./2-7-mdllock-diag.md)
-
-
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
 - **扫码关注微信公众号**
