@@ -775,11 +775,11 @@ COMMITTED_GTID_SET: 4fb86f5b-b028-11ee-92b8-d08e7908bcb1:1-339
 GreatSQL Rapid引擎性能表现优异，在32C64G测试机环境下，TPC-H 100G测试中22条SQL总耗时仅需不到80秒。下面是和其他类似产品的对比数据，仅供参考（测试时间：2024.1.31）：
 ![tpch100g-rapid-vs-stonedb-starrocks](./5-1-highperf-greatsql-tpch100g.png)
 
-###  数据压缩率
+###  数据压缩比
 
-下面是几个不同TPC-H数据量级的压缩率数据：
+下面是几个不同TPC-H数据量级的压缩比数据：
 
-| TPC-H仓库大小 | InnoDB引擎数据文件大小 | Rapid引擎数据文件大小 | 压缩率 | 
+| TPC-H仓库大小 | InnoDB引擎数据文件大小 | Rapid引擎数据文件大小 | 压缩比 | 
 | --- | --- | --- | --- |
 | TPC-H 1GB | 2003026076 | 276574208 | 7.24 |
 | TPC-H 100GB | 184570593436 | 28728373248 | 6.42 | 
