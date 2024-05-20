@@ -1,7 +1,7 @@
 # Rapid引擎（Rapid Engine）
 ---
 
-## 1. Rapid引擎简述
+## Rapid引擎简述
 
 从GreatSQL 8.0.32-25版本开始，新增Rapid存储引擎，该引擎使得GreatSQL能满足联机分析（OLAP）查询请求。
 
@@ -9,9 +9,9 @@ Rapid引擎采用插件（Plugin）方式嵌入GreatSQL中，可以在线动态�
 
 Rapid引擎不会直接面对客户端和应用程序，用户无需修改原有的数据访问方式。它是一个无共享、内存化、混合列式存储的查询处理引擎，其设计目的是为了高性能的处理分析型查询。
 
-## 2. 使用Rapid引擎加速查询
+## 使用Rapid引擎加速查询
 
-### 2.1 启用Rapid引擎
+###  启用Rapid引擎
 想要使用Rapid引擎，需要安装Rapid plugin, 并且为表指定 `secondary_engine` 为Rapid引擎，然后将用户数据加载到Rapid引擎内存中。
 
 首先，加载Rapid引擎这个Plugin：
@@ -45,7 +45,7 @@ greatsql> SHOW ENGINES;
 ```
 可以看到，Rapid引擎已经加载成功。
 
-### 2.2 卸载Rapid引擎
+###  卸载Rapid引擎
 执行下面的SQL命令即可卸载Rapid引擎：
 ```sql
 greatsql> UNINSTALL PLUGIN rapid;
@@ -73,7 +73,7 @@ greatsql> ALTER TABLE t1 SECONDARY_ENGINE = NULL;
 [Note] [MY-010733] [Server] Shutting down plugin 'Rapid'
 ```
 
-### 2.3 为InnoDB表加上Rapid辅助引擎
+###  为InnoDB表加上Rapid辅助引擎
 接下来对一个已存在的InnoDB引擎表，增加 `SECONDARY_ENGINE` 属性：
 ```sql
 greatsql> CREATE TABLE `t1` (
@@ -156,7 +156,7 @@ Max_data_length: 0
 
 执行SQL命令 `ALTER TABLE ...  SECONDARY_UNLOAD` 操作会先判断辅助引擎中是否存在此表，是的话将其（从辅助引擎中）删除掉，但不会删除其（在主引擎中的）基本表。
 
-### 2.4 利用Rapid引擎提升查询效率
+###  利用Rapid引擎提升查询效率
 
 将用户数据加载到Rapid引擎后，通过下面介绍的方式，即可使用Rapid引擎提升查询效率。
 
@@ -293,7 +293,7 @@ greatsql> SELECT /*+ SET_VAR(use_secondary_engine=1 SET_VAR(secondary_engine_cos
 ```
 可以看到，虽然 `lineitem` 表已经加载到Rapid引擎中，但因为调大 `secondary_engine_cost_threshold` 阈值，实际上还是没用上。
 
-### 2.5 Rapid引擎使用约束
+###  Rapid引擎使用约束
 在GreatSQL 8.0.32-25版本中，Rapid引擎支持的语句范围如下：
 
 - 表类型：InnoDB引擎的normal表。
@@ -306,16 +306,16 @@ greatsql> SELECT /*+ SET_VAR(use_secondary_engine=1 SET_VAR(secondary_engine_cos
 
 Rapid引擎暂时不支持表分区（partition），不支持外键（foreign key）。
 
-## 3. 数据导入
+## 数据导入
 
-### 3.1 向Rapid引擎导入数据
+###  向Rapid引擎导入数据
 当对表执行 `ALTER TABLE xxx SECONDARY_LOAD` 操作成功后，会将InnoDB主引擎中的数据全量加载到Rapid引擎中，这个过程称为全量导入。全量导入成功后，Rapid引擎中的数据是静态的，当向主引擎表中继续插入、删除、修改数据时，并不会导入到Rapid引擎中。
 
 利用binlog特性，可以在全量导入成功后，启动增量导入任务。增量任务会读取自全量导入成功之后的binlog数据，将binlog解析并应用到rapid引擎中，这个过程称为**增量导入**。
 
 不同于全量导入，增量导入会启动一个常驻的后台线程，实时读取和应用增量binlog数据。
 
-### 3.2 增量导入数据的限制和需求
+###  增量导入数据的限制和需求
 1. 需要设置表名大小写不敏感，即设置 `lower_case_table_names = 1`。
 1. 需要开启GTID模式，即设置 `gtid_mode = ON` 和 `enforce_gtid_consistency = ON`。
 1. 需要采用row格式的binlog event，不支持statement格式，即设置 `binlog_format = ROW`。增量任务运行过程中，检测到statement的DML event，可能会报错退出。
@@ -325,10 +325,10 @@ Rapid引擎暂时不支持表分区（partition），不支持外键（foreign k
 1. 不支持 `CREATE TABLE SELECT` 语句，增量任务运行过程中，检测到该语句产生的binlog event时可能会报错退出。
 1. 不支持XA事务，运行过程中检查到XA事务会报错退出。
 
-### 3.3 增量导入任务管理
+###  增量导入任务管理
 新增两个系统函数用于管理增量导入任务，分别是 `START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK()` 和 `STOP_SECONDARY_ENGINE_INCREMENT_LOAD_TASK()`。顾名思义，还是很好理解的，分别对应启动和停止任务。
 
-#### 3.3.1 启动增量任务
+#### 启动增量任务
 执行SQL命令 `SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK()` 即可启动增量任务，根据函数返回信息可以确认是否任务启动成功。如果启动失败，可以从错误日志中查看具体失败的原因。
 
 该函数包含3个参数：
@@ -377,7 +377,7 @@ greatsql> SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK('tpch1g', 't1', '4fb
 ```
 增量导入任务会跳过GTID值为 1-335 区间的事务，从下一个事务开始继续增量导入。当binlog被意外清除时，默认方式（不带GTID参数）启动的增量导入任务可能会失败，这时就可以先停止增量导入任务，对该表执行一次全量导入，在全量导入完成后再次启动增量导入任务，启动任务时指定GTID参数即可。
 
-#### 3.3.2 停止增量任务
+#### 停止增量任务
 
 执行SQL命令 `SELECT STOP_SECONDARY_ENGINE_INCREMENT_LOAD_TASK()` 即可停止增量任务，根据函数返回信息可以确认是否任务启动成功。如果启动失败，可以从错误日志中查看具体失败的原因。
 
@@ -396,7 +396,7 @@ greatsql> SELECT STOP_SECONDARY_ENGINE_INCREMENT_LOAD_TASK('tpch1g', 't1');
 1 row in set (0.65 sec)
 ```
 
-#### 3.3.3 查看增量任务进度
+#### 查看增量任务进度
 
 执行SQL命令：`SELECT READ_SECONDARY_ENGINE_TABLE_LOAD_GTID('greatsql', 't1')` 即可查看任务当前导入的GTID进度。
 
@@ -482,11 +482,11 @@ COMMITTED_GTID_SET: 4fb86f5b-b028-11ee-92b8-d08e7908bcb1:1-339
               INFO: NORMAL EXIT
 1 row in set (0.00 sec)
 ```
-#### 3.3.4 增量任务线程
+#### 增量任务线程
 1. 每一个用户表的增量导入任务对应一个后台线程，该线程只负责处理将该表的增量数据导入到Rapid。所以如果加载的Rapid表很多，可能会消耗较多线程资源。
 2. 增量任务执行过程中，根据之前的测试，对于`UPDATE/DELETE` 语句在Rapid引擎中执行较慢，可能导致增量导入任务线程延迟加大。
 
-### 3.4 辅助查询概述
+###  辅助查询概述
 由于用户表的主引擎可能产生实时变更的新数据，因此对于辅助引擎的查询，即使开启了增量导入任务，相对主引擎，Rapid引擎的数据也还是可能存在延迟。针对数据延迟问题，新增了如下5个 **SESSION/GLOBAL** 选项，标记在何种条件下仍旧通过Rapid引擎进行数据读操作。
 
 | 选项名 | 类型 | 默认值 | 最小值 | 最大值 | 说明 |
@@ -505,8 +505,8 @@ COMMITTED_GTID_SET: 4fb86f5b-b028-11ee-92b8-d08e7908bcb1:1-339
 - `secondary_engine_read_delay_wait_mode`：本选项是对`secondary_engine_read_delay_wait_timeout`的补充，本选项指定了等待超时的模式，有两个可选值 **[WAIT_FOR_DB, WAIT_FOR_TRX]**，默认为 **WAIT_FOR_TRX**。如果设置为**WAIT_FOR_DB**，则在 `secondary_engine_read_delay_wait_timeout` 设定的超时范围内，每次都以主引擎最新状态进行对比；如果设置为 **WAIT_FOR_TRX**，则在`secondary_engine_read_delay_wait_timeout` 设定的超时范围内，每次都以查询语句/事务开启时的状态进行对比。所以，如果采用**WAIT_FOR_DB** 模式，并将 `secondary_engine_read_delay_wait_timeout` 设置为最大值，可能导致查询永远满足不了延迟条件的可能。
 - `secondary_engine_read_delay_level`：指定辅助引擎查询时，支持延迟查询的表的严格级别。支持两个可选值 **[ALL_TABLES, TABLE_START_INC_TASK]**，默认为**TABLE_START_INC_TASK**。当设置为 **ALL_TABLES** 时，不管该表是否开启了增量导入任务，都需要检查延迟。如果设置为 **TABLE_START_INC_TASK**，则如果表没有开启增量导入任务、或者增量导入任务因任何原因停止，对该表查询时，不检查和主引擎的延迟。
 
-## 4. 解读Rapid引擎
-### 4.1 体系结构
+## 解读Rapid引擎
+###  体系结构
 Rapid引擎整体架构如下图所示
 ![GreatSQL Rapid引擎体系结构图](./5-1-highperf-GreatSQL-Rapid-arch.png)
 
@@ -535,7 +535,7 @@ Rapid引擎整体架构如下图所示
 
 1. 全部写入完成后，自动清理WAL日志文件和临时文件。
 
-### 4.2 支持的数据类型
+###  支持的数据类型
 
 Rapid引擎支持以下数据类型
 
@@ -559,13 +559,13 @@ Rapid引擎支持以下数据类型
 |字符型|CHAR(n)|定长字符串|
 ||VARCHAR(n)|变长字符串|
 
-## 5. 运维管理
+## 运维管理
 Rapid引擎相关的选项设置主要包括系统选项和插件选项两类：
 
 - **系统选项**，开启使用Rapid引擎，设置Rapid引擎并行加载参数。
 - **插件选项**，针对Rapid引擎内部的选项设置。
 
-### 5.1 新增系统选项
+###  新增系统选项
 
 | System Variable Name | Variable Scope |  Dynamic Variable | Permitted Values | Type | Default | Description |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -578,7 +578,7 @@ Rapid引擎相关的选项设置主要包括系统选项和插件选项两类：
 |secondary_engine_read_delay_wait_mode|Global, Session|YES|[WAIT_FOR_TRX, WAIT_FOR_DB]|ENUM|WAIT_FOR_TRX|指定辅助引擎查询时，读延迟时查询等待模式|
 |secondary_engine_read_delay_wait_timeout|Global, Session|YES|[0, ULONG_MAX]|ULONG|60|指定辅助引擎查询时，读延迟时最大等待超时时间|
 
-### 5.2 新增插件选项
+###  新增插件选项
 
 新增以下插件选项，用于设定Rapid引擎相关选项。
 
@@ -590,7 +590,7 @@ Rapid引擎相关的选项设置主要包括系统选项和插件选项两类：
 |rapid_temp_directory|Global|NO||String|"duckdb.data.tmp"|Rapid引擎存放临时文件的目录。当启用Rapid引擎后，不支持修改；启用之前，可修改|
 |rapid_checkpoint_threshold|Global|YES|[0, 2^39]|LONGLONG|16MB(2^24)|触发自动checkpoint操作的WAL大小阈值。WAL文件是Rapid引擎的预写日志，在Rapid引擎运行过程中，对其的所有修改操作在提交之前，都会预先写入日志，以保证数据库系统的原子性和持久性|
 
-### 5.3 新增状态变量
+###  新增状态变量
 
 新增状态变量 `Secondary_engine_execution_count` 用于统计辅助引擎表上执行查询的次数。例如：
 ```sql
@@ -638,7 +638,7 @@ greatsql> SHOW STATUS LIKE 'Secondary_engine_execution_count';
 +----------------------------------+-------+
 ```
 
-### 5.4 部分内存参数的使用说明
+###  部分内存参数的使用说明
 
 在GreatSQL实例启动加载Rapid引擎时，会读取Rapid引擎元数据，扫描到已经加载过的表，然后把这些表数据再次加载到内存中，实例启动完成后，无需再次手动加载，就正常使用Rapid引擎来提升查询效率了。
 
@@ -693,7 +693,7 @@ $ ls -lh duckdb.data.tmp/
 
 最后还需要再补充的是，Rapid引擎内部还会额外使用一些小块内存，这部分内存不受 `rapid_memory_limit` 选项控制，这些小内存块的消耗与 `rapid_worker_threads` 以及并行执行SQL查询请求的数量正相关。因此Rapid引擎实际使用的内存通常会比 `rapid_memory_limit` 大一点。
 
-### 5.5 统计信息
+###  统计信息
 用户数据表的统计信息和索引统计信息，暂不支持Rapid引擎视图查看，只能查看主引擎相关视图：
 ```sql
 -- 查看表统计信息
@@ -703,7 +703,7 @@ greatsql> SHOW TABLE STATUS LIKE 't1';
 greatsql> SHOW INDEX FROM t1;
 ```
 
-### 5.6 执行计划
+###  执行计划
 查看查询是否使用了Rapid引擎，可通过 `EXPLAIN SELECT` 或者 `EXPLAIN FORMAT=TREE` 显示是否有Rapid关键字。
 
 目前，`EXPLAIN FORMAT=TREE` 暂不支持显示Rapid引擎具体执行计划， 只可通过该方式来判断语句是否使用了Rapid引擎。
@@ -729,7 +729,7 @@ greatsql> EXPLAIN FORMAT=TREE  SELECT * FROM t1;
 
 目前，Rapid引擎不支持 `EXPLAIN ANALYZE` 用法。
 
-### 5.7 元数据
+###  元数据
 
 可以执行下面的SQL，查询当前有哪些表使用了Rapid引擎：
 
@@ -769,13 +769,13 @@ COMMITTED_GTID_SET: 4fb86f5b-b028-11ee-92b8-d08e7908bcb1:1-339
 1 row in set (0.00 sec)
 ```
 
-## 6. 性能表现参考
+## 性能表现参考
 
-### 6.1 TPC-H测试表现
+###  TPC-H测试表现
 GreatSQL Rapid引擎性能表现优异，在32C64G测试机环境下，TPC-H 100G测试中22条SQL总耗时仅需不到80秒。下面是和其他类似产品的对比数据，仅供参考（测试时间：2024.1.31）：
 ![tpch100g-rapid-vs-stonedb-starrocks](./5-1-highperf-greatsql-tpch100g.png)
 
-### 6.2 数据压缩率
+###  数据压缩率
 
 下面是几个不同TPC-H数据量级的压缩率数据：
 
@@ -785,7 +785,7 @@ GreatSQL Rapid引擎性能表现优异，在32C64G测试机环境下，TPC-H 100
 | TPC-H 100GB | 184570593436 | 28728373248 | 6.42 | 
 | TPC-H 500GB | 1167795142848 | 146723045376 | 7.96 | 
 
-## 7. 构建专属AP查询服务器
+## 构建专属AP查询服务器
 
 可以利用主从复制或MGR组复制方式构建一个读写分离场景，主节点上仍采用InnoDB引擎，选择一个专属从节点响应AP查询请求，该从节点上的数据表加上Rapid辅助引擎，这样就可以在从节点利用Rapid引擎响应AP查询请求了。
 
@@ -793,7 +793,7 @@ GreatSQL Rapid引擎性能表现优异，在32C64G测试机环境下，TPC-H 100
 
 我们还在持续优化Rapid引擎，以支持更多特性和应用场景。
 
-## 8. 注意事项
+## 注意事项
 
 - 当前Rapid引擎的动态库文件仅支持运行在X86/ARM架构下的CentOS 7/8系统，或对应glibc版本分别是2.17和2.28，其他环境暂不支持。
 - 用户数据表主引擎只能是InnoDB引擎，不支持MyISAM等其他引擎。

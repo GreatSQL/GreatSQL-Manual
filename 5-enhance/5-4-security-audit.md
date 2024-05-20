@@ -13,7 +13,7 @@ GreatSQL支持审计功能，并将审计日志写入数据表中，并且设置
 - 允许基于数据库用户的操作进行审计，允许配置针对1个到多个的数据库用户的操作进行审计。
 - 启用审计日志入表后，审计日志仍然可以同时存储一份在日志文件中。
 
-## 1. 启用审计功能
+## 启用审计功能
 
 ```sql
 -- 安装插件
@@ -63,7 +63,7 @@ $ cat audit.log
 ...
 ```
 
-## 2. 新增变量说明
+## 新增变量说明
 
 审计功能相关新增参数/选项有
 
@@ -356,7 +356,7 @@ greatsql> SHOW VARIABLES LIKE 'audit%';
 
 用于设置SYSLOG的 `priority` 值，该变量的含义与[syslog(3)手册](http://linux.die.net/man/3/syslog)中描述的相应参数相同。
 
-## 3. 新增状态变量
+## 新增状态变量
 
 - Audit_log_buffer_size_overflow
 
@@ -368,7 +368,7 @@ greatsql> SHOW VARIABLES LIKE 'audit%';
 由于审计日志记录的大小大于 `audit_log_buffer_size` 变量而将其删除或直接写入文件的次数。
 
 
-## 4. 应用案例
+## 应用案例
 ```
 -- 启用审计入表特性
 greatsql> SET GLOBAL audit_log_to_table = 1;

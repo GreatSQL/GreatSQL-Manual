@@ -1,7 +1,7 @@
 # InnoDB并行查询（InnoDB Parallel Query, InnoDB PQ）
 ---
 
-## 1. InnoDB PQ简述
+## InnoDB PQ简述
 
 根据B+树的特点，可以将B+树划分为若干子树，此时多个线程可以并行扫描同一张InnoDB表的不同部分。
 
@@ -19,10 +19,10 @@ GreatSQL中对执行计划进行多线程改造，每个子线程执行计划与
 
 - 暂不支持子查询，可想办法改造成JOIN。
 
-## 2. 启用InnoDB PQ
+## 启用InnoDB PQ
 有两种方式来使用并行查询：
 
-### 2.1 设置系统参数
+### 设置系统参数
 通过全局参数 `force_parallel_execute` 来控制是否启用并行查询；使用全局参数 `parallel_default_dop` 来控制使用多少线程去并行查询。上述参数在使用过程中，随时可以修改，无需重启数据库。
 
 例如，想要开启并行执行，且并发度设置为4：
@@ -32,7 +32,7 @@ parallel_default_dop = 4;
 ```
 可以根据实际情况调整 `parallel_cost_threshold` 参数的值，如果设置为0，则所有查询都会使用并行；设置为非0，则只有查询语句的代价估值大于该值的查询才会使用并行。
 
-### 2.2 使用hint语法
+### 使用hint语法
 使用hint语法可以控制单个语句是否进行并行执行。在系统默认关闭并行执行的情况下, 可以使用hint对特定的SQL进行加速。相反地，也可以限制某类SQL进入并行执行。
 
 - `SELECT /*+ PQ */ … FROM …` 使用默认的并发度4进行并行查询。
@@ -41,9 +41,9 @@ parallel_default_dop = 4;
 
 - `SELECT /*+ NO_PQ */ … FROM …` 这条语句不使用并行查询。
 
-## 3. 并行查询相关参数、状态变量
+## 并行查询相关参数、状态变量
 
-### 3.1 新增参数
+### 新增参数
 在并行框架中，增加6个并行相关的参数：
 
 | System Variable Name	| force_parallel_execute |
@@ -104,7 +104,7 @@ parallel_default_dop = 4;
 | Default	| 0 |
 | Description	| 设置系统中并行查询的等待的超时时间，如果系统的资源不够，例如运行的并行查询线程已达到parallel_max_threads的值，并行查询语句将会等待，如果超时后还未获取资源，将会执行原生的查询过程。 <br/>单位：毫秒|
 
-### 3.2 新增状态变量
+### 新增状态变量
 在并行框架中，同时增加了4个状态变量：
 
 - **PQ_threads_running**
@@ -123,7 +123,7 @@ global级别，由于总线程数限制，导致未能执行并行执行的查�
 
 global级别，由于总内存限制，导致未能执行并行执行的查询总数。
 
-## 4. InnoDB PQ和MySQL并行读取有什么不同
+## InnoDB PQ和MySQL并行读取有什么不同
 
 从MySQL 8.0.14开始，InnoDB支持并行读取聚集索引，这可以提高CHECK TABLE的性能。但该特性并不适用于辅助索引扫描。`innodb_parallel_read_threads` 选项必须设置为大于1的值才能启用聚集索引并行读取。默认值为4。用于执行并行聚集索引读取的实际线程数由 `innodb_parallel_read_threads` 选项值或要扫描的索引子树数（以较小者为准）决定。
 
@@ -204,7 +204,7 @@ greatsql> SELECT /*+ PQ(16) */ ...;
 可以看到，Q1 SQL执行耗时显著下降，效率至少提升了将近5倍。
 
 
-## 5. 什么情况下建议启用InnoDB PQ
+## 什么情况下建议启用InnoDB PQ
 
 如果是不加判断条件的全表扫描场景，例如 `SELECT COUNT(*) FROM t1` 或 `SELECT * FROM t1` 这种，就没必要启用InnoDB PQ，而继续使用原生的聚集索引并行读取特性即可。
 

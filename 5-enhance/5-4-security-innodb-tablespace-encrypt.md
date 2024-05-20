@@ -3,7 +3,7 @@
 
 
 
-## 1. 编译安装BabaSSL
+## 编译安装BabaSSL
 
 编译安装BabaSSL以支持国密算法。
 
@@ -33,7 +33,7 @@ $ openssl ciphers|grep SM
 TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_SM4_GCM_SM3:TLS_SM4_CCM_SM3... 
 ```
 
-## 2. 修改GreatSQL相关设置，启用国密支持
+## 修改GreatSQL相关设置，启用国密支持
 修改 my.cnf 配置文件，增加以下国密支持选项：
 ```
 #enable openssl & SM
@@ -51,7 +51,7 @@ Environment=LD_LIBRARY_PATH=/usr/local/lib64
 
 如果是直接在命令行下手动方式启动GreatSQL，则确保BabaSSL已经启用的情况下，再次重启GreatSQL服务。
 
-## 3. 登入测试
+## 登入测试
 再次登入GreatSQL，确认国密支持已生效：
 ```
 # 用tcp协议登入，确认国密算法生效
@@ -71,7 +71,7 @@ greatsql> SELECT * FROM performance_schema.global_variables WHERE variable_name 
 +--------------------------+---------------------------------+
 ```
 
-## 4. 采用国密算法加密表空间
+## 采用国密算法加密表空间
 在开始对数据库对象设置加密之前，要先生成一份master keyring file。
 
 新建一个专用于存储GreatSQL master keyring file 的目录（注意：不能放在 datadir 目录下），并修改相应的属主及权限模式：
@@ -151,7 +151,7 @@ greatsql> ALTER TABLE t1 ENCRYPTION='N';  -- 取消加密
 ```
 **注意：** keyring文件需要做好备份，万一不慎被删除、修改或移走，都会导致被加密的数据库对象无法被正确读取，这时就可以将备份文件恢复回去。
 
-## 5. 查看元数据
+## 查看元数据
 可以在 `performance_schema` 和 `information_schema` 中查看加密相关元数据信息：
 
 ```
