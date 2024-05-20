@@ -3,7 +3,7 @@
 
 本文介绍如何从GreatSQL 5.7/MySQL 5.7版本升级到GreatSQL 8.0版本。
 
-## 1. 为什么要升级
+## 为什么要升级
 
 GreatSQL 8.0相对于GreatSQL 5.7有着众多优秀新特性，包括且不仅限以下：
 
@@ -48,9 +48,9 @@ GreatSQL 8.0相对于GreatSQL 5.7有着众多优秀新特性，包括且不仅�
 |备份加密| :heavy_check_mark: | ❌ |
 |审计日志入库| :heavy_check_mark: | ❌ |
 
-## 2. 升级前准备
+## 升级前准备
 
-### 2.1 注意事项
+### 注意事项
 
 从5.7版本升级到8.0，有以下相关注意事项，请认真核对是否产生冲突或不兼容：
 
@@ -67,7 +67,7 @@ GreatSQL 8.0相对于GreatSQL 5.7有着众多优秀新特性，包括且不仅�
 
 更多详情请见：[What Is New in MySQL 8.0](https://dev.mysql.com/doc/refman/8.0/en/mysql-nutshell.html)。
 
-### 2.2 升级准备
+### 升级准备
 
 
 首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-25版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，至于选择RPM还是二进制包看具体情况及个人喜好。
@@ -114,7 +114,7 @@ Checking if update is needed.
 - [5.7 升级 8.0 的升级检查利器 util.checkForServerUpgrade 原理(2)](https://mp.weixin.qq.com/s/i9w4-zqRh8DO2XByhUZrVA)
 - [5.7 升级 8.0 的升级检查利器 util.checkForServerUpgrade 原理(3)](https://mp.weixin.qq.com/s/0rMJpIS7zyP3Het5QOwYmw)
 
-## 3. 升级过程
+## 升级过程
 
 从GreatSQL/MySQL 5.7升级到8.0需要注意以下几点变化：
 
@@ -129,7 +129,7 @@ Checking if update is needed.
 
 升级的方法有以下几种可选。
 
-### 3.1 原地升级
+### 原地升级
 
 如果数据库能停机维护，则采用原地升级（in-place upgrade）方法最为简单。
 
@@ -205,7 +205,7 @@ upgrade = FORCE
 ```
 这样就完成升级了，非常便捷省事。
 
-### 3.2 滚动升级
+### 滚动升级
 
 可借助主从复制或MGR架构，利用滚动升级方法，先在从节点升级验证无误后，再升级主节点，最终实现所有节点都升级到GreatSQL 8.0版本。
 
@@ -215,7 +215,7 @@ upgrade = FORCE
 
 确定升级完成后，记得注释掉 `my.cnf` 文件中的 `upgrade = FORCE` 选项，或者将其修改成 `upgrade = AUTO`。
 
-## 4. 升级GreatSQL 8.0.25到8.0.32 
+## 升级GreatSQL 8.0.25到8.0.32 
 GreatSQL 8.0.32相对于8.0.25版本，新增了更多SQL语法兼容性、MGR层支持绑定VIP、支持并行LOAD DATA、在安全方面支持国密加密&备份加密等非常不错的特性，强烈建议升级到最新的GreatSQL 8.0.32版本。
 
 从GreatSQL 8.0.25升级到8.0.32版本过程较为简单：

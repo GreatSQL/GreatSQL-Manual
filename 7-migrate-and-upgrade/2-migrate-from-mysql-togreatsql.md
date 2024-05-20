@@ -3,7 +3,7 @@
 
 本文介绍如何从MySQL迁移/升级到GreatSQL数据库。
 
-## 1. 为什么要迁移/升级
+## 为什么要迁移/升级
 
 GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以下：
 
@@ -66,7 +66,7 @@ GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以�
 |START TRANSACTION WITH CONSISTENT SNAPSHOT扩展| :heavy_check_mark: | ❌ |
 
 
-## 2. 迁移/升级前准备
+## 迁移/升级前准备
 
 首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-25版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，至于选择RPM还是二进制包看具体情况及个人喜好。
 
@@ -88,7 +88,7 @@ GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以�
 
 本文重点说说第三种场景。
 
-## 3. 迁移过程
+## 迁移过程
 
 GreatSQL数据库是不支持直接原地(in-place)降级的，因此需要采用 **逻辑备份+导入** 的方式完成迁移。
 
@@ -130,7 +130,7 @@ ERROR 1146 (42S02) at line 586: Table 'mysql.replication_group_member_actions' d
 如果数据量较大的话，逻辑备份+导入过程耗时较久，要有心理准备。
 
 
-## 4. 注意事项
+## 注意事项
 
 在MySQL 8.0.26中引入MGR组视图UUID特性（[`group_replication_view_change_uuid`](https://dev.mysql.com/doc/refman/8.0/en/group-replication-system-variables.html#sysvar_group_replication_view_change_uuid)）。因此，如果当前有个MGR集群的版本是8.0.25及以下，则无法实现平滑升级迁移到8.0.26版本。需要申请一次停机维护时间，对MGR集群中的各个节点实施in-place升级，完成从8.0.25到8.0.26及更高版本的升级。
 

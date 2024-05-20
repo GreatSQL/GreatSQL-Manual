@@ -3,7 +3,7 @@
 
 本文介绍如何从Percona Server for MySQL迁移/升级到GreatSQL数据库。
 
-## 1. 为什么要迁移/升级
+## 为什么要迁移/升级
 
 GreatSQL是在Percona Server for MySQL（简称Percona）的基础上Fork的开源分支，专注于提升MGR可靠性及性能，支持InnoDB并行查询等特性。
 
@@ -35,7 +35,7 @@ GreatSQL相对于Percona有着众多优秀特性，包括且不仅限以下：
 
 
 
-## 2. 迁移/升级前准备
+## 迁移/升级前准备
 
 首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-25版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，至于选择RPM还是二进制包看具体情况及个人喜好。
 
@@ -60,7 +60,7 @@ GreatSQL相对于Percona有着众多优秀特性，包括且不仅限以下：
 从Percona迁移到GreatSQL是最快捷的，元数据库表几乎没有区别，而InnoDB表数据则是通用的，几乎可以做到平滑迁移。
 
 
-## 3. 注意事项
+## 注意事项
 
 在MySQL 8.0.26中引入MGR组视图UUID特性（[`group_replication_view_change_uuid`](https://dev.mysql.com/doc/refman/8.0/en/group-replication-system-variables.html#sysvar_group_replication_view_change_uuid)）。因此，如果当前有个MGR集群的版本是8.0.25及以下，则无法实现平滑升级迁移到8.0.26版本。需要申请一次停机维护时间，对MGR集群中的各个节点实施in-place升级，完成从8.0.25到8.0.26及更高版本的升级。
 
