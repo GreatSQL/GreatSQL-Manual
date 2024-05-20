@@ -2,7 +2,7 @@
 
 ---
 
-本文描述MGR集群的日常管理维护操作，包括主节点切换，单主&多主模式切换等，文档中的操作以MySQL Shell for GreatSQL与手动方式均有讲解
+本文描述MGR集群的日常管理维护操作，包括主节点切换，单主&多主模式切换等，文档中的操作以MySQL Shell for GreatSQL（以下简称 GreatSQL Shell）与手动方式均有讲解
 
 现在有个三节点的MGR集群：
 
@@ -25,14 +25,14 @@ $ mysqlsh --uri GreatSQL@172.16.16.10:3306
 
 ## 切换主节点
 
-- [MySQL Shell for GreatSQL方式切换主节点](#mysql-shell-for-greatsql方式切换主节点)
+- [GreatSQL Shell方式切换主节点](#mysql-shell-for-greatsql方式切换主节点)
 - [手动方式切换](#手工方式切换)
 
-### MySQL Shell for GreatSQL方式切换主节点
+### GreatSQL Shell方式切换主节点
 
 当主节点需要进行维护时，或者执行滚动升级时，就可以对其进行切换，将主节点切换到其他节点。
 
-在MySQL Shell for GreatSQL中，可以调用 `set_primary_instance()` 函数进行切换：
+在GreatSQL Shell中，可以调用 `set_primary_instance()` 函数进行切换：
 
 ```sql
 #首先获取mgr cluster对象
@@ -129,10 +129,10 @@ greatsql> select * from performance_schema.replication_group_members;
 
 ## 切换单主/多主模式
 
-- [MySQL Shell for GreatSQL方式切换模式](#mysql-shell-for-greatsql方式切换模式)
+- [GreatSQL Shell方式切换模式](#mysql-shell-for-greatsql方式切换模式)
 - [手动方式切换](#手动方式切换)
 
-### MySQL Shell for GreatSQL方式切换模式
+### GreatSQL Shell方式切换模式
 
 调用函数 `switch_to_multi_primary_mode()` 和 `switch_to_single_primary_mode()` 可以实现切换到多主、单主模式。
 
@@ -163,7 +163,7 @@ ERROR 3092 (HY000): The server is not configured properly to be an active member
 [ERROR] [MY-011529] [Repl] Plugin group_replication reported: 'The member configuration is not compatible with the group configuration. Variables such as group_replication_single_primary_mode or group_replication_enforce_update_everywhere_checks must have the same value on every server in the group. (member configuration option: [group_replication_single_primary_mode], group configuration option: [group_replication_enforce_update_everywhere_checks]).'
 ```
 
-这是因为，通过MySQL Shell for GreatSQL管理MGR时，会跟随单主/多主模式的不同，动态修改选项 `group_replication_enforce_update_everywhere_checks` 的值。仲裁节点中，该选项值和其他节点不同，所以需要先手动修改： 
+这是因为，通过GreatSQL Shell管理MGR时，会跟随单主/多主模式的不同，动态修改选项 `group_replication_enforce_update_everywhere_checks` 的值。仲裁节点中，该选项值和其他节点不同，所以需要先手动修改： 
 
 ```sql
 # 先手动关闭单主模式
@@ -258,16 +258,16 @@ greatsql> select group_replication_switch_to_single_primary_mode('af39db70-6850-
 
 ## 添加新节点
 
-- [MySQL Shell for GreatSQL方式添加新节点](#mysql-shell-for-greatsql方式添加新节点)
+- [GreatSQL Shell方式添加新节点](#mysql-shell-for-greatsql方式添加新节点)
 - [手动方式添加新节点](#手动方式添加新节点)
 
-### MySQL Shell for GreatSQL方式添加新节点
+### GreatSQL Shell方式添加新节点
 
 首先，启动一个全新的空实例，确保可以用root账户连接登入。
 
-参考文档：[MGR节点预检查](../4-install-guide/2-install-with-rpm.md#91mgr节点预检查)，先利用 MySQL Shell for GreatSQL，调用函数 `dba.configure_instance()` 完成初始化检查工作。
+参考文档：[MGR节点预检查](../4-install-guide/2-install-with-rpm.md#91mgr节点预检查)，先利用 GreatSQL Shell 调用函数 `dba.configure_instance()` 完成初始化检查工作。
 
-后切换到连接主节点的MySQL Shell for GreatSQL终端上，首先获取cluster对象，再进行添加新节点操作：
+后切换到连接主节点的GreatSQL Shell终端上，首先获取cluster对象，再进行添加新节点操作：
 
 ```sql
 MySQL  172.16.16.10:3306 ssl  Py > c=dba.get_cluster()
@@ -334,10 +334,10 @@ greatsql> clone INSTANCE FROM GreatSQL@172.16.16.11:3306 IDENTIFIED BY 'GreatSQL
 
 ## 删除节点
 
-- [MySQL Shell for GreatSQL方式删除新节点](#mysql-shell-for-greatsql方式删除节点)
+- [GreatSQL Shell方式删除新节点](#mysql-shell-for-greatsql方式删除节点)
 - [手动方式添加新节点](#手动方式删除节点)
 
-### MySQL Shell for GreatSQL方式删除节点
+### GreatSQL Shell方式删除节点
 
 删除节点比较简单，调用 `remove_instance()` 函数即可：
 
@@ -360,9 +360,9 @@ The instance '172.16.16.13:3306' was successfully removed from the cluster.
 
 ## 异常退出的节点重新加回
 
-### MySQL Shell for GreatSQL方式重新加回
+### GreatSQL Shell方式重新加回
 
-在MySQL Shell for GreatSQL里，可以调用 `rejoin_instance()` 函数将异常的节点重新加回集群：
+在GreatSQL Shell里，可以调用 `rejoin_instance()` 函数将异常的节点重新加回集群：
 
 ```
  MySQL  172.16.16.10:3306 ssl  Py > c.rejoin_instance('172.16.16.13:3306');
@@ -383,7 +383,7 @@ The instance '172.16.16.13:3306' was successfully rejoined to the cluster.
 
 P.S，第一个节点启动完毕后，记得重置选项 `group_replication_bootstrap_group=OFF`，避免在后续的操作中导致MGR集群分裂。
 
-如果是用MySQL Shell for GreatSQL重启MGR集群，调用 `rebootClusterFromCompleteOutage()` 函数即可，它会自动判断各节点的状态，选择其中一个作为Primary节点，然后拉起各节点上的MGR服务，完成MGR集群重启。可以参考这篇文章：[万答#12，MGR整个集群挂掉后，如何才能自动选主，不用手动干预](https://mp.weixin.qq.com/s/07o1poO44zwQIvaJNKEoPA)
+如果是用GreatSQL Shell重启MGR集群，调用 `rebootClusterFromCompleteOutage()` 函数即可，它会自动判断各节点的状态，选择其中一个作为Primary节点，然后拉起各节点上的MGR服务，完成MGR集群重启。可以参考这篇文章：[万答#12，MGR整个集群挂掉后，如何才能自动选主，不用手动干预](https://mp.weixin.qq.com/s/07o1poO44zwQIvaJNKEoPA)
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 

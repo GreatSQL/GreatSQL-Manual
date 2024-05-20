@@ -76,7 +76,7 @@ Threads: 2  Questions: 18  Slow queries: 0  Opens: 119  Flush tables: 3  Open ta
 
 看到容器已经完成初始化，并且可以直接无密码登入。
 
-##  利用Docker-compose创建Docker容器并构建MGR集群（单主模式）
+##  构建MGR集群（单主模式）
 
 手工管理Docker比较麻烦，建议采用 `docker-compose` ，它可以更方便的管理docker容器。
 
@@ -213,7 +213,7 @@ Threads: 11  Questions: 52  Slow queries: 0  Opens: 145  Flush tables: 3  Open t
 ```
 可以看到，包含仲裁节点的三节点MGR集群已自动构建完毕。
 
-##  利用Docker-compose创建Docker容器并构建MGR集群（多主模式）
+##  构建MGR集群（多主模式）
 
 下面是一个docker-compose的配置文件参考 `/data/docker/mgr-multi-primary.yml`:
 ```

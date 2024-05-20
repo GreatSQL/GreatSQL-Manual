@@ -33,7 +33,7 @@ $ openssl ciphers|grep SM
 TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_SM4_GCM_SM3:TLS_SM4_CCM_SM3... 
 ```
 
-## 修改GreatSQL相关设置，启用国密支持
+## 启用国密支持
 修改 my.cnf 配置文件，增加以下国密支持选项：
 ```
 #enable openssl & SM

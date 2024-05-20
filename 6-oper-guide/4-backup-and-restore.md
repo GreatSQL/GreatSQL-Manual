@@ -3,15 +3,16 @@
 
 本文介绍GreatSQL数据库的几种不同备份恢复方法，主要包括：
 
-1. 逻辑备份恢复
- - 1.1 [mysqldump逻辑备份恢复](./4-1-mysqldump.md)
- - 1.2 [OUTFILE逻辑备份恢复](./4-2-outfile.md)
- - 1.3 [MySQL Shell util逻辑备份恢复](./4-3-shell-util.md)
-2. 物理备份恢复
- - 2.1 [物理备份恢复、xtrabackup备份恢复](./4-4-physical-backup.md)
-3. CLONE备份恢复
+## 逻辑备份恢复
+### [mysqldump逻辑备份恢复](./4-1-mysqldump.md)
+### [OUTFILE逻辑备份恢复](./4-2-outfile.md)
+### [MySQL Shell util逻辑备份恢复](./4-3-shell-util.md)
 
-- 3.1 [CLONE备份恢复](./4-5-clone.md)
+## 物理备份恢复
+### [物理备份恢复、xtrabackup备份恢复](./4-4-physical-backup.md)
+
+### CLONE备份恢复
+### [CLONE备份恢复](./4-5-clone.md)
 
 可以根据实际情况和业务需要，选择定制不同的备份恢复策略。
 

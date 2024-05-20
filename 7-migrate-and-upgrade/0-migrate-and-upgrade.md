@@ -3,9 +3,9 @@
 
 本章文档主要介绍如何从MySQL/Percona/MariaDB等其他数据库迁移/升级到GreatSQL数据库。
 
-- ## [1 GreatSQL 5.7升级到8.0](./1-upgrade-to-greatsql8.md)
-- ## [2 从MySQL迁移到GreatSQL](./2-migrate-from-mysql-togreatsql.md)
-- ## [3 从Percona Server迁移到GreatSQL](./3-migrate-from-percona-to-greatsql.md)
+## [GreatSQL 5.7升级到8.0](./1-upgrade-to-greatsql8.md)
+## [从MySQL迁移到GreatSQL](./2-migrate-from-mysql-togreatsql.md)
+## [从Percona Server迁移到GreatSQL](./3-migrate-from-percona-to-greatsql.md)
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 

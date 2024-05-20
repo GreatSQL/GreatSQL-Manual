@@ -261,7 +261,10 @@ $ /sbin/groupadd mysql
 $ /sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
 ```
 
-###  新建数据库主目录，并修改权限模式及属主
+###  新建 datadir
+
+新建数据库主目录，并修改权限模式及属主：
+
 ```
 $ mkdir -p /data/GreatSQL 
 $ chown -R mysql:mysql /data/GreatSQL
