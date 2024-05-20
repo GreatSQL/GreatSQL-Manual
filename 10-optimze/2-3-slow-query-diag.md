@@ -3,7 +3,7 @@
 
 本文介绍如何定位数据库运行时那些性能较差的SQL（即通常所说的慢查询SQL），并分析慢查询SQL，以及对这些SQL进行优化。
 
-## 1. 慢查询SQL相关设置
+## 慢查询SQL相关设置
 
 在默认设置模式下，是不会记录慢查询SQL的，需要自行配置，可以参考以下设置模板：
 ```
@@ -84,7 +84,7 @@ select c, count(*) from t1 group by c;
 
 更详细解读请参考：[Slow Query Log](https://www.percona.com/doc/percona-server/5.6/diagnostics/slow_extended.html#id1)。
 
-## 2. 利用pt-query-digest分析慢查询SQL
+## 利用pt-query-digest分析慢查询SQL
 
 `pt-query-digest`是Percona出品的`pt-toolkit`包中的一个工具，主要用于分析MySQL慢查询。除了慢查询外，它还可以分析binlog、general log，也可以通过 `SHOW PROCESSLIST` 或者通过tcpdump抓取的MySQL数据包进行实时分析。
 
@@ -190,7 +190,7 @@ select  `visit` = `visit` + 1, `last_visit` = '2021-10-17 00:04:53' from wp_stat
 
 P.S，还可以利用pt-query-digest工具将慢查询SQL分析后写入数据库，并结合Anemometer构建慢查询管理系统。
 
-## 3. 慢查询SQL优化
+## 慢查询SQL优化
 
 接下来以一个慢查询SQL为例，来看看如何优化。
 

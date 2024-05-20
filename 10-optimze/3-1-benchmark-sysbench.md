@@ -3,7 +3,7 @@
 
 本文主要介绍采用sysbench工具对GreatSQL进行性能测试的方法。
 
-## 1. 关于sysbench
+## 关于sysbench
 
 通常采用 [sysbench](https://github.com/akopytov/sysbench) 对数据库进行性能测试。
 
@@ -17,12 +17,14 @@ sysbench是一个基于 LuaJIT 的可编写脚本的多线程基准测试工具�
 
 总之，sysbench是一个功能强大且广泛应用的性能测试工具，特别适用于数据库性能测试，有助于评估和优化数据库系统的性能。
 
-## 2. 安装sysbench
+## 安装sysbench
+
 **1. 下载sysbench**
 
 访问[sysbench github仓库](https://github.com/akopytov/sysbench/releases)，下载源码包。
 
 **2. 解压缩**
+
 ```
 $ cd /opt
 $ tar xf sysbench-1.0.20.tar.gz
@@ -79,6 +81,7 @@ $ ./configure --prefix=/usr/local/sysbench \
 | --with-mysql-libs |  指定 MySQL/GreatSQL 的 libs 目录 |
 
 **4. 运行sysbench，确认可用**
+
 在开始运行sysbench前，要先修改 `LD_LIBRARY_PATH` 环境变量，加上GreatSQL二进制文件包的lib目录：
 ```
 $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/
@@ -100,7 +103,7 @@ $ ./sysbench --version
 sysbench 1.0.20 
 ```
 
-## 3. sysbench压测模式
+## sysbench压测模式
 
 sysbench默认支持以下几种OLTP测试方案：
 
@@ -117,20 +120,23 @@ sysbench默认支持以下几种OLTP测试方案：
 
 此外，Percona在github上开源了一个[sysbench-tpcc项目](https://github.com/Percona-Lab/sysbench-tpcc/)，可利用sysbench模拟TPC-C测试，省去了单独安装TPC-C测试工具的麻烦。作为补充，也可以利用这个项目进行测试。
 
-## 4. 执行压力测试
+## 执行压力测试
 
 **1. 运行以下命令，初始化数据库**
+
 ```
 $ cd /usr/local/sysbench/bin
 $ ./sysbench ./oltp_read_write.lua --db-driver=mysql --mysql-host=x.x.x.x --mysql-port=xxxx --mysql-user=x --mysql-password=x --mysql-db=sbtest --report-interval=1 --percentile=99 --rand-type=uniform --tables=16 --table_size=1000000 --threads=16 --time=600 prepare
 ```
 
 **2. 运行以下命令，执行测试**
+
 ```
 $ ./sysbench ./oltp_read_write.lua --db-driver=mysql --mysql-host=x.x.x.x --mysql-port=xxxx --mysql-user=x --mysql-password=x --mysql-db=sbtest --report-interval=1 --percentile=99 --rand-type=uniform --tables=16 --table_size=1000000 --threads=16 --time=600 run
 ```
 
 **3. 压测完毕，清除数据**
+
 ```
 $ ./sysbench ./oltp_read_write.lua --db-driver=mysql --mysql-host=x.x.x.x --mysql-port=xxxx --mysql-user=x --mysql-password=x --mysql-db=sbtest --report-interval=1 --percentile=99 --rand-type=uniform --tables=16 --table_size=1000000 --threads=16 --time=600 cleanup
 ```
@@ -155,7 +161,7 @@ $ ./sysbench ./oltp_read_write.lua --db-driver=mysql --mysql-host=x.x.x.x --mysq
 | --time | 压测总时长，单位：秒，设置为0表示一致运行 |
 | --events | 最大请求数量，和 --time 选项二选一即可 |
 
-## 5. 压测参数及建议
+## 压测参数及建议
 
 压测的目的通常是想找到数据库运行时的性能瓶颈，以及在不断摸索调整参数选项，采用何种设置模式下其性能表现最好。
 
@@ -191,7 +197,7 @@ $ ./sysbench ./oltp_read_write.lua \
 --time=900 run
 ```
 
-## 6. 性能测试报告
+## 性能测试报告
 
 sysbench性能压测结束后，打印输出类似以下面的内容：
 

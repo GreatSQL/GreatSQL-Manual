@@ -23,7 +23,7 @@ GreatSQL 社区文档中所有内容，包括但不限于图片、架构设计�
 
 GreatSQL社区官网：[https://greatsql.cn](https://greatsql.cn)。
 
-## 1. 概述
+##  概述
 
 本次测试针对GreatSQL数据库基于标准 TPC-H 场景的测试。
 
@@ -31,7 +31,7 @@ TPC-H（商业智能计算测试）是美国交易处理效能委员会（TPC，
 
 GreatSQL数据库是一款**开源免费**数据库，可在普通硬件上满足金融级应用场景，具有**高可用**、**高性能**、**高兼容**、**高安全**等特性，可作为MySQL或Percona Server for MySQL的理想可选替换。
 
-## 2. 测试环境信息
+##  测试环境信息
 
 | 配置 | 备注 | 
 |   ---    | --- |
@@ -142,7 +142,7 @@ greatsql> SET GLOBAL rapid_memory_limit = 68719476736;
 greatsql> SET GLOBAL rapid_worker_threads = 32;
 ```
 
-## 3. 测试表结构和数据量
+##  测试表结构和数据量
 
 各表数据量对比：
 
@@ -168,7 +168,7 @@ Rapid引擎表空间压缩率：
 
 ![TPC-H各表结构关系示意图](./tpch-tables.jpg)
 
-## 4. 测试结果
+##  测试结果
 
 GreatSQL 8.0.32-25中，采用全新的Rapid存储引擎，使得其在TPC-H性能测试中表现大大优于此前的其他版本，也大大优于MySQL社区版、Percona Server MySQL、MariaDB等数据库。
 
@@ -206,11 +206,11 @@ GreatSQL SF100 vs SF300（32C64G）对比示意图如下
 
 ![GreatSQL TPC-H SF100 vs SF300对比示意图](./greatsql-tpch-sf100-vs-sf300.jpg)
 
-## 5. 测试步骤
-### 5.1 安装 GreatSQL
+##  测试步骤
+### 安装 GreatSQL
 请参考GreatSQL手册内容：[安装指南](../4-install-guide/0-install-guide.md)，完成GreatSQL安装。
 
-### 5.2 生成 TPC-H 测试数据
+### 生成 TPC-H 测试数据
 请参考GreatSQL手册内容：[TPC-H性能测试](./3-2-benchmark-tpch.md)，完成TPC-H工具编译安装。
 
 运行 TPC-H `dbgen` 工具，生成数据文件，一共会生成 8 个表对应的 tbl 数据文件，例如：
@@ -232,7 +232,7 @@ $ ls -l *tbl
 
 也可以参考 [`duckdb_dbgen.py`](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/duckdb_dbgen.py) 脚本做法，利用duckdb并行生成测试数据。
 
-### 5.3 创建 TPC-H 测试数据库表并导入数据
+### 创建 TPC-H 测试数据库表并导入数据
 
 参考GreatSQL社区提供的TPC-H数据库表初始化脚本：[tpch-create-table.sql](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/tpch-create-table.sql)，完成TPC-H测试数据库表创建。
 
@@ -263,7 +263,7 @@ Database: tpch100
 
 **提示**：运行LOAD DATA导入数据时，可能会在 `tmpdir` 产生临时文件，因此要保证 `tmpdir` 有足够的剩余可用磁盘空间。
 
-### 5.4 确认Rapid引擎设置，并加载数据到secondary engine
+### 确认Rapid引擎设置，并加载数据到secondary engine
 
 数据导入完成后，在开始运行TPC-H测试前，需要先将测试数据加载到secondary engine引擎中。
 
@@ -289,7 +289,7 @@ alter table supplier secondary_load;
 
 这个过程需要一定时间，请耐心等待。
 
-### 5.5 执行 TPC-H 测试
+### 执行 TPC-H 测试
 
 参考GreatSQL社区提供的TPC-H性能测试脚本，完成测试，并记录各个SQL的耗时。
 
@@ -313,8 +313,8 @@ alter table supplier secondary_load;
 上述结果中的 COST: 1.301s ，即为本SQL的运行耗时：1.301秒。
 
 
-## 6. 附录
-### 6.1 创建测试表DDL
+##  附录
+### 创建测试表DDL
 
 ```sql
 -- DROP DATABASE IF EXISTS tpch;
@@ -416,7 +416,7 @@ create table lineitem ( l_orderkey    integer not null,
                                 key lineitem_fk2 (l_partkey,l_suppkey) ) secondary_engine = rapid;
 ```
 
-### 6.2 22条TPC-H测试SQL
+### 22条TPC-H测试SQL
 
 ```sql
 -- tpch_queries_1.sql
@@ -1143,7 +1143,7 @@ ORDER BY
     cntrycode;
 ```
 
-### 6.3 参考资料
+### 参考资料
 
 - TPC-H官网：[http://www.tpc.org/tpch](http://www.tpc.org/tpch)
 - GreatSQL安装指南：[https://greatsql.cn/docs/8032-25/user-manual/4-install-guide/0-install-guide.html](https://greatsql.cn/docs/8032-25/user-manual/4-install-guide/0-install-guide.html)

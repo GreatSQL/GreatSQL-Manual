@@ -3,18 +3,20 @@
 
 本文主要介绍采用TPC-H工具对GreatSQL进行性能测试的方法。
 
-## 1. 关于TPC-H
+## 关于TPC-H
 
 TPC-H是TPC(Transaction Processing Performance Council)组织提供的工具包。主要用于进行OLAP业务场景测试，以评估商业分析中决策支持系统（DSS）的性能。它包含了一整套面向商业的ad-hoc查询和并发数据修改，强调测试的是数据库、平台和I/O性能，关注查询能力。
 
 官网：[http://www.tpc.org/tpch](http://www.tpc.org/tpch)
 
-## 2. 编译安装TPC-H
+## 编译安装TPC-H
+
 **1. 下载TPC-H**
 
 访问[TPC-H下载页面](https://www.tpc.org/tpc_documents_current_versions/download_programs/tools-download-request5.asp?bm_type=TPC-H)，下载源码包。
 
 **2. 下载完后，解压缩，并复制 `makefile.suite` 文件**
+
 ```
 $ unzip 41aa248b-48a5-11ee-8bef-d08e7908bcb1-tpc-h-tool.zip
 $ cd TPC-H_Tools_v3.0.1
@@ -23,6 +25,7 @@ $ cp makefile.suite Makefile
 ```
 
 **3. 修改Makefile以适配**
+
 ```
 $ vim Makefile
 CC      = gcc
@@ -37,6 +40,7 @@ WORKLOAD = TPCH
 ```
 
 **4. 修改tpcd.h文件，在文件末尾新增几行MYSQL宏定义**
+
 ```
 $ vim tpcd.h
 #ifdef MYSQL
@@ -56,7 +60,7 @@ $ vim tpcd.h
 - dbgen：数据生成工具。在使用InfiniDB官方测试脚本进行测试时，需要用该工具生成tpch相关表数据。
 - qgen：SQL生成工具
 
-## 3. 生成测试数据
+## 生成测试数据
 
 可根据实际情况，生成1G、10G、100G等不同量级的测试数据，例如30G：
 
@@ -76,7 +80,7 @@ $ ls -lh
 -rw-r--r-- 1 root root  41M Jul 19 15:36 supplier.tbl
 ```
 
-## 4. 生成TPC-H测试查询SQL
+## 生成TPC-H测试查询SQL
 可直接访问[gitee仓库获取相应的SQL](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/tpch/3.0.1/queries)，使用这些SQL测试GreatSQL的InnoDB并行查询特性时，需要自行调整语句中的HINT，例如：
 ```
 $ vim tpch_queries_1.sql
@@ -98,9 +102,9 @@ $ dos2unix *.sql
 ```
 参数 `-s 30` 表示测试数据集大小是30G。
 
-## 5. 新建TPC-H测试数据库，导入测试数据
+## 新建TPC-H测试数据库，导入测试数据
 
-### 5.1 修改GreatSQL选项，启用InnoDB并行特性
+### 修改GreatSQL选项，启用InnoDB并行特性
 
 ```
 $ vim /etc/my.cnf 
@@ -130,7 +134,7 @@ greatsql> show global variables like '%parall%';
 11 rows in set (0.01 sec)
 ```
 
-### 5.2 初始化TPC-H测试库表
+### 初始化TPC-H测试库表
 1. 下载 [tpch-create-table.sql文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/tpch-create-table.sql)，导入数据库，完成TPC-H测试库表初始化。
 
 文件内容如下：
@@ -248,7 +252,7 @@ $ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch
 
 还可以进一步设置并行load data的并行线程数以及分片大小，详情参考文档：[并行load data](../5-enhance/5-1-highperf-parallel-load.md)。
 
-### 5.3 开始TPC-H测试
+### 开始TPC-H测试
 
 在开始测试前，先调低 `long_query_time` 的值（甚至可以设置为0），使得可以记录所有TPC-H查询测试请求：
 ```
@@ -311,7 +315,7 @@ greatsql> show processlist;
 greatsql> explain for connection **;
 ```
 
-## 6. 测试结果
+## 测试结果
 在GreatSQL中引入了InnoDB查询特性，对轻量级TPC-H查询有很好的优化效果，可支持的查询SQL类型也在不断增加中。
 
 关于TPC-H测试结果可参考：[InnoDB并行查询（InnoDB Parallel Query, InnoDB PQ）](../5-enhance/5-1-highperf-innodb-pq.md)。

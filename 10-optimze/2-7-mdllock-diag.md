@@ -3,7 +3,7 @@
 
 本文介绍在GreatSQL数据库中，如何查看MDL锁以及发生MDL锁等待时如何排查分析。
 
-## 1. 关于MDL锁
+## 关于MDL锁
 在[**UPDATE执行慢排查分析**](./2-4-slow-update-diag.md)一文中提到，当执行`SHOW PROCESSLIST`时，可能会看到一种状态是`Waiting for XX metadata lock`，这就意味着当前发生了MDL锁等待。
 
 MDL锁全称为Metadata Lock（元数据锁）。在MySQL/GreatSQL中，DDL是不不支持事务特性的，当事务和DDL同时操作同一个表，可能会出现各种意想不到问题，如事务特性被破坏、binlog顺序错乱等。为了解决类似这些问题，MySQL在5.5开始引入了MDL锁(Metadata Locking)。也就是说，MDL锁的作用是保证表元数据的一致性，避免DDL和DML并行导致元数据不一致。
@@ -19,7 +19,7 @@ MDL锁的范围主要包括以下几种：
 
 还有其他MDL锁范围，这里未能全部列出，MySQL仍在持续优化MDL锁。
 
-## 2. 查看MDL锁状态
+## 查看MDL锁状态
 
 MDL锁是Server层的锁，对象级锁。
 
@@ -194,7 +194,7 @@ OBJECT_INSTANCE_BEGIN: 139835061536608
 ```
 看到除了GLOBAL锁，还有COMMIT锁。
 
-## 3. 查看分析MDL锁等待
+## 查看分析MDL锁等待
 
 MDL锁是比较粗粒度的锁，一旦出现写锁等待，不但当前操作会被阻塞，同时还会阻塞后续该表的所有操作，如下例所示：
 
@@ -312,7 +312,7 @@ sql_kill_blocking_connection: KILL 13366
 ```
 在上述输出结果中，甚至还提供了解除MDL锁等待的方法，通过KILL持有MDL锁的连接或正在执行的SQL以释放MDL锁。不过这种是比较粗暴的做法，最好是找到持有MDL锁的那个事务，主动发起COMMIT/ROLLBACK结束这个事务，或执行 `UNLOCK TABLES`，就可以释放相应的MDL锁了。
 
-## 4. MDL锁等待优化建议
+## MDL锁等待优化建议
 
 MDL锁等待超时阈值由选项 `lock_wait_timeout` 定义，默认值是 **31536000** 秒（即：一年），这个值太大了，建议调低，在 [GreatSQL my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25) 中的建议参考值是 **3600**。
 

@@ -3,7 +3,7 @@
 
 本文介绍在GreatSQL数据库中，如何查看行锁以及发生行锁等待时如何排查分析。
 
-## 1. 关于行锁
+## 关于行锁
 行锁，也称为行级锁、row lock。
 
 在MySQL/GreatSQL数据库中的InnoDB引擎表支持行锁，依赖来实现事务的隔离性。行锁定是一种并发控制机制，允许多个用户同时访问表中的不同数据行，而不会造成数据不一致或冲突。
@@ -66,7 +66,7 @@ InnoDB行锁有几种不同的加锁粒度（范围）：
 
 这些不同的行锁方式允许InnoDB引擎在多个事务同时访问数据库时保持数据的一致性和完整性，同时提供了灵活性以满足不同的并发需求。
 
-## 2. 查看行锁状态
+## 查看行锁状态
 可以通过执行 `SHOW ENGINE INNODB STATUS\G` 或查看 `performance_schema.data_locks` 来观察行锁状态。
 
 选项 `innodb_status_output_locks` 用于设置是否在执行 `SHOW ENGINE INNODB STATUS` 时显示行锁信息，默认关闭，建议打开。
@@ -181,7 +181,7 @@ greatsql> select ENGINE_LOCK_ID, ENGINE_TRANSACTION_ID, INDEX_NAME, LOCK_TYPE, L
 
 这两种查看行锁的方式可根据个人喜好自行选择。
 
-## 3. 查看分析行锁等待
+## 查看分析行锁等待
 
 可以通过执行 `SHOW ENGINE INNODB STATUS\G` 或查看 `sys.innodb_locK_waits` 来观察行锁状态。
 
@@ -288,7 +288,7 @@ sql_kill_blocking_connection: KILL 13333        #<-- 解锁方法之二
 
 利用上述方法，就可以清晰观察InnoDB表当前存在的行锁以及行锁等待，同时建议针对行锁等待设置相应的监控告警规则，例如当行锁等待超过10秒就发出告警，更多关于监控告警的内容可参考：[监控告警](../6-oper-guide/3-monitoring-and-alerting.md)。
 
-## 4. 行锁等待优化建议
+## 行锁等待优化建议
 
 为了避免产生大量、长时间的行锁等待，建议适当调低行锁等待时长阈值 `innodb_lock_wait_timeout`，在[GreatSQL my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25)中，这个阈值设置为10(秒)，可根据实际情况适当调整，通常建议不超过120(秒)。
 

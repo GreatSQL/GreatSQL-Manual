@@ -3,15 +3,15 @@
 
 本文介绍在GreatSQL数据库中，如果UPDATE请求响应较慢如何进行排查分析。
 
-## 1. 写在前面
+## 写在前面
 
 在开始分析排查先简单了解 UPDATE 请求在 MySQL/GreatSQL 中的生命周期是什么，以及如何执行一个事务。
 
 理解UPDATE的工作过程后，更有利于排查分析慢的原因。
 
-## 2. Update 生命周期
+## Update 生命周期
 
-### 2.1 Server 层阶段
+###  Server 层阶段
 
 **1. 连接器**
 
@@ -25,9 +25,9 @@ MySQL/GrreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select
 
 优化器会分析 SQL 语句，选择合适的索引，根据预结果集判断是否使用全表扫描。
 
-### 2.2 InnoDB 引擎层阶段
+###  InnoDB 引擎层阶段
 
-#### 2.2.1 事务执行阶段
+####  事务执行阶段
 
 1. 请求进入 InnoDB 引擎后，首先判断该事务涉及到的数据页是否在buffer pool中（以下简称ibp），不存在则会从磁盘中加载此事务涉及的数据页到ibp中，并对相应的索引数据页加锁。
 
@@ -39,7 +39,7 @@ MySQL/GrreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select
 
 5. 写 change buffer。如果这个事务需要在二级索引上做修改，写入到 change buffer page 中，等待之后，事务需要读取该二级索引时进行 merge。
 
-#### 2.2.2 事务提交阶段
+####  事务提交阶段
 
 执行事务提交会进入二阶段提交模式（prepare 阶段和 commit 阶段。
 
@@ -59,7 +59,7 @@ MySQL/GrreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select
 
 7. 如果事务发生ROLLBACK，因为系统异常或显示回滚，所有数据变更会变成原来的，通过回滚日志中数据进行恢复。
 
-## 3. 影响事务提交慢的几种情况
+## 影响事务提交慢的几种情况
 
 **1. 在事务执行阶段**
 
@@ -71,9 +71,9 @@ MySQL/GrreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select
 
 1. 因为binlog & redo log两阶段协同提交，导致落盘慢，这时通常能看到类似 `waiting for handler commit` 的线程状态。
 
-## 4. UPDATE执行慢排查分析
+## UPDATE执行慢排查分析
 
-### 4.1 查看当时实例系统性能情况（IO、CPU、memory），排除系统性能干扰
+###  查看当时实例系统性能情况（IO、CPU、memory），排除系统性能干扰
 
 如果 CPU 高、IO 高、wa 大：
 
@@ -87,7 +87,7 @@ MySQL/GrreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select
 
 排查当前占用 io 高的线程，有可能是 page clean 导致或日志刷新频繁导致。
 
-### 4.2 检查数据库状态
+###  检查数据库状态
 
 执行 `SHOW PROCESSLIST`，查看当前线程是否有下列几种情况：
 - converting HEAP to ondisk、copy to tmp table、Copying to group table、Copying to tmp table等状态。
@@ -98,17 +98,17 @@ MySQL/GrreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select
 
 如果有，抓紧分析并优化这些正在执行的SQL。
 
-### 4.3 分析SQL语句
+###  分析SQL语句
 
 通过 `EXPLAIN` 分析SQL的执行情况，是否走索引，是否有额外分组、排序、临时表，以及多表关联查询时驱动表选错等情况。
 
 使用 `PROFILING` 分析SQL语句哪个执行阶段最慢。
 
-### 4.4 分析应用程序执行 SQL 慢的时间
+###  分析应用程序执行 SQL 慢的时间
 
 观察是单个 SQL 执行慢，还是所有语句都慢，如果是所有SQL都慢，有可能是那个时段受到其他外部影响，导致数据库整体性能都很差，需要通过系统层的监控工具辅助排查分析。
 
-### 4.5 进行抓包和堆栈分析
+###  进行抓包和堆栈分析
 
 使用 `tcpdump` 进行抓包，分析是 MySQL/GreatSQL 返回慢，还是网络慢。
 
