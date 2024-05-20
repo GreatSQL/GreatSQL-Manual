@@ -8,7 +8,7 @@ MySQL Router是一个轻量级的中间件，它采用多端口的方案实现�
 
 建议把MySQL Router部署在应用服务器上，每个应用服务器都部署一套，这样应用程序可以直接连接本机IP，连接的效率更高，而且后端数据库发生变化时，程序端也无需修改IP配置。
 
-## 1. 部署MySQL Router
+## 部署MySQL Router
 MySQL Router第一次启动时要先初始化
 
 参数解释参数 ：
@@ -58,7 +58,7 @@ the cluster 'MGR1' can be reached by connecting to:
 ```
 如果想自定义名字和目录，还可以在初始化时自行指定 `--name` 和 `--directory` 选项，这样可以实现在同一个服务器上部署多个Router实例，参考这篇文章：[MySQL Router可以在同一个系统环境下跑多实例吗](https://mp.weixin.qq.com/s/9eLnQ2EJIMQnZuEvScIhiw)
 
-## 2. 启动mysqlrouter服务
+##  启动mysqlrouter服务
 这就初始化完毕了，按照上面的提示，直接启动 **mysqlrouter** 服务即可：
 ```bash
 $ systemctl start mysqlrouter
@@ -87,7 +87,7 @@ protocol=classic
 ```
 可以根据需要自行修改绑定的IP地址和端口，也可以在初始化时指定 `--conf-base-port` 选项自定义初始端口号。
 
-## 3. 确认读写分离效果
+##  确认读写分离效果
 现在，用客户端连接到6446（读写）端口，确认连接的是PRIMARY节点：
 ```sql
 $ mysql -h172.16.16.10 -u GreatSQL -p -P6446
@@ -126,14 +126,14 @@ greatsql> select @@server_uuid;
 # 确实是连接的SECONDARY节点
 ```
 
-## 4. 确认只读负载均衡效果
+##  确认只读负载均衡效果
 MySQL Router连接读写节点（Primary节点）默认的策略是 **first-available**，即只连接第一个可用的节点。Router连接只读节点（Secondary节点）默认的策略是 **round-robin-with-fallback**，会在各个只读节点间轮询。
 
 保持6447端口原有的连接不退出，继续新建到6447端口的连接，查看 **server_uuid**，这时应该会发现读取到的是其他只读节点的值，因为 **mysqlrouter** 的读负载均衡机制是在几个只读节点间自动轮询。在默认的 **round-robin-with-fallback** 策略下，只有当所有只读节点都不可用时，只读请求才会打到PRIMARY节点上。
 
 关于Router的连接策略，可以参考 FAQ文档中的：[24. MySQL Router可以配置在MGR主从节点间轮询吗](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/GreatSQL-FAQ.md)，或者MySQL Router官方文档：[routing_strategy参数/选项](https://dev.mysql.com/doc/mysql-router/8.0/en/mysql-router-conf-options.html#option_mysqlrouter_routing_strategy)
 
-## 5. 确认故障自动转移功能
+##  确认故障自动转移功能
 接下来模拟PRIMARY节点宕机或切换时，**mysqlrouter** 也能实现自动故障转移。
 
 登入MGR集群任意节点：

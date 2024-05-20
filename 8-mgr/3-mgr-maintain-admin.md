@@ -23,12 +23,12 @@ greatsql> select * from performance_schema.replication_group_members;
 $ mysqlsh --uri GreatSQL@172.16.16.10:3306
 ```
 
-## 1. 切换主节点
+## 切换主节点
 
 - [MySQL Shell for GreatSQL方式切换主节点](#mysql-shell-for-greatsql方式切换主节点)
 - [手动方式切换](#手工方式切换)
 
-##### MySQL Shell for GreatSQL方式切换主节点
+### MySQL Shell for GreatSQL方式切换主节点
 
 当主节点需要进行维护时，或者执行滚动升级时，就可以对其进行切换，将主节点切换到其他节点。
 
@@ -101,7 +101,7 @@ The instance '172.16.16.11:3306' was successfully elected as primary.
 
 之后再次执行 `c.status()` 就能看到 `PRIMARY` 角色切换到 *172.16.16.11:3306* 上了
 
-##### 手工方式切换
+### 手工方式切换
 
 在命令行模式下，可以使用`group_replication_set_as_primary()`这个udf实现切换，例如：
 
@@ -127,12 +127,12 @@ greatsql> select * from performance_schema.replication_group_members;
 
 可以看到`PRIMARY` 角色切换到 *172.16.16.11:3306* 上了
 
-## 2. 切换单主/多主模式
+## 切换单主/多主模式
 
 - [MySQL Shell for GreatSQL方式切换模式](#mysql-shell-for-greatsql方式切换模式)
 - [手动方式切换](#手动方式切换)
 
-##### MySQL Shell for GreatSQL方式切换模式
+### MySQL Shell for GreatSQL方式切换模式
 
 调用函数 `switch_to_multi_primary_mode()` 和 `switch_to_single_primary_mode()` 可以实现切换到多主、单主模式。
 
@@ -223,7 +223,7 @@ greatsql> start group_replication;
 Query OK, 0 rows affected (2.85 sec)
 ```
 
-##### 手动方式切换
+### 手动方式切换
 
 在命令行模式下，可以调用`group_replication_switch_to_single_primary_mode()` 和 `group_replication_switch_to_multi_primary_mode()` 来切换单主/多主模式
 
@@ -256,12 +256,12 @@ greatsql> select group_replication_switch_to_single_primary_mode('af39db70-6850-
 +-----------------------------------------------------------------------------------------+
 ```
 
-## 3. 添加新节点
+## 添加新节点
 
 - [MySQL Shell for GreatSQL方式添加新节点](#mysql-shell-for-greatsql方式添加新节点)
 - [手动方式添加新节点](#手动方式添加新节点)
 
-##### MySQL Shell for GreatSQL方式添加新节点
+### MySQL Shell for GreatSQL方式添加新节点
 
 首先，启动一个全新的空实例，确保可以用root账户连接登入。
 
@@ -308,7 +308,7 @@ The instance '172.16.16.13:3306' was successfully added to the cluster.
 
 确认新节点添加成功。
 
-##### 手动方式添加新节点
+### 手动方式添加新节点
 
 首先，要先完成MySQL Server初始化，创建好MGR专用账户、设置好MGR服务通道等前置工作，这部分的操作可以参考前文 [**3. 安装部署MGR集群**](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/deep-dive-mgr-03.md)。
 
@@ -332,12 +332,12 @@ greatsql> clone INSTANCE FROM GreatSQL@172.16.16.11:3306 IDENTIFIED BY 'GreatSQL
 
 全量复制完数据后，该节点会进行一次自动重启。重启完毕后，再次确认 `group_replication_group_name`、`group_replication_local_address`、`group_replication_group_seeds` 这些选项值是否正确，如果没问题，执行 `start group_replication` 后，该节点应该就可以正常加入集群了。
 
-## 4. 删除节点
+## 删除节点
 
 - [MySQL Shell for GreatSQL方式删除新节点](#mysql-shell-for-greatsql方式删除节点)
 - [手动方式添加新节点](#手动方式删除节点)
 
-##### MySQL Shell for GreatSQL方式删除节点
+### MySQL Shell for GreatSQL方式删除节点
 
 删除节点比较简单，调用 `remove_instance()` 函数即可：
 
@@ -354,13 +354,13 @@ The instance '172.16.16.13:3306' was successfully removed from the cluster.
 
 这就将该节点踢出集群了，并且会重置 `group_replication_group_seeds` 和 `group_replication_local_address` 两个选项值，之后该节点如果想再加入集群，只需调用 `add_instance()` 重新加回即可。
 
-##### 手动方式删除节点
+### 手动方式删除节点
 
 在命令行模式下，一个节点想退出MGR集群，直接执行 `stop group_replication` 即可，如果这个节点只是临时退出集群，后面还想加回集群，则执行 `start group_replication` 即可自动再加入。而如果是想彻底退出集群，则停止MGR服务后，执行 `reset master; reset slave all;` 重置所有复制（包含MGR）相关的信息就可以了。
 
-## 5. 异常退出的节点重新加回
+## 异常退出的节点重新加回
 
-##### MySQL Shell for GreatSQL方式重新加回
+### MySQL Shell for GreatSQL方式重新加回
 
 在MySQL Shell for GreatSQL里，可以调用 `rejoin_instance()` 函数将异常的节点重新加回集群：
 
@@ -371,13 +371,13 @@ Rejoining instance '172.16.16.13:3306' to cluster 'GreatSQLMGR'...
 The instance '172.16.16.13:3306' was successfully rejoined to the cluster.
 ```
 
-##### 手动方式重新加回
+### 手动方式重新加回
 
 当节点因为网络断开、实例crash等异常情况与MGR集群断开连接后，这个节点的状态会变成 **UNREACHABLE**，待到超过 `group_replication_member_expel_timeout` + 5 秒后，集群会踢掉该节点。
 
 等到这个节点再次启动并执行 `start group_replication`，正常情况下，该节点应能自动重新加回集群。如果设置了选项 `group_replication_start_on_boot = ON`，实例启动时也会尝试自动加回集群。
 
-## 6. 重启MGR集群
+## 重启MGR集群
 
 正常情况下，MGR集群中的Primary节点退出时，剩下的节点会自动选出新的Primary节点。当最后一个节点也退出时，相当于整个MGR集群都关闭了。这时候任何一个节点启动MGR服务后，都不会自动成为Primary节点，需要在启动MGR服务前，先设置 `group_replication_bootstrap_group=ON`，使其成为引导节点，再启动MGR服务，它才会成为Primary节点，后续启动的其他节点也才能正常加入集群。可自行测试，这里不再做演示。
 

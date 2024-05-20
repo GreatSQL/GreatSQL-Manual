@@ -4,7 +4,7 @@
 
 本文介绍MGR性能优化相关内容。
 
-## 1. 性能瓶颈
+## 性能瓶颈
 在MGR架构中，可能存在众多可能会影响整体性能，包括本地节点中常见的一些性能瓶颈点，也可能包括MGR层产生的。
 
 一般而言，造成MGR性能瓶颈的原因可能有以下几种情况：
@@ -17,20 +17,20 @@
 
 接下来，我们针对以上几种情况，分别进行瓶颈分析并给出优化建议。
 
-## 2. 优化建议
-### 2.1 本地节点存在性能瓶颈
+## 优化建议
+### 本地节点存在性能瓶颈
 在MGR中，可能各个节点服务器配置等级各不相同，所能承载的业务压力也不同。因此，各节点可能会分别产生不同的事务延迟，或者等待被应用的事务堆积越来越多。
 
 这种情况下，最有效的办法就是提升该节点的服务器配置级别，提高业务承载能力。同时，也要检查GreatSQL配置选项，是否有设置不合理的地方，并且可以考虑将选项 `innodb_flush_log_at_trx_commit` 和 `sync_binlog` 都设置为 0，以降低该节点的磁盘I/O负载，提升事务应用效率。
 
 在GreatSQL中，还可以设置选项 `group_replication_single_primary_fast_mode = 1`（要求所有节点都这么设置），启用快速单主模式，提升MGR事务应用效率。
 
-### 2.2 不恰当的流控
+### 不恰当的流控
 原生的流控机制有明显的缺陷，实际流控效果很有限，并且还可能会起到反作用，因此不建议启用原生的流控机制。即设置选项 `group_replication_flow_control_mode = DISABLED`。
 
 在GreatSQL中，除了关闭流控外，只需设置选项 `group_replication_flow_control_replay_lag_behind = 600`，控制MGR主从节点复制延迟阈值，当MGR主从节点因为大事务等原因延迟超过阈值时，就会触发优化后的新的流控机制。
 
-### 2.3 大事务造成延迟
+### 大事务造成延迟
 当Primary上有大事务产生时，很容易造成Secondary在应用大事务过程中存在延迟。
 
 因此，要尽量避免执行大事务。可以将大事务拆分成多个小事务，例如当执行load data导入大批数据时，就可以将导入文件切分成多个小文件。
@@ -54,12 +54,12 @@ greatsql> SELECT * FROM information_schema.innodb_trx WHERE
 ```
 当然了，上述这些监控SQL的阈值可根据实际情况自行适当调整。
 
-### 2.4 网络存在瓶颈
+### 网络存在瓶颈
 一般来说，最好是在局域网内运行MGR，甚至在同一个VLAN里运行，使得网络质量尽量有保证。
 
 如果怀疑是因为网络质量比较差导致MGR性能问题的话，可以通过设置选项 `group_replication_request_time_threshold` 记录那些因为网络延迟较大导致的MGR性能瓶颈（这个选项在GreatSQL中才有，MySQL不支持）。这个选项的单位是毫秒，如果是在局域网内，可以设置为10-50（毫秒）左右；如果是网络质量较差或者跨公网的环境，可以设置为100-10000（即100毫秒 - 10秒）之间。
 
-### 2.5 其他GreatSQL性能瓶颈因素
+### 其他GreatSQL性能瓶颈因素
 其他因素导致的GreatSQL性能瓶颈，可以参考这篇文章 [比较全面的MySQL优化参考（上篇）](https://mp.weixin.qq.com/s/V51yKzCKUSIm28sMhvQl8Q) 和 [比较全面的MySQL优化参考（下篇）](https://mp.weixin.qq.com/s/p2IBlGguf4Vaq_AO_jja9A)。
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**

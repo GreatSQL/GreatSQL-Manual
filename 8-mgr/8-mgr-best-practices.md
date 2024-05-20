@@ -4,7 +4,7 @@
 
 本文介绍MGR最佳实践参考以及使用MGR的约束限制。
 
-## 1. 参数选项设置
+## 参数选项设置
 下面是几个MGR相关参数选项设置建议：
 ```sql
 #建议只用单主模式
@@ -44,7 +44,7 @@ loose-group_replication_request_time_threshold = 100
 log_error_verbosity=3
 ```
 
-## 2. MGR相关约束
+## MGR相关约束
 下面是关于MGR使用的一些限制：
 - 所有表必须是InnoDB引擎。可以创建非InnoDB引擎表，但无法写入数据，在利用Clone构建新节点时也会报错（在GreatSQL中，可以设置选项 `enforce_storage_engine = InnoDB` 只允许使用InnoDB引擎，而禁用其他引擎）。
 - 所有表都必须要有主键。同上，能创建没有主键的表，但无法写入数据，在利用Clone构建新节点时也会报错。
@@ -77,7 +77,7 @@ log_error_verbosity=3
     - `slave_checkpoint_period = 2`
 
 
-## 3. MGR使用建议
+## MGR使用建议
 在使用MGR时，有以下几个建议：
 - 不同版本不要混用，尤其是不同大版本不要混用，要尽快完成升级。
 - 对同一个表的DDL和DML都只在同一个节点，否则可能会造成节点意外退出MGR。

@@ -4,7 +4,7 @@
 
 MGR和传统主从复制类似，在运行过程中主要关注各节点的运行状态，以及Secondary节点的事务是否有延迟。本文介绍如何监控MGR节点状态、事务状态等。
 
-## 1. 节点状态监控
+##  节点状态监控
 通过查询 `performance_schema.replication_group_members` 表即可知道MGR各节点的状态：
 ```sql
 greatsql> select * from performance_schema.replication_group_members;
@@ -30,7 +30,7 @@ greatsql> select * from performance_schema.replication_group_members;
 
 在节点状态发生变化时，或者有节点加入、退出时，表 `performance_schema.replication_group_members`的数据都会更新，各节点间会交换和共享这些状态信息，因此可以在任意节点查看。
 
-## 2. MGR事务状态监控
+##  MGR事务状态监控
 另一个需要重点关注的是Secondary节点的事务状态，更确切的说是关注待认证事务及待应用事务队列大小。
 
 可以执行下面的命令查看当前除了 **PRIMARY** 节点外，其他节点的 `trx_tobe_certified` 或 `relaylog_tobe_applied` 值是否较大：
@@ -51,7 +51,7 @@ greatsql> SELECT MEMBER_ID AS id, COUNT_TRANSACTIONS_IN_QUEUE AS trx_tobe_certif
 
 多提一下，在启用流控（flow control）时，上述两个值超过相应的阈值时（`group_replication_flow_control_applier_threshold` 和 `group_replication_flow_control_certifier_threshold` 默认阈值都是 25000），就会触发流控机制。
 
-## 3. 其他监控
+##  其他监控
 另外，也可以查看接收到的事务和已执行完的事务之间的差距来判断：
 ```sql
 greatsql> SELECT RECEIVED_TRANSACTION_SET FROM performance_schema.replication_connection_status WHERE  channel_name = 'group_replication_applier' UNION ALL SELECT variable_value FROM performance_schema.global_variables WHERE  variable_name = 'gtid_executed'\G
@@ -66,7 +66,7 @@ RECEIVED_TRANSACTION_SET: 6cfb873b-573f-11ec-814a-d08e7908bcb1:1-3078139
 
 另外，当原来的主节点发生故障，想要手动选择某个节点做为新的主节点时，也应该先判断哪个节点已执行的事务GTID值更大，应优先选择该节点。
 
-## 4. MySQL Shell for GreatSQL监控
+##  MySQL Shell for GreatSQL监控
 
 使用`status()`，可以查看当前各节点列表，以及各节点状态
 

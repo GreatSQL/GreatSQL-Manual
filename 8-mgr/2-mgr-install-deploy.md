@@ -6,9 +6,9 @@
 
 [点击此处查看使用MySQL Shell方式构建三节点MGR集群](#二使用mysql-shell构建mgr)
 
-## 一、利用手动方式构建MGR
+## 利用手动方式构建MGR
 
-### 1. 安装准备
+###  安装准备
 
 准备好下面三台服务器：
 
@@ -32,7 +32,7 @@ bin    COPYING-jemalloc  include  LICENSE         LICENSE-test  mysqlrouter-log-
 cmake  docs              lib      LICENSE.router  man           README                  README-test    share  var
 ```
 
-### 2. 初始化GreatSQL
+###  初始化GreatSQL
 首先准备好 */etc/my.cnf* 配置文件：
 ```sql
 #/etc/my.cnf
@@ -64,7 +64,7 @@ $ /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-fil
 
 此外，建议把GreatSQL加入系统systemd服务中，方便管理。具体方法可以参考这篇文章：[利用systemd管理GreatSQL](../4-install-guide/8-greatsql-with-systemd.md)。
 
-### 3. 初始化MGR第一个节点
+###  初始化MGR第一个节点
 接下来准备初始化MGR的第一个节点，也称之为 **引导节点**。
 
 修改 */etc/my.cnf* ，增加以下几行和MGR相关的配置参数：
@@ -128,7 +128,7 @@ greatsql> select * from performance_schema.replication_group_members;
 ```
 好了，第一个节点初始化完成。
 
-### 4. 继续设置另外两个节点
+###  继续设置另外两个节点
 继续使用下面这份 */etc/my.cnf* 配置文件模板：
 ```sql
 #my.cnf
@@ -179,7 +179,7 @@ greatsql> select * from performance_schema.replication_group_members;
 ```
 看到上面这个集群共有3个节点处于ONLINE状态，其中 *172.16.16.10* 是 **PRIMARY** 节点，其余两个都是 **SECONDARY** 节点，也就是说当前这个集群采用 **单主** 模式。如果采用多主模式，则所有节点的角色都是 **PRIMARY**。
 
-### 5. 向MGR集群中写入数据
+###  向MGR集群中写入数据
 接下来我们连接到 **PRIMARY** 节点，创建测试库表并写入数据：
 ```sql
 $mysql -h172.16.16.10 -uroot -Spath/mysql.sock
@@ -209,13 +209,13 @@ greatsql> select * from t1;
 
 到这里，就完成了三节点MGR集群的安装部署。
 
-## 二、使用MySQL Shell构建MGR
+## 使用MySQL Shell构建MGR
 
 本文介绍如何利用<a id="test2">MySQL Shell for GreatSQL + GreatSQL 8.0.32</a>构建一个三节点的MGR集群。
 
 > MySQL Shell for GreatSQL 的出现是因为在 GreatSQL 8.0.25-16 版本的时候引入了MGR仲裁节点（投票节点）的新特性，MySQL提供的MySQL Shell无法识别该特性，因此我们提供了 MySQL Shell for GreatSQL 版本
 
-### 1. 安装准备
+###  安装准备
 准备好下面三台服务器：
 
 | IP           | 端口 | 角色 |
@@ -239,7 +239,7 @@ Python 3.6.8
 
 接下来直接利用MySQL Shell for GreatSQL部署MGR
 
-### 2. 利用MySQL Shell构建MGR集群
+###  利用MySQL Shell构建MGR集群
 利用MySQL Shell for GreatSQL构建MGR集群比较简单，主要有几个步骤：
 1. 检查实例是否满足条件。
 2. 创建并初始化一个集群。
@@ -401,7 +401,7 @@ MySQL  172.16.16.10:3306 ssl  Py > c.describe()
 
 至此，利用MySQL Shell for GreatSQL构建一个三节点的MGR集群做好了，可以尝试向 Primary 节点写入数据观察测试。
 
-### 3. MySQL Shell接管现存的MGR集群
+###  MySQL Shell接管现存的MGR集群
 对于已经在运行中的MGR集群，也是可以用MySQL Shell for GreatSQL接管的。只需要在调用 `createCluster()` 函数时，加上 `adoptFromGR:true` 选项即可。实际上不加这个选项的话，MySQL Shell for GreatSQL也会自动检测到该MGR集群已存在，并询问是否要接管。
 
 在这里简单演示下：
@@ -447,7 +447,7 @@ Metadata Schema successfully removed.
 ```
 这样就可以接管了
 
-### 4. 使用MySQL Shell的窍门
+###  使用MySQL Shell的窍门
 在MySQL Shell for GreatSQL中，也是可以启用pager（分页器）的，像下面这样设置即可：
 ```
 mysqlsh> shell.enable_pager()

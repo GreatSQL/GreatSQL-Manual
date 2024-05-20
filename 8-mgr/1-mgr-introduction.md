@@ -2,7 +2,7 @@
 
 ---
 
-## 1. 为什么是MGR
+## 为什么是MGR
 MGR是MySQL Group Replication的缩写，即MySQL组复制。
 
 在以往，我们一般是利用MySQL的主从复制或半同步复制来提供高可用解决方案，但这存在以下几个比较严重的问题：
@@ -17,7 +17,7 @@ MGR是MySQL 5.7.17开始引入的，但随着5.7版本逐渐退出历史舞台�
 
 进一步提醒，推荐GreatSQL 8.0.22及之后的版本，整体会更稳定可靠，也有些很不错的新功能（不只是MGR方面的）。
 
-## 2. MGR技术概要
+## MGR技术概要
 MGR具备以下几个特点：
 1. 基于shared-nothing模式，所有节点都有一份完整数据，发生故障时可以直接切换。
 2. MGR提供了数据一致性保障，默认是**最终一致性**，可根据业务特征需要自行调整一致性级别。
@@ -38,7 +38,7 @@ MGR可以选择单主（Single-Primary）模式
 上述两种架构模式下，应用端通过MySQL Router连接后端在MGR服务，当后端节点发生切换时，Router会自动感知，对应用端来说几乎是透明的，影响很小，架构上也更灵活。
 
 
-## 3. MGR技术架构
+## MGR技术架构
 首先来个MGR的技术架构图：
 ![Group Replication Plugin Architecture](./1-single-primary-election-03.png)
 
