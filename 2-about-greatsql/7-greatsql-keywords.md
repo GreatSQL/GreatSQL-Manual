@@ -2,11 +2,11 @@
 ---
 
 
-在GreatSQL中，**保留字（Reserved Words）** 和 **关键字（Keywords）** 通常有特殊意义，比如`SELECT`/`DELETE`/`BIGINT` 都是保留字。
+在 GreatSQL 中，**保留字（Reserved Words）** 和 **关键字（Keywords）** 通常有特殊意义，比如`SELECT`/`DELETE`/`BIGINT` 都是保留字。
 
 当使用这些保留字（Reserved Words）作为表名、列名、内置函数名等对象名情况下，需要特殊处理才行（通常建议加上反引号"`"），避免报SQL语法错误。
 
-当使用关键字（Keywords）作为表明、列名、内置函数名等对象名时，无需特殊处理，不会报SQL语法错误。
+当使用关键字（Keywords）作为表明、列名、内置函数名等对象名时，无需特殊处理，不会报 SQL 语法错误。
 
 如下面的例子：
 ```
@@ -20,7 +20,7 @@ greatsql> CREATE TABLE `interval`(begin INT, end INT);
 Query OK, 0 rows affected (0.08 sec)
 ```
 
-另外，要注意的是，从GreatSQL 8.0.32-24开始，开启Oracle兼容模式（`SET sql_mode = ORACLE`）后，对象名都需要特殊处理才行，例如：
+另外，要注意的是，从 GreatSQL 8.0.32-24 开始，开启 Oracle 兼容模式（`SET sql_mode = ORACLE`）后，对象名都需要特殊处理才行，例如：
 ```
 greatsql> CREATE TABLE `interval`(`begin` INT, `end` INT);
 Query OK, 0 rows affected (0.02 sec)
@@ -32,7 +32,7 @@ Query OK, 0 rows affected (0.02 sec)
 ```
 在上面的两个例子中，用双引号 **"** 或 **`** 均可。
 
-综上，强烈建议在SQL开发、编写SQL语句时，对象名都用 **"** 或 **`** 将其引用起来，避免报SQL语法错误，保证应用程序的容错性。
+综上，强烈建议在 SQL 开发、编写 SQL 语句时，对象名都用 **"** 或 **`** 将其引用起来，避免报 SQL 语法错误，保证应用程序的容错性。
 
 通过查询视图 `information_schema.KEYWORDS` 也可以找到保留字和关键字的信息（其中RESERVED=1的表示是保留字，其余是关键字）：
 ```
@@ -57,7 +57,7 @@ greatsql> SELECT * FROM information_schema.KEYWORDS WHERE WORD LIKE '%int%';
 766 rows in set (0.00 sec)
 ```
 
-其中，GreatSQL相对MySQL新增的保留字、关键字如下：
+其中，GreatSQL 相对 MySQL 新增的保留字、关键字如下：
 ```
 +----------------------------------------+----------+
 | WORD                                   | RESERVED |
@@ -79,7 +79,7 @@ greatsql> SELECT * FROM information_schema.KEYWORDS WHERE WORD LIKE '%int%';
 | VARCHAR2                               |        1 |
 +----------------------------------------+----------+
 ```
-在使用过程中请注意上述保留字、关键字，默认都用 **"** 或 **`** 将其引用起来，避免报SQL语法错误，保证应用程序的容错性。
+在使用过程中请注意上述保留字、关键字，默认都用 **"** 或 **`** 将其引用起来，避免报 SQL 语法错误，保证应用程序的容错性。
 
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
