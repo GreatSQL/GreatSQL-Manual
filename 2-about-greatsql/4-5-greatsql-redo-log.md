@@ -2,7 +2,7 @@
 
 ## 前言
 
-**请注意：本文基于 GreatSQL 8.0.25 & GreatSQL 5.7.7-RC版本，在 GreatSQL8.0.30 Redo 发生变化，详情见：** [MySQL 8.0.30动态redo log初探](http://mp.weixin.qq.com/s?__biz=MjM5NzAzMTY4NQ==&mid=2653939142&idx=1&sn=25c8c20017c421024f9c7cdb13b50274&chksm=bd3b7fac8a4cf6ba21f71c628c0c6eb5edbde6ac2152306681e484e06899d3904fa805f7e47f&scene=21#wechat_redirect)
+**请注意：本文基于 GreatSQL 8.0.25 & GreatSQL 5.7.7-RC版本，在 GreatSQL 8.0.30 Redo 发生变化，详情见：** [MySQL 8.0.30动态redo log初探](http://mp.weixin.qq.com/s?__biz=MjM5NzAzMTY4NQ==&mid=2653939142&idx=1&sn=25c8c20017c421024f9c7cdb13b50274&chksm=bd3b7fac8a4cf6ba21f71c628c0c6eb5edbde6ac2152306681e484e06899d3904fa805f7e47f&scene=21#wechat_redirect)
 
 > 事务有4种特性：原子性、一致性、隔离性和持久性（ACID）。那么事务的四种特性到底是基于什么机制实现呢？
 

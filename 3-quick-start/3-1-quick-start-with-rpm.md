@@ -1,7 +1,7 @@
 # RPM安装
 ---
 
-本文档主要介绍如何用RPM包方式安装GreatSQL数据库，假定本次安装是在CentOS 8.x x86_64环境中安装，并且是以root用户身份执行安装操作。
+本节介绍如何用 RPM 包方式安装 GreatSQL 数据库，假定本次安装是在 CentOS 8.x x86_64 环境中安装，并且是以 root 用户身份执行安装操作。
 
 ## 下载安装包
 
@@ -29,9 +29,9 @@ $ systemctl disable iptables
 $ systemctl stop iptables
 ```
 
-另外，要先确认YUM源可用，因为安装GreatSQL时还要先安装其他依赖包，通过YUM安装最省事。
+另外，要先确认yum源可用，因为安装GreatSQL时还要先安装其他依赖包，通过yum安装最省事。
 
-如果需要配置YUM源，可以参考[这篇文档](https://developer.aliyun.com/mirror/centos)。
+如果需要配置yum源，可以参考[这篇文档](https://developer.aliyun.com/mirror/centos)。
 
 ## 安装依赖包
 
@@ -67,7 +67,7 @@ $ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-too
 
 如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](../4-install-guide/1-install-prepare.md)。
 
-其他部分依赖包，如果通过YUM还是无法安装，则加上 `--nodeps --force` 强制忽略即可，例如：
+其他部分依赖包，如果通过yum还是无法安装，则加上 `--nodeps --force` 强制忽略即可，例如：
 ```
 $ rpm -ivh greatsql*rpm
 error: Failed dependencies:

@@ -1,15 +1,15 @@
 # 容器化安装
 ---
 
-本文档主要介绍如何用Docker方式安装GreatSQL数据库，假定本次安装是在CentOS 8.x x86_64环境中安装，并且是以root用户身份执行安装操作。
+本节介绍如何用 Docker 方式安装 GreatSQL 数据库，假定本次安装是在 CentOS 8.x x86_64 环境中安装，并且是以 root 用户身份执行安装操作。
 
 ## 环境准备
 
-Docker安装GreatSQL与宿主机的操作系统无关，只要能够运行Docker的操作系统均可支持，比如Linux，Windows，macOS。在此之前，您需要先确认已经安装好Docker并能正常使用。
+Docker 安装 GreatSQL 与宿主机的操作系统无关，只要能够运行 Docker 的操作系统均可支持，比如 Linux，Windows，macOS。在此之前，您需要先确认已经安装好 Docker 并能正常使用。
 
-Docker是一个开源的应用容器引擎，基于Go语言并遵从Apache2.0协议开源。Docker可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的Linux机器上，也可以实现虚拟化。
+Docker 是一个开源的应用容器引擎，基于 Go 语言并遵从 Apache2.0 协议开源。Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。
 
-GreatSQL的Docker镜像仓库主页：[https://hub.docker.com/repository/docker/greatsql/greatsql](https://hub.docker.com/repository/docker/greatsql/greatsql)。
+GreatSQL Docker 镜像仓库主页：[https://hub.docker.com/repository/docker/greatsql/greatsql](https://hub.docker.com/repository/docker/greatsql/greatsql)。
 
 ## 安装步骤
 1. 启动Docker服务

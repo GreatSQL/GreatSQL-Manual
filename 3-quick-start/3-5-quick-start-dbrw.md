@@ -1,17 +1,18 @@
 # 访问数据库
 ---
 
-成功安装GreatSQL后，就可以登入连接GreatSQL数据库，并执行SQL语句来操作和管理数据库。
+成功安装 GreatSQL 后，就可以登入连接 GreatSQL 数据库，并执行 SQL 语句来操作和管理数据库。
 
-GreatSQL中除去少数新增的特性外，绝大多数语法和MySQL是完全一样的。
+GreatSQL 中除去部分新增的 [Oracle 兼容语法](../5-enhance/5-3-easyuse.md) 特性外，绝大多数语法和 MySQL 是完全一样的。
 
-MySQL相关SQL语法详见手册：[SQL Statements](https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html)。
+MySQL 相关 SQL 语法详见手册：[SQL Statements](https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html)。
 
 本文档中所有操作都采用命令行模式下的cli工具来演示。
 
-**连接登入GreatSQL数据库**
+## 连接登入GreatSQL数据库
 
 有多种方式连入：
+
 ```
 # 本机直接连入
 $ mysql -uroot -p
@@ -23,8 +24,10 @@ $ mysql -S/var/lib/mysql/mysql.sock -uroot -p
 $ mysql -h172.17.0.3 -uroot -p
 ```
 
-**修改root用户密码**
+## 修改root用户密码
+
 二进制及Docker方式快速安装GreatSQL后，数据库中的管理员用户root默认是空密码，安全起见，可以先修改密码：
+
 ```
 # 先查看当前用户
 greatsql> SELECT USER();
@@ -40,8 +43,10 @@ Query OK, 0 rows affected (0.02 sec)
 ```
 修改完成后，再次用root用户连入的话就可以用新密码了。
 
-**创建新用户**
+## 创建新用户
+
 平时操作数据库时，尽量少用最高权限的root用户，避免误操作删除数据。最好创建新用户，并且只授予部分权限。
+
 ```
 # 先以root用户登入
 $ mysql -uroot 
@@ -54,6 +59,8 @@ greatsql> CREATE USER GreatSQL@'172.17.0.0/16' IDENTIFIED BY 'GreatSQL-202X';
 greatsql> CREATE DATABASE GreatSQL;
 greatsql> GRANT ALL ON GreatSQL.* TO GreatSQL@'172.17.0.0/16';
 ```
+
+## 操作 GreatSQL 读写数据
 
 切换到普通用户GreatSQL登入，创建测试表，写入数据：
 ```

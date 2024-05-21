@@ -1,7 +1,7 @@
-# 通过GreatSQL客户端连接
+# 通过 CLI 客户端连接
 ---
 
-连接到GreatSQL客户端之前，请确认GreatSQL正常运行。
+连接到 GreatSQL 数据库之前，请确认 GreatSQL 服务正常运行。
 
 ```bash
 $ systemctl status greatsql

@@ -1,7 +1,7 @@
-# 通过GUI客户端连接
+# 通过 GUI 客户端连接
 ---
 
-通过GUI客户端连接需要修改用户的当前主机配置信息。
+通过 GUI 客户端连接需要修改用户的当前主机配置信息。
 
 ```sql
 greatsql> SELECT Host,User FROM mysql.user; 
@@ -16,15 +16,16 @@ greatsql> SELECT Host,User FROM mysql.user;
 4 rows in set (0.00 sec)
 ```
 
-Host列指定了允许用户登录所使用的IP
+`Host` 列指定了允许用户登录所使用的IP
 
-- user=root Host=192.168.1.1。这里的意思就是说root用户只能通过`192.168.1.1`的客户端去访问 
+- 如果 user=root, Host=192.168.1.1，表示 root表示 过 *192.168.1.1* 的客户端去访问 
+- 如果 user=root, Host=localhost，表示只能通过本机客户端去访问
+- 如果 Host=192.168.1.%，*%* 为通配符，表示 *192.168.1.%* 网段的客户端都可以连接
+- 如果 Host=% ，表示所有IP都有连接权限
 
-- user=root Host=localhost，表示只能通过本机客户端去访问
-- Host=192.168.1.%，%为通配符，那么表示只要是IP地址前缀为`192.168.1.*`的客户端都可以连接
-- Host=% ，表示所有IP都有连接权限
-
-> 不建议修改root用户的Host！建议对远程连接创建一个新用户
+> 不建议修改root用户的Host！
+>
+> 建议新建一个用于远程连接用户授权。
 
 创建一个新用户`greatsql`，密码为`GreatSQL@2024`，该用户拥有和root同权，并支持远程连接
 

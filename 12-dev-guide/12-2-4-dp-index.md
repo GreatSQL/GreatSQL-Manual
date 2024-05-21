@@ -143,17 +143,17 @@ ALTER TABLE tablename MODIFY id INT ;
 # 删除主键索引
 ALTER TABLE tablename DROP PRIMARY KEY;
 ```
-## 隐藏索引
+## 不可见索引
 在GreatSQL 5.7及更早版本中，索引的删除和恢复均依赖于显式操作。若删除索引后遇到错误，需再次显式创建以恢复，这对于数据量大或表结构复杂的场景而言，不仅操作繁琐，更将极大消耗系统资源，提升操作成本。
 
-自GreatSQL 8.0起，引入隐藏索引功能，让索引管理更加灵活。只需将待删索引设为隐藏状态，查询优化器将不再使用它，即便使用强制索引也无法触发。确认设置后，系统无响应影响，便可轻松实现索引的软删除。这种创新方式，简化了索引管理，提高了系统效率。
+自GreatSQL 8.0起，引入不可见索引功能，让索引管理更加灵活。只需将待删索引设为不可见状态，查询优化器将不再使用它，即便使用强制索引也无法触发。确认设置后，系统无响应影响，便可轻松实现索引的软删除。这种创新方式，简化了索引管理，提高了系统效率。
 
-同时，你想验证某个索引删除之后的查询性能影响，就可以暂时先隐藏该索引
+同时，你想验证某个索引删除之后的查询性能影响，就可以暂时先将该索引设置为不可见。
 
 索引默认是可见的，在使用`CREATE TABLE，CREATE INDEX`或者`ALTERTABLE`等语句时可以通过`VISIBLE`或者`INVISIBLE`关键词设置索引的可见性。
 
-### 在建表时候创建隐藏索引
-隐藏索引通过SQL语句INVISIBLE来实现，其语法形式如下：
+### 创建不可见索引
+不可见索引通过SQL语句INVISIBLE来实现，其语法形式如下：
 ```sql
 CREATE TABLE tablename(
 	propname1 type1 [ CONSTRAINT1],propname2 type2[ CONSTRAINT2],
@@ -166,11 +166,11 @@ CREATE TABLE tablename(
 ```sql
 greatsql> CREATE TABLE t1(a int, b int, INDEX idx_b (b) INVISIBLE);
 ```
-此时这个索引`idx_b`是隐藏的，无法使用。
+此时这个索引`idx_b`是不可见的，无法使用。
 
-### 已创建的表上创建隐藏索引
+### 已存在表上创建不可见索引
 
-为已经存在的表设置隐藏索引，其语法形式如下：
+为已经存在的表设置不可见索引，其语法形式如下：
 ```sql
 CREATE [UNIQUE | FULLTEXT | SPATIAL] INDEX index_name ON table_name (col_name[length] [ASC | DESC] ,...) [INVISIBLE|VISIBLE]
 ```
@@ -178,19 +178,19 @@ CREATE [UNIQUE | FULLTEXT | SPATIAL] INDEX index_name ON table_name (col_name[le
 ```sql
 greatsql> CREATE INDEX idx_b ON t1 (b) INVISIBLE;
 ```
-在t1表中创建隐藏索引idx_b，此时该索引不可见。
+在t1表中创建不可见索引idx_b，此时该索引不可见。
 
-### ALTER TABLE语句创建/修改索引可见性
+### 创建/修改不可见性索引
 #### ALTER TABLE创建索引
 语法如下：
 ```sql
 ALTER TABLE table_name ADD [UNIQUE | FULLTEXT | SPATIAL] INDEX index_name (col_name[length],...) INVISIBLE
 ```
-举例创建隐藏索引idx_b：
+举例创建不可见索引idx_b：
 ```sql
 greatsql> ALTER TABLE t1 ADD INDEX idx_b (b) INVISIBLE;
 ```
-在t1表中创建隐藏索引idx_b，此时该索引不可见。
+在t1表中创建不可见索引idx_b，此时该索引不可见。
 #### ALTER TABLE修改索引可见性
 已存在的索引可通过如下语句切换可见状态：
 ```sql
@@ -204,7 +204,7 @@ greatsql> ALTER TABLE t1 MODIFY INDEX idx_b INVISIBLE;
 ```sql
 greatsql> ALTER TABLE t1 MODIFY INDEX idx_b VISIBLE;
 ```
-> 隐藏索引时，其内容保持实时更新。若需长期隐藏，建议直接删除，以减少对插入、更新和删除操作的性能影响。
+> 不可见索引时，其内容保持实时更新。若长期不用，建议直接删除，以减少对插入、更新和删除操作的性能影响。
 
 ## 降序索引
 

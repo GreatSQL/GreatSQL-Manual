@@ -73,7 +73,9 @@ MySQL/GrreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select
 
 ## UPDATE执行慢排查分析
 
-###  查看当时实例系统性能情况（IO、CPU、memory），排除系统性能干扰
+###  排除系统负载干扰
+
+查看当时实例系统负载情况（IO、CPU、memory），排除系统负载干扰
 
 如果 CPU 高、IO 高、wa 大：
 

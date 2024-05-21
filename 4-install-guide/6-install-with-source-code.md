@@ -14,8 +14,8 @@ $ uname -a
 Linux gip 4.18.0-348.el8.x86_64 #1 SMP Tue Oct 19 15:14:17 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 ```
 ##  准备工作
-###  配置 Yum 源
-开始编译之前，建议先配置好 Yum 源，方便安装一些工具
+###  配置 yum 源
+开始编译之前，建议先配置好 yum 源，方便安装一些工具
 ```bash
 # 直接替换yum源文件，并替换部分资源
 $ curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo
@@ -30,7 +30,7 @@ $ yum makecache
 ```
 
 ###  安装 Docker
-下载 Docker 的 Yum 源，并清理生成新的 Yum 缓存
+下载 Docker 的 yum 源，并清理生成新的 yum 缓存
 ```bash
 $ wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo
 $ yum clean all

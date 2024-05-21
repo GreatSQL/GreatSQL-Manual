@@ -118,7 +118,7 @@ $ sysctl -p
 
 对于上述两种观点，请用户自行选择判断。
 
-## 检查和配置操作系统优化参数
+## 操作系统优化
 
 1. **修改数据库分区的 I/O Scheduler 设置为 noop / deadline**
 
@@ -233,11 +233,11 @@ $ systemctl daemon-reload
 
 ## 其他
 
-- **配置正确的YUM源，并提前安装一些依赖包**
+- **配置正确的yum源，并提前安装一些依赖包**
 
-要确认YUM源可用，因为安装GreatSQL时还要先安装其他依赖包，通过YUM安装最省事。
+要确认yum源可用，因为安装GreatSQL时还要先安装其他依赖包，通过yum安装最省事。
 
-如果需要配置YUM源，可以参考[这篇文档](https://developer.aliyun.com/mirror/centos)。
+如果需要配置yum源，可以参考[这篇文档](https://developer.aliyun.com/mirror/centos)。
 
 安装GreatSQL RPM包时，要先安装这些相关依赖包。
 ```

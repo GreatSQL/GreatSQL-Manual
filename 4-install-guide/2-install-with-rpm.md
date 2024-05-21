@@ -59,7 +59,7 @@ $ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-too
 
 如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](./1-install-prepare.md)。
 
-其他部分依赖包，如果通过YUM还是无法安装，则加上 `--nodeps --force` 强制忽略即可，例如：
+其他部分依赖包，如果通过yum还是无法安装，则加上 `--nodeps --force` 强制忽略即可，例如：
 ```
 $ rpm -ivh greatsql*rpm
 error: Failed dependencies:
@@ -256,7 +256,10 @@ performance_schema_instrument = '%lock%=on'
 
 ```
 
-### 新建数据库主目录，并修改权限模式及属主
+### 新建datadir
+
+新建数据库主目录，并修改权限模式及属主：
+
 ```
 $ mkdir -p /data/GreatSQL
 $ chown -R mysql:mysql /data/GreatSQL
@@ -431,7 +434,7 @@ GreatSQL数据库安装并初始化完毕。
 
 为了支持仲裁节点特性，需要安装GreatSQL提供的MySQL Shell发行包。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，找到 **7. GreatSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
 
-P.S，如果暂时不想使用仲裁节点特性的话，则可以继续使用相同版本的官方MySQL Shell安装包，可以直接用YUM方式安装，此处略过。
+P.S，如果暂时不想使用仲裁节点特性的话，则可以继续使用相同版本的官方MySQL Shell安装包，可以直接用yum方式安装，此处略过。
 
 本文场景中，选择下面的二进制包：
 

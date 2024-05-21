@@ -346,9 +346,8 @@ greatsql> SELECT gen_dictionary(ELT(gen_range(1,3), 'fruit', 'testdict'));
 1 row in set (0.00 sec)
 ```
 
-## 相关阅读
+**相关阅读**：[MySQL企业版之数据脱敏功能](https://mp.weixin.qq.com/s/74pUYuPRUp-BkvjI0ysoCg)
 
-- [MySQL企业版之数据脱敏功能](https://mp.weixin.qq.com/s/74pUYuPRUp-BkvjI0ysoCg)
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 

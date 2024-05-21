@@ -1,7 +1,7 @@
 # 二进制包安装
 ---
 
-本文档主要介绍如何用二进制包方式安装GreatSQL数据库，假定本次安装是在CentOS 8.x x86_64环境中安装，并且是以root用户身份执行安装操作。
+本节介绍如何用二进制包方式安装 GreatSQL 数据库，假定本次安装是在 CentOS 8.x x86_64 环境中安装，并且是以 root 用户身份执行安装操作。
 
 ## 下载安装包
 
@@ -10,7 +10,7 @@
 - GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal.tar.xz    
 
 ## 运行环境配置
-关闭selinux和防火墙
+关闭 selinux 和防火墙
 ```
 #关闭selinux
 $ setenforce=0
@@ -23,13 +23,13 @@ $ systemctl disable iptables
 $ systemctl stop iptables
 ```
 
-另外，要先确认YUM源可用，因为安装GreatSQL时还要先安装其他依赖包，通过YUM安装最省事。
+另外，要先确认yum源可用，因为安装GreatSQL时还要先安装其他依赖包，通过yum安装最省事。
 
-如果需要配置YUM源，可以参考[这篇文档](https://developer.aliyun.com/mirror/centos)。
+如果需要配置yum源，可以参考[这篇文档](https://developer.aliyun.com/mirror/centos)。
 
 ## 安装依赖包
 
-安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
+安装 GreatSQL 需要先安装其他依赖包，可执行下面命令完成：
 
 ```
 $ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
