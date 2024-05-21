@@ -38,6 +38,8 @@
 ## 2. MGR相对传统主从复制是不是会更耗CPU、内存和带宽等资源
 一定程度上来说，是的。因为MGR需要在多个节点间进行事务冲突检测，不过这方面的开销有限，总体来说也还好。
 
+如果不需要使用 MGR，请确认选项 `group_replication_start_on_boot` 不要设置为 *ON*；如果设置为 *ON*，则会尝试启动 MGR 服务进程，会显著消耗更多内存。详情参考案例：[GreatSQL内存使用问题](https://greatsql.cn/thread-755-1-1.html) 和 [docker 8.0.32-25 启动后内存使用率很高](https://greatsql.cn/thread-666-1-1.html)。
+
 ## 3. MGR中可以创建无主键的InnoDB表吗
 是可以的，并且会复制到所有MGR节点，但是仅能创建空表，业务上不能写入数据。
 
