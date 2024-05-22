@@ -45,17 +45,12 @@ jdbc:mysql://host:port/schema_name?useSSL=false&serverTimezone=Asia/Shanghai&use
 ```
 
 - `host`：提供 GreatSQL 数据库连接 IP
-
 - `port`：填写 GreatSQL 数据库连接端口
-
 - `schema_name`：访问的数据库名称
 - `useSSL=false`：不加密链接，在8.0版本以上都需要添加
-- `&serverTimezone=Asia/Shanghai`：中国上海时效
-
+- `&serverTimezone=Asia/Shanghai`：中国上海时区
 - `user_name`：连接的用户名
-
 - `password`：连接的密码
-
 - `characterEncoding`：字符编码，默认为UTF-8
 
 ## 使用Golang连接
