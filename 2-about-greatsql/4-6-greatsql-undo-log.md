@@ -59,6 +59,8 @@ greatsql> SHOW VARIABLES LIKE 'innodb_undo_logs';
 
 `innodb_undo_tablespaces:`设置构成rollback segment文件的数量，这样rollback segment可以较为平均地分布在多个文件中。设置该参数后，会在路径innodb_undo_directory看到undo为前缀的文件，该文件就代表rollback segment文件。
 
+提醒：在 MySQL 5.5 版本中的 InnoDB Versioin 为 1.1。从 5.6.11 开始，InnoDB Version 和 MySQL Version 一致，可以通过查看 `innodb_version` 来获取。
+
 - **回滚段与事务**
 
 1.每个事务只会使用一个回滚段（rollback segment），一个回滚段在同一时刻可能会服务于多个事务。
