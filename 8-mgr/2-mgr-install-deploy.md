@@ -248,7 +248,7 @@ Python 3.6.8
 首先，用管理员账号 root 连接到第一个节点：
 ```sql
 #在本地通过socket方式登入
-$ mysqlsh -Spath/mysql.sock root@localhost
+$ mysqlsh -Spath/mysql.sock -u root
 Please provide the password for 'root@.%2Fmysql.sock': ********
 Save password for 'root@.%2Fmysql.sock'? [Y]es/[N]o/Ne[v]er (default No): yes
 MySQL Shell 8.0.25

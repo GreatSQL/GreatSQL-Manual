@@ -490,7 +490,7 @@ $ pip3.6 install --user certifi
 用管理员账号 root 连接到第一个节点：
 ```
 #在本地通过socket方式登入
-$ mysqlsh -S/data/GreatSQL/mysql.sock root@localhost
+$ mysqlsh -S/data/GreatSQL/mysql.sock -u root
 Please provide the password for 'root@.%2Fmysql.sock': ********  <-- 输入root密码
 Save password for 'root@.%2Fmysql.sock'? [Y]es/[N]o/Ne[v]er (default No): yes  <-- 提示是否存储密码（视各公司安全规则而定，这里为了方便选择了存储密码）
 MySQL Shell 8.0.25

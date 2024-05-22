@@ -18,7 +18,7 @@
 - 错误日志文件为： */var/log/mysqld.log*
 - 监听TCP端口为：*3306*
 - CLI客户端为：*/usr/bin/mysql*
-- 管理工具位：*/usr/bin/mysqladmin*
+- 管理工具为：*/usr/bin/mysqladmin*
 - GreatSQL数据库中root账户的密码已修改为：`GreatSQL@202X`
 
 ## 安装样例数据库
