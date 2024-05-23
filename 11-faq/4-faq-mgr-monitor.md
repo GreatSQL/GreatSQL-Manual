@@ -46,6 +46,18 @@ RECEIVED_TRANSACTION_SET: 6cfb873b-573f-11ec-814a-d08e7908bcb1:1-3078139
 8. 个别节点的本地事务更多，例如误操作写入数据，也会无法加入MGR，这种情况需要重建本地节点。
 9. 个别节点的本地事务缺失太多，且加入MGR时无法自动完成恢复，这种情况比较少见，需要手动执行clone复制数据，或者其他类似操作。
 
+## 3. 向 MGR 集群中导入 mysqldump 备份文件报错
+
+在向 MGR 集群中导入 mysqldump 备份文件时遇到报错，错误信息类似下面这样：
+
+```sql
+ERROR 3098 (HY000) at line 1: The table does not comply with the requirements by an external plugin.
+```
+
+产生这个错误的原因是，要导入的 SQL 备份文件中，建表 DDL 不符合 MGR 约束要求，比如必须是 InnoDB 引擎表，必须还有显式定义的主键等。
+
+关于 MGR 的约束限制条件详情参考：[使用mgr有什么限制吗](./5-faq-others.md#_1-使用mgr有什么限制吗)
+
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
