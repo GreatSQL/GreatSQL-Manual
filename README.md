@@ -91,7 +91,7 @@ yum -y install jemalloc jemalloc-devel
         libjemalloc.so.1 (libc6,x86-64) => /usr/local/lib64/libjemalloc.so.1
         libjemalloc.so (libc6,x86-64) => /usr/local/lib64/libjemalloc.so
 ```
-jemalloc下载地址：https://centos.pkgs.org/8/epel-x86_64/jemalloc-5.2.1-2.el8.x86_64.rpm.html
+jemalloc下载地址：[https://centos.pkgs.org/8/epel-x86_64/jemalloc-5.2.1-2.el8.x86_64.rpm.html](https://centos.pkgs.org/8/epel-x86_64/jemalloc-5.2.1-2.el8.x86_64.rpm.html)
 
 ## 安装GreatSQL
 
