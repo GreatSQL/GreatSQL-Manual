@@ -134,12 +134,15 @@ greatsql> DROP TRIGGER trg_after_insert_orders;
 7. **不支持的用法**：触发器内的 SQL 语句不能使用 `CALL` 调用存储过程，不能使用 `LOAD DATA/XML` 语句。
 8. **错误处理**：如果在触发器中发生错误，触发器内的操作将被回滚，并且触发器所在的语句也会失败。触发器也是事务的一部分，当事务回滚，触发器中的操作也会回滚。
 
+## 小结
 
 触发器在数据库自动化操作和数据完整性维护中起着重要作用。它们可以用于自动执行复杂的业务逻辑，确保数据一致性和完整性。
 
 然而，在使用触发器时，需要注意潜在的性能影响和递归调用问题。
 
 通过合理设计和使用触发器，可以提高数据库的自动化水平和数据管理能力。
+
+从 GreatSQL 8.0.32-24 版本开始支持 Oracle 兼容，对触发器用法进行扩展，详情请参考：[Oracle 兼容之 Trigger](../5-enhance/sql-compat/5-3-easyuse-ora-sp-trigger.md)。
 
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**

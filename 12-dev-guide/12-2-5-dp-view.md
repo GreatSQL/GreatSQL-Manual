@@ -127,10 +127,13 @@ greatsql> DROP VIEW v1;
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-综上，视图是数据库设计中一种灵活且强大的工具，通过视图，用户可以简化复杂查询，增强数据安全性，提高查询的可维护性和重用性。
+## 小结
+
+视图是数据库设计中一种灵活且强大的工具，通过视图，用户可以简化复杂查询，增强数据安全性，提高查询的可维护性和重用性。
 
 然而，在使用视图时，需注意其性能影响、可更新性限制以及依赖关系，以确保视图的有效性和可靠性。
 
+从 GreatSQL 8.0.32-24 版本开始支持 Oracle 兼容，对创建视图用法进行扩展，支持 `CREATE FORCE VIEW` 语法，详情请参考：[Oracle 兼容之 CREATE FORCE VIEW](../5-enhance/sql-compat/5-3-easyuse-ora-syntax-createforceview.md)。
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
