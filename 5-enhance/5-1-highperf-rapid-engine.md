@@ -800,6 +800,10 @@ GreatSQL Rapid引擎性能表现优异，在32C64G测试机环境下，TPC-H 100
 - 当前Rapid引擎还处于Alpha版本阶段，尚未达到GA（General Availability）阶段，重要线上生产环境中使用需谨慎。
 - 数据库实例重启后，查询个别Rapid引擎表可能会提示无法使用Rapid引擎加速，这时可以尝试执行 `ALTER TABLE ... SECONDARY_LOAD` 将该表再次加载到Rapid引擎中，实际上无需重新加载一次，速度非常快，之后就可以使用Rapid引擎了。
 - 由于底层存储结构的差异，用户从InnoDB主引擎和Rapid辅助引擎分别读取数据时，如果不加相同的排序规则，则读取到的数据顺序可能不一致。
+- 运行 OLAP 类查询通常需要更多内存，运行结束后内存可能无法立即回收，导致再次执行 OLAP 查询时会报告类似下面的错误，这种情况下可以耐心再等一段时间后再执行查询，应该就可以了。如果还是会报错，可以尝试适当加大 `rapid_memory_limit` 选项值。
+```
+ERROR 3877 (HY000): Out of Memory Error: Failed to allocate block of 8192 bytes
+```
 
 
 
