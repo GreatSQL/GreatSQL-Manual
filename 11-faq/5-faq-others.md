@@ -405,6 +405,24 @@ $ sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
 再次重试，应该就可以了。
 
 
+## 21. 为什么用 GreatSQL 异常重启，日志中的报错信息有 A long semaphore wait 字样
+
+出现这种情况时，通常是因为 InnoDB 内部的 mutex 或者 lock 互斥等待太久，日志中一般还包含类似下面的内容
+
+```
+Thread XXX has waited at XXX line XXX for 928 seconds the semaphore
+```
+
+这可能是因为当时系统负载太高了，也可能是因为叠加了某些 bug 导致。当信号量互斥等待事件 持续太久（约900秒）后，GreatSQL 就会自行重启（不重启的话其他啥也做不了，也没意义）。
+
+几个可能的原因及可选解决办法
+1. 垃圾SQL太多，需要进行优化垃圾SQL，能看到有些事务修改多行记录，看起来效率也很低
+2. 数据库层面关闭自适应哈希索引（innodb_adaptive_hash_index = OFF），也可能是这个引起的
+3. 加强监控，不少事务活跃时间太久了，一直没提交。垃圾SQL（事务）长时间不结束，会占用更多资源，之后一起玩完。参考 [监控告警](../6-oper-guide/3-monitoring-and-alerting.md)。
+4. 可能系统层I/O设备有故障，能看到多个事务处于PREPARED状态，此时可能因为物理I/O设备故障导致无法提交/刷新数据。
+5. 最后建议升级到 GreatSQL 最新版本，相对更稳定可靠。
+
+
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
 - **扫码关注微信公众号**
