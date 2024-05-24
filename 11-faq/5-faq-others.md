@@ -361,6 +361,49 @@ NUMA 是一种用于多处理器系统的内存设计，旨在提高系统性能
 
 通过以上方法，应该可以在一定程度上缓解 `innodb_numa_interleave = ON` 造成的启动变慢问题。
 
+## 20. 为什么用 systemd 启动 GreatSQL 时，会报错提示 Failed to execute command: Permission denied
+
+问题现象：GreatSQL 的 mysqld 二进制文件权限设置正确，手工调用也能正常启动，但只要是通过 `systemd` 启动时就会报告 `Permission denied` 错误，例如：
+
+
+```
+systemd[1549425]: greatdb.service: Failed to execute command: Permission denied
+systemd[1549425]: greatdb.service: Failed at step EXEC spawning /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld: Permission denied
+-- Subject: Process /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld could not be executed
+-- Defined-By: systemd
+-- Support: https://access.redhat.com/support
+--
+-- The process /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld could not be executed and failed.
+--
+-- The error number returned by this process is 13.
+```
+
+文件权限设置是正常的
+
+```
+$ ls -la /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld 
+-rwxr-xr-x 1 mysql mysql 383759416 Feb  2 23:36 /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
+```
+
+出现这种情况，应该是 **SELinux* 导致的。
+
+在开启 **SELinux** 时，如果先把二进制可执行文件放在用户主目录，然后移动到其他目标目录的，就会由于文件的 **安全上下文** 不正确导致上述问题。
+
+可以采用下面方法修复：
+
+1. 首先，执行 `restorecon` 命令将文件和目录的SELinux安全上下文重置为默认值
+```shell
+$ restorecon -rv /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/
+```
+
+2. 关闭 SELinux
+```shell
+$ setenforce 0
+$ sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
+```
+
+再次重试，应该就可以了。
+
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
