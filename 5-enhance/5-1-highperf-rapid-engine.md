@@ -785,6 +785,8 @@ GreatSQL Rapid引擎性能表现优异，在32C64G测试机环境下，TPC-H 100
 | TPC-H 100GB | 184570593436 | 28728373248 | 6.42 | 
 | TPC-H 500GB | 1167795142848 | 146723045376 | 7.96 | 
 
+更多关于 Rapid 引擎 TPC-H 测试报告详情请参考：[GreatSQL TPC-H 性能测试报告](../10-optimze/3-3-benchmark-greatsql-tpch-report.md)。
+
 ## 构建专属AP查询服务器
 
 可以利用主从复制或MGR组复制方式构建一个读写分离场景，主节点上仍采用InnoDB引擎，选择一个专属从节点响应AP查询请求，该从节点上的数据表加上Rapid辅助引擎，这样就可以在从节点利用Rapid引擎响应AP查询请求了。
