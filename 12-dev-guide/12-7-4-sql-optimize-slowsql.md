@@ -248,7 +248,7 @@ possible_keys: c
 另外，在 GreatSQL 中还支持通过设置以下几个参数来实现自动轮转 slow query log 功能：
 
 - max_slowlog_size，设置每个 slow query log 文件大小，默认值为 0，即表示不自动轮转。
-- max_slowlog_files，设置开启 slow query log 自动乱转后，最多保留的文件数目。
+- max_slowlog_files，设置开启 slow query log 自动轮转后，最多保留的文件数目。
 
 启用 slow query log 自动轮转后，每个 slow query log 都会添加和 binlog 文件类似的序号后缀，例如：`slow_query_log_file.000001`。
 
