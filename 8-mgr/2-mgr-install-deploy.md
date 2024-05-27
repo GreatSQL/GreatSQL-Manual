@@ -2,9 +2,7 @@
 
 ---
 
-本文介绍如何利用手动方式和MySQL Shell方式用`GreatSQL-8.0.32-25`构建一个三节点的MGR集群
-
-[点击此处查看使用MySQL Shell方式构建三节点MGR集群](#二使用mysql-shell构建mgr)
+本文介绍如何利用手动方式和 MySQL Shell for GreatSQL（以下简称 GreatSQL Shell）方式基于 GreatSQL 8.0.32-25 构建一个三节点的MGR集群。
 
 ## 利用手动方式构建MGR
 
@@ -209,11 +207,11 @@ greatsql> select * from t1;
 
 到这里，就完成了三节点MGR集群的安装部署。
 
-## 使用MySQL Shell构建MGR
+## 使用GreatSQL Shell构建MGR
 
-本文介绍如何利用<a id="test2">MySQL Shell for GreatSQL + GreatSQL 8.0.32</a>构建一个三节点的MGR集群。
+接下来介绍如何利用 GreatSQL Shell 基于 GreatSQL 8.0.32-32 构建一个三节点的MGR集群。
 
-> MySQL Shell for GreatSQL 的出现是因为在 GreatSQL 8.0.25-16 版本的时候引入了MGR仲裁节点（投票节点）的新特性，MySQL提供的MySQL Shell无法识别该特性，因此我们提供了 MySQL Shell for GreatSQL 版本
+> 只有 GreatSQL Shell 支持仲裁节点（投票节点）特性，MySQL Shell 社区版不支持。
 
 ###  安装准备
 准备好下面三台服务器：
@@ -226,21 +224,32 @@ greatsql> select * from t1;
 
 确保三个节点间的网络是可以互通的，并且没有针对3306和33061端口的防火墙拦截规则。
 
-首先我们先下载MySQL Shell for GreatSQL，下载地址在GreatSQL的gitee仓库，和我们的GreatSQL 8.0.32-25新版本放在一起：https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25
+打开 [GreatSQL Shell 二进制包文件](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25) 并下载对应版本安装包，更推荐利用 [Docker 运行 GreatSQL Shell](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)，更便捷省事。
 
-进入下载文件列表最下方就是我们的MySQL Shell for GreatSQL，大家按机器和架构下载对应版本~
+下载时要选择和操作系统相同 glibc 版本的二进制包，用下面方法确认
 
-MySQL Shell for GreatSQL 需要 Python 3 的环境，如果没有环境的话，需要安装`yum install python3 -y`
+```shell
+$ ldd --version | grep GNU
+ldd (GNU libc) 2.28
 
-```bash
-$ python3 -V
-Python 3.6.8
+$ uname -p
+x86_64
+```
+可以看到是 x86_64 平台下的 glibc 2.28 版本，因此选择二进制包文件：**greatsql-shell-8.0.32-25-glibc2.28-x86_64.tar.xz**。
+
+由于编译环境限制，我们没有提供全平台的 GreatSQL Shell 二进制包，如果有需要，请参考 [GreatSQL Shell Build仓库](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build) 自行构建适合您的运行环境的二进制包文件。
+
+运行 GreatSQL Shell 8.0.32-25 需要依赖 Python 3.8 环境，需要先执行下面命令完成相关依赖安装
+
+```shell
+$ yum install -y libssh python38 python38-libs python38-pyyaml
+$ pip3.8 install --user certifi pyclamd
 ```
 
-接下来直接利用MySQL Shell for GreatSQL部署MGR
+接下来直接利用 GreatSQL Shell 部署MGR
 
-###  利用MySQL Shell构建MGR集群
-利用MySQL Shell for GreatSQL构建MGR集群比较简单，主要有几个步骤：
+###  利用 GreatSQL Shell 构建MGR集群
+利用 GreatSQL Shell 构建MGR集群比较简单，主要有几个步骤：
 1. 检查实例是否满足条件。
 2. 创建并初始化一个集群。
 3. 逐个添加实例。
@@ -251,7 +260,7 @@ Python 3.6.8
 $ mysqlsh -Spath/mysql.sock -u root
 Please provide the password for 'root@.%2Fmysql.sock': ********
 Save password for 'root@.%2Fmysql.sock'? [Y]es/[N]o/Ne[v]er (default No): yes
-MySQL Shell 8.0.25
+MySQL Shell 8.0.32
 ...
 ```
 执行命令 `\status` 查看当前节点的状态，确认连接正常可用。
@@ -292,7 +301,7 @@ Successfully enabled parallel appliers.
 $ mysqlsh --uri GreatSQL@172.16.16.10:3306
 Please provide the password for 'GreatSQL@172.16.16.10:3306': ********
 Save password for 'GreatSQL@172.16.16.10:3306'? [Y]es/[N]o/Ne[v]er (default No): yes
-MySQL Shell 8.0.25
+MySQL Shell 8.0.32
 ...
 #定义一个变量名c，方便下面引用
 MySQL  172.16.16.10:3306 ssl  Py > c = dba.create_cluster('MGR1');
@@ -399,10 +408,10 @@ MySQL  172.16.16.10:3306 ssl  Py > c.describe()
 ```
 或者执行 `c.status()` 可以打印出集群更多的信息。
 
-至此，利用MySQL Shell for GreatSQL构建一个三节点的MGR集群做好了，可以尝试向 Primary 节点写入数据观察测试。
+至此，利用 GreatSQL Shell 构建一个三节点的MGR集群做好了，可以尝试向 Primary 节点写入数据观察测试。
 
-###  MySQL Shell接管现存的MGR集群
-对于已经在运行中的MGR集群，也是可以用MySQL Shell for GreatSQL接管的。只需要在调用 `createCluster()` 函数时，加上 `adoptFromGR:true` 选项即可。实际上不加这个选项的话，MySQL Shell for GreatSQL也会自动检测到该MGR集群已存在，并询问是否要接管。
+###   GreatSQL Shell 接管现存的MGR集群
+对于已经在运行中的MGR集群，也是可以用 GreatSQL Shell 接管的。只需要在调用 `createCluster()` 函数时，加上 `adoptFromGR:true` 选项即可。实际上不加这个选项的话，GreatSQL Shell 也会自动检测到该MGR集群已存在，并询问是否要接管。
 
 在这里简单演示下：
 ```sql
@@ -447,15 +456,15 @@ Metadata Schema successfully removed.
 ```
 这样就可以接管了
 
-###  使用MySQL Shell的窍门
-在MySQL Shell for GreatSQL中，也是可以启用pager（分页器）的，像下面这样设置即可：
+###  使用 GreatSQL Shell 的窍门
+在 GreatSQL Shell 中，也是可以启用pager（分页器）的，像下面这样设置即可：
 ```
 mysqlsh> shell.enable_pager()
 mysqlsh> shell.options["pager"]="less -i -n -S";
 Pager has been set to 'less -i -n -S'.
 ```
 
-在用MySQL Shell for GreatSQL连接时，也可以加上 `--dba-log-sql=2 --log-level=debug3` 参数，以启用debug模式，并记录运行过程中实际调用的SQL命令，默认日志文件是 `~/.mysqlsh/mysqlsh.log`。
+在用 GreatSQL Shell 连接时，也可以加上 `--dba-log-sql=2 --log-level=debug3` 参数，以启用debug模式，并记录运行过程中实际调用的SQL命令，默认日志文件是 `~/.mysqlsh/mysqlsh.log`。
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
