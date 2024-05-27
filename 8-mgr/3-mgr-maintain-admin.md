@@ -4,7 +4,31 @@
 
 本文描述MGR集群的日常管理维护操作，包括主节点切换，单主&多主模式切换等，文档中的操作以MySQL Shell for GreatSQL（以下简称 GreatSQL Shell）与手动方式均有讲解
 
-现在有个三节点的MGR集群：
+## 安装 GreatSQL Shell
+
+打开 [GreatSQL Shell 二进制包文件](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25) 并下载对应版本安装包，更推荐利用 [Docker 运行 GreatSQL Shell](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)，更便捷省事。
+
+下载时要选择和操作系统相同 glibc 版本的二进制包，用下面方法确认
+
+```shell
+$ ldd --version | grep GNU
+ldd (GNU libc) 2.28
+
+$ uname -p
+x86_64
+```
+可以看到是 x86_64 平台下的 glibc 2.28 版本，因此选择二进制包文件：**greatsql-shell-8.0.32-25-glibc2.28-x86_64.tar.xz**。
+
+由于编译环境限制，我们没有提供全平台的 GreatSQL Shell 二进制包，如果有需要，请参考 [GreatSQL Shell Build仓库](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build) 自行构建适合您的运行环境的二进制包文件。
+
+运行 GreatSQL Shell 8.0.32-25 需要依赖 Python 3.8 环境，需要先执行下面命令完成相关依赖安装
+
+```shell
+$ yum install -y libssh python38 python38-libs python38-pyyaml
+$ pip3.8 install --user certifi pyclamd
+```
+
+接下来准备好一个包含仲裁节点的三节点 MGR 集群：
 
 ```sql
 greatsql> select * from performance_schema.replication_group_members;
@@ -22,6 +46,7 @@ greatsql> select * from performance_schema.replication_group_members;
 ```
 $ mysqlsh --uri GreatSQL@172.16.16.10:3306
 ```
+
 
 ## 切换主节点
 
