@@ -279,6 +279,10 @@ GreatSQL 8.0.32-25 基于Percona Server for MySQL 8.0.32，它在 MySQL 8.0.32 �
 
 GreatSQL同时也是gitee（码云）平台上的GVP项目，详见：[https://gitee.com/gvp/database-related](https://gitee.com/gvp/database-related) **数据库相关**类目。
 
+## 温馨提示
+
+[如果您在使用 GreatSQL，请告诉我们，将有机会获得精美礼品和免费技术支持](https://wj.qq.com/s2/11543483/9e09/)。
+
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
 - **扫码关注微信公众号**
