@@ -1,6 +1,8 @@
 # GreatSQL高可用特性之仲裁节点
 ---
 
+## 概要
+
 GreatSQL中新增仲裁节点（投票节点）角色，使得可以用更低的服务器成本实现更高可用。
 
 该节点仅参与MGR投票仲裁，不存放实际数据，也无需执行DML操作，因此可以用一般配置级别的服务器，在保证MGR可靠性的同时还能降低服务器成本。
@@ -23,7 +25,9 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 ```
 可以看到，`MEMBER_ROLE` 这列显示为 **ARBITRATOR**，表示该节点是一个仲裁节点。
 
-再看压测期间各节点负载数据，先看 **Primary** 节点：
+## 仲裁节点产生的系统负载很低
+
+对一个包含仲裁节点的 MGR 集群执行 [sysbench 性能压测](../10-optimze/3-1-benchmark-sysbench.md)，观察压测期间各节点负载数据，先看 **Primary** 节点：
 ```
 $ top
 ...
@@ -80,7 +84,10 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 ```
 可以看到负载明显小了很多，这就可以在一个服务器上跑多个仲裁节点角色。
 
-**注意：** 在有仲裁节点的情况下，将单主切换成多主模式时，需要把投票节点先关闭再机型切换，否则可能会导致切换失败，并且仲裁节点报错退出MGR。
+## 注意事项
+
+1. 在有仲裁节点的情况下，将单主切换成多主模式时，需要把投票节点先关闭再机型切换，否则可能会导致切换失败，并且仲裁节点报错退出MGR。
+2. 仲裁节点在 GreatSQL 中才支持，MySQL 社区版不支持，因此也无法采用 MySQL Shell 社区版管理包含仲裁节点的 MGR 集群，需要改用 [GreatSQL Shell](../8-mgr/3-mgr-maintain-admin.md) 进行管理。
 
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
