@@ -6,7 +6,7 @@
 ## 关于MDL锁
 在[**UPDATE执行慢排查分析**](./2-4-slow-update-diag.md)一文中提到，当执行`SHOW PROCESSLIST`时，可能会看到一种状态是`Waiting for XX metadata lock`，这就意味着当前发生了MDL锁等待。
 
-MDL锁全称为Metadata Lock（元数据锁）。在MySQL/GreatSQL中，DDL是不不支持事务特性的，当事务和DDL同时操作同一个表，可能会出现各种意想不到问题，如事务特性被破坏、binlog顺序错乱等。为了解决类似这些问题，MySQL在5.5开始引入了MDL锁(Metadata Locking)。也就是说，MDL锁的作用是保证表元数据的一致性，避免DDL和DML并行导致元数据不一致。
+MDL锁全称为Metadata Lock（元数据锁）。在MySQL/GreatSQL中，DDL是不支持事务特性的，当事务和DDL同时操作同一个表，可能会出现各种意想不到问题，如事务特性被破坏、binlog顺序错乱等。为了解决类似这些问题，MySQL在5.5开始引入了MDL锁(Metadata Locking)。也就是说，MDL锁的作用是保证表元数据的一致性，避免DDL和DML并行导致元数据不一致。
 
 MDL锁的范围主要包括以下几种：
 - GLOBAL级，即全局读锁，例如执行`FLUSH TABLES WITH READ LOCK`。
