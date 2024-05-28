@@ -93,7 +93,7 @@ ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: Y
 
 可能是以下几种情况导致 GreatSQL 服务器端拒绝了客户端的连接请求。
 
-1. 密码密码错误
+1. 密码错误
 2. 用户名不存在
 3. 用户的主机限制
 4. 防火墙问题
