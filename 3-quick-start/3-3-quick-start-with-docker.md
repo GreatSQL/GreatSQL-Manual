@@ -11,6 +11,13 @@ Docker 是一个开源的应用容器引擎，基于 Go 语言并遵从 Apache2.
 
 GreatSQL Docker 镜像仓库主页：[https://hub.docker.com/repository/docker/greatsql/greatsql](https://hub.docker.com/repository/docker/greatsql/greatsql)。
 
+本文使用的 Docker 版本是 20.10.10
+
+```shell
+$ docker --version
+Docker version 20.10.10, build b485636
+```
+
 ## 安装步骤
 1. 启动Docker服务
 ```

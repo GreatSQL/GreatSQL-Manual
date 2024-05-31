@@ -3,6 +3,20 @@
 
 本文详细介绍如何在Docker中部署GreatSQL，并且构建一个MGR集群。
 
+本文使用的 Docker 版本是 20.10.10
+
+```shell
+$ docker --version
+Docker version 20.10.10, build b485636
+```
+
+docker-compose 版本是 2.15.0
+
+```shell
+$ docker-compose --version
+Docker Compose version v2.15.0 
+```
+
 ##  安装Docker
 直接用yum/dnf安装Docker，非常省事
 ```
