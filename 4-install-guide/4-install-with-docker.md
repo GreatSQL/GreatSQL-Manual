@@ -187,7 +187,7 @@ Creating mgr4 ... done
 
 查看运行状态：
 ```
-$ docker-compose -f /data/docker-compose/mgr-3nodes.yml up -d
+$ docker-compose -f /data/docker-compose/mgr-3nodes.yml ps
 Name             Command              State               Ports
 ----------------------------------------------------------------------------
 mgr2   /docker-entrypoint.sh mysqld   Up      3306/tcp, 33060/tcp, 33061/tcp
