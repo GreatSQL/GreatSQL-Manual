@@ -34,7 +34,6 @@ $ systemctl start docker
 拉取GreatSQL官方镜像
 ```
 $ docker pull greatsql/greatsql
-docker pull greatsql/greatsql
 Using default tag: latest
 Trying to pull repository docker.io/greatsql/greatsql ...
 latest: Pulling from docker.io/greatsql/greatsql
