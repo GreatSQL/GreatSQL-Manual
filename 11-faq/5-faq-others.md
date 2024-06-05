@@ -184,7 +184,7 @@ greatsql> ALTER TABLE t1 SECONDARY_LOAD;
 |T3|insert into t1 select 6; -- 不会被阻塞（如果是在同一个节点上执行，RR级别，这个SQL下会被阻塞）<br/>commit;<br/>select * from t1;<br/>\|  1 \|<br/>\|  3 \|<br/>\|  6 \|<br/>\| 10 \|||
 |T4||select * from t1 where id>=3 for update; -- 这里无论是否加for update，都会触发死锁<br/>ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting transaction|
 
-综上，在MGR中，即便本地节点选择的事RR级别，依然无法跨节点实现gap lock加锁，因此也就无法跨节点保证RR级别。但**如果写入事务都在同一个节点的话，则设置RR是有意义的**。
+综上，在MGR中，即便本地节点选择的是RR级别，依然无法跨节点实现gap lock加锁，因此也就无法跨节点保证RR级别。但**如果写入事务都在同一个节点的话，则设置RR是有意义的**。
 
 ## 11. GreatSQL性能表现如何
 
