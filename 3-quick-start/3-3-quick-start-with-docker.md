@@ -88,6 +88,36 @@ Threads: 2  Questions: 6  Slow queries: 0  Opens: 119  Flush tables: 3  Open tab
 
 至此，在Docker中安装GreatSQL数据库完成。
 
+如果想要在 Docker 容器中执行某个 SQL 脚本，需要先将该 SQL 脚本拷贝到容器中，再执行相应的 SQL 脚本，如下例所示：
+
+```shell
+# 先从宿主拷贝文件到容器中
+$ docker cp /opt/greatsql-test.sql greatsql:/tmp/
+```
+
+其中
+- `docker cp` 表示发起一个 Docker 容器拷贝操作
+- `/tmp/greatsql-test.sql` 是宿主环境下的文件
+- `greatsql` 是容器名
+- `/tmp/` 是容器中的目录
+
+接下来，可以直接在宿主环境中调用执行容器中的 SQL 脚本
+
+```shell
+$ docker exec -it greatsql bash -c "mysql -f < /tmp/greatsql-test.sql"
+```
+
+上述方法有可能由于一些环境变量等原因无法执行，这时可以先进入容器再执行 SQL 脚本
+
+```shell
+# 先进入容器
+$ docker exec -it greatsql bash
+
+# 再在容器中执行一个 SQL 脚本
+$ mysql -f < /tmp/greatsql-test.sql
+```
+这样就可以了。
+
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
