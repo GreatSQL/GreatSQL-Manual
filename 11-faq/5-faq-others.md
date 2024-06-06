@@ -116,6 +116,7 @@ greatsql> show global status like 'PQ_%';
 | PQ_threads_refused | 82      |
 | PQ_threads_running | 4       |  <-- 并行线程4
 ```
+相较而言，建议采用 [Rapid 引擎](../5-enhance/5-1-highperf-rapid-engine.md) 提升查询效率，其提升效果更为明显。
 
 ## 8. 为什么一个表已经设置了SECONDARY_ENGINE=rapid却还无法使用Rapid引擎加速查询
 
