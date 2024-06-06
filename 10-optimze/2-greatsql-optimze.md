@@ -33,18 +33,6 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 - slave_preserve_commit_order = 1
 从节点回放事务时，要保证事务顺序，避免和主节点数据不一致。
 
-- loose-force_parallel_execute = ON
-启用InnoDB并行查询优化功能。
-
-- loose-parallel_default_dop = 8
-设置每个SQL语句的并行查询最大并发度。
-
-- loose-parallel_max_threads = 64
-设置系统中总的并行查询线程数，可以和最大逻辑CPU数量一样。
-
-- loose-parallel_memory_limit = 12G
-并行执行时leader线程和worker线程使用的总内存大小上限，可以设置物理内存的5-10%左右
-
 - loose-group_replication_flow_control_mode = "DISABLED"
 关闭MySQL原生的MGR流控模式，因为其作用不大。
 
@@ -63,12 +51,25 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 - loose-group_replication_primary_election_mode = GTID_FIRST
 设置MGR选主模式为GTID_FIRST，在发生主节点切换时，会优先选择事务应用效率最高的那个节点。
 
-- innodb_io_capacity = 4000
-- innodb_io_capacity_max = 8000
+- innodb_io_capacity = 20000
+- innodb_io_capacity_max = 40000
 配置高端PCIe SSD卡的话，则可以调整的更高，比如 50000 - 80000
+
+- innodb_read_io_threads = 16
+- innodb_write_io_threads = 16
+设置InnoDB I/O读写线程数，默认值均为4，在高I/O负载场景下可以适当调大。
 
 - innodb_thread_concurrency = 0 
 不限制InnoDB并行线程数，使其发挥最大性能。但如果业务端发起的业务请求并行度总是超过服务器逻辑CPU数，则可能导致CPU调度频繁等待，此时可以考虑将本选项设置为逻辑CPU的数量。
+
+- loose-rapid_memory_limit = 1G
+设置Rapid引擎运行过程中可使用的内存，默认值1G。如果数据量较大，也应适当提高，一般可以设置为InnoDB表空间文件总大小的10% ~ 30%。
+
+- loose-rapid_worker_threads = 8
+设置Rapid引擎运行过程中可使用的线程数，默认值为4，如果OLAP类查询较多，可以适当提高。
+
+- loose-rapid_hash_table_memory_limit = 10
+设置Rapid引擎运行过程中hash table最大可使用memory_limit的比例，默认值为10。如果JOIN时的表数量较多，该选项不应设置太大，避免内存耗尽。
 
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
