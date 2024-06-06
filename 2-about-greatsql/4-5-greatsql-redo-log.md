@@ -241,6 +241,7 @@ greatsql> SHOW VARIABLES LIKE 'innodb_log_files_in_group';
 ```
 
 - `innodb_flush_log_at_trx_commit：`控制 Redo Log 刷新到磁盘的策略，默认为1。
+
 - `innodb_log_file_size：`单个 Redo Log 文件设置大小，默认值为 48M 。最大值为512G，注意最大值指的是整个 Redo Log 系列文件之和，即`（innodb_log_files_in_group * innodb_log_file_size ）`不能大于最大值512G。
 
 ```sql
@@ -260,6 +261,12 @@ innodb_log_file_size=200M
 ```
 
 > 在数据库实例更新比较频繁的情况下，可以适当加大 Redo Log 组数和大小。但也不推荐 Redo Log 设置过大，在GreatSQL崩溃恢复时会重新执行REDO日志中的记录。
+
+- innodb_redo_log_capacity
+
+从 8.0.30 版本开始，新增 `innodb_redo_log_capacity` 选项用于定义 Redo Log 总容量，并且日志文件数量被固定为 32 个（不再受到选项 `innodb_log_files_in_group` 设置影响）。有了这个新选项后，就无需再设置 `innodb_log_file_size` 和 `innodb_log_files_in_group` 两个选项了。
+
+选项 `innodb_redo_log_capacity` 默认值为 100MB，并且允许在线调整，而无需重启数据库服务，在一般的生产环境中建议设置至少 1GB。
 
 ### 日志文件组
 
