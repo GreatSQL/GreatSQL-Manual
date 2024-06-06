@@ -1,7 +1,7 @@
 # TPC-H性能测试
 ---
 
-本文主要介绍采用TPC-H工具对GreatSQL进行性能测试的方法。
+本文主要介绍采用 TPC-H 工具对 GreatSQL 进行性能测试的方法。
 
 ## 关于TPC-H
 
@@ -62,7 +62,7 @@ $ vim tpcd.h
 
 ## 生成测试数据
 
-可根据实际情况，生成1G、10G、100G等不同量级的测试数据，例如30G：
+可根据实际情况，生成 1、10、100、1000 等不同数据集比例因子（Scale Factor）级别的测试数据，例如 30：
 
 ```Bash
 $ ./dbgen -vf -s 30
@@ -80,82 +80,72 @@ $ ls -lh
 -rw-r--r-- 1 root root  41M Jul 19 15:36 supplier.tbl
 ```
 
-## 生成TPC-H测试查询SQL
-可直接访问[gitee仓库获取相应的SQL](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/tpch/3.0.1/queries)，使用这些SQL测试GreatSQL的InnoDB并行查询特性时，需要自行调整语句中的HINT，例如：
-```
-$ vim tpch_queries_1.sql
+还可以利用 [pdbgen.sh脚本](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/pdbgen.sh) 来生成测试数据集，它采用并行的方法，每个大表生成多个文件切片，其效率相比直接调用 `dbgen` 至少可以提升一倍。这种多文件切片的方式，也更有利于后续采用 [pload.sh脚本](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/pload.sh)) 实现更高效并发导入。
 
-select /*+ PQ(16) */
+## 生成TPC-H测试查询SQL
+
+可直接访问[gitee仓库获取相应的SQL](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/tpch/3.0.1/queries)，这些 SQL 脚本文件可直接用于测试 GreatSQL 的 Rapid 引擎，已经加上了相应的 HINT，例如：
+
+```sql
+-- tpch_queries_1.sql
+SELECT /*+ SET_VAR(use_secondary_engine=1) SET_VAR(secondary_engine_cost_threshold=0) */ /*+ Q1 */
     l_returnflag,
     l_linestatus,
+...
 ```
-更多关于GreatSQL中InnoDB并行查询特性的介绍详见文档：[InnoDB并行查询](../5-enhance/5-1-highperf-innodb-pq.md)。
-
 
 也可参考下面的方法手动生成22个TPC-H测试查询SQL：
 ```
 # 生成22个SQL文件
-$ for i in $(seq 1 22); do ./qgen -d $i -s 30 > tpch_queries_"$i".sql; done
+$ for i in $(seq 1 22); do ./qgen -d $i -s 1000 > tpch_queries_"$i".sql; done
 
 # 转换文件格式
 $ dos2unix *.sql
 ```
-参数 `-s 30` 表示测试数据集大小是30G。
+
+参数 `-s 1000` 表示测试数据集比例因子是 1000，不同比例因子的区别在于第 11 个查询SQL中的条件因子，在 tpch_queries_11.sql 中也已注明：
+
+```sql
+-- cat tpch_queries_11.sql
+...
+        SELECT
+            sum(ps_supplycost * ps_availqty) * 0.0001000000 /* SF1 */
+            /* sum(ps_supplycost * ps_availqty) * 0.0000100000 /* SF10 */
+            /* sum(ps_supplycost * ps_availqty) * 0.0000010000 /* SF100 */
+            /* sum(ps_supplycost * ps_availqty) * 0.0000001000 /* SF1000 */
+        FROM
+...
+```
 
 ## 新建TPC-H测试数据库，导入测试数据
 
-### 修改GreatSQL选项，启用InnoDB并行特性
-
-```
-$ vim /etc/my.cnf 
-
-...
-# 打开并行查询
-force_parallel_execute = 1
-
-# 设置并行查询的使用最大内存为8G，请根据实际情况调整设置
-parallel_memory_limit = 8G
-```
-InnoDB并行查询相关选项可在线动态调整，也可在每个SQL中单独添加HINT以启用，不是必须全局开启的。
-
-
-确认InnoDB并行查询相关选项：
-
-```SQL
-greatsql> show global variables like '%parall%';
-+----------------------------------+----------------+
-| force_parallel_execute           | ON             |
-| parallel_cost_threshold          | 1000           |
-| parallel_default_dop             | 4              |
-| parallel_max_threads             | 64             |
-| parallel_memory_limit            | 8589934592     |
-| parallel_queue_timeout           | 0              |
-+----------------------------------+----------------+
-11 rows in set (0.01 sec)
-```
-
 ### 初始化TPC-H测试库表
+
 1. 下载 [tpch-create-table.sql文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/tpch-create-table.sql)，导入数据库，完成TPC-H测试库表初始化。
 
 文件内容如下：
-```
-DROP DATABASE IF EXISTS tpch;
-CREATE DATABASE IF NOT EXISTS tpch DEFAULT CHARACTER SET latin1;
-USE tpch;
 
-create table nation  ( n_nationkey  integer not null,
+```sql
+-- DROP DATABASE IF EXISTS tpch;
+-- CREATE DATABASE IF NOT EXISTS tpch DEFAULT CHARACTER SET latin1;
+-- USE tpch;
+
+drop table if exists nation;
+create table nation  ( n_nationkey  bigint not null,
                 n_name       char(25) not null,
-                n_regionkey  integer not null,
+                n_regionkey  bigint not null,
                 n_comment    varchar(152),
                 primary key(n_nationkey),
-                key nation_fk1 (n_regionkey) );
+                key nation_fk1 (n_regionkey) ) secondary_engine = rapid;
 
-create table region  ( r_regionkey  integer not null,
+drop table if exists region;
+create table region  ( r_regionkey  bigint not null,
                 r_name       char(25) not null,
                 r_comment    varchar(152),
-                primary key(r_regionkey) );
+                primary key(r_regionkey) ) secondary_engine = rapid;
 
-create table part  ( p_partkey     integer not null,
+drop table if exists part;
+create table part  ( p_partkey     bigint not null,
                 p_name        varchar(55) not null,
                 p_mfgr        char(25) not null,
                 p_brand       char(10) not null,
@@ -164,41 +154,45 @@ create table part  ( p_partkey     integer not null,
                 p_container   char(10) not null,
                 p_retailprice decimal(15,2) not null,
                 p_comment     varchar(23) not null,
-                primary key(p_partkey) );
+                primary key(p_partkey) ) secondary_engine = rapid;
 
-create table supplier ( s_suppkey     integer not null,
+drop table if exists supplier;
+create table supplier ( s_suppkey     bigint not null,
                 s_name        char(25) not null,
                 s_address     varchar(40) not null,
-                s_nationkey   integer not null,
+                s_nationkey   bigint not null,
                 s_phone       char(15) not null,
                 s_acctbal     decimal(15,2) not null,
                 s_comment     varchar(101) not null,
                 primary key(s_suppkey),
-                key supplier_fk1 (s_nationkey) );
+                key supplier_fk1 (s_nationkey) ) secondary_engine = rapid;
 
-create table partsupp ( ps_partkey     integer not null,
-                ps_suppkey     integer not null,
+drop table if exists partsupp;
+create table partsupp ( ps_partkey     bigint not null,
+                ps_suppkey     bigint not null,
                 ps_availqty    integer not null,
                 ps_supplycost  decimal(15,2)  not null,
                 ps_comment     varchar(199) not null,
                 primary key(ps_partkey,ps_suppkey),
                 key partsupp_fk1 (ps_suppkey),
-                key partsupp_fk2 (ps_partkey) );
+                key partsupp_fk2 (ps_partkey) ) secondary_engine = rapid;
 
 
-create table customer ( c_custkey     integer not null,
+drop table if exists customer;
+create table customer ( c_custkey     bigint not null,
                 c_name        varchar(25) not null,
                 c_address     varchar(40) not null,
-                c_nationkey   integer not null,
+                c_nationkey   bigint not null,
                 c_phone       char(15) not null,
                 c_acctbal     decimal(15,2)   not null,
                 c_mktsegment  char(10) not null,
                 c_comment     varchar(117) not null,
                 primary key(c_custkey),
-                key customer_fk1 (c_nationkey) );
+                key customer_fk1 (c_nationkey) ) secondary_engine = rapid;
 
-create table orders  ( o_orderkey       integer not null,
-                o_custkey        integer not null,
+drop table if exists orders;
+create table orders  ( o_orderkey       bigint not null,
+                o_custkey        bigint not null,
                 o_orderstatus    char(1) not null,
                 o_totalprice     decimal(15,2) not null,
                 o_orderdate      date not null,
@@ -207,12 +201,13 @@ create table orders  ( o_orderkey       integer not null,
                 o_shippriority   integer not null,
                 o_comment        varchar(79) not null,
                 primary key(o_orderkey),
-                key orders_fk1 (o_custkey) );
+                key orders_fk1 (o_custkey) ) secondary_engine = rapid;
 
-create table lineitem ( l_orderkey    integer not null,
-                l_partkey     integer not null,
-                l_suppkey     integer not null,
-                l_linenumber  integer not null,
+drop table if exists lineitem;
+create table lineitem ( l_orderkey    bigint not null,
+                l_partkey     bigint not null,
+                l_suppkey     bigint not null,
+                l_linenumber  bigint not null,
                 l_quantity    decimal(15,2) not null,
                 l_extendedprice  decimal(15,2) not null,
                 l_discount    decimal(15,2) not null,
@@ -227,11 +222,13 @@ create table lineitem ( l_orderkey    integer not null,
                 l_comment      varchar(44) not null,
                 primary key(l_orderkey,l_linenumber),
                 key lineitem_fk1 (l_orderkey) ,
-                key lineitem_fk2 (l_partkey,l_suppkey) );
+                key lineitem_fk2 (l_partkey,l_suppkey) ) secondary_engine = rapid;
 ```
+上述 SQL 脚本在建表时，同时指定了辅助引擎为 Rapid，便于后续进行 TPC-H 性能测试。
 
 2. 并行导入数据
-可以利用GreatSQL提供的并行load data特性并行导入测试数据，提高导入效率：
+
+可以利用GreatSQL提供的 [并行 LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md) 特性并行导入测试数据，提高导入效率：
 ```
 $ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/region.tbl' into table region FIELDS TERMINATED BY '|'; analyze table region;" tpch
 
@@ -250,7 +247,9 @@ $ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch
 $ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/lineitem.tbl' into table lineitem FIELDS TERMINATED BY '|'; analyze table lineitem;" tpch
 ```
 
-还可以进一步设置并行load data的并行线程数以及分片大小，详情参考文档：[并行load data](../5-enhance/5-1-highperf-parallel-load.md)。
+还可以进一步设置并行 LOAD DATA 的并行线程数以及分片大小，详情参考文档：[并行 LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md)。
+
+前面提到，可以使用 [pdbgen.sh脚本](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/pdbgen.sh) 生成（多文件多切片式的）测试数据集，因此可以相应地使用 [pload.sh脚本](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/pload.sh) 在已经开启 并行LOAD DATA 的基础上，实现双重并行导入，其效率相对原生的 LOAD DATA 至少可提升数倍。
 
 ### 开始TPC-H测试
 
@@ -264,68 +263,84 @@ greatsql> set global long_query_time = 0.001;
 ```
 
 在前面 **4. 生成TPC-H测试查询SQL** 中已经生成了测试22个测试查询SQL文件，逐一执行这些查询文件，也可以写个小脚本来执行，并分别记录运行耗时：
+
 ```
 $ cat run-thch.sh
 #!/bin/bash
 workdir=/data/tpch
+tpchdb="tpch"
+host="172.16.16.10"
+port="3306"
+user="tpch"
+passwd="tpch"
+logdir="tpch-runlog-`date +%Y%m%d`"
+sleeptime=5
+
 cd ${workdir}
-MYSQL_CLI="mysql -h$host -P$port -u$user -p'$passwd' -f tpch"
+mkdir -p ${logdir}
+MYSQL_CLI="mysql -h"${host}" -P"${port}" -u"${user}" -p"${passwd}" -f ${tpchdb}"
 
-# 第一遍执行，先预热数据
+# 每个查询SQL执行5遍，其中前2遍是预热
 for i in $(seq 1 22)
 do
- $MYSQL_CLI < ./queries/tpch_queries_$i.sql
-done
-
-# 正式测试，每个查询SQL执行3遍
-for i in $(seq 1 22)
-do
- for j in $(seq 1 3)
+ for j in $(seq 1 5)
  do
+   if [ ${j} -le 2 ] ; then
+     time_1=`date +%s%N`
 
-   time_1=`date +%s%N`
-	 echo `date  '+[%Y-%m-%d %H:%M:%S]'` "BEGIN RUN TPC-H Q${i} ${j} times" >> ./run-tpch-queries.log 2>&1
+     $MYSQL_CLI < ./queries/tpch_queries_$i.sql > /dev/null 2>&1
 
-	 $MYSQL_CLI < ./queries/tpch_queries_$i.sql >> ./tpch_queries_$i.res 2>&1
+     time_2=`date +%s%N`
+     durtime=`echo $time_2 $time_1 | awk '{printf "%0.3f\n", ($1 - $2) / 1000000000}'`
 
-	 time_2=`date +%s%N`
-	 durtime=`echo $time_2 $time_1 | awk '{printf "%0.2f\n", ($1 - $2) / 1000000000}'`
-	 echo `date  '+[%Y-%m-%d %H:%M:%S]'` "TPC-H Q${i} END, COST: ${durtime}s" >> ./run-tpch-queries.log 2>&1
-	 echo "" >> ./run-tpch-queries.log 2>&1
-	 echo "" >> ./run-tpch-queries.log 2>&1
+     echo "tpch_queries_$i.sql warmup ${j} times END, COST: ${durtime}s"
+   else
+     time_1=`date +%s%N`
+     echo `date  '+[%Y-%m-%d %H:%M:%S]'` "BEGIN RUN TPC-H Q${i} ${j} times" >> ./${logdir}/run-tpch-queries.log 2>&1
+
+     $MYSQL_CLI < ./queries/tpch_queries_$i.sql >> ./${logdir}/tpch_queries_${i}_${j}.res 2>&1
+
+     time_2=`date +%s%N`
+     durtime=`echo $time_2 $time_1 | awk '{printf "%0.3f\n", ($1 - $2) / 1000000000}'`
+     echo `date  '+[%Y-%m-%d %H:%M:%S]'` "TPC-H Q${i} END, COST: ${durtime}s" >> ./${logdir}/run-tpch-queries.log 2>&1
+     echo "RUN TPC-H Q${i} ${j} times END, COST: ${durtime}s"
+     echo "" >> ./${logdir}/run-tpch-queries.log 2>&1
+     echo "" >> ./${logdir}/run-tpch-queries.log 2>&1
+   fi
+
+   echo "sleeping for ${sleeptime} seconds"
+   sleep ${sleeptime}
  done
 done
 ```
+这个脚本最新版本可以看这里 [TPC-H 自动测试脚本 run-tpch.sh](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/run-tpch.sh)。 
 
 在运行查询SQL时，也要观察相关指标：
 
 ```SQL
-greatsql> show global status like '%PQ%';
-+--------------------+-------+
-| Variable_name      | Value |
-+--------------------+-------+
-| PQ_memory_refused  | 0     |
-| PQ_memory_used     | 0     |
-| PQ_threads_refused | 0     |
-| PQ_threads_running | 0     |
-+--------------------+-------+
-4 rows in set (0.00 sec)
-
-greatsql> show processlist;
-greatsql> explain for connection **;
+greatsql> SHOW GLOBAL STATUS LIKE 'Secondary_engine_execution_count';
++----------------------------------+-------+
+| Variable_name                    | Value |
++----------------------------------+-------+
+| Secondary_engine_execution_count | 41    |
++----------------------------------+-------+
 ```
+上述结果中的 `Secondary_engine_execution_count` 状态指标值为 41，表示共发生了 41 次辅助引擎（Rapid）的读取请求。 
 
 ## 测试结果
-在GreatSQL中引入了InnoDB查询特性，对轻量级TPC-H查询有很好的优化效果，可支持的查询SQL类型也在不断增加中。
 
-关于TPC-H测试结果可参考：[InnoDB并行查询（InnoDB Parallel Query, InnoDB PQ）](../5-enhance/5-1-highperf-innodb-pq.md)。
+在 GreatSQL 8.0.32-25 中引入了 Rapid 辅助引擎，对 TB 数据量级的 OLAP 复杂数据分析类型查询有很好的优化效果，其查询效率也在不断提升中。
 
+在最近的测试中，利用 Rapid 引擎运行 TPC-H SF100/SF1000 数据量级测试时，总耗时分别为：39.399 和 642.652 秒。
 
-**参考资料**
+|测试数据量 | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 | Q9 | Q10 | Q11 | Q12 | Q13 | Q14 | Q15 | Q16 | Q17 | Q18 | Q19 | Q20 | Q21 | Q22 | 总耗时 | 
+| --- |  --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| TPC-H SF100 | 3.218 | 0.305 | 1.036 | 0.868 | 1.011 | 0.219 | 4.469 | 0.886 | 3.030 | 2.597 | 0.164 | 0.588 | 2.760 | 0.729 | 0.986 | 0.654 | 0.739 | 9.557 | 1.422 | 0.624 | 3.006 | 0.531 | 39.399 |
+| TPC-H SF1000 | 17.713 | 2.221 | 6.710 | 6.297 | 6.783 | 1.373 | 63.600 | 5.589 | 37.384 | 38.240 | 1.299 | 5.039 | 29.492 | 5.269 | 8.209 | 4.748 | 4.910 | 358.120 | 7.938 | 3.788 | 23.485 | 4.445 | 642.652 | 
 
-- [MySQL TPCH测试工具简要手册](https://imysql.com/2012/12/21/tpch-for-mysql-manual.html)
-- [使用TPC-H 进行GreatSQL并行查询测试](https://mp.weixin.qq.com/s/9yyKxzMT4Udh-EbX_HAHsQ)
-- [GreatSQL重磅特性，InnoDB并行并行查询优化测试](https://mp.weixin.qq.com/s/_LeEtwJlfyvIlxzLoyNVdA)
+上述数据的测试机配置为 **32C64G、NVMe PCIe SSD 3.8T**。
+
+更多关于 GreatSQL 的 TPC-H 测试的详细信息可参考：[GreatSQL TPC-H 性能测试报告](./3-3-benchmark-greatsql-tpch-report.md)。
 
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
