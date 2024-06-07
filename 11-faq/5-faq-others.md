@@ -447,6 +447,38 @@ Transaction check error:
 
 所以，在安装 perl-DBD-MySQL 时加上 --nodeps 参数应该就可以，例如 `yum install --nodeps perl-DBD-MySQL` 再试试看。
 
+同样的问题，可能也会出现在安装其他软件包的时候，例如安装 sysbench 时。
+
+## 23. 部署 GreatSQL VIP功能时，执行 `ldconfig -p` 提示 "file is truncated"
+
+当 `ldconfig` 尝试读取或处理一个共享库文件时，如果文件大小比预期的小，或者文件末尾被意外截断，就会报告 "file is truncated" 错误。这种情况可能由以下几个原因造成：
+
+1. **文件系统错误**：磁盘损坏或其他文件系统问题可能导致文件不完整。
+
+2. **不完整的复制或下载**：动态库文件是在传输过程中出现问题而被复制或下载的，可能会导致文件数据丢失。
+
+3. **软件故障**：应用程序崩溃或错误地写入文件也可能导致文件损坏。
+
+4. **恶意行为**：病毒或恶意软件可能修改或删除系统文件。
+
+5. **权限问题**：尝试访问或修改文件的用户可能没有足够的权限，尽管这种情况下通常会有不同的错误消息。或者 SELinux 也可能会引发这个问题，参考本页内容：[20. 为什么用 systemd 启动 GreatSQL 时，会报错提示 Failed to execute command: Permission denied](../11-faq/5-faq-others.md#_20-为什么用-systemd-启动-greatsql-时-会报错提示-failed-to-execute-command-permission-denied)。
+
+解决 "file is truncated" 错误的方法包括：
+
+1. **重新安装受影响的库**：卸载并重新安装包含有问题的 .so 文件的包，这通常可以替换损坏的文件。
+
+2. **修复文件系统**：使用文件系统的检查和修复工具（如 fsck）来扫描并修复磁盘错误。
+
+3. **恢复文件**：从备份中恢复文件，如果有的话。
+
+4. **手动替换文件**：从相同版本的另一台健康机器上复制文件，然后替换本地的损坏文件。
+
+5. **检查权限**：确认你有足够的权限访问和修改文件，或者修复 SELinux 相关问题，参考本页内容：[20. 为什么用 systemd 启动 GreatSQL 时，会报错提示 Failed to execute command: Permission denied](../11-faq/5-faq-others.md#_20-为什么用-systemd-启动-greatsql-时-会报错提示-failed-to-execute-command-permission-denied)。
+
+6. **更新系统**：确保所有的系统包都是最新的，有时候问题可能是因为旧版本的库文件。
+
+以上方法通常就能解决此问题。
+
 
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
