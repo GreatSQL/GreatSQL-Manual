@@ -423,6 +423,31 @@ Thread XXX has waited at XXX line XXX for 928 seconds the semaphore
 4. 可能系统层I/O设备有故障，能看到多个事务处于PREPARED状态，此时可能因为物理I/O设备故障导致无法提交/刷新数据。
 5. 最后建议升级到 GreatSQL 最新版本，相对更稳定可靠。
 
+## 22. 安装percona-toolkit工具时需要安装perl-DBD-MySQL依赖，但提示和GreatSQL冲突
+
+使用percona-toolkit工具时报错提示缺失perl-DBD-MySQL，在安装perl-DBD-MySQL的时候出现报错和GreatSQL冲突，类似下面的错误信息：
+
+```shell
+$ yum install perl-DBD-MySQL
+...
+Installing:
+perl-DBD-MySQL                                 x86_64                                 4.023-6.el7                                       base                                 140 k
+Installing for dependencies:
+mariadb-libs        
+...
+Transaction check error:
+  file /etc/my.cnf from install of mariadb-libs-1:5.5.68-1.el7.x86_64 conflicts with file from package greatsql-server-8.0.32-25.1.el7.x86_64
+  file /usr/lib64/mysql/plugin/dialog.so from install of mariadb-libs-1:5.5.68-1.el7.x86_64 conflicts with file from package greatsql-server-8.0.32-25.1.el7.x86_64
+...
+```
+
+这是因为安装 percona-toolkit 时需要依赖 perl-DBD-MySQL，而 perl-DBD-MySQL 又需要依赖 mariadb-libs。
+
+如果系统中已经用 RPM 方式安装了 GreatSQL，就会报告这个冲突，因为 GreatSQL 也提供了这个lib库。
+
+所以，在安装 perl-DBD-MySQL 时加上 --nodeps 参数应该就可以，例如 `yum install --nodeps perl-DBD-MySQL` 再试试看。
+
+
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
