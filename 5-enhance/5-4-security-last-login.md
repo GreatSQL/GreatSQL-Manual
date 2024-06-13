@@ -10,6 +10,7 @@
 ```sql
 greatsql> SET GLOBAL enable_last_login_info = ON;
 ```
+该选项默认值为 "OFF"，即默认不启用。
 
 启用后，新建立的连接就会被记录下来。
 
@@ -23,6 +24,9 @@ greatsql> SELECT * FROM sys_audit.greatdb_login_info;
 |         8 | 2024-06-03 18:56:20 | localhost  | root       | localhost | root      |            0 |
 +-----------+---------------------+------------+------------+-----------+-----------+--------------+
 ```
+
+上述查询结果中，`Failed_times` 表示该账户登录失败次数，如果值大于 0，管理员应该加以重视，确认该账户是否存在被 DDoS 攻击等安全风险。
+
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
