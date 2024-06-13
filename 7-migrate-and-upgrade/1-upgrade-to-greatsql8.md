@@ -156,7 +156,7 @@ upgrade = FORCE
 [System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-25'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 25, Revision db07cc5cb73.
 ```
 
-是不是觉得有点惊喜，有点意外，怎么怎么简单，事实的确如此。
+是不是觉得有点惊喜，有点意外，怎么这么简单，事实的确如此。
 
 如果有强迫症的话，想要看到完整升级过程，还可以加上两个选项 `log_error_verbosity=3` 以及 `innodb_print_ddl_logs = ON`，输出的日志就会多很多：
 ```
