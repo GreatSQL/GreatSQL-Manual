@@ -181,6 +181,31 @@ GreatSQL版本号采用点分位命名规则（X.Y.Z-R）模式，其中
 
 GreatSQL数据库是一款**开源免费**数据库，没有XC资质。如果您需要有XC资质的数据库产品，可以扫描页面下方二维码联系我们。
 
+## 9. 为什么在 openEuler 系统中安装 GreatSQL 时提示 compat-openssl-devel 冲突
+
+为什么在 openEuler 系统中用 yum/dnf 安装 greatsql 时会提示类似下面的错误：
+
+```shell
+$ dnf install greatsql-server
+...
+Error:
+ Problem: problem with installed package openssl-devel-1:3.0.12-4.oe2403.x86_64
+  - package compat-openssl11-devel-1:1.1.1m-10.oe2403.x86_64 from everything conflicts with openssl-devel provided by openssl-devel-1:3.0.12-4.oe2403.x86_64 from @System
+...
+```
+
+这是因为 GreatSQL 在 openEuler 中安装时需要依赖 compat-openssl-devel 包，而这个包和系统默认的 openssl 包产生冲突了，因此会有上述报错。可以在安装时加上 --allowerasing 参数，这时就会自动解决冲突问题，安装 compat-openssl-devel 以替换 openssl-devel 包：
+
+```shell
+$ dnf install -y --allowerasing greatsql-server
+...
+Removing dependent packages:
+ openssl-devel                                    x86_64                          1:3.0.12-4.oe2403                             @OS                                  14 M
+...
+```
+
+这个问题从 8.0.32-26 版本开始会得到解决。
+
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
