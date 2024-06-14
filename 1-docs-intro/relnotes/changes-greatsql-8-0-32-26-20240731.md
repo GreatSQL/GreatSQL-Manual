@@ -26,41 +26,7 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 
 - 支持非阻塞式 DDL 操作。当执行 DDL 操作的表上有大事务或大查询未结束时，会导致 DDL 请求长时间等待 MDL 锁。详见：[非阻塞式 DDL](../../5-enhance/5-1-highperf-nonblocking_ddl.md)。
 - 【缺测试报告】NUMA 亲和性优化。通过 NUMA 亲和性调度优化，将前端用户线程和后台线程绑定到固定 NUMA 节点上以提升线程处理性能。详见：[NUMA 亲和性优化](../../5-enhance/5-1-highperf-numa-affinity.md)。
-- 【缺文档，及测试报告】无显式主键表并行导入性能优化。对无显式主键表并行导入数据时，受限于实例级 `DB_ROW_ID` 锁互斥的影响，随着并发数的增加，性能明显下降。新增选项 `innodb_optimize_no_pk_parallel_load` 以应对这种业务场景。详见：[]()。 http://zbox.greatdb.com/zentao/story-view-4330-0-87.html http://gitlab.greatdb.com/greatdb/percona-server/-/commit/ea2f8454a63bc053c4370d6465d8aa15b1656000
-====from 高月====
-TC10363:是对这个功能新增参数的测试
-
-单机:
-TC31097:关闭GIPK，验证开启innodb_optimize_no_pk_parallel_load时load data执行时间较关闭innodb_optimize_no_pk_parallel_load load data执行数据短
-测试数据:normal表load 100000000数据量的数据,提升5倍
-开启innodb_optimize_no_pk_parallel_load,load时间为190.87297775s
-关闭innodb_optimize_no_pk_parallel_load,load时间为966.15685475s
-
-TC31098:验证基于8.0.25版本升级到604以上版本时，开启innodb_optimize_no_pk_parallel_load时load data执行时间较关闭innodb_optimize_no_pk_parallel_load load data执行时间有提升 (测的是GreatDB-5.1.9-GA-1升级到610beta1)
-测试数据:normal表load 100000000数据量的数据,提升4.8倍
-开启innodb_optimize_no_pk_parallel_load,load时间为192.728711s
-关闭innodb_optimize_no_pk_parallel_load,load时间为930.01837375s
-
-功能主要是针对单机做的，集群也合并这部分代码了，不慢就可以算通过
-集群：
-TC31136:关闭GIPK，验证开启innodb_optimize_no_pk_parallel_load时load data执行时间较关闭innodb_optimize_no_pk_parallel_load load data执行数据短
-测试数据:normal表load 100000000数据量的数据
-开启innodb_optimize_no_pk_parallel_load,load时间为549.25322475s
-关闭innodb_optimize_no_pk_parallel_load,load时间为555.0122575s
-
-TC31137:验证基于8.0.25版本升级到604以上版本时，开启innodb_optimize_no_pk_parallel_load时load data执行时间较关闭innodb_optimize_no_pk_parallel_load load data执行时间有提升
-开启innodb_optimize_no_pk_parallel_load,load时间为558.13615475s
-关闭innodb_optimize_no_pk_parallel_load,load时间为564.4806495s
-
-TC31138:验证开启innodb_optimize_no_pk_parallel_load时load data执行时间随着并发数量（测试并发数gdb_parallel_load_workers=1/8/16/24）提升，性能不会下降
-测试数据:normal表load 100000000数据量的数据
-gdb_parallel_load_workers=1,load时间为1921.15475675s
-gdb_parallel_load_workers=8,load时间为722.1722675s
-gdb_parallel_load_workers=16,load时间为615.48078875s
-gdb_parallel_load_workers=24,load时间为570.91603325s
-=================
-
-
+- 【缺文档，及测试报告】无显式主键表并行导入性能优化。对无显式主键表并行导入数据时，受限于实例级 `DB_ROW_ID` 锁互斥的影响，随着并发数的增加，性能明显下降。新增选项 `innodb_optimize_no_pk_parallel_load` 以应对这种业务场景。详见：[并行 LOAD DATA](../../5-enhance/5-1-highperf-parallel-load.md)。
 
 更多信息详见文档：[高性能](../../5-enhance/5-1-highperf.md)。
 
