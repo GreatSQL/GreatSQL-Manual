@@ -22,7 +22,7 @@
 ## 相关变量
 
 | 变量名| 含义| 作用域 | 取值范围及单位 | 默认值 |
-| --- | --- | ---- | --- |
+| --- | --- | ---- | --- | --- |
 | gdb_parallel_load| 是否开启并行导入(SESSION级设置) |Session | ON/OFF|OFF|
 | gdb_parallel_load_chunk_size | 并行导入时，文件切割的大小|Session | 64k-128M，字节|4M|
 | gdb_parallel_load_workers| 并行导入最大worker线程数 | Session | 1-32| 8|
