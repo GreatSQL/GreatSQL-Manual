@@ -1,18 +1,18 @@
-# CLONE备份加密
+# Clone 备份加密
 ---
 
-
-
-GreatSQL 8.0.32-25支持在执行CLONE备份时加密备份文件，以及对加密后的备份文件解密。
+从 GreatSQL 8.0.32-25 起支持在执行 Clone 备份时加密备份文件，以及对加密后的备份文件解密。
 
 ## CLONE备份加密
-在执行clone前，先设置选项 `clone_encrypt_key_path` 开启加密功能。
+在执行 Clone 前，先设置选项 `clone_encrypt_key_path` 开启加密功能。
 
 ```sql
-greatsql> set global clone_encrypt_key_path= 'PATH/mysql_encrypt_key'
+greatsql> set global clone_encrypt_key_path = 'PATH/mysql_encrypt_key'
 ```
+
 其中，`mysql_encrypt_key` 密钥文件的内容类似下面这样：
-```
+
+```shell
 $ cat mysql_encrypt_key
 aes-128-cbc
 Jmfyvubtms66kIcHwHco8XeOYPA6GiQb86U
@@ -27,22 +27,26 @@ Jmfyvubtms66kIcHwHco8XeOYPA6GiQb86U
 接下来就可以进行CLONE加密备份了。CLONE支持几种不同的备份模式：备份（远程实例 or 本地实例）数据到本地存储中，将远程实例数据备份并覆盖本地实例。
 
 想要执行CLONE备份，需要先给运行的用户至少授予 `BACKUP_ADMIN` 权限，例如：
+
 ```sql
 greatsql> CREATE USER bkuser IDENTIFIED BY 'bkuser';
 greatsql> GRANT SELECT, BACKUP_ADMIN ON *.* TO bkuser;
 ```
 
 如果要备份远程实例，还需要先设置好选项 `clone_valid_donor_list`（如果是将本地实例CLONE备份到本地存储中则不需要设置），例如：
+
 ```sql
 greatsql> SET GLOBAL clone_valid_donor_list = '172.17.140.10:3306';
 ```
 
 再设置密钥文件路径（要确保GreatSQL数据库进程有权限访问这个密钥文件）：
+
 ```sql
 greatsql> SET GLOBAL clone_encrypt_key_path = '/data/backup/mysql_encrypt_key';
 ```
 
 接下来就可以执行CLONE备份了，例如：
+
 ```sql
 -- 将本地实例备份到本地存储中
 greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/20230515';
@@ -52,6 +56,7 @@ greatsql> CLONE INSTANCE FROM bkuser@172.17.140.10:3306 IDENTIFIED BY 'bkuser' D
 ```
 
 查看加密备份文件：
+
 ```shell
 # 进入数据备份目录
 $ cd /data/backup/20230515
@@ -61,19 +66,21 @@ $ ls -a
  .   '#clone'    ib_buffer_pool.xbcrypt  '#innodb_redo'   mysql.ibd.xbcrypt   sys_audit.ibd.xbcrypt   test               undo_002.xbcrypt
  ..   greatsql   ibdata1.xbcrypt          mysql           sys                 sys_mac.ibd.xbcrypt     undo_001.xbcrypt
 ```
-可以看到，无论是用户表空间文件，还是MySQL系统表空间、redo log、undo log等文件，全部数据文件都加上了 ".xbcrypt" 后缀，都是加密后的文件。
 
-## 解密clone加密备份文件
+可以看到，无论是 用户表空间文件，还是 系统表空间、Redo Log、Undo Log等文件，全部数据文件都加上了 ".xbcrypt" 后缀，都是加密后的文件。
 
-执行CLONE加密备份存储到本地文件时，备份文件名都会带有 ".xbcrypt" 后缀，在将加密数据备份文件导入前，还需要先解密才行。
+## 解密 Clone 加密备份文件
 
-在GreatSQL中，新增一个文件名为 `mysqldecrypt` 的解密工具，可以用它来解密数据文件。
+执行 Clone 加密备份存储到本地文件时，备份文件名都会带有 ".xbcrypt" 后缀，在将加密数据备份文件导入前，还需要先解密才行。
+
+在 GreatSQL 中，新增一个文件名为 `mysqldecrypt` 的解密工具，可以用它来解密数据文件。
 
 下面演示如何进行解密操作。
 
 ### 解密整个数据备份目录
 
 把解密工作封装在小脚本中：
+
 ```shell
 $ cat /data/backup/clone_decrypt_files.sh
 # 调用 mysqldecrypt 工具解密整个目录
@@ -89,7 +96,8 @@ mysqldecrypt --clone-decrypt \
  --clone-decrypt-key=/data/backup/mysql_encrypt_key \
  --clone-decrypt-dir=./ --remove-original=true
 ```
-参数 `--remove-original=true` 的作用是在解密完成后，是否删除原有的加密文件，`true`表示删除，`false`表示保留。因为已经做了一次全量备份，所以可以放心删除。另外，该参数只针对解密整个数据目录时才生效，当解密单个文件时是不生效的。
+
+参数 `--remove-original=true` 的作用是在解密完成后，是否删除原有的加密文件，`true` 表示删除，`false` 表示保留。因为已经做了一次全量备份，所以可以放心删除。另外，该参数只针对解密整个数据目录时才生效，当解密单个文件时是不生效的。
 
 ### 解密单个加密表空间文件
 
@@ -120,6 +128,7 @@ done
 完成解密后，就可以继续进行数据恢复工作，可以对整个实例全量恢复，也可以只恢复某个数据表。
 
 ## 使用帮助
+
 更多 `mysqldecrypt` 参数可以加上 `--help` 查看，有以下几个：
 - `--help`，查看帮助。
 - `--clone-decrypt`，声明是否进行解密，可选项 FALSE|TRUE，默认值 FALSE。
