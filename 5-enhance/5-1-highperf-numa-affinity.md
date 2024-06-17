@@ -331,7 +331,6 @@ CENTOS_MANTISBT_PROJECT="CentOS-8"
 CENTOS_MANTISBT_PROJECT_VERSION="8"
 
 $ free -ht
-free -ht
               total        used        free      shared  buff/cache   available
 Mem:          382Gi       8.4Gi       365Gi        93Mi       9.0Gi       340Gi
 Swap:         4.0Gi          0B       4.0Gi
