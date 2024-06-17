@@ -1,4 +1,4 @@
-# GreatSQL高可用特性之MGR网络开销阈值
+# MGR 网络开销阈值
 ---
 
 新增相应选项 `group_replication_request_time_threshold`。

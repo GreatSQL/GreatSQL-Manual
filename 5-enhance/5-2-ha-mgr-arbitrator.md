@@ -1,4 +1,4 @@
-# GreatSQL高可用特性之仲裁节点
+# MGR Arbitrator（仲裁节点）
 ---
 
 ## 概要

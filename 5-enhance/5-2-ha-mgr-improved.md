@@ -1,4 +1,4 @@
-# GreatSQL高可用之MGR其他优化提升
+# MGR 优化提升
 ---
 
 - 支持AFTER模式下多数派写机制。
@@ -15,6 +15,9 @@
 - 优化了加入节点时可能导致性能剧烈抖动的问题。
 - 完善MGR中的外键约束机制，降低或避免从节点报错退出MGR的风险。
 
+TODO
+新增选项解读
+- group_replication_communication_flp_timeout, http://wiki.greatdb.com:11128/ch04/timeout.html?h=group_replication_communication_flp_timeout
 
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**

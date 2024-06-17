@@ -1,4 +1,4 @@
-# GreatSQL高可用特性之内置动态VIP
+# MGR 读写动态 VIP
 ---
 
 GreatSQL支持在单主（Single-Primary）模式下，在读写节点（以下称呼：Primary节点）绑定动态VIP，使得高可用切换更便捷。
