@@ -309,6 +309,153 @@ sched_affinity_purge_coordinator = 121-124
 
 4. 综上，当 GreatSQL 实例启动后，不应该再在系统层改变 CPU 绑定策略。否则 GreatSQL 实例仍能正常运行，但线程亲和性的负载信息将不再准确，影响调度优化效果。
 
+## 测试报告
+
+测试机：
+
+```shell
+$ cat /etc/os-release
+cat /etc/os-release
+NAME="CentOS Linux"
+VERSION="8"
+ID="centos"
+ID_LIKE="rhel fedora"
+VERSION_ID="8"
+PLATFORM_ID="platform:el8"
+PRETTY_NAME="CentOS Linux 8"
+ANSI_COLOR="0;31"
+CPE_NAME="cpe:/o:centos:centos:8"
+HOME_URL="https://centos.org/"
+BUG_REPORT_URL="https://bugs.centos.org/"
+CENTOS_MANTISBT_PROJECT="CentOS-8"
+CENTOS_MANTISBT_PROJECT_VERSION="8"
+
+$ free -ht
+free -ht
+              total        used        free      shared  buff/cache   available
+Mem:          382Gi       8.4Gi       365Gi        93Mi       9.0Gi       340Gi
+Swap:         4.0Gi          0B       4.0Gi
+Total:        386Gi       8.4Gi       369Gi
+
+$ lscpu
+Architecture:                    aarch64
+CPU op-mode(s):                  64-bit
+Byte Order:                      Little Endian
+CPU(s):                          96
+On-line CPU(s) list:             0-95
+Thread(s) per core:              1
+Core(s) per socket:              48
+Socket(s):                       2
+NUMA node(s):                    4
+Vendor ID:                       HiSilicon
+Model:                           0
+Model name:                      Kunpeng-920
+Stepping:                        0x1
+CPU max MHz:                     2600.0000
+CPU min MHz:                     200.0000
+BogoMIPS:                        200.00
+L1d cache:                       6 MiB
+L1i cache:                       6 MiB
+L2 cache:                        48 MiB
+L3 cache:                        192 MiB
+NUMA node0 CPU(s):               0-23
+NUMA node1 CPU(s):               24-47
+NUMA node2 CPU(s):               48-71
+NUMA node3 CPU(s):               72-95
+Vulnerability Itlb multihit:     Not affected
+Vulnerability L1tf:              Not affected
+Vulnerability Mds:               Not affected
+Vulnerability Meltdown:          Not affected
+Vulnerability Spec store bypass: Vulnerable
+Vulnerability Spectre v1:        Mitigation; __user pointer sanitization
+Vulnerability Spectre v2:        Not affected
+Vulnerability Tsx async abort:   Not affected
+Flags:                           fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma dcpop asimddp asimdfhm
+
+$ nvme list
+Node             SN                   Model                                    Namespace Usage                      Format           FW Rev
+---------------- -------------------- ---------------------------------------- --------- -------------------------- ---------------- --------
+/dev/nvme0n1     PHLN018200FD3P2BGN   INTEL SSDPE2KE032T8                      1           3.20  TB /   3.20  TB    512   B +  0 B   VDV10152
+
+$ df -hT | grep ssd
+/dev/nvme0n1            xfs       3.0T  1.5T  1.5T  49% /ssd2
+
+$ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
+20480+0 records in
+20480+0 records out
+21474836480 bytes (21 GB) copied, 8.69131 s, 2.5 GB/s
+```
+
+GreatSQL 配置文件主要内容：
+
+```ini
+[mysqld]
+basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-aarch64
+datadir = /data/GreatSQL/mysql.sock
+port = 3306
+user = mysql
+pid-file = mysql.pid
+character-set-server = UTF8MB4
+skip_name_resolve = 1
+
+max_connections=60000
+back_log=4000
+performance_schema=OFF
+max_prepared_stmt_count=1280000
+
+innodb_file_per_table
+innodb_log_file_size=2048M
+innodb_log_files_in_group=32
+innodb_open_files=10000
+table_open_cache_instances=64
+
+innodb_buffer_pool_size=230G
+innodb_buffer_pool_instances=16
+innodb_log_buffer_size=2048M
+
+default_time_zone=+8:00
+thread_cache_size=2000
+sync_binlog=0
+innodb_flush_log_at_trx_commit=0
+innodb_use_native_aio=1
+innodb_spin_wait_delay=20
+#innodb_sync_spin_loops=25
+innodb_flush_method=O_DIRECT
+innodb_io_capacity=30000
+innodb_io_capacity_max=40000
+innodb_lru_scan_depth=9000
+innodb_page_cleaners=16
+innodb_spin_wait_pause_multiplier=5
+innodb_lock_wait_timeout=100
+
+innodb_flush_neighbors=0
+innodb_write_io_threads=24
+innodb_read_io_threads=16
+innodb_purge_threads=32
+
+skip_log_bin
+table_open_cache=30000
+innodb_adaptive_hash_index=0
+
+#NUMA
+sched_affinity_numa_aware=ON
+sched_affinity_foreground_thread=0-26,30-127
+sched_affinity_log_writer=28
+sched_affinity_log_flusher=27
+sched_affinity_log_write_notifier=29
+sched_affinity_log_flush_notifier=29
+sched_affinity_log_checkpointer=29
+sched_affinity_purge_coordinator=29
+```
+
+分别编译两个 GreatSQL 二进制包，一个启用 NUMA 亲和性优化，一个未启用。
+
+基于上述配置文件，运行这两个版本的 GreatSQL 二进制包，区别在于最后的 NUMA 优化部分内容。
+
+利用 benchmarksql5.0-for-mysql 进行 TPC-C 测试，结果表明 NUMA 亲和性调度优化可以使 TPC-C 综合性能提升约 10%：
+
+![5-1-highperf-numa-affinity-5.png](./5-1-highperf-numa-affinity-5.png)
+
 
 **问题反馈**
 ---
