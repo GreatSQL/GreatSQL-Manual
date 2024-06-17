@@ -16,7 +16,17 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 
 ### 高可用
 - 可以利用 Clone 结合 Redo 实现在线全量热备和增备（类似 Xtrabackup 的做法），支持恢复到任意指定时间点。此外，Clone 备份还支持加密、压缩、限流等功能。详见：[Clone 备份]()。 http://zbox.greatdb.com/zentao/story-view-3293.html
-- 在 MGR 架构中，添加新成员节点当选择 Clone 复制全量数据时，支持自动选择从最新事务数据的成员节点复制数据，可有效提升 Clone 速度，提高 MGR 的服务可靠性。详见：[]()。 http://zbox.greatdb.com/zentao/story-view-1736.html
+- 【缺文档】当有新成员节点加入 MGR 时，如果选择 Clone 方式复制数据，支持自动选择从最新事务数据的成员节点复制数据，可有效提升 Clone 速度，提高 MGR 的服务可靠性。
+
+新增选项 `group_replication_donor_threshold`，取值范围 [1, MAX]，默认值为 MAX。MAX 值取决于 CPU 类型，在 32-bit 系统中是 4294967295（2^32-1），而在 64-bit 系统中是 18446744073709551615（2^64-1）。
+
+当新成员节点加入 MGR 时，新成员节点只会选择那些延迟小于 `group_replication_donor_threshold` 的节点作为 Donor 节点。
+
+假设 `group_replication_donor_threshold = 100`，那么：
+1. 现在 MGR 中有两个节点A、B，它们的 GTID 分别是 [1-300]、[1-280]，新节点 C 加入，由于 A & B 节点的 GTID 差值小于预设阈值，则随机选择 A 或 B 其中一个节点作为 Donor 节点。
+2. 现在 MGR 中有两个节点A、B，它们的 GTID 分别是 [1-400]、[1-280]，新节点 C 加入，由于 A & B 节点的 GTID 差值大于预设阈值，则只会选择 A 作为 Donor 节点。
+3. 现在 MGR 中有三个节点A、B、C，它们的 GTID 分别是 [1-400]、[1-350]、[1-280]，新节点 D 加入，由于 C 节点的 GTID 差值大于预设阈值，A & B 节点 GTID 延迟小于预设阈值，则会随机选择 A 或 B 其中一个作为 Donor 节点。
+
 - 当 MGR 各成员节点设置 [地理标签](../../5-enhance/5-2-ha-mgr-zoneid.md) 时，其中的 [仲裁节点](../../5-enhance/5-2-ha-mgr-arbitrator.md) 无需像其他节点那样也要设置地理标签ID。详见：[地理标签](../../5-enhance/5-2-ha-mgr-zoneid.md)。 http://zbox.greatdb.com/zentao/story-view-4305-0-87.html
 - 【缺测试报告】优化了在 [快速单主模式](../../5-enhance/5-2-ha-mgr-fast-mode.md) 下 relay log 应用逻辑，提升 MGR 整体性能；并优化了当 relay log 存在堆积时的 applier 线程的内存消耗异常情况。 http://zbox.greatdb.com/zentao/story-view-4353-0-87.html https://bbkv6krkep.feishu.cn/docx/QKS9dGFbOoz3lfxxueWcPK5ynGg
 
