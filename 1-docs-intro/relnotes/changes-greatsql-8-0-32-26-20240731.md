@@ -35,7 +35,7 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 ### 高性能
 
 - 支持非阻塞式 DDL 操作。当执行 DDL 操作的表上有大事务或大查询未结束时，会导致 DDL 请求长时间等待 MDL 锁。详见：[非阻塞式 DDL](../../5-enhance/5-1-highperf-nonblocking_ddl.md)。
-- 【缺测试报告】NUMA 亲和性优化。通过 NUMA 亲和性调度优化，将前端用户线程和后台线程绑定到固定 NUMA 节点上以提升线程处理性能。详见：[NUMA 亲和性优化](../../5-enhance/5-1-highperf-numa-affinity.md)。
+- NUMA 亲和性优化。通过 NUMA 亲和性调度优化，将前端用户线程和后台线程绑定到固定 NUMA 节点上以提升线程处理性能。详见：[NUMA 亲和性优化](../../5-enhance/5-1-highperf-numa-affinity.md)。
 - 无显式主键表并行导入性能优化。对无显式主键表并行导入数据时，会随着并发数的增加，性能明显下降，GreatSQL针对这种情况也提供了优化方案。详见：[并行 LOAD DATA](../../5-enhance/5-1-highperf-parallel-load.md)。
 
 更多信息详见文档：[高性能](../../5-enhance/5-1-highperf.md)。
