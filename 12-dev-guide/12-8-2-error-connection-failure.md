@@ -138,7 +138,7 @@ greatsql> SELECT User,Host FROM mysql.user;
 例如，在Linux系统中，可以使用`netstat -anp | grep 3306`查看端口是否开放。
 
 
-- **[问题反馈 gitee](https://gitee.com/ GreatSQL / GreatSQL -Manual/issues)**
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
 - **扫码关注微信公众号**
 

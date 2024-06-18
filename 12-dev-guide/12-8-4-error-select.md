@@ -77,7 +77,7 @@ greatsql> GRANT ALL ON employees.* TO 'user1'@'%';
 ```
 
 
-- **[问题反馈 gitee](https://gitee.com/ GreatSQL / GreatSQL -Manual/issues)**
+- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
 - **扫码关注微信公众号**
 
