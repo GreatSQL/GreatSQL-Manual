@@ -37,12 +37,13 @@ trigger_event: { INSERT | UPDATE | DELETE | INSERT OR UPDATE | INSERT OR DELETE 
 
 ## 4. 示例
 
+提示：下面的示例中，都已预先设置了 `sql_generate_invisible_primary_key = OFF`，所以创建测试表时，没有显式指定主键列也不会自动创建隐藏的 `my_row_id` 列。但是否启用该选项不影响触发器功能的正常使用。
+
 创建测试表并初始化数据
 ```sql
 greatsql> CREATE TABLE t1 (a INT NOT NULL, b VARCHAR(300) NOT NULL);
 greatsql> INSERT INTO t1 VALUES(1, 'row1'), (2, 'row2'), (3,'row3') ;
 ```
-
 
 - 1 示例1：`INSERT`
 
