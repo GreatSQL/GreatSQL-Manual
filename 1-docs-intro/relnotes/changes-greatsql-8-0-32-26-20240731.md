@@ -41,10 +41,10 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 更多信息详见文档：[高性能](../../5-enhance/5-1-highperf.md)。
 
 ### 高兼容
-- 在创建触发器时，新增 CREATE OR REPLACE 语法支持。详见：[]()。
-- 支持在存储函数中使用 DECLARE BEGIN 语法。详见：[]()。
-- 支持 CONTINUE 语法。详见：[]()。
-- 在 FOR var1 .. var2 LOOP 用法中新增支持符号和参数相连。详见：[]()。
+- 新增支持在 `LOOP` 循环使用 `CONTINUE` 语法。详见：[CONTINUE](../../5-enhance/sql-compat/5-3-easyuse-ora-sp-continue.md)。
+- 新增支持用 `CREATE OR REPLACE` 语法创建/修改触发器；新增支持在触发器中使用 `DECLARE BEGIN` 语法。详见：[触发器](../../5-enhance/sql-compat/5-3-easyuse-ora-sp-trigger.md)。
+- 新增支持在匿名块中使用 `DECLARE BEGIN` 语法。详见：[匿名块](../../5-enhance/sql-compat/5-3-easyuse-ora-sp-anony-block.md)。
+- 新增支持在 `FOR/FOR ALL ... LOOP` 用法中使用符号和参数相连，例如 `FOR var1..var2 LOOP`。详见：[FOR LOOP](../../5-enhance/sql-compat/5-3-easyuse-ora-sp-for-loop.md) 和 [FORALL LOOP](../../5-enhance/sql-compat/5-3-easyuse-ora-sp-forall-loop.md)。
 
 更多信息详见文档：[高兼容](../../5-enhance/5-3-easyuse.md)。
 
@@ -55,13 +55,13 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 更多信息详见文档：[高安全](../../5-enhance/5-4-security.md)。
 
 ### 其他
-无。
+- 由于 GreatSQL 已支持 Rapid 引擎，以及未来还将推出 dplan 特性，因此从 GreatSQL 8.0.32-26 开始，不再推荐使用 InnoDB 并行查询特性。
 
 ## 缺陷修复
-- 修复了在部分 ARM 架构环境中无法使用并行复制的问题，详见：[MySQL Bug 110752](https://bugs.mysql.com/bug.php?id=110752)。 http://zbox.greatdb.com/zentao/story-view-4181-0-87.html
-- 修复了登录信息和审计日志入表时未处理 binlog 可能导致主从异常的问题。 http://zbox.greatdb.com/zentao/task-view-18847.html
-- 修复了数个因为 SQL 注入可能导致数据库实例发生 crash 风险的问题。 http://zbox.greatdb.com/zentao/story-view-4418-0-87.html
-- 修复了 Oracle 模式下 NULL 值唯一约束问题。详见：[]()。
+- 修复了在部分 ARM 架构环境中无法使用并行复制的问题，详见：[MySQL Bug 110752](https://bugs.mysql.com/bug.php?id=110752)。
+- 修复了最后登录信息和审计日志入表时未处理 Binlog 可能导致主从异常的问题。在新版本中，最后登录信息和审计日志都不会记录 Binlog，避免因为主从复制（也包括 MGR）中各实例都开启该特性记录 Binlog 而造成主从复制失败（或 MGR 报错）。
+- 修复了数个因为 SQL 注入可能导致数据库实例发生 crash 风险的问题，大幅提升 GreatSQL 对 SQL 注入风险的抵御能力。
+- 修复了 Oracle 模式下 NULL 值唯一约束问题。在原来的 Oracle 模式下，插入 NULL 值会触发唯一约束冲突；而在 Oracle 数据库中，是允许向唯一约束列中重复写入 NULL 值的。在新版本中修复了这个问题。
 
 ## 注意事项
 
