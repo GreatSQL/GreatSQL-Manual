@@ -6,11 +6,14 @@
 
 ```sql
 FORALL var IN expr1 .. expr2 INSERT INTO .. VALUES var(n)
+
+-- OR
+FORALL var IN expr1..expr2 INSERT INTO .. VALUES var(n)
 ```
 
 ## 2. 定义和用法
 
-在GreatSQL中支持用 `FORALL .. LOOP` 循环读取 `expr1` 和 `expr2` 之间的所有值，并再赋值给变量 `var`，之后再执行 `INSERT INTO .. VALUES var(i)` 写入数据。
+在 GreatSQL 中支持用 `FORALL .. LOOP` 循环读取 `expr1` 和 `expr2` 之间的所有值，并再赋值给变量 `var`，之后再执行 `INSERT INTO .. VALUES var(i)` 写入数据。在 `FORALL ... LOOP` 中，支持前后两个参数表达式和中间的点号连接在一起，例如：`FORALL .. IN expr1..expr2 LOOP`；或者只和一个参数连接，例如：`FORALL .. IN expr1.. expr2 LOOP` 及 `FORALL .. IN expr1 ..expr2 LOOP` 都是可以的。
 
 ## 3. Oracle兼容说明
 

@@ -6,11 +6,14 @@
 
 ```sql
 FOR var IN [REVERSE] expr1 .. expr2 LOOP .. END LOOP
+
+-- OR
+FOR var IN [REVERSE] expr1..expr2 LOOP .. END LOOP
 ```
 
 ## 2. 定义和用法
 
-在GreatSQL中支持用 `FOR .. IN expr1 .. expr2 LOOP .. END LOOP` 语法循环读取数据，并赋值给相应变量。
+在 GreatSQL 中支持用 `FOR .. IN expr1 .. expr2 LOOP .. END LOOP` 语法循环读取数据，并赋值给相应变量。在 `FOR ... LOOP` 中，支持前后两个参数表达式和中间的点号连接在一起，例如：`FOR .. IN expr1..expr2 LOOP`；或者只和一个参数连接，例如：`FOR .. IN expr1.. expr2 LOOP` 及 `FOR .. IN expr1 ..expr2 LOOP` 都是可以的。
 
 ## 3. Oracle兼容说明
 
