@@ -8,7 +8,7 @@
 1.
 SET sql_mode = ORACLE;
 
-CREATE TRIGGER trigger_name
+CREATE [OR REPLACE] TRIGGER trigger_name
   trigger_time trigger_event
   ON tbl_name FOR EACH ROW
   [trigger_order]
@@ -52,6 +52,7 @@ greatsql> DELIMITER //
 
 CREATE TRIGGER trg_t1_before_insert BEFORE INSERT 
 ON t1 FOR EACH ROW
+DECLARE
 BEGIN
  IF :NEW.a < 0 THEN
   :NEW.b := '-trg_t1_before_insert INSERT' || :NEW.b;
@@ -67,6 +68,7 @@ greatsql> DELIMITER //
 
 CREATE TRIGGER trg_t1_before_insert_or_update BEFORE INSERT OR UPDATE
 ON t1 FOR EACH ROW
+DECLARE
 BEGIN
  IF :NEW.a < 0 THEN
   :NEW.b := '-trg_t1_before_insert_or_update INSERT OR UPDATE' || :NEW.b;
@@ -82,6 +84,7 @@ greatsql> DELIMITER //
 
 CREATE TRIGGER trg_t1_before_update_or_delete BEFORE UPDATE OR DELETE
 ON t1 FOR EACH ROW
+DECLARE
 BEGIN
  IF :NEW.a < 0 THEN
   :NEW.b := '-trg_t1_before_update_or_delete UPDATE OR DELETE' || :NEW.b;
