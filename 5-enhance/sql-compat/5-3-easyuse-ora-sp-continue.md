@@ -44,9 +44,9 @@ greatsql> INSERT INTO t2 VALUES(10, 'row10'), (20, 'row20'), (30, 'row30');
 ### 示例1：FOR ... CURSOR LOOP
 
 ```sql
+greatsql> SET sql_mode = ORACLE; SET udt_format_result = 'DBA';
 greatsql> DELIMITER //
-greatsql> SET sql_mode = ORACLE;
-greatsql> CREATE OR REPLACE PROCEDURE p1() AS
+CREATE OR REPLACE PROCEDURE p1() AS
   CURSOR cur1  IS SELECT * FROM t1 WHERE id < 3;
   CURSOR cur21 IS SELECT * FROM t2 WHERE id < 30;
   CURSOR cur22 IS SELECT * FROM t2 WHERE id < 30;
@@ -68,15 +68,45 @@ begin
   END LOOP;
 END //
 DELIMITER ;
+
 greatsql> CALL p1();
++----------------+
+| i              |
++----------------+
+| id:1 | c1:row1 |
++----------------+
+1 row in set (0.01 sec)
+
++------------------+
+| j                |
++------------------+
+| id:10 | c1:row10 |
++------------------+
+1 row in set (0.01 sec)
+
++----------------+
+| i              |
++----------------+
+| id:2 | c1:row2 |
++----------------+
+1 row in set (0.01 sec)
+
++------------------+
+| j                |
++------------------+
+| id:10 | c1:row10 |
++------------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
 ```
 
 ### 示例2：`FOR select_stmt LOOP`
 
 ```
+greatsql> SET sql_mode = ORACLE; SET udt_format_result = 'DBA';
 greatsql> DELIMITER //
-greatsql> SET sql_mode = ORACLE;
-greatsql> CREATE OR REPLACE PROCEDURE p1() AS
+CREATE OR REPLACE PROCEDURE p1() AS
   CURSOR cur1 IS SELECT * FROM t1 WHERE id < 3;
   CURSOR cur2 IS SELECT * FROM t2 WHERE id < 30;
 BEGIN
@@ -92,15 +122,73 @@ BEGIN
   END LOOP;
 END //
 DELIMITER ;
+
 greatsql> CALL p1();
++----------------+
+| i              |
++----------------+
+| id:1 | c1:row1 |
++----------------+
+1 row in set (0.00 sec)
+
++------------------+
+| j                |
++------------------+
+| id:10 | c1:row10 |
++------------------+
+1 row in set (0.00 sec)
+
++------------------+
+| j                |
++------------------+
+| id:20 | c1:row20 |
++------------------+
+1 row in set (0.00 sec)
+
++----------------+
+| AFTER CONTINUE |
++----------------+
+| AFTER CONTINUE |
++----------------+
+1 row in set (0.00 sec)
+
++----------------+
+| i              |
++----------------+
+| id:2 | c1:row2 |
++----------------+
+1 row in set (0.00 sec)
+
++------------------+
+| j                |
++------------------+
+| id:10 | c1:row10 |
++------------------+
+1 row in set (0.00 sec)
+
++------------------+
+| j                |
++------------------+
+| id:20 | c1:row20 |
++------------------+
+1 row in set (0.00 sec)
+
++----------------+
+| AFTER CONTINUE |
++----------------+
+| AFTER CONTINUE |
++----------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
 ```
 
 ### 示例3：`FOR i IN ... LOOP`
 
 ```sql
-greatsql> DELIMITER //
 greatsql> SET sql_mode = ORACLE;
-greatsql> CREATE OR REPLACE PROCEDURE p1() AS
+greatsql> DELIMITER //
+CREATE OR REPLACE PROCEDURE p1() AS
   ret VARCHAR(100);
 BEGIN
   <<label1>>
@@ -115,15 +203,45 @@ BEGIN
   END LOOP;
 END //
 DELIMITER ;
+
 greatsql> CALL p1();
++------+
+| i    |
++------+
+|    1 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| j    |
++------+
+|   10 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| i    |
++------+
+|    2 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| j    |
++------+
+|   10 |
++------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
 ```
 
 ### 示例4：`WHILE ... LOOP`
 
 ```sql
-greatsql> DELIMITER //
 greatsql> SET sql_mode = ORACLE;
-greatsql> CREATE OR REPLACE PROCEDURE p1() AS
+greatsql> DELIMITER //
+CREATE OR REPLACE PROCEDURE p1() AS
   ret VARCHAR(100);
   c1 INT := 0;
   c2 INT := 0;
@@ -142,15 +260,80 @@ BEGIN
   END LOOP;
 END //
 DELIMITER ;
+
 greatsql> CALL p1();
++------+
+| c1   |
++------+
+|    1 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| c2   |
++------+
+|    1 |
++------+
+1 row in set (0.00 sec)
+
++----------------+
+| AFTER CONTINUE |
++----------------+
+| AFTER CONTINUE |
++----------------+
+1 row in set (0.00 sec)
+
++------+
+| c2   |
++------+
+|    2 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| c2   |
++------+
+|    3 |
++------+
+1 row in set (0.00 sec)
+
++----------------+
+| AFTER CONTINUE |
++----------------+
+| AFTER CONTINUE |
++----------------+
+1 row in set (0.00 sec)
+
++------+
+| c2   |
++------+
+|    4 |
++------+
+1 row in set (0.00 sec)
+
++----------------+
+| AFTER CONTINUE |
++----------------+
+| AFTER CONTINUE |
++----------------+
+1 row in set (0.00 sec)
+
++------+
+| c1   |
++------+
+|    2 |
++------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
 ```
 
 ### 示例5：`LOOP ... END LOOP`
 
 ```sql
-greatsql> DELIMITER //
 greatsql> SET sql_mode = ORACLE;
-greatsql> CREATE OR REPLACE PROCEDURE p1() AS
+greatsql> DELIMITER //
+CREATE OR REPLACE PROCEDURE p1() AS
   ret VARCHAR(100);
   c1 INT := 0;
   c2 INT := 0;
@@ -171,7 +354,44 @@ BEGIN
   END LOOP;
 END //
 DELIMITER ;
+
 greatsql> CALL p1();
++------+
+| c1   |
++------+
+|    1 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| c2   |
++------+
+|    1 |
++------+
+1 row in set (0.00 sec)
+
++----------------+
+| AFTER CONTINUE |
++----------------+
+| AFTER CONTINUE |
++----------------+
+1 row in set (0.00 sec)
+
++------+
+| c2   |
++------+
+|    2 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| c1   |
++------+
+|    2 |
++------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
 ```
 
 ### 示例6：不用在 `LOOP` 块中，不支持 `CONTINUE` 用法
@@ -179,12 +399,13 @@ greatsql> CALL p1();
 ```sql
 greatsql> SET sql_mode = ORACLE;
 greatsql> DELIMITER //
-greatsql> CREATE OR REPLACE PROCEDURE p1() AS
+CREATE OR REPLACE PROCEDURE p1() AS
 BEGIN
   <<label1>>
   CONTINUE;
 END //
-SQL Error [1235] [42000]: This version of MySQL doesn't yet support 'CONTINUE clause without loop statement'
+DELIMITER ;
+ERROR 1235 (42000): This version of MySQL doesn't yet support 'CONTINUE clause without loop statement'
 ```
 
 
