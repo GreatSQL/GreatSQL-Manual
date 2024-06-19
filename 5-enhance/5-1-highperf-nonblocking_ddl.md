@@ -15,7 +15,7 @@ greatsql> SET lock_wait_timeout = 100;
 ```sql
 greatsql> SET lock_ddl_polling_mode = ON;
 ```
-该选项支持在 session 会话中单独设置，也可以修改全局设置。
+该选项支持在 Session 会话中单独设置，也可以修改 Global 级别设置（修改完 Global 级别设置后，不会对当前 Session 立即生效，只对新建立的 Session 生效）。
 
 3. 可根据业务特点或需要，修改选项 `lock_ddl_polling_runtime`，设置每次尝试申请 MDL-X 锁的时长。
 
@@ -23,17 +23,42 @@ greatsql> SET lock_ddl_polling_mode = ON;
 greatsql> SET lock_ddl_polling_runtime = 1000;
 ```
 
+4. 新增选项
+
+| System Variable Name | Variable Scope |  Dynamic Variable | Permitted Values | Type | Default | Description |
+| --- | --- | --- | --- | --- | --- | --- |
+|lock_ddl_polling_mode|Session|YES|[ON/OFF]|ENUM|OFF|是否启用非阻塞式 DDL 特性，默认：不启用|
+|lock_ddl_polling_runtime|Session|YES|[200, LONG_MAX]|LONGLONG|1000|非阻塞式 DDL 请求时，每次 DDL 请求尝试持续时长，默认：1000 毫秒（1秒）|
+
+
 原生的 MDL 锁申请是独占式的，也就是在发起 DDL 操作时，需要先申请 MDL-X 锁，如果不能立即申请到，则会被阻塞，直至达到 `lock_wait_timeout` 选项设定的阈值。
 
 启用非阻塞式 DDL 功能后，在不超过 `lock_wait_timeout` 定义的时长内，会进行多次申请 MDL-X 锁的尝试，而非原生的独占申请方式，这就可以在多次重试的间隙释放锁资源允许新事务进行。
 
 选项 `lock_ddl_polling_runtime` 的作用是设置每次尝试申请 MDL-X 锁的最长等待时间。该选项的单位是 ms（毫秒），默认值为 1000，即 1 秒。
 
-4. 新模式对 DDL 的影响
+5. 新模式对 DDL 的影响
 
 开启非阻塞式 DDL 功能会导致 DDL 请求申请 MDL-X 锁的时间有所延长，增加 DDL 操作超时失败的概率。
 
-非阻塞式 DDL 功能仅支持 `ALTER, OPTIMIZE, TRUNCATE TABLE` 等 DDL 操作。
+非阻塞式 DDL 功能仅支持 `ALTER, OPTIMIZE, TRUNCATE TABLE` 这几个 DDL 操作。
+
+6. 案例
+
+在下面的案例开始之前，已经先修改相关的两个选项：
+
+```sql
+greatsql> SET GLOBAL lock_ddl_polling_mode = ON;
+greatsql> SET GLOBAL lock_ddl_polling_runtime = 200;
+```
+
+| 时间线 | Session 1 | Session 2 | Session 3 |
+| --- | --- | --- | --- |
+| T1  | BEGIN;<br/>SELECT * FROM t WHERE id = 1 FOR SHARE;<br>*发起事务，还未提交* | |
+| T2  | | ALTER TABLE t ADD c3 INT UNSIGNED;<br/>*对表 t 发起 ALTER TABLE 操作，会被阻塞，提示：*<br/>*Waiting for table metadata lock*||
+| T3  | | | SELECT * FROM t LIMIT 1;<br/>*可以返回结果，没有被阻塞*|
+
+同时也能注意到，在 Session 3 中的 `SELECT` 查询请求如果多次执行，则每次的响应时长是不一样的，因为 Session 2 中的 `ALTER TABLE` 请求会多次反复请求 MDL-X 锁，每次最大时长 200ms。
 
 
 推荐相关阅读：[InnoDB and Online DDL](https://dev.mysql.com/doc/refman/8.0/en/innodb-online-ddl.html)。
