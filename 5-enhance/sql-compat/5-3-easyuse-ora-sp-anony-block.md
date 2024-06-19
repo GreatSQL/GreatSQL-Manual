@@ -13,7 +13,7 @@ BEGIN
  ...
 END;
 
-2. BEGIN
+2. [DECLARE] BEGIN
  ...
 END;
 ```
