@@ -8,7 +8,7 @@
 
 ### 全量备份
 
-1. 备份远程实例
+#### 备份远程实例
 
 连接到 donor 节点上，执行下面的命令安装 mysqlbackup 组件：
 
@@ -55,7 +55,7 @@ BINLOG_POSITION: 0
 - END_LSN，表示本次备份任务结束时的 LSN。
 
 
-2. 备份本地实例
+#### 备份本地实例
 
 如果只需要对本地实例进行全量备份，执行类似下面的命令即可：
 
@@ -69,7 +69,7 @@ greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-full/20240610' ENABLE
 
 增量备份是在上一次全量或增量备份的基础上，再次备份到当前为止，对数据库所有修改变化的新数据。因此，在执行 Clone 增量备份时，需要在备份命令中体现上一次备份结束时产生的 PAGE_TRACK_LSN，它是上一次全量/增量备份结束时记录 LSN。所有大于该 LSN 的修改变化数据，都在本次增量备份任务的备份范围内。
 
-1. 对远程实例执行增量备份
+#### 对远程实例执行增量备份
 
 连接到 recipient 节点上，执行下面的命令执行增量备份：
 
@@ -86,7 +86,7 @@ greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306 IDENTIFIED BY 'GreatSQL@202
 ```
 上述命令指定本次增备任务是在已有的别分目录 /data/backup/clone-full/20240610 基础上，自动识别起始 LSN 后执行增备，这个方法的好处是避免手误写错 START_LSN 值。
 
-2. 对本地实例执行增量备份
+#### 对本地实例执行增量备份
 
 执行下面的命令，完成针对本地实例的增量备份：
 
@@ -99,8 +99,6 @@ greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-incr/20240610-2108311
 ```sql
 greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116' ENABLE PAGE TRACK INCREMENT BASED DIRECTORY = '/data/backup/clone-full/20240610' 
 ```
-
-### 压缩备份
 
 ## 数据恢复
 
@@ -201,10 +199,10 @@ $ cp -rfp /data/backup/clone-full/20240618/ /data/restore/
 
 如果不打算进行后续的增量备份恢复，那进行到这里就行了，可以基于这个工作目录，准备好一个合适的 my.cnf 配置文件，然后直接启动一个新的数据库实例。
 
-```ini
+```shell
 $ cat /data/restore/20240618/my.cnf
 [mysqld]
-basedir = /data/apps/GreatDB-6.0.4-ALPHA-1413b448-Linux-glibc2.17-x86_64/
+basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
 datadir = /data/restore/20240618
 user = mysql
 socket = mysql.sock
@@ -270,7 +268,8 @@ $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-fil
 
 基于 Binlog 实现任意时间点的恢复步骤如下所示：
 
-1. 连接恢复后的数据库实例，查询已执行的事务 GTID 信息
+##### 连接恢复后的数据库实例，查询已执行的事务 GTID 信息
+
 ```sql
 greatsql> SELECT * FROM performance_schema.clone_status\G
 *************************** 1. row ***************************
@@ -293,7 +292,7 @@ BINLOG_POSITION: 29832341
 
 这个查询结果表明该实例已恢复的事务 GTID 是 "c42c1e3e-0f41-11ef-b6bf-d08e7908bcb1:1-3270"，对应的 Binlog 文件是 "binlog.000013"，日志的点位是 "29832341"，对应的时间是 "2024-06-18 15:37:53.569"。
 
-2. 连接原来的数据库实例，查询最新的事务 GTID 信息
+##### 连接原来的数据库实例，查询最新的事务 GTID 信息
 
 ```sql
 greatsql> SHOW MASTER STATUS\G
@@ -315,7 +314,7 @@ greatsql> SHOW BINARY LOGS;
 ```
 看到 Binlog 文件已更新，产生了更多的事务日志。
 
-3. 指定 Binlog 文件及点位，进行指定时间点恢复
+##### 指定 Binlog 文件及点位，进行指定时间点恢复
 
 ```shell
 # 进入原来的数据库实例存储 Binlog 的目录下
@@ -337,15 +336,197 @@ $ mysqlbinlog ./binlog.000013 --start-position=29832341 --stop-datetime="2024-06
 $ mysqlbinlog ./binlog.000013 --start-position=29832341 | mysql -S/data/restore/20240618/mysql.sock -uroot -p
 ```
 
-### 备份解压缩和恢复
+## 压缩备份
 
-### 恢复注意事项
+GreatSQL 8.0.32-26 版本开始支持 Clone 备份文件压缩功能，只需设置选项 `clone_file_compress` 即可实现，例如设置为 `clone_file_compress = CLONE_FILE_COMPRESS_ZSTD`，该特性默认不启用。关于压缩备份，有几点注意：
+
+1. 必须是 GreatSQL 8.0.32-26 及以上版本才支持该特性，也就是 Clone 备份的接收端必须是 8.0.32-26 及以上版本才支持。
+
+2. 如果是 Clone 备份远程实例，则需要在接收端实例（recipient 节点）设置该选项。
+
+3. 支持两种压缩算法：zstd 和 lz4。推荐选择 zstd，它是一种快速无损压缩算法，针对实时压缩场景，且具有更好的压缩比。
+
+4. 选项 `clone_file_compress` 和 `clone_enable_compression` 不同，前者决定了备份文件是否压缩；而后者用于决定 Clone 在网络传输数据时，是否开启压缩功能。且二者没有依赖关系。
+
+5. 不支持同时开启 Clone 备份加密和压缩功能。
+
+### 开始压缩备份
+
+#### 开启备份文件压缩功能
+
+``sql
+greatsql> SET GLOBAL clone_file_compress = CLONE_FILE_COMPRESS_ZSTD;
+```
+
+#### 执行 Clone 备份
+```sql
+-- 备份本地实例，并开启 page tracking
+greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-compressed/20240618' ENABLE PAGE TRACK;
+```
+
+查看备份文件，确认压缩结果
+
+```shell
+$ ls -la /data/backup/clone-compressed/20240618
+TODO
+```
+
+#### 在全备基础上，再做一次增备（压缩）
+
+```sql
+greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-compressed-incr/20240618-202406181530' ENABLE PAGE TRACK INCREMENT BASED DIRECTORY '/data/backup/clone-compressed/20240618';
+```
+
+查看备份文件，确认压缩结果
+
+```shell
+$ ls -la /data/backup/clone-compressed-incr/20240618-202406181530
+TODO
+```
+
+### 压缩备份恢复
+
+#### 解压缩备份文件
+
+在开始使用压缩后的备份文件恢复前，需要先解压缩：
+
+```shell
+# 无论如何，不要忘记再做一次备份，避免误操作影响原来的备份文件
+$ cp -rfp /data/backup/clone-compressed/20240618 /data/restore/
+
+# 解压缩
+$ cd /data/restore/20240618
+$ for f in `find . -iname "*\.zstd"`; do zstd_decompress $f $(dirname $f)/$(basename $f .zstd); rm $i; done
+TODO
+
+# 确认解压缩后的文件
+$ ls -la
+TODO
+```
+
+以上是假定备份压缩采用的是 zstd 方式，如果是 lz4 则改成类似下面这样：
+
+```shell
+# 解压缩
+$ cd /data/restore/20240618
+$ for f in `find . -iname "*\.lz4"`; do lz4_decompress $f $(dirname $f)/$(basename $f .lz4); rm $i; done
+TODO
+
+$ ls -la
+TODO
+```
+
+其中，`zstd_decompress` 和 `lz4_decompress` 是 GreatSQL 提供的解压缩工具，它们位于 *basedir/bin* 目录下，需要将该目录加到环境变量 **PATH** 中，否则就需要指定全路径：
+
+
+```shell
+$ export PATH=$PATH:/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin
+$ which zstd_decompress
+/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/zstd_decompress
+```
+
+也可以使用 `mysqldecompress` 工具来解压缩，它是个 Shell 脚本，使用起来会更方便些，例如：
+
+```shell
+$ mysqldecompress --decompress-tool=zstd_decompress --decompress-dir=/data/restore/20240618
+TODO
+```
+
+注意：
+1. 采用 `mysqldecompress` 解压缩后会删除原文件; 
+2. 参数 `--decompress-tool` 指定相应的解压缩工具，如果是 lz4 压缩文件，则指定为 "lz4_decompress"。
+
+在全量 Clone 备份文件目录下，可以看到每个表空间都会对应一个 ".delta" 后缀的数据文件。之所以产生这些文件，是因为全量 Clone 备份在 *FILE COPY* 阶段结束后，数据文件已被压缩，在 *PAGE COPY* 阶段中的数据因找不到其在原文件的位置，需要单独存储到 ".delta" 文件。在数据恢复过程，需要对这些 ".delta" 文件单独处理。
+
+#### 解压缩增备文件
+
+如果还要恢复增备压缩文件，同样地，也要先进行解压缩操作：
+
+```shell
+# 不厌其烦地提醒，要先做好备份，不要对原备份文件直接操作
+$ cp -rfp /data/backup/clone-compressed-incr/20240618-202406181530 /data/restore/
+
+# 解压缩
+$ mysqldecompress --decompress-tool=zstd_decompress --decompress-dir=/data/restore/20240618-202406181530
+TODO
+```
+
+#### 全量压缩备份恢复
+
+如果不打算继续恢复增量备份文件，则准备好一个合适的 my.cnf 配置文件，将恢复后的文件目录作为 *datadir*，直接启动 GreatSQL 服务即可（如果还想继续恢复增量备份文件，请跳到下一步操作 "4. 增量压缩备份恢复"）：
+
+```shell
+$ cd /data/restore/20240618
+
+# 检查确认 my.cnf 文件内容
+$ cat my.cnf
+[mysqld]
+basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
+datadir = /data/restore/20240618
+user = mysql
+socket = mysql.sock
+
+# 启动 GreatSQL
+$ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf &
+TODO
+```
+可根据需要自行调整 my.cnf 配置文件内容。
+
+启动过程中如果没有报错，就说明压缩备份恢复成功。
+
+#### 增量压缩备份恢复
+
+将增备压缩文件解压缩后，准备好一个合适的 my.cnf 配置文件，配合全备文件目录，执行增备文件的恢复应用：
+
+```shell
+$ cd /data/restore/20240618
+
+# 检查确认 my.cnf 文件内容
+$ cat my.cnf
+[mysqld]
+basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
+datadir = /data/restore/20240618
+user = mysql
+socket = mysql.sock
+
+# 启动 GreatSQL，将参数 --clone_incremental_dir 指向增备恢复文件
+$ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf --clone_incremental_dir=/data/restore/20240618-202406181530
+TODO
+```
+
+恢复过程中没有产生报错信息，说明一切顺利。
+
+这就完成了增备文件恢复，如果有多个增备压缩文件，重复上面的 **解压缩 & 应用** 操作即可。
+
+#### 启动数据库实例
+
+全备、增备文件全部应用完后，接下来可以启动数据库实例：
+
+```shell
+$ cd /data/restore/20240618
+$ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf &
+TODO
+```
+可根据需要自行调整 my.cnf 配置文件内容。
+
+启动过程中如果没有报错，就说明压缩全备 + 增备恢复成功。
+
+至此，一次完整的 Clone 压缩全备 + 增备，以及后续的数据恢复工作完成了。
+
+### 压缩备份效果测试
+
+利用 `sysbench` 工具填充 5 个测试表，每个表 2000 万行数据。经对比测试，数据压缩比如下：
+
+| 压缩算法	| 原数据大小 | Clone | Xtrabackup| Clone 压缩比| Xtrabackup压缩比|
+| --- | --- |--- | --- | --- | --- |
+| zstd| 23G |9.6G |9.6G |2.40 | 2.40 |
+| lz4 |	23G |16.1G |17G |1.43 | 1.35 |
 
 ## 关于 InnoDB page tracking
 
 当在 Clone 备份任务中加上 `ENABLE PAGE TRACK` 子句，表示启用 page tracking 特性，则备份对象实例每次数据刷盘时，page tracking 系统就会记录刷盘的页面的 tablespace id 和 page no。这个操作由后台线程异步执行，并不影响前端用户业务性能。更多关于 page tracking 的介绍详见 [InnoDB Clone and page tracking](https://dev.mysql.com/blog-archive/innodb-clone-and-page-tracking)。
 
-1. 开启 page tracking
+### 开启 page tracking
 
 在执行 Clone 备份时，加上 `ENABLE PAGE TRACK` 子句即可启用 page tracking：
 
@@ -421,7 +602,7 @@ $ find ./#ib_archive/ -type f | xargs ls -l
 -rw-r----- 1 mysql mysql 65536 Jun 18 09:50 ./#ib_archive/page_group_21528636229/ib_page_0
 ```
 
-2. 关闭 page tracking
+### 关闭 page tracking
 
 可以通过调用 `mysqlbackup_page_track_set()` 函数来关闭 page tracking：
 
@@ -447,7 +628,7 @@ greatsql> SHOW GLOBAL STATUS LIKE '%lsn%';
 ```
 向函数传递参数 "false" 表示关闭 page tracking，函数返回值为当前最新 LSN。
 
-3. 清除 page tracking 历史数据
+### 清除 page tracking 历史数据
 
 在清除 page tracking 历史数据前需要先关闭 page tracking，再调用 `mysqlbackup_page_track_purge_up_to()` 函数清除历史数据。
 
@@ -489,6 +670,59 @@ $ find ./#ib_archive/ -type f | xargs ls -l
 打开 page tracking 后，如果后续不再需要增备，则最好采用上面的方法关闭 page tracking 并清除历史数据。
 
 ## 新增选项
+
+GreatSQL 中针对 Clone 备份新增以下几个选项。
+
+- clone_file_compress
+
+| System Variable Name	| clone_file_compress |
+| --- | --- | 
+| Variable Scope	| Global |
+| Dynamic Variable	| Yes |
+| Permitted Values |	[CLONE_FILE_COMPRESS_NONE | CLONE_FILE_COMPRESS_ZSTD | CLONE_FILE_COMPRESS_LZ4] |
+| Default	| CLONE_FILE_COMPRESS_NONE |
+| Description	| 选择 Clone 文件压缩算法，默认：未开启。支持两种压缩算法：zstd（CLONE_FILE_COMPRESS_ZSTD），lz4（CLONE_FILE_COMPRESS_LZ4）|
+
+- clone_file_compress_zstd_level
+
+| System Variable Name	| clone_file_compress_zstd_level |
+| --- | --- | 
+| Variable Scope	| Global |
+| Dynamic Variable	| Yes |
+| Permitted Values |	[1 - 19] |
+| Default	| 1 |
+| Description	| zstd 压缩级别，取值范围为 [1 - 19] 的整数，默认为 1|
+
+- clone_file_compress_chunk_size
+
+| System Variable Name	| clone_file_compress_chunk_size |
+| --- | --- | 
+| Variable Scope	| Global |
+| Dynamic Variable	| Yes |
+| Permitted Values |	[1024, ULLONG_MAX] |
+| Default	| 64Kb |
+| Description	| 数据压缩线程的工作缓冲区大小（以字节为单位），默认值：64Kb |
+
+- clone_file_compress_threads
+
+| System Variable Name	| clone_file_compress_threads |
+| --- | --- | 
+| Variable Scope	| Global, Session |
+| Dynamic Variable	| Yes |
+| Permitted Values |	[1 - 128] |
+| Default	| 4 |
+| Description	| 数据压缩的并行线程数，取值范围 [1 - 128] 的整数，默认值：4 |
+
+- clone_incremental_dir
+
+| System Variable Name	| clone_incremental_dir |
+| --- | --- | 
+| Variable Scope	| Global |
+| Dynamic Variable	| No |
+| Permitted Values |	 |
+| Default	|  |
+| Description	| 指定用于数据恢复的增备文件路径 |
+
 
 ## 元数据表
 
@@ -576,7 +810,7 @@ BINLOG_POSITION: 0
 
 该视图只能保存最近 5 次备份操作记录。更多详细信息请参考：[Performance Schema Clone Tables](https://dev.mysql.com/doc/mysql-perfschema-excerpt/8.0/en/performance-schema-clone-tables.html)。
 
-1. 查询备份状态
+#### 查询备份状态
 
 ```sql
 greatsql> SELECT * FROM performance_schema.clone_status\G
@@ -598,7 +832,7 @@ greatsql> KILL 11;
 
 注意：被终止的备份任务，不能再次启动，目前也不支持备份任务暂停。
 
-2. 查询备份进度
+#### 查询备份进度
 
 ```sql
 greatsql> SELECT * FROM performance_schema.clone_progress;
