@@ -417,7 +417,7 @@ greatsql> SELECT c1, c2, c3 FROM greatsql.t1 LIMIT 1;
 - 4. 单独将授权账户 "user2@%" 设置为对脱敏策略 "policy1" 不生效，也就是对 "user2@%" 账户的查询请求不启用脱敏策略，例如：
 
 ```sql
-greatsql> CALL sys_masking.policy_add_user('policy1', 'user2@127.0.0.1');
+greatsql> CALL sys_masking.policy_add_user('policy1', 'user2@%');
 ```
 
 ```sql
