@@ -177,6 +177,8 @@ GreatSQL支持Oracle风格的存储过程使用方式，部分存储过程/函�
 ### 兼容模式支持的存储过程/函数
 
 下面是需要先设定 `sql_mode = ORACLE` 才能支持 Oracle 兼容的存储过程/函数用法（部分用法在 `sql_mode = DEFAULT` 模式下也支持，但不具备 Oracle 兼容特性）
+- [BULK COLLECT](./sql-compat/5-3-easyuse-ora-sp-bulk-collect.md)
+- [CONTINUE](./sql-compat/5-3-easyuse-ora-sp-continue.md)
 - [CURSOR](./sql-compat/5-3-easyuse-ora-sp-cursor.md)
 - [EXIT/EXIT WHEN](./sql-compat/5-3-easyuse-ora-sp-exit-when.md)
 - [FORALL LOOP](./sql-compat/5-3-easyuse-ora-sp-forall-loop.md)
@@ -184,7 +186,6 @@ GreatSQL支持Oracle风格的存储过程使用方式，部分存储过程/函�
 - [GOTO](./sql-compat/5-3-easyuse-ora-sp-goto-label.md)
 - [IF .. ELSIF](./sql-compat/5-3-easyuse-ora-sp-if.md)
 - [REF CURSOR, SYS_REFCURSOR](./sql-compat/5-3-easyuse-ora-sp-ref-cursor.md)
-- [BULK COLLECT](./sql-compat/5-3-easyuse-ora-sp-bulk-collect.md)
 - [TRIGGER](./sql-compat/5-3-easyuse-ora-sp-trigger.md)
 - [TYPE IS RECORD](./sql-compat/5-3-easyuse-ora-sp-record-type.md)
 - [TYPE IS TABLE](./sql-compat/5-3-easyuse-ora-sp-table-type.md)
