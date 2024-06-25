@@ -15,10 +15,9 @@
 GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**高安全** 等多方面都有增强新特性，包括 Clone 全量 & 增备份和恢复，以及 Clone 压缩备份，MGR 新加入成员节点时自动选择最新数据节点为 Donor 节点，NUMA 亲和性优化，非阻塞式 DDL，无主键表导入提速，更多 Oracle 兼容用法，可记录最后登入时间，基于规则的数据脱敏功能等多个新特性。
 
 ### 高可用
-- 支持采用 Clone 实现在线全量热备和增备以及恢复（类似 Xtrabackup），结合 Binlog 可实现恢复到指定时间点。此外，Clone 备份还支持压缩功能。详见：[Clone 备份](../../5-enhance/5-2-ha-clone.md)。
-- 当有新成员节点加入 MGR 时，如果选择 Clone 方式复制数据，支持自动选择从最新事务数据的成员节点复制数据，可有效提升 Clone 速度，提高 MGR 的服务可靠性。
+- 当有新成员节点加入 MGR 时，如果选择 Clone 方式复制数据，支持自动选择从最新事务数据的成员节点复制数据，可有效提升 Clone 速度，提高 MGR 的服务可靠性。当新加入节点触发 Clone 方式复制数据时，也支持该特性。
 
-新增选项 `group_replication_donor_threshold`，取值范围 [1, MAX]，默认值为 MAX。MAX 值取决于 CPU 类型，在 32-bit 系统中是 4294967295（2^32-1），而在 64-bit 系统中是 18446744073709551615（2^64-1）。
+选项 `group_replication_donor_threshold` 用于定义选择 Donor 节点时判断事务延迟阈值，取值范围 [1, MAX]，默认值为 MAX。MAX 值取决于 CPU 类型，在 32-bit 系统中是 4294967295（2^32-1），而在 64-bit 系统中是 18446744073709551615（2^64-1）。
 
 当新成员节点加入 MGR 时，新成员节点只会选择那些延迟小于 `group_replication_donor_threshold` 的节点作为 Donor 节点。
 
@@ -27,8 +26,11 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 2. 现在 MGR 中有两个节点A、B，它们的 GTID 分别是 [1-400]、[1-280]，新节点 C 加入，由于 A & B 节点的 GTID 差值大于预设阈值，则只会选择 A 作为 Donor 节点。
 3. 现在 MGR 中有三个节点A、B、C，它们的 GTID 分别是 [1-400]、[1-350]、[1-280]，新节点 D 加入，由于 C 节点的 GTID 差值大于预设阈值，A & B 节点 GTID 延迟小于预设阈值，则会随机选择 A 或 B 其中一个作为 Donor 节点。
 
-- 当 MGR 各成员节点设置 [地理标签](../../5-enhance/5-2-ha-mgr-zoneid.md) 时，其中的 [仲裁节点](../../5-enhance/5-2-ha-mgr-arbitrator.md) 无需像其他节点那样也要设置地理标签ID。详见：[地理标签](../../5-enhance/5-2-ha-mgr-zoneid.md)。 http://zbox.greatdb.com/zentao/story-view-4305-0-87.html
-- 【缺测试报告】优化了在 [快速单主模式](../../5-enhance/5-2-ha-mgr-fast-mode.md) 下 relay log 应用逻辑，提升 MGR 整体性能；并优化了当 relay log 存在堆积时的 applier 线程的内存消耗异常情况。 http://zbox.greatdb.com/zentao/story-view-4353-0-87.html https://bbkv6krkep.feishu.cn/docx/QKS9dGFbOoz3lfxxueWcPK5ynGg
+- 在主从复制中，由从节点向主节点发起 Binlog 读取请求，如果读取太快或并发太多线程就会加大主节点的压力。新增选项 `rpl_read_binlog_speed_limit` 用于控制从节点上向主节点发起 Binlog 读取请求的限速，这对于控制主从复制中的网络带宽使用率、降低主节点压力、或在数据恢复过程中降低消耗资源非常有用。该选项可在从节点端设置生效。详见：[Binlog 读取限速](../../5-enhance/5-2-ha-binlog-speed-limit.md)。
+- 优化了在 [快速单主模式](../../5-enhance/5-2-ha-mgr-fast-mode.md) 下 relay log 应用逻辑，提升 MGR 整体性能；并优化了当 relay log 存在堆积时的 applier 线程的内存消耗异常情况。 http://zbox.greatdb.com/zentao/story-view-4353-0-87.html https://bbkv6krkep.feishu.cn/docx/QKS9dGFbOoz3lfxxueWcPK5ynGg
+- GreatSQL 优化了 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 中的故障检测效率，特别是发生网络故障时，备用集群能更快完成主从复制通道调整，降低主从复制链路断开的时间，提高整体可用性。以设置 `MASTER_RETRY_COUNT = 2` 为例（`slave_net_timeout` 和 `MASTER_CONNECT_RETRY` 默认值均为 60），在主从复制通道间发生网络故障时导致的复制中断持续约 3 分钟，优化后故障影响时长缩短到 10 - 20 秒以内。在 GreatSQL 中，可以利用 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 实现两个 MGR 集群间的主从复制，实现跨机房间的高可用切换方案。
+- [地理标签](../../5-enhance/5-2-ha-mgr-zoneid.md) 功能中包含两个参数 `group_replication_zone_id`（默认值为 0）和 `group_replication_zone_id_sync_mode`（默认值为ON）。在旧版本中，要求各个节点的 `group_replication_zone_id_sync_mode` 保持一致，否则无法加入 MGR。新版本中，允许仲裁节点设置不同的 `group_replication_zone_id_sync_mode`。例如，节点 A1、A2 设置 `group_replication_zone_id = 0` & `zone_id_sync_mode = ON`；节点 B1、B2 设置 `group_replication_zone_id = 1`，它们也必须设置 `zone_id_sync_mode = ON`；仲裁投票节点C 设置 `group_replication_zone_id = 2`，但可以设置 `group_replication_zone_id_sync_mode = OFF`。
+- 当启用 greatdb_ha Plugin 时，新增支持 IPv6。
 
 更多信息详见文档：[高可用](../../5-enhance/5-2-ha.md)。
 
@@ -55,13 +57,66 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 更多信息详见文档：[高安全](../../5-enhance/5-4-security.md)。
 
 ### 其他
-- 由于 GreatSQL 已支持 Rapid 引擎，以及未来还将推出 dplan 特性，因此从 GreatSQL 8.0.32-26 开始，不再推荐使用 InnoDB 并行查询特性。
+- 支持采用 Clone 实现在线全量热备和增备以及恢复（类似 Xtrabackup），结合 Binlog 可实现恢复到指定时间点。此外，Clone 备份还支持压缩功能。详见：[Clone 备份](../../5-enhance/5-2-ha-clone.md)。
+- 由于 GreatSQL 已支持 Rapid 引擎，以及未来还将推出 dplan 特性，因此从 GreatSQL 8.0.32-26 开始，不再推荐使用 InnoDB 并行查询特性（同时会删除用户手册中的入口链接）。
+- 合并龙芯支持patch，参考：https://gitee.com/src-openeuler/greatsql/pulls/54/files。
 
 ## 缺陷修复
 - 修复了在部分 ARM 架构环境中无法使用并行复制的问题，详见：[MySQL Bug 110752](https://bugs.mysql.com/bug.php?id=110752)。
 - 修复了最后登录信息和审计日志入表时未处理 Binlog 可能导致主从异常的问题。在新版本中，最后登录信息和审计日志都不会记录 Binlog，避免因为主从复制（也包括 MGR）中各实例都开启该特性记录 Binlog 而造成主从复制失败（或 MGR 报错）。
-- 修复了数个因为 SQL 注入可能导致数据库实例发生 crash 风险的问题，大幅提升 GreatSQL 对 SQL 注入风险的抵御能力。
+- 修复了数个因为 SQL 注入可能导致数据库实例发生 coredump 的问题，大幅提升 GreatSQL 对 SQL 注入风险的抵御能力。
 - 修复了 Oracle 模式下 NULL 值唯一约束问题。在原来的 Oracle 模式下，插入 NULL 值会触发唯一约束冲突；而在 Oracle 数据库中，是允许向唯一约束列中重复写入 NULL 值的。在新版本中修复了这个问题。
+
+```sql
+-- 在老版本中
+greatsql> SET sql_mode = ORACLE;
+greatsql> CREATE TABLE t1 (c1 INT UNIQUE);
+greatsql> SHOW CREATE TABLE t1\G
+*************************** 1. row ***************************
+       Table: t1
+Create Table: CREATE TABLE "t1" (
+  "my_row_id" bigint unsigned NOT NULL AUTO_INCREMENT /*!80023 INVISIBLE */,
+  "c1" int DEFAULT NULL,
+  PRIMARY KEY ("my_row_id"),
+  UNIQUE KEY "c1" ("c1") /* nulls are equal in unique index as oracle does */
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+greatsql> INSERT INTO t1 SELECT NULL;
+Query OK, 1 row affected (0.01 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+greatsql> INSERT INTO t1 SELECT NULL;
+ERROR 1062 (23000): Duplicate entry 'NULL' for key 't1.c1'
+```
+
+在新版本中修复了这个唯一性约束问题：
+```sql
+-- 在新版本中
+greatsql> SET sql_mode = ORACLE;
+greatsql> CREATE TABLE t1 (c1 INT UNIQUE);
+greatsql> SHOW CREATE TABLE t1\G
+*************************** 1. row ***************************
+       Table: t1
+Create Table: CREATE TABLE "t1" (
+  "my_row_id" bigint unsigned NOT NULL AUTO_INCREMENT /*!80023 INVISIBLE */,
+  "c1" int DEFAULT NULL,
+  PRIMARY KEY ("my_row_id"),
+  UNIQUE KEY "c1" ("c1") /* nulls are equal in unique index as oracle does */
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+greatsql> INSERT INTO t1 SELECT NULL;
+Query OK, 1 row affected (0.01 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+-- 不再报告唯一性约束冲突
+greatsql> INSERT INTO t1 SELECT NULL;
+Query OK, 1 row affected (0.01 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+```
+
+- 修复了开启线程池后，当逻辑 CPU 核数大于 128 时会触发 coredump 的问题，详见：[mysqld debug version will core if the number of cpu cores is larger than 128](https://github.com/GreatSQL/GreatSQL/issues/5)。
+- 修复了在 greatdb_ha Plugin 中启用 VIP 后因系统环境问题或配置不当可能导致 GreatSQL 在启动 MGR 后发生 coredump 的问题。
+- 修复了用RPM包和TAR二进制包不同方式安装会造成 `lower_case_table_names` 的默认设置不同的问题。
 
 ## 注意事项
 
