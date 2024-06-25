@@ -5,7 +5,7 @@ GreatSQL支持在单主（Single-Primary）模式下，在读写节点（以下�
 
 还可以为只读节点（以下称呼：Secondary节点）绑定只读VIP，业务可以通过该VIP来访问Secondary节点，实现Secondary节点的动态VIP漂移。
 
-目前绑定动态VIP只支持IPv4，不支持IPv6。
+绑定动态VIP支持IPv4 和 IPv6。
 
 **特别提醒**：
 
@@ -71,7 +71,7 @@ loose-greatdb_ha_port = 33062
 > SET GLOABL greatdb_ha_vip_tope = "node1_uuid1::vip1; node2_uuid2::vip2,vip3; node3_uuid3::vip4";
 ```
 
-- 配置要绑定的网卡名，插件会将vip绑定到MGR主所在机器的指定网卡上，比如配置为eth0，为了防止网卡原有的ip被覆盖，实际绑定后，会绑定在名为eth0:0的网卡上
+- 配置要绑定的网卡名，插件会将vip绑定到MGR主（Primary）节点所在机器的指定网卡上，比如配置为eth0，为了防止网卡原有的ip被覆盖，实际绑定后，会绑定在名为eth0:0的网卡上
 ```
 loose-greatdb_ha_mgr_vip_nic = 'eth0'
 ```
