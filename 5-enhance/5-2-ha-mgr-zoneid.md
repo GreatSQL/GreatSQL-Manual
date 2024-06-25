@@ -15,16 +15,33 @@ GreatSQL中新增地理标签特性，可以提升多机房架构数据可靠性
 
 | System Variable Name  | group_replication_zone_id |
 | --- | --- |
-| Variable Scope        | global |
-| Dynamic Variable      | YES |
-| Permitted Values |    [0 ~ 8] |
+| Variable Scope        | Global |
+| Dynamic Variable      | Yes |
+| Type                | Interger  |
+| Permitted Values |    [0 - 8] |
 | Default       | 0 |
 | Description   | 设置MGR各节点不同的地理标签，主要用于解决多机房数据同步的问题。<br/>修改完该选项值之后，要重启MGR线程才能生效。 |
 
 
-- 新增选项 `group_replication_zone_id_sync_mode`（类型：布尔型，可选值：ON/OFF，默认值：ON）。如果设置了 `group_replication_zone_id` 启用地理标签功能，需要保证所
-有节点都同步数据。但当 `group_replication_zone_id_sync_mode = OFF` 时，地理标签就只是个标记，不再保证各节点都同步数据。
+- 新增选项 `group_replication_zone_id_sync_mode`（类型：布尔型，可选值：ON/OFF，默认值：ON）。
 
+| System Variable Name  | group_replication_zone_id_sync_mode |
+| --- | --- |
+| Variable Scope        | Global |
+| Dynamic Variable      | Yes |
+| Type                | Boolean  |
+| Permitted Values |    ON/OFF |
+| Default       | ON |
+| Description   | 该参数用于控制 MGR 中，不同机房里的节点的数据同步行为模式 |
+
+
+该参数用于控制 MGR 中，不同机房里的节点的数据同步行为模式。需要保证 MGR 中除了仲裁节点之外的所有节点配置相同的值，否则节点无法加入 MGR。
+
+在 MGR 运行过程中，不允许更改选项值；需要先停止 MGR 服务，修改后才能再启动。
+
+当选项设置为 ON 时，如果 MGR 中存在多个 zone id（地理标签），则要求在满足 Paxos 多数派协议的基础上，需要保证每个 zone id 中最少有一个节点同步到最新数据。
+
+如果设置了 `group_replication_zone_id` 启用地理标签功能，需要保证所有节点都同步数据。但当 `group_replication_zone_id_sync_mode = OFF` 时，地理标签就只是个标记，不再保证各节点都同步数据。 
 
 
 - **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
