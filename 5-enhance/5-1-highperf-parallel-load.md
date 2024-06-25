@@ -11,7 +11,11 @@
 
 并行导入与存储引擎无关，理论上可以支持所有的存储引擎。
 
-当 InnoDB 表没有显式定义主键且选项 `sql_generate_invisible_primary_key = OFF` 时，就会使用实例级的 `DB_ROW_ID` 作为隐式的聚集索引键。这种情况下，如果对该表并行导入数据，受限于实例级 `DB_ROW_ID` 锁互斥的影响，随着并发数的增加，性能明显下降。GreatSQL针对这种情况也提供了优化方案，通过设置选项 `innodb_optimize_no_pk_parallel_load = ON` 就能获得更好的并发导入性能。下面是一个性能对比参考，可以看到导入效率大约提升了 5 倍：
+## 无主键表并行导入优化
+
+当 InnoDB 表没有显式定义主键且选项 `sql_generate_invisible_primary_key = OFF` 时，就会使用实例级的 `DB_ROW_ID` 作为隐式的聚集索引键。这种情况下，如果对该表并行导入数据，受限于实例级 `DB_ROW_ID` 锁互斥的影响，随着并发数的增加，性能明显下降。GreatSQL针对这种情况也提供了优化方案，通过设置选项 `innodb_optimize_no_pk_parallel_load = ON` 就能获得更好的并发导入性能。
+
+下面是一个性能对比参考，可以看到在关闭 [GIPKs](https://dev.mysql.com/doc/refman/8.0/en/create-table-gipks.html) 的前提下，采用并行 LOAD DATA 方式（设置 `gdb_parallel_load_workers=24`）导入一亿条数据，启用本优化特性后（设置 `innodb_optimize_no_pk_parallel_load = ON`），导入效率大约提升了 5 倍：
 
 
 | 导入数据量 | 优化模式 | 耗时 |
