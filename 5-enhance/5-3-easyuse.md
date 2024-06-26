@@ -1,13 +1,13 @@
-# GreatSQL高兼容
+# GreatSQL 高兼容
 ---
 
-从GreatSQL 8.0.32-25版本开始，在Oracle兼容方面有了巨大提升，除了OCI、DBlink、包之外，几乎支持绝大多数常用的Oracle语法、数据类型、函数、存储过程等功能。
+GreatSQL 实现 100% 完全兼容 MySQL 及 Percona Server For MySQL 用法，支持大多数常见 Oracle 用法，包括 [数据类型兼容](#数据类型兼容)、[函数兼容](#函数兼容)、[SQL 语法兼容](#sql语法兼容)、[存储程序兼容](#存储程序兼容) 等众多兼容扩展用法。
 
 ## Oracle兼容设计思路概述
 GreatSQL的Oracle的兼容处理的优先原则如下：
-1. GreatSQL风格的SQL和存储过程可以直接在默认SQL MODE模式下工作。
-2. 与GreatSQL风格的SQL和存储过程**不冲突**的Oracle兼容功能也可以直接在默认SQL MODE模式下工作。
-3. 与GreatSQL风格的SQL和存储过程**存在语法或语义冲突**的功能，需要用户显式切换到Oracle MODE模式下才能工作。
+- GreatSQL风格的SQL和存储程序可以直接在默认SQL MODE模式下工作。
+- 与GreatSQL风格的SQL和存储程序**不冲突**的Oracle兼容功能也可以直接在默认SQL MODE模式下工作。
+- 与GreatSQL风格的SQL和存储程序**存在语法或语义冲突**的功能，需要用户显式切换到Oracle MODE模式下才能工作。
 
 GreatSQL对Oracle的兼容主要通过以下三种不同方案来实现：
 - 原生模式：Oracle、GreatSQL都支持或部分支持通用的SQL标准，对于部分简单语句，无需调整即可兼容。
@@ -166,17 +166,17 @@ Create Table: CREATE TABLE `t1` (
 **注意**：以上函数在设定 `sql_mode = ORACLE` 后，行为与Oracle会更加接近；反之则保持GreatSQL的原生行为。
 
 
-## 存储过程/函数兼容
+## 存储程序兼容
 
-GreatSQL支持Oracle风格的存储过程使用方式，部分存储过程/函数部分在 `ORACLE` 模式下做了基础结构改造，详见：[存储过程基础结构改造说明](./sql-compat/5-3-easyuse-ora-sp-basic-constructs.md)。
+GreatSQL支持Oracle风格的存储程序使用方式，部分存储程序部分在 `ORACLE` 模式下做了基础结构改造，详见：[存储程序基础结构改造说明](./sql-compat/5-3-easyuse-ora-sp-basic-constructs.md)。
 
-### 扩展兼容支持的存储过程/函数
+### 扩展兼容支持的存储程序
 
 下面是在 GreatSQL 中，无论 `sql_mode` 采用 *DEFAULT* 还是 *ORACLE*，都能支持 [CREATE OR REPLACE扩展](./sql-compat/5-3-easyuse-ora-sp-create-or-replace.md)，但是在不同模式下的表现也有所区别。
 
-### 兼容模式支持的存储过程/函数
+### 兼容模式支持的存储程序
 
-下面是需要先设定 `sql_mode = ORACLE` 才能支持 Oracle 兼容的存储过程/函数用法（部分用法在 `sql_mode = DEFAULT` 模式下也支持，但不具备 Oracle 兼容特性）
+下面是需要先设定 `sql_mode = ORACLE` 才能支持 Oracle 兼容的存储程序用法（部分用法在 `sql_mode = DEFAULT` 模式下也支持，但不具备 Oracle 兼容特性）
 - [BULK COLLECT](./sql-compat/5-3-easyuse-ora-sp-bulk-collect.md)
 - [CONTINUE](./sql-compat/5-3-easyuse-ora-sp-continue.md)
 - [CURSOR](./sql-compat/5-3-easyuse-ora-sp-cursor.md)
@@ -193,7 +193,7 @@ GreatSQL支持Oracle风格的存储过程使用方式，部分存储过程/函�
 - [WHILE...LOOP... END LOOP](./sql-compat/5-3-easyuse-ora-sp-while.md)
 - [匿名存储块](./sql-compat/5-3-easyuse-ora-sp-anony-block.md)
 - [命名标记法传递参数](./sql-compat/5-3-easyuse-ora-sp-named-parameters.md)
-- [存储过程/函数支持默认参数(DEFAULT)](./sql-compat/5-3-easyuse-ora-sp-default-optval.md)
+- [存储程序支持默认参数(DEFAULT)](./sql-compat/5-3-easyuse-ora-sp-default-optval.md)
 - [存储过程支持使用RETURN](./sql-compat/5-3-easyuse-ora-sp-return.md)
 - [异常处理 EXCEPTION HANDLER](./sql-compat/5-3-easyuse-ora-sp-exception-handler.md)
 - 更多 ...
@@ -201,7 +201,7 @@ GreatSQL支持Oracle风格的存储过程使用方式，部分存储过程/函�
 
 示例:
 
-- Oracle环境下的存储过程用法:
+- Oracle环境下的存储程序用法:
 
 ```
 CREATE OR REPLACE EDITIONABLE FUNCTION f0(delta INT DEFAULT 0) RETURN TIMESTAMP AS
@@ -214,7 +214,7 @@ SELECT f0(2) FROM DUAL ;
 SELECT f0() FROM DUAL ;
 ```
 
-- GreatSQL **原生模式**下的存储过程用法:
+- GreatSQL **原生模式**下的存储程序用法:
 
 ```
 CREATE OR REPLACE FUNCTION f1(delta INT) RETURNS TIMESTAMP
@@ -227,7 +227,7 @@ END;
 SELECT f0(2) FROM DUAL ;
 ```
 
-- GreatSQL **兼容模式** 下存储过程用法:
+- GreatSQL **兼容模式** 下存储程序用法:
 
 ```
 SET sql_mode = ORACLE;
