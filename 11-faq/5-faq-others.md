@@ -191,7 +191,7 @@ greatsql> ALTER TABLE t1 SECONDARY_LOAD;
 
 GreatSQL相对于MySQL官方社区版本有非常大的性能提升，尤其是引入了InnoDB并行查询特性，在TPC-H测试中，平均提升15倍以上，最高提升43倍，表现非常优异。
 
-从GreatSQL 8.0.32-25版本开始，支持类似MySQL HeatWave的大规模并行、高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级。在32C64G测试机环境下，TPC-H 100G测试中22条SQL总耗时仅需不到80秒。更详细内容参考：[Rapid引擎](../5-enhance/5-1-highperf-rapid-engine.md)。
+从GreatSQL 8.0.32-25版本开始，支持类似MySQL HeatWave的大规模并行、高性能的内存查询加速AP引擎，可将数据分析性能提升几个数量级。在32C64G测试机环境下，TPC-H 100G测试中22条SQL总耗时仅需不到80秒。更详细内容参考：[Rapid引擎](../5-enhance/5-1-highperf-rapid-engine.md)。
 
 更多关于GreatSQL性能提升方面的内容可以参考下面几个测评报告：
 - [GreatSQL重磅特性，InnoDB并行并行查询优化测试](https://mp.weixin.qq.com/s/pK90W9xT_V59yvgxRwcn8A)

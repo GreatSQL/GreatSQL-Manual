@@ -3,7 +3,7 @@
 
 相对 MySQL 及 Percona Server For MySQL 的性能表现更稳定优异，支持 Rapid 引擎、事务无锁化、并行LOAD DATA、异步删除大表、线程池、非阻塞式DDL、NUMA 亲和调度优化 等特性，在 TPC-C 测试中相对 MySQL 性能提升超过 30%，在 TPC-H 测试中的性能表现是 MySQL 的十几倍甚至上百倍。
 
-- 支持 [大规模并行、基于内存查询、高压缩比的高性能 Rapid 引擎](./5-1-highperf-rapid-engine.md)，可将GreatSQL的数据分析性能提升几个数量级。在 32C64G 测试机环境下，TPC-H SF100 测试中 22 条 SQL 总耗时仅需不到80秒。并且针对 TPC-H 测试数据的压缩比平均可达到 7 倍多。
+- 支持 [大规模并行、基于内存查询、高压缩比的高性能 Rapid 引擎](./5-1-highperf-rapid-engine.md)，可将数据分析性能提升几个数量级。在 32C64G 测试机环境下，TPC-H SF100 测试中 22 条 SQL 总耗时仅需不到80秒。并且针对 TPC-H 测试数据的压缩比平均可达到 7 倍多。
 
 ![GreatSQL Rapid 引擎 TPC-H SF100 性能测试表现突出](../10-optimze/greatsql-tpch-sf100-vs-sf300.jpg)
 
