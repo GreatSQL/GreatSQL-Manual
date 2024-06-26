@@ -356,8 +356,7 @@ write和fsync的时机，可以由参数`sync_binlog`控制，默认是 0 。
   - redo log让InnoDB存储引擎拥有了崩溃恢复能力。
   - binlog保证了GreatSQL集群架构的数据一致性。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

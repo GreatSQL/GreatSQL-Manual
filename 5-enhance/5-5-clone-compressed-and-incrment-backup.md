@@ -896,8 +896,7 @@ greatsql> SELECT * FROM performance_schema.clone_progress;
 在 GreatSQL 中，通过 Clone 能更方便实现对本地或远程实例的全量或增量备份，大幅提升了数据库的便利性和可靠性。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

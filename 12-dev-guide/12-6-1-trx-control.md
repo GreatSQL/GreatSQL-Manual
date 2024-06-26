@@ -730,8 +730,7 @@ Query OK, 0 rows affected (0.00 sec)
 更多关于 XA 事务的细节内容请参考：[XA Transactions](https://dev.mysql.com/doc/refman/8.0/en/xa.html)。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

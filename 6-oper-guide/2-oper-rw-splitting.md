@@ -258,8 +258,7 @@ MySQL  172.16.16.10:3306 ssl  Py >  c.status();
 利用MySQL Router构建一套支持读写分离、读负载均衡以及故障自动转移的MGR集群就部署完成。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

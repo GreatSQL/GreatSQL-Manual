@@ -59,8 +59,7 @@ Database changed
 ## 创建时遵守的规则
 对数据库对象采用统一的命名规则和标准，使得应用代码的可读性更强，便于他人阅读、理解和继承。详情可见：[Schema设计规范参考](../10-optimze/2-1-schema-design-refer.md)
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

@@ -64,8 +64,7 @@ MGR支持单主和多主两种模式，在单主模式下，各节点会自动�
 2. 半同步复制中，一旦slave因为锁或其他原因响应慢的话，也会导致master事务被阻塞。MGR是采用多数派确认机制，个别节点响应慢对Primary节点的影响没那么大（不要选用AFTER模式）。
 3. 主从复制没有类似MGR那样提供事务数据的一致性保证。MGR自带了事务数据一致性保障机制。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

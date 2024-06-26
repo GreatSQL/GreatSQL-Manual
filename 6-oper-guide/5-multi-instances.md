@@ -98,8 +98,7 @@ $ systemctl start greatsql@mgr01
 这就可以在单机环境下很方便的管理多实例服务了。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

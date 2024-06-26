@@ -174,8 +174,7 @@ Current database: *** NONE ***
 至此，利用MySQL Router配合GreatSQL构建一套支持读写分离、读负载均衡以及故障自动转移的MGR集群就部署完毕了。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

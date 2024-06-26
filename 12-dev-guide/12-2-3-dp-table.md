@@ -142,8 +142,7 @@ greatsql> SHOW TABLES;
 正例：无符号值可以避免误存负数，且扩大了表示范围。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

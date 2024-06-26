@@ -123,8 +123,7 @@ Empty set (0.00 sec)
 1. 插入数据的表必须有主键或者是唯一索引！否则的话，`REPLACE INTO` 会直接插入数据，这将导致表中出现重复的数据。
 2. 在有外键的情况下使用`REPLACE INTO`，如果被替换的记录被其他表的外键引用，会造成数据被删除。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

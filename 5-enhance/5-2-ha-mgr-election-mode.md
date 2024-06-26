@@ -31,8 +31,7 @@ GreatSQL中支持多种智能选主模式，使得高可用切换选主机制更
 
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

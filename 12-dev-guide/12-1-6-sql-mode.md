@@ -122,8 +122,7 @@
 从 GreatSQL 8.0.32-24 版本开始支持 Oracle 兼容，并新增支持设置 `sql_mode = ORACLE` 模式以适配 Oracle 语法及行为模式，详情请参考：[ORACLE MODE](../5-enhance/sql-compat/5-3-easyuse-ora-syntax-oraclemode.md)。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

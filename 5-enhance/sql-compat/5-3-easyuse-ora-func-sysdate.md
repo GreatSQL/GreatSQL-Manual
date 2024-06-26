@@ -38,8 +38,7 @@ greatsql> SELECT SYSDATE, SYSDATE() FROM DUAL;
 可以看到在不同 `sql_mode` 下输出结果不同，在Oracle mode下输出的精度更高。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../../greatsql-wx.jpg)

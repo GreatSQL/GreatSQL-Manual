@@ -23,8 +23,7 @@ GreatSQL 相较于 MySQL 增加了许多运维特性增强，例如用户统计�
 
 ## [其它新增表](./6-8-other-tables.md) 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

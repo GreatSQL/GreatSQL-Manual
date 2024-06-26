@@ -126,8 +126,7 @@ UPDATE慢的问题还不止于上面列举的这些情况，本文主要是提�
 - [PROCESSLIST中哪些状态要引起关注](https://mp.weixin.qq.com/s/vhUmB9JO-Zt2P02gVk4mwg)
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

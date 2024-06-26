@@ -240,8 +240,7 @@ GreatSQL数据库架构通常有以下几种方案：
 
 在金融级应用场景中，强烈建议采用GreatSQL MGR来构建高一致性高可用数据库架构。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

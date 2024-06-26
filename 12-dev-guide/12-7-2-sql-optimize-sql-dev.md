@@ -72,8 +72,7 @@
 - 尽量不使用外键约束，因为会增加更多行锁、死锁概率，以及数据库复杂度。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

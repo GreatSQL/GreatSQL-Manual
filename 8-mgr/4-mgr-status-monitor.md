@@ -137,8 +137,7 @@ MySQL  172.16.16.10:3306 ssl  Py > c.status()
   - `status:`节点状态,ONLINE表示在线
   - `version:`节点GreatSQL版本
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

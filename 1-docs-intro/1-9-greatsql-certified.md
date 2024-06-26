@@ -149,8 +149,7 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 18   | [高*明](https://greatsql.cn/home.php?mod=space&uid=1781) | GCP-DBA-2024664321 |
 | 19   | [孙*翀](https://greatsql.cn/home.php?mod=space&uid=1780) | GCP-DBA-2024911245 |
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

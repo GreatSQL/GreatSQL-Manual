@@ -142,8 +142,7 @@ greatsql> LOAD /*+ SET_VAR(gdb_parallel_load=ON) SET_VAR(gdb_parallel_load_chunk
 - [GreatSQL增强特性之：并行LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md)
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

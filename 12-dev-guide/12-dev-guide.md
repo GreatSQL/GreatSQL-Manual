@@ -211,8 +211,7 @@ $ mysql -uroot -e 'SHOW TABLE STATUS' world
 接下来，可以开始GreatSQL数据库应用开发之旅了。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

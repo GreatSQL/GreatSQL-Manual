@@ -147,8 +147,7 @@ ERROR 1366 (HY000): Incorrect integer value: ' GreatSQL ' for column 'Population
 若要更改数据类型详见 [Table/表管理](./12-2-3-dp-table.md) 中修改字段类型。
 
 
-- **[问题反馈 gitee](https://gitee.com/ GreatSQL / GreatSQL -Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

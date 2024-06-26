@@ -706,8 +706,7 @@ Record lock, heap no 2 PHYSICAL RECORD: n_fields 6; compact format; info bits 0
 如果在个别应用场景下，不希望 InnoDB 启用自动检测死锁，可以设置 `innodb_deadlock_detect = OFF`，不过这样一来，可能会有更多的行锁等待发生，此时应该适当调低行锁等待时间（修改选项 `innodb_lock_wait_timeout`），通常建议不超过 5-10 秒钟。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

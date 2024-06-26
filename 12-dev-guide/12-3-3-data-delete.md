@@ -28,8 +28,7 @@ greatsql> DELETE FROM student;
 
 `TRUNCATE TABLE` 在功能上与不带 WHERE 子句的 DELETE 语句相同，但 `TRUNCATE TABLE` 比 `DELETE` 速度快，且使用的系统和事务日志资源少，但 `TRUNCATE TABLE` 无事务且不触发 `TRIGGER`，有可能造成事故，故不建议在开发代码中使用此语句
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

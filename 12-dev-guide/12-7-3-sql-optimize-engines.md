@@ -59,8 +59,7 @@ Rapid 引擎适用于以读多写很少的业务场景，尤其适用于非实�
 也可以考虑利用 MyISAM 存储引擎表作为过渡，即执行 `LOAD DATA` 把数据导入到 MyISAM 表，而后再执行 `INSERT ... SELECT` 将数据加载到 InnoDB 引擎表中。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

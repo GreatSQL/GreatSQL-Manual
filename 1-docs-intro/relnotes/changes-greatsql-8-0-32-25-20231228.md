@@ -159,8 +159,7 @@ GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引
 
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../../greatsql-wx.jpg)

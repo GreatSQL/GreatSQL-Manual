@@ -7,8 +7,7 @@
 ## [从MySQL迁移到GreatSQL](./2-migrate-from-mysql-togreatsql.md)
 ## [从Percona Server迁移到GreatSQL](./3-migrate-from-percona-to-greatsql.md)
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

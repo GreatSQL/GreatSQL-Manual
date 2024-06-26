@@ -43,8 +43,7 @@
 - 在一个数据库实例内，数据表（包含表分区在内）数量通常不要超过一万个，每个 Schema（数据库）内数据表的数量通常不要超过一千个，避免元数据管理开销太高。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

@@ -53,8 +53,7 @@ GreatSQL采用GPLv2协议。
 GreatSQL的代码托管在[gitee](https://gitee.com/GreatSQL/GreatSQL)，同时在[github](https://github.com/GreatSQL/GreatSQL)保留镜像备份。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

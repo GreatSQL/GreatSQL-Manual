@@ -33,8 +33,7 @@ greatsql> select * from performance_schema.replication_group_members;
 ![MySQL Router + GreatSQL MGR 实现单IDC高可用方案](./2-ha-single-idc01.png)
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

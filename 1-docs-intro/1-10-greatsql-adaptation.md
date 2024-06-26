@@ -91,8 +91,7 @@ GreatSQL 社区面向数据库产业生态上下游厂商，包括如操作系�
 
 ![扫码添加GreatSQL社区助手](../11-faq/greatsql-wx-assist.jpg)
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

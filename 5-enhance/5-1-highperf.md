@@ -20,8 +20,7 @@ GreatSQL高性能方面的主要提升有以下几点：
 
 6. 支持线程池（thread pool），降低了线程创建和销毁的代价，保证高并发下，性能稳定不会明显衰退。更多内容参考：[线程池](./5-1-highperf-thread-pool.md)。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

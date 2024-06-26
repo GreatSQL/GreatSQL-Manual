@@ -268,8 +268,7 @@ greatsql> select _gbk'GreatSQL社区';
 
 - [关于GreatSQL字符集的总结](https://mp.weixin.qq.com/s/RERq6735UnbF8ZEmrD3AAw)
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

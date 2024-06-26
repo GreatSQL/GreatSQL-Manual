@@ -83,8 +83,7 @@ log_error_verbosity=3
 - 对同一个表的DDL和DML都只在同一个节点，否则可能会造成节点意外退出MGR。
 - 不要跑大事务，每个事务尽量控制在10MB以内。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

@@ -240,8 +240,7 @@ greatsql> select * from INFORMATION_SCHEMA.COMPRESSION_DICTIONARY_TABLES;
 
 对于用户事先已知其前 N 个字节的压缩率较差的值，可以调整此参数以跳过不必要的数据压缩尝试。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

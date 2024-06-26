@@ -90,8 +90,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 2. 仲裁节点在 GreatSQL 中才支持，MySQL 社区版不支持，因此也无法采用 MySQL Shell 社区版管理包含仲裁节点的 MGR 集群，需要改用 [GreatSQL Shell](../8-mgr/3-mgr-maintain-admin.md) 进行管理。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

@@ -9,8 +9,7 @@
 ## [同城跨IDC高可用](./3-ha-same-city-multi-idc.md)
 ## [跨城多IDC高可用](./4-ha-multi-city-multi-idc.md)
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

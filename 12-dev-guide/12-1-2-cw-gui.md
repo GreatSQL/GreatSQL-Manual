@@ -108,8 +108,7 @@ ATOMDB™ 数据库管理客户端是一款服务广大开发者的工具软件�
 
 至此，使用 ATOMDB 连接GreatSQL服务器完成
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

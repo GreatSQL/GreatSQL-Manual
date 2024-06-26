@@ -435,8 +435,7 @@ greatsql> DELETE FROM CITY WHERE ID=4080;
 greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL;
 ```
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

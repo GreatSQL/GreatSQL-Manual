@@ -81,8 +81,7 @@ Records: 2  Duplicates: 0  Warnings: 0
 3. 插入数据时，建议了解列上的约束定义情况。
     `NOT NULL`、`PRIMARY KEY` 约束、`UNIQUE` 约束均可以通过 `DESC` 语句查看，`FOREIGN KEY`、`CHECK` 约束可以通过查询 `information_schema.TABLE_CONSTRAINTS` 视图进行查看。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

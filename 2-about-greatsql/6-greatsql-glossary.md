@@ -23,8 +23,7 @@
 | Encryption | GreatSQL 支持 mysqldump 备份加密、CLONE 备份加密，以及 InnoDB 表空间国密加密等功能。详情参考文档：[高安全](../1-docs-intro/relnotes/changes-greatsql-8-0-32-24-20230605.md#14-%E5%AE%89%E5%85%A8)。|
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

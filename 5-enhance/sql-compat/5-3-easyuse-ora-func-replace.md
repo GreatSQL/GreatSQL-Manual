@@ -89,8 +89,7 @@ ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that 
 
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../../greatsql-wx.jpg)

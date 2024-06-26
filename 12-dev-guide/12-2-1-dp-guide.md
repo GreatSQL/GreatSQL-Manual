@@ -43,8 +43,7 @@ DML是数据操作语言，用于对数据库中的数据进行增删改查。�
 #### DCL 数据控制语言
 DCL是数据控制语言，用于授予或回收权限。关键字包括GRANT 、REVOKE 等
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

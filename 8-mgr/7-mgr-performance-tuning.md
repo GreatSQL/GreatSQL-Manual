@@ -62,8 +62,7 @@ greatsql> SELECT * FROM information_schema.innodb_trx WHERE
 ### 其他GreatSQL性能瓶颈因素
 其他因素导致的GreatSQL性能瓶颈，可以参考这篇文章 [比较全面的MySQL优化参考（上篇）](https://mp.weixin.qq.com/s/V51yKzCKUSIm28sMhvQl8Q) 和 [比较全面的MySQL优化参考（下篇）](https://mp.weixin.qq.com/s/p2IBlGguf4Vaq_AO_jja9A)。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

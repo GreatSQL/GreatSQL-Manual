@@ -296,8 +296,7 @@ GreatSQL同时也是gitee（码云）平台上的GVP项目，详见：[https://g
 
 [如果您在使用 GreatSQL，请告诉我们，将有机会获得精美礼品和免费技术支持](https://wj.qq.com/s2/11543483/9e09/)。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](./greatsql-wx.jpg)

@@ -343,8 +343,7 @@ greatsql> SHOW GLOBAL STATUS LIKE 'Secondary_engine_execution_count';
 更多关于 GreatSQL 的 TPC-H 测试的详细信息可参考：[GreatSQL TPC-H 性能测试报告](./3-3-benchmark-greatsql-tpch-report.md)。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

@@ -112,8 +112,7 @@ GreatSQL 存储程序（Stored Routines）包括存储过程和存储函数，�
 从 GreatSQL 8.0.32-24 版本开始支持 Oracle 兼容，对存储过程用法进行大量扩展，详情请参考：[Oracle 兼容之存储过程/函数兼容](https://greatsql.cn/docs/8.0.32-25/5-enhance/5-3-easyuse.html#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B-%E5%87%BD%E6%95%B0%E5%85%BC%E5%AE%B9)。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

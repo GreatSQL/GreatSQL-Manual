@@ -14,8 +14,7 @@ GreatSQL版本号采用点分位命名规则（X.Y.Z-R）模式，其中
 
 正常情况下，GreatSQL每年会发布两次版本，一般是上半年、下半年各发布一个新版本。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

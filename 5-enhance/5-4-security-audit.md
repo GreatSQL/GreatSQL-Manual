@@ -384,8 +384,7 @@ greatsql> SET PERSIST audit_log_exclude_accounts = NULL;
 greatsql> SELECT * FROM sys_audit.audit_log ORDER BY timestamp DESC LIMIT 10;
 ```
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

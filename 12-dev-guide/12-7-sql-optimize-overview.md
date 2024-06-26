@@ -18,8 +18,7 @@
 SQL 优化是个持续动态变化的过程，没有一成不变的套路，要求开发者、DBA 能根据实际情况灵活应变，做出合适的应对措施。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

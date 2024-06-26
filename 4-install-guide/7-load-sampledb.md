@@ -183,8 +183,7 @@ greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE, ENGINE, TABLE_ROWS
 关于测试数据库的更多详情参考 [**Other MySQL Documentation**](https://dev.mysql.com/doc/index-other.html)。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

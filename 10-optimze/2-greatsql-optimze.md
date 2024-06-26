@@ -92,8 +92,7 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 设置Rapid引擎运行过程中hash table最大可使用memory_limit的比例，默认值为10。如果JOIN时的表数量较多，该选项不应设置太大，避免内存耗尽。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

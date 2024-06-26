@@ -28,8 +28,7 @@ greatsql> SELECT * FROM sys_audit.greatdb_login_info;
 上述查询结果中，`Failed_times` 表示该账户登录失败次数，如果值大于 0，管理员应该加以重视，确认该账户是否存在被 DDoS 攻击等安全风险。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

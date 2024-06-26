@@ -34,8 +34,7 @@ greatsql> SET GLOBAL group_replication_flow_control_replay_lag_behind = 60;
 
 根据这两个指标项，可以判断MGR流控的影响有多大。也可以通过监控某个时段内指标发生的变化，判断这段时间内的事务提交是否受到流控的影响。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

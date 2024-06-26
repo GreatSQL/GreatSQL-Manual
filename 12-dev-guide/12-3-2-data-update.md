@@ -45,8 +45,7 @@ greatsql> INSERT INTO test (id, name) VALUES (1, 'GreatSQL') ON DUPLICATE KEY UP
 ```
 示例中，若id为1的数据不存在，则会插入一行数据。如果id为1的数据存在，则会更新name字段为GreatSQL。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

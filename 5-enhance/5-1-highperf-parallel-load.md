@@ -82,8 +82,7 @@ greatsql> LOAD /*parallel load worker(chunk_no:xxx)*/ DATA INFILE 'session_id:wo
 受限于 master session 的文件分割速度，并行导入速度可能区别较大。经过测试，在磁盘 I/O 和 CPU 核心资源都充足的前提下启动 32 个 Worker，最大的加速比大概为 20 倍。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

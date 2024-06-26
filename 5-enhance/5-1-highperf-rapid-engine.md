@@ -809,8 +809,7 @@ ERROR 3877 (HY000): Out of Memory Error: Failed to allocate block of 8192 bytes
 
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

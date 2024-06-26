@@ -135,8 +135,7 @@ Query OK, 0 rows affected (0.00 sec)
 
 从 GreatSQL 8.0.32-24 版本开始支持 Oracle 兼容，对创建视图用法进行扩展，支持 `CREATE FORCE VIEW` 语法，详情请参考：[Oracle 兼容之 CREATE FORCE VIEW](../5-enhance/sql-compat/5-3-easyuse-ora-syntax-createforceview.md)。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

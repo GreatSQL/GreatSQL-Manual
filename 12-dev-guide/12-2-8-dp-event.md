@@ -181,8 +181,7 @@ GreatSQL 事件调度器为数据库管理和维护提供了强大的自动化�
 在使用过程中，需要注意事件的调度频率、系统资源消耗及错误处理等，以确保事件调度的高效和稳定。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

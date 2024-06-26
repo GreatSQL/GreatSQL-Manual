@@ -299,8 +299,7 @@ innodb_log_file_size=200M
 
 由于Redo LOG的内容知识过于庞大，由于篇幅限制，本文只做浅析，这边推荐几篇文章（详见参考文章），感兴趣的同学可以继续深入学习研究。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

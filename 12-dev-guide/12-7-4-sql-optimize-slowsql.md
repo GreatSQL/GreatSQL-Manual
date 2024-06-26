@@ -258,8 +258,7 @@ possible_keys: c
 - [Slow query log rotation and expiration](https://docs.percona.com/percona-server/8.0/slowlog-rotation.html)
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

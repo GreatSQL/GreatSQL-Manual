@@ -59,8 +59,7 @@ ERROR 3098 (HY000) at line 1: The table does not comply with the requirements by
 关于 MGR 的约束限制条件详情参考：[使用mgr有什么限制吗](./5-faq-others.md#_1-使用mgr有什么限制吗)
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

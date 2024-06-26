@@ -145,8 +145,7 @@ greatsql> DROP TRIGGER trg_after_insert_orders;
 从 GreatSQL 8.0.32-24 版本开始支持 Oracle 兼容，对触发器用法进行扩展，详情请参考：[Oracle 兼容之 Trigger](../5-enhance/sql-compat/5-3-easyuse-ora-sp-trigger.md)。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

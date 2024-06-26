@@ -465,8 +465,7 @@ trx_autocommit_non_locking: 0
 需要注意的是，隔离级别的选择也要考虑到系统的整体架构、并发访问量、事务类型等因素，建议在实际应用中进行测试和评估，选择最适合的隔离级别。在大多数场景下，选择 RC 隔离级别就基本能满足业务需求。
 
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

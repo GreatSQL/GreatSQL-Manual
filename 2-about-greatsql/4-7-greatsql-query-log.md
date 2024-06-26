@@ -90,8 +90,7 @@ $ mysqladmin -uroot -p flush-logs
 
 除了上述方法之外，还可以手工删除通用日志。删除之后需要重新启动 GreatSQL 服务。重启之后就会生成新的通用日志。如果希望备份旧的日志文件，可以将旧的日志文件改名，然后重启 GreatSQL 服务。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

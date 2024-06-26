@@ -67,8 +67,7 @@ RW事务在应用之前，RO事务在执行之前，都要先等待前面堆积�
 
 P.S，各个节点的一致性级别最好都设置成一样，并且在运行过程中也不要修改其session级选项值，避免造成不可预料的影响。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

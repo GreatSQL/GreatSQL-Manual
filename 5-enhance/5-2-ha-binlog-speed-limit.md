@@ -46,8 +46,7 @@ greatsql> SET GLOBAL rpl_read_binlog_speed_limit = 100;
 
 启用限速模式后，固然可以降低主节点服务器和网络传输的负载压力，但如果设置过低限速值可能会降低主从复制数据同步效率，影响从库上的数据复制失效性。需要根据实际情况和业务需要适当平衡和调整。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)
