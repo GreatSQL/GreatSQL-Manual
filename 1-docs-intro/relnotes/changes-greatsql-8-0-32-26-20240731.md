@@ -57,7 +57,7 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 更多信息详见文档：[高安全](../../5-enhance/5-4-security.md)。
 
 ### 其他
-- 支持采用 Clone 实现在线全量热备和增备以及恢复（类似 Xtrabackup），结合 Binlog 可实现恢复到指定时间点。此外，Clone 备份还支持压缩功能。详见：[Clone 备份](../../5-enhance/5-2-ha-clone.md)。
+- 支持采用 Clone 实现在线全量热备和增备以及恢复（类似 Xtrabackup），结合 Binlog 可实现恢复到指定时间点。此外，Clone 备份还支持压缩功能。详见：[Clone 备份](../../5-enhance/5-5-clone-compressed-and-incrment-backup.md)。
 - 由于 GreatSQL 已支持 Rapid 引擎，以及未来还将推出 dplan 特性，因此从 GreatSQL 8.0.32-26 开始，不再推荐使用 InnoDB 并行查询特性（同时会删除用户手册中的入口链接）。
 - 合并龙芯支持patch，参考：https://gitee.com/src-openeuler/greatsql/pulls/54/files。
 
