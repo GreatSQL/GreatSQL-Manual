@@ -67,7 +67,8 @@
 - [lgclt](https://gitee.com/lgclt)
 - 许怀安
 - L.B
-
+- [王歡](https://greatsql.cn/home.php?mod=space&uid=1353&do=thread&view=me&from=space)
+- [reddey](https://greatsql.cn/home.php?mod=space&uid=1772&do=thread&view=me&from=space)
 
 
 **扫码关注微信公众号**
