@@ -1,5 +1,5 @@
 # 已知问题
----
+
 - 在 GreatSQL 5.7.36-39 版本中，不支持 InnoDB 并行查询特性。
 - 在 GreatSQL 8.0.32-25 以前的版本中，InnoDB 并行查询特性不支持 TPC-H 中的 Q21。
 - 在 GreatSQL 8.0.* 版本中，InnoDB 并行查询特性不支持子查询。

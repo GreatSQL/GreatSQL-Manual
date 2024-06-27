@@ -9,20 +9,17 @@
 本文档适用版本：GreatSQL 8.0.32-26。
 
 ## 关于 GreatSQL
----
 
 GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上满足金融级应用场景，具有 **高可用**、**高性能**、**高兼容**、**高安全** 等特性，可作为 MySQL 或 Percona Server for MySQL 的理想可选替换。
 
 ![GreatSQL LOGO](./GreatSQL-logo-01.png "GreatSQL LOGO")
 
 ## 下载GreatSQL
----
 
 - [下载 GreatSQL 最新版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-26)
 - [下载 GreatSQL 历史版本](https://gitee.com/GreatSQL/GreatSQL/releases/)
 
 ## GreatSQL核心特性
----
 
 ### [高可用](./5-enhance/5-2-ha.md)
 
@@ -82,7 +79,6 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 ## 安装 GreatSQL
 
 ### 安装 jemalloc
----
 
 运行 GreatSQL 时如果有 jemalloc（推荐5.2.1+版本）支持，则数据库进程的内存分配会更稳定、高效，因此建议安装 jemalloc（不是必须安装 jemalloc）。以 CentOS 8 系统为例，采用类似下面的方法安装 jemalloc 软件包：
 
@@ -161,12 +157,10 @@ $ systemctl status mysqld
 推荐利用 Docker 环境快速编译 GreatSQL 二进制包，可参考方法：[编译源码安装GreatSQL](./4-install-guide/6-install-with-source-code.md)。
 
 ## 版本历史
----
 
 戳此查看 [GreatSQL 版本历史](./1-docs-intro/1-2-release-history.md)。
 
 ## GreatSQL 用户手册及学习资料
----
 
 ### GreatSQL 用户手册
 - [GreatSQL 用户手册](https://greatsql.cn/docs/)

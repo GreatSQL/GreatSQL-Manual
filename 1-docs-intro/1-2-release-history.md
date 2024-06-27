@@ -1,5 +1,4 @@
 # 版本历史
----
 
 ## GreatSQL 8.0
 - [Changes in GreatSQL 8.0.32-26 (2024-07-31)](./relnotes/changes-greatsql-8-0-32-26-20240731.md)
