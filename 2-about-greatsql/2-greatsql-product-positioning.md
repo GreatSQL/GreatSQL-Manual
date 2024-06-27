@@ -21,7 +21,7 @@ GreatSQL 数据库广泛支持和应用于多种业务应用场景，包括且�
 
 GreatSQL 的代码托管在[gitee](https://gitee.com/GreatSQL/GreatSQL)，同时在 [github](https://github.com/GreatSQL/GreatSQL) 保留镜像备份。
 
-关于 GreatSQL 的优势特性详见：[GreatSQL优势特性](./1-3-greatsql-features.md)。
+关于 GreatSQL 的优势特性详见：[GreatSQL优势特性](../1-docs-intro/1-3-greatsql-features.md)。
 
 
 **扫码关注微信公众号**

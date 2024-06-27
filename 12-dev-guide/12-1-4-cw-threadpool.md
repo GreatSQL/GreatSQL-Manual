@@ -7,7 +7,7 @@ GreatSQL默认为每个客户端连接创建一个工作线程（**one-thread-pe
 
 GreatSQL中引入线程池（**Thread pool**）特性，可以避免在连接数瞬间激增时因资源竞争而导致系统吞吐下降的问题，使得GreatSQL的性能表现更稳定。
 
-详细描述详见：[线程池（Thread pool）](../5-enhance/5-1-highperf-thread-pool)
+详细描述详见：[线程池（Thread pool）](../5-enhance/5-1-highperf-thread-pool.md)
 
 ### 查看线程池特性是否开启
 ```sql
