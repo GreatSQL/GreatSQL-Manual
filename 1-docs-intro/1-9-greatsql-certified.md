@@ -1,4 +1,4 @@
-# GCA/GCP认证
+# 认证考试
 
 GreatSQL社区开放GCA与GCP双等级认证课程，课程全面覆盖GreatSQL的安装、使用、优化、安全高可用等方面，包含构建主从和MGR架构，优化提升性能，安全增强配置，SQL兼容性改造，备份恢复和高可用架构搭建等实用内容，且认证免费。
 
@@ -157,8 +157,7 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 19   | [孙*翀](https://greatsql.cn/home.php?mod=space&uid=1780) | GCP-DBA-2024911245 |
 | 20   | [阮*](https://greatsql.cn/home.php?mod=space&uid=1495)   | GCP-DBA-2024965051 |
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

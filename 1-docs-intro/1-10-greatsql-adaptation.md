@@ -1,4 +1,4 @@
-# 生态认证
+# 生态兼容适配
 
 GreatSQL 社区面向数据库产业生态上下游厂商，包括如操作系统、芯片、中间件、存储、服务器、应用软件等，提供包括产品兼容性的测试以及相应的产品适配认证。
 
@@ -91,8 +91,6 @@ GreatSQL 社区面向数据库产业生态上下游厂商，包括如操作系�
 
 ![扫码添加GreatSQL社区助手](../11-faq/greatsql-wx-assist.jpg)
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
-
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)
