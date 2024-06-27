@@ -122,7 +122,7 @@ greatsql> SHOW ENGINES;
 
 以两个节点为例，可以构建单向的复制架构，也可以是双向复制架构。一般情况下，建议采用单向复制，这样的话，架构方案比较简单，也不容易误操作。
 
-单向复制架构即由一个主节点（Master/Source）和一个从节点（Slave/Replicas）构成。主节点接收到应用端发出的读写请求，并将对数据库产生变化的事件对应的操作记录到二进制日志（binlog/binary log）中，然后将二进制日志发送到从节点。从节点接将二进制日志转储到本地成为中级日志（relay log），然后再读取中级日志，将这些变更操作应用到本地数据库中。这样就完成主从间的逻辑复制了。
+单向复制架构即由一个主节点（Master/Source）和一个从节点（Slave/Replicas）构成。主节点接收到应用端发出的读写请求，并将对数据库产生变化的事件对应的操作记录到二进制日志（Binlog/Binary log）中，然后将二进制日志发送到从节点。从节点接将二进制日志转储到本地成为中继日志（Relay Log），然后再读取中继日志，将这些变更操作应用到本地数据库中。这样就完成主从间的逻辑复制了。
 
 在单向复制架构中，通常要把从节点设置为只读模式（`read_only = 1` & `super_read_only = 1`），避免应用端或DBA误操作写入数据造成主从间数据不一致，并可能导致主从复制失败停止。
 
@@ -137,17 +137,17 @@ greatsql> SHOW ENGINES;
 | 名称 | 描述 |
 | --- | --- |
 | Source | 即Master节点，也称为主节点、主库，响应业务端发起的读写请求。|
-| Replica | 即Slave节点，也称为从节点、从库，接收Source节点发送过来的binlog event，并转储成relay log。一般设置为只读模式，只负责响应业务端发起的只读请求，并禁止业务端向Replica节点写入数据。|
-| binlog | 即binary log，也称为二进制日志，是一种逻辑日志。选项 `binlog_format` 可用于设置binlog的工作模式，支持三种可选：row、statement、mixed。**强烈建议选择row模式**，以提高主从间的数据一致性。|
-| relay log | 也称为中继日志。是Replica节点接收来自Source节点的binlog event后，转储到本地成为relay log，在Replica节点上再启动一个或多个SQL线程读取relay log并应用到本地节点，重演Source节点上的数据变更操作。|
+| Replica | 即Slave节点，也称为从节点、从库，接收Source节点发送过来的Binlog Event，并转储成Relay Log。一般设置为只读模式，只负责响应业务端发起的只读请求，并禁止业务端向Replica节点写入数据。|
+| Binlog | 即Binary Log，也称为二进制日志，是一种逻辑日志。选项 `binlog_format` 可用于设置Binlog的工作模式，支持三种可选：row、statement、mixed。**强烈建议选择row模式**，以提高主从间的数据一致性。|
+| Relay Log | 也称为中继日志。是Replica节点接收来自Source节点的Binlog Event后，转储到本地成为Relay Log，在Replica节点上再启动一个或多个SQL线程读取Relay Log并应用到本地节点，重演Source节点上的数据变更操作。|
 
 对于复制方式，可以选择异步复制或半同步复制。通常情况下，选择异步复制模式就可以。如果是数据一致性等级要求较高的话，可以选择半同步复制。
 
-异步复制（async replication）是主从复制的默认模式，这种模式不足之处在于，Master点无法验证binlog是否成功写入到Slave节点。当一个事务提交时，Master节点上成功写入binlog，但还没来得及将这个event发送到Slave节点，此时Master节点宕机了；或者Slave节点上因为磁盘损坏等故障，导致该event没能写入relay log中，那Slave节点上就不能正确应用这个事务event，从而造成了主从节点数据不一致。
+异步复制（async replication）是主从复制的默认模式，这种模式不足之处在于，Master点无法验证Binlog是否成功写入到Slave节点。当一个事务提交时，Master节点上成功写入Binlog，但还没来得及将这个event发送到Slave节点，此时Master节点宕机了；或者Slave节点上因为磁盘损坏等故障，导致该event没能写入Relay Log中，那Slave节点上就不能正确应用这个事务event，从而造成了主从节点数据不一致。
 
-半同步复制（semi-sync replication）的区别在于，Master节点上每提交一个事务后，不会立即返回给用户，而是等待至少一个Slave节点收到binlog并成功写入relay log才返回，这样可以保证这个事务在至少一个Slave节点上存在，从而保证了主从间数据的安全性和一致性。
+半同步复制（semi-sync replication）的区别在于，Master节点上每提交一个事务后，不会立即返回给用户，而是等待至少一个Slave节点收到Binlog并成功写入Relay Log才返回，这样可以保证这个事务在至少一个Slave节点上存在，从而保证了主从间数据的安全性和一致性。
 
-不过半同步复制也有个风险，当主从节点间发生网络故障了，binlog发送到Slave节点时会一直等待，直到超时，然后再将半同步复制降级为异步复制。当主从间网络恢复正常了，再重新切换为半同复制。当超时阈值 `rpl_semi_sync_master_timeout` 设置较大时，就会影响业务端的正常请求，造成业务卡死的现象。
+不过半同步复制也有个风险，当主从节点间发生网络故障了，Binlog发送到Slave节点时会一直等待，直到超时，然后再将半同步复制降级为异步复制。当主从间网络恢复正常了，再重新切换为半同复制。当超时阈值 `rpl_semi_sync_master_timeout` 设置较大时，就会影响业务端的正常请求，造成业务卡死的现象。
 
 半同步复制架构如下图所示：
 
@@ -201,7 +201,7 @@ MGR具备以下几个特点：
 | Primary | 称为主要节点，主节点，MGR节点角色之一。响应读写事务请求。|
 | Secondary | 称为辅助节点，从节点，MGR节点角色之一。只能响应只读事务请求。|
 | Consensus | 共识。在MGR中，一个事务发起后，要广播到各个节点，当多数派节点达成共识（Consensus）后，这个事务才可以被提交。所谓的多数派就是超过半数的节点达成一致，例如总共3个节点，则至少2个节点达成一致。|
-| cetfify | 事务认证。在MGR中，一个事务需要进行认证，确认不存在冲突，并且多数派达成一致后，才可以被提交。|
+| certify | 事务认证。在MGR中，一个事务需要进行认证，确认不存在冲突，并且多数派达成一致后，才可以被提交。|
 
 MGR是以Plugin方式嵌入MySQL，部署更灵活方便。
 
@@ -240,8 +240,7 @@ GreatSQL数据库架构通常有以下几种方案：
 
 在金融级应用场景中，强烈建议采用GreatSQL MGR来构建高一致性高可用数据库架构。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

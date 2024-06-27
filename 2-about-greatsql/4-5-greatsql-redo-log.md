@@ -11,9 +11,9 @@
 
 `Redo Log`称为**重做日志**，提供再写入操作，恢复提交事务修改的页操作，用来保证事务的持久性。
 
-`UNDO LOG`称为**回滚日志**，回滚行记录到某个特定版本，用来保证事务的原子性、一致性。
+`Undo Log`称为**回滚日志**，回滚行记录到某个特定版本，用来保证事务的原子性、一致性。
 
-> 有的DBA或许会认为 UNDO 是 REDO 的逆过程，其实不然。REDO和UNDO都可以视为是一种恢复操作。
+> 或许会认为 Undo 是 Redo 的逆过程，其实不然。Redo 和 Undo 都可以视为是一种恢复操作。
 
 `Redo Log:`是**存储引擎层(InnoDB)生成的日志**，记录的是"物理级别"上的页修改操作，比如页号xx、偏移量yyy写入了’zzz’数据。主要为了**保证数据的可靠性**;
 
@@ -52,7 +52,7 @@ InnoDB引擎的事务采用了`WAL技术(Write-Ahead Logging)`，这种技术的
 
 ## Redo日志记录了什么
 
-为了应对InnoDB各种各样不同的需求，到GreatSQL 8.0为止，已经有多达 **65** 种的REDO记录。用来记录这不同的信息，恢复时需要判断不同的 REDO 类型，来做对应的解析。根据 REDO 记录不同的作用对象，可以将这65中 REDO 划分为三个大类：
+为了应对InnoDB各种各样不同的需求，到GreatSQL 8.0为止，已经有多达 65 种 Redo 记录。用来记录这不同的信息，恢复时需要判断不同的 Redo 类型，来做对应的解析。根据 Redo 记录不同的作用对象，可以将这 65 种 Redo 划分为三个大类：
 
 - 作用于Page
 - 作用于Space
@@ -99,7 +99,7 @@ greatsql> SHOW VARIABLES LIKE '%innodb_log_buffer_size%';
 
 - 重做日志文件(Redo Log File)，保存在硬盘中，是持久的。
 
-REDO日志文件如图所示，其中的`ib_logfile0`和`ib_logfile1`即为Redo Log日志。
+Redo日志文件如图所示，其中的`ib_logfile0`和`ib_logfile1`即为Redo Log日志。
 
 ![事务Redo log流程](./4-5-greatsql-redo-Log-03.png)
 
@@ -260,7 +260,7 @@ $ vim /etc/my.cnf
 innodb_log_file_size=200M  
 ```
 
-> 在数据库实例更新比较频繁的情况下，可以适当加大 Redo Log 组数和大小。但也不推荐 Redo Log 设置过大，在GreatSQL崩溃恢复时会重新执行REDO日志中的记录。
+> 在数据库实例更新比较频繁的情况下，可以适当加大 Redo Log 组数和大小。但也不推荐 Redo Log 设置过大，在GreatSQL崩溃恢复时会重新执行Redo日志中的记录。
 
 - innodb_redo_log_capacity
 
@@ -299,8 +299,7 @@ innodb_log_file_size=200M
 
 由于Redo LOG的内容知识过于庞大，由于篇幅限制，本文只做浅析，这边推荐几篇文章（详见参考文章），感兴趣的同学可以继续深入学习研究。
 
-- **[问题反馈 gitee](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)**
 
-- **扫码关注微信公众号**
+**扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)
