@@ -38,9 +38,9 @@ GreatSQL把这些为了回滚而记录的这些内容称之为**撤销日志**�
 
 InnoDB对Undo Log的管理采用段的方式，也就是`回滚段（rollback segment）`。每个回滚段记录了`1024 个Undo Log segment`，而在每个Undo Log segment段中进行`Undo页`的申请。
 
-在`InnoDB1.1版本`之前（不包括1.1版本），只有一个`rollback segment`，因此支持同时在线的事务限制为 **1024**。虽然对绝大多数的应用来说都已经够用。
+在 InnoDB 1.1 版本之前（不包括1.1版本），只有一个`rollback segment`，因此支持同时在线的事务限制为 **1024**。虽然对绝大多数的应用来说都已经够用。
 
-从1.1版本开始InnoDB支持最大**128个rollback segment**，故其支持同时在线的事务限制提高到了**`128\*1024`**。
+从 1.1 版本开始 InnoDB 支持最大**128个rollback segment**，故其支持同时在线的事务限制提高到了**`128\*1024`**。
 
 ```sql
 greatsql> SHOW VARIABLES LIKE 'innodb_undo_logs';
@@ -50,14 +50,15 @@ greatsql> SHOW VARIABLES LIKE 'innodb_undo_logs';
 | innodb_undo_logs | 128   |
 +------------------+-------+
 ```
+提示：从 8.0 版本开始，`innodb_undo_logs` 改名为 `innodb_rollback_segments`。
 
-虽然InnoDB1.1版本支持了128个`rollback segment`，但是这些`rollback segment`都存储于共享表空间**ibdata**中。从lnnoDB1.2版本开始，可通过参数对`rollback segment`做进一步的设置。这些参数包括:
+虽然InnoDB 1.1版本支持了128个`rollback segment`，但是这些`rollback segment`都存储于共享表空间**ibdata**中。从InnoDB 1.2版本开始，可通过参数对`rollback segment`做进一步的设置。这些参数包括:
 
-`innodb_undo_directory:`设置rollback segment文件所在的路径。这意味着rollback segment可以存放在共享表空间以外的位置，即可以设置为独立表空间。该参数的默认值为“./”，表示当前InnoDB存储引擎的目录。
+- `innodb_undo_directory:`设置rollback segment文件所在的路径。这意味着rollback segment可以存放在共享表空间以外的位置，即可以设置为独立表空间。该参数的默认值为“./”，表示当前InnoDB存储引擎的目录。
 
-`innodb_undo_logs:`设置rollback segment的个数，默认值为128。在InnoDB1.2版本中，该参数用来替换之前版本的参数innodb_rollback_segments。
+- `innodb_undo_logs:`设置rollback segment的个数，默认值为128。在InnoDB 1.2版本中，该参数改名为 `innodb_rollback_segments`。
 
-`innodb_undo_tablespaces:`设置构成rollback segment文件的数量，这样rollback segment可以较为平均地分布在多个文件中。设置该参数后，会在路径innodb_undo_directory看到undo为前缀的文件，该文件就代表rollback segment文件。
+- `innodb_undo_tablespaces:`设置构成rollback segment文件的数量，这样rollback segment可以较为平均地分布在多个文件中。设置该参数后，会在路径 `innodb_undo_directory` 看到undo为前缀的文件，该文件就代表rollback segment文件。
 
 提醒：在 MySQL 5.5 版本中的 InnoDB Versioin 为 1.1。从 5.6.11 开始，InnoDB Version 和 MySQL Version 一致，可以通过查看 `innodb_version` 来获取。
 
@@ -148,13 +149,15 @@ greatsql> SHOW VARIABLES LIKE 'innodb_undo_logs';
 
 ## Undo Log的配置参数
 
-`innodb_max_undo_log_size:`Undo日志文件的最大值，默认1GB，初始化大小10M
+- `innodb_max_undo_log_size`，Undo日志文件的最大值，默认1GB，初始化大小10M
 
-`innodb_undo_log_truncate:`标识是否开启自动收缩Undo Log表空间的操作
+- `innodb_undo_log_truncate`，标识是否开启自动收缩Undo Log表空间的操作
 
-`innodb_undo_tablespaces:`设置独立表空间的个数，默认为0，标识不开启独立表空间，Undo日志保存在ibdata1中
+- `innodb_undo_tablespaces`，设置独立表空间的个数，默认为2，标识不开启独立表空间，Undo日志保存在ibdata1中。改参数从 8.0.14 开始建议不再使用
 
-`innodb_undo_directory:`Undo日志存储的目录位置 innodb_undo_logs: 回滚的个数 默认128
+- `innodb_undo_directory`，Undo日志存储的目录位置
+
+- `innodb_undo_logs`，回滚的个数，默认128，在 8.0 之后的版本中改名为 `innodb_rollback_segments`
 
 
 **扫码关注微信公众号**
