@@ -4,7 +4,7 @@
 [![](https://img.shields.io/badge/License-GPL_v2.0-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)
 [![](https://img.shields.io/badge/release-8.0.32_26-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)
 
-最后更新：2024-06-26。
+最后更新：2024-06-27。
 
 本文档适用版本：GreatSQL 8.0.32-26。
 
@@ -30,12 +30,12 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 - 支持 [地理标签](./5-enhance/5-2-ha-mgr-zoneid.md) 特性，提升多机房架构数据可靠性。
 - 支持 [仲裁节点](./5-enhance/5-2-ha-mgr-arbitrator.md) 特性，用更低的服务器成本实现更高可用。
-- 支持 [读写动态 VIP](./5-enhance/5-2-ha-mgr-vip.md) 特性，高可用切换更便捷，更快实现读负载均衡。支持 [当主节点切换时，主动关闭当前活跃连接](./5-2-ha-mgr-kill-conn-after-switch.md)，缩短应用端不可用时长。。
+- 支持 [读写动态 VIP](./5-enhance/5-2-ha-mgr-vip.md) 特性，高可用切换更便捷，更快实现读负载均衡。支持 [当主节点切换时，主动关闭当前活跃连接](./5-enhance/5-2-ha-mgr-kill-conn-after-switch.md)，缩短应用端不可用时长。。
 - 支持 [快速单主模式](./5-enhance/5-2-ha-mgr-fast-mode.md)，在单主模式下更快，性能更高。
 - 支持 [智能选主](./5-enhance/5-2-ha-mgr-election-mode.md) 特性，高可用切换选主机制更合理。
 - 优化 [流控算法](./5-enhance/5-2-ha-mgr-new-fc.md)，使得事务更平稳，避免剧烈抖动。
-- 支持 [记录 MGR 网络通信开销超过阈值的事件](./5-2-ha-mgr-request-time.md)，用于进一步分析和优化。
-- 支持在跨机房容灾场景中的 [主主双向复制防止回路](./5-2-ha-repl-server-mode.md) 机制。
+- 支持 [记录 MGR 网络通信开销超过阈值的事件](./5-enhance/5-2-ha-mgr-request-time.md)，用于进一步分析和优化。
+- 支持在跨机房容灾场景中的 [主主双向复制防止回路](./5-enhance/5-2-ha-repl-server-mode.md) 机制。
 - 优化了节点加入、退出时可能导致性能剧烈抖动的问题。
 - 解决了个别节点上磁盘空间爆满时导致MGR集群整体被阻塞的问题。
 - 优化事务认证队列清理算法，高负载下不复存在每 60 秒性能抖动问题。

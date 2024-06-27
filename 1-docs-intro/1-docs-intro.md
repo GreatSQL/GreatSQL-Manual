@@ -10,7 +10,8 @@
 - ## [社区行为守则](./1-6-community-rules.md)
 - ## [社区治理](./1-8-community-toc.md)
 - ## [致谢](./1-7-thanks.md)
-- ## [认证人员名单](./1-9-greatsql-certified.md)
+- ## [认证考试](./1-9-greatsql-certified.md)
+- ## [生态兼容适配](./1-10-greatsql-adaptation.md)
 
 
 

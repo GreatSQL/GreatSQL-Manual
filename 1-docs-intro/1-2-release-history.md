@@ -2,6 +2,7 @@
 ---
 
 ## GreatSQL 8.0
+- [Changes in GreatSQL 8.0.32-26 (2024-07-31)](./relnotes/changes-greatsql-8-0-32-26-20240731.md)
 - [Changes in GreatSQL 8.0.32-25 (2023-12-28)](./relnotes/changes-greatsql-8-0-32-25-20231228.md)
 - [Changes in GreatSQL 8.0.32-24 (2023-6-5)](./relnotes/changes-greatsql-8-0-32-24-20230605.md)
 - [Changes in GreatSQL 8.0.25-17 (2023-3-13)](./relnotes/changes-greatsql-8-0-25-17-20230313.md)

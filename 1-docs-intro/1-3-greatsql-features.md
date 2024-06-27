@@ -11,7 +11,7 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 - 支持 [地理标签](../5-enhance/5-2-ha-mgr-zoneid.md) 特性，提升多机房架构数据可靠性。
 - 支持 [仲裁节点](../5-enhance/5-2-ha-mgr-arbitrator.md) 特性，用更低的服务器成本实现更高可用。
-- 支持 [读写动态 VIP](../5-enhance/5-2-ha-mgr-vip.md) 特性，高可用切换更便捷，更快实现读负载均衡。支持 [当主节点切换时，主动关闭当前活跃连接](../5-2-ha-mgr-kill-conn-after-switch.md)，缩短应用端不可用时长。
+- 支持 [读写动态 VIP](../5-enhance/5-2-ha-mgr-vip.md) 特性，高可用切换更便捷，更快实现读负载均衡。支持 [当主节点切换时，主动关闭当前活跃连接](../5-enhance/5-2-ha-mgr-kill-conn-after-switch.md)，缩短应用端不可用时长。
 - 支持 [快速单主模式](../5-enhance/5-2-ha-mgr-fast-mode.md)，在单主模式下更快，性能更高。
 - 支持 [智能选主](../5-enhance/5-2-ha-mgr-election-mode.md) 特性，高可用切换选主机制更合理。
 - 优化 [流控算法](../5-enhance/5-2-ha-mgr-new-fc.md)，使得事务更平稳，避免剧烈抖动。
@@ -59,7 +59,7 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 通过上述多个安全提升特性，进一步保障业务数据安全。更多信息详见文档：[高安全](../5-enhance/5-4-security.md)。
 
 ### [其他](../5-enhance/5-5-others.md)
-- 支持 [Clone 在线全量热备、增备及恢复](../../5-enhance/5-5-clone-compressed-and-incrment-backup.md)，结合 Binlog 可实现恢复到指定时间点。此外，Clone 备份还支持压缩功能。
+- 支持 [Clone 在线全量热备、增备及恢复](../5-enhance/5-5-clone-compressed-and-incrment-backup.md)，结合 Binlog 可实现恢复到指定时间点。此外，Clone 备份还支持压缩功能。
 
 ## GreatSQL VS MySQL
 
