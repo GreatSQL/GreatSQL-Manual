@@ -1,4 +1,4 @@
-# 图解GreatSQL Redo Log（重做日志）
+# Redo Log（重做日志）
 
 ## 前言
 

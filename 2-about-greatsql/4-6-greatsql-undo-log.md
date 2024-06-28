@@ -1,4 +1,4 @@
-# 图解GreatSQL Undo Log（撤销日志）
+# Undo Log（撤销日志）
 
 ## 什么是Undo Log？
 

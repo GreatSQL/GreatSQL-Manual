@@ -45,20 +45,20 @@ greatsql> SHOW VARIABLES LIKE 'log_error%';
 +----------------------------+----------------------------------------+
 | Variable_name              | Value                                  |
 +----------------------------+----------------------------------------+
-| log_error                  | /var/log/mysqld.log                     |
+| log_error                  | /data/GreatSQL/error.log                |
 | log_error_services         | log_filter_internal; log_sink_internal |
 | log_error_suppression_list |                                        |
 | log_error_verbosity        | 2                                      |
 +----------------------------+----------------------------------------+
 ```
-上述结果表明当前 GreatSQL 的错误日志文件路径是 */var/log/mysqld.log*。
+上述结果表明当前 GreatSQL 的错误日志文件路径是 */data/GreatSQL/error.log*。
 
-## 参数变量
+## 相关参数
 
-以下是错误日志相关的参数变量。
+以下是错误日志相关的参数。
 
 - `log_error` 错误日志文件路径，支持指定为全路径或相对路径。
-- `log_error_services` 设置使用哪些错误日志服务组件，以控制如何处理和存储错误日志。该变量可以设置为 0、1 或多个可选值；在后一种情况下，组件列表可以用分号或逗号（从 GreatSQL 8.0.12开始）分隔，每个服务名称代表一个日志处理组件，这些组件可以过滤、格式化或存储日志消息。
+- `log_error_services` 设置使用哪些错误日志服务组件，以控制如何处理和存储错误日志。该参数可以设置为 0、1 或多个可选值；在后一种情况下，组件列表可以用分号或逗号（从 GreatSQL 8.0.12开始）分隔，每个服务名称代表一个日志处理组件，这些组件可以过滤、格式化或存储日志消息。
 
 默认情况下，`log_error_services` 具有以下可选值：
 
@@ -109,7 +109,7 @@ greatsql> SHOW GLOBAL VARIABLES LIKE 'log_timestamps';
 greatsql> SET GLOBAL log_timestamps = system;
 ```
 
-再修改 my.cnf 配置文件使其持久化生效：
+也可以修改 my.cnf 配置文件使其持久化生效（下次数据库实例重启后生效）：
 
 ```ini
 [mysqld]
@@ -118,18 +118,19 @@ log_timestamps = system
 
 ## 错误日志管理
 
-对于很久以前的错误日志，通常已经没什么用处，可以将这些错误日志备份后清空。由于错误日志是以文本文件的形式存储的，可以在备份后直接清空。
+对于很久以前的错误日志，通常已经没什么用处，可以将这些错误日志备份后清空。由于错误日志是以文本文件的形式存储的，可以在备份后直接清空：
 
 ```shell
 # 备份后清空
-$ cp mysqld.log mysqld-`date +'%Y%m%d'`.log
-$ echo '' > mysqld.log
+$ cd /data/GreatSQL
+$ cp error.log error-`date +'%Y%m%d'`.log
+$ echo '' > error.log
 
 # 清空刷新
 $ mysqladmin -uroot -p flush-logs
 ```
 
-也可以在完成 `mv` 备份后，连入 GreatSQL 后执行相应的 SQL 命令
+也可以在完成 `cp` 备份后，连入 GreatSQL 后执行相应的 SQL 命令刷新错误日志：
 
 ```sql
 greatsql> FLUSH ERROR LOGS;
@@ -141,25 +142,21 @@ greatsql> FLUSH ERROR LOGS;
 如果出现以下错误提示：
 
 ```sql
-mysqladmin: refresh failed; error: 'Could not open file '/var/log/mysqld.log' for error logging.'
+mysqladmin: refresh failed; error: 'Could not open file '/data/GreatSQL/error.log' for error logging.'
 ```
 
 可以再进行下面的操作：
 
 ```shell
 # 备份旧错误日志
-$ mv mysqld.log mysqld-`date +'%Y%m%d'`.log
+$ cd /data/GreatSQL
+$ mv error.log error-`date +'%Y%m%d'`.log
 
 # 清空误日志文件
-$ echo '' > mysqld.log
+$ echo '' > error.log
 ```
 
-补充说明，关于 `flush-logs` 操作
-
-- 在 GreatSQL 5.5.7 以前的版本，`flush-logs` 将错误日志文件重命名为 `filename.err_old`，然后创建新的日志文件。
-- 从 GreatSQL 5.5.7 开始，`flush-logs` 只是重新打开日志文件句柄，并不进行日志备份和重新创建的操作。
-- 如果日志文件不存在，GreatSQL 启动或者执行 `flush-logs` 时会自动创建新的日志文件；重新创建的错误日志，文件初始大小为 0 字节。
-
+> 不要在服务器上用 vi 等方式在线打开错误日志文件，这可能会文件句柄修改，使得该文件状态异常，并造成不可意料的磁盘满问题。
 
 **扫码关注微信公众号**
 

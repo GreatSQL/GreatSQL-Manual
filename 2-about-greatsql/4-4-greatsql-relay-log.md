@@ -1,4 +1,4 @@
-# 图解GreatSQL Relay Log（中继日志）
+# Relay Log（中继日志）
 
 ## 什么是中继日志（Relay Log）
 

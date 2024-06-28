@@ -1,4 +1,4 @@
-# 图解GreatSQL General Log（通用日志）
+# General Log（通用日志）
 
 ## 什么是通用日志
 
