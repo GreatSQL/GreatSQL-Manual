@@ -338,7 +338,7 @@ binlog的写入时机也非常简单，事务执行过程中，先把日志写�
 
 > 上图的fsync，才是将数据持久化到磁盘的操作
 
-write和fsync的时机，可以由参数`sync_binlog`控制，默认是 0 。
+write和fsync的时机，可以由参数`sync_binlog`控制，默认是 1 。
 
 为 0 的时候，表示每次提交事务都只write，由系统自行判断什么时候执行fsync。虽然性能得到提升，但是机器宕机，page cache里面的binglog 会丢失。如下图：![binlog刷盘机制](./4-3-greatsql-binary-log-03.png#pic_center)
 
