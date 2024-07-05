@@ -129,6 +129,14 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 118  | [陈*君](https://greatsql.cn/home.php?mod=space&uid=1824) | GCA-DBA-2024531804 |
 | 119  | [崔*](https://greatsql.cn/home.php?mod=space&uid=1791)   | GCA-DBA-2024539104 |
 | 120  | [陈*超](https://greatsql.cn/home.php?mod=space&uid=1799) | GCA-DBA-2024507265 |
+| 121  | [杨*](https://greatsql.cn/home.php?mod=space&uid=1368)   | GCA-DBA-2024251016 |
+| 122  | [苏*刚](https://greatsql.cn/home.php?mod=space&uid=1861) | GCA-DBA-2024833622 |
+| 123  | [邹*](https://greatsql.cn/home.php?mod=space&uid=1856)   | GCA-DBA-2024115821 |
+| 124  | [马*彦](https://greatsql.cn/home.php?mod=space&uid=1814) | GCA-DBA-2024445013 |
+| 125  | [纪*](https://greatsql.cn/home.php?mod=space&uid=1871)   | GCA-DBA-2024997623 |
+| 126  | [杨*](https://greatsql.cn/home.php?mod=space&uid=1869)   | GCA-DBA-2024980040 |
+| 127  | [林*东](https://greatsql.cn/home.php?mod=space&uid=700)  | GCA-DBA-2024713864 |
+| 128  | [张*娜](https://greatsql.cn/home.php?mod=space&uid=1501) | GCA-DBA-2024372841 |
 
 ### 通过GCP等级考核人员名单
 
@@ -156,7 +164,7 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 18   | [高*明](https://greatsql.cn/home.php?mod=space&uid=1781) | GCP-DBA-2024664321 |
 | 19   | [孙*翀](https://greatsql.cn/home.php?mod=space&uid=1780) | GCP-DBA-2024911245 |
 | 20   | [阮*](https://greatsql.cn/home.php?mod=space&uid=1495)   | GCP-DBA-2024965051 |
-
+| 21   | [陈*超](https://greatsql.cn/home.php?mod=space&uid=1799) | GCP-DBA-2024124516 |
 
 **扫码关注微信公众号**
 
