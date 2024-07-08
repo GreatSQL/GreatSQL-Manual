@@ -175,11 +175,11 @@ BINLOG_POSITION: 0
 确定备份链路后，就可以选择恢复策略了，是要执行 "全量恢复" 还是 "全量 + 增量" 恢复，恢复过程步骤如下所示：
 
 1. 如果只想要恢复全量备份数据，那么直接在 ID = 3 的备份文件集基础上启动 GreatSQL 服务即可；
-2. 如果还想要恢复后续的增量备份，那么需要在以 ID = 3 的备份文件集基础上再将选项 `--clone_incremental_dir` 指向第一次增量备份（ID = 4）目录；
+2. 如果还想要恢复后续的增量备份，那么需要在以 ID = 3 的备份文件集基础上再将参数 `--clone_incremental_dir` 指向第一次增量备份（ID = 4）目录；
 3. 待到第一次增量备份（ID = 4）恢复完成；
-4. 如果还想继续恢复第二次增量备份（ID = 5），则需要在步骤 4 的基础上，继续将选项 `--clone_incremental_dir` 指向第二次增量备份（ID = 5）目录，这样就可以完成所有全备+增备数据恢复。
+4. 如果还想继续恢复第二次增量备份（ID = 5），则需要在步骤 4 的基础上，继续将参数 `--clone_incremental_dir` 指向第二次增量备份（ID = 5）目录，这样就可以完成所有全备+增备数据恢复。
 
-在启动 mysqld 程序时，加上选项 `--clone_incremental_dir` 的作用是将增量备份数据应用到 `datadir` 中，在应用完全部增量备份数据后，它就会自动退出，而不是继续进入服务启动阶段。
+在启动 mysqld 程序时，加上参数 `--clone_incremental_dir` 的作用是将增量备份数据应用到 `datadir` 中，在应用完全部增量备份数据后，它就会自动退出，而不是继续进入服务启动阶段。
 
 一次完整的数据恢复过程如下方的演示。
 
@@ -207,9 +207,10 @@ basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
 datadir = /data/restore/20240618
 user = mysql
 socket = mysql.sock
+skip-networking
 ```
 
-上面是一份最简单的 my.cnf 参考，仅设定了三个最基本的选项，更多选项可根据实际情况进行增减和调整。
+上面是一份很简单的 my.cnf 参考，仅设定了几个基本参数，更多参数可根据实际情况进行增减和调整，例如 `lower_case_table_names` 要和原来的实例设置保持一致。在上面的配置文件中，增加了一行 *skip-networking*，因为这是做恢复测试的环境，不打算对外提供服务，只用于测试备份的可恢复性。
 
 如果不打算进行后续的增备恢复，则可以直接启动 GreatSQL 服务：
 
@@ -261,7 +262,7 @@ $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-fil
 
 #### 启动数据库实例
 
-启动实例前，需要确认 my.cnf 中关键选项配置和原来实例中的要保持一致，尤其是 `port/socket/lower_case_table_names` 等几个，并进行适当的调整。
+启动实例前，需要确认 my.cnf 中关键参数配置和原来实例中的要保持一致，尤其是 `port/socket/lower_case_table_names` 等几个，并进行适当的调整。
 
 ```shell
 $ cd /data/restore/20240618
@@ -346,15 +347,15 @@ $ mysqlbinlog ./binlog.000013 --start-position=29832341 | mysql -S/data/restore/
 
 ## 压缩备份
 
-GreatSQL 8.0.32-26 版本开始支持 Clone 备份文件压缩功能，只需设置选项 `clone_file_compress` 即可实现，例如设置为 `clone_file_compress = CLONE_FILE_COMPRESS_ZSTD`，该特性默认不启用。关于压缩备份，有几点注意：
+GreatSQL 8.0.32-26 版本开始支持 Clone 备份文件压缩功能，只需设置参数 `clone_file_compress` 即可实现，例如设置为 `clone_file_compress = CLONE_FILE_COMPRESS_ZSTD`，该特性默认不启用。关于压缩备份，有几点注意：
 
 1. 必须是 GreatSQL 8.0.32-26 及以上版本才支持该特性，也就是 Clone 备份的接收端必须是 8.0.32-26 及以上版本才支持。
 
-2. 如果是 Clone 备份远程实例，则需要在接收端实例（recipient 实例）设置该选项。
+2. 如果是 Clone 备份远程实例，则需要在接收端实例（recipient 实例）设置该参数。
 
 3. 支持两种压缩算法：*zstd* 和 *lz4*。推荐选择 zstd，它是一种快速无损压缩算法，针对实时压缩场景，且具有更好的压缩比。
 
-4. 选项 `clone_file_compress` 和 `clone_enable_compression` 不同，前者决定了备份文件是否压缩；而后者用于决定 Clone 在网络传输数据时，是否开启压缩功能。且二者没有依赖关系。
+4. 参数 `clone_file_compress` 和 `clone_enable_compression` 不同，前者决定了备份文件是否压缩；而后者用于决定 Clone 在网络传输数据时，是否开启压缩功能。且二者没有依赖关系。
 
 5. 不支持同时开启 Clone 备份加密和压缩功能。
 
@@ -370,30 +371,86 @@ greatsql> SET GLOBAL clone_file_compress = CLONE_FILE_COMPRESS_ZSTD;
 
 ```sql
 -- 备份本地实例，并开启 page tracking
-greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-compressed/20240618' ENABLE PAGE TRACK;
+greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-compressed/20240708' ENABLE PAGE TRACK;
 ```
 
 查看备份文件，确认压缩结果
 
 ```shell
-$ ls -la /data/backup/clone-compressed/20240618
-TODO
+$ ls -la /data/backup/clone-compressed/20240708
+total 50744
+drwxr-x--- 7 mysql mysql     4096 Jul  8 12:16  .
+drwxr-x--- 3 mysql mysql       22 Jul  8 12:16  ..
+drwxr-x--- 2 mysql mysql      115 Jul  8 12:16 '#clone'
+-rw-r----- 1 mysql mysql     1699 Jul  8 12:16  ib_buffer_pool.zstd
+-rw-r----- 1 mysql mysql      142 Jul  8 12:16  ibdata1.delta.zstd
+-rw-r----- 1 mysql mysql       64 Jul  8 12:16  ibdata1.meta
+-rw-r----- 1 mysql mysql     4410 Jul  8 12:16  ibdata1.zstd
+drwxr-x--- 2 mysql mysql       28 Jul  8 12:16 '#innodb_redo'
+drwxr-x--- 2 mysql mysql     4096 Jul  8 12:16  mysql
+-rw-r----- 1 mysql mysql      432 Jul  8 12:16  mysql.ibd.delta.zstd
+-rw-r----- 1 mysql mysql       73 Jul  8 12:16  mysql.ibd.meta
+-rw-r----- 1 mysql mysql  4671502 Jul  8 12:16  mysql.ibd.zstd
+drwxr-x--- 2 mysql mysql      195 Jul  8 12:16  sys
+-rw-r----- 1 mysql mysql        0 Jul  8 12:16  sys_audit.ibd.delta.zstd
+-rw-r----- 1 mysql mysql       64 Jul  8 12:16  sys_audit.ibd.meta
+-rw-r----- 1 mysql mysql     3399 Jul  8 12:16  sys_audit.ibd.zstd
+-rw-r----- 1 mysql mysql        0 Jul  8 12:16  sys_mac.ibd.delta.zstd
+-rw-r----- 1 mysql mysql       64 Jul  8 12:16  sys_mac.ibd.meta
+-rw-r----- 1 mysql mysql    15696 Jul  8 12:16  sys_mac.ibd.zstd
+drwxr-x--- 2 mysql mysql     4096 Jul  8 12:16  tpch1g
+-rw-r----- 1 mysql mysql        0 Jul  8 12:16  undo_001.delta.zstd
+-rw-r----- 1 mysql mysql       69 Jul  8 12:16  undo_001.meta
+-rw-r----- 1 mysql mysql 26857347 Jul  8 12:16  undo_001.zstd
+-rw-r----- 1 mysql mysql      407 Jul  8 12:16  undo_002.delta.zstd
+-rw-r----- 1 mysql mysql       69 Jul  8 12:16  undo_002.meta
+-rw-r----- 1 mysql mysql 20346487 Jul  8 12:16  undo_002.zstd
 ```
 
 #### 在全备基础上，再做一次增备（压缩）
 
 ```sql
-greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-compressed-incr/20240618-202406181530' ENABLE PAGE TRACK INCREMENT BASED DIRECTORY '/data/backup/clone-compressed/20240618';
+greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-compressed-incr/20240708-202407081218' ENABLE PAGE TRACK INCREMENT BASED DIRECTORY '/data/backup/clone-compressed/20240708';
 ```
 
 查看备份文件，确认压缩结果
 
 ```shell
-$ ls -la /data/backup/clone-compressed-incr/20240618-202406181530
-TODO
+$ ls -la /data/backup/clone-compressed-incr/20240708-2024070812
+total 176
+drwxr-x--- 7 mysql mysql   4096 Jul  8 12:18  .
+drwxr-x--- 3 mysql mysql     33 Jul  8 12:18  ..
+drwxr-x--- 2 mysql mysql    115 Jul  8 12:18 '#clone'
+-rw-r----- 1 mysql mysql    195 Jul  8 12:18  ibdata1.delta.zstd
+-rw-r----- 1 mysql mysql     64 Jul  8 12:18  ibdata1.meta
+drwxr-x--- 2 mysql mysql     28 Jul  8 12:18 '#innodb_redo'
+drwxr-x--- 2 mysql mysql    236 Jul  8 12:18  mysql
+-rw-r----- 1 mysql mysql 103457 Jul  8 12:18  mysql.ibd.delta.zstd
+-rw-r----- 1 mysql mysql     73 Jul  8 12:18  mysql.ibd.meta
+drwxr-x--- 2 mysql mysql    136 Jul  8 12:18  sys
+-rw-r----- 1 mysql mysql      0 Jul  8 12:18  sys_audit.ibd.delta.zstd
+-rw-r----- 1 mysql mysql     64 Jul  8 12:18  sys_audit.ibd.meta
+-rw-r----- 1 mysql mysql      0 Jul  8 12:18  sys_mac.ibd.delta.zstd
+-rw-r----- 1 mysql mysql     64 Jul  8 12:18  sys_mac.ibd.meta
+drwxr-x--- 2 mysql mysql   4096 Jul  8 12:18  tpch1g
+-rw-r----- 1 mysql mysql   9692 Jul  8 12:18  undo_001.delta.zstd
+-rw-r----- 1 mysql mysql     69 Jul  8 12:18  undo_001.meta
+-rw-r----- 1 mysql mysql  21114 Jul  8 12:18  undo_002.delta.zstd
+-rw-r----- 1 mysql mysql     69 Jul  8 12:18  undo_002.meta
 ```
 
 ### 压缩备份恢复
+
+#### 设置环境变量
+
+解压缩时需要用到 `zstd_decompress` 和 `lz4_decompress` 是 GreatSQL 提供的解压缩工具，它们位于 *basedir/bin* 目录下，需要将该目录加到环境变量 **PATH** 中，否则就需要指定全路径：
+
+```shell
+$ export PATH=$PATH:/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin
+$ which zstd_decompress
+/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/zstd_decompress
+```
+
 
 #### 解压缩备份文件
 
@@ -405,47 +462,53 @@ $ cp -rfp /data/backup/clone-compressed/20240618 /data/restore/
 
 # 解压缩
 $ cd /data/restore/20240618
-$ for f in `find . -iname "*\.zstd"`; do zstd_decompress $f $(dirname $f)/$(basename $f .zstd); rm $i; done
-TODO
+$ for f in `find . -iname "*\.zstd"`; do zstd_decompress $f $(dirname $f)/$(basename $f .zstd); rm -f $f; done
+decompress file: ./sys/sys_config.ibd.zstd
+decompress file: ./sys/dbms_alert_info.ibd.zstd
+...
+decompress file: ./mysql/clone_history.ibd.delta.zstd
+decompress file: ./#innodb_redo/#ib_redo0.zstd
 
 # 确认解压缩后的文件
 $ ls -la
-TODO
+total 299644
+drwxr-x--- 7 mysql mysql      4096 Jul  8 14:05  .
+drwxr-xr-x 4 root  root         39 Jul  8 14:04  ..
+drwxr-x--- 2 mysql mysql       115 Jul  8 12:16 '#clone'
+-rw-r--r-- 1 root  root      10237 Jul  8 14:05  ib_buffer_pool
+-rw-r--r-- 1 root  root   12582912 Jul  8 14:05  ibdata1
+-rw-r--r-- 1 root  root      32768 Jul  8 14:05  ibdata1.delta
+-rw-r----- 1 mysql mysql        64 Jul  8 12:16  ibdata1.meta
+drwxr-x--- 2 mysql mysql        23 Jul  8 14:05 '#innodb_redo'
+drwxr-x--- 2 mysql mysql       312 Jul  8 14:05  mysql
+-rw-r--r-- 1 root  root   41943040 Jul  8 14:05  mysql.ibd
+-rw-r--r-- 1 root  root      32768 Jul  8 14:05  mysql.ibd.delta
+-rw-r----- 1 mysql mysql        73 Jul  8 12:16  mysql.ibd.meta
+drwxr-x--- 2 mysql mysql       175 Jul  8 14:05  sys
+-rw-r--r-- 1 root  root     131072 Jul  8 14:05  sys_audit.ibd
+-rw-r--r-- 1 root  root          0 Jul  8 14:05  sys_audit.ibd.delta
+-rw-r----- 1 mysql mysql        64 Jul  8 12:16  sys_audit.ibd.meta
+-rw-r--r-- 1 root  root     376832 Jul  8 14:05  sys_mac.ibd
+-rw-r--r-- 1 root  root          0 Jul  8 14:05  sys_mac.ibd.delta
+-rw-r----- 1 mysql mysql        64 Jul  8 12:16  sys_mac.ibd.meta
+drwxr-x--- 2 mysql mysql      4096 Jul  8 14:05  tpch1g
+-rw-r--r-- 1 root  root  134217728 Jul  8 14:05  undo_001
+-rw-r--r-- 1 root  root          0 Jul  8 14:05  undo_001.delta
+-rw-r----- 1 mysql mysql        69 Jul  8 12:16  undo_001.meta
+-rw-r--r-- 1 root  root  117440512 Jul  8 14:05  undo_002
+-rw-r--r-- 1 root  root      32768 Jul  8 14:05  undo_002.delta
+-rw-r----- 1 mysql mysql        69 Jul  8 12:16  undo_002.meta
 ```
 
-以上是假定备份压缩采用的是 *zstd* 方式，如果是 *lz4* 则改成类似下面这样：
+以上是假定备份压缩采用的是 *zstd* 方式，如果是 *lz4* 则改成类似下面这样（修改文件后缀，以及调用的解压缩工具）：
 
 ```shell
 # 解压缩
 $ cd /data/restore/20240618
-$ for f in `find . -iname "*\.lz4"`; do lz4_decompress $f $(dirname $f)/$(basename $f .lz4); rm $i; done
-TODO
-
-$ ls -la
-TODO
+$ for f in `find . -iname "*\.lz4"`; do lz4_decompress $f $(dirname $f)/$(basename $f .lz4); rm $f; done
 ```
 
-其中，`zstd_decompress` 和 `lz4_decompress` 是 GreatSQL 提供的解压缩工具，它们位于 *basedir/bin* 目录下，需要将该目录加到环境变量 **PATH** 中，否则就需要指定全路径：
-
-
-```shell
-$ export PATH=$PATH:/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin
-$ which zstd_decompress
-/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/zstd_decompress
-```
-
-也可以使用 `mysqldecompress` 工具来解压缩，它是个 Shell 脚本，使用起来会更方便些，例如：
-
-```shell
-$ mysqldecompress --decompress-tool=zstd_decompress --decompress-dir=/data/restore/20240618
-TODO
-```
-
-注意：
-1. 采用 `mysqldecompress` 解压缩后会删除原文件; 
-2. 参数 `--decompress-tool` 指定相应的解压缩工具，如果是 *lz4* 压缩文件，则指定为 "lz4_decompress"。
-
-在全量 Clone 备份文件目录下，可以看到每个表空间都会对应一个 ".delta" 后缀的数据文件。之所以产生这些文件，是因为全量 Clone 备份在 *FILE COPY* 阶段结束后，数据文件已被压缩，在 *PAGE COPY* 阶段中的数据因找不到其在原文件的位置，需要单独存储到 ".delta" 文件。在数据恢复过程，需要对这些 ".delta" 文件单独处理。
+在全量 Clone 备份文件目录下，可以看到每个表空间都会对应一个 ".delta" 后缀的数据文件。之所以产生这些文件，是因为全量 Clone 备份在 *FILE COPY* 阶段结束后，数据文件已被压缩，在 *PAGE COPY* 阶段中的数据因找不到其在原文件的位置，需要单独存储到 ".delta" 文件。在数据恢复过程，GreatSQL 会对这些 ".delta" 文件自动处理。
 
 #### 解压缩增备文件
 
@@ -453,11 +516,14 @@ TODO
 
 ```shell
 # 不厌其烦地提醒，要先做好备份，不要对原备份文件直接操作
-$ cp -rfp /data/backup/clone-compressed-incr/20240618-202406181530 /data/restore/
+$ cp -rfp /data/backup/clone-compressed-incr/20240708-2024070812 /data/restore/increment
 
 # 解压缩
-$ mysqldecompress --decompress-tool=zstd_decompress --decompress-dir=/data/restore/20240618-202406181530
-TODO
+$ cd /data/restore/increment/20240708-2024070812
+$ for f in `find . -iname "*\.zstd"`; do zstd_decompress $f $(dirname $f)/$(basename $f .zstd); rm -f $f; done
+decompress file: ./ibdata1.delta.zstd
+...
+decompress file: ./sys/dbms_alert_info.ibd.delta.zstd
 ```
 
 #### 全量压缩备份恢复
@@ -474,18 +540,11 @@ basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
 datadir = /data/restore/20240618
 user = mysql
 socket = mysql.sock
-
-# 启动 GreatSQL
-$ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf --clone_incremental_dir=/data/restore/20240618 &
-TODO
+skip-networking
 ```
 可根据需要自行调整 my.cnf 配置文件内容。
 
-注意：在上面的例子中，先是在 my.cnf 里将 `datadir` 指向全备恢复目录，同时 `clone_incremental_dir` 也要再次指向该目录（TODO，待确认）。
-
-应用过程中如果没有报错，就说明压缩备份恢复成功。
-
-如果还想继续恢复增量备份文件，请跳到下一步操作 "4. 增量压缩备份恢复"。如果不需要继续恢复增备文件，则将恢复后的文件目录作为 `datadir`，直接启动 GreatSQL 服务即可：
+如果还想继续恢复增量备份文件，请跳到下一步操作 [增量压缩备份恢复](#增量压缩备份恢复)。如果不需要继续恢复增备文件，则将恢复后的文件目录作为 `datadir`，直接启动 GreatSQL 服务即可：
 
 ```shell
 $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf &
@@ -509,10 +568,21 @@ basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
 datadir = /data/restore/20240618
 user = mysql
 socket = mysql.sock
+skip-networking
+```
 
+可根据需要自行调整 my.cnf 配置文件内容。
+
+接下来启动 *mysqld* 进程，在启动时加上 `--clone_incremental_dir` 参数，它的作用是将增量备份数据应用到 `datadir` 中，在应用完全部增量备份数据后，进程就会自动退出，而不是继续进入服务启动阶段。
+
+```shell
 # 启动 GreatSQL，将参数 --clone_incremental_dir 指向增备恢复文件
 $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf --clone_incremental_dir=/data/restore/20240618-202406181530
-TODO
+2024-07-08T07:00:53.686378Z 0 [Warning] [MY-010097] [Server] Insecure configuration for --secure-log-path: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
+2024-07-08T07:00:53.686422Z 0 [System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.17-x86_64/bin/mysqld (mysqld 8.0.32-23)
+2024-07-08T07:00:53.702073Z 0 [Warning] [MY-010075] [Server] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: d1405fbb-3cf7-11ef-8d84-d08e7908bcb1.
+2024-07-08T07:00:53.728307Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2024-07-08T07:00:53.738851Z 1 [Warning] [MY-012091] [InnoDB] Allocated tablespace ID 7 for sys_audit, old maximum was 0
 ```
 
 恢复过程中没有产生报错信息，说明一切顺利。
@@ -526,7 +596,6 @@ TODO
 ```shell
 $ cd /data/restore/20240618
 $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf &
-TODO
 ```
 可根据需要自行调整 my.cnf 配置文件内容。
 
@@ -692,9 +761,9 @@ $ find ./#ib_archive/ -type f | xargs ls -l
 
 打开 *page tracking* 后，如果后续不再需要增备，则最好采用上面的方法关闭 *page tracking* 并清除历史数据。
 
-## 新增选项
+## 新增参数
 
-GreatSQL 中针对 Clone 备份新增以下几个选项。
+GreatSQL 中针对 Clone 备份新增以下几个参数。
 
 - clone_file_compress
 
