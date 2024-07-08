@@ -126,8 +126,8 @@ $ cd /data/GreatSQL
 $ cp error.log error-`date +'%Y%m%d'`.log
 $ echo '' > error.log
 
-# 清空刷新
-$ mysqladmin -uroot -p flush-logs
+# 刷新错误日志文件
+$ mysqladmin -uroot -p flush-logs error
 ```
 
 也可以在完成 `cp` 备份后，连入 GreatSQL 后执行相应的 SQL 命令刷新错误日志：
@@ -137,7 +137,7 @@ greatsql> FLUSH ERROR LOGS;
 ```
 
 
-> 如果 GreatSQL 日志文件被其他进程打开或被锁定，执行 `mysqladmin flush-logs` 操作可能会失败
+> 如果 GreatSQL 日志文件被其他进程打开或被锁定，执行 `mysqladmin flush-logs error` 操作可能会失败
 
 如果出现以下错误提示：
 

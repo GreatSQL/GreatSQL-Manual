@@ -274,8 +274,8 @@ $ cd /data/GreatSQL
 $ cp slow.log slow-`date +'%Y%m%d'`.log
 $ echo '' > slow.log
 
-# 清空刷新
-$ mysqladmin -uroot -p flush-logs
+# 刷新慢查询日志文件
+$ mysqladmin -uroot -p flush-logs slow
 ```
 
 也可以在完成 `cp` 备份后，连入 GreatSQL 后执行相应的 SQL 命令刷新慢查询日志：
