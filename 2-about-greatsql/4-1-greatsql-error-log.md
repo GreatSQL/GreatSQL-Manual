@@ -92,7 +92,7 @@ greatsql> SELECT @@GLOBAL.log_error_services;
 
 - `log_timestamps` 控制日志显示时间
 
-从 GreatSQL 5.7.2 开始新增了 `log_timestamps` 这个参数，用于设置 [错误日志](#)、[通用日志](./4-7-greatsql-query-log.md) 中时间戳的记录方式。参数默认值为 *UTC*（简单说就是 UTC+0 时区），这会使得日志中记录的时间采用比中国采用的时区慢 8 小时，日志查看起来就没那么方便了。
+从 GreatSQL 5.7.2 开始新增了 `log_timestamps` 这个参数，用于设置 [错误日志](#)、[通用日志](./4-7-greatsql-general-log.md) 中时间戳的记录方式。参数默认值为 *UTC*（简单说就是 UTC+0 时区），这会使得日志中记录的时间采用比中国采用的时区慢 8 小时，日志查看起来就没那么方便了。
 
 ```sql
 greatsql> SHOW GLOBAL VARIABLES LIKE 'log_timestamps';
