@@ -1018,7 +1018,7 @@ greatsql> SELECT * FROM performance_schema.clone_progress;
 - `FILE COPY`，拷贝文件。
 - `PAGE COPY`，拷贝有变化的 data page。
 - `REDO COPY`，拷贝有变化的 Rodo Log。
-- `FILE SYNC`，这份备份文件集是否被用过（用于后续的增备等）。
+- `FILE SYNC`，Clone到本地的文件被刷新写入到磁盘中。
 - `RESTART`，这份备份文件集是否经历过重启。
 - `RECOVERY`，这份备份文件集是否已用于恢复。
 
