@@ -19,13 +19,13 @@ greatsql> INSTALL COMPONENT "file://component_mysqlbackup";
 再连接到 recipient 实例上，执行下面的命令进行在线全量热备：
 
 ```sql
-greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306 IDENTIFIED BY 'GreatSQL@2023' \
+greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306 IDENTIFIED BY 'GreatSQL@2023'
           DATA DIRECTORY = '/data/backup/clone-full/20240610' ENABLE PAGE TRACK;
 ```
 
 上述命令的作用是对远程实例 *172.16.16.10:3306* 执行在线全量热备，备份数据保存到本地目录 */data/backup/clone-full/20240610* 中，同时启用 [InnoDB page tracking](#关于-innodb-page-tracking) 用于后续的增量备份（如果只需要一次性全量备份，则不需要启用 *InnoDB page tracking*，就不要加上 `ENABLE PAGE TRACK` 子句）。
 
-加上 `ENABLE PAGE TRACK` 子句后，在全量备份任务结束时会记录本次备份结束时的 LSN（*END_LSN*），将它作为下次增备任务的 LSN 起始点（*PAGE_TRACK_LSN*）。在每次备份任务结束后，都可以通过查询元数据表 `mysql.clone_history` 查看确认备份任务的状态，获取备份任务的位置点信息：
+加上 `ENABLE PAGE TRACK` 子句后，在全量备份任务结束时会记录本次备份结束时的 LSN（*END_LSN*），以及下次增备任务的 LSN 起始点（*PAGE_TRACK_LSN*）。在每次备份任务结束后，都可以通过查询元数据表 `mysql.clone_history` 查看确认备份任务的状态，获取备份任务的位置点信息：
 
 ```sql
 greatsql> SELECT * FROM mysql.clone_history\G
@@ -50,7 +50,7 @@ BINLOG_POSITION: 0
 
 其中
 - `START_LSN`，表示本次备份任务开始时的 LSN，如果是全量备份任务，则值为 0。
-- `PAGE_TRACK_LSN`，表示本次备份任务结束时的 LSN，将它作为后续增量备份任务的起始点 LSN。
+- `PAGE_TRACK_LSN`，表示本次备份任务结束时，启用 InnoDB page tracking 的 LSN，将它作为后续增量备份任务的起始点 LSN。
 - `END_LSN`，表示本次备份任务结束时的 LSN。
 
 #### 备份本地实例
@@ -74,8 +74,8 @@ greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-full/20240610' ENABLE
 连接到 recipient 实例上，执行下面的命令执行增量备份：
 
 ```sql
-greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306 IDENTIFIED BY 'GreatSQL@2023' \
-	  DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116' \
+greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306 IDENTIFIED BY 'GreatSQL@2023'
+	  DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
 	  ENABLE PAGE TRACK START_LSN = 21083116;
 ```
 
@@ -84,27 +84,27 @@ greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306 IDENTIFIED BY 'GreatSQL@202
 除了指定起始 LSN 方式外，还可以指定基于本地备份目录执行增量备份：
 
 ```sql
-greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306 IDENTIFIED BY 'GreatSQL@2023' \
-	  DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116' \
-	  ENABLE PAGE TRACK \
+greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306 IDENTIFIED BY 'GreatSQL@2023'
+	  DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
+	  ENABLE PAGE TRACK
 	  INCREMENT BASED DIRECTORY = '/data/backup/clone-full/20240610';
 ```
-上述命令指定本次增备任务是在已有的别分目录 "/data/backup/clone-full/20240610" 基础上，自动识别起始 LSN 后执行增备，这个方法的好处是避免手误写错 *START_LSN* 值。
+上述命令指定本次增备任务是在已有的别分目录 */data/backup/clone-full/20240610* 基础上，自动识别起始 LSN 后执行增备，这个方法的好处是避免手误写错 *START_LSN* 值。
 
 #### 对本地实例执行增量备份
 
 执行下面的命令，完成针对本地实例的增量备份：
 
 ```sql
-greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116' \
+greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
           ENABLE PAGE TRACK START_LSN = 21083116;
 ```
 
 同样地，也可以指定基于本地备份目录执行增备：
 
 ```sql
-greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116' \
-          ENABLE PAGE TRACK \
+greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
+          ENABLE PAGE TRACK
           INCREMENT BASED DIRECTORY = '/data/backup/clone-full/20240610';
 ```
 
@@ -180,7 +180,7 @@ BINLOG_POSITION: 0
 
 ### 备份（全量、增量）恢复
 
-确定备份链路后，就可以选择恢复策略了，是要执行 "全量恢复" 还是 "全量 + 增量" 恢复，恢复过程步骤如下所示：
+确定备份链路后，就可以选择恢复策略了，是要执行 *全量恢复* 还是 *全量 + 增量* 恢复，恢复过程步骤如下所示：
 
 1. 如果只想要恢复全量备份数据，那么直接在 ID = 3 的备份文件集基础上启动 GreatSQL 服务即可；
 2. 如果还想要恢复后续的增量备份，那么需要在以 ID = 3 的备份文件集基础上再将参数 `--clone_incremental_dir` 指向第一次增量备份（ID = 4）目录；
@@ -339,7 +339,7 @@ BINLOG_POSITION: 29832341
         END_LSN: 0
 ```
 
-这个查询结果表明该实例已恢复的事务 GTID 是 "c42c1e3e-0f41-11ef-b6bf-d08e7908bcb1:1-3270"，对应的 Binlog 文件是 "binlog.000013"，日志的点位是 "29832341"，对应的时间是 "2024-06-18 15:37:53.569"。
+这个查询结果表明该实例已恢复的事务 GTID 是 *c42c1e3e-0f41-11ef-b6bf-d08e7908bcb1:1-3270*，对应的 Binlog 文件是 *binlog.000013*，日志的点位是 *29832341*。
 
 **2. 连接原来的数据库实例，查询最新的事务 GTID 信息。**
 
@@ -460,8 +460,8 @@ drwxr-x--- 2 mysql mysql     4096 Jul  8 12:16  tpch1g
 #### 在全备基础上，再做一次增备（压缩）
 
 ```sql
-greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-compressed-incr/20240708-202407081218' \
-          ENABLE PAGE TRACK \
+greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-compressed-incr/20240708-202407081218'
+          ENABLE PAGE TRACK
           INCREMENT BASED DIRECTORY '/data/backup/clone-compressed/20240708';
 ```
 
@@ -709,7 +709,7 @@ greatsql> SHOW GLOBAL STATUS LIKE '%lsn%';
 +-------------------------------------+-------------+
 ```
 
-向函数传递参数 "true" 表示开启 *page tracking*，函数返回值为当前最新 LSN。
+向函数传递参数 *true* 表示开启 *page tracking*，函数返回值为当前最新 LSN。
 
 开启 *page tracking* 后，向数据库中持续写入新数据或更新数据，过一段时间后再观察 LSN 变化：
 
@@ -778,7 +778,7 @@ greatsql> SHOW GLOBAL STATUS LIKE '%lsn%';
 | Innodb_lsn_last_checkpoint          | 21635193850 |
 +-------------------------------------+-------------+
 ```
-向函数传递参数 "false" 表示关闭 *page tracking*，函数返回值为当前最新 LSN。
+向函数传递参数 *false* 表示关闭 *page tracking*，函数返回值为当前最新 LSN。
 
 ### 清除 page tracking 历史数据
 
@@ -809,7 +809,7 @@ greatsql> SELECT mysqlbackup_page_track_purge_up_to(21635193850);
 +-------------------------------------------------+
 ```
 
-其中，"21635193850" 是指定要清除 *page tracking* 数据的截止 LSN。如果要清除所有 *page tracking* 历史数据，则可以指定 "LSN = 9223372036854775807"，这是 LSN 的最大值。
+其中，*21635193850* 是指定要清除 *page tracking* 数据的截止 LSN。如果要清除所有 *page tracking* 历史数据，则可以指定 *LSN = 9223372036854775807*，这是 LSN 的最大值。
 
 再次查看 `%datadir%/#ib_archive` 目录下相关文件：
 
@@ -859,7 +859,7 @@ GreatSQL 中针对 Clone 备份新增以下几个参数。
 
 | System Variable Name	| clone_file_compress_threads |
 | --- | --- | 
-| Variable Scope	| Global, Session |
+| Variable Scope	| Global |
 | Dynamic Variable	| Yes |
 | Permitted Values |	[1 - 128] |
 | Default	| 4 |
@@ -911,7 +911,7 @@ Create Table: CREATE TABLE `clone_history` (
 - `STATE`：Clone 操作的状态，包括：Not Started（尚未开始），In Progress（进行中），Completed（成功），Failed（失败）。
 - `BEGIN_TIME`，`END_TIME`：Clone 操作开始、结束时间。
 - `ERROR_MESSAGE`：出具体的报错信息。
-- `SOURCE`：donor 实例的地址。如果是 "LOCAL INSTANCE"，代表是本地 Clone 操作。
+- `SOURCE`：donor 实例的地址。如果是 *LOCAL INSTANCE*，代表是本地 Clone 操作。
 - `DESTINATION`：Clone 备份文件存储的本地目录。
 - `START_LSN`：Clone 开始时的 LSN。
 - `PAGE_TRACK_LSN`：新启动 *page tracking* 的 LSN。
@@ -957,7 +957,7 @@ BINLOG_POSITION: 0
         END_LSN: 21635283915
 4 rows in set (0.00 sec)
 ```
-可以看到当前 ID 为 3 和 4 的两个备份任务，一个是全备（"full clone"），另一个是增备（"increment clone"），均已完成（"Completed"）。
+可以看到当前 ID 为 3 和 4 的两个备份任务，一个是全备（*full clone*），另一个是增备（*increment clone*），均已完成（*Completed*）。
 
 ### 备份状态监控视图
 
