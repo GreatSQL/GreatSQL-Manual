@@ -12,7 +12,7 @@
 
 ##  特性增强
 
-GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**高安全** 等多方面都有增强新特性，包括 Clone 全量 & 增备份和恢复，以及 Clone 压缩备份，MGR 新加入成员节点时自动选择最新数据节点为 Donor 节点，NUMA 亲和性优化，非阻塞式 DDL，无主键表导入提速，更多 Oracle 兼容用法，可记录最后登入时间，基于规则的数据脱敏功能等多个新特性。
+GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**高安全** 等多方面都有增强新特性，包括 Clone 增备份、压缩备份，MGR 新加入成员节点时自动选择最新数据节点为 Donor 节点，NUMA 亲和性优化，非阻塞式 DDL，无主键表导入提速，更多 Oracle 兼容用法，最后登录信息，基于规则的数据脱敏功能等多个新特性。
 
 ### 高可用
 - 当有新成员节点加入 MGR 时，如果选择 Clone 方式复制数据，支持自动选择从最新事务数据的成员节点复制数据，可有效提升 Clone 速度，提高 MGR 的服务可靠性。当新加入节点触发 Clone 方式复制数据时，也支持该特性。
@@ -59,7 +59,7 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 ### 其他
 - 支持采用 Clone 实现在线全量热备和增备以及恢复（类似 Xtrabackup），结合 Binlog 可实现恢复到指定时间点。此外，Clone 备份还支持压缩功能。详见：[Clone 备份](../../5-enhance/5-5-clone-compressed-and-incrment-backup.md)。
 - 由于 GreatSQL 已支持 Rapid 引擎，以及未来还将推出 dplan 特性，因此从 GreatSQL 8.0.32-26 开始，不再推荐使用 InnoDB 并行查询特性（同时会删除用户手册中的入口链接）。
-- 合并龙芯支持patch，参考：[add loongarch64 support](https://gitee.com/src-openeuler/greatsql/pulls/54/files)。
+- 合并龙芯支持 patch，参考：[add loongarch64 support](https://gitee.com/src-openeuler/greatsql/pulls/54/files)。
 
 ## 缺陷修复
 - 修复了在部分 ARM 架构环境中无法使用并行复制的问题，详见：[MySQL Bug 110752](https://bugs.mysql.com/bug.php?id=110752)。
@@ -115,8 +115,10 @@ Records: 1  Duplicates: 0  Warnings: 0
 ```
 
 - 修复了开启线程池后，当逻辑 CPU 核数大于 128 时会触发 coredump 的问题，详见：[mysqld debug version will core if the number of cpu cores is larger than 128](https://github.com/GreatSQL/GreatSQL/issues/5)。
-- 修复了在 greatdb_ha Plugin 中启用 VIP 后因系统环境问题或配置不当可能导致 GreatSQL 在启动 MGR 后发生 coredump 的问题。
+- 修复了在 greatdb_ha Plugin 中启用 VIP 后因系统环境问题或配置不当可能导致 GreatSQL 在启动 MGR 后发生 coredump 的问题，详见：[Issue#I9VTF8](https://gitee.com/GreatSQL/GreatSQL/issues/I9VTF8?from=project-issue)。
 - 修复了用RPM包和TAR二进制包不同方式安装会造成 `lower_case_table_names` 的默认设置不同的问题。
+- 修复了在空跑或低负载时，进程 CPU 消耗较高的问题。
+- 修复了 merge view 后导致 assert fail 问题，详见：[Issue#IABSE6](https://gitee.com/GreatSQL/GreatSQL/issues/IABSE6?from=project-issue)。
 
 ## 注意事项
 无。
