@@ -1,304 +1,241 @@
 # Redo Log（重做日志）
 
-## 前言
+## 什么是 Redo Log（重做日志）
 
-**请注意：本文基于 GreatSQL 8.0.25 & GreatSQL 5.7.7-RC版本，在 GreatSQL 8.0.30 Redo 发生变化，详情见：** [MySQL 8.0.30动态redo log初探](http://mp.weixin.qq.com/s?__biz=MjM5NzAzMTY4NQ==&mid=2653939142&idx=1&sn=25c8c20017c421024f9c7cdb13b50274&chksm=bd3b7fac8a4cf6ba21f71c628c0c6eb5edbde6ac2152306681e484e06899d3904fa805f7e47f&scene=21#wechat_redirect)
+Redo Log（重做日志）是 InnoDB 中用于确保数据持久性和一致性的机制的关键组件。Redo Log 中记录所有修改数据的事务操作，这样即使在系统崩溃时也能通过重做日志进行恢复。
 
-> 事务有4种特性：原子性、一致性、隔离性和持久性（ACID）。那么事务的四种特性到底是基于什么机制实现呢？
+Redo Log 对 InnoDB 很重要，主要以下几点原因：
 
-- 事务的**隔离性由锁机制**实现。
-- 而事务的原子性、一致性和持久性由事务的 **Redo 日志和 Undo 日志**来保证。
+1. **数据恢复**：Redo Log 确保在系统崩溃后，可以恢复已提交但尚未写入磁盘的数据，确保数据完整性。
+2. **事务持久性**：它记录了所有提交事务的修改，保证数据在事务提交后不会丢失。
+3. **性能提升**：通过先写入 Redo Log（也就是 WAL，Write-Ahead Logging），再批量将事务数据合并写入磁盘，减少了频繁的磁盘 I/O 操作，大幅提高数据库性能。
 
-`Redo Log`称为**重做日志**，提供再写入操作，恢复提交事务修改的页操作，用来保证事务的持久性。
-
-`Undo Log`称为**回滚日志**，回滚行记录到某个特定版本，用来保证事务的原子性、一致性。
-
-> 或许会认为 Undo 是 Redo 的逆过程，其实不然。Redo 和 Undo 都可以视为是一种恢复操作。
-
-`Redo Log:`是**存储引擎层(InnoDB)生成的日志**，记录的是"物理级别"上的页修改操作，比如页号xx、偏移量yyy写入了’zzz’数据。主要为了**保证数据的可靠性**;
-
-- 提交，由Redo Log来保证事务的持久化。
-
-`Undo Log:`是**存储引擎层(Innodb)生成的日志**，记录的是逻辑操作日志，比如对某一行数据进行了INSERT语句操作，那么Undo Log 就记录一条与之相反的DELETE操作。主要用于事务的回滚(Undo Log 记录的是每个修改操作的逆操作)和一致性非锁定读(Undo Log回滚行记录到某种特定的版本—MVCC，即多版本并发控制)。
-
-## Redo Log日志
-
-InnoDB存储引擎是以**页**为单位来管理存储空间的。在真正访问页面之前需要把在磁盘上的页缓存到内存中的`Buffer Pool`之后才可以访问。所有的变更都必须先更新缓冲池中的数据，然后缓冲池中的脏页会以一定的频率被刷入磁盘（`checkPoint机制`），通过缓冲池来优化CPU和磁盘之间的鸿沟，这样就可以保证整体的性能不会下降太快。
-
-## 为什么需要Redo日志
-
-一方面，缓冲池可以帮助我们消除CPU和磁盘之间的鸿沟，`checkpoint机制`可以保证数据的最终落盘，然而由于`checkpoint`并不是每次变更的时候就触发的，而是`master`线程隔一段时间去处理的。所以最坏的情况就是事务提交后，刚写完缓冲池，数据库宕机了，那么这段数据就是丢失的，无法恢复。
-
-另一方面，事务包含**持久性**的特性，就是说对于一个已经提交的事务，在事务提交后即使系统发生了崩溃，这个事务对数据库中所做的更改也不能丢失。
-
-那么如何保证这个持久性呢？一个简单的做法：在事务提交完成之前把该事务所修改的所有页面都刷新到磁盘，但是这个简单粗暴的做法有些问题:
-
-- **修改量与刷新磁盘工作量严重不成比例**
-
-有时候我们只修改了某个页面中的一个字节，但是我们知道在InnoDB中是以页为单位来进行磁盘I/O的，也就是说我们在该事务提交时不得不将一个完整的页面从内存中刷新到磁盘，我们又知道一个页面默认是16KB大小，只修改一个字节就要刷新16KB的数据到磁盘上显然是太小题大做了（这也就是所谓“写放大”的意思）。
-
-- **随机I/O刷新较慢**
-
-一个事务可能包含很多语句，即使是一条语句也可能修改许多页面，假如该事务修改的这些页面可能并不相邻，这就意味着在将某个事务修改的Buffer Pool中的页面**刷新到磁盘**时需要进行**很多的随机I/O**，随机I/O比顺序I/O要慢，尤其对于传统的机械硬盘来说。
-
-**另一个解决的思路 ：**我们只是想让已经提交了的事务对数据库中数据所做的修改永久生效，即使后来系统崩溃，在重启后也能把这种修改恢复出来。所以我们其实没有必要在每次事务提交时就把该事务在内存中修改过的全部页面刷新到磁盘，只需要把修改了哪些东西记录一下就好。
-
-> 比如，某个事务将系统表空间中 第**10号**页面中偏移量为 100 处的那个字节的值 **1 改成 2** 。
-> 我们只需要记录一下：将第0号表空间的**10号**页面的偏移量为 100 处的值**更新为 2** 。
-
-InnoDB引擎的事务采用了`WAL技术(Write-Ahead Logging)`，这种技术的思想就是先写日志，再写磁盘，只有日志写入成功，才算事务提交成功，这里的日志就是Redo Log。当发生宕机且数据未刷到磁盘的时候，可以通过Redo Log来恢复，保证ACID中的D，这就是Redo Log的作用。
+没有 Redo Log，InnoDB 无法提供数据恢复和事务持久性保障，严重影响数据可靠性和数据库性能。
 
 ![Redo log作用](./4-5-greatsql-redo-Log-01.png)
 
-## Redo日志记录了什么
+## 配置 Redo Log
 
-为了应对InnoDB各种各样不同的需求，到GreatSQL 8.0为止，已经有多达 65 种 Redo 记录。用来记录这不同的信息，恢复时需要判断不同的 Redo 类型，来做对应的解析。根据 Redo 记录不同的作用对象，可以将这 65 种 Redo 划分为三个大类：
+从 8.0.30 开始，只需要设置参数 `innodb_redo_log_capacity` 即可定义 Redo Log 总容量上限。
 
-- 作用于Page
-- 作用于Space
-- 提供额外信息的Logic类型。
-
-## Redo日志的好处、特点
-
-- **好处**
-
-- - Redo日志**降低了刷盘频率**
-  - Redo日志**占用的空间非常小**
-    存储表空间ID、页号、偏移量以及需要更新的值，所需的存储空间是很小的，刷盘快。
-
-- **特点**
-
-- Redo日志是顺序写入磁盘的
-  在执行事务的过程中，每执行一条语句，就可能产生若干条Redo日志，这些日志是按照产生的顺序写入磁盘的，也就是使用顺序I/O，效率比随机I/O快。
-
-- 事务执行过程中，Redo Log不断记录
-  `Redo Log`跟`Binlog`的区别，Redo Log是存储引擎层产生的，而Binlog是数据库层产生的。假设一个事务，对表做10万行的记录插入，在这个过程中，一直不断的往Redo Log顺序记录，而 Binlog 不会记录，直到这个事务提交，才会一次写入到  Binlog 文件中。
-
-## Redo的组成
-
-Redo Log可以简单分为以下两个部分：
-
-- `重做日志的缓冲 (Redo Log Buffer)`
-  保存在内存中，是易失的。
-  在服务器启动时就向操作系统申请了一大片称之为`Redo Log Buffer`的连续内存空间，翻译成中文就是**Redo日志缓冲区**。这片内存空间被划分成若干个连续的`Redo Log Block`。一个Redo Log Block占用**512字节**大小。
-
-![Redo log buffer](./4-5-greatsql-redo-Log-02.png)
-
-- 参数设置`innodb_log_buffer_size：`
-
-Redo Log Buffer 的大小，默认为 `16M` ，最大值是`4096M`，最小值为 `1M` 。
+它支持在线动态修改并立即生效：
 
 ```sql
-greatsql> SHOW VARIABLES LIKE '%innodb_log_buffer_size%';
-+------------------------+----------+
-| Variable_name          | Value    |
-+------------------------+----------+
-| innodb_log_buffer_size | 16777216 |
-+------------------------+----------+
+-- 修改 Redo Log 总容量为 8GB
+greatsql> SET GLOBAL innodb_redo_log_capacity = 8589934592;
+```
+调整 Redo Log 总容量后，需要先把 buffer pool 中的脏页刷新到磁盘中，再完成收缩或扩展；如果是把调小，则需要尽快刷脏页；如果是调大，则刷脏页的动作会慢一些。
+
+也支持通过 my.cnf 修改，添加/修改下面内容即可，重启后即可生效：
+
+```ini
+[mysqld]
+innodb_redo_log_capacity = 8G
 ```
 
-- 重做日志文件(Redo Log File)，保存在硬盘中，是持久的。
+当 `innodb_redo_log_capacity` 设置了，则不管 `innodb_log_file_size` 或 `innodb_log_files_in_group` 是否也设置了都不生效，Redo Log 总量以 `innodb_redo_log_capacity` 为准。
 
-Redo日志文件如图所示，其中的`ib_logfile0`和`ib_logfile1`即为Redo Log日志。
+当 `innodb_redo_log_capacity` 未设置，并且 `innodb_log_file_size` 或 `innodb_log_files_in_group` 也都没设置时，则 Redo Log 总量等于 `innodb_redo_log_capacity` 的默认值，即 *100MB*。
 
-![事务Redo log流程](./4-5-greatsql-redo-Log-03.png)
+当 `innodb_redo_log_capacity` 未设置，但 `innodb_log_file_size` 和 `innodb_log_files_in_group` 其中之一或二者设置了，则 Redo Log 总容量为 *`innodb_log_file_size \*innodb_log_files_in_group`*。
 
-## Redo的整体流程
+### Redo Log 文件
 
-以一个更新事务为例，Redo Log 流转过程，如下图所示：
+Redo Log 文件存储在 `#innodb_redo` 目录下，而 `#innodb_redo` 目录默认位于 `datadir` 目录下，除非额外设置了 `innodb_log_group_home_dir` 参数。
+
+Redo Log 有两种类型：使用中（ordinary）、备用的（spare）。InnoDB 会尝试维护 *32* 个 Redo Log 文件，每个文件大小为 `1/32 * innodb_redo_log_capacity`。在 `#innodb_redo` 目录下，日志文件名为 *#ib_redoXX*，XX 是 **数字** 或 **数字_tmp**，前者表示已使用的，后者表示备用的。例如下面这样：
+
+```
+#ib_redo1310      #ib_redo1314_tmp  #ib_redo1318_tmp  #ib_redo1322_tmp  #ib_redo1326_tmp  #ib_redo1330_tmp  #ib_redo1334_tmp  #ib_redo1338_tmp
+#ib_redo1311      #ib_redo1315_tmp  #ib_redo1319_tmp  #ib_redo1323_tmp  #ib_redo1327_tmp  #ib_redo1331_tmp  #ib_redo1335_tmp  #ib_redo1339_tmp
+#ib_redo1312_tmp  #ib_redo1316_tmp  #ib_redo1320_tmp  #ib_redo1324_tmp  #ib_redo1328_tmp  #ib_redo1332_tmp  #ib_redo1336_tmp  #ib_redo1340_tmp
+#ib_redo1313_tmp  #ib_redo1317_tmp  #ib_redo1321_tmp  #ib_redo1325_tmp  #ib_redo1329_tmp  #ib_redo1333_tmp  #ib_redo1337_tmp  #ib_redo1341_tmp
+```
+
+每个已使用的 Redo Log 文件都有相应的起止 LSN 值：
+
+```sql
+greatsql> SELECT FILE_ID, FILE_NAME, START_LSN, END_LSN, SIZE_IN_BYTES, IS_FULL, CONSUMER_LEVEL
+          FROM performance_schema.innodb_redo_log_files;
++---------+-----------------------------+-------------+-------------+---------------+---------+----------------+
+| FILE_ID | FILE_NAME                   | START_LSN   | END_LSN     | SIZE_IN_BYTES | IS_FULL | CONSUMER_LEVEL |
++---------+-----------------------------+-------------+-------------+---------------+---------+----------------+
+|    1310 | ./#innodb_redo/#ib_redo1310 | 21996097536 | 22012872704 |      16777216 |       1 |              0 |
+|    1311 | ./#innodb_redo/#ib_redo1311 | 22012872704 | 22029647872 |      16777216 |       0 |              0 |
++---------+-----------------------------+-------------+-------------+---------------+---------+----------------+
+```
+
+当 Redo Log 执行完 checkpoint 后，相应的 checkpoint LSN 就会存储在它所在的那个日志文件头部信息中，当需要进行 crash recovery 时再扫描这些文件的头部信息，找出最后的 checkpoint LSN 进行恢复。
+
+### 自动配置 Redo Log
+
+当参数 `innodb_dedicated_server = ON` 时，会假定 GreatSQL 数据库实例尽量最优地使用服务器资源，InnoDB 就会自动调整相关参数配置，也包括 Redo Log 总容量；该参数默认不启用，更多详情参考：[Enabling Automatic Configuration for a Dedicated MySQL Server](https://dev.mysql.com/doc/refman/8.0/en/innodb-dedicated-server.html)。
+
+### 禁用 Redo Log
+从 8.0.21 开始，支持执行 SQL 命令 `ALTER INSTANCE DISABLE INNODB REDO_LOG` 以禁用 Redo Log（其实也包括禁用 Doublewrite Buffer）。这是危险操作，一般不要这么做，只有在以下几种特殊场景下可以考虑：
+
+- 仅用于性能测试目的。
+- 停机维护期间，为了加快数据批量导入速度。
+
+其他时候，**严禁** 执行禁用 Redo Log 的操作，**否则有极大可能性会导致数据丢失、甚至实例损坏等重大风险**。当发生这种风险时，可能[错误日志](./4-1-greatsql-error-log.md)中会有类似下面的提示：
+
+```
+[ERROR] [MY-013598] [InnoDB] Server was killed when Innodb Redo logging was disabled. Data files could be corrupt. You can try to restart the database with innodb_force_recovery=6
+```
+这就只能采用最高等级的 InnoDB 恢复了，有较大可能性会导致数据丢失，甚至实例都无法启动。
+
+执行 SQL 命令 `ALTER INSTANCE ENABLE INNODB REDO_LOG` 再次启用 Redo Log。
+
+## 理解 Redo Log
+
+### Redo Log 写入过程
+
+以一个 Update 事务为例，描述 Redo Log 流转过程，如下图所示：
 
 ![Redo log刷盘流程](./4-5-greatsql-redo-Log-04.png)
 
 流程说明：
 
-- **第1步**：先将原始数据从磁盘中读入内存中来，修改数据的内存拷贝
-- **第2步**：生成一条重做日志并写入Redo Log Buffer，记录的是数据被修改后的值
-- **第3步**：当事务commit时，将Redo Log Buffer中的内容刷新到 Redo Log File，对 Redo Log File采用追加写的方式
-- **第4步**：定期将内存中修改的数据刷新到磁盘中
+1. 判断要 Update 的数据是否已经在 InnoDB buffer pool 中，没有的话就先将它从磁盘中读入 buffer pool，并修改它（产生脏页）。
 
-## Redo Log的刷盘策略
+2. 生成 Redo Log 记录并写入 Redo Log Buffer。
 
-Redo Log的写入并不是直接写入磁盘的，InnoDB引擎会在写Redo Log的时候先写`Redo Log Buffer`，之后以**一定的频率**刷入到真正的`Redo Log File`中。这里的一定频率怎么规定的呢？这就是我们要说的刷盘策略。
+3. 当事务提交时，将 Redo Log Buffer 中的内容刷新到 Redo Log 磁盘文件中。
 
-![tr_commit不同设置区别](./4-5-greatsql-redo-Log-05.png)
+4. 再将内存中修改的数据（脏页）刷新到对应的表空间磁盘文件中。
 
-> 问题：什么时候刷盘呢？
+这里没有列出 Redo Log 和 Undo Log 的协同过程，这部分内容可以参考：[事务中 Undo Log 和 Redo Log 协同](./4-6-greatsql-undo-log.md#事务中-undo-log-和-redo-log-协同)。
 
-有几种场景可能会触发redo log写文件：
+### Redo Log 刷盘策略
 
-- Redo log buffer空间不足时
-- 事务提交
-- 后台线程
-- 做checkpoint
-- 实例shutdown时
-- binlog切换时
+上面提到，Redo Log 是先写到 log buffer 中，再刷新到 Redo Log 文件中。下面介绍 Redo Log 刷盘策略。
 
-注意，`Redo Log Buffer`刷盘到`Redo Log File`的过程并不是真正的刷到磁盘中去，只是刷入到`文件系统缓存`（page cache）中去（这是现代操作系统为了提高文件写入效率做的一个优化），真正的写入会交给系统自己来决定（比如 page cache 足够大了）。那么对于InnoDB来说就存在一个问题，如果交给系统来同步，同样如果系统宕机，那么数据也丢失了（虽然整个系统宕机的概率还是比较小的）。
+以下几种情况下，会触发 Redo Log Buffer 立即写入 Redo Log 文件中：
 
-针对这种情况，InnoDB给出 `innodb_flush_log_at_trx_commit` 参数，该参数控制 commit 提交事务时，如何将 Redo Log Buffer 中的日志刷新到 Redo Log File 中。它支持三种策略：
+- 当可用 Redo Log Buffer 空间不足 1/2 时。
+- 事务提交且设置 `innodb_flush_log_at_trx_commit=1` 时。
+- 后台线程每秒定期调度刷新磁盘。
+- 执行 Checkpoint 时。
+- 实例 Shutdown 时。
+- 切换 Binlog 文件时。
 
-- `设置为0 ：`表示每次事务提交时不进行刷盘操作。（系统默认master thread每隔1s进行一次重做日志的同步），事务提交不会触发redo写操作，而是留给后台线程每秒一次的刷盘操作，因此实例crash将最多丢失1秒钟内的事务。
-- `设置为1 ：`表示每次事务提交时都将进行同步，刷盘操作（ 默认值 ）,每次事务提交都要做一次fsync，这是最安全的配置，即使宕机也不会丢失事务；
-- `设置为2 ：`表示每次事务提交时都只把 Redo Log Buffer 内容写入 page cache，不进行同步。由os自己决定什么时候同步到磁盘文件,则在事务提交时只做write操作，只保证写到系统的page cache，因此实例crash不会丢失事务，但宕机则可能丢失事务；
+> Redo Log Buffer 写入 Redo Log 文件时有可能并不是立即同步刷新到磁盘文件的，可能只是写到操作系统的 page cache 中，再由操作系统执行刷新同步到磁盘文件。
+>
+> 这种情况下，如果发生宕机，那么数据可能会丢失。
+>
+> 因此，在要求数据高可靠性的环境中，务必设置 `innodb_flush_log_at_trx_commit=1`。
 
-下图表示了不同配置值的持久化程度：
+### Checkpoint（检查点）
 
-![Redo log buffer刷盘](./4-5-greatsql-redo-Log-06.png)
-显然对性能的影响是随着持久化程度的增加而增加的。通常我们建议在日常场景将该值设置为 1 ，但在系统高峰期临时修改成 2 以应对大负载。
+Redo Log Checkpoint 机制用于标识 Redo Log 中已持久化到磁盘的数据部分，从而避免重复写入，提高系统性能。及时 Checkpoint 也能提高发生 crash recovery 时恢复的效率，因为可以从最后的 Checkpoint LSN 位置处开始扫描待恢复的日志，而无需扫描全部日志。
 
-```sql
-#查看刷盘策略
-greatsql> SHOW VARIABLES LIKE 'innodb_flush_log_at_trx_commit';
-+--------------------------------+-------+
-| Variable_name                  | Value |
-+--------------------------------+-------+
-| innodb_flush_log_at_trx_commit | 1     |
-+--------------------------------+-------+
-1 row in set (0.00 sec)
-```
+执行 Checkpoint 时
+- 将脏页从缓冲池写入数据文件。
+- 更新 last checkpoint LSN 位置。
 
-另外，InnoDB存储引擎有一个后台线程，**每隔1秒**，就会把 Redo Log Buffer 中的内容写到文件系统缓存( page cache )，然后调用刷盘操作。
+## Redo Log 优化
 
-![Redo log buffer刷盘](./4-5-greatsql-redo-Log-07.png)
+Redo Log 相关的调整优化操作，主要参考以下几条原则：
+- Redo Log 是以顺序 I/O 为主，不管是读还是写都是，整体的 I/O 性能还是不错的。
+- 加大 Redo Log 容量有利于降低 checkpoint 的频率，缩小则可能会导致产生过多的没必要的刷盘操作，甚至于可能导致 Redo Log 不够用，导致数据库发生丢失损坏风险。
+- 适当调大 `innodb_log_buffer_size` 可以在内存中缓冲更多的事务数据，降低刷盘频率。
+- 适当调整 `innodb_log_write_ahead_size`，一般建议和操作系统或文件系统块大小设置一致，例如 *4KB*。设置过小就比较容易发生 *写时读*，而设置太大则可能导致 *fsync* 性能受到一定影响（因为一次性要刷新多个数据块）。
+- 从 8.0.11 开始新增专门的 log writer 线程负责将 redo log 记录写入 log buffer，并再将其从 log buffer 写入 Redo Log 文件。从 8.0.22 开始，可以通过设置 `innodb_log_writer_threads` 来启用或禁用该线程。在高并发场景建议启用，在低并发场景可以关闭。
+- 优化用户线程等待 Redo 刷新时的自旋延迟（spin delay）。自旋延迟可以减少用户响应时延（latency）。在低并发场景下，降低响应时延并不急迫，在这期间避免使用自旋延迟反而还能降低能耗；而在高并发场景下，应尽量减少自旋延迟。通过下面几个参数变量可以设置自旋延迟高低水位边界。
+  - `innodb_log_wait_for_flush_spin_hwm` 定义用户线程在等待刷新 Redo 时不再自旋的最大平均日志刷新时间。默认值：*400（微秒）*。
+  - `innodb_log_spin_cpu_abs_lwm` 定义 CPU 使用率的最小值，低于该值时，用户线程在等待刷新 Redo 时不再自旋。该值表示所有 CPU 核心的总和。默认值：*80(%)*。当有多个 CPU 核心时，它可以定义超过 100；例如：150，即第一个 CPU 核心使用率 100%，第二个核心使用率 50%。
+  - `innodb_log_spin_cpu_pct_hwm` 定义 CPU 使用率的最大值，高于该值时，用户线程在等待刷新 Redo 时不再自旋。该值表示所有 CPU 核心总处理能力的百分比。默认值：*50(%)*。例如，在有 4 个 CPU 核的时候，其中 2 个 CPU 核 100% 的使用率就是CPU处理能力总和的 50%。另外，该参数会考虑到 CPU 亲和性设置；例如，如果一台服务器有 48 个 CPU 核，但 mysqld 进程设置了仅固定在 4 个 CPU 核上，则会忽略其他 44 个 CPU 核。
 
-也就是说，一个没有提交事务的Redo Log记录，也可能会刷盘。因为在事务执行过程Redo Log记录是会写入Redo Log Buffer 中，这些Redo Log记录会被**后台线程刷盘**。
 
-![Redo log buffer刷盘](./4-5-greatsql-redo-Log-08.png)
+## 相关参数变量
+- `innodb_redo_log_capacity`
 
-除了后台线程每秒`1次`的轮询操作，还有一种情况，当`Redo Log Buffer`占用的空间即将达到`innodb_log_buffer_size`(这个参数默认是16M)的一半的时候，后台线程会主动刷盘。
+  用于配置 InnoDB Redo Log 容量，默认值：*100MB*，取值范围：[*8MB - 512GB*]。大部分情况下设置为 *1GB - 8GB* 范围是足够的。在支持在线动态修改并立即生效。8.0.30 及更高版本之后引入，在这之前可以通过设置 `innodb_log_file_size` 和 `innodb_log_files_in_group` 来配置，见下方说明。
 
-## 写入Redo Log Buffer 过程
+- `innodb_log_file_size` & `innodb_log_files_in_group`
+  
+  在 8.0.30 版本以前，通过 `innodb_log_buffer_size` 和 `innodb_log_files_in_group` 组合来配置 Redo Log 总量。前者表示每个 Redo Log 文件大小，后者表示总共有几个文件。前者默认值：*48MB*，取值范围：[*4MB - 512GB / innodb_log_files_in_group*]。后者默认值：*2*，取值范围：[*2 - 100*]。二者相乘后即为 Redo Log 容量，但最大值不得超过 *512GB*。
+  
+- `innodb_log_group_home_dir`
 
-### Mini-Transaction
+  指定了存放 Redo Log 文件的路径。默认值为空，表示将 Redo Log 文件存储在 `datadir` 目录下的 `#innodb_redo` 子目录下。一般不做配置。
 
-GreatSQL把对底层页面中的一次原子访问的过程称之为一个`Mini-Transaction`，简称`mtr`，比如，向某个索引对应的B+树中插入一条记录的过程就是一个`Mini-Transaction`。一个所谓的mtr可以包含一组Redo日志，在进行崩溃恢复时这一组Redo日志作为一个不可分割的整体。
+- `innodb_log_buffer_size`
 
-一个事务可以包含若干条语句，每一条语句其实是由若干个 mtr 组成，每一个 mtr 又可以包含若干条Redo日志，画个图表示它们的关系就是这样：
+  用于配置 InnoDB 用于缓冲 Redo Log 的内存大小。在事务提交前，事务的修改会先写入这个日志缓冲区。默认值：*16MB*，取值范围：[*1MB - 4GB*]。大部分情况下设置为 *16MB - 64MB* 范围是足够的。支持在线动态修改并立即生效。
 
-![InnoDB mtr](./4-5-greatsql-redo-Log-09.png)
+- `innodb_log_write_ahead_size`
 
-### Redo 日志写入Log Buffer
+  配置 Redo Log 预写块大小，单位：*字节*，默认值：*8192*（字节），取值范围：[*512字节 - innodb_page_size*]。为了避免 *写时读（read-on-write）*，建议将其设置为和操作系统或文件系统缓存块大小一致。当 Redo Log 预写块大小和操作系统（或文件系统）缓存块大小不一致时，就会发生 *写时读* 的情况。它必须设置为 InnoDB Redo Log 块大小（*512字节*）的整数倍。当设置为最小值即 *512字节* 时就不再对 Redo Log 进行 *预写*。设置过小就比较容易发生 *写时读*，而设置太大则可能导致 *fsync* 性能受到一定影响（因为一次性要刷新多个数据块）。
 
-向`log buffer`中写入Redo日志的过程是顺序的，也就是先往前边的block中写，当该block的空闲空间用完之后再往下一个block中写。当我们想往`log buffer`中写入Redo日志时，第一个遇到的问题就是应该写在哪个block的哪个偏移量处，所以InnoDB的设计者特意提供了一个称之为`buf_free`的全局变量，该变量指明后续写入的Redo日志应该写入到`log buffer`中的哪个位置，如图所示:
+- `innodb_log_writer_threads`
 
-![Redo log buffer](./4-5-greatsql-redo-Log-10.png)
+  从 8.0.11 开始新增专门的 log writer 线程负责将 redo log 记录写入 log buffer，并再将其从 log buffer 写入 Redo Log 文件。从 8.0.22 开始，可以通过设置 `innodb_log_writer_threads` 来启用或禁用该线程。
 
-一个 mtr 执行过程中可能产生若干条Redo日志，**这些Redo日志是一个不可分割的组**，所以其实并不是每生成一条Redo日志，就将其插入到log buffer中，而是每个 mtr 运行过程中产生的日志先暂时存到一个地方，当该 mtr 结束的时候，将过程中产生的一组Redo日志再全部复制到log buffer中。我们现在假设有两个名为T1、T2的事务，每个事务都包含2个 mtr ，我们给这几个 mtr 命名一下:
+- `innodb_log_wait_for_flush_spin_hwm`
 
-- 事务`T1`的两个 `mtr` 分别称为`mtr_T1_1`和`mtr_T1_2`。
-- 事务`T2`的两个 `mtr` 分别称为`mtr_T2_1`和`mtr_T2_2`。
+  定义用户线程在等待刷新 Redo 时不再自旋的最大平均日志刷新时间。默认值：*400（微秒）*。
 
-每个 mtr 都会产生一组Redo日志，用示意图来描述一下这些 mtr 产生的日志情况：
+- `innodb_log_spin_cpu_abs_lwm`
 
-![InnoDB mtr](./4-5-greatsql-redo-Log-11.png)
+  定义 CPU 使用率的最小值，低于该值时，用户线程在等待刷新 Redo 时不再自旋。该值表示所有 CPU 核心的总和。默认值：*80(%)*。
 
-不同的事务可能是 `并发` 执行的，所以 `T1` 、 `T2` 之间的 `mtr` 可能是 `交替执行` 的。每当一个mtr执行完成时，伴随该mtr生成的一组Redo日志就需要被复制到log buffer中，也就是说不同事务的mtr可能是交替写入log buffer的，我们画个示意图(为了美观，我们把一个mtr中产生的所有的Redo日志当作一个整体来画):
+- `innodb_log_spin_cpu_pct_hwm`
 
-![Redo log buffer结构示意图](./4-5-greatsql-redo-Log-12.png)
+  定义 CPU 使用率的最大值，高于该值时，用户线程在等待刷新 Redo 时不再自旋。该值表示所有 CPU 核心总处理能力的百分比。默认值：*50(%)*。该参数会考虑到 CPU 亲和性设置。
 
-有的mtr产生的Redo日志量非常大，比如mtr_t1_2产生的Redo日志占用空间比较大，占用了3个block来存储。
+- `innodb_flush_log_at_trx_commit`
 
-### Redo Log Block的结构图
+  用于控制事务提交时 Redo Log 的刷盘行为模式，不同设置会影响数据库的性能，以及数据可靠性风险。默认值：*1*，取值范围：
+  - **0**：事务提交时不刷新重做日志缓冲区到磁盘。每秒刷新一次。**性能最好，安全性最差**。
+  - **1**：每个事务提交时都将重做日志缓冲区写入磁盘，并刷新文件系统缓冲区。**性能最差，安全性最好**。
+  - **2**：事务提交时只将重做日志缓冲区写入文件系统缓冲区，每秒刷新一次。**性能和安全性的折中选择**。
+  - 为了保证数据安全可靠，请务必同时设置 `innodb_flush_log_at_trx_commit = 1` & `sync_binlog = 1`，即俗称设置为 **双1**。
 
-一个Redo Log Block是由**日志头**、**日志体**、**日志尾**组成。日志头占用**12字节**，日志尾占用**4字节**，所以一个block真正能存储的数据就是`512-12-4=496字节`。
+![Redo log buffer不同刷盘模式](./4-5-greatsql-redo-Log-06.png)
 
-- 为什么一个block设计成512字节?
-  这个和磁盘的扇区有关，机械磁盘默认的扇区就是512字节，如果你要写入的数据大于512字节，那么要写入的扇区肯定不止一个，这时就要涉及到盘片的转动，找到下一个扇区，假设现在需要写入两个扇区A和B，如果扇区A写入成功，而扇区B写入失败，那么就会出现**非原子性**的写入，而如果每次只写入和扇区的大小一样的512字节，那么每次的写入都是原子性的。
+> DDL 变更以及其他 InnoDB 内部活动相关日志刷新不受本参数影响。
 
-![Redo log block](./4-5-greatsql-redo-Log-13.png)
+- `innodb_flush_log_at_timeout`
 
-真正的Redo日志都是存储到占用`496`字节大小的`log block body`中，图中的`log block header`和`logblock trailer`存储的是一些管理信息。我们来看看这些所谓的管理信息都有什么。
+  用于控制 InnoDB Redo Log 缓冲区在没有事务提交的情况下被刷新到磁盘的时间间隔，以增强数据的持久性和安全性。单位：*秒*，默认值：*1*，取值范围：[*1 - 2700*]。
 
-![Redo log block header](./4-5-greatsql-redo-Log-14.png)
+## 相关状态变量
 
-- `log block header`的属分别如下：
-
-- - `LOG_BLOCK_HDR_NO:`log buffer是由log block组成，在内部log buffer就好似一个数组，因此LOG_BLOCK_HDR_NO用来标记这个数组中的位置。其是递增并且循环使用的，占用4个字节，但是由于第一位用来判断是否是flush bit,所以最大的值为2G。
-  - `LOG_BLOCK_HDR_DATA_LEN:`表示block中已经使用了多少字节，初始值为`12`(因为log block body从第12个字节处开始）。随着往block中写入的Redo日志越来也多，本属性值也跟着增长。如果`log block body`已经被全部写满，那么本属性的值被设置为512。
-  - `LOG_BLOCK_FIRST_REC_GROUP:`一条Redo日志也可以称之为一条Redo日志记录（Redo Log Record),一个 mtr 会生产多条Redo日志记录，这些Redo日志记录被称之为一个`Redo日志记录组（Redo Log Recordgroup)`。`LOG_BLOCK_FIRST_REC_GROUP`就代表该block中第一个mtr生成的Redo日志记录组的偏移量（其实也就是这个block里第一个mtr生成的第一条Redo日志的偏移量）。如果该值的大小和`LOG_BLOCK_HDR_DATA_LEN`相同，则表示当前log block不包含新的日志。
-  - `LOG_BLOCK_CHECKPOINT_NO:`占用4字节，表示该log block最后被写入时的`checkpoint`。
-
-- `log block trailer` 中属性的意思如下：
-
-- - `LOG_BLOCK_CHECKSUM:`表示block的校验值，用于正确性校验（其值和LOG_BLOCK_HDR_NO相同）,我们暂时不关心它。
-
-### Redo Log File
-
-相关参数设置
-
-- `innodb_log_group_home_dir ：`指定 Redo Log 文件组所在的路径，默认值为`./`，表示在数据库的数据目录下。GreatSQL的默认数据目录（ `/var/lib/mysql` ）下默认有两个名为 `ib_logfile0` 和`ib_logfile1` 的文件，log buffer中的日志默认情况下就是刷新到这两个磁盘文件中。此Redo日志文件位置还可以修改。
-- `innodb_log_files_in_group：`指明Redo Log File的个数，命名方式如：ib_logfile0，iblogfile1…iblogfilen。默认2个，最大100个。
+Redo Log 相关状态变量有以下这些
 
 ```sql
-greatsql> SHOW VARIABLES LIKE 'innodb_log_files_in_group';
-+---------------------------+-------+
-| Variable_name             | Value |
-+---------------------------+-------+
-| innodb_log_files_in_group | 2     |
-+---------------------------+-------+
-#ib_logfile0
-#ib_logfile1
+greatsql> SHOW GLOBAL STATUS LIKE 'innodb%redo%';
++-------------------------------------+-------------+
+| Variable_name                       | Value       |
++-------------------------------------+-------------+
+| Innodb_redo_log_read_only           | OFF         | <= Redo Log 是否处于只读状态
+| Innodb_redo_log_uuid                | 1075899837  | <= Redo Log UUID
+| Innodb_redo_log_checkpoint_lsn      | 22026843368 | <= 完成 checkpoint 的 LSN
+| Innodb_redo_log_current_lsn         | 22026843368 | <= 最新 LSN
+| Innodb_redo_log_flushed_to_disk_lsn | 22026843368 | <= 已刷新到磁盘的 LSN
+| Innodb_redo_log_logical_size        | 512         | <= 数据块大小（单位：字节），表示在用Redo Log的LSN范围，从重做日志使用者所需的最旧块到最近写入的块
+| Innodb_redo_log_physical_size       | 33554432    | <= 物理大小（已使用 Redo Log）
+| Innodb_redo_log_capacity_resized    | 536870912   | <= Redo Log 的总容量大小，512MB
+| Innodb_redo_log_resize_status       | OK          | <= Redo Log 调整大小的进度和状态
+| Innodb_redo_log_enabled             | ON          | <= 是否启用 Redo Log
++-------------------------------------+-------------+
 ```
 
-- `innodb_flush_log_at_trx_commit：`控制 Redo Log 刷新到磁盘的策略，默认为1。
+以上是 8.0.30 及更高版本的配置及相应状态查看方法，在 8.0.30 以前的配置方法这里不赘述，详细请参考：[Configuring Redo Log Capacity](https://dev.mysql.com/doc/refman/8.0/en/innodb-redo-log.html#innodb-redo-log-file-reconfigure)。
 
-- `innodb_log_file_size：`单个 Redo Log 文件设置大小，默认值为 48M 。最大值为512G，注意最大值指的是整个 Redo Log 系列文件之和，即`（innodb_log_files_in_group * innodb_log_file_size ）`不能大于最大值512G。
+## 附录：8.0 版本相对 5.7 在 Redo Log 方面的变化
+- 新增 `innodb_redo_log_capacity` 参数，取代原来的 `innodb_log_file_size` & `innodb_log_files_in_group`。
+- 新增 `innodb_log_wait_for_flush_spin_hwm, innodb_log_spin_cpu_abs_lwm, innodb_log_spin_cpu_pct_hwm` 等几个优化相关参数。
+- 支持 Redo Log 并行写入。
+- 支持在线禁用/启用 Redo Log。
+- 支持 Redo Log 加密。
+- 支持 Redo Log 归档（企业版 mysqlbackup 所用）。
 
-```sql
-greatsql> SHOW VARIABLES LIKE 'innodb_log_file_size';
-+----------------------+----------+
-| Variable_name        | Value    |
-+----------------------+----------+
-| innodb_log_file_size | 50331648 |
-+----------------------+----------+
-```
-
-根据业务修改其大小，以便容纳较大的事务。编辑my.cnf文件并重启数据库生效，如下所示
-
-```bash
-$ vim /etc/my.cnf
-innodb_log_file_size=200M  
-```
-
-> 在数据库实例更新比较频繁的情况下，可以适当加大 Redo Log 组数和大小。但也不推荐 Redo Log 设置过大，在GreatSQL崩溃恢复时会重新执行Redo日志中的记录。
-
-- innodb_redo_log_capacity
-
-从 8.0.30 版本开始，新增 `innodb_redo_log_capacity` 选项用于定义 Redo Log 总容量，并且日志文件数量被固定为 32 个（不再受到选项 `innodb_log_files_in_group` 设置影响）。有了这个新选项后，就无需再设置 `innodb_log_file_size` 和 `innodb_log_files_in_group` 两个选项了。
-
-选项 `innodb_redo_log_capacity` 默认值为 100MB，并且允许在线调整，而无需重启数据库服务，在一般的生产环境中建议设置至少 1GB。
-
-### 日志文件组
-
-从上边的描述中可以看到，磁盘上的`Redo`日志文件不只一个，而是以一个`日志文件组`的形式出现的。这些文件以`ib_logfile[数字]`（数字可以是0、1、2…）的形式进行命名，每个的Redo日志文件大小都是一样的。
-
-在将Redo日志写入日志文件组时，是从`ib_logfile0`开始写，如果`ib_logfile0`写满了，就接着`ib_logfile1`写。同理,`ib_logfile1`.写满了就去写`ib_logfile2`，依此类推。如果写到最后一个文件该咋办?那就重新转到`ib_logfile0`继续写，所以整个过程如下图所示:
-
-![Redo log file group](./4-5-greatsql-redo-Log-15.png)
-
-总共的Redo日志文件大小其实就是：`innodb_log_file_size × innodb_log_files_in_group` 。
-
-采用循环使用的方式向Redo日志文件组里写数据的话，会导致后写入的Redo日志覆盖掉前边写的Redo日志？当然！所以InnoDB的设计者提出了`checkpoint`的概念。
-
-### checkpoint
-
-在整个日志文件组中还有两个重要的属性，分别是write pos、checkpoint
-
-- `write pos`是当前记录的位置，一边写一边后移
-- `checkpoint`是当前要擦除的位置，也是往后推移
-
-每次刷盘Redo Log记录到日志文件组中，write pos位置就会后移更新。每次GreatSQL加载日志文件组恢复数据时，会清空加载过的Redo Log记录，并把 checkpoint后移更新。write pos和checkpoint之间的还空着的部分可以用来写入新的Redo Log记录。
-
-![Redo checkpoint](./4-5-greatsql-redo-Log-16.png)
-
-如果 write pos 追上 checkpoint ，表示 **日志文件组** 满了，这时候不能再写入新的 Redo Log 记录，GreatSQL 得停下来，清空一些记录，把 checkpoint 推进一下。
-
-![Redo checkpoint](./4-5-greatsql-redo-Log-17.png)
-
-## 结尾
-
-由于Redo LOG的内容知识过于庞大，由于篇幅限制，本文只做浅析，这边推荐几篇文章（详见参考文章），感兴趣的同学可以继续深入学习研究。
-
+延伸阅读：
+- [Redo Log](https://dev.mysql.com/doc/refman/8.0/en/innodb-redo-log.html)
+- [Redo Log Configuration](https://dev.mysql.com/doc/refman/8.0/en/innodb-init-startup-configuration.html#innodb-startup-log-file-configuration)
+- [Optimizing InnoDB Redo Logging](https://dev.mysql.com/doc/refman/8.0/en/optimizing-innodb-logging.html)
 
 **扫码关注微信公众号**
 
