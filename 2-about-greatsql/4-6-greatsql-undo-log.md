@@ -230,7 +230,7 @@ InnoDB page size 默认为 16 KB，因此一个回滚段里最多可以支持 10
 - 如果是在 8-9 之间发生宕机，则会
   - 扫描 Redo Log 进行恢复。
   - 扫描 Undo Log 发现有事务没完成进行回滚。
-- 若在9之后系统宕机，内存映射中变更的数据还来不及刷回磁盘，那么系统恢复之后，可以根据Redo Log把数据刷回磁盘。
+- 若在 9 之后系统宕机，内存映射中变更的数据还来不及刷回磁盘，那么系统恢复之后，可以根据Redo Log把数据刷回磁盘。
 
 > InnoDB 在进行 crash recovery 时，会进一步检查 Redo Log 和 Binlog，判断该事务是否同时也已经写了 Binlog，是的话就会再次提交。如果一个事务在 Redo Log 中只处于 Prepare 状态，但 Binlog 还没写成功，那就会回滚。
 
@@ -266,6 +266,20 @@ InnoDB page size 默认为 16 KB，因此一个回滚段里最多可以支持 10
 
   用于控制回滚段清理操作的频率。这个参数决定了清理操作在 purge 操作中是否经常性地进行，以释放空间。默认值和最大值均为 *128*，最小值为 *1*，一般不做调整。频繁的清理操作（较低的数值）会使回滚段迅速释放空间，但可能增加系统的负载和性能开销。
 
+## 附录：8.0 版本相对 5.7 在 Undo Log 方面的变化
+
+- 默认地，初始化时会创建两个 Undo 表空间。Undo 表空间不再存储在系统表空间中，而是独立出来。
+- 从 8.0.14 版本开始，支持利用 `CREATE/DROP/ALTER UNDO TABLESPACE` 命令创建/删除/启用/禁用 Undo 表空间。
+- 参数 `innodb_undo_log_truncate` 默认值为 *ON*，即默认启用自动清理 Undo 表空间。
+- 参数 `innodb_rollback_segments` 是针对每个 Undo 表空间控制其最大可使用的回滚段数目。而在以前，它定义的是所有 Undo 表空间全部的最大可用回滚段数目。这大大提升了最大可支持的并发事务数。
+- 新参数 `innodb_rollback_segments` 取代旧参数 `innodb_undo_logs`。 
+- 删掉状态变量 `Innodb_available_undo_logs`。
+- 参数 `innodb_undo_tablespaces` 从 8.0.14 开始建议不再使用。
+- 增加对 Undo 表空间的加密支持。
+
+延伸阅读：
+- [Undo Logs](https://dev.mysql.com/doc/refman/8.0/en/innodb-undo-logs.html)
+- [Undo Tablespaces](https://dev.mysql.com/doc/refman/8.0/en/innodb-undo-tablespaces.html)
 
 **扫码关注微信公众号**
 
