@@ -7,13 +7,13 @@ GreatSQL 中除去部分新增的 [Oracle 兼容语法](../5-enhance/5-3-easyuse
 
 MySQL 相关 SQL 语法详见手册：[SQL Statements](https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html)。
 
-本文档中所有操作都采用命令行模式下的cli工具来演示。
+本文档中所有操作都采用命令行模式下的 Cli 工具来演示。
 
 ## 连接登入GreatSQL数据库
 
 有多种方式连入：
 
-```
+```shell
 # 本机直接连入
 $ mysql -uroot -p
 
@@ -100,6 +100,8 @@ greatsql> SELECT * FROM t1;
 成功。
 
 更多相关SQL命令/语法详见手册：[SQL Statements](https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html)。
+
+更多基于 GreatSQL 的应用开发内容请参考：[应用开发](../12-dev-guide/12-dev-guide.md)。
 
 
 **扫码关注微信公众号**
