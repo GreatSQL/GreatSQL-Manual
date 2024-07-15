@@ -14,6 +14,42 @@ GreatSQL 版本号采用点分位命名规则（X.Y.Z-R）模式，其中
 
 正常情况下，GreatSQL每年会发布两次版本，一般是上半年、下半年各发布一个新版本。
 
+**约定**
+
+在本文档中，关于操作系统命令行以及 SQL 命令提示符约定如下：
+
+- `$` 为 Linux 命令提示符。
+- `greatsql>` 为 GreatSQL 数据库 SQL 命令提示符。
+
+如下例所示。
+
+执行下面的命令启动 GreatSQL 服务：
+
+```shell
+$ systemctl start greatsql
+```
+
+在 GreatSQL 中执行下面的命令查看数据库列表：
+
+```sql
+greatsql> SHOW DATABASES;
++-------------------------------+
+| Database                      |
++-------------------------------+
+| employees                     |
+| greatsql                      |
+| information_schema            |
+| mysql                         |
+| mysql_innodb_cluster_metadata |
+| performance_schema            |
+| sakila                        |
+| sys                           |
+| sys_audit                     |
+| world                         |
++-------------------------------+
+14 rows in set (0.00 sec)
+```
+
 
 **扫码关注微信公众号**
 
