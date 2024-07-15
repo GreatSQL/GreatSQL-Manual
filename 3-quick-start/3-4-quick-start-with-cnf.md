@@ -1,11 +1,10 @@
 # my.cnf参考模板
 ---
-以下是GreatSQL8.0.32-25的my.cnf推荐参考模板。
+以下是 GreatSQL 8.0.32-25 的 my.cnf 推荐参考模板。
 
-```sql
+```ini
 #
 # my.cnf example for GreatSQL
-# last update, 2024/5/6
 #
 # 下面参数选项设置仅作为参考，且假设服务器可用内存为256G
 #
@@ -25,7 +24,7 @@ socket    = /data/GreatSQL/mysql.sock
 pid-file = mysql.pid
 character-set-server = UTF8MB4
 skip_name_resolve = 1
-#若你的GreatSQL数据库主要运行在境外，请务必根据实际情况调整本参数
+#若你的数据库主要运行在境外，请务必根据实际情况调整本参数
 default_time_zone = "+8:00"
 bind_address = "0.0.0.0"
 
@@ -37,7 +36,6 @@ max_connections = 1024
 max_connect_errors = 1000000
 table_open_cache = 2048
 table_definition_cache = 2048
-thread_stack = 512K
 sort_buffer_size = 4M
 join_buffer_size = 4M
 read_buffer_size = 8M
@@ -189,6 +187,7 @@ innodb_sort_buffer_size = 64M
 innodb_adaptive_hash_index = 0
 #开启NUMA支持
 innodb_numa_interleave = ON
+innodb_spin_wait_delay = 20
 innodb_print_lock_wait_timeout_info = 1
 #自动杀掉超过5分钟不活跃事务，避免行锁被长时间持有
 kill_idle_transaction = 300
@@ -203,7 +202,6 @@ performance_schema = 1
 #performance_schema_instrument = '%memory%=on'
 performance_schema_instrument = '%lock%=on'
 ```
-
 
 **扫码关注微信公众号**
 
