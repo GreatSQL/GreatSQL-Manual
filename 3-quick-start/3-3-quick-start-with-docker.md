@@ -19,13 +19,16 @@ Docker version 20.10.10, build b485636
 ```
 
 ## 安装步骤
-1. 启动Docker服务
-```
+
+### 1. 启动Docker服务
+
+```shell
 $ systemctl start docker
 ```
 
-2. 搜索、拉取GreatSQL镜像
-```
+### 2. 搜索、拉取GreatSQL镜像
+
+```shell
 $ docker search greatsql
 NAME                DESCRIPTION   STARS     OFFICIAL   AUTOMATED
 greatsql/greatsql                 4
@@ -41,8 +44,11 @@ Status: Downloaded newer image for greatsql/greatsql:latest
 docker.io/greatsql/greatsql:latest
 ```
 
-3. 创建一个新容器，容器中会安装并启动GreatSQL数据库
-```
+### 3. 创建一个新容器
+
+容器中会安装并启动GreatSQL数据库
+
+```shell
 $ docker run -d --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EMPTY_PASSWORD=1 greatsql/greatsql
 
 4f351e22cea990b177589970ac5374f4b3366d2c0f69e923475f82c51da4b934
@@ -50,7 +56,8 @@ $ docker run -d --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EMPTY_PASSWOR
 容器的命名和容器内主机名均为greatsql。
 
 确认容器状态：
-```
+
+```shell
 $ docker ps -a | grep greatsql
 ...
 4f351e22cea9   greatsql/greatsql     "/docker-entrypoint.…"   About a minute ago   Up About a minute          3306/tcp, 33060-33061/tcp   greatsql
@@ -58,20 +65,22 @@ $ docker ps -a | grep greatsql
 ```
 看到容器状态是Up的，表示已正常启动了。
 
-4. 进入容器
-```
+### 4. 进入容器
+
+```shell
 $ docker exec -it greatsql bash
 [root@greatsql /]# cd /data/GreatSQL/
 [root@greatsql GreatSQL]# ls
-'#ib_16384_0.dblwr'   binlog.000001   ca-key.pem        error.log     ibdata1       mysql.ibd         performance_schema   server-key.pem   undo_002
-'#ib_16384_1.dblwr'   binlog.000002   ca.pem            ib_buffer_pool     ibtmp1           mysql.pid         private_key.pem      slow.log
-'#innodb_temp'          binlog.000003   client-cert.pem   ib_logfile0     innodb_status.1   mysql.sock         public_key.pem      sys
- auto.cnf          binlog.index    client-key.pem    ib_logfile1     mysql           mysql.sock.lock   server-cert.pem      undo_001
+ auto.cnf        binlog.index      client-key.pem   '#file_purge'         ibdata1          '#innodb_temp'   mysql.sock           public_key.pem    sys
+ binlog.000001   ca-key.pem        duckdb.data      '#ib_16384_0.dblwr'   ibtmp1            mysql           mysql.sock.lock      server-cert.pem   sys_audit
+ binlog.000002   ca.pem            duckdb.data.wal  '#ib_16384_1.dblwr'  '#innodb_redo'     mysql.ibd       performance_schema   server-key.pem    undo_001
+ binlog.000003   client-cert.pem   error.log         ib_buffer_pool       innodb_status.1   mysql.pid       private_key.pem      slow.log          undo_002
 ```
 可以看到，GreatSQL已经安装并初始化完毕。
 
 在容器中登入GreatSQL数据库：
-```
+
+```shell
 [root@greatsql GreatSQL]# mysql -uroot
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
@@ -81,7 +90,7 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 (Wed Jul  6 14:42:39 2022)[root@GreatSQL][(none)]>\s
 --------------
 ...
-Server version:        8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
+Server version:        8.0.32-26 GreatSQL, Release 26, Revision db07cc5cb73
 ...
 Threads: 2  Questions: 6  Slow queries: 0  Opens: 119  Flush tables: 3  Open tables: 36  Queries per second avg: 0.017
 ```
