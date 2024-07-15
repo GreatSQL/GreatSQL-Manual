@@ -1,4 +1,4 @@
-# 通过 CLI 客户端连接
+# 通过 Client 客户端连接
 ---
 
 连接到 GreatSQL 数据库之前，请确认 GreatSQL 服务正常运行。
@@ -9,7 +9,7 @@ $ systemctl status greatsql
 Active: active (running) since Wed 2024-04-24 16:17:45 CST; 4 days ago
 ```
 
-可以直接使用CLI客户端连接到GreatSQL客户端
+可以直接使用 Client 客户端连接到 GreatSQL 数据库
 
 ```bash
 $ mysql -h主机名 -P端口号 -u用户名 -p密码

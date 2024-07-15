@@ -60,7 +60,7 @@ greatsql> FLUSH PRIVILEGES;
 
 ![Navicat03](./12-1-2-cw-gui-03.png)
 
-至此，使用Navicat连接GreatSQL服务器完成
+至此，使用 Navicat 连接 GreatSQL 服务器完成。
 
 ### 使用 MySQL workbench 连接
 
@@ -80,7 +80,7 @@ greatsql> FLUSH PRIVILEGES;
 
 ![workbench04](./12-1-2-cw-gui-07.png)
 
-至此，使用MySQL workbench连接GreatSQL服务器完成
+至此，使用 MySQL workbench 连接 GreatSQL 服务器完成。
 
 ### 使用 ATOMDB 连接
 
@@ -106,7 +106,7 @@ ATOMDB™ 数据库管理客户端是一款服务广大开发者的工具软件�
 
 ![atomdb3](./12-1-2-cw-gui-11.png)
 
-至此，使用 ATOMDB 连接GreatSQL服务器完成
+至此，使用 ATOMDB 连接 GreatSQL 服务器完成。
 
 
 **扫码关注微信公众号**
