@@ -19,8 +19,10 @@ greatsql> INSTALL COMPONENT "file://component_mysqlbackup";
 再连接到 recipient 实例上，执行下面的命令进行在线全量热备：
 
 ```sql
-greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306 IDENTIFIED BY 'GreatSQL@2023'
-          DATA DIRECTORY = '/data/backup/clone-full/20240610' ENABLE PAGE TRACK;
+greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306
+          IDENTIFIED BY 'GreatSQL@2023'
+          DATA DIRECTORY = '/data/backup/clone-full/20240610'
+          ENABLE PAGE TRACK;
 ```
 
 上述命令的作用是对远程实例 *172.16.16.10:3306* 执行在线全量热备，备份数据保存到本地目录 */data/backup/clone-full/20240610* 中，同时启用 [InnoDB page tracking](#关于-innodb-page-tracking) 用于后续的增量备份（如果只需要一次性全量备份，则不需要启用 *InnoDB page tracking*，就不要加上 `ENABLE PAGE TRACK` 子句）。
@@ -60,7 +62,9 @@ BINLOG_POSITION: 0
 ```sql
 greatsql> INSTALL COMPONENT "file://component_mysqlbackup";
 
-greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-full/20240610' ENABLE PAGE TRACK;
+greatsql> CLONE LOCAL DATA
+	  DIRECTORY = '/data/backup/clone-full/20240610'
+          ENABLE PAGE TRACK;
 ```
 
 同样地，如果不需要增量备份，则不要加上 `ENABLE PAGE TRACK` 子句。
@@ -74,7 +78,8 @@ greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-full/20240610' ENABLE
 连接到 recipient 实例上，执行下面的命令执行增量备份：
 
 ```sql
-greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306 IDENTIFIED BY 'GreatSQL@2023'
+greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306
+          IDENTIFIED BY 'GreatSQL@2023'
 	  DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
 	  ENABLE PAGE TRACK START_LSN = 21083116;
 ```
@@ -84,7 +89,8 @@ greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306 IDENTIFIED BY 'GreatSQL@202
 除了指定起始 LSN 方式外，还可以指定基于本地备份目录执行增量备份：
 
 ```sql
-greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306 IDENTIFIED BY 'GreatSQL@2023'
+greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306
+          IDENTIFIED BY 'GreatSQL@2023'
 	  DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
 	  ENABLE PAGE TRACK
 	  INCREMENT BASED DIRECTORY = '/data/backup/clone-full/20240610';
@@ -96,14 +102,16 @@ greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306 IDENTIFIED BY 'GreatSQL@202
 执行下面的命令，完成针对本地实例的增量备份：
 
 ```sql
-greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
+greatsql> CLONE LOCAL DATA
+          DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
           ENABLE PAGE TRACK START_LSN = 21083116;
 ```
 
 同样地，也可以指定基于本地备份目录执行增备：
 
 ```sql
-greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
+greatsql> CLONE LOCAL DATA
+          DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
           ENABLE PAGE TRACK
           INCREMENT BASED DIRECTORY = '/data/backup/clone-full/20240610';
 ```
@@ -276,11 +284,11 @@ $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-fil
 ```shell
 $ cp -rfp /data/backup/clone-incr/20240618-202406181350/ /data/restore/increment
 $ chown -R mysql:mysql /data/restore/
-```
 
 # 对第二次增量备份文件进行恢复
 $ cd /data/restore/20240618
-$ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf --clone_incremental_dir=/data/restore/increment/20240618-202406181350
+$ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf \
+  --clone_incremental_dir=/data/restore/increment/20240618-202406181350
 ...
 2024-06-18T07:28:41.207700Z 0 [System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld (mysqld 8.0.32-26) starting as process 915395
 2024-06-18T07:28:41.214029Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
@@ -370,13 +378,15 @@ greatsql> SHOW BINARY LOGS;
 $ cd /data/GreatSQL
 
 # 调用 mysqlbinlog 工具，指定起止点位，解析 Binlog 完成恢复
-$ mysqlbinlog ./binlog.000013 --start-position=29832341 --stop-position=29838644 | mysql -S/data/restore/20240618/mysql.sock -uroot -p
+$ mysqlbinlog ./binlog.000013 --start-position=29832341 \
+  --stop-position=29838644 | mysql -S/data/restore/20240618/mysql.sock -uroot -p
 ```
 
 解析 Binlog 恢复时，也可以改成指定截止时间点：
 
 ```shell
-$ mysqlbinlog ./binlog.000013 --start-position=29832341 --stop-datetime="2024-06-18 16:00:00" | mysql -S/data/restore/20240618/mysql.sock -uroot -p
+$ mysqlbinlog ./binlog.000013 --start-position=29832341 \
+  --stop-datetime="2024-06-18 16:00:00" | mysql -S/data/restore/20240618/mysql.sock -uroot -p
 ```
 
 也可以不指定截止点位，则表示恢复到最新事务，例如：
@@ -417,7 +427,8 @@ greatsql> SET GLOBAL clone_file_compress = CLONE_FILE_COMPRESS_ZSTD;
 
 ```sql
 -- 备份本地实例，并开启 page tracking
-greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-compressed/20240708' ENABLE PAGE TRACK;
+greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-compressed/20240708'
+          ENABLE PAGE TRACK;
 ```
 
 查看备份文件，确认压缩结果
@@ -460,7 +471,8 @@ drwxr-x--- 2 mysql mysql     4096 Jul  8 12:16  tpch1g
 #### 在全备基础上，再做一次增备（压缩）
 
 ```sql
-greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-compressed-incr/20240708-202407081218'
+greatsql> CLONE LOCAL DATA
+	  DIRECTORY = '/data/backup/clone-compressed-incr/20240708-202407081218'
           ENABLE PAGE TRACK
           INCREMENT BASED DIRECTORY '/data/backup/clone-compressed/20240708';
 ```
@@ -600,7 +612,9 @@ skip-networking
 在这里要特别注意的是，在对全量压缩备份的第一次恢复过程中，启动 mysqld 程序时既要指定 datadir=/data/restore/20240708，同时也要指定 clone_incremental_dir=/data/restore/20240708，这样才能对 .delta 文件进行恢复操作。类似下面这样：
 
 ```shell
-$ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf --clone_incremental_dir=/data/restore/20240708
+$ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf \
+  --clone_incremental_dir=/data/restore/20240708
+
 2024-07-08T07:38:19.997169Z 0 [Warning] [MY-010097] [Server] Insecure configuration for --secure-log-path: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
 2024-07-08T07:38:19.997213Z 0 [System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.17-x86_64/bin/mysqld (GreatSQL 8.0.32-26) starting as process 1637442
 2024-07-08T07:38:20.034542Z 0 [Warning] [MY-010075] [Server] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: 0c2b81ce-3cfd-11ef-be21-d08e7908bcb1.
@@ -637,7 +651,9 @@ skip-networking
 
 ```shell
 # 启动 GreatSQL，将参数 --clone_incremental_dir 指向增备恢复文件
-$ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf --clone_incremental_dir=/data/restore/20240618-202406181530
+$ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf \
+  --clone_incremental_dir=/data/restore/20240618-202406181530
+
 2024-07-08T07:00:53.686378Z 0 [Warning] [MY-010097] [Server] Insecure configuration for --secure-log-path: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
 2024-07-08T07:00:53.686422Z 0 [System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.17-x86_64/bin/mysqld (mysqld 8.0.32-23)
 2024-07-08T07:00:53.702073Z 0 [Warning] [MY-010075] [Server] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: d1405fbb-3cf7-11ef-8d84-d08e7908bcb1.
