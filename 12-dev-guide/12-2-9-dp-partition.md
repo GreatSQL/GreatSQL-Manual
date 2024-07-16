@@ -663,7 +663,7 @@ greatsql> ALTER TABLE sales REBUILD PARTITION p0;
 
 ```sql
 greatsql ALTER TABLE sales OPTIMIZE PARTITION p0;
-
+```
 
 ## 注意事项
 - **主键和唯一索引**：如果表中定义了主键索引或唯一索引键，则这个索引必须包含分区键。
