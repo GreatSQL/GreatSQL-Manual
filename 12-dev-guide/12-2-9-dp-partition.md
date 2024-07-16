@@ -82,6 +82,28 @@ greatsql> SELECT * FROM sales PARTITION(p1);
 
 > 在实际使用中，经常采用 RANGE 分区，尤其是存储便于后期定时归档（删除）的数据，例如日志
 
+当插入新记录时，如果分区的列值或相应分区表达式返回值为 NULL，则总是将其写入到最小的那个分区，例如：
+
+```sql
+greatsql> SELECT * FROM sales PARTITION(p0);
++------+------------+---------+
+| id   | sale_date  | amount  |
++------+------------+---------+
+|    1 | 1999-12-31 | 1999.00 |
++------+------------+---------+
+
+greatsql> INSERT INTO sales VALUES(5, null, 1024);
+
+-- 新插入的数据落在了 p0 分区
+greatsql> SELECT * FROM sales PARTITION(p0);
++------+------------+---------+
+| id   | sale_date  | amount  |
++------+------------+---------+
+|    1 | 1999-12-31 | 1999.00 |
+|    5 | NULL       | 1024.00 |
++------+------------+---------+
+```
+
 ### LIST 分区
 
 LIST 分区和 RANGE 分区类似。区别在于 LIST 是枚举值列表的集合，而 RANGE 是连续的区间值的集合。LIST 分区常用于区分有限数量枚举类型，例如地区、某种状态值等。
@@ -123,6 +145,13 @@ greatsql> SELECT * FROM customers PARTITION(pEast);
 +------+--------------+-----------+
 |    3 | 尉迟雪艳     |         3 |
 +------+--------------+-----------+
+```
+
+当插入新记录时，如果分区的列值或相应分区表达式返回值为 NULL，这时如果分区 LIST 列表中不包含 NULL 值则会报错，例如：
+
+```sql
+greatsql> INSERT INTO customers VALUES(5, '南宫彩妍', null);
+ERROR 1526 (HY000): Table has no partition for value NULL
 ```
 
 ### COLUMNS 分区
