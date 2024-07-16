@@ -35,7 +35,11 @@ greatsql> SET sql_generate_invisible_primary_key=OFF;
 
 ### RANGE 分区
 
-按照年份进行分区：
+RANGE 分区的做法是基于一个给定连续区间的列值，对数据进行分区。最常见的是基于时间字段，分区的列最好是整型，如果日期型的可以使用函数转换为整型。
+
+> RANGE 分区列最好是直接采用整型，这样可以减少数据转换/运算过程，提升效率
+
+例如，按照年份进行分区：
 
 ```sql
 -- 建表
@@ -52,8 +56,9 @@ PARTITION BY RANGE (YEAR(sale_date)) (
 );
 
 -- 写数据
-greatsql> INSERT INTO sales VALUES(1,'1999-12-31',1999), (2,'2009-12-31',2009),
-          (3,'2019-12-31',2019), (4,'2024-07-30',2024);
+greatsql> INSERT INTO sales VALUES(1,'1999-12-31',1999),
+	  (2,'2009-12-31',2009), (3,'2019-12-31',2019),
+	  (4,'2024-07-30',2024);
 
 -- 查询全部数据
 greatsql> SELECT * FROM sales;
@@ -75,9 +80,15 @@ greatsql> SELECT * FROM sales PARTITION(p1);
 +------+------------+---------+
 ```
 
+> 在实际使用中，经常采用 RANGE 分区，尤其是存储便于后期定时归档（删除）的数据，例如日志
+
 ### LIST 分区
 
-按照地区进行分区：
+LIST 分区和 RANGE 分区类似。区别在于 LIST 是枚举值列表的集合，而 RANGE 是连续的区间值的集合。LIST 分区常用于区分有限数量枚举类型，例如地区、某种状态值等。
+
+> 由于要事先定义好 LIST 分区枚举值，后期维护可能会有点麻烦，实际使用的场景相对较少
+
+例如，按照地区进行分区：
 
 ```sql
 greatsql> CREATE TABLE customers (
@@ -92,7 +103,9 @@ PARTITION BY LIST (region_id) (
     PARTITION pWest VALUES IN (4)
 );
 
-greatsql> INSERT INTO customers VALUES(1, '端木元白', 1), (2, '那拉易巧', 2), (3, '尉迟雪艳', 3), (4, '完颜采南', 4);
+greatsql> INSERT INTO customers VALUES(1, '端木元白', 1),
+	  (2, '那拉易巧', 2), (3, '尉迟雪艳', 3),
+	  (4, '完颜采南', 4);
 
 greatsql> SELECT * FROM customers;
 +------+--------------+-----------+
@@ -131,7 +144,9 @@ PARTITION BY RANGE COLUMNS(a, b) (
     PARTITION p2 VALUES LESS THAN (MAXVALUE, MAXVALUE)
 );
 
-greatsql> INSERT INTO logs VALUES(1, 3, 3, 'msg-1-3-3'), (2, 3, 20, 'msg-2-3-20'), (3, 6, 20, 'msg-3-6-20'), (4, 20, 30, 'msg-4-20-30');
+greatsql> INSERT INTO logs VALUES(1, 3, 3, 'msg-1-3-3'),
+	  (2, 3, 20, 'msg-2-3-20'), (3, 6, 20, 'msg-3-6-20'),
+	  (4, 20, 30, 'msg-4-20-30');
 
 greatsql> SELECT * FROM logs;
 +------+------+------+-------------+
@@ -168,7 +183,9 @@ PARTITION BY LIST COLUMNS (region_id, city) (
  PARTITION pWest VALUES IN ((4, 10), (4, 11), (4, 12))
 );
 
-greatsql> INSERT INTO customers1 VALUES(1, '端木元白', 1, 2), (2, '那拉易巧', 1, 3), (3, '尉迟雪艳', 2, 5), (4, '端木玉成', 3, 9), (5, '司徒瑜璟', 4, 12);
+greatsql> INSERT INTO customers1 VALUES(1, '端木元白', 1, 2),
+	  (2, '那拉易巧', 1, 3), (3, '尉迟雪艳', 2, 5),
+	  (4, '端木玉成', 3, 9), (5, '司徒瑜璟', 4, 12);
 
 greatsql> SELECT * FROM customers1;
 +------+--------------+-----------+---------+
@@ -194,11 +211,15 @@ greatsql> INSERT INTO customers1 VALUES(6, '宇文娅欣', 2, 3);
 ERROR 1526 (HY000): Table has no partition for value from column_list
 ```
 
+> COLUMNS 分区的规则有点复杂，在实际应用中相对较少
+
 ### HASH 分区
+
+按照 HASH 算法将数据相对较平均打散分布到各个分区，只支持对正整数（或运算结果为正整数的表达式）进行 HASH 分区。
 
 按照 ID 哈希分区：
 ```sql
-CREATE TABLE orders (
+greatsql> CREATE TABLE orders (
     id INT,
     order_date DATE,
     customer_id INT,
@@ -206,7 +227,9 @@ CREATE TABLE orders (
 )
 PARTITION BY HASH(id) PARTITIONS 4;
 
-greatsql> INSERT INTO orders VALUES(1, '2014-01-01', 1), (2, '2024-02-01', 2), (3, '2024-03-01', 3), (4, '2024-04-01', 4);
+greatsql> INSERT INTO orders VALUES(1, '2014-01-01', 1),
+	  (2, '2024-02-01', 2), (3, '2024-03-01', 3),
+	  (4, '2024-04-01', 4);
 
 greatsql> SELECT * FROM orders;
 +----+------------+-------------+
@@ -226,6 +249,84 @@ greatsql> SELECT * FROM orders PARTITION(p0);
 +----+------------+-------------+
 ```
 
+HASH 分区底层实现基于 `MOD` 函数。在上例中，HASH 列是 `id`，则分区的选择是根据表达式 `MOD(id, 4)` 的计算值决定的。
+
+### LINEAR HASH 分区（线性 HASH 分区）
+
+LINEAR HASH 分区是 HASH 分区的一种特殊类型，它与 HASH 分区基于 `MOD` 函数不同，它使用两个算法的线性幂。
+
+创建一个线性 HASH 分区表：
+
+```sql
+greatsql> CREATE TABLE orders (
+    id INT,
+    order_date DATE,
+    customer_id INT,
+    PRIMARY KEY(id)
+)
+PARTITION BY LINEAR HASH(id) PARTITIONS 4;
+
+greatsql> INSERT INTO orders VALUES(1, '2014-01-01', 1),
+	  (2, '2024-02-01', 2), (3, '2024-03-01', 3),
+	  (4, '2024-04-01', 4);
+
+greatsql> SELECT * FROM orders;
++----+------------+-------------+
+| id | order_date | customer_id |
++----+------------+-------------+
+|  4 | 2024-04-01 |           4 |
+|  1 | 2014-01-01 |           1 |
+|  2 | 2024-02-01 |           2 |
+|  3 | 2024-03-01 |           3 |
++----+------------+-------------+
+
+greatsql> SELECT * FROM orders PARTITION(p0);
++----+------------+-------------+
+| id | order_date | customer_id |
++----+------------+-------------+
+|  4 | 2024-04-01 |           4 |
++----+------------+-------------+
+
+```
+
+> 线性 HASH 分区更适合数据量大的场景；但它相对于 HASH 分区，数据分布不均匀的概率更大。
+
+### KEY 分区
+
+KEY 分区和 HASH 分区差不多，不同之处有：
+- HASH 分区可以自定义表达式，而 KEY 分区是内置的。
+- KEY 可以指定多个列，也可以不指定。而 HASH 分区只能指定一个列。
+- 如果表有主键，则 KEY 分区键的必须包含表主键的一部分或全部。
+- KEY 分区如果没有指定列名作为分区键，则使用表的主键（如果有的话）。
+- KEY 分区不能为表达式，而 HASH 分区可以是表达式。
+
+```sql
+-- 表没有定义主键，如果 KEY 分区没指定列，会报错
+greatsql> CREATE TABLE k1 (
+    id INT NOT NULL,
+    name VARCHAR(20)
+)
+PARTITION BY KEY()
+PARTITIONS 2;
+ERROR 1488 (HY000): Field in list of fields for partition function not found in table
+
+-- 如果没有主键或不允许为NULL的唯一索引键（可以用于聚集索引），则 KEY 分区必须指定某个列
+greatsql> CREATE TABLE k1 (
+    id INT NOT NULL,
+    name VARCHAR(20)
+)
+PARTITION BY KEY(id)
+PARTITIONS 2;
+
+greatsql> CREATE TABLE k1 (
+    id INT NOT NULL,
+    name VARCHAR(20),
+    UNIQUE KEY(id)
+)
+PARTITION BY KEY()
+PARTITIONS 2;
+```
+
 ### 子分区
 
 先按年份分区，再按哈希值子分区：
@@ -242,7 +343,9 @@ SUBPARTITION BY HASH(id) SUBPARTITIONS 4 (
     PARTITION p2 VALUES LESS THAN MAXVALUE
 );
 
-greatsql> INSERT INTO logs VALUES(1, '2009-01-01', 'msg-1-2009'), (2, '2019-01-01', 'msg-2-2019'), (3, '2024-01-01', 'msg-3-2024');
+greatsql> INSERT INTO logs VALUES(1, '2009-01-01', 'msg-1-2009'),
+	  (2, '2019-01-01', 'msg-2-2019'),
+	  (3, '2024-01-01', 'msg-3-2024');
 
 greatsql> select * from logs;
 +------+------------+------------+
@@ -263,7 +366,9 @@ greatsql> SELECT * FROM logs PARTITION(p0);
 
 ## 分区管理
 
-### 增加 RANGE 分区
+### 增加分区
+
+- 增加 RANGE 分区
 
 ```sql
 greatsql> SHOW CREATE TABLE sales\G
@@ -289,7 +394,7 @@ greatsql> ALTER TABLE sales DROP PARTITION p3,
 ```
 从上面案例可见，对于 RANGE 分区最好是显式指定每个分区的范围，不要一开始就定义 MAXVALUE 用于最后一个分区，这样的好处是方便后续新增更多分区。
 
-### 增加/收缩 HASH 分区
+- 增加 HASH 分区 
 
 ```sql
 greatsql> SHOW CREATE TABLE orders\G
@@ -304,9 +409,122 @@ Create Table: CREATE TABLE `orders` (
 /*!50100 PARTITION BY HASH (`id`)
 PARTITIONS 4 */
 
--- 调整（增加/减少）分区个数
-greatsql> ALTER TABLE orders PARTITION BY HASH(id) PARTITIONS 6;
-greatsql> ALTER TABLE orders PARTITION BY HASH(id) PARTITIONS 3;
+-- 增加2个分区
+greatsql> ALTER TABLE orders ADD PARTITION PARTITIONS 2;
+
+greatsql> SHOW CREATE TABLE orders\G
+*************************** 1. row ***************************
+       Table: orders
+Create Table: CREATE TABLE `orders` (
+  `id` int NOT NULL,
+  `order_date` date DEFAULT NULL,
+  `customer_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+/*!50100 PARTITION BY HASH (`id`)
+PARTITIONS 6 */
+```
+
+### 分区重组
+
+- 重组 RANGE 分区
+
+```sql
+-- 将 RANGE 分区中的 p0,p1 合并
+greatsql> SHOW CREATE TABLE sales\G
+*************************** 1. row ***************************
+       Table: sales
+Create Table: CREATE TABLE `sales` (
+  `id` int DEFAULT NULL,
+  `sale_date` date DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+/*!50100 PARTITION BY RANGE (year(`sale_date`))
+(PARTITION p0 VALUES LESS THAN (2000) ENGINE = InnoDB,
+ PARTITION p1 VALUES LESS THAN (2010) ENGINE = InnoDB,
+ PARTITION p2 VALUES LESS THAN (2020) ENGINE = InnoDB,
+ PARTITION p3 VALUES LESS THAN (2024) ENGINE = InnoDB,
+ PARTITION p4 VALUES LESS THAN (2025) ENGINE = InnoDB) */
+
+greatsql> ALTER TABLE sales REORGANIZE PARTITION p0,p1 INTO (PARTITION p0 VALUES LESS THAN (2010));
+
+greatsql> SHOW CREATE TABLE sales\G
+*************************** 1. row ***************************
+       Table: sales
+Create Table: CREATE TABLE `sales` (
+  `id` int DEFAULT NULL,
+  `sale_date` date DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+/*!50100 PARTITION BY RANGE (year(`sale_date`))
+(PARTITION p0 VALUES LESS THAN (2010) ENGINE = InnoDB,
+ PARTITION p2 VALUES LESS THAN (2020) ENGINE = InnoDB,
+ PARTITION p3 VALUES LESS THAN (2024) ENGINE = InnoDB,
+ PARTITION p4 VALUES LESS THAN (2025) ENGINE = InnoDB) */
+```
+
+- 重组 LIST 分区
+
+```sql
+greatsql> SHOW CREATE TABLE customers\G
+*************************** 1. row ***************************
+       Table: customers
+Create Table: CREATE TABLE `customers` (
+  `id` int DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `region_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+/*!50100 PARTITION BY LIST (`region_id`)
+(PARTITION pNorth VALUES IN (1) ENGINE = InnoDB,
+ PARTITION pSouth VALUES IN (2) ENGINE = InnoDB,
+ PARTITION pEast VALUES IN (3) ENGINE = InnoDB,
+ PARTITION pWest VALUES IN (4) ENGINE = InnoDB) */
+
+greatsql> ALTER TABLE customers REORGANIZE PARTITION pNorth,pSouth INTO (PARTITION pNorthSouth VALUES IN (1,2));
+
+greatsql> SHOW CREATE TABLE customers\G
+*************************** 1. row ***************************
+       Table: customers
+Create Table: CREATE TABLE `customers` (
+  `id` int DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `region_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+/*!50100 PARTITION BY LIST (`region_id`)
+(PARTITION pNorthSouth VALUES IN (1,2) ENGINE = InnoDB,
+ PARTITION pEast VALUES IN (3) ENGINE = InnoDB,
+ PARTITION pWest VALUES IN (4) ENGINE = InnoDB) */
+```
+
+- 重组 HASH 分区
+
+```sql
+greatsql> SHOW CREATE TABLE orders\G
+*************************** 1. row ***************************
+       Table: orders
+Create Table: CREATE TABLE `orders` (
+  `id` int NOT NULL,
+  `order_date` date DEFAULT NULL,
+  `customer_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+/*!50100 PARTITION BY HASH (`id`)
+PARTITIONS 6 */
+
+-- 合并分区数到4个（收缩2个）
+greatsql> ALTER TABLE orders COALESCE PARTITION 2;
+
+greatsql> SHOW CREATE TABLE orders\G
+*************************** 1. row ***************************
+       Table: orders
+Create Table: CREATE TABLE `orders` (
+  `id` int NOT NULL,
+  `order_date` date DEFAULT NULL,
+  `customer_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+/*!50100 PARTITION BY HASH (`id`)
+PARTITIONS 4 */
 ```
 
 ### 清空某个分区中的所有数据
