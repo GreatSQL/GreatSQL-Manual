@@ -1,7 +1,9 @@
 # 审计
 ---
 
-GreatSQL支持审计功能，并将审计日志写入数据表中，并且设置审计日志入表规则，以便达到不同的审计需求。
+GreatSQL 支持审计功能，并将审计日志写入数据表中，并且设置审计日志入表规则，以便达到不同的审计需求。
+
+审计功能仅记录当前节点审计信息，且在写表时不记录 Binlog 以避免数据会复制到从节点。在设置 `sql_log_bin = 1` 时只允许 `SELECT, SHOW CREATE, SHOW FIELDS` 查看审计表。
 
 审计内容将包括操作账户、客户端ip、被操作的数据库对象、操作的完整语句、操作结果。
 
@@ -13,52 +15,83 @@ GreatSQL支持审计功能，并将审计日志写入数据表中，并且设置
 - 允许基于数据库用户的操作进行审计，允许配置针对1个到多个的数据库用户的操作进行审计。
 - 启用审计日志入表后，审计日志仍然可以同时存储一份在日志文件中。
 
+
 ## 启用审计功能
 
 ```sql
--- 安装插件
-greatsql> INSTALL PLUGIN audit_log SONAME 'audit_log.so';
+-- 安装和启用审计插件
+-- %basedir% 是 GreatSQL 二进制包安装目录
+-- 如用 TAR 包安装时放在 /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/share 目录下
+-- 或用 RPM 包安装时放在 /usr/share/mysql 目录下
+greatsql> SOURCE %basedir%/share/install_audit_log.sql;
 
--- 启用审计功能
-greatsql> SET GLOBAL audit_log_enabled = 1;
+-- 卸载关闭审计插件
+greatsql> SOURCE %basedir%/share/uninstall_audit_log.sql;
 
 -- 启用审计入表特性
 greatsql> SET GLOBAL audit_log_to_table = 1;
 
 -- 查看审计信息
 greatsql> select * from sys_audit.audit_log\G
-*************************** 1. row ***************************
-         name: Query
-       record: 75670_2024-02-26T02:17:29
-    timestamp: 2024-02-26T10:55:17Z
-command_class: select
-connection_id: 444
-       status: 0
-      sqltext: explain select /*+ JOIN_ORDER(t1, t2) */ * from nation t1, region t2
-         user: yejr[yejr] @  [127.0.0.1]
-         host:
-      os_user:
-           ip: 127.0.0.1
-           db: tpch
+...
+          name: Query
+        record: 1_17_2024-07-17T05:57:34
+     timestamp: 2024-07-17 13:58:34
+ command_class: create_table
+ connection_id: 40
+        status: 0
+       sqltext: create table t1(id int unsigned not null primary key, c1 varchar(20) not null)
+          user: root[root] @ localhost []
+          host: localhost
+     priv_user:
+       os_user:
+            ip:
+            db: greatsql
+server_version:
+    os_version:
+     server_id: 1
+       timegmt: 1721195915424930
+...
 ```
 
+其中
+
+- `name` 审计的操作行为。常见的有Query（查询）、Quit（退出）、Connect（连接）、Init DB（选择某个数据库）。
+- `record` 审计记录唯一标识，由 *server_id + 当前节点递增序列号 + 时间戳* 三部分组成。
+- `timestamp` 审计记录时间。
+- `command_class` 操作行为类型，例如 select（SELECT 查询）、init db（选择某个数据库）。
+- `connection_id` 用户连接号。
+- `status` 执行操作的状态，**0** 表示成功，非 0 为错误（通常是 SQL 执行错误，例如语法错误等）。
+- `sqltext` 执行请求操作的 SQL 语句。
+- `user` 执行操作的客户端用户名。
+- `host` 客户端主机名。
+- `priv_user` 用于检查权限的用户名。
+- `os_user` 操作系统用户名。
+- `ip` 用户登录 IP。
+- `db` 执行操作时的当前数据库名。
+- `server_version` 数据库版本。
+- `os_version` 操作系统版本。
+- `server_id` 数据库当前节点 *server_id*。
+- `timegmt` 审计记录时间戳。
+
 如果没启用审计入表特性，则审计日志存储在外部日志文件中，默认文件为 `audit.log`，在 `datadir` 目录下，例如：
+
 ```shell
 $ cat audit.log
 ...
 <AUDIT_RECORD
   NAME="Query"
-  RECORD="75691_2024-02-26T02:17:29"
-  TIMESTAMP="2024-02-26T10:56:41Z"
-  COMMAND_CLASS="select"
-  CONNECTION_ID="454"
+  RECORD="1_17_2024-07-17T05:57:34"
+  TIMESTAMP="2024-07-17 13:58:34"
+  COMMAND_CLASS="create_table"
+  CONNECTION_ID="40"
   STATUS="0"
-  SQLTEXT="explain select /*+ JOIN_ORDER(t1, t2) */ * from nation t1, region t2"
-  USER="yejr[yejr] @  [127.0.0.1]"
-  HOST=""
+  SQLTEXT="create table t1(id int unsigned not null primary key, c1 varchar(20) not null)"
+  USER="root[root] @ localhost []"
+  HOST="localhost"
   OS_USER=""
-  IP="127.0.0.1"
-  DB="tpch"
+  IP=""
+  DB="greatsql"
 />
 ...
 ```
@@ -84,7 +117,6 @@ greatsql> SHOW VARIABLES LIKE 'audit%';
 | audit_log_include_accounts  |                |
 | audit_log_include_commands  |                |
 | audit_log_include_databases |                |
-| audit_log_max_rows          | 2147483647     |
 | audit_log_policy            | ALL            |
 | audit_log_rotate_on_size    | 0              |
 | audit_log_rotations         | 0              |
@@ -108,6 +140,10 @@ greatsql> SHOW VARIABLES LIKE 'audit%';
 | Allowed values       | 1(ON), 0(OFF)                       |
 
 审计日志功能总开关，设置是否启用该功能。
+
+> 执行 SOURCE install_audit_log.sql 安装审计插件后，会自动设置 audit_log_enabled = 1 启用审计功能。
+>
+> 也可以在不卸载审计插件的情况下，执行 `SET GLOBAL audit_log_enabled = 0` 临时禁用审计功能。
 
 - audit_log_to_table
 
@@ -208,17 +244,6 @@ greatsql> SHOW VARIABLES LIKE 'audit%';
 | Data type            | String                              |
 
 用于指定应用“按数据库筛选”时的排除数据库列表。该值可以是NULL或逗号分隔的数据库列表。如果设置了此变量，则不能同时设置 `audit_log_include_databases`，反之亦然。
-
-- audit_log_max_rows
-
-| System Variable Name | audit_log_max_rows                  |
-| -------------------- | ----------------------------------- |
-| Command-line         | Yes                                 |
-| Scope                | Global                              |
-| Dynamic              | Yes                                 |
-| Data type            | Numeric                             |
-| Default value        | 2147483647                          |
-| Allowed values       | [0, ULONG]                          |
 
 - audit_log_format
 
