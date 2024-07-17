@@ -384,7 +384,7 @@ sys_masking.drop_label_by_name | 根据标签名称删除脱敏标签
 - 1. 将想要脱敏的数据对象设置标签
 
 ```sql
-greatsql> CALL sys_masking.create_label('greatsql', 't1', 'c3', 'mask_greatsql_t1_c3') ;
+greatsql> CALL sys_masking.create_label('greatsql', 't1', 'c3', 'mask_greatsql_t1_c3');
 ```
 
 调用 `sys_masking.create_label()` 函数为 `greatsql.t1.c3` 这个列（`greatsql.t1` 表中的 `c3` 列）加上 "mask_greatsql_t1_c3" 标签。
@@ -392,7 +392,7 @@ greatsql> CALL sys_masking.create_label('greatsql', 't1', 'c3', 'mask_greatsql_t
 - 2. 创建一个脱敏策略
 
 ```sql
-greatsql> CALL sys_masking.create_policy('policy1', 'maskall', '*' ) ;
+greatsql> CALL sys_masking.create_policy('policy1', 'maskall', '*' );
 ```
 
 调用 `sys_masking.create_policy()` 函数新建一个名为 "policy1" 的策略, 该策略的行为是调用 `maskall()` 函数将所有数据替换成字符 "*"。
@@ -400,7 +400,7 @@ greatsql> CALL sys_masking.create_policy('policy1', 'maskall', '*' ) ;
 - 3. 对脱敏策略添加指定标签，使之生效
 
 ```sql
-greatsql> CALL sys_masking.policy_add_label('policy1', 'mask_greatsql_t1_c3')
+greatsql> CALL sys_masking.policy_add_label('policy1', 'mask_greatsql_t1_c3');
 ```
 
 调用 `sys_masking.policy_add_label()` 函数对策略 "policy1" 添加指定标签 "mask_greatsql_t1_c3"，使得该标签下的所有数据对象在查询返回结果时都会被脱敏，例如：
@@ -413,6 +413,8 @@ greatsql> SELECT c1, c2, c3 FROM greatsql.t1 LIMIT 1;
 |  1 | 280638 | 991512.2317965257 | ****************** |
 +----+--------+-------------------+--------------------+
 ```
+
+> 此时需要改成用普通用户连入查询，该脱敏规则默认对具有管理权限的账户不生效
 
 - 4. 单独将授权账户 "user2@%" 设置为对脱敏策略 "policy1" 不生效，也就是对 "user2@%" 账户的查询请求不启用脱敏策略，例如：
 
