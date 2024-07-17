@@ -28,7 +28,7 @@ greatsql> SET lock_ddl_polling_runtime = 1000;
 | System Variable Name | Variable Scope |  Dynamic Variable | Permitted Values | Type | Default | Description |
 | --- | --- | --- | --- | --- | --- | --- |
 |lock_ddl_polling_mode|Session|YES|[ON/OFF]|ENUM|OFF|是否启用非阻塞式 DDL 特性，默认：不启用|
-|lock_ddl_polling_runtime|Session|YES|[200, LONG_MAX]|LONGLONG|1000|非阻塞式 DDL 请求时，每次 DDL 请求尝试持续时长，默认：1000 毫秒（1秒）|
+|lock_ddl_polling_runtime|Session|YES|[200, 31536000]|Integer|1000|非阻塞式 DDL 请求时，每次 DDL 请求尝试持续时长，默认：1000 毫秒（1秒）|
 
 
 原生的 MDL 锁申请是独占式的，也就是在发起 DDL 操作时，需要先申请 MDL-X 锁，如果不能立即申请到，则会被阻塞，直至达到 `lock_wait_timeout` 选项设定的阈值。
