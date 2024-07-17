@@ -100,7 +100,7 @@ greatsql> SELECT dept_no, emp_no, emp_name, salary FROM emp e1 WHERE
 27 rows in set (0.21 sec)
 ```
 
-上面这种写法显然看着有点费劲，一不小心还容易写错，改成用下面的窗口函数写法更简单易懂：
+上述写法较为繁琐，相较而言，采用下方的窗口函数写法则更为简便且易于理解：
 
 ```sql
 greatsql> SELECT * FROM (
@@ -127,7 +127,7 @@ greatsql> SELECT * FROM (
 
 下面是两个查询 SQL 相应的 Status 状态值对比：
 
-```
+```sql
 greatsql> FLUSH STATUS;
 greatsql> -- 执行第一条查询SQL
 greatsql> SHOW STATUS LIKE 'Handler_read_%';
