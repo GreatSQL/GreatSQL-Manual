@@ -8,7 +8,7 @@
 
 - 下载链接：[RPM包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)、[TAR包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)、[源码包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)
 
-- 用户手册：[GreatSQL 8.0.32-26 User Manual](https://greatsql.cn/docs/8032-26/)
+- 用户手册：[GreatSQL 8.0.32-26 User Manual](https://greatsql.cn/docs/8.0.32-26/)
 
 ##  特性增强
 
