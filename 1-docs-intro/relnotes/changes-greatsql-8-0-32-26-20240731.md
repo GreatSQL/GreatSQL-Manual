@@ -27,7 +27,7 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 3. 现在 MGR 中有三个节点A、B、C，它们的 GTID 分别是 [1-400]、[1-350]、[1-280]，新节点 D 加入，由于 C 节点的 GTID 差值大于预设阈值，A & B 节点 GTID 延迟小于预设阈值，则会随机选择 A 或 B 其中一个作为 Donor 节点。
 
 - 在主从复制中，由从节点向主节点发起 Binlog 读取请求，如果读取太快或并发太多线程就会加大主节点的压力。新增选项 `rpl_read_binlog_speed_limit` 用于控制从节点上向主节点发起 Binlog 读取请求的限速，这对于控制主从复制中的网络带宽使用率、降低主节点压力、或在数据恢复过程中降低消耗资源非常有用。该选项可在从节点端设置生效。详见：[Binlog 读取限速](../../5-enhance/5-2-ha-binlog-speed-limit.md)。
-- 优化了在 [快速单主模式](../../5-enhance/5-2-ha-mgr-fast-mode.md) 下 relay log 应用逻辑，提升 MGR 整体性能；并优化了当 relay log 存在堆积时的 applier 线程的内存消耗异常情况。 http://zbox.greatdb.com/zentao/story-view-4353-0-87.html https://bbkv6krkep.feishu.cn/docx/QKS9dGFbOoz3lfxxueWcPK5ynGg
+- 优化了在 [快速单主模式](../../5-enhance/5-2-ha-mgr-fast-mode.md) 下 relay log 应用逻辑，提升 MGR 整体性能；并优化了当 relay log 存在堆积时的 applier 线程的内存消耗异常情况。
 - GreatSQL 优化了 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 中的故障检测效率，特别是发生网络故障时，备用集群能更快完成主从复制通道调整，降低主从复制链路断开的时间，提高整体可用性。以设置 `MASTER_RETRY_COUNT = 2` 为例（`slave_net_timeout` 和 `MASTER_CONNECT_RETRY` 默认值均为 60），在主从复制通道间发生网络故障时导致的复制中断持续约 3 分钟，优化后故障影响时长缩短到 10 - 20 秒以内。在 GreatSQL 中，可以利用 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 实现两个 MGR 集群间的主从复制，实现跨机房间的高可用切换方案。
 - [地理标签](../../5-enhance/5-2-ha-mgr-zoneid.md) 功能中包含两个参数 `group_replication_zone_id`（默认值为 0）和 `group_replication_zone_id_sync_mode`（默认值为ON）。在旧版本中，要求各个节点的 `group_replication_zone_id_sync_mode` 保持一致，否则无法加入 MGR。新版本中，允许仲裁节点设置不同的 `group_replication_zone_id_sync_mode`。例如，节点 A1、A2 设置 `group_replication_zone_id = 0` & `zone_id_sync_mode = ON`；节点 B1、B2 设置 `group_replication_zone_id = 1`，它们也必须设置 `zone_id_sync_mode = ON`；仲裁投票节点C 设置 `group_replication_zone_id = 2`，但可以设置 `group_replication_zone_id_sync_mode = OFF`。
 - 当启用 greatdb_ha Plugin 时，新增支持 IPv6。
@@ -118,7 +118,9 @@ Records: 1  Duplicates: 0  Warnings: 0
 - 修复了在 greatdb_ha Plugin 中启用 VIP 后因系统环境问题或配置不当可能导致 GreatSQL 在启动 MGR 后发生 coredump 的问题，详见：[Issue#I9VTF8](https://gitee.com/GreatSQL/GreatSQL/issues/I9VTF8?from=project-issue)。
 - 修复了用RPM包和TAR二进制包不同方式安装会造成 `lower_case_table_names` 的默认设置不同的问题。
 - 修复了在空跑或低负载时，进程 CPU 消耗较高的问题。
+- 修复了 默认安装多了sys_audit库 问题，详见：[Issue#I8TL52](https://gitee.com/GreatSQL/GreatSQL/issues/I8TL52?from=project-issue)。
 - 修复了 merge view 后导致 assert fail 问题，详见：[Issue#IABSE6](https://gitee.com/GreatSQL/GreatSQL/issues/IABSE6?from=project-issue)。
+- 修复了 full join 执行计划不正确问题，详见：[Issue#IADFD7](https://gitee.com/GreatSQL/GreatSQL/issues/IADFD7?from=project-issue)。
 
 ## 注意事项
 无。
@@ -143,7 +145,8 @@ Records: 1  Duplicates: 0  Warnings: 0
 |地理信息（GIS）| :heavy_check_mark: | :heavy_check_mark: |
 |基于 GTID 的复制| :heavy_check_mark: | :heavy_check_mark: |
 |组复制（MGR）| :heavy_check_mark: | :heavy_check_mark: |
-|MyRocks 引擎| :heavy_check_mark: | |
+|MyRocks 引擎| :heavy_check_mark: | ❌ |
+|支持龙芯架构| :heavy_check_mark: | ❌ |
 | **2. 性能提升扩展** | GreatSQL 8.0.32-26 | MySQL 8.0.32 |
 |AP 引擎| :heavy_check_mark: | 仅云上HeatWave |
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
@@ -181,8 +184,9 @@ Records: 1  Duplicates: 0  Warnings: 0
 |MGR 提升-智能选主机制| :heavy_check_mark: | ❌ |
 |MGR 提升-全新流控算法| :heavy_check_mark: | ❌ |
 |MGR 提升-自动选择 Donor 节点| :heavy_check_mark: | ❌ |
-|Clone 全备 & 增备| :heavy_check_mark: | ❌ |
+|Clone 增量备份| :heavy_check_mark: | ❌ |
 |Clone 备份压缩| :heavy_check_mark: | ❌ |
+|Binlog 读取限速| :heavy_check_mark: | ❌ |
 |information_schema 表数量|95|65|
 |全局性能和状态指标|853|434|
 |优化器直方图（Histograms）| :heavy_check_mark: | :heavy_check_mark: |
