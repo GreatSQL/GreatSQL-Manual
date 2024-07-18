@@ -125,6 +125,19 @@ Records: 1  Duplicates: 0  Warnings: 0
 ## 注意事项
 无。
 
+## 升级到 GreatSQL 8.0.32-26
+
+以下是升级到 GreatSQL 8.0.32-26 的几种不同场景说明。
+
+- 如果旧版本是 GreatSQL 8.0.32-25，并且没有使用 Rapid 引擎，则可以直接在原来的 *datadir* 基础上，修改 *basedir* 后，原地（in-place）启动 GreatSQL 8.0.32-26 后会完成自动升级。
+- 如果旧版本是 GreatSQL 8.0.32-25，并且已启用 Rapid 引擎，这种情况下暂时先不要升级，可以等到后续发布带新版本 Rapid 引擎的 GreatSQL 8.0.32-26 版本后再升级。
+- 如果旧版本是 GreatSQL 8.0.32-24、8.0.25-*、5.7.36-39 等系列版本，则可以直接在原来的 *datadir* 基础上，修改 *basedir* 后，原地（in-place）启动 GreatSQL 8.0.32-26 后会完成自动升级。
+- 如果是 MySQL 8.0.*（<= 8.0.32 版本）、Percona Server 8.0.*（<= 8.0.32 版本）等系列版本，则可以直接在原来的 *datadir* 基础上，修改 *basedir* 后，原地（in-place）启动 GreatSQL 8.0.32-26 后会完成自动升级。
+- 如果是 MySQL 8.0.*（> 8.0.32 版本）、Percona Server 8.0.*（> 8.0.32 版本）等系列版本，则需要利用逻辑备份方式导出数据，再导入的方式完成升级，不支持原地（in-place）升级到 GreatSQL 8.0.32-26。
+- 如果是 MySQL 5.7.*（>= 5.7.23 版本）、Percona Server 5.7.*（<= 5.7.23 版本）等系列版本，则可以直接在原来的 *datadir* 基础上，修改 *basedir* 后，原地（in-place）启动 GreatSQL 8.0.32-26 后会完成自动升级。
+
+更多迁移升级方案请参考：[迁移升级](../../7-migrate-and-upgrade/0-migrate-and-upgrade.md)。
+
 ## GreatSQL VS MySQL
 
 | **1.主要特性** | GreatSQL 8.0.32-26 | MySQL 8.0.32 |
