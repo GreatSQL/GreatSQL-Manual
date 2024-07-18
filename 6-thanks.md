@@ -69,6 +69,7 @@
 - L.B
 - [王歡](https://greatsql.cn/home.php?mod=space&uid=1353&do=thread&view=me&from=space)
 - [reddey](https://greatsql.cn/home.php?mod=space&uid=1772&do=thread&view=me&from=space)
+- [Dale](https://gitee.com/Dale_nn)
 - [梁熙民](https://gitee.com/daydreammirror)
 
 
