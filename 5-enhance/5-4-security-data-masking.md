@@ -469,7 +469,7 @@ greatsql> SELECT id, c3, c3 + 1 FROM t1 LIMIT 1;
 +----+--------------------+--------------------+
 |  1 | ****************** | 1.9644671762031196 |
 +----+--------------------+--------------------+
-``` 
+```
 
 - 2. 被脱敏的数据列返回结果数据类型将总是被转换成字符串类型。
 
@@ -537,6 +537,7 @@ greatsql> SHOW WARNINGS;
 - 8. 如果查询中包含 `UNION / UNION ALL`，则查询结果中脱敏后的值 "***" 将会按照脱敏后的结果去重，而不是按原值去重；后续的 `GROUP BY / ORDER BY` 也将按照脱敏后的结果进行分组及排序。
 
 ```sql
+-- 此查询由于包含了 id 列，故而得到此结果
 greatsql> SELECT id, c3 FROM t1 WHERE id <= 4 UNION SELECT id, c3 FROM t2 WHERE id <= 4;
 +----+---------------------+
 | id | c3                  |
@@ -574,7 +575,7 @@ greatsql> SELECT c3 FROM t1 WHERE id <= 4 UNION SELECT c3 FROM t2 WHERE id <= 4 
 | ******************* |
 | ******************  |
 +---------------------+
-```   
+```
 
 ### 脱敏策略配置接口说明
 #### 脱敏策略控制存储过程
@@ -642,7 +643,7 @@ sys_masking.policy_add_label('policy_name', 'label_name')
 
 如下例所示，将策略 "policy1" 应用于标签 "label1"：
 
-```
+```sql
 greatsql> CALL sys_masking.policy_add_label('policy1', 'label1') 
 ```
 
@@ -720,11 +721,14 @@ sys_masking.policy_delete_label('policy_name', 'label_name')
 如下例所示，删除策略 "policy1" 与标签 "label1" 的关系：
 
 ```sql
-CALL sys_masking.policy_delete_label('policy1', 'label1');
+greatsql> CALL sys_masking.policy_delete_label('policy1', 'label1');
 ```
 
 - 8. 删除策略排除的特殊用户
+
+```sql
 sys_masking.policy_delete_user('policy_name', 'user_name')
+```
 
 功能：删除策略与账号的排除关系。
 
@@ -737,7 +741,7 @@ sys_masking.policy_delete_user('policy_name', 'user_name')
 
 ```sql
 -- 删除策略排除的特殊用户
-CALL sys_masking.policy_delete_user('policy1', 'user2@%');
+greatsql> CALL sys_masking.policy_delete_user('policy1', 'user2@%');
 ```
 
 - 9. 指定名称方式删除标签
@@ -767,9 +771,10 @@ sys_masking.drop_label_by_id(label_id)
 
 参数：
 - label_id，标签名对应的 ID，不能为空，必须是整型数值。
-    
+  
+
 如下例所示，删除 id = 1 的标签。
-```
+```sql
 -- 用具有管理权限的账户查询标签，可获得相应的 id 值
 greatsql> SELECT label_id, label_name FROM sys_masking.masking_label WHERE label_name = 'label1';
 +----------+---------------+
@@ -802,7 +807,7 @@ greatsql> SELECT maskall('GreatSQL数据库') AS c1,
 +-------------+-------------+-----------------------------------+-------------+
 | c1          | c2          | c3                                | c4          |
 +-------------+-------------+-----------------------------------+-------------+
-| xxxxxxxxxxx | aaaaaaaaaaa | 赞赞赞赞赞赞赞赞赞赞赞            | xxxxxxxxxxx |
+| xxxxxxxxxxx | aaaaaaaaaaa | 赞赞赞赞赞赞赞赞赞赞赞                | xxxxxxxxxxx |
 +-------------+-------------+-----------------------------------+-------------+
 ```
 
@@ -829,7 +834,7 @@ greatsql> SELECT mask_inside('GreatSQL数据库', 1, 3) AS c1,
 +-------------------+-------------------+-------------------+-------------------+-----------------------+-------------------+-------------+
 | GxxatSQL数据库    | xxxxtSQL数据库    | G**atSQL数据库    | ####tSQL数据库    | G赞赞atSQL数据库      | GxeatSQL数据库    | xxxxxxxxxxx |
 +-------------------+-------------------+-------------------+-------------------+-----------------------+-------------------+-------------+
-``` 
+```
 
 #### 查看策略视图 
 
