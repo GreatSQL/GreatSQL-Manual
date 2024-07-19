@@ -136,6 +136,14 @@ Records: 1  Duplicates: 0  Warnings: 0
 - 如果是 MySQL 8.0.*（> 8.0.32 版本）、Percona Server 8.0.*（> 8.0.32 版本）等系列版本，则需要利用逻辑备份方式导出数据，再导入的方式完成升级，不支持原地（in-place）升级到 GreatSQL 8.0.32-26。
 - 如果是 MySQL 5.7.*（>= 5.7.23 版本）、Percona Server 5.7.*（<= 5.7.23 版本）等系列版本，则可以直接在原来的 *datadir* 基础上，修改 *basedir* 后，原地（in-place）启动 GreatSQL 8.0.32-26 后会完成自动升级。
 
+在以上几个原地升级场景中，务必保证 GreatSQL 中参数 `upgrade` 不能设置为 *NONE*，可以设置为默认的 *AUTO* 或 *FORCE*。例如：
+
+```ini
+[mysqld]
+upgrade = AUTO
+```
+
+
 更多迁移升级方案请参考：[迁移升级](../../7-migrate-and-upgrade/0-migrate-and-upgrade.md)。
 
 ## GreatSQL VS MySQL
