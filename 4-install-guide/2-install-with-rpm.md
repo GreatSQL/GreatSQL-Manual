@@ -332,13 +332,10 @@ LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=
 
 # 查看数据库文件
 $ ls /data/GreatSQL
- auto.cnf          client-key.pem       '#ib_16384_14.dblwr'  '#ib_16384_6.dblwr'   ib_logfile1           mysql.pid            server-key.pem
- binlog.000001     error.log            '#ib_16384_15.dblwr'  '#ib_16384_7.dblwr'   ib_logfile2           mysql.sock           slow.log
- binlog.000002    '#ib_16384_0.dblwr'   '#ib_16384_1.dblwr'   '#ib_16384_8.dblwr'   ibtmp1                mysql.sock.lock      sys
- binlog.index     '#ib_16384_10.dblwr'  '#ib_16384_2.dblwr'   '#ib_16384_9.dblwr'   innodb_status.52003   performance_schema   undo_001
- ca-key.pem       '#ib_16384_11.dblwr'  '#ib_16384_3.dblwr'    ib_buffer_pool      '#innodb_temp'         private_key.pem      undo_002
- ca.pem           '#ib_16384_12.dblwr'  '#ib_16384_4.dblwr'    ibdata1              mysql                 public_key.pem
- client-cert.pem  '#ib_16384_13.dblwr'  '#ib_16384_5.dblwr'    ib_logfile0          mysql.ibd             server-cert.pem
+ auto.cnf        ca-key.pem        error.log           '#ib_archive'    '#innodb_redo'       mysql.ibd         performance_schema   server-key.pem   undo_002
+ binlog.000001   ca.pem           '#file_purge'         ib_buffer_pool   innodb_status.258   mysql.pid         private_key.pem      slow.log
+ binlog.000002   client-cert.pem  '#ib_16384_0.dblwr'   ibdata1         '#innodb_temp'       mysql.sock        public_key.pem       sys
+ binlog.index    client-key.pem   '#ib_16384_1.dblwr'   ibtmp1           mysql               mysql.sock.lock   server-cert.pem      undo_001
 ```
 可以看到，GreatSQL服务已经正常启动了。
 
@@ -498,13 +495,13 @@ MySQL Shell 8.0.25
 Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
 No default schema selected; type \use <schema> to set one.
 WARNING: Found errors loading plugins, for more details look at the log at: /root/.mysqlsh/mysqlsh.log
- MySQL  localhost  Py >
+ MySQL  localhost  JS >
 ```
 
-接下来，执行 `dba.configure_instance`命令开始检查当前实例是否准备好了，可以作为MGR集群的一个节点：
+接下来，执行 `dba.configureInstance()`命令开始检查当前实例是否准备好了，可以作为MGR集群的一个节点：
 ```
 # 开始配置MGR节点
-MySQL  172.16.16.10:3306 ssl  Py > dba.configure_instance();
+MySQL  172.16.16.10:3306 ssl  JS > dba.configureInstance();
 Configuring local MySQL instance listening at port 3306 for use in an InnoDB cluster...
 
 This instance reports its own address as GreatSQL-01:3306
@@ -532,10 +529,6 @@ The instance 'GreatSQL-01:3306' is valid to be used in an InnoDB cluster.
 Cluster admin user 'GreatSQL'@'%' created.
 The instance 'GreatSQL-01:3306' is already ready to be used in an InnoDB cluster.      
 ```
-这里切换到MySQL Shell的Python风格下了，如果是Javascript风格的话，则函数名是 `dba.configureInstance()`。
-
-GreatSQL提供的MySQL Shell二进制包不支持Javascript语法，因为编译时没有libv8库，所以只能支持Python/SQL语法。
-
 **截止到这里，以上所有步骤在另外两个节点 GreatSQL-02、GreatSQL-03 也同样执行一遍。**
 
 ### 创建并初始化一个集群
@@ -554,7 +547,7 @@ No default schema selected; type \use <schema> to set one.
 
 # 选定GreatSQL-01节点作为PRIMARY，开始创建MGR集群
 # 集群命名为 GreatSQLMGR，后面mysqlrouter读取元数据时用得上
-MySQL  172.16.16.10:3306 ssl  Py > c = dba.create_cluster('GreatSQLMGR');
+MySQL  172.16.16.10:3306 ssl  JS > c = dba.createCluster('GreatSQLMGR');
 A new InnoDB cluster will be created on instance '172.16.16.10:3306'.
 
 Validating instance configuration at 172.16.16.10:3306...
@@ -567,10 +560,10 @@ NOTE: Group Replication will communicate with other members using 'GreatSQL-01:3
 Creating InnoDB cluster 'GreatSQLMGR' on 'GreatSQL-01:3306'...
 
 Adding Seed Instance...
-Cluster successfully created. Use Cluster.add_instance() to add MySQL instances.
+Cluster successfully created. Use Cluster.addInstance() to add MySQL instances.
 At least 3 instances are needed for the cluster to be able to withstand up to
 one server failure.
-MySQL  172.16.16.10:3306 ssl  Py > 
+MySQL  172.16.16.10:3306 ssl  JS > 
 ```
 集群已经创建并初始化完毕，接下来就是继续添加其他节点了。
 
@@ -580,7 +573,7 @@ MySQL  172.16.16.10:3306 ssl  Py >
 ```
 # 此时mysqlsh客户端还保持连接到GreatSQL-01节点
 # 可以直接添加GreatSQL-02节点
-MySQL  172.16.16.10:3306 ssl  Py > c.add_instance('GreatSQL@172.16.16.11:3306');  <-- 添加GreatSQL-02节点
+MySQL  172.16.16.10:3306 ssl  JS > c.addInstance('GreatSQL@172.16.16.11:3306');  <-- 添加GreatSQL-02节点
 NOTE: The target instance 'GreatSQL-02:3306' has not been pre-provisioned (GTID set is empty). The Shell is unable to decide whether incremental state recovery can correctly provision it.
 The safest and most convenient way to provision a new instance is through automatic clone provisioning, which will completely overwrite the state of 'GreatSQL-02:3306' with a physical snapshot from an existing cluster member. To use this method by default, set the 'recoveryMethod' option to 'clone'.
 
@@ -633,7 +626,7 @@ The instance 'GreatSQL-02:3306' was successfully added to the cluster.
 这就将 GreatSQL-02 节点加入MGRT集群中了，此时可以先查看下集群状态。
 
 ```
-MySQL  172.16.16.10:3306 ssl  Py > c.status()
+MySQL  172.16.16.10:3306 ssl  JS > c.status()
 {
     "clusterName": "GreatSQLMGR",
     "defaultReplicaSet": {
@@ -681,9 +674,9 @@ loose-group_replication_arbitrator = 1
 ```
 其作用就是指定该节点作为**仲裁节点**，保存退出，重启该节点GreatSQL数据库。
 
-然后照着第三步的操作，调用 `dba.add_instance()` 添加新节点，就可以直接将仲裁节点加入MGR集群了，再次查看集群状态：
+然后照着第三步的操作，调用 `dba.addInstance()` 添加新节点，就可以直接将仲裁节点加入MGR集群了，再次查看集群状态：
 ```
-MySQL  172.16.16.10:3306 ssl  Py > c.status()
+MySQL  172.16.16.10:3306 ssl  JS > c.status()
 {
     "clusterName": "GreatSQLMGR",
     "defaultReplicaSet": {
