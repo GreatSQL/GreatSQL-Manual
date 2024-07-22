@@ -324,6 +324,22 @@ one server failure.
 ```
 这就完成了MGR集群的初始化并加入第一个节点（引导节点）。
 
+**提示**：参数 `group_replication_communication_stack` 的默认值是 XCOM。但是在利用 GreatSQL Shell 的 `create_cluster()` 函数创建并初始化 MGR 集群时，参数 `communicationStack` 默认值则是 MYSQL，这里存在差异。因此，建议在这里显式指定 `communicationStack` 参数值为 XCOM，例如：
+
+```sql
+MySQL  172.16.16.10:3306 ssl  Py > c = dba.create_cluster('MGR1', {"communicationStack": "xcom"});
+```
+
+如果是 JS 风格的写法则是下面这样的：
+
+```sql
+MySQL  172.16.16.10:3306 ssl  JS > dba.createCluster("MGR1", {"communicationStack": "xcom"})
+```
+
+> 因目前采用 MYSQL 协议可能存在风险，所以建议采用 XCOM 协议
+>
+> 采用 MYSQL 协议的风险可参考文章：[新的MGR MySQL协议报错BUG](https://mp.weixin.qq.com/s/N-poOiG8zAAmLI0-S79zDg)
+
 接下来，用同样方法先用 root 账号分别登入到另外两个节点，完成节点的检查并创建最小权限级别用户（此过程略过。。。注意各节点上创建的用户名、密码都要一致），之后回到第一个节点，执行 `add_instance()` 添加另外两个节点。
 ```sql
 MySQL  172.16.16.10:3306 ssl py > c.add_instance('GreatSQL@172.16.16.11:3306');<--这里要指定MGR专用账号
@@ -411,11 +427,11 @@ MySQL  172.16.16.10:3306 ssl  Py > c.describe()
 至此，利用 GreatSQL Shell 构建一个三节点的MGR集群做好了，可以尝试向 Primary 节点写入数据观察测试。
 
 ###   GreatSQL Shell 接管现存的MGR集群
-对于已经在运行中的MGR集群，也是可以用 GreatSQL Shell 接管的。只需要在调用 `createCluster()` 函数时，加上 `adoptFromGR:true` 选项即可。实际上不加这个选项的话，GreatSQL Shell 也会自动检测到该MGR集群已存在，并询问是否要接管。
+对于已经在运行中的MGR集群，也是可以用 GreatSQL Shell 接管的。只需要在调用 `create_cluster()` 函数时，加上 `"adoptFromGR":"true"` 选项即可。实际上不加这个选项的话，GreatSQL Shell 也会自动检测到该MGR集群已存在，并询问是否要接管。
 
 在这里简单演示下：
 ```sql
-#不加上 adoptFromGr:true 选项
+#不加上 "adoptFromGr":"true" 选项
 MySQL  172.16.16.10:3306 ssl  Py > c = dba.create_cluster('MGR1');
 A new InnoDB cluster will be created on instance '172.16.16.10:3306'.
 
@@ -424,9 +440,9 @@ Do you want to setup an InnoDB cluster based on this replication group? [Y/n]:
 ```
 可以看到，会有提示信息询问是否要接管。
 
-如果加上 `adoptFromGr:true` 选项，则会直接创建集群，不再询问：
+如果加上 `"adoptFromGr":"true"` 选项，则会直接创建集群，不再询问：
 ```sql
-MySQL  172.16.16.10:3306 ssl Py > c=dba.create_cluster('MGR1', {adoptFromGr:true});
+MySQL  172.16.16.10:3306 ssl Py > c=dba.create_cluster('MGR1', {"adoptFromGr":"true"});
 A new InnoDB cluster will be created based on the existing replication group on instance '172.16.16.10:3306'.
 
 Creating InnoDB cluster 'MGR1' on '172.16.16.10:3306'...
@@ -451,7 +467,7 @@ Are you sure you want to remove the Metadata? [y/N]: y
 Metadata Schema successfully removed.
 
 #接管现有集群
- MySQL  172.16.16.10:3306 ssl  Py > c=dba.create_cluster('MGR1', {adoptFromGr:true})
+ MySQL  172.16.16.10:3306 ssl  Py > c=dba.create_cluster('MGR1', {"adoptFromGr":"true"})
 ...
 ```
 这样就可以接管了
