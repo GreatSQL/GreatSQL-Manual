@@ -265,9 +265,9 @@ MySQL Shell 8.0.32
 ```
 执行命令 `\status` 查看当前节点的状态，确认连接正常可用。
 
-执行 `dba.configure_instance()` 命令开始检查当前实例是否满足安装MGR集群的条件，如果不满足可以直接配置成为MGR集群的一个节点：
+执行 `dba.configureInstance()` 命令开始检查当前实例是否满足安装MGR集群的条件，如果不满足可以直接配置成为MGR集群的一个节点：
 ```sql
-MySQL  localhost  Py > dba.configure_instance()
+MySQL  localhost  JS > dba.configureInstance()
 Configuring local MySQL instance listening at port 3306 for use in an InnoDB cluster...
 
 This instance reports its own address as 172.16.16.10:3306
@@ -304,7 +304,7 @@ Save password for 'GreatSQL@172.16.16.10:3306'? [Y]es/[N]o/Ne[v]er (default No):
 MySQL Shell 8.0.32
 ...
 #定义一个变量名c，方便下面引用
-MySQL  172.16.16.10:3306 ssl  Py > c = dba.create_cluster('MGR1');
+MySQL  172.16.16.10:3306 ssl  JS > c = dba.createCluster('MGR1');
 A new InnoDB cluster will be created on instance '172.16.16.10:3306'.
 
 Validating instance configuration at 172.16.16.10:3306...
@@ -327,7 +327,7 @@ one server failure.
 **提示**：参数 `group_replication_communication_stack` 的默认值是 XCOM。但是在利用 GreatSQL Shell 的 `create_cluster()` 函数创建并初始化 MGR 集群时，参数 `communicationStack` 默认值则是 MYSQL，这里存在差异。因此，建议在这里显式指定 `communicationStack` 参数值为 XCOM，例如：
 
 ```sql
-MySQL  172.16.16.10:3306 ssl  Py > c = dba.create_cluster('MGR1', {"communicationStack": "xcom"});
+MySQL  172.16.16.10:3306 ssl  JS > c = dba.createCluster('MGR1', {"communicationStack": "xcom"});
 ```
 
 如果是 JS 风格的写法则是下面这样的：
@@ -340,9 +340,9 @@ MySQL  172.16.16.10:3306 ssl  JS > dba.createCluster("MGR1", {"communicationStac
 >
 > 采用 MYSQL 协议的风险可参考文章：[新的MGR MySQL协议报错BUG](https://mp.weixin.qq.com/s/N-poOiG8zAAmLI0-S79zDg)
 
-接下来，用同样方法先用 root 账号分别登入到另外两个节点，完成节点的检查并创建最小权限级别用户（此过程略过。。。注意各节点上创建的用户名、密码都要一致），之后回到第一个节点，执行 `add_instance()` 添加另外两个节点。
+接下来，用同样方法先用 root 账号分别登入到另外两个节点，完成节点的检查并创建最小权限级别用户（此过程略过。。。注意各节点上创建的用户名、密码都要一致），之后回到第一个节点，执行 `addInstance()` 添加另外两个节点。
 ```sql
-MySQL  172.16.16.10:3306 ssl py > c.add_instance('GreatSQL@172.16.16.11:3306');<--这里要指定MGR专用账号
+MySQL  172.16.16.10:3306 ssl py > c.addInstance('GreatSQL@172.16.16.11:3306');<--这里要指定MGR专用账号
 
 WARNING: A GTID set check of the MySQL instance at '172.16.16.11:3306' determined that it contains transactions that do not originate from the cluster, which must be discarded before it can join the cluster.
 
@@ -396,7 +396,7 @@ The instance '172.16.16.11:3306' was successfully added to the cluster.  <-- 新
 
 现在，一个有这三节点的MGR集群已经部署完毕，来确认下：
 ```sql
-MySQL  172.16.16.10:3306 ssl  Py > c.describe()
+MySQL  172.16.16.10:3306 ssl  JS > c.describe()
 {
     "clusterName": "MGR1",
     "defaultReplicaSet": {
@@ -427,12 +427,12 @@ MySQL  172.16.16.10:3306 ssl  Py > c.describe()
 至此，利用 GreatSQL Shell 构建一个三节点的MGR集群做好了，可以尝试向 Primary 节点写入数据观察测试。
 
 ###   GreatSQL Shell 接管现存的MGR集群
-对于已经在运行中的MGR集群，也是可以用 GreatSQL Shell 接管的。只需要在调用 `create_cluster()` 函数时，加上 `"adoptFromGR":"true"` 选项即可。实际上不加这个选项的话，GreatSQL Shell 也会自动检测到该MGR集群已存在，并询问是否要接管。
+对于已经在运行中的MGR集群，也是可以用 GreatSQL Shell 接管的。只需要在调用 `createCluster()` 函数时，加上 `"adoptFromGR":"true"` 选项即可。实际上不加这个选项的话，GreatSQL Shell 也会自动检测到该MGR集群已存在，并询问是否要接管。
 
 在这里简单演示下：
 ```sql
 #不加上 "adoptFromGr":"true" 选项
-MySQL  172.16.16.10:3306 ssl  Py > c = dba.create_cluster('MGR1');
+MySQL  172.16.16.10:3306 ssl  JS > c = dba.createCluster('MGR1');
 A new InnoDB cluster will be created on instance '172.16.16.10:3306'.
 
 You are connected to an instance that belongs to an unmanaged replication group.
@@ -442,7 +442,7 @@ Do you want to setup an InnoDB cluster based on this replication group? [Y/n]:
 
 如果加上 `"adoptFromGr":"true"` 选项，则会直接创建集群，不再询问：
 ```sql
-MySQL  172.16.16.10:3306 ssl Py > c=dba.create_cluster('MGR1', {"adoptFromGr":"true"});
+MySQL  172.16.16.10:3306 ssl JS > c=dba.createCluster('MGR1', {"adoptFromGr":"true"});
 A new InnoDB cluster will be created based on the existing replication group on instance '172.16.16.10:3306'.
 
 Creating InnoDB cluster 'MGR1' on '172.16.16.10:3306'...
@@ -454,20 +454,20 @@ Adding Instance '172.16.16.12:3306'...
 ...
 ```
 
-如果是MGR集群的metadata发生变化，这时候无论调用 `dba.get_cluster()` 还是 `dba.create_cluster` 都可能会报告类似下面的错误：
+如果是MGR集群的metadata发生变化，这时候无论调用 `dba.getCluster()` 还是 `dba.createCluster()` 都可能会报告类似下面的错误：
 ```
 Dba.getCluster: Unable to get an InnoDB cluster handle. The instance '192.168.6.27:3306' may belong to a different cluster from the one registered in the Metadata since the value of 'group_replication_group_name' does not match the one registered in the Metadata: possible split-brain scenario. Please retry while connected to another member of the cluster. (RuntimeError)
 ```
 
-这种情况下，可以调用 `dba.drop_metadata_schema()` 函数删除元数据，再调用 `dba.create_cluster` 接管集群：
+这种情况下，可以调用 `dba.dropMetadataSchema()` 函数删除元数据，再调用 `dba.createCluster()` 接管集群：
 ```sql
 #确保不影响正常业务的话，删除无用MGR元数据
-MySQL  172.16.16.10:3306 ssl  Py > dba.drop_metadata_schema()
+MySQL  172.16.16.10:3306 ssl  JS > dba.dropMetadataSchema()
 Are you sure you want to remove the Metadata? [y/N]: y
 Metadata Schema successfully removed.
 
 #接管现有集群
- MySQL  172.16.16.10:3306 ssl  Py > c=dba.create_cluster('MGR1', {"adoptFromGr":"true"})
+ MySQL  172.16.16.10:3306 ssl  JS > c=dba.createCluster('MGR1', {"adoptFromGr":"true"})
 ...
 ```
 这样就可以接管了
@@ -475,7 +475,7 @@ Metadata Schema successfully removed.
 ###  使用 GreatSQL Shell 的窍门
 在 GreatSQL Shell 中，也是可以启用pager（分页器）的，像下面这样设置即可：
 ```
-mysqlsh> shell.enable_pager()
+mysqlsh> shell.enablePager()
 mysqlsh> shell.options["pager"]="less -i -n -S";
 Pager has been set to 'less -i -n -S'.
 ```
