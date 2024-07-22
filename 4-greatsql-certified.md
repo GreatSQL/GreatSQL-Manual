@@ -46,6 +46,17 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 
 这些限制会因情况而定，目的在于保证考试的公正性和考证的价值。感谢您的理解与支持，让考核回归本质，共同提升数据库技术与应用水平。祝学习进步!
 
+### 有哪些额外学习资料？
+
+除了 GCA、GCP 等级所对应的课程之外，还有如下资料推荐给您进行学习。
+
+- [GreatSQL用户手册](https://greatsql.cn/docs/)
+- [GreatSQL课程视频](https://greatsql.cn/smx_course-lesson.html?op=video)
+- [深入浅出MGR系列](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/deep-dive-mgr)
+- [GreatSQL官方公众号文章](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkzMTIzMDgwMg==&action=getalbum&album_id=1835791315800768514#wechat_redirect)
+
+在认真学习完这些资料之后，再去尝试参与 GCA、GCP 等级考试，将会显著增加您通过考试的几率。
+
 ## 认证通过名单
 
 ### 通过GCA等级考核人员名单
