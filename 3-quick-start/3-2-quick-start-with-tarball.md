@@ -193,9 +193,10 @@ LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=
 
 # 查看数据库文件
 $ ls /var/lib/mysql
- auto.cnf        ca-key.pem        client-key.pem       ib_buffer_pool   ib_logfile1     mysql        mysql.sock.lock      public_key.pem    sys
- binlog.000001   ca.pem           '#ib_16384_0.dblwr'   ibdata1          ibtmp1          mysql.ibd    performance_schema   server-cert.pem   undo_001
- binlog.index    client-cert.pem  '#ib_16384_1.dblwr'   ib_logfile0     '#innodb_temp'   mysql.sock   private_key.pem      server-key.pem    undo_002
+ auto.cnf        ca-key.pem        error.log           '#ib_archive'    '#innodb_redo'       mysql.ibd         performance_schema   server-key.pem   undo_002
+ binlog.000001   ca.pem           '#file_purge'         ib_buffer_pool   innodb_status.258   mysql.pid         private_key.pem      slow.log
+ binlog.000002   client-cert.pem  '#ib_16384_0.dblwr'   ibdata1         '#innodb_temp'       mysql.sock        public_key.pem       sys
+ binlog.index    client-key.pem   '#ib_16384_1.dblwr'   ibtmp1           mysql               mysql.sock.lock   server-cert.pem      undo_001
 ```
 可以看到，GreatSQL 服务已经正常启动了。
 

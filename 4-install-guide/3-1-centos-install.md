@@ -357,13 +357,10 @@ LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=
 
 # 查看数据库文件
 $ ls /data/GreatSQL
- auto.cnf          client-key.pem       '#ib_16384_14.dblwr'  '#ib_16384_6.dblwr'   ib_logfile1           mysql.pid            server-key.pem
- binlog.000001     error.log            '#ib_16384_15.dblwr'  '#ib_16384_7.dblwr'   ib_logfile2           mysql.sock           slow.log
- binlog.000002    '#ib_16384_0.dblwr'   '#ib_16384_1.dblwr'   '#ib_16384_8.dblwr'   ibtmp1                mysql.sock.lock      sys
- binlog.index     '#ib_16384_10.dblwr'  '#ib_16384_2.dblwr'   '#ib_16384_9.dblwr'   innodb_status.60231   performance_schema   undo_001
- ca-key.pem       '#ib_16384_11.dblwr'  '#ib_16384_3.dblwr'    ib_buffer_pool      '#innodb_temp'         private_key.pem      undo_002
- ca.pem           '#ib_16384_12.dblwr'  '#ib_16384_4.dblwr'    ibdata1              mysql                 public_key.pem
- client-cert.pem  '#ib_16384_13.dblwr'  '#ib_16384_5.dblwr'    ib_logfile0          mysql.ibd             server-cert.pem
+ auto.cnf        ca-key.pem        error.log           '#ib_archive'    '#innodb_redo'       mysql.ibd         performance_schema   server-key.pem   undo_002
+ binlog.000001   ca.pem           '#file_purge'         ib_buffer_pool   innodb_status.258   mysql.pid         private_key.pem      slow.log
+ binlog.000002   client-cert.pem  '#ib_16384_0.dblwr'   ibdata1         '#innodb_temp'       mysql.sock        public_key.pem       sys
+ binlog.index    client-key.pem   '#ib_16384_1.dblwr'   ibtmp1           mysql               mysql.sock.lock   server-cert.pem      undo_001
 ```
 可以看到，GreatSQL服务已经正常启动了。
 
