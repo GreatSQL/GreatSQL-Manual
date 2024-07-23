@@ -12,7 +12,7 @@
 
 ##  特性增强
 
-GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**高安全** 等多方面都有增强新特性，包括 Clone 增备份、压缩备份，MGR 新加入成员节点时自动选择最新数据节点为 Donor 节点，NUMA 亲和性优化，非阻塞式 DDL，无主键表导入提速，更多 Oracle 兼容用法，最后登录信息，基于规则的数据脱敏功能等多个新特性。
+GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**高安全** 等多方面都有增强新特性，包括 Clone 增量备份、压缩备份，MGR 新加入成员节点时自动选择最新数据节点为 donor 节点，NUMA 亲和性优化，非阻塞式 DDL，无主键表导入优化，更多 Oracle 兼容用法，最后登录信息，基于规则的数据脱敏功能等多个新特性。
 
 ### 高可用
 - 当有新成员节点加入 MGR 时，如果选择 Clone 方式复制数据，支持自动选择从最新事务数据的成员节点复制数据，可有效提升 Clone 速度，提高 MGR 的服务可靠性。当新加入节点触发 Clone 方式复制数据时，也支持该特性。
@@ -172,7 +172,7 @@ upgrade = AUTO
 |AP 引擎| :heavy_check_mark: | 仅云上HeatWave |
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
 |非阻塞式 DDL| :heavy_check_mark: | ❌ |
-|无主键表导入提速 | :heavy_check_mark: | ❌ |
+|无主键表导入优化 | :heavy_check_mark: | ❌ |
 |InnoDB 并行查询| :heavy_check_mark: | 仅主键扫描 |
 |并行 LOAD DATA| :heavy_check_mark: | ❌ |
 |InnoDB 事务 ReadView 无锁优化| :heavy_check_mark: | ❌ |
