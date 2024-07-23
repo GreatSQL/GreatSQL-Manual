@@ -342,7 +342,7 @@ MySQL  172.16.16.10:3306 ssl  JS > dba.createCluster("MGR1", {"communicationStac
 
 接下来，用同样方法先用 root 账号分别登入到另外两个节点，完成节点的检查并创建最小权限级别用户（此过程略过。。。注意各节点上创建的用户名、密码都要一致），之后回到第一个节点，执行 `addInstance()` 添加另外两个节点。
 ```sql
-MySQL  172.16.16.10:3306 ssl py > c.addInstance('GreatSQL@172.16.16.11:3306');<--这里要指定MGR专用账号
+MySQL  172.16.16.10:3306 ssl JS > c.addInstance('GreatSQL@172.16.16.11:3306');<--这里要指定MGR专用账号
 
 WARNING: A GTID set check of the MySQL instance at '172.16.16.11:3306' determined that it contains transactions that do not originate from the cluster, which must be discarded before it can join the cluster.
 

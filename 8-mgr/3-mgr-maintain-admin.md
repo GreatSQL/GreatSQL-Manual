@@ -57,13 +57,13 @@ $ mysqlsh --uri GreatSQL@172.16.16.10:3306
 
 当主节点需要进行维护时，或者执行滚动升级时，就可以对其进行切换，将主节点切换到其他节点。
 
-在GreatSQL Shell中，可以调用 `set_primary_instance()` 函数进行切换：
+在GreatSQL Shell中，可以调用 `setPrimaryInstance()` 函数进行切换：
 
 ```sql
 #首先获取mgr cluster对象
-MySQL  172.16.16.10:3306 ssl  Py > c=dba.get_cluster()
+MySQL  172.16.16.10:3306 ssl  JS > c=dba.getCluster()
 #查看当前各节点列表 
-MySQL  172.16.16.10:3306 ssl  Py > c.status()
+MySQL  172.16.16.10:3306 ssl  JS > c.status()
 {
     "clusterName": "GreatSQLMGR",
     "defaultReplicaSet": {
@@ -110,7 +110,7 @@ MySQL  172.16.16.10:3306 ssl  Py > c.status()
 }
 
 #执行切换
-MySQL  172.16.16.10:3306 ssl  Py > c.set_primary_instance('172.16.16.11:3306')
+MySQL  172.16.16.10:3306 ssl  JS > c.setPrimaryInstance('172.16.16.11:3306')
 Setting instance '172.16.16.11:3306' as the primary instance of cluster 'MGR1'...
 
 #罗列了三个节点各自发生的变化
@@ -118,7 +118,7 @@ Instance '172.16.16.10:3306' was switched from PRIMARY to SECONDARY.
 Instance '172.16.16.11:3306' was switched from SECONDARY to PRIMARY.
 Instance '172.16.16.12:3306' remains ARBITRATOR.
 
-WARNING: The cluster internal session is not the primary member anymore. For cluster management operations please obtain a fresh cluster handle using dba.get_cluster().
+WARNING: The cluster internal session is not the primary member anymore. For cluster management operations please obtain a fresh cluster handle using dba.getCluster().
 
 #完成切换
 The instance '172.16.16.11:3306' was successfully elected as primary.
@@ -159,12 +159,12 @@ greatsql> select * from performance_schema.replication_group_members;
 
 ### GreatSQL Shell方式切换模式
 
-调用函数 `switch_to_multi_primary_mode()` 和 `switch_to_single_primary_mode()` 可以实现切换到多主、单主模式。
+调用函数 `switchToMultiPrimaryMode()` 和 `switchToSinglePrimaryMode()` 可以实现切换到多主、单主模式。
 
 首先，从单主模式切换到多主模式：
 
 ```sql
-MySQL  172.16.16.10:3306 ssl  Py > c.switch_to_multi_primary_mode()
+MySQL  172.16.16.10:3306 ssl  JS > c.switchToMultiPrimaryMode()
 Switching cluster 'GreatSQLMGR' to Multi-Primary mode...
 
 Instance '172.16.16.10:3306' remains PRIMARY.
@@ -208,7 +208,7 @@ Query OK, 0 rows affected (2.65 sec)
 再次查看MGR的状态：
 
 ```sql
- MySQL  172.16.16.10:3306 ssl  Py > c.status()
+ MySQL  172.16.16.10:3306 ssl  JS > c.status()
 ...
                 "address": "172.16.16.10:3306",
                 "memberRole": "PRIMARY",
@@ -225,7 +225,7 @@ Query OK, 0 rows affected (2.65 sec)
 指定 *172.16.16.10:3306* 作为新主：
 
 ```sql
-MySQL  172.16.16.10:3306 ssl  Py > c.switch_to_single_primary_mode("172.16.16.10:3306")
+MySQL  172.16.16.10:3306 ssl  JS > c.switchToSinglePrimaryMode("172.16.16.10:3306")
 Switching cluster 'GreatSQLMGR' to Single-Primary mode...
 
 Instance '172.16.16.10:3306' remains PRIMARY.
@@ -290,13 +290,13 @@ greatsql> select group_replication_switch_to_single_primary_mode('af39db70-6850-
 
 首先，启动一个全新的空实例，确保可以用root账户连接登入。
 
-参考文档：[MGR节点预检查](../4-install-guide/2-install-with-rpm.md#91mgr节点预检查)，先利用 GreatSQL Shell 调用函数 `dba.configure_instance()` 完成初始化检查工作。
+参考文档：[MGR节点预检查](../4-install-guide/2-install-with-rpm.md#91mgr节点预检查)，先利用 GreatSQL Shell 调用函数 `dba.configureInstance()` 完成初始化检查工作。
 
 后切换到连接主节点的GreatSQL Shell终端上，首先获取cluster对象，再进行添加新节点操作：
 
 ```sql
-MySQL  172.16.16.10:3306 ssl  Py > c=dba.get_cluster()
-MySQL  172.16.16.10:3306 ssl  Py > c.add_instance("GreatSQL@172.16.16.13:3306")
+MySQL  172.16.16.10:3306 ssl  JS > c=dba.getCluster()
+MySQL  172.16.16.10:3306 ssl  JS > c.addInstance("GreatSQL@172.16.16.13:3306")
 
 NOTE: The target instance '172.16.16.13:3306' has not been pre-provisioned (GTID set is empty). The Shell is unable to decide whether incremental state recovery can correctly provision it.
 The safest and most convenient way to provision a new instance is through automatic clone provisioning, which will completely overwrite the state of '172.16.16.13:3306' with a physical snapshot from an existing cluster member. To use this method by default, set the 'recoveryMethod' option to 'clone'.
@@ -315,7 +315,7 @@ NOTE: '172.16.16.13:3306' is being recovered from '172.16.16.12:3306'
 The instance '172.16.16.13:3306' was successfully added to the cluster.
 
 # 确认添加成功，已在MGR集群列表中
- MySQL  172.16.16.10:3306 ssl  Py > c.status()
+ MySQL  172.16.16.10:3306 ssl  JS > c.status()
 ...
                 "address": "172.16.16.10:3306",
                 "memberRole": "PRIMARY",
@@ -364,10 +364,10 @@ greatsql> clone INSTANCE FROM GreatSQL@172.16.16.11:3306 IDENTIFIED BY 'GreatSQL
 
 ### GreatSQL Shell方式删除节点
 
-删除节点比较简单，调用 `remove_instance()` 函数即可：
+删除节点比较简单，调用 `removeInstance()` 函数即可：
 
 ```
-MySQL  172.16.16.10:3306 ssl  Py > c.remove_instance("GreatSQL@172.16.16.13:3306")
+MySQL  172.16.16.10:3306 ssl  JS > c.removeInstance("GreatSQL@172.16.16.13:3306")
 The instance will be removed from the InnoDB cluster. Depending on the instance
 being the Seed or not, the Metadata session might become invalid. If so, please
 start a new session to the Metadata Storage R/W instance.
@@ -377,7 +377,7 @@ Instance '172.16.16.13:3306' is attempting to leave the cluster...
 The instance '172.16.16.13:3306' was successfully removed from the cluster.
 ```
 
-这就将该节点踢出集群了，并且会重置 `group_replication_group_seeds` 和 `group_replication_local_address` 两个选项值，之后该节点如果想再加入集群，只需调用 `add_instance()` 重新加回即可。
+这就将该节点踢出集群了，并且会重置 `group_replication_group_seeds` 和 `group_replication_local_address` 两个选项值，之后该节点如果想再加入集群，只需调用 `addInstance()` 重新加回即可。
 
 ### 手动方式删除节点
 
@@ -387,10 +387,10 @@ The instance '172.16.16.13:3306' was successfully removed from the cluster.
 
 ### GreatSQL Shell方式重新加回
 
-在GreatSQL Shell里，可以调用 `rejoin_instance()` 函数将异常的节点重新加回集群：
+在GreatSQL Shell里，可以调用 `rejoinInstance()` 函数将异常的节点重新加回集群：
 
 ```
- MySQL  172.16.16.10:3306 ssl  Py > c.rejoin_instance('172.16.16.13:3306');
+ MySQL  172.16.16.10:3306 ssl  JS > c.rejoinInstance('172.16.16.13:3306');
  
 Rejoining instance '172.16.16.13:3306' to cluster 'GreatSQLMGR'...
 The instance '172.16.16.13:3306' was successfully rejoined to the cluster.
