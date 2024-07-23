@@ -195,8 +195,8 @@ protocol=classic
 ```
 $ mysqlsh --uri GreatSQL@172.16.16.10:3306
 ...
-MySQL  172.16.16.10:3306 ssl  Py > c=dba.get_cluster();
-MySQL  172.16.16.10:3306 ssl  Py > c.set_primary_instance('172.16.16.11:3306');   <-- 切换PRIMARY节点
+MySQL  172.16.16.10:3306 ssl  JS > c=dba.getCluster();
+MySQL  172.16.16.10:3306 ssl  JS > c.setPrimaryInstance('172.16.16.11:3306');   <-- 切换PRIMARY节点
 Setting instance '172.16.16.11:3306' as the primary instance of cluster 'GreatSQLMGR'...
 
 Instance '172.16.16.10:3306' was switched from PRIMARY to SECONDARY.   <-- 切换了，从PRIMARY到SECONDARY
@@ -204,7 +204,7 @@ Instance '172.16.16.11:3306' was switched from SECONDARY to PRIMARY.   <-- 切�
 Instance '172.16.16.12:3306' remains ARBITRATOR.   <-- 保持不变
 Instance '172.16.16.13:3306' remains SECONDARY.   <-- 保持不变
 
-WARNING: The cluster internal session is not the primary member anymore. For cluster management operations please obtain a fresh cluster handle using dba.get_cluster().
+WARNING: The cluster internal session is not the primary member anymore. For cluster management operations please obtain a fresh cluster handle using dba.getCluster().
 
 The instance '172.16.16.11:3306' was successfully elected as primary.
 ```
@@ -229,7 +229,7 @@ Current database: *** NONE ***
 
 再次查看切换后的MGR集群状态：
 ```
-MySQL  172.16.16.10:3306 ssl  Py >  c.status();
+MySQL  172.16.16.10:3306 ssl  JS >  c.status();
 ...
         "topology": {
             "172.16.16.10:3306": {
