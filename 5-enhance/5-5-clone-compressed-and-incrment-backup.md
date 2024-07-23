@@ -195,7 +195,7 @@ BINLOG_POSITION: 0
 3. 待到第一次增量备份（ID = 4）恢复完成；
 4. 如果还想继续恢复第二次增量备份（ID = 5），则需要在步骤 4 的基础上，继续将参数 `--clone_incremental_dir` 指向第二次增量备份（ID = 5）目录，这样就可以完成所有全备+增备数据恢复。
 
-在启动 mysqld 程序时，加上参数 `--clone_incremental_dir` 的作用是将增量备份数据应用到 `datadir` 中，在应用完全部增量备份数据后，它就会自动退出，而不是继续进入服务启动阶段。
+在启动 *mysqld* 程序时，加上参数 `--clone_incremental_dir` 的作用是将增量备份数据应用到 `datadir` 中，在应用完全部增量备份数据后，它就会自动退出，而不是继续进入服务启动阶段。
 
 一次完整的数据恢复过程如下方的演示。
 
@@ -607,9 +607,9 @@ skip-networking
 
 如果还想继续恢复增量备份文件，请跳到下一步操作 [增量压缩备份恢复](#增量压缩备份恢复)。
 
-如果不需要继续恢复增备文件，则将全量压缩备份恢复后的文件目录作为 `datadir`，准备启动 *mysqld *程序。
+如果不需要继续恢复增备文件，则将全量压缩备份恢复后的文件目录作为 `datadir`，准备启动 *mysqld* 程序。
 
-在这里要特别注意的是，在对全量压缩备份的第一次恢复过程中，启动 mysqld 程序时既要指定 datadir=/data/restore/20240708，同时也要指定 clone_incremental_dir=/data/restore/20240708，这样才能对 .delta 文件进行恢复操作。类似下面这样：
+在这里要特别注意的是，在对全量压缩备份的第一次恢复过程中，启动 *mysqld* 程序时既要指定 `datadir=/data/restore/20240708`，同时也要指定 `clone_incremental_dir=/data/restore/20240708`，这样才能对 *.delta* 文件进行恢复操作。类似下面这样：
 
 ```shell
 $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf \
