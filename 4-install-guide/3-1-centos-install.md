@@ -404,21 +404,21 @@ Server version:         8.0.32-25
 
 GreatSQL数据库安装并初始化完毕。
 
-## 安装MySQL Shell
+## 安装GreatSQL Shell
 
-为了支持仲裁节点特性，需要安装GreatSQL提供的MySQL Shell发行包。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，找到 **7. GreatSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
+为了支持仲裁节点特性，需要安装GreatSQL Shell。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，找到 **GreatSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
 
 P.S，如果暂时不想使用仲裁节点特性的话，则可以继续使用相同版本的官方MySQL Shell安装包，可以直接用yum方式安装，此处略过。
 
 本文场景中，选择下面的二进制包：
 
-- greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64.tar.xz
+- greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 
 将二进制文件包放在 `/usr/local` 目录下，解压缩：
 
 ```
 $ cd /usr/local/
-$ tar xf greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64.tar.xz
+$ tar xf greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 修改家目录下的profile文件，加入PATH：
@@ -427,45 +427,41 @@ $ tar xf greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64.tar.xz
 $ vim ~/.bash_profile
 
 ...
-PATH=$PATH:$HOME/bin:/usr/local/greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64/bin
+PATH=$PATH:$HOME/bin:/usr/local/greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64/bin
 
 export PATH
 ```
 
-加载一下
-
+加载，使之生效
 ```
 $ source ~/.bash_profile
 ```
 
 这样就可以直接执行 `mysqlsh`，而无需每次都加上全路径了。
 
-第一次启动mysqlsh时，可能会有类似下面的提示：
+运行 GreatSQL Shell 8.0.32-25 需要安装 Python 3.8 依赖
 
-```
-WARNING: Found errors loading plugins, for more details look at the log at: /root/.mysqlsh/mysqlsh.log
+```shell
+$ dnf install -y libssh python38 python38-libs python38-pyyaml
+$ pip3.8 install --user certifi pyclamd
 ```
 
-执行下面的指令安装certifi这个Python模块即可：
-
-```
-$ pip3.6 install --user certifi
-```
 接下来就可以直接使用mysqlsh了
 ```bash
 $ mysqlsh
-MySQL Shell 8.0.25
+MySQL Shell 8.0.32
 
 Copyright (c) 2016, 2021, Oracle and/or its affiliates.
 Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
 Other names may be trademarks of their respective owners.
 
 Type '\help' or '\?' for help; '\quit' to exit.
- MySQL  Py >
+ MySQL  JS >
 ```
 
-MySQL Shell就可以正常使用，并继续构建MGR集群了。
+GreatSQL Shell就可以正常使用，并继续构建MGR集群了。
 
+> 推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)
 
 **扫码关注微信公众号**
 

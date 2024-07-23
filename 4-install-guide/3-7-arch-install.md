@@ -387,9 +387,9 @@ Query OK, 0 rows affected (0.02 sec)
 
 GreatSQL数据库安装并初始化完毕
 
-## 安装MySQL Shell
+## 安装GreatSQL Shell
 
-为了支持仲裁节点特性，需要安装GreatSQL提供的MySQL Shell发行包。打开GreatSQL下载页面找到
+为了支持仲裁节点特性，需要安装GreatSQL Shell。打开GreatSQL下载页面找到
 
 - greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64.tar.xz
 
@@ -445,6 +445,7 @@ WARNING: Found errors loading plugins, for more details look at the log at: /roo
  MySQL  Py > 
 ```
 
+> 推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)
 
 **扫码关注微信公众号**
 

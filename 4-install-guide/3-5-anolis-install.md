@@ -316,39 +316,17 @@ Server version:         8.0.32-25
 
 GreatSQL数据库安装并初始化完毕。
 
-## 安装MySQL Shell
+## 安装GreatSQL Shell
 
-下载MySQL Shell for GreatSQL二进制包*greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64.tar.xz*，在龙蜥Anolis系统下也可以正常运行。
+下载GreatSQL Shell二进制包*greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64.tar.xz*。
 
-接下来安装MySQL Shell，以及进行MGR初始化等操作和用RPM包方式安装一样，这里就不赘述了。
+接下来安装GreatSQL Shell，以及进行MGR初始化等操作和用RPM包方式安装一样，这里就不赘述了。
 
 参考文档[RPM安装并构建MGR集群](./2-install-with-rpm.md#安装mysql-shell)，从“8. 安装MySQL Shell”这节开始及往后内容即可。
 
-在龙蜥Anolis系统中，首次运行 `mysqlsh` 二进制文件时，可能会提示Python依赖错误：
+GreatSQL Shell就可以正常使用，并继续构建MGR集群了。
 
-```bash
-$ /usr/local/greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64/bin/mysqlsh
-
-./mysqlsh: error while loading shared libraries: libpython3.8.so.1.0: cannot open shared object file: No such file or directory
-```
-
-只需将系统中其他版本的Python依赖包头文件做个软链接就行：
-
-```bash
-$ ln -s /usr/lib64/libpython3.6m.so.1.0 /usr/lib64/libpython3.8.so.1.0
-$ /usr/local/greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64/bin/mysqlsh
-MySQL Shell 8.0.25
-
-Copyright (c) 2016, 2021, Oracle and/or its affiliates.
-Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
-Other names may be trademarks of their respective owners.
-
-Type '\help' or '\?' for help; '\quit' to exit.
- MySQL  Py >
-```
-
-MySQL Shell就可以正常使用，并继续构建MGR集群了。
-
+> 推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)
 
 **扫码关注微信公众号**
 
