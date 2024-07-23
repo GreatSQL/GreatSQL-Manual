@@ -7,7 +7,7 @@
 
 GreatSQL 8.0.25-16起，如果有仲裁节点，则需要用MySQL Shell for GreatSQL版本才能管理，否则只能在命令行下管理。
 
-MySQL Shell for GreatSQL下载链接 [https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.25-16](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.25-16)
+MySQL Shell for GreatSQL下载链接 [https://gitee.com/GreatSQL/GreatSQL/releases](https://gitee.com/GreatSQL/GreatSQL/releases)
 。
 
 ## 2. MGR最多可支持多少个节点
