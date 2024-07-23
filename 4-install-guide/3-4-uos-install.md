@@ -442,7 +442,7 @@ GreatSQL数据库安装并初始化完毕。
 
 ##  安装MySQL Shell
 
-下载GreatSQL Shell二进制包*greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64.tar.xz*。
+下载GreatSQL Shell二进制包*greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz*。
 
 接下来安装GreatSQL Shell，以及进行MGR初始化等操作和用RPM包方式安装一样，这里就不赘述了。
 
