@@ -60,14 +60,14 @@ greatsql> SHOW GLBOAL VARIABLES LIKE 'general_log%';
 ```shell
 $ cd /data/GreatSQL
 $ cat general.log
-/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld, Version: 8.0.32-25 (GreatSQL, Release 25, Revision 79f57097e3f), Time: 2024-07-08T10:23:05.166725+08:00. started with:
+/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld, Version: 8.0.32-26 (GreatSQL, Release 26, Revision 444164cc78e), Time: 2024-07-08T10:23:05.166725+08:00. started with:
 Tcp port: 3306  Unix socket: /data/GreatSQL/mysql.sock
 Time                 Id Command    Argument
-2024-07-08T10:23:12.148118+08:00           16 Connect   root@localhost on  using Socket
-2024-07-08T10:23:12.148276+08:00           16 Query     select @@version_comment limit 1
-2024-07-08T10:23:14.813514+08:00           16 Query     select version()
-2024-07-08T10:23:16.091244+08:00           16 Query     select user()
-2024-07-08T10:23:16.794915+08:00           16 Quit
+16 Connect   root@localhost on  using Socket
+16 Query     select @@version_comment limit 1
+16 Query     select version()
+16 Query     select user()
+16 Quit
 ```
 
 从上面内容可以看出，具体时间点、连接ID、请求类型、具体请求指令，各种信息一目了然。

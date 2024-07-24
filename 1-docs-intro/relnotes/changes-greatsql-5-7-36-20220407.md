@@ -44,7 +44,7 @@ mysql> SET GLOBAL group_replication_flow_control_replay_lag_behind = 600;
 
 当事务响应较慢想要分析性能瓶颈时，可以先确定是网络层的开销还是本地性能瓶颈导致的。通过设置选项 `group_replication_request_time_threshold` 即可记录超过阈值的事件，便于进一步分析。输出的内容记录在error log中，例如：
 ```
-2022-03-04T09:45:34.602093+08:00 128 [Note] Plugin group_replication reported: 'MGR request time:33775'
+[Note] Plugin group_replication reported: 'MGR request time:33775'
 ```
 表示当时这个事务在MGR层的网络开销耗时33.775毫秒，再去查看那个时段的网络监控，分析网络延迟较大的原因。
 

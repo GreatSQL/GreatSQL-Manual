@@ -269,10 +269,10 @@ $ chown -R mysql:mysql /data/restore/
 ```shell
 $ cd /data/restore/20240618
 $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf --clone_incremental_dir=/data/restore/increment/20240618-202406181041
-2024-06-18T07:18:34.877691Z 0 [System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld (mysqld 8.0.32-26) starting as process 914938
-2024-06-18T07:18:34.897273Z 0 [Warning] [MY-010075] [Server] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: f982e941-2d42-11ef-9a06-d08e7908bcb1.
-2024-06-18T07:18:34.931886Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
-2024-06-18T07:18:34.934287Z 1 [Warning] [MY-012091] [InnoDB] Allocated tablespace ID 6 for sys_mac, old maximum was 0
+[System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld (mysqld 8.0.32-26) starting as process 914938
+[Warning] [MY-010075] [Server] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: f982e941-2d42-11ef-9a06-d08e7908bcb1.
+[System] [MY-013576] [InnoDB] InnoDB initialization has started.
+[Warning] [MY-012091] [InnoDB] Allocated tablespace ID 6 for sys_mac, old maximum was 0
 ```
 
 到这里就成功地把第一次增量备份恢复到全量备份工作目录下了。
@@ -290,9 +290,9 @@ $ cd /data/restore/20240618
 $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf \
   --clone_incremental_dir=/data/restore/increment/20240618-202406181350
 ...
-2024-06-18T07:28:41.207700Z 0 [System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld (mysqld 8.0.32-26) starting as process 915395
-2024-06-18T07:28:41.214029Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
-2024-06-18T07:28:41.216527Z 1 [Warning] [MY-012091] [InnoDB] Allocated tablespace ID 6 for sys_mac, old maximum was 0
+[System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld (mysqld 8.0.32-26) starting as process 915395
+[System] [MY-013576] [InnoDB] InnoDB initialization has started.
+[Warning] [MY-012091] [InnoDB] Allocated tablespace ID 6 for sys_mac, old maximum was 0
 ```
 
 恢复的过程中没有产生报错信息，说明一切顺利。
@@ -615,11 +615,11 @@ skip-networking
 $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf \
   --clone_incremental_dir=/data/restore/20240708
 
-2024-07-08T07:38:19.997169Z 0 [Warning] [MY-010097] [Server] Insecure configuration for --secure-log-path: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
-2024-07-08T07:38:19.997213Z 0 [System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.17-x86_64/bin/mysqld (GreatSQL 8.0.32-26) starting as process 1637442
-2024-07-08T07:38:20.034542Z 0 [Warning] [MY-010075] [Server] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: 0c2b81ce-3cfd-11ef-be21-d08e7908bcb1.
-2024-07-08T07:38:20.102551Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
-2024-07-08T07:38:20.105270Z 1 [Warning] [MY-012091] [InnoDB] Allocated tablespace ID 7 for sys_audit, old maximum was 0
+[Warning] [MY-010097] [Server] Insecure configuration for --secure-log-path: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
+[System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.17-x86_64/bin/mysqld (GreatSQL 8.0.32-26) starting as process 1637442
+[Warning] [MY-010075] [Server] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: 0c2b81ce-3cfd-11ef-be21-d08e7908bcb1.
+[System] [MY-013576] [InnoDB] InnoDB initialization has started.
+[Warning] [MY-012091] [InnoDB] Allocated tablespace ID 7 for sys_audit, old maximum was 0
 ```
 
 > 也就是说，在对 Clone 压缩备份文件执行恢复时，同时要把恢复目录当做增量备份目录以完成对 .delta 文件的恢复
@@ -654,11 +654,11 @@ skip-networking
 $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf \
   --clone_incremental_dir=/data/restore/20240618-202406181530
 
-2024-07-08T07:00:53.686378Z 0 [Warning] [MY-010097] [Server] Insecure configuration for --secure-log-path: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
-2024-07-08T07:00:53.686422Z 0 [System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.17-x86_64/bin/mysqld (mysqld 8.0.32-23)
-2024-07-08T07:00:53.702073Z 0 [Warning] [MY-010075] [Server] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: d1405fbb-3cf7-11ef-8d84-d08e7908bcb1.
-2024-07-08T07:00:53.728307Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
-2024-07-08T07:00:53.738851Z 1 [Warning] [MY-012091] [InnoDB] Allocated tablespace ID 7 for sys_audit, old maximum was 0
+[Warning] [MY-010097] [Server] Insecure configuration for --secure-log-path: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
+[System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.17-x86_64/bin/mysqld (mysqld 8.0.32-23)
+[Warning] [MY-010075] [Server] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: d1405fbb-3cf7-11ef-8d84-d08e7908bcb1.
+[System] [MY-013576] [InnoDB] InnoDB initialization has started.
+[Warning] [MY-012091] [InnoDB] Allocated tablespace ID 7 for sys_audit, old maximum was 0
 ```
 
 恢复过程中没有产生报错信息，说明一切顺利。

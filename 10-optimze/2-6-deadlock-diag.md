@@ -28,10 +28,6 @@
 ------------------------
 LATEST DETECTED DEADLOCK
 ------------------------
-
-# 死锁发生时间
-2023-09-07 16:45:13 139836574922496
-
 # 发生死锁的第一个事务A
 *** (1) TRANSACTION:
 TRANSACTION 5315754291, ACTIVE 10 sec starting index read

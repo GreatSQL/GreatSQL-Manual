@@ -80,8 +80,8 @@ DO
 只执行一次（一次性）的时间调度器，在执行完毕后，会被自动删除，相应的信息会记录到 error log 中：
 
 ```log
-2024-05-23T10:21:00.335960+08:00 1990488 [Note] [MY-010044] [Server] Event Scheduler: Last execution of tpch.my_once_event. Dropping.
-2024-05-23T10:21:00.342496+08:00 1990583 [Note] [MY-010450] [Server] Event Scheduler: Dropping greatsql.my_once_event
+[Note] [MY-010044] [Server] Event Scheduler: Last execution of tpch.my_once_event. Dropping.
+[Note] [MY-010450] [Server] Event Scheduler: Dropping greatsql.my_once_event
 ```
 
 3. **创建一个每天执行一次的事件**
@@ -134,7 +134,7 @@ greatsql> SELECT * FROM information_schema.EVENTS WHERE EVENT_SCHEMA = 'greatsql
 当事件执行遇到错误（例如因为 SQL 写错）则会记录到错误日志中，类似下面这样：
 
 ```log
-2024-05-23T10:11:00.659070+08:00 1990491 [ERROR] [MY-010045] [Server] Event Scheduler: [root@localhost][greatsql.my_once_event] Unknown column 'aid' in 'where clause'
+[ERROR] [MY-010045] [Server] Event Scheduler: [root@localhost][greatsql.my_once_event] Unknown column 'aid' in 'where clause'
 ```
 
 ## 使用注意事项

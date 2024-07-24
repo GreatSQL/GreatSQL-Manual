@@ -635,7 +635,6 @@ greatsql> SHOW ENGINE INNODB STATUS\G
 ------------------------
 LATEST DETECTED DEADLOCK
 ------------------------
-2024-05-07 02:49:59 139691190978304
 *** (1) TRANSACTION:
 TRANSACTION 2796, ACTIVE 12 sec starting index read
 mysql tables in use 1, locked 1
