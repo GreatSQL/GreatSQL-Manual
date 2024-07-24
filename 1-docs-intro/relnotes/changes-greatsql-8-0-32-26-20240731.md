@@ -28,7 +28,7 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 
 - 在主从复制中，由从节点向主节点发起 Binlog 读取请求，如果读取太快或并发太多线程就会加大主节点的压力。新增参数 `rpl_read_binlog_speed_limit` 用于控制从节点上向主节点发起 Binlog 读取请求的限速，这对于控制主从复制中的网络带宽使用率、降低主节点压力、或在数据恢复过程中降低消耗资源非常有用。该参数可在从节点端设置生效。详见：[Binlog 读取限速](../../5-enhance/5-2-ha-binlog-speed-limit.md)。
 - 优化了在 [快速单主模式](../../5-enhance/5-2-ha-mgr-fast-mode.md) 下 relay log 应用逻辑，提升 MGR 整体性能；并优化了当 relay log 存在堆积时的 applier 线程的内存消耗异常情况。
-- GreatSQL 优化了 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 中的故障检测效率，特别是发生网络故障时，备用集群能更快完成主从复制通道调整，降低主从复制链路断开的时间，提高整体可用性。以设置 `MASTER_RETRY_COUNT = 2` 为例（`slave_net_timeout` 和 `MASTER_CONNECT_RETRY` 默认值均为 60），在主从复制通道间发生网络故障时导致的复制中断持续约 3 分钟，优化后故障影响时长缩短到 10 - 20 秒以内。在 GreatSQL 中，可以利用 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 实现两个 MGR 集群间的主从复制，实现跨机房间的高可用切换方案。
+- 优化了 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 中的故障检测效率，特别是发生网络故障时，备用集群能更快完成主从复制通道调整，降低主从复制链路断开的时间，提高整体可用性。以设置 `MASTER_RETRY_COUNT = 2` 为例（`slave_net_timeout` 和 `MASTER_CONNECT_RETRY` 默认值均为 60），在主从复制通道间发生网络故障时导致的复制中断持续约 3 分钟，优化后故障影响时长缩短到 10 - 20 秒以内。可以利用 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 实现两个 MGR 集群间的主从复制，实现跨机房间的高可用切换方案。
 - [地理标签](../../5-enhance/5-2-ha-mgr-zoneid.md) 功能中包含两个参数 `group_replication_zone_id`（默认值为 0）和 `group_replication_zone_id_sync_mode`（默认值为ON）。在旧版本中，要求各个节点的 `group_replication_zone_id_sync_mode` 保持一致，否则无法加入 MGR。新版本中，允许仲裁节点设置不同的 `group_replication_zone_id_sync_mode`。例如，节点 A1、A2 设置 `group_replication_zone_id = 0` & `zone_id_sync_mode = ON`；节点 B1、B2 设置 `group_replication_zone_id = 1`，它们也必须设置 `zone_id_sync_mode = ON`；仲裁投票节点C 设置 `group_replication_zone_id = 2`，但可以设置 `group_replication_zone_id_sync_mode = OFF`。
 - 当启用 greatdb_ha Plugin 时，新增支持 IPv6。
 
@@ -58,8 +58,8 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 
 ### 其他
 - 支持采用 Clone 实现在线全量热备和增备以及恢复（类似 Xtrabackup），结合 Binlog 可实现恢复到指定时间点。此外，Clone 备份还支持压缩功能。详见：[Clone 备份](../../5-enhance/5-5-clone-compressed-and-incrment-backup.md)。
-- 由于 GreatSQL 已支持 Rapid 引擎，以及未来还将推出 dplan 特性，因此从 GreatSQL 8.0.32-26 开始，不再推荐使用 InnoDB 并行查询特性（同时会删除用户手册中的入口链接）。
 - 合并龙芯支持 patch，参考：[add loongarch64 support](https://gitee.com/src-openeuler/greatsql/pulls/54/files)。
+- 由于 GreatSQL 已支持 Rapid 引擎，以及未来还将推出 dplan 特性，因此从 GreatSQL 8.0.32-26 开始，不再推荐使用 InnoDB 并行查询特性（同时会删除用户手册中的入口链接）。
 
 ## 缺陷修复
 - 修复了在部分 ARM 架构环境中无法使用并行复制的问题，详见：[MySQL Bug 110752](https://bugs.mysql.com/bug.php?id=110752)。

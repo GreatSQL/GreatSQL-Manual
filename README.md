@@ -23,7 +23,7 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 ### [高可用](./5-enhance/5-2-ha.md)
 
-针对 MGR 进行了大量改进和提升工作，支持 地理标签、仲裁节点、读写动态 VIP、快速单主模式、智能选主 等特性，并针对 流控算法、事务认证队列清理算法、节点加入&退出机制、recovery机制 等多个 MGR 底层工作机制算法进行深度优化，进一步提升优化了 MGR 的高可用保障及性能稳定性。
+针对 MGR 及主从复制进行了大量改进和提升工作，支持 地理标签、仲裁节点、读写动态 VIP、快速单主模式、智能选主 等特性，并针对 流控算法、事务认证队列清理算法、节点加入&退出机制、recovery机制 等多个 MGR 底层工作机制算法进行深度优化，进一步提升优化了 MGR 的高可用保障及性能稳定性。
 
 - 支持 [地理标签](./5-enhance/5-2-ha-mgr-zoneid.md) 特性，提升多机房架构数据可靠性。
 - 支持 [仲裁节点](./5-enhance/5-2-ha-mgr-arbitrator.md) 特性，用更低的服务器成本实现更高可用。
@@ -32,12 +32,15 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 - 支持 [智能选主](./5-enhance/5-2-ha-mgr-election-mode.md) 特性，高可用切换选主机制更合理。
 - 优化 [流控算法](./5-enhance/5-2-ha-mgr-new-fc.md)，使得事务更平稳，避免剧烈抖动。
 - 支持 [记录 MGR 网络通信开销超过阈值的事件](./5-enhance/5-2-ha-mgr-request-time.md)，用于进一步分析和优化。
+- 支持自动选择从最新事务数据的成员节点复制数据，可有效提升 Clone 速度，提高 MGR 的服务可靠性。
+- 在主从复制中，从节点向主节点发起 Binlog 读取请求时支持限速控制。
+- 优化了 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 中的故障检测效率，降低主从复制链路断开的时间，提高整体可用性。
 - 支持在跨机房容灾场景中的 [主主双向复制防止回路](./5-enhance/5-2-ha-repl-server-mode.md) 机制。
-- 优化了节点加入、退出时可能导致性能剧烈抖动的问题。
+- 优化了 MGR 节点加入、退出时可能导致性能剧烈抖动的问题。
 - 解决了个别节点上磁盘空间爆满时导致MGR集群整体被阻塞的问题。
-- 优化事务认证队列清理算法，高负载下不复存在每 60 秒性能抖动问题。
-- 解决了长事务造成无法选主的问题。
-- 修复了 recovery 过程中长时间等待的问题。
+- 优化了 MGR 事务认证队列清理算法，高负载下不复存在每 60 秒性能抖动问题。
+- 解决了 MGR 中长事务造成无法选主的问题。
+- 修复了 MGR recovery 过程中长时间等待的问题。
 
 更多信息详见文档：[高可用](./5-enhance/5-2-ha.md)。
 
@@ -56,20 +59,20 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 ### [高兼容](./5-enhance/5-3-easyuse.md)
 
-GreatSQL 实现 100% 完全兼容 MySQL 及 Percona Server For MySQL 用法，支持大多数常见 Oracle 用法，包括 [数据类型兼容](./5-enhance/5-3-easyuse.md#数据类型兼容)、[函数兼容](./5-enhance/5-3-easyuse.md#函数兼容)、[SQL 语法兼容](./5-enhance/5-3-easyuse.md#sql语法兼容)、[存储程序兼容](./5-enhance/5-3-easyuse.md#存储程序兼容) 等众多兼容扩展用法。
+GreatSQL 实现 100% 完全兼容 MySQL 及 Percona Server For MySQL 语法，支持大多数常见 Oracle 语法，包括 [数据类型兼容](./5-enhance/5-3-easyuse.md#数据类型兼容)、[函数兼容](./5-enhance/5-3-easyuse.md#函数兼容)、[SQL 语法兼容](./5-enhance/5-3-easyuse.md#sql语法兼容)、[存储程序兼容](./5-enhance/5-3-easyuse.md#存储程序兼容) 等众多兼容扩展用法。
 
 更多信息详见文档：[高兼容](./5-enhance/5-3-easyuse.md)。
 
 ### [高安全](./5-enhance/5-4-security.md)
 
-GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国密加密、敏感数据脱敏等多个安全提升特性，进一步保障业务数据安全，更适用于金融级应用场景。
+GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国密加密、敏感数据脱敏、存储登录历史等多个安全提升特性，进一步保障业务数据安全，更适用于金融级应用场景。
 
 - 支持 [mysqldump 逻辑备份加密](./5-enhance/5-4-security-mysqldump-encrypt.md)，提供了利用 mysqldump 逻辑备份的安全加密需求。
 - 支持 [Clone 备份加密](./5-enhance/5-4-security-clone-encrypt.md)，提供了利用 Clone 物理备份的安全加密需求。
 - 支持 [审计功能](./5-enhance/5-4-security-audit.md)，及时记录和发现未授权或不安全行为。
 - 支持 [InnoDB 表空间国密加密算法](./5-enhance/5-4-security-innodb-tablespace-encrypt.md)，确保重要数据的加密安全。
 - 支持 [基于函数和策略的两种数据脱敏](./5-enhance/5-4-security-data-masking.md) 工作方式，保障敏感用户数据查询结果保密性。
-- 支持 [记录指定用户的最后一次登入时间](./5-enhance/5-4-security-last-login.md)，便于管理员查询，进一步提升数据库安全性。
+- 支持 [存储登录历史](./5-enhance/5-4-security-last-login.md)，便于管理员查询，进一步提升数据库安全性。
 
 通过上述多个安全提升特性，进一步保障业务数据安全。更多信息详见文档：[高安全](./5-enhance/5-4-security.md)。
 
@@ -78,9 +81,9 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 
 ## 安装 GreatSQL
 
-### 安装 jemalloc
+### 安装 jemalloc（推荐）
 
-运行 GreatSQL 时如果有 jemalloc（推荐5.2.1+版本）支持，则数据库进程的内存分配会更稳定、高效，因此建议安装 jemalloc（不是必须安装 jemalloc）。以 CentOS 8 系统为例，采用类似下面的方法安装 jemalloc 软件包：
+运行 GreatSQL 时如果有 jemalloc 支持，则数据库进程的内存分配会更稳定、高效，因此建议安装 jemalloc（非必须）。以 CentOS 8 系统为例，采用类似下面的方法安装 jemalloc 软件包：
 
 ```
 # 先安装 epel 源
@@ -187,7 +190,6 @@ $ systemctl status mysqld
 
 ## 其他 GreatSQL 相关资源仓库
 - [GreatSQL-Docker](https://gitee.com/GreatSQL/GreatSQL-Docker)，在Docker中运行和编译GreatSQL及GreatSQL Shell
-- [GreatSQL-Ansible](https://gitee.com/GreatSQL/GreatSQL-Ansible)，利用Ansible一键安装GreatSQL并完成MGR集群部署
 
 ## GreatSQL vs MySQL
 
@@ -209,12 +211,13 @@ $ systemctl status mysqld
 |地理信息（GIS）| :heavy_check_mark: | :heavy_check_mark: |
 |基于 GTID 的复制| :heavy_check_mark: | :heavy_check_mark: |
 |组复制（MGR）| :heavy_check_mark: | :heavy_check_mark: |
-|MyRocks 引擎| :heavy_check_mark: | |
+|MyRocks 引擎| :heavy_check_mark: | ❌ |
+|支持龙芯架构| :heavy_check_mark: | ❌ |
 | **2. 性能提升扩展** | GreatSQL 8.0.32-26 | MySQL 8.0.32 |
 |AP 引擎| :heavy_check_mark: | 仅云上HeatWave |
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
 |非阻塞式 DDL| :heavy_check_mark: | ❌ |
-|无主键表导入提速 | :heavy_check_mark: | ❌ |
+|无主键表导入优化 | :heavy_check_mark: | ❌ |
 |InnoDB 并行查询| :heavy_check_mark: | 仅主键扫描 |
 |并行 LOAD DATA| :heavy_check_mark: | ❌ |
 |InnoDB 事务 ReadView 无锁优化| :heavy_check_mark: | ❌ |
@@ -246,9 +249,13 @@ $ systemctl status mysqld
 |MGR 提升-快速单主模式| :heavy_check_mark: | ❌ |
 |MGR 提升-智能选主机制| :heavy_check_mark: | ❌ |
 |MGR 提升-全新流控算法| :heavy_check_mark: | ❌ |
-|MGR 提升-自动选择 Donor 节点| :heavy_check_mark: | ❌ |
-|Clone 全备 & 增备| :heavy_check_mark: | ❌ |
+|MGR 提升-网络分区异常处理 |  :heavy_check_mark: | ❌ |
+|MGR 提升-节点异常退出处理 | :heavy_check_mark: | ❌ |
+|MGR 提升-节点磁盘满处理 | :heavy_check_mark: | ❌ |
+|MGR 提升-自动选择 donor 节点| :heavy_check_mark: | ❌ |
+|Clone 增量备份| :heavy_check_mark: | ❌ |
 |Clone 备份压缩| :heavy_check_mark: | ❌ |
+|Binlog 读取限速| :heavy_check_mark: | ❌ |
 |information_schema 表数量|95|65|
 |全局性能和状态指标|853|434|
 |优化器直方图（Histograms）| :heavy_check_mark: | :heavy_check_mark: |
