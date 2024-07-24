@@ -181,8 +181,8 @@ $ systemctl status greatsql
    CGroup: /system.slice/greatsql.service
            └─47994 /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64-minimal/bin/mysqld
 
-Jul 06 13:42:30 db170 systemd[1]: Starting GreatSQL Server...
-Jul 06 13:42:35 db170 systemd[1]: Started GreatSQL Server.
+systemd[1]: Starting GreatSQL Server...
+systemd[1]: Started GreatSQL Server.
 
 $ ps -ef | grep mysqld
 mysql      47994       1  2 13:42 ?        00:00:03 /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64-minimal/bin/mysqld
@@ -222,7 +222,7 @@ $ grep -i root /data/GreatSQL/error.log
 $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64-minimal/bin/mysql -uroot
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
-Server version: 8.0.32-26 GreatSQL, Release 26, Revision db07cc5cb73
+Server version: 8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 
 Copyright (c) 2021-2023 GreatDB Software Co., Ltd
 Copyright (c) 2009-2021 Percona LLC and/or its affiliates
@@ -232,7 +232,7 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 greatsql> \s
 --------------
-mysql  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL, Release 26, Revision db07cc5cb73)
+mysql  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL, Release 26, Revision 444164cc78e)
 
 Connection id:          8
 Current database:
@@ -241,7 +241,7 @@ SSL:                    Not in use
 Current pager:          stdout
 Using outfile:          ''
 Using delimiter:        ;
-Server version:         8.0.32-26 GreatSQL, Release 26, Revision db07cc5cb73
+Server version:         8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 Protocol version:       10
 Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4

@@ -37,7 +37,9 @@ $ systemctl stop iptables
 
 安装GreatSQL RPM包时，要先安装这些相关依赖包。
 ```
-$ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
+$ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools \
+  openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 \
+  python2 perl-JSON perl-Test-Simple
 ```
 
 如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](../4-install-guide/1-install-prepare.md)。
@@ -45,7 +47,7 @@ $ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-too
 ## 安装RPM包
 
 执行下面的命令安装PRM包，如果一切顺利的话，相应的过程如下所示：
-```
+```shell
 $ rpm -ivh --nodeps greatsql*rpm
 Verifying...                          ################################# [100%]
 Preparing...                          ################################# [100%]
@@ -56,19 +58,10 @@ Updating / installing...
    4:greatsql-server-8.0.32-26.1.el8  ################################# [ 80%]
    5:greatsql-devel-8.0.32-26.1.el8   ################################# [100%]
 ```
-这就安装成功了。
 
-**提示**：
-1. 安装GreatSQL RPM包需要先安装其他依赖包，可执行下面命令完成：
+安装 GreatSQL RPM 包的时候，可能会报告类似下面的依赖包错误提示，
 
-```
-$ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
-```
-
-如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](../4-install-guide/1-install-prepare.md)。
-
-其他部分依赖包，如果通过yum还是无法安装，则加上 `--nodeps --force` 强制忽略即可，例如：
-```
+```shell
 $ rpm -ivh greatsql*rpm
 error: Failed dependencies:
         perl(Lmo) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
@@ -79,9 +72,11 @@ error: Failed dependencies:
         perl(Percona::Toolkit) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
         perl(Quoter) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
         perl(Transformers) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
+```
 
-#上述这些依赖包可以先忽略，不影响GreatSQL正常使用
+上述这些依赖包可以先忽略，不影响 GreatSQL 正常使用。这时可以加上 `--nodeps --force` 强制忽略即可，例如：
 
+```shell
 $ rpm -ivh --nodeps --force greatsql*rpm
 Preparing...                          ################################# [100%]
 Updating / installing...
@@ -91,8 +86,6 @@ Updating / installing...
    4:greatsql-server-8.0.32-26.1.el8  ################################# [ 80%]
    5:greatsql-devel-8.0.32-26.1.el8   ################################# [100%]
 ```
-
-2. 正式安装GreatSQL RPM包时，可能还需要依赖Perl等其他软件包，此处为快速演示，因此加上 `--nodeps` 参数，忽略相应的依赖关系检查。安装完毕后，如果因为依赖关系无法启动，请再行安装相应软件依赖包。
 
 ## 启动GreatSQL
 
@@ -199,7 +192,7 @@ RPM 方式安装 GreatSQL 后，会随机生成管理员 root 的密码，通过
 
 ```shell
 $ grep -i root /var/log/mysqld.log
-2024-07-06T02:35:54.691879Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: K<f9Iapd#wwp
+[Note] [MY-010454] [Server] A temporary password is generated for root@localhost: K<f9Iapd#wwp
 ```
 
 可以看到，root 账户的密码是："K<f9Iapd#wwp" (不包含双引号)，复制到粘贴板里。
@@ -211,7 +204,7 @@ $ mysql -uroot -p
 Enter password:     #<--这个地方粘贴上面复制的随机密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
-Server version: 8.0.32-26 GreatSQL, Release 26, Revision db07cc5cb73
+Server version: 8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 
 Copyright (c) 2021-2023 GreatDB Software Co., Ltd
 Copyright (c) 2009-2021 Percona LLC and/or its affiliates
@@ -227,7 +220,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 greatsql> \s   #<--就可以正常执行其他命令了
 --------------
-mysql  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL, Release 26, Revision db07cc5cb73)
+mysql  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL, Release 26, Revision 444164cc78e)
 
 Connection id:          11
 Current database:
@@ -236,7 +229,7 @@ SSL:                    Not in use
 Current pager:          stdout
 Using outfile:          ''
 Using delimiter:        ;
-Server version:         8.0.32-26 GreatSQL, Release 26, Revision db07cc5cb73
+Server version:         8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 Protocol version:       10
 Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4

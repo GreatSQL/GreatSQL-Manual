@@ -26,13 +26,13 @@ ldd (GNU libc) 2.28
 ```
 如果您的glibc版本为2.28或更高版本，请选择带有"el8"标识的rpm包；如果您的glibc版本为2.17，请选择带有"el7"标识的rpm包。
 
-[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)下载最新的安装包，下载以下几个就可以：
+[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)下载最新的安装包，下载以下几个就可以：
 
-- greatsql-client-8.0.32-25.1.el8.x86_64.rpm 
-- greatsql-devel-8.0.32-25.1.el8.x86_64.rpm  
-- greatsql-icu-data-files-8.0.32-25.1.el8.x86_64.rpm
-- greatsql-shared-8.0.32-25.1.el8.x86_64.rpm
-- greatsql-server-8.0.32-25.1.el8.x86_64.rpm 
+- greatsql-client-8.0.32-26.1.el8.x86_64.rpm 
+- greatsql-devel-8.0.32-26.1.el8.x86_64.rpm  
+- greatsql-icu-data-files-8.0.32-26.1.el8.x86_64.rpm
+- greatsql-shared-8.0.32-26.1.el8.x86_64.rpm
+- greatsql-server-8.0.32-26.1.el8.x86_64.rpm 
 
 ##  安装GreatSQL RPM包
 
@@ -42,11 +42,11 @@ $ rpm -ivh greatsql*rpm
 Verifying...                          ################################# [100%]
 Preparing...                          ################################# [100%]
 Updating / installing...
-   1:greatsql-shared-8.0.32-25.1.el8  ################################# [ 20%]
-   2:greatsql-client-8.0.32-25.1.el8  ################################# [ 40%]
-   3:greatsql-icu-data-files-8.0.32-25################################# [ 60%]
-   4:greatsql-server-8.0.32-25.1.el8  ################################# [ 80%]
-   5:greatsql-devel-8.0.32-25.1.el8   ################################# [100%]
+   1:greatsql-shared-8.0.32-26.1.el8  ################################# [ 20%]
+   2:greatsql-client-8.0.32-26.1.el8  ################################# [ 40%]
+   3:greatsql-icu-data-files-8.0.32-26################################# [ 60%]
+   4:greatsql-server-8.0.32-26.1.el8  ################################# [ 80%]
+   5:greatsql-devel-8.0.32-26.1.el8   ################################# [100%]
 ```
 这就安装成功了。
 
@@ -63,25 +63,25 @@ $ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-too
 ```
 $ rpm -ivh greatsql*rpm
 error: Failed dependencies:
-        perl(Lmo) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
-        perl(Lmo::Meta) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
-        perl(Lmo::Object) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
-        perl(Lmo::Types) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
-        perl(Lmo::Utils) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
-        perl(Percona::Toolkit) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
-        perl(Quoter) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
-        perl(Transformers) is needed by greatsql-server-8.0.32-25.1.el8.x86_64
+        perl(Lmo) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
+        perl(Lmo::Meta) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
+        perl(Lmo::Object) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
+        perl(Lmo::Types) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
+        perl(Lmo::Utils) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
+        perl(Percona::Toolkit) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
+        perl(Quoter) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
+        perl(Transformers) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
 
 #上述这些依赖包可以先忽略，不影响GreatSQL正常使用
 
 $ rpm -ivh --nodeps --force greatsql*rpm
 Preparing...                          ################################# [100%]
 Updating / installing...
-   1:greatsql-shared-8.0.32-25.1.el7  ################################# [ 20%]
-   2:greatsql-client-8.0.32-25.1.el7  ################################# [ 40%]
-   3:greatsql-icu-data-files-8.0.32-25################################# [ 60%]
-   4:greatsql-server-8.0.32-25.1.el7  ################################# [ 80%]
-   5:greatsql-devel-8.0.32-25.1.el7   ################################# [100%]
+   1:greatsql-shared-8.0.32-26.1.el8  ################################# [ 20%]
+   2:greatsql-client-8.0.32-26.1.el8  ################################# [ 40%]
+   3:greatsql-icu-data-files-8.0.32-26################################# [ 60%]
+   4:greatsql-server-8.0.32-26.1.el8  ################################# [ 80%]
+   5:greatsql-devel-8.0.32-26.1.el8   ################################# [100%]
 ```
 
 2. 正式安装GreatSQL RPM包时，可能还需要依赖Perl等其他软件包，此处为快速演示，因此加上 `--nodeps` 参数，忽略相应的依赖关系检查。安装完毕后，如果因为依赖关系无法启动，请再行安装相应软件依赖包。
@@ -90,7 +90,7 @@ Updating / installing...
 
 ### 修改 /etc/my.cnf 配置文件
 
-[参考这份文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
+[参考这份文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 ```
 #my.cnf
 [client]
@@ -309,7 +309,7 @@ $ systemctl start mysqld
 $ systemctl status mysqld
 ● mysqld.service - MySQL Server
    Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)
-   Active: active (running) since Fri 2022-07-08 14:10:14 CST; 5min ago
+   Active: active (running) since Fri 2024-07-08 14:10:14 CST; 5min ago
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
   Process: 51902 ExecStartPre=/usr/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
@@ -320,8 +320,8 @@ $ systemctl status mysqld
    CGroup: /system.slice/mysqld.service
            └─52003 /usr/sbin/mysqld
 
-Jul 08 14:10:06 db170 systemd[1]: Starting MySQL Server...
-Jul 08 14:10:14 db170 systemd[1]: Started MySQL Server.
+systemd[1]: Starting MySQL Server...
+systemd[1]: Started MySQL Server.
 
 $ ps -ef | grep mysqld
 mysql      43653       1  3 10:35 ?        00:00:02 /usr/sbin/mysqld
@@ -350,7 +350,7 @@ mysqld  52003 mysql  mem       REG              253,0     608096   68994440 /usr
 RPM方式安装GreatSQL后，会随机生成管理员root的密码，通过搜索日志文件获取：
 ```
 $ grep -i root /data/GreatSQL/error.log
-2022-07-08T14:10:09.670473+08:00 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: ahaA(ACmw8wy
+[Note] [MY-010454] [Server] A temporary password is generated for root@localhost: ahaA(ACmw8wy
 ```
 可以看到，root账户的密码是："ahaA(ACmw8wy" (不包含双引号)，复制到粘贴板里。
 
@@ -360,7 +360,7 @@ $ mysql -uroot -p
 Enter password:     #<--这个地方粘贴上面复制的随机密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
+Server version: 8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 
 Copyright (c) 2021-2023 GreatDB Software Co., Ltd
 Copyright (c) 2009-2021 Percona LLC and/or its affiliates
@@ -376,7 +376,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 greatsql> \s   #<--就可以正常执行其他命令了
 --------------
-mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision db07cc5cb73)
+mysql  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL, Release 26, Revision 444164cc78e)
 
 Connection id:          8
 Current database:
@@ -385,7 +385,7 @@ SSL:                    Not in use
 Current pager:          stdout
 Using outfile:          ''
 Using delimiter:        ;
-Server version:         8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
+Server version:         8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 Protocol version:       10
 Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4
@@ -504,7 +504,7 @@ Please provide the password for 'root@.%2Fmysql.sock': ********  <-- 输入root�
 Save password for 'root@.%2Fmysql.sock'? [Y]es/[N]o/Ne[v]er (default No): yes  <-- 提示是否存储密码（视各公司安全规则而定，这里为了方便选择了存储密码）
 MySQL Shell 8.0.32
 ...
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
+Server version: 8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 No default schema selected; type \use <schema> to set one.
 WARNING: Found errors loading plugins, for more details look at the log at: /root/.mysqlsh/mysqlsh.log
  MySQL  localhost  JS >
@@ -554,7 +554,7 @@ Please provide the password for 'GreatSQL@172.16.16.10:3306': *************
 Save password for 'GreatSQL@172.16.16.10:3306'? [Y]es/[N]o/Ne[v]er (default No): yes
 MySQL Shell 8.0.32
 ...
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
+Server version: 8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 No default schema selected; type \use <schema> to set one.
 
 # 选定GreatSQL-01节点作为PRIMARY，开始创建MGR集群

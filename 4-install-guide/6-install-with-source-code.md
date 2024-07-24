@@ -84,8 +84,8 @@ $ docker logs greatsql_build
 1. compile patchelf
 2. entering greatsql automake
 3. greatsql automake completed
-drwxrwxr-x 13 mysql mysql       293 Feb 18 08:29 GreatSQL-8.0.32-25-centos-glibc2.28-x86_64
-/opt/GreatSQL-8.0.32-25-centos-glibc2.28-x86_64/bin/mysqld  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 79f57097e3f)
+drwxrwxr-x 13 mysql mysql       293 Feb 18 08:29 GreatSQL-8.0.32-26-centos-glibc2.28-x86_64
+/opt/GreatSQL-8.0.32-26-centos-glibc2.28-x86_64/bin/mysqld  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL, Release 26, Revision 444164cc78e)
 4. entering /bin/bash
 ```
 出现`4. entering /bin/bash`表示已经完成编译
@@ -95,7 +95,7 @@ drwxrwxr-x 13 mysql mysql       293 Feb 18 08:29 GreatSQL-8.0.32-25-centos-glibc
 如果需要的话，可以将Docker容器中的二进制包文件拷贝到宿主机上，例如：
 
 ```bash
-$ docker cp greatsql_build:/opt/GreatSQL-8.0.32-25-centos-glibc2.28-x86_64 /usr/local/
+$ docker cp greatsql_build:/opt/GreatSQL-8.0.32-26-centos-glibc2.28-x86_64 /usr/local/
 ```
 如果宿主机环境也是CentOS 8 x86_64的话，这就可以在宿主机环境下直接使用该二进制文件包了。
 

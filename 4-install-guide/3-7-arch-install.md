@@ -74,7 +74,7 @@ ldd (GNU libc) 2.38
 
 因为Arch Linux系统自带的ldd (GNU libc)版本是2.38，所以这里下载的GreatSQL二进制包选择
 
-- GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
+- GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
 
 Arch Linux系统缺少wget需要先安装wget
 
@@ -86,9 +86,9 @@ $ pacman -S wget
 
 ```bash
 $ cd /usr/local
-$ wget https://product.greatdb.com/GreatSQL-8.0.32-25/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
+$ wget https://product.greatdb.com/GreatSQL-8.0.32-26/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
 # 解压
-$ tar xf GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
+$ tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 ### 运行环境配置
@@ -99,7 +99,7 @@ $ tar xf GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 
 Arch Linux用了一个工具 pacman 作为下载软件包
 
-进入到`GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin`目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其它信息则已经不缺必要软件包
+进入到`GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin`目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其它信息则已经不缺必要软件包
 
 这里缺失了两个依赖包
 
@@ -139,7 +139,7 @@ port    = 3306
 #另外，实例启动时会生成 auto.cnf，里面的 server_uuid 值也要不同
 #server_uuid的值还可以自己手动指定，只要符合uuid的格式标准就可以
 server_id = 3306
-basedir = /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64
+basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
 datadir = /data/GreatSQL
 socket  = /data/GreatSQL/mysql.sock
 pid-file = mysql.pid
@@ -320,8 +320,8 @@ Group=mysql
 Type=notify
 TimeoutSec=0
 PermissionsStartOnly=true
-ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
-ExecStart=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
+ExecStartPre=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
+ExecStart=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
 EnvironmentFile=-/etc/sysconfig/mysql
 Restart=on-failure
 RestartPreventExitStatus=1
@@ -334,7 +334,7 @@ PrivateTmp=false
 把GreatSQL添加进环境变量
 
 ```bash
-$ echo 'export PATH=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
+$ echo 'export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
 $ source ~/.bash_profile
 ```
 
@@ -345,20 +345,20 @@ $ systemctl start greatsql
 $ systemctl status greatsql
 ● greatsql.service - GreatSQL Server
      Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; preset: disabled)
-     Active: active (running) since Fri 2023-12-01 10:30:29 CST; 4s ago
+     Active: active (running) since Fri 2024-07-08 10:30:29 CST; 4s ago
        Docs: man:mysqld(8)
              http://dev.mysql.com/doc/refman/en/using-systemd.html
-    Process: 712571 ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+    Process: 712571 ExecStartPre=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
    Main PID: 712708 (mysqld)
      Status: "Server is operational"
      Memory: 2.5G
         CPU: 4.549s
      CGroup: /system.slice/greatsql.service
-             └─712708 /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
+             └─712708 /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld
 
-Dec 01 10:30:24 myarch systemd[1]: Starting GreatSQL Server...
-Dec 01 10:30:28 myarch (mysqld)[712708]: greatsql.service: Referenced but unset environment variable evaluates to an empty string: MYSQLD_OPTS
-Dec 01 10:30:29 myarch systemd[1]: Started GreatSQL Server.
+systemd[1]: Starting GreatSQL Server...
+(mysqld)[712708]: greatsql.service: Referenced but unset environment variable evaluates to an empty string: MYSQLD_OPTS
+systemd[1]: Started GreatSQL Server.
 ```
 
 在上面进行GreatSQL初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
@@ -375,7 +375,7 @@ $ mysql -uroot -p
 Enter password:
 
 # 进入数据库后可以看到版本
-Server version: 8.0.32-25
+Server version: 8.0.32-26
 ```
 
 首次登入立刻提醒该密码已过期，需要修改，执行类似下面的命令修改即可：
@@ -391,20 +391,20 @@ GreatSQL数据库安装并初始化完毕
 
 为了支持仲裁节点特性，需要安装GreatSQL Shell。打开GreatSQL下载页面找到
 
-- greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64.tar.xz
+- greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 
 下载相应的MySQL Shell安装包（目前只提供二进制安装包）并解压
 
 ```bash
 $ cd /usr/local
-$ wget https://product.greatdb.com/GreatSQL-8.0.25-16/greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64.tar.xz
-$ tar xf greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64.tar.xz
+$ wget https://product.greatdb.com/GreatSQL-8.0.32-25/greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
+$ tar xf greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 进入bin目录查看下缺少什么依赖
 
 ```bash
-$ cd /usr/local/greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64/bin
+$ cd /usr/local/greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64/bin
 $ ldd mysqlsh | grep "not found"
         libssl.so.1.1 => not found
         libcrypto.so.1.1 => not found
@@ -433,8 +433,8 @@ $ ldd mysqlsh | grep "not found"
 没有缺失依赖的话，接下来就可以体验MySQL Shell了
 
 ```sql
-$ /usr/local/greatsql-shell-8.0.25-16-Linux-glibc2.28-x86_64/bin/mysqlsh
-MySQL Shell 8.0.25
+$ /usr/local/greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqlsh
+MySQL Shell 8.0.32
 
 Copyright (c) 2016, 2021, Oracle and/or its affiliates.
 Oracle is a registered trademark of Oracle Corporation and/or its affiliates.

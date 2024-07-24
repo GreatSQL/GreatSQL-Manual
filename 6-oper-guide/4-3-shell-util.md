@@ -12,7 +12,7 @@ MySQL Shell中提供了Utilities工具包，可用于对数据库进行备份和
 $ mysqlsh -S/data/GreatSQL/mysql.sock -uroot -p
 MySQL Shell 8.0.32
 ...
-Server version: 8.0.32-25  GreatSQL, Release 25, Revision db07cc5cb73
+Server version: 8.0.32-26  GreatSQL, Release 26, Revision 444164cc78e
 No default schema selected; type \use <schema> to set one.
  MySQL  localhost  JS >
 ```
@@ -89,7 +89,7 @@ Util.loadDump: local_infile disabled in server (MYSQLSH 53025)
  MySQL  localhost  JS > util.loadDump("/data/backup/20230830", {excludeSchemas: ["sys_audit"]})
 Loading DDL and Data from '/data/backup/20230830' using 4 threads.
 Opening dump...
-Target is MySQL 8.0.32-25. Dump was produced from MySQL 8.0.32-25
+Target is GreatSQL 8.0.32-26. Dump was produced from GreatSQL 8.0.32-26
 NOTE: Load progress file detected. Load will be resumed from where it was left, assuming no external updates were made.
 You may enable the 'resetProgress' option to discard progress for this MySQL instance and force it to be completely reloaded.
 Scanning metadata - done
@@ -110,7 +110,7 @@ Recreating indexes - done
  MySQL  localhost  JS > util.loadDump("/data/backup/20230830")
 Loading DDL and Data from '/data/backup/20230830' using 4 threads.
 Opening dump...
-Target is MySQL 88.0.32-25 Dump was produced from MySQL 8.0.32-25
+Target is GreatSQL 8.0.32-26 Dump was produced from GreatSQL 8.0.32-26
 Scanning metadata - done
 Checking for pre-existing objects...
 ERROR: Schema `sys_audit` already contains a table named audit_log

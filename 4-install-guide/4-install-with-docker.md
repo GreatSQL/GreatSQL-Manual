@@ -38,12 +38,16 @@ Using default tag: latest
 Trying to pull repository docker.io/greatsql/greatsql ...
 latest: Pulling from docker.io/greatsql/greatsql
 ...
-Digest: sha256:03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1
+Digest: sha256:27255f94207ceec4302d4fb6f83c4b610e177f57e66347766befb69d1bae91e8
 Status: Downloaded newer image for greatsql/greatsql:latest
 docker.io/greatsql/greatsql:latest
 ```
 
-若是arm的架构拉取请使用`docker pull greatsql/greatsql:8.0.32-25-aarch64`
+若由于网络原因无法从 docker.io 拉取 GreatSQL 镜像的话，可以改成从阿里云拉取，方法如下：
+
+```shell
+$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
+```
 
 检查是否成功拉取
 
@@ -79,9 +83,9 @@ $ docker exec -it greatsql /bin/bash
 [root@greatsql /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 12
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
+Server version: 8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 ...
-Server version:        8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
+Server version:        8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 ...
 
 Threads: 2  Questions: 18  Slow queries: 0  Opens: 119  Flush tables: 3  Open tables: 36  Queries per second avg: 0.243
@@ -201,20 +205,20 @@ $ docker exec -it mgr2 bash
 [root@mgr2 /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 30
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
+Server version: 8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-(Tue Jul 12 14:28:00 2022)[root@GreatSQL][(none)]> \s
+[root@GreatSQL][(none)]> \s
 --------------
-mysql  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision db07cc5cb73)
+mysql  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL, Release 26, Revision 444164cc78e)
 ...
 Uptime:            1 min 38 sec
 
 Threads: 11  Questions: 52  Slow queries: 0  Opens: 145  Flush tables: 3  Open tables: 62  Queries per second avg: 0.530
 --------------
 
-(Tue Jul 12 14:28:05 2022)[root@GreatSQL][(none)]> SELECT * FROM performance_schema.replication_group_members;
+[root@GreatSQL][(none)]> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+

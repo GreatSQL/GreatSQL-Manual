@@ -1,7 +1,9 @@
 # Ansible安装
 ---
 
-本次介绍如何利用ansible快速安装GreatSQL并构建包含仲裁节点的MGR集群。
+本节介绍如何利用ansible快速安装GreatSQL并构建包含仲裁节点的MGR集群。
+
+推荐采用更好用的 Ansible 项目 [dbops](https://gitee.com/fanderchan/dbops) 来安装 GreatSQL，本文截止 GreatSQL 8.0.32-25 版本已不再更新。
 
 ##  安装准备
 
@@ -215,8 +217,8 @@ $ systemctl status greatsql
    CGroup: /system.slice/greatsql.service
            └─78043 /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal/bin/mysqld
 
-Jul 13 15:46:17 GreatSQL-01 systemd[1]: Starting GreatSQL Server...
-Jul 13 15:46:21 GreatSQL-01 systemd[1]: Started GreatSQL Server.
+systemd[1]: Starting GreatSQL Server...
+systemd[1]: Started GreatSQL Server.
 ```
 
 检查MGR服务运行状态：

@@ -39,9 +39,15 @@ latest: Pulling from greatsql/greatsql
 a1d0c7532777: Already exists
 0689c7a54f49: Pull complete
 ...
-Digest: sha256:03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1
+Digest: sha256:27255f94207ceec4302d4fb6f83c4b610e177f57e66347766befb69d1bae91e8
 Status: Downloaded newer image for greatsql/greatsql:latest
 docker.io/greatsql/greatsql:latest
+```
+
+若由于网络原因无法从 docker.io 拉取 GreatSQL 镜像的话，可以改成从阿里云拉取，方法如下：
+
+```shell
+$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
 ```
 
 ### 3. 创建一个新容器
@@ -87,10 +93,10 @@ Your MySQL connection id is 8
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-(Wed Jul  6 14:42:39 2022)[root@GreatSQL][(none)]>\s
+[root@GreatSQL][(none)]>\s
 --------------
 ...
-Server version:        8.0.32-26 GreatSQL, Release 26, Revision db07cc5cb73
+Server version:        8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 ...
 Threads: 2  Questions: 6  Slow queries: 0  Opens: 119  Flush tables: 3  Open tables: 36  Queries per second avg: 0.017
 ```
