@@ -69,7 +69,7 @@ GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引
 |MyRocks引擎| :heavy_check_mark: | |
 | **2. 性能提升扩展** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
 |AP引擎| :heavy_check_mark: | 仅云上HeatWave |
-|InnODB并行查询| :heavy_check_mark: | 仅主键扫描 |
+|InnoDB并行查询| :heavy_check_mark: | 仅主键扫描 |
 |并行LOAD DATA| :heavy_check_mark: | ❌ |
 |InnoDB事务ReadView无锁优化| :heavy_check_mark: | ❌ |
 |InnoDB事务大锁拆分优化| :heavy_check_mark: | ❌ |

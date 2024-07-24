@@ -204,6 +204,9 @@ upgrade = AUTO
 |MGR 提升-快速单主模式| :heavy_check_mark: | ❌ |
 |MGR 提升-智能选主机制| :heavy_check_mark: | ❌ |
 |MGR 提升-全新流控算法| :heavy_check_mark: | ❌ |
+|MGR 提升-网络分区异常处理 |  :heavy_check_mark: | ❌ |
+|MGR 提升-节点异常退出处理 | :heavy_check_mark: | ❌ |
+|MGR 提升-节点磁盘满处理 | :heavy_check_mark: | ❌ |
 |MGR 提升-自动选择 donor 节点| :heavy_check_mark: | ❌ |
 |Clone 增量备份| :heavy_check_mark: | ❌ |
 |Clone 备份压缩| :heavy_check_mark: | ❌ |
