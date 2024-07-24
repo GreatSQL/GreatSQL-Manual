@@ -9,42 +9,65 @@ GreatSQL 8.0相对于GreatSQL 5.7有着众多优秀新特性，包括且不仅�
 
 | 特性 |  GreatSQL 8.0 |GreatSQL/MySQL 5.7 |
 | --- | ---|---|
+|支持龙芯架构| :heavy_check_mark: | ❌ |
 |AP引擎| :heavy_check_mark: | 仅云上HeatWave |
 |并行LOAD DATA| :heavy_check_mark: | ❌ |
 |InnoDB事务ReadView无锁优化| :heavy_check_mark: | ❌ |
 |InnoDB事务大锁拆分优化| :heavy_check_mark: | ❌ |
 |快速DDL| :heavy_check_mark: | :heavy_check_mark: |
+|NUMA 亲和性优化| :heavy_check_mark: | ❌ |
+|非阻塞式 DDL| :heavy_check_mark: | ❌ |
+|无主键表导入优化 | :heavy_check_mark: | ❌ |
+|InnoDB 并行查询| :heavy_check_mark: | 仅主键扫描 |
+|并行 LOAD DATA| :heavy_check_mark: | ❌ |
 |DDL原子性| :heavy_check_mark: | :heavy_check_mark: |
-|MGR提升-地理标签| :heavy_check_mark: | ❌ |
-|MGR提升-仲裁节点| :heavy_check_mark: | ❌ |
-|MGR提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
-|MGR提升-快速单主模式| :heavy_check_mark: | ❌ |
-|MGR提升-智能选主机制| :heavy_check_mark: | ❌ |
-|MGR提升-全新流控算法| :heavy_check_mark: | ❌ |
-|MGR提升-网络分区异常处理 |  :heavy_check_mark: | ❌ |
-|MGR提升-节点异常退出处理 | :heavy_check_mark: | ❌ |
-|MGR提升-节点磁盘满处理 | :heavy_check_mark: | ❌ |
+|InnoDB 事务 ReadView 无锁优化| :heavy_check_mark: | ❌ |
+|InnoDB 事务大锁拆分优化| :heavy_check_mark: | ❌ |
+|InnoDB 资源组| :heavy_check_mark: | :heavy_check_mark: |
+|Contention-Aware Transaction Scheduling| :heavy_check_mark: | :heavy_check_mark: |
+|InnoDB Mutexes 拆分优化| :heavy_check_mark: | ❌ |
+|MEMORY 引擎优化| :heavy_check_mark: | ❌ |
+|InnoDB Flushing 优化| :heavy_check_mark: | ❌ |
+|InnoDB 快速索引创建优化| :heavy_check_mark: | ❌ |
+|并行 Doublewrite Buffer| :heavy_check_mark: | :heavy_check_mark: |
+|MGR 提升-地理标签| :heavy_check_mark: | ❌ |
+|MGR 提升-仲裁节点| :heavy_check_mark: | ❌ |
+|MGR 提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
+|MGR 提升-快速单主模式| :heavy_check_mark: | ❌ |
+|MGR 提升-智能选主机制| :heavy_check_mark: | ❌ |
+|MGR 提升-全新流控算法| :heavy_check_mark: | ❌ |
+|MGR 提升-网络分区异常处理 |  :heavy_check_mark: | ❌ |
+|MGR 提升-节点异常退出处理 | :heavy_check_mark: | ❌ |
+|MGR 提升-节点磁盘满处理 | :heavy_check_mark: | ❌ |
+|MGR 提升-自动选择 donor 节点| :heavy_check_mark: | ❌ |
 |Oracle兼容-数据类型| :heavy_check_mark: | ❌ |
 |Oracle兼容-函数| :heavy_check_mark: | ❌ |
 |Oracle兼容-SQL语法| :heavy_check_mark: | ❌ |
 |Oracle兼容-存储程序| :heavy_check_mark: | ❌ |
-| Hash Join|  :heavy_check_mark: | ❌ |
-| Anti Join优化 |  :heavy_check_mark: | ❌ |
-| 直方图 |  :heavy_check_mark: | ❌ |
-| 倒序索引 |  :heavy_check_mark: | ❌ |
-| 不可见索引 |  :heavy_check_mark: | ❌ |
-| 函数索引/表达式索引 |  :heavy_check_mark: | ❌ |
-| 多值索引 |  :heavy_check_mark: | ❌ |
-| CTE |  :heavy_check_mark: | ❌ |
-| 窗口函数 |  :heavy_check_mark: | ❌ |
-| EXPLAIN ANALYZE | :heavy_check_mark: | ❌ | 
-| Clone Plugin | :heavy_check_mark: | ❌ | 
-| 全新数据字典 | :heavy_check_mark: | ❌ | 
-| 升级更灵活 | :heavy_check_mark: | ❌ |  
-| 数个安全增强 | :heavy_check_mark: | ❌ | 
-| 数个InnODB增强 | :heavy_check_mark: | ❌ | 
-| 数个优化器增强 |  :heavy_check_mark: | ❌ |
+|Clone 增量备份| :heavy_check_mark: | ❌ |
+|Clone 备份压缩| :heavy_check_mark: | ❌ |
+|Binlog 读取限速| :heavy_check_mark: | ❌ |
+|Hash Join|  :heavy_check_mark: | ❌ |
+|Anti Join优化 |  :heavy_check_mark: | ❌ |
+|优化器直方图（Histograms）| :heavy_check_mark: | :heavy_check_mark: |
+|倒序索引 |  :heavy_check_mark: | ❌ |
+|不可见索引 |  :heavy_check_mark: | ❌ |
+|函数索引/表达式索引 |  :heavy_check_mark: | ❌ |
+|多值索引 |  :heavy_check_mark: | ❌ |
+|CTE |  :heavy_check_mark: | ❌ |
+|窗口函数 |  :heavy_check_mark: | ❌ |
+|EXPLAIN ANALYZE | :heavy_check_mark: | ❌ | 
+|Clone Plugin | :heavy_check_mark: | ❌ | 
+|全新数据字典 | :heavy_check_mark: | ❌ | 
+|升级更灵活 | :heavy_check_mark: | ❌ |  
+|多个安全增强 | :heavy_check_mark: | ❌ | 
+|多个InnoDB增强 | :heavy_check_mark: | ❌ | 
+|多个优化器增强 |  :heavy_check_mark: | ❌ |
+|线程池（Threadpool）| :heavy_check_mark: | 仅企业版 |
+|备份锁| :heavy_check_mark: | ❌ |
 |国密支持| :heavy_check_mark: | ❌ |
+|数据脱敏| :heavy_check_mark: | ❌ |
+|最后登录记录| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
 |审计日志入库| :heavy_check_mark: | ❌ |
 
@@ -72,8 +95,7 @@ GreatSQL 8.0相对于GreatSQL 5.7有着众多优秀新特性，包括且不仅�
 
 ### 升级准备
 
-
-首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-25版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，至于选择RPM还是二进制包看具体情况及个人喜好。
+首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-26版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-26)，至于选择RPM还是二进制包看具体情况及个人喜好。
 
 本文假定升级前后都是二进制包方式安装。
 
@@ -153,10 +175,10 @@ upgrade = FORCE
 [System] [MY-011012] [Server] Starting upgrade of data directory.
 ...
 [System] [MY-011003] [Server] Finished populating Data Dictionary tables with data.
-[System] [MY-013381] [Server] Server upgrade from '50700' to '80025' started.
-[System] [MY-013381] [Server] Server upgrade from '50700' to '80025' completed.
+[System] [MY-013381] [Server] Server upgrade from '50700' to '80032' started.
+[System] [MY-013381] [Server] Server upgrade from '50700' to '80032' completed.
 ...
-[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-25'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 25, Revision db07cc5cb73.
+[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-26'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 26, Revision 444164cc78e.
 ```
 
 是不是觉得有点惊喜，有点意外，怎么怎么简单，事实的确如此。
@@ -173,7 +195,7 @@ upgrade = FORCE
 [Note] [MY-011008] [Server] Finished migrating TABLE statistics data.
 [Note] [MY-011008] [Server] Finished migrating TABLE statistics data.
 [Note] [MY-010006] [Server] Using data dictionary with version '80023'.
-[System] [MY-013381] [Server] Server upgrade from '50700' to '80025' started.
+[System] [MY-013381] [Server] Server upgrade from '50700' to '80032' started.
 [Note] [MY-013386] [Server] Running queries to upgrade MySQL server.
 ...
 [Note] [MY-012477] [InnoDB] DDL log insert : [DDL record: REMOVE CACHE, id=1, thread_id=5, table_id=1072, new_file_path=mysql/default_roles
@@ -202,9 +224,9 @@ upgrade = FORCE
 [Note] [MY-013394] [Server] Checking 'mysql' schema.
 [Note] [MY-013394] [Server] Checking 'greatsql' schema.
 [Note] [MY-013394] [Server] Checking 'sys' schema.
-[System] [MY-013381] [Server] Server upgrade from '50700' to '80025' completed.
+[System] [MY-013381] [Server] Server upgrade from '50700' to '80032' completed.
 ...
-[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-25'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 25, Revision db07cc5cb73.
+[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-26'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 26, Revision 444164cc78e.
 ```
 这样就完成升级了，非常便捷省事。
 
@@ -219,15 +241,15 @@ upgrade = FORCE
 确定升级完成后，记得注释掉 `my.cnf` 文件中的 `upgrade = FORCE` 选项，或者将其修改成 `upgrade = AUTO`。
 
 ## 升级GreatSQL 8.0.25到8.0.32 
-GreatSQL 8.0.32相对于8.0.25版本，新增了更多SQL语法兼容性、MGR层支持绑定VIP、支持并行LOAD DATA、在安全方面支持国密加密&备份加密等非常不错的特性，强烈建议升级到最新的GreatSQL 8.0.32版本。
+GreatSQL 8.0.32相对于8.0.25版本，新增了Rapid引擎、更多SQL语法兼容性、MGR层支持绑定VIP、支持并行LOAD DATA、在安全方面支持国密加密&备份加密等非常不错的特性，强烈建议升级到最新的GreatSQL 8.0.32版本。
 
 从GreatSQL 8.0.25升级到8.0.32版本过程较为简单：
 
-1. 下载最新[GreatSQL 8.0.32二进制包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25)，并解压缩到相应目录下。
+1. 下载最新[GreatSQL 8.0.32二进制包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)，并解压缩到相应目录下。
 
 2. 在数据库维护期间关闭GreatSQL 8.0.25版本数据库。关闭前，先执行 `SET GLOBAL innodb_fast_shutdown = 0`，确保停机时得到一份完整、干净的数据文件。
 
-3. 修改my.cnf，调整basedir，指向新版本二进制包路径。可参考这份[my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25)。
+3. 修改my.cnf，调整basedir，指向新版本二进制包路径。可参考这份[my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)。
 
 4. 重启新的GreatSQL 8.0.32版本数据库服务进程，即可实现原地升级（in-place upgrade），可以看到日志中有类似下面的内容：
 ```

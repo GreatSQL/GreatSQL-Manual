@@ -9,10 +9,15 @@ GreatSQL是在Percona Server for MySQL（简称Percona）的基础上Fork的开�
 
 GreatSQL相对于Percona有着众多优秀特性，包括且不仅限以下：
 
-| **2. 性能提升扩展** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
+| **1.主要特性** | GreatSQL 8.0.32-26 | Percona 8.0.32-24 |
+|支持龙芯架构| :heavy_check_mark: | ❌ |
+| **2. 性能提升扩展** | GreatSQL 8.0.32-26 | Percona 8.0.32-24 |
 | :--- | :---: | :---: |
 |AP引擎| :heavy_check_mark: | 仅云上HeatWave |
-|InnODB并行查询| :heavy_check_mark: | 仅主键扫描 |
+|NUMA 亲和性优化| :heavy_check_mark: | ❌ |
+|非阻塞式 DDL| :heavy_check_mark: | ❌ |
+|无主键表导入优化 | :heavy_check_mark: | ❌ |
+|InnoDB并行查询| :heavy_check_mark: | 仅主键扫描 |
 |并行LOAD DATA| :heavy_check_mark: | ❌ |
 |InnoDB事务ReadView无锁优化| :heavy_check_mark: | ❌ |
 |InnoDB事务大锁拆分优化| :heavy_check_mark: | ❌ |
@@ -22,16 +27,25 @@ GreatSQL相对于Percona有着众多优秀特性，包括且不仅限以下：
 |Oracle兼容-SQL语法| :heavy_check_mark: | ❌ |
 |Oracle兼容-存储程序| :heavy_check_mark: | ❌ |
 | **4. 基础特性提升改进** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
-|MGR提升-地理标签| :heavy_check_mark: | ❌ |
-|MGR提升-仲裁节点| :heavy_check_mark: | ❌ |
-|MGR提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
-|MGR提升-快速单主模式| :heavy_check_mark: | ❌ |
-|MGR提升-智能选主机制| :heavy_check_mark: | ❌ |
-|MGR提升-全新流控算法| :heavy_check_mark: | ❌ |
+|MGR 提升-地理标签| :heavy_check_mark: | ❌ |
+|MGR 提升-仲裁节点| :heavy_check_mark: | ❌ |
+|MGR 提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
+|MGR 提升-快速单主模式| :heavy_check_mark: | ❌ |
+|MGR 提升-智能选主机制| :heavy_check_mark: | ❌ |
+|MGR 提升-全新流控算法| :heavy_check_mark: | ❌ |
+|MGR 提升-网络分区异常处理 |  :heavy_check_mark: | ❌ |
+|MGR 提升-节点异常退出处理 | :heavy_check_mark: | ❌ |
+|MGR 提升-节点磁盘满处理 | :heavy_check_mark: | ❌ |
+|MGR 提升-自动选择 donor 节点| :heavy_check_mark: | ❌ |
+|Clone 增量备份| :heavy_check_mark: | ❌ |
+|Clone 备份压缩| :heavy_check_mark: | ❌ |
+|Binlog 读取限速| :heavy_check_mark: | ❌ |
 | **5.安全性提升** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
 |国密支持| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
+|基于策略的数据脱敏| :heavy_check_mark: | ❌ |
 |审计日志入库| :heavy_check_mark: | ❌ |
+|最后登录记录| :heavy_check_mark: | ❌ |
 
 
 
