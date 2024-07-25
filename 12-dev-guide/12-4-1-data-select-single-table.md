@@ -3,7 +3,7 @@
 
 本节介绍如何使用 SELECT 命令来对GreatSQL数据库中的数据进行查询。
 
-本章将使用 [文档约定](./12-dev-guide.md) 中提到的样例数据库
+本节将使用 [文档约定](./12-dev-guide.md) 中提到的样例数据库
 - employee data (large dataset, includes data and test/verification suite)
 - world database
 - sakila database

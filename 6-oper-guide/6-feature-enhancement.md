@@ -2,7 +2,7 @@
 
 ---
 
-本章文档主要介绍GreatSQL数据库的运维特性增强。
+本节文档介绍GreatSQL数据库的运维特性增强。
 
 
 GreatSQL 相较于 MySQL 增加了许多运维特性增强，例如用户统计功能、ProcFS 插件、带字典的压缩列、扩展显示InnoDB引擎状态、扩展显示授权、改进对损坏表处理、及新增的许多INFORMATION_SCHEMA表等

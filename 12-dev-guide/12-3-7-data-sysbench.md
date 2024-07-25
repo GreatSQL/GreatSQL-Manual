@@ -1,5 +1,7 @@
 # 使用sysbench生成测试数据
+
 sysbench是一个轻量级且功能强大的基准测试工具，用于评估系统的性能。它支持CPU、内存、线程和I/O等性能测试，并且特别适用于数据库的性能测试，如MySQL、GreatSQL等。通过模拟真实的应用场景和工作负载，sysbench可以帮助用户快速了解系统的性能瓶颈，并据此进行系统优化和硬件选型
+
 ## 安装sysbench
 
 centos系统下安装sysbench
@@ -30,7 +32,7 @@ $ mysql -u root -p
 greatsql> CREATE DATABASE sysbench_test;
 Query OK, 1 row affected (0.03 sec)
 ```
-执行以下命令，本章主要为了演示方法，因此把table_size设置的小一点
+执行以下命令，本节主要为了演示方法，因此把table_size设置的小一点
 ```bash
 $ sysbench /usr/share/sysbench/oltp_read_write.lua --tables=5 --table_size=100 --mysql-user=root --mysql-password=GreatSQL@2024 --mysql-socket=/var/lib/mysql/mysql.sock --mysql-db=sysbench_test prepare
 

@@ -34,7 +34,7 @@ $ mysql -u root -p
 greatsql> CREATE DATABASE sysbench_test;
 Query OK, 1 row affected (0.03 sec)
 ```
-执行以下命令，本章主要为了演示方法，因此把table_size设置的小一点
+执行以下命令，本节主要为了演示方法，因此把table_size设置的小一点
 ```bash
 $ sysbench /usr/share/sysbench/oltp_read_write.lua --tables=5 --table_size=100 --mysql-user=root --mysql-password=GreatSQL@2024 --mysql-socket=/var/lib/mysql/mysql.sock --mysql-db=sysbench_test prepare
 

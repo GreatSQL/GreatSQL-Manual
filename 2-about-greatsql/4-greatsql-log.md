@@ -2,7 +2,7 @@
 
 ---
 
-本章文档主要介绍 GreatSQL 中的几个重要日志。
+本节介绍 GreatSQL 中的几个重要日志。
 
 ## [Error Log/错误日志](./4-1-greatsql-error-log.md)
 

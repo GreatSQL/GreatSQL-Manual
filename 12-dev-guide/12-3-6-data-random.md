@@ -1,7 +1,9 @@
 # 生成随机测试数据
-本章节将使用mysql_random_data_load、Shell脚本、存储过程/函数向GreatSQL数据库生存随机测试数据。
 
-在 [概述章节](./12-dev-guide.md) 已安装样例数据库，若有需要生成额外测试数据，可参考本章节。
+本节介绍使用mysql_random_data_load、Shell脚本、存储过程/函数向GreatSQL数据库生存随机测试数据。
+
+在 [概述章节](./12-dev-guide.md) 已安装样例数据库，若有需要生成额外测试数据，可参考本节内容。
+
 ## mysql_random_data_load 生成随机数据
 
 mysql_random_data_load 是使用 Go 语言开发的 MySQL/GreatSQL 随机造数工具，可从下方链接中直接下载编译完成的二进制程序。
