@@ -297,7 +297,8 @@ greatsql> INSERT INTO t1(data) VALUES ('{"name": "乌孙怀玉", "age": 30, "cit
 
 3. **查询JSON数据**：
 
-    - 获取整个JSON字段：
+  - 获取整个JSON字段：
+
 ```sql
 greatsql> SELECT data FROM t1 WHERE id = 1;
 +--------------------------------------------------------+
@@ -307,7 +308,7 @@ greatsql> SELECT data FROM t1 WHERE id = 1;
 +--------------------------------------------------------+
 ```
 
-    - 获取JSON字段的某个属性：
+  - 获取JSON字段的某个属性：
 
 ```sql
 greatsql> SELECT data->'$.name' AS name FROM t1 WHERE id = 1;
