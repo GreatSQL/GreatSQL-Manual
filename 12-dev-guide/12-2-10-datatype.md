@@ -284,56 +284,57 @@ JSON 数据类型理论上可以存储任何有效的 JSON 文档，包括数字
 
 
 1. **创建表并使用JSON字段**：
-    ```sql
-    greatsql> CREATE TABLE t1(
-        id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        data JSON);
-    ```
+```sql
+greatsql> CREATE TABLE t1(
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    data JSON);
+```
 
 2. **插入JSON数据**：
-    ```sql
-    greatsql> INSERT INTO t1(data) VALUES ('{"name": "乌孙怀玉", "age": 30, "city": "Beijing"}');
-    ```
+```sql
+greatsql> INSERT INTO t1(data) VALUES ('{"name": "乌孙怀玉", "age": 30, "city": "Beijing"}');
+```
 
 3. **查询JSON数据**：
     - 获取整个JSON字段：
-      ```sql
-      greatsql> SELECT data FROM t1 WHERE id = 1;
-      +--------------------------------------------------------+
-      | data                                                   |
-      +--------------------------------------------------------+
-      | {"age": 30, "city": "Beijing", "name": "乌孙怀玉"}     |
-      +--------------------------------------------------------+
-      ```
+```sql
+greatsql> SELECT data FROM t1 WHERE id = 1;
++--------------------------------------------------------+
+| data                                                   |
++--------------------------------------------------------+
+| {"age": 30, "city": "Beijing", "name": "乌孙怀玉"}     |
++--------------------------------------------------------+
+```
     - 获取JSON字段的某个属性：
-      ```sql
-      greatsql> SELECT data->'$.name' AS name FROM t1 WHERE id = 1;
-      +----------------+
-      | name           |
-      +----------------+
-      | "乌孙怀玉"     |
-      +----------------+
+```sql
+greatsql> SELECT data->'$.name' AS name FROM t1 WHERE id = 1;
++----------------+
+| name           |
++----------------+
+| "乌孙怀玉"     |
++----------------+
 
-      greatsql> SELECT data->>'$.name' AS name FROM t1 WHERE id = 1;
-      +--------------+
-      | name         |
-      +--------------+
-      | 乌孙怀玉     |
-      +--------------+
-      ```
+greatsql> SELECT data->>'$.name' AS name FROM t1 WHERE id = 1;
++--------------+
+| name         |
++--------------+
+| 乌孙怀玉     |
++--------------+
+```
 
 > `->` 操作符：用于从 JSON 字段中提取 JSON 值。返回的值仍然是 JSON 格式。
+>
 > `->>` 操作符：用于从 JSON 字段中提取纯文本值。返回的值是纯文本格式。
 
 4. **更新JSON数据**：
-    ```sql
-    greatsql> UPDATE t1 SET data = JSON_SET(data, '$.age', 31) WHERE id = 1;
-    ```
+```sql
+greatsql> UPDATE t1 SET data = JSON_SET(data, '$.age', 31) WHERE id = 1;
+```
 
 5. **删除JSON字段的某个属性**：
-    ```sql
-    greatsql> UPDATE t1 SET data = JSON_REMOVE(data, '$.city') WHERE id = 1;
-    ```
+```sql
+greatsql> UPDATE t1 SET data = JSON_REMOVE(data, '$.city') WHERE id = 1;
+```
 
 6. 使用注意事项
 
