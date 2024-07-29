@@ -443,6 +443,83 @@ BLOB（Binary Large Object）数据类型用于存储二进制数据，如图像
 
 这两种数据类型相对较少使用，如果有需要建议改成用 TINYINT/SMALLINT 来表示，性能更好，业务中使用起来也更灵活。
 
+## 行记录大小限制说明
+
+1. 每行记录存储的最大长度为 65535 字节。如果是 TEXT/BLOB 类型的列，实际上只存储 9-12 字节指针，指向 TEXT/BLOB 列实际存储的数据页（InnoDB data page）。
+
+2. 在每个数据页中存储的每行记录实际上最大长度大约是 `innodb_page_size` 的一半，默认配置下约为 8KB（`innodb_page_size` 默认值为 16KB）。如果设置 `innodb_page_size` 为 32KB，则数据页中存储的每行记录实际的最大长度约为 16KB。超出的部分，会根据各列的实际长度倒序排，依次将最大的列数据存储在额外的page中（称为 off-page），直到剩下的列总长度不大于 `innodb_page_size` 的一半为止，这个处理方式也称为行溢出（overflow），用于存储超长列的页称为溢出页（overflow page）。
+
+**建议**
+> 1. 设计表结构时，尽量保证所有列长度加起来不超过 `innodb_page_size` 的一半大小。可能存储较大数据的列，尤其是较长的 VARCHAR 列（一般是指长度超过 512 字节），以及 TEXT/BLOB 列，最好是将它们单独放在另外的表中，和其他 INT 等较小的列区分开。
+> 
+> 2. 存储实际用户数据时，尽量保证存储的行长度不超过 `innodb_page_size` 的一半大小，一旦超过就会发生行溢出，对性能影响较大。
+
+示例：
+
+```sql
+greatsql> CREATE TABLE t1(
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  c1 VARCHAR(200) NOT NULL,
+  c2 VARCHAR(600) NOT NULL,
+  c3 VARCHAR(6000) NOT NULL,
+  c4 VARCHAR(9580) NOT NULL);
+Query OK, 0 rows affected (0.00 sec)
+
+-- 加长c4列，所有列定义总长度超过16382，报错
+greatsql> CREATE TABLE t1(
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  c1 VARCHAR(200) NOT NULL,
+  c2 VARCHAR(600) NOT NULL,
+  c3 VARCHAR(6000) NOT NULL,
+  c4 VARCHAR(9581) NOT NULL);
+ERROR 1118 (42000): Row size too large. The maximum row size for the used table type, not counting BLOBs, is 65535. This includes storage overhead, check the manual. You have to change some columns to TEXT or BLOBs
+
+-- 计算所有列总长度，ROW_SIZE=65531 未超
+-- 超过255字节的VARCHAR列要额外增加2字节
+greatsql> SELECT 4 + (200*4+2) + (600*4+2) + (6000*4+2) + (9580*4+2) AS ROW_SIZE;
++----------+
+| ROW_SIZE |
++----------+
+|    65532 |
++----------+
+
+-- 计算所有列总长度，ROW_SIZE=65535 超长
+greatsql> SELECT 4 + (200*4+2) + (600*4+2) + (6000*4+2) + (9581*4+2) AS ROW_SIZE;
++----------+
+| ROW_SIZE |
++----------+
+|    65536 |
++----------+
+
+-- 包含TEXT类型
+greatsql> CREATE TABLE t1(
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  c1 VARCHAR(200) NOT NULL,
+  c2 VARCHAR(600) NOT NULL,
+  c3 VARCHAR(6000) NOT NULL,
+  c4 VARCHAR(9580) NOT NULL,
+  c5 TEXT NOT NULL);
+ERROR 1118 (42000): Row size too large. The maximum row size for the used table type, not counting BLOBs, is 65535. This includes storage overhead, check the manual. You have to change some columns to TEXT or BLOBs
+
+-- 调低c4列长度，成功
+greatsql> CREATE TABLE t1(
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  c1 VARCHAR(200) NOT NULL,
+  c2 VARCHAR(600) NOT NULL,
+  c3 VARCHAR(6000) NOT NULL,
+  c4 VARCHAR(9578) NOT NULL,
+  c5 TEXT NOT NULL);
+Query OK, 0 rows affected (0.07 sec)
+
+-- 计算总长度
+greatsql> SELECT 4 + (200*4+2) + (600*4+2) + (6000*4+2) + (9578*4+2) + 9 AS ROW_SIZE;
++----------+
+| ROW_SIZE |
++----------+
+|    65533 |
++----------+
+```
+
 ## 总结
 
 为了尽可能保证业务应用开发的性能，合理选择和使用数据类型是非常关键的。下面是一些关于常用数据类型在使用中的注意事项、优化技巧以及如何提升和保证性能的方法：
