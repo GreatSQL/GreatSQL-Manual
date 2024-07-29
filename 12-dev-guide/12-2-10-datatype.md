@@ -551,6 +551,8 @@ greatsql> SELECT 4 + (200*4+2) + (600*4+2) + (6000*4+2) + (9578*4+2) + 9 AS ROW_
 
 尽可能严格遵循上述方法、原则，通常可以有效地提升和保证业务应用的性能。
 
+更多关于数据类型的内容请参考：[Data Types](https://dev.mysql.com/doc/refman/8.0/en/data-types.html)。
+
 **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)
