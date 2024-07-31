@@ -1,10 +1,10 @@
-# Changes in GreatSQL 8.0.32-26 (2024-07-31)
+# Changes in GreatSQL 8.0.32-26 (2024-08-05)
 
 ## 版本信息
 
-- 发布时间：2024年07月31日
+- 发布时间：2024年08月05日
 
-- 版本号：8.0.32-26, Revision xxxxxxxxxxx
+- 版本号：8.0.32-26, Revision a68b3034c3d
 
 - 下载链接：[RPM包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)、[TAR包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)、[源码包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)
 
@@ -260,7 +260,7 @@ GreatSQL 8.0.32-26 基于 Percona Server for MySQL 8.0.32 版本，它在 MySQL 
 
 ## GreatSQL Release Notes
 ### GreatSQL 8.0
-- [Changes in GreatSQL 8.0.32-26 (2024-07-31)](changes-greatsql-8-0-32-26-20240731.md)
+- [Changes in GreatSQL 8.0.32-26 (2024-08-05)](changes-greatsql-8-0-32-26-20240805.md)
 - [Changes in GreatSQL 8.0.32-25 (2023-12-28)](changes-greatsql-8-0-32-25-20231228.md)
 - [Changes in GreatSQL 8.0.32-24 (2023-6-5)](changes-greatsql-8-0-32-24-20230605.md)
 - [Changes in GreatSQL 8.0.25-17 (2023-3-13)](changes-greatsql-8-0-25-17-20230313.md)
