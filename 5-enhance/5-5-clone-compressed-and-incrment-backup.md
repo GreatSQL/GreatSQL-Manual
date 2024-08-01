@@ -1040,6 +1040,10 @@ greatsql> SELECT * FROM performance_schema.clone_progress;
 
 在 GreatSQL 中，通过 Clone 能更方便实现对本地或远程实例的全量或增量备份，大幅提升了数据库的便利性和可靠性。
 
+## 注意事项
+
+- 在执行 Clone 备份过程中，最好不要同时执行库表 DDL 操作，避免产生严重的 MDL 等待，导致业务系统不可用或备份任务异常。
+- 为避免对数据库系统负载造成严重影响，请不要同时发起多个并发 Clone 备份请求。
 
 
 **扫码关注微信公众号**
