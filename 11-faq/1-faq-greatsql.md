@@ -114,7 +114,7 @@ GreatSQL提供Ansible一键安装包，可在gitee或github下载：
 
 ## 6. GreatSQL版本计划是怎样的
 
-GreatSQL和MySQL一样，采用[GPLv2协议](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)。
+GreatSQL 致力于保持开源的开放性。GreatSQL 采用 [GPLv2 协议](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)。
 
 GreatSQL版本号采用点分位命名规则（X.Y.Z-R）模式，其中
 - X表示大版本号：MYSQL_VERSION_MAJOR，例如3.x、4.x、5.x、8.x等

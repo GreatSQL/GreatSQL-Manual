@@ -5,7 +5,7 @@ GreatSQL 数据库是开放原子开源基金会旗下捐赠项目，拥有中�
 
 GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上满足金融级应用场景，具有 **高可用**、**高性能**、**高兼容**、**高安全** 等特性，可作为 MySQL 或 Percona Server for MySQL 的理想可选替换。
 
-GreatSQL 采用GPLv2协议。
+GreatSQL 致力于保持开源的开放性。GreatSQL 采用 [GPLv2 协议](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)。
 
 GreatSQL 数据库由 [GreatSQL 社区](https://greatsql.cn) 主导负责运营维护，已有[众多社区维护者、爱好者及用户](../1-docs-intro/1-7-thanks.md)参与，包括提交代码、功能测试验证、发现 Bug 以及文档改进等多方面贡献。
 
