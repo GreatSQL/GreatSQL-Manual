@@ -307,7 +307,7 @@ GreatSQL同时也是gitee（码云）平台上的GVP项目，详见：[https://g
 
 ## 许可/Licensing
 
-GreatSQL 致力于保持开源的开放性。GreatSQL 和 MySQL 一样，采用 GPLv2 协议。
+GreatSQL 致力于保持开源的开放性。GreatSQL 采用 GPLv2 协议。
 
 ## 温馨提示
 
