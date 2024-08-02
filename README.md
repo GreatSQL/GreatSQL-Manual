@@ -159,6 +159,40 @@ $ systemctl status mysqld
 
 推荐利用 Docker 环境快速编译 GreatSQL 二进制包，可参考方法：[编译源码安装GreatSQL](./4-install-guide/6-install-with-source-code.md)。
 
+### 编译 GreatSQL RPM 包
+
+还可以利用 *src.rpm* 源码包快速编译 GreatSQL RPM 包，可参考方法：[在CentOS环境下编译GreatSQL src.rpm包，并再编译RPM包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-srcrpm-under-centos.md)。
+
+安装 rmp-build、cmake、gcc 等编译环境必要的软件包
+
+```shell
+$ dnf install -y  bison cmake cyrus-sasl-devel gcc-c++ gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc krb5-devel libaio-devel libcurl-devel libssh libtirpc-devel m4 make ncurses-devel numactl-devel openldap-devel openssl openssl-devel pam-devel perl perl-Carp perl-Data-Dumper perl-Errno perl-Exporter perl-File-Temp perl-Getopt-Long perl-JSON perl-Memoize perl-Time-HiRes readline-devel rpm-build time vim-common zlib-devel
+```
+
+创建相应的目录
+
+```shell
+$ mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+```
+
+将下载后的 *src.rpm* 文件放在 *SRPMS* 目录下
+
+```shell
+$ ls -l /root/rpmbuild/SRPMS
+-rw-r--r-- 1 root root 496724859 Aug  2 14:01 greatsql-8.0.32-26.1.noarch.src.rpm
+```
+
+编译 GreatSQL RPM 包
+
+```shell
+$ cd /root/rpmbuild/
+$ rpmbuild --define "_smp_mflags -j16" --define 'dist .el8' --define "_topdir /root/rpmbuild/" --rebuild ./SRPMS/greatsql-8.0.32-26.1.noarch.src.rpm > ./rpmbuild.log 2>&1
+```
+
+参数 *dist* 支持以下常见 OS 标签（如需支持更多标签请告诉我们）：
+- openEuler系统，例如：oe2003, oe2203, oe2403。
+- RHEL/CentOS 系统，例如：el7, el8, el9。
+
 ## 版本历史
 
 戳此查看 [GreatSQL 版本历史](./1-docs-intro/1-2-release-history.md)。
