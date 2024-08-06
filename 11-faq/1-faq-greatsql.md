@@ -109,7 +109,7 @@ GreatSQL提供Ansible一键安装包，可在gitee或github下载：
 
 - [其他公开分享](https://greatsql.cn/smx_course-lesson.html?op=video&ids=4)
 
-您学习完上述课程后，还可以报名参加GreatSQL GCA或GCP认证考试，详见：[GreatSQL GCA/GCP培训认证](../1-docs-intro/1-9-greatsql-certified.md)。
+您学习完上述课程后，还可以报名参加GreatSQL GCA或GCP认证考试，详见：[GreatSQL GCA/GCP培训认证](https://greatsql.cn/docs/community/4-greatsql-certified.html)。
 
 
 ## 6. GreatSQL版本计划是怎样的
