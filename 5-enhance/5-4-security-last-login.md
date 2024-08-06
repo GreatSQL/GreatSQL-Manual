@@ -5,7 +5,7 @@
 
 用户通过查看自身的登录信息，可判定是否有被其他人员登录或者被尝试破解登录的情况。
 
-本功能基于审计插件，所以需要先开启[审计插件](./5-4-security-audit.md)才能使用，并且必须确保设置参数 `audit_log_enabled = 1`，和`audit_log_to_table = 1`，启用审计和审计日志入表特性。
+本功能基于审计插件，所以需要先开启[审计插件](./5-4-security-audit.md)才能使用，并且必须确保设置参数 `audit_log_enabled = 1` 和 `audit_log_to_table = 1`，启用审计和审计日志入表特性。
 
 ## 记录的信息
 
@@ -38,7 +38,7 @@ greatsql> SELECT audit_login_messages(10);
 
 ## 注意事项
 
-在 GreatSQL Docker 镜像中可能无法使用该功能，执行 `SET GLOBAL audit_log_to_table = ON` 命令启用审计日志入表开关后，可能会报告类似下面的错误：
+在 GreatSQL Docker 镜像中可能无法使用该功能，执行 `SET GLOBAL audit_log_to_table = 1` 命令启用审计日志入表开关后，可能会报告类似下面的错误：
 
 ```
 [ERROR] [MY-011071] [Server] Gdb_cmd_service execute_sql error sql[SET SESSION SQL_LOG_BIN = OFF] error[1227 Access denied; you need (at least one of) the SUPER, SYSTEM_VARIABLES_ADMIN or SESSION_VARIABLES_ADMIN privilege(s) for this operation], thread_id is [11]
