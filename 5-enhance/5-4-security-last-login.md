@@ -36,6 +36,17 @@ greatsql> SELECT audit_login_messages(10);
 
 > 使用 mysql 客户端建立连接时，务必加上 --binary-as-hex=0 参数，否则查询到的结果以十六进制显示
 
+## 注意事项
+
+在 GreatSQL Docker 镜像中可能无法使用该功能，执行 `SET GLOBAL audit_log_to_table = ON` 命令启用审计日志入表开关后，可能会报告类似下面的错误：
+
+```
+[ERROR] [MY-011071] [Server] Gdb_cmd_service execute_sql error sql[SET SESSION SQL_LOG_BIN = OFF] error[1227 Access denied; you need (at least one of) the SUPER, SYSTEM_VARIABLES_ADMIN or SESSION_VARIABLES_ADMIN privilege(s) for this operation], thread_id is [11]
+[ERROR] [MY-011071] [Server] Gdb_cmd_service execute_sql error sql[INSERT INTO sys_audit.audit_log SET name = 'Query', record = '3306422_151291_2024-08-06T06:41:01', timestamp = '2024-08-06 06:43:05', command_class = 'set_option', connection_id = 10, status = '0', sqltext = 'set global audit_log_to_table=1', user = 'root[root] @ localhost []', host = 'localhost', priv_user = '', os_user = '', ip = '', db = '', server_version = '', os_version = '', server_id = 3306422, timegmt = 1722926585577048] error[7737 Audit log update denied with sql_log_bin = on], thread_id is [11]
+```
+
+具体原因待查，我们将尽快解决该问题。
+
 
 **扫码关注微信公众号**
 
