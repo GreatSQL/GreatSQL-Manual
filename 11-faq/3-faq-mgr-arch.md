@@ -61,6 +61,7 @@ MySQL Router通过两个端口来区分读写服务请求，默认是 6446端口
 
 要注意的是，当GreatSQL MGR集群中存在Arbitrator（仲裁）节点时，MySQL Shell无法识别，这时只能使用GreatSQL Shell来管理了。
 
+更具体内容可以参考：[手动构建的GreatSQL MGR集群（含仲裁节点）如何用shell接管](https://greatsql.cn/thread-503-1-1.html)。
 
 ## 8. 为什么推荐单主架构的MGR，为何不推荐多主架构呢
 
