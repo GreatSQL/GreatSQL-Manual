@@ -290,6 +290,7 @@ GreatSQL 8.0.32相对于8.0.25版本，新增了Rapid引擎、更多SQL语法兼
 
 **参考文档**
 
+- [GreatSQL-8.0.25升级到GreatSQL-8.0.32](https://greatsql.cn/thread-825-1-2.html)
 - [Percona Server for MySQL In-Place Upgrading Guide: From 5.7 to 8.0](https://docs.percona.com/percona-server/latest/upgrading_guide.html)
 - [Changes in MySQL 8.0](https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html)
 - [Before You Begin](https://dev.mysql.com/doc/refman/8.0/en/upgrade-before-you-begin.html)
