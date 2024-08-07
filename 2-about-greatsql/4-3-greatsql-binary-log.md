@@ -6,7 +6,7 @@ Binlog 是 GreatSQL 最重要的日志之一。
 
 Binlog 即 Binary Log，二进制日志文件，也叫作变更日志（Update Log）。它记录了数据库中所有的 DDL 和 DML 等对数据库有变更的事件，但不包含没有修改任何数据的语句（如 `SELECT` 只读查询请求）。
 
-Binlog 以事件（Event）形式记录并保存在二进制文件中，利用这些 Events，可以很方便地再现数据变更的全过程，所以 Binlog 常用语主从复制、MGR 等场景。
+Binlog 以事件（Event）形式记录并保存在二进制文件中，利用这些 Events，可以很方便地再现数据变更的全过程，所以 Binlog 常用于主从复制、MGR 等场景。
 
 > 如果是想记录所有的请求，则需要使用 [通用日志](./4-7-greatsql-general-log.md)
 
