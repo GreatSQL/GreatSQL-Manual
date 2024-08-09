@@ -43,10 +43,16 @@ Status: Downloaded newer image for greatsql/greatsql:latest
 docker.io/greatsql/greatsql:latest
 ```
 
-若由于网络原因无法从 docker.io 拉取 GreatSQL 镜像的话，可以改成从阿里云拉取，方法如下：
+若由于网络原因无法从 docker.io 拉取 GreatSQL 镜像的话，可以改成从阿里云 ACR 拉取，方法如下：
 
 ```shell
 $ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
+```
+
+也可以从腾讯云 TCR 拉取：
+
+```shell
+$ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql
 ```
 
 检查是否成功拉取
