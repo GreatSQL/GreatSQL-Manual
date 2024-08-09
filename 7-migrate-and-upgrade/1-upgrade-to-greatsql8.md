@@ -21,8 +21,6 @@ GreatSQL 8.0相对于GreatSQL 5.7有着众多优秀新特性，包括且不仅�
 |InnoDB 并行查询| :heavy_check_mark: | 仅主键扫描 |
 |并行 LOAD DATA| :heavy_check_mark: | ❌ |
 |DDL原子性| :heavy_check_mark: | :heavy_check_mark: |
-|InnoDB 事务 ReadView 无锁优化| :heavy_check_mark: | ❌ |
-|InnoDB 事务大锁拆分优化| :heavy_check_mark: | ❌ |
 |InnoDB 资源组| :heavy_check_mark: | :heavy_check_mark: |
 |Contention-Aware Transaction Scheduling| :heavy_check_mark: | :heavy_check_mark: |
 |InnoDB Mutexes 拆分优化| :heavy_check_mark: | ❌ |
