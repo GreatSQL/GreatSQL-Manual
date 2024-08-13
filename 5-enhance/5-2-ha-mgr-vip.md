@@ -176,7 +176,141 @@ $ ldconfig && ldconfig -p | grep -i 'libprotobuf.so'
 - 建议采用 `systemd` 方式管理GreatSQL服务，或者对启动用户用户（如 mysql）开启sudo权限，利用sudo调用 `systemd` 再启动GreatSQL服务，这样能确保mysqld进程可获得内核权限，成功绑定VIP。
 - 当 `setcap` 命令为mysqld二进制文件添加capability以后，需要保证登录系统的用户和启动mysqld的用户保持一致，才能确保mysqld进程可获得内核权限。例如：用root用户登录系统，然后再以普通用户（mysql）启动mysqld进程，setcap无法生效，绑定vip时会失败报错。
 
+## 在 Docker 容器中使用 VIP
 
+GreatSQL Docker 镜像不支持在 Docker 中使用 VIP 功能。原因如下：
+
+1. 在 Docker 中，无法用 systemd 方式来启动 GreatSQL。
+2. 在打包时，也没有将 mysqld 程序文件属主改为 root，并加上 setcap 提权。
+
+因此，想要在 Docker 中使用 GreatSQL VIP 的话，需要自行处理。下面介绍如何在 Docker 容器中使用 GreatSQL 绑定 VIP 功能。
+
+如果想要在 Docker 中使用 GreatSQL VIP，可以采用以下方式实现：
+
+1. 创建一个全新容器，并加上 `--privileged` 参数。
+2. 安装 GreatSQL 软件包（二进制包或 RPM 包都行）。
+3. 修改 mysqld 程序文件属主为 root，并利用 setcap 给 mysqld 程序文件加上提权属性。
+4. 正确配置相关参数。
+
+正常地，在 Docker 容器中是无法执行绑定 VIP 等影响操作系统层的操作，以避免发生安全风险，这就需要先行提权。
+
+想要在 Docker 容器中使用 VIP，在创建容器时，需要先加上 `--privileged` 参数，例如：
+
+```shell
+$ docker run -itd --privileged --hostname t1 --name t1 centos:8 bash
+```
+
+进入容器，并查看初始 IP 信息：
+
+```shell
+[root@t1 /]# ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+233: eth0@if234: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+    link/ether 02:42:ac:11:00:04 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.17.0.4/16 brd 172.17.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+```
+
+接下来，安装 GreatSQL，这里采用 RPM 包方式，具体过程不赘述。
+
+执行提权操作并确认：
+
+```shell
+[root@t1 /]# setcap CAP_NET_ADMIN,CAP_NET_RAW+ep /usr/sbin/mysqld
+[root@t1 /]# chown root:root /usr/sbin/mysqld
+
+[root@t1 /]# getcap /usr/sbin/mysqld
+/usr/sbin/mysqld = cap_net_admin,cap_net_raw+ep
+
+[root@t1 /]# ls -la /usr/sbin/mysqld
+-rwxr-xr-x 1 root root 67858088 Jul 30 08:18 /usr/sbin/mysqld
+```
+
+修改 */etc/my.cnf* 配置文件（只展示部分相关内容）：
+
+```ini
+[mysqld]
+...
+user = root
+...
+loose-plugin_load_add = 'greatdb_ha.so'
+loose-greatdb_ha_enable_mgr_vip = ON
+loose-greatdb_ha_mgr_vip_nic = 'eth0'
+loose-greatdb_ha_mgr_vip_ip = '172.17.0.40'
+loose-greatdb_ha_mgr_vip_mask = '255.255.0.0'
+loose-greatdb_ha_port = 33062
+#loose-greatdb_ha_mgr_read_vip_ips = "172.17.0.41,172.17.0.42"
+loose-greatdb_ha_mgr_read_vip_floating_type = "TO_ANOTHER_SECONDARY"
+loose-greatdb_ha_send_arp_packge_times = 5
+loose-greatdb_ha_mgr_exit_primary_kill_connection_mode = OFF
+report_host = 172.17.0.4
+report_port = 3306
+...
+```
+
+在已经完成 GreatSQL 数据初始化操作之后，启动 GreatSQL 服务进程（确认是以 root 身份运行）：
+
+```shell
+[root@t1 /]# /usr/sbin/mysqld &
+
+[root@t1 /]# ps -ef | grep mysqld
+root        1518       1  1 07:02 ?        00:00:23 /usr/sbin/mysqld
+```
+
+进入 GreatSQL 查看 VIP 绑定/运行状态：
+
+```sql
+[root@GreatSQL][(none)]> SHOW GLOBAL VARIABLES LIKE 'greatdb_ha%';
++--------------------------------------------------+---------------------------------------------------+
+| Variable_name                                    | Value                                             |
++--------------------------------------------------+---------------------------------------------------+
+| greatdb_ha_enable_mgr_vip                        | ON                                                |
+| greatdb_ha_force_change_mgr_vip                  | OFF                                               |
+| greatdb_ha_gateway_address                       |                                                   |
+| greatdb_ha_mgr_exit_primary_kill_connection_mode | OFF                                               |
+| greatdb_ha_mgr_read_vip_floating_type            | TO_ANOTHER_SECONDARY                              |
+| greatdb_ha_mgr_read_vip_ips                      |                                                   |
+| greatdb_ha_mgr_vip_broad                         | 255.255.255.255                                   |
+| greatdb_ha_mgr_vip_ip                            | 172.17.0.40                                       |
+| greatdb_ha_mgr_vip_mask                          | 255.255.0.0                                       |
+| greatdb_ha_mgr_vip_nic                           | eth0                                              |
+| greatdb_ha_port                                  | 33062                                             |
+| greatdb_ha_send_arp_packge_times                 | 5                                                 |
+| greatdb_ha_vip_tope                              | bcd374fc-593c-11ef-a05e-0242ac110004::172.17.0.40 |
++--------------------------------------------------+---------------------------------------------------+
+13 rows in set (0.00 sec)
+```
+
+查看 VIP 绑定状态：
+
+```shell
+[root@t1 /]# ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+233: eth0@if234: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+    link/ether 02:42:ac:11:00:04 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.17.0.4/16 brd 172.17.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet 172.17.0.40/16 brd 172.17.255.255 scope global secondary eth0:0
+       valid_lft forever preferred_lft forever
+```
+
+在外部宿主系统环境下检测 VIP 是否可连通：
+
+```shell
+$ ping 172.17.0.40
+PING 172.17.0.40 (172.17.0.40) 56(84) bytes of data.
+64 bytes from 172.17.0.40: icmp_seq=1 ttl=64 time=0.038 ms
+64 bytes from 172.17.0.40: icmp_seq=2 ttl=64 time=0.032 ms
+...
+```
+
+可以看到，已经正确绑定 VIP 并且可连通。
 
 
 **扫码关注微信公众号**
