@@ -74,6 +74,7 @@
 - [reddey](https://greatsql.cn/home.php?mod=space&uid=1772&do=thread&view=me&from=space)
 - [Dale](https://gitee.com/Dale_nn)
 - [梁熙民](https://gitee.com/daydreammirror)
+- [lingoYS](https://greatsql.cn/home.php?mod=space&uid=1753&do=profile)
 
 
 **扫码关注微信公众号**
