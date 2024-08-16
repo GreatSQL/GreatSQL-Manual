@@ -482,45 +482,7 @@ Term-00, Running Average tpmTOTAL: 421384.59    Current tpmTOTAL: 83449452    Me
 
 最终的性能测试结果是以 `Measured tpmTOTAL` 指标为准，也即通常所说的 **tpmC**（平均每分钟事务数）。
 
-3. 生成测试报告
-
-可以利用 `run/generateReport.sh` 生成图形化测试报告。
-
-在此之前，需要先安装 R 语言运行环境。
-
-```shell
-$ yum install -y epel-release
-$ yum makecache 
-$ yum install -y R
-```
-
-生成测试报告：
-
-```shell
-$ cd /usr/local/benchmarksql-5.0/run
-$ ./generateReport.sh ./my_result_2024-08-16_104010
-Generating my_result_2024-08-16_104010/tpm_nopm.png ...  OK
-Generating my_result_2024-08-16_104010/latency.png ... OK
-Generating my_result_2024-08-16_104010/cpu_utilization.png ... OK
-Generating my_result_2024-08-16_104010/dirty_buffers.png ... OK
-Generating my_result_2024-08-16_104010/blk_md127_iops.png ... OK
-Generating my_result_2024-08-16_104010/blk_md127_kbps.png ... OK
-Generating my_result_2024-08-16_104010/net_em1_iops.png ... OK
-Generating my_result_2024-08-16_104010/net_em1_kbps.png ... OK
-Generating my_result_2024-08-16_104010/report.html ... OK
-
-$ ls my_result_2024-08-16_104010/
-blk_md127_iops.png  cpu_utilization.png  dirty_buffers.png  net_em1_iops.png  report.html     tpm_nopm.png
-blk_md127_kbps.png  data                 latency.png        net_em1_kbps.png  run.properties
-```
-
-之后就可以在浏览器中打开测试报告了，就像这样：
-
-![BenchmarkSQL Report: Transactions per Minute](./3-4-benchmarksql-tpm_nopm.png)
-
-![BenchmarkSQL Report: Transaction Latency](./3-4-benchmarksql-latency.png)
-
-4. 清理数据库
+3. 清理数据库
 
 测试完成后，运行 `bin/unDatabaseDestroy.sh` 来清理测试数据库。
 
@@ -564,6 +526,42 @@ $ ls -l data/
 -rw-r--r--. 1 root root      218 Aug 16 10:10 runInfo.csv
 -rw-r--r--. 1 root root    34612 Aug 16 10:15 sys_info.csv
 ```
+
+可以利用 `run/generateReport.sh` 生成图形化测试报告。
+
+在此之前，需要先安装 R 语言运行环境。
+
+```shell
+$ yum install -y epel-release
+$ yum makecache 
+$ yum install -y R
+```
+
+生成测试报告：
+
+```shell
+$ cd /usr/local/benchmarksql-5.0/run
+$ ./generateReport.sh ./my_result_2024-08-16_104010
+Generating my_result_2024-08-16_104010/tpm_nopm.png ...  OK
+Generating my_result_2024-08-16_104010/latency.png ... OK
+Generating my_result_2024-08-16_104010/cpu_utilization.png ... OK
+Generating my_result_2024-08-16_104010/dirty_buffers.png ... OK
+Generating my_result_2024-08-16_104010/blk_md127_iops.png ... OK
+Generating my_result_2024-08-16_104010/blk_md127_kbps.png ... OK
+Generating my_result_2024-08-16_104010/net_em1_iops.png ... OK
+Generating my_result_2024-08-16_104010/net_em1_kbps.png ... OK
+Generating my_result_2024-08-16_104010/report.html ... OK
+
+$ ls my_result_2024-08-16_104010/
+blk_md127_iops.png  cpu_utilization.png  dirty_buffers.png  net_em1_iops.png  report.html     tpm_nopm.png
+blk_md127_kbps.png  data                 latency.png        net_em1_kbps.png  run.properties
+```
+
+之后就可以在浏览器中打开测试报告了，就像这样：
+
+![BenchmarkSQL Report: Transactions per Minute](./3-4-benchmarksql-tpm_nopm.png)
+
+![BenchmarkSQL Report: Transaction Latency](./3-4-benchmarksql-latency.png)
 
 ## 总结
 
