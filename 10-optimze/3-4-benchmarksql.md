@@ -86,7 +86,7 @@ Apache Ant(TM) version 1.10.5 compiled on June 24 2019
 2. 修改 `src/client/jTPCCConnection.java` 文件 225 行附近，在 SQL 子查询增加 `AS L` 别名。
 
 ```java
-i211             default:
+211             default:
 212                 stmtStockLevelSelectLow = dbConn.prepareStatement(
 213                     "SELECT count(*) AS low_stock FROM (" +
 214                     "    SELECT s_w_id, s_i_id, s_quantity " +
@@ -257,7 +257,7 @@ create table bmsql_stock (
  18 AFTER_LOAD="indexCreates buildFinish"
 ```
 
-5. 修改 `run/funcs.sh` 文件 13 和 54 行附近，添加 MySQL/GreatSQL 数据库类型。
+5. 修改 `run/funcs.sh` 文件 31 和 54 行附近，添加 MySQL/GreatSQL 数据库类型。
 
 ```shell
  28         firebird)
@@ -285,8 +285,14 @@ $ mv mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar .
 $ pwd
 /usr/local/benchmarksql-5.0/lib/mysql
 
-$ ls
-mysql-connector-j-8.0.33  mysql-connector-j-8.0.33.jar  mysql-connector-j-8.0.33.tar.gz
+$ ls -l
+-rw-r--r-- 1 root root 2481560 Mar  8  2023 mysql-connector-j-8.0.33.jar
+```
+
+如果还是用较早版本的驱动（例如 *mysql-connector-java-8.0.30.jar*），可能会有类似下面的提示：
+
+```
+Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
 ```
 
 6. 重新编译修改后的源码。
@@ -343,11 +349,25 @@ osCollectorInterval=1
 主要参数说明
 - `db=mysql`，指定数据库类型。
 - `driver=com.mysql.jdbc.Driver`，指定驱动程序文件，这里是 MySQL JDBC 驱动。
-- `conn`, `user`, `password`，定义 GreatSQL 数据库连接IP、端口、账号名、密码、默认数据库等。
-- `warehouses`，定义仓库数，仓库数决定性能测试的成绩。对于高配服务器（32C96G以上），建议至少 1000 仓或更高。
-- `loadWorkers`，定义加载数据时的并发数。如果是高配服务器，该值可以设置大一些，例如 100，一般和服务器的逻辑 CPU 核数一样即可。过高的并发可能会导致内存消耗太快，出现报错，导致数据加载需要重新进行。
-- `terminals`，定义性能压测时的并发数。建议并发数不要高于服务器的逻辑 CPU 核数。否则可能产生过多锁等待。
-- `runMins`，定义性能测试持续的时间。时间越久，越能考验数据库的性能和稳定性。建议不要少于 10 分钟，生产环境中机器建议不少于 1 小时。
+- `conn`, `user`, `password`，指定 GreatSQL 数据库连接IP、端口、账号名、密码、默认数据库等。
+- `warehouses`，指定仓库数，仓库数决定性能测试的成绩。对于高配服务器（32C96G以上），建议至少 1000 仓或更高。
+- `loadWorkers`，指定加载数据时的并发数。如果是高配服务器，该值可以设置大一些，例如 100，一般和服务器的逻辑 CPU 核数一样即可。过高的并发可能会导致内存消耗太快，出现报错，导致数据加载需要重新进行。
+- `terminals`，指定性能压测时的并发数。建议并发数不要高于服务器的逻辑 CPU 核数。否则可能产生过多锁等待。
+- `runTxnsPerTerminal`，指定每个终端执行的事务数量。如果该参数配置为非0时，则 `runMins` 参数必须设置为0。
+- `runMins`，指定性能测试持续的时间（分钟）。如果该值设置为非0值时，runTxnsPerTerminal参数必须设置为0。时间越久，越能考验数据库的性能和稳定性。建议不要少于 10 分钟，生产环境中机器建议不少于 1 小时。
+- `limitTxnsPerMin`，每分钟事务总数限制，该参数主要控制每分钟处理的事务数，事务数受 `terminals` 参数的影响，`limitTxnsPerMin/terminals` 运算后结果值必须是正整数。
+- `terminalWarehouseFixed`，终端和仓库的绑定模式，设置为 **true** 时可以运行 4.x 兼容模式，意思为每个终端都有一个固定的仓库。设置为 **false** 时可以均匀的使用数据库整体配置。TPC-C 规则要求每个终端都必须有一个绑定的仓库，所以一般使用默认值 **true**。
+- 下面五个值的总和必须等于100，默认值为：45, 43, 4, 4，4 ，与 TPC-C 测试定义的比例一致，实际操作过程中，可以调整比重来适应各种场景。
+  - `newOrderWeight=45`，新订单事务占总事务的45%。
+  - `paymentWeight=43`，支付订单事务占总事务的43%。
+  - `orderStatusWeight=4`，订单状态事务占总事务的4%。
+  - `deliveryWeight=4`，到货日期事务占总事务的4%。
+  - `stockLevelWeight=4`，查看现存货品的事务占总事务的4%。
+- `resultDirectory`，压测期间收集系统性能数据的目录。
+- `osCollectorScript`，操作系统性能收集脚本。
+- `osCollectorInterval`，操作系统收集操作间隔（单位：秒），默认为1秒。
+- `osCollectorSSHAddr`，需要收集系统性能的主机。
+- `osCollectorDevices`，操作系统中被收集服务器的网卡名称和磁盘名称。
 
 ### 3. 运行 BenchmarkSQL 测试
 
@@ -418,6 +438,11 @@ Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class 
 
 运行 `bin/runBenchmark.sh` 来开始压力测试。
 
+**提示**
+> 1. 运行 BenchmarkSQL 压测时，OSCollector 组件需要用到 Python 2.x，因此还需要先安装 Python 2.x（执行 `yum install -y python2`）。
+>
+> 2. 如果设置的 terminals 参数值较大的话，也就是压测并发数较大时，可能比较容易发生行锁等待超时，这时可以适当加大 GreatSQL 中的 `innodb_lock_wait_timeout` 参数值（例如 `SET GLOBAL innodb_lock_wait_timeout = 60`）。
+
 ```shell
 $ cd /usr/local/benchmarksql-5.0/run
 $ ./runBenchmark.sh ./props.greatsql
@@ -440,16 +465,62 @@ $ ./runBenchmark.sh ./props.greatsql
 [main] INFO   jTPCC : Term-00, writing per transaction results to my_result_2024-08-16_095115/data/result.csv
 [main] INFO   jTPCC : Term-00, osCollectorScript=./misc/os_collector_linux.py
 ...
-Term-00, Running Average tpmTOTAL: 419069.59    Current tpmTOTAL: 10137792    Memory Usage: 652MB / 3544MBB
-
+Term-00, Running Average tpmTOTAL: 421384.59    Current tpmTOTAL: 83449452    Memory Usage: 1814MB / 3135MB
+[Thread-15] INFO   jTPCC : Term-00,
+[Thread-15] INFO   jTPCC : Term-00,
+[Thread-15] INFO   jTPCC : Term-00, Measured tpmC (NewOrders) = 189675.86
+[Thread-15] INFO   jTPCC : Term-00, Measured tpmTOTAL = 421368.54
+[Thread-15] INFO   jTPCC : Term-00, Session Start     = 2024-08-16 10:40:10
+[Thread-15] INFO   jTPCC : Term-00, Session End       = 2024-08-16 11:10:10
+[Thread-15] INFO   jTPCC : Term-00, Transaction Count = 12641575
 ```
 
-**提示**
-> 1. 运行 BenchmarkSQL 压测时，OSCollector 组件需要用到 Python 2.x，因此还需要先安装 Python 2.x（执行 `yum install -y python2`）。
->
-> 2. 如果设置的 terminals 参数值较大的话，也就是压测并发数较大时，可能比较容易发生行锁等待超时，这时可以适当加大 GreatSQL 中的 `innodb_lock_wait_timeout` 参数值（例如 `SET GLOBAL innodb_lock_wait_timeout = 60`）。
+上述测试结果中
+- `Measured tpmC (NewOrders)`，表示每分钟执行的事务数（只统计NewOrders事务）。
+- `Measured tpmTOTAL`，表示每分钟平均执行事务数（所有事务）。
+- `Transaction Count`，表示总事务数。
 
-3. 清理数据库
+最终的性能测试结果是以 `Measured tpmTOTAL` 指标为准，也即通常所说的 **tpmC**（平均每分钟事务数）。
+
+3. 生成测试报告
+
+可以利用 `run/generateReport.sh` 生成图形化测试报告。
+
+在此之前，需要先安装 R 语言运行环境。
+
+```shell
+$ yum install -y epel-release
+$ yum makecache 
+$ yum install -y R
+```
+
+生成测试报告：
+
+```shell
+$ cd /usr/local/benchmarksql-5.0/run
+$ ./generateReport.sh ./my_result_2024-08-16_104010
+Generating my_result_2024-08-16_104010/tpm_nopm.png ...  OK
+Generating my_result_2024-08-16_104010/latency.png ... OK
+Generating my_result_2024-08-16_104010/cpu_utilization.png ... OK
+Generating my_result_2024-08-16_104010/dirty_buffers.png ... OK
+Generating my_result_2024-08-16_104010/blk_md127_iops.png ... OK
+Generating my_result_2024-08-16_104010/blk_md127_kbps.png ... OK
+Generating my_result_2024-08-16_104010/net_em1_iops.png ... OK
+Generating my_result_2024-08-16_104010/net_em1_kbps.png ... OK
+Generating my_result_2024-08-16_104010/report.html ... OK
+
+$ ls my_result_2024-08-16_104010/
+blk_md127_iops.png  cpu_utilization.png  dirty_buffers.png  net_em1_iops.png  report.html     tpm_nopm.png
+blk_md127_kbps.png  data                 latency.png        net_em1_kbps.png  run.properties
+```
+
+之后就可以在浏览器中打开测试报告了，就像这样：
+
+![BenchmarkSQL Report: Transactions per Minute](./3-4-benchmarksql-tpm_nopm.png)
+
+![BenchmarkSQL Report: Transaction Latency](./3-4-benchmarksql-latency.png)
+
+4. 清理数据库
 
 测试完成后，运行 `bin/unDatabaseDestroy.sh` 来清理测试数据库。
 
