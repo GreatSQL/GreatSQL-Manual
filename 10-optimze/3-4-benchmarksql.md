@@ -1,0 +1,504 @@
+# BenchmarkSQL 性能测试
+
+BenchmarkSQL 是一个开源的 Java 应用程序，用于评估数据库系统在 OLTP 场景下的性能，它是符合 TPC-C 基准压力测试的工具。它最初由 HammerDB 的作者开发，后来由 Cloud V LLC 维护。
+
+TPC-C 模型是模拟一个商品批发公司的销售模型，这个模型涵盖了一个批发公司面向客户对一系列商品进行销售的过程，这包括管理订单，管理库存，管理账号收支等操作。这些操作涉及到仓库、商品、客户、订单等概念，围绕这些概念，构造了数据表格，以及相应的数据库操作。
+
+BenchmarkSQL 支持 MySQL（Percona Server for MySQL、GreatSQL）、PostgreSQL、Oracle、SQL Server 等。
+
+## 主要特性
+- **标准化的测试**：基于 TPC-C 和 TPC-E 的标准基准测试，提供了一套公平的测试方案。
+- **可扩展性**：支持多客户端并发测试，可以根据需要调整测试规模。
+- **详细的报告**：测试完成后生成详细的性能报告，包括事务吞吐量、延迟、资源使用情况等。
+- **跨平台**：由于基于 Java，BenchmarkSQL 可以在多种操作系统上运行。
+
+## 如何使用 BenchmarkSQL 测试 GreatSQL
+
+下面以 CentOS 8.x x86_64 环境为例，介绍如何安装配置使用 BenchmarkSQL。
+
+### 1. 准备环境
+- **下载 BenchmarkSQL**：在[这里下载 BenchmarkSQL 的最新版本](https://sourceforge.net/projects/benchmarksql/files/)。
+
+下载完 BenchmarkSQL 压缩包后，解压缩放在 /usr/local 目录下
+
+```shell
+$ cd /usr/local
+$ curl -OL -o benchmarksql-5.0.zip "https://jaist.dl.sourceforge.net/project/benchmarksql/benchmarksql-5.0.zip?viasf=1"
+$ unzip benchmarksql-5.0.zip
+$ cd benchmarksql-5.0
+$ ls
+build.xml  doc  HOW-TO-RUN.txt  lib  README.md  run  src
+```
+
+- **安装 Java**：BenchmarkSQL 需要 Java 运行环境，确保系统中安装了 JDK 8 或更高版本。
+
+此外，还要安装 Apache Ant，它是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具。用于编译 Benchmark SQL。
+
+```shell
+$ yum install -y java-1.8.0-openjdk ant
+```
+
+配置 Apache-Ant 的环境变量：
+
+```shell
+$ echo 'export APACH_HOME=/usr/share/doc/ant-1.9.4' >> ~/.bash_profile
+$ echo 'export PATH=${ANT_HOME}/bin:$PATH' >> ~/.bash_profile
+$ source ~/.bash_profile
+```
+
+检查 Java 运行环境是否可用：
+
+```shell
+$ java -version
+openjdk version "1.8.0_312"
+OpenJDK Runtime Environment (build 1.8.0_312-b07)
+OpenJDK 64-Bit Server VM (build 25.312-b07, mixed mode)
+
+$ ant -version
+Apache Ant(TM) version 1.10.5 compiled on June 24 2019
+```
+
+### 2. 配置 BenchmarkSQL
+
+1. 修改 `src/client/jTPCC.java` 文件 119 行附近，增加 MySQL/GraetSQL 数据库相关内容。
+
+```java
+117         if (iDB.equals("firebird"))
+118             dbType = DB_FIREBIRD;
+119         else if (iDB.equals("mysql"))
+120             dbType = DB_MYSQL;
+121         else if (iDB.equals("oracle"))
+122             dbType = DB_ORACLE;
+123         else if (iDB.equals("postgres"))
+124             dbType = DB_POSTGRES;
+```
+
+修改 `src/client/jTPCCConfig.java` 文件 17 行附近，增加 MySQL/GreatSQL 数据库类型。
+
+```java
+ 16     public final static int     DB_UNKNOWN = 0,
+ 17                                 DB_FIREBIRD = 1,
+ 18                                 DB_MYSQL = 4,
+ 19                                 DB_ORACLE = 2,
+ 20                                 DB_POSTGRES = 3;
+```
+
+2. 修改 `src/client/jTPCCConnection.java` 文件 225 行附近，在 SQL 子查询增加 `AS L` 别名。
+
+```java
+i211             default:
+212                 stmtStockLevelSelectLow = dbConn.prepareStatement(
+213                     "SELECT count(*) AS low_stock FROM (" +
+214                     "    SELECT s_w_id, s_i_id, s_quantity " +
+215                     "        FROM bmsql_stock " +
+216                     "        WHERE s_w_id = ? AND s_quantity < ? AND s_i_id IN (" +
+217                     "            SELECT ol_i_id " +
+218                     "                FROM bmsql_district " +
+219                     "                JOIN bmsql_order_line ON ol_w_id = d_w_id " +
+220                     "                 AND ol_d_id = d_id " +
+221                     "                 AND ol_o_id >= d_next_o_id - 20 " +
+222                     "                 AND ol_o_id < d_next_o_id " +
+223                     "                WHERE d_w_id = ? AND d_id = ? " +
+224                     "        ) " +
+225                     "    ) AS L");
+226                 break;
+```
+
+3. 编辑一份适合 MySQL/GreatSQL 的表 DDL 文件。 
+
+```shell
+$ cd /usr/local/benchmarksql-5.0/run
+$ cp -rf sql.common/ sql.mysql
+```
+
+编辑 `sql.mysql/tableCreates.sql` 文件，对每个表都加上使用 InnoDB 引擎的声明，以及每个表都要有显式主键的定义。此外，还要对 `bmsql_oorder` 表额外增加一个索引，根据对测试过程中产生的慢查询日志进行分析，增加该索引可有效提升测试性能。
+
+```sql
+create table bmsql_config (
+  cfg_name    varchar(30) primary key,
+  cfg_value   varchar(50)
+) engine = innodb;
+
+create table bmsql_warehouse (
+  w_id        integer   not null,
+  w_ytd       decimal(12,2),
+  w_tax       decimal(4,4),
+  w_name      varchar(10),
+  w_street_1  varchar(20),
+  w_street_2  varchar(20),
+  w_city      varchar(20),
+  w_state     char(2),
+  w_zip       char(9),
+  primary key (w_id)
+) engine = innodb;
+
+create table bmsql_district (
+  d_w_id       integer       not null,
+  d_id         integer       not null,
+  d_ytd        decimal(12,2),
+  d_tax        decimal(4,4),
+  d_next_o_id  integer,
+  d_name       varchar(10),
+  d_street_1   varchar(20),
+  d_street_2   varchar(20),
+  d_city       varchar(20),
+  d_state      char(2),
+  d_zip        char(9),
+  primary key (d_w_id, d_id)
+) engine = innodb;
+
+create table bmsql_customer (
+  c_w_id         integer        not null,
+  c_d_id         integer        not null,
+  c_id           integer        not null,
+  c_discount     decimal(4,4),
+  c_credit       char(2),
+  c_last         varchar(16),
+  c_first        varchar(16),
+  c_credit_lim   decimal(12,2),
+  c_balance      decimal(12,2),
+  c_ytd_payment  decimal(12,2),
+  c_payment_cnt  integer,
+  c_delivery_cnt integer,
+  c_street_1     varchar(20),
+  c_street_2     varchar(20),
+  c_city         varchar(20),
+  c_state        char(2),
+  c_zip          char(9),
+  c_phone        char(16),
+  c_since        timestamp,
+  c_middle       char(2),
+  c_data         varchar(500),
+  primary key (c_w_id, c_d_id, c_id)
+) engine = innodb;
+
+create table bmsql_history (
+  hist_id  integer AUTO_INCREMENT,
+  h_c_id   integer,
+  h_c_d_id integer,
+  h_c_w_id integer,
+  h_d_id   integer,
+  h_w_id   integer,
+  h_date   timestamp,
+  h_amount decimal(6,2),
+  h_data   varchar(24),
+  primary key (hist_id,h_w_id)
+) engine = innodb;
+
+create table bmsql_new_order (
+  no_w_id  integer   not null,
+  no_d_id  integer   not null,
+  no_o_id  integer   not null,
+  primary key (no_w_id, no_d_id, no_o_id)
+) engine = innodb;
+
+create table bmsql_oorder (
+  o_w_id       integer      not null,
+  o_d_id       integer      not null,
+  o_id         integer      not null,
+  o_c_id       integer,
+  o_carrier_id integer,
+  o_ol_cnt     integer,
+  o_all_local  integer,
+  o_entry_d    timestamp,
+  primary key (o_w_id, o_d_id, o_id),
+  k1 (o_c_id)
+) engine = innodb;
+
+create table bmsql_order_line (
+  ol_w_id         integer   not null,
+  ol_d_id         integer   not null,
+  ol_o_id         integer   not null,
+  ol_number       integer   not null,
+  ol_i_id         integer   not null,
+  ol_delivery_d   timestamp,
+  ol_amount       decimal(6,2),
+  ol_supply_w_id  integer,
+  ol_quantity     integer,
+  ol_dist_info    char(24),
+  primary key (ol_w_id, ol_d_id, ol_o_id, ol_number)
+) engine = innodb;
+
+create table bmsql_item (
+  i_id     integer      not null,
+  i_name   varchar(24),
+  i_price  decimal(5,2),
+  i_data   varchar(50),
+  i_im_id  integer,
+  primary key (i_id)
+) engine = innodb;
+
+create table bmsql_stock (
+  s_w_id       integer       not null,
+  s_i_id       integer       not null,
+  s_quantity   integer,
+  s_ytd        integer,
+  s_order_cnt  integer,
+  s_remote_cnt integer,
+  s_data       varchar(50),
+  s_dist_01    char(24),
+  s_dist_02    char(24),
+  s_dist_03    char(24),
+  s_dist_04    char(24),
+  s_dist_05    char(24),
+  s_dist_06    char(24),
+  s_dist_07    char(24),
+  s_dist_08    char(24),
+  s_dist_09    char(24),
+  s_dist_10    char(24),
+  primary key (s_w_id, s_i_id)
+) engine = innodb;
+```
+
+4. 修改 `run/runDatabaseBuild.sh` 文件 17 行附近，定义数据加载结束时的后续工作。
+
+```shell
+ 17 #AFTER_LOAD="indexCreates foreignKeys extraHistID buildFinish"
+ 18 AFTER_LOAD="indexCreates buildFinish"
+```
+
+5. 修改 `run/funcs.sh` 文件 13 和 54 行附近，添加 MySQL/GreatSQL 数据库类型。
+
+```shell
+ 28         firebird)
+ 29             cp="../lib/firebird/*:../lib/*"
+ 30             ;;
+ 31         mysql)
+ 32             cp="../lib/mysql/*:../lib/*"
+ 33             ;;
+ 34         oracle)
+...
+ 53 case "$(getProp db)" in
+ 54     firebird|mysql|oracle|postgres)
+ 55         ;;
+```
+
+访问 [MySQL官网下载站](https://downloads.mysql.com/archives/c-j/)，下载 MySQL 驱动 jar 包：
+
+```shell
+$ cd /usr/local/benchmarksql-5.0/lib
+$ mkdir -p mysql
+$ cd mysql
+$ curl -OL -o mysql-connector-j-8.0.33.tar.gz https://downloads.mysql.com/archives/get/p/3/file/mysql-connector-j-8.0.33.tar.gz
+$ tar xf mysql-connector-j-8.0.33.tar.gz mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar
+$ mv mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar .
+$ pwd
+/usr/local/benchmarksql-5.0/lib/mysql
+
+$ ls
+mysql-connector-j-8.0.33  mysql-connector-j-8.0.33.jar  mysql-connector-j-8.0.33.tar.gz
+```
+
+6. 重新编译修改后的源码。
+
+```shell
+$ cd /usr/local/benchmarksql-5.0
+$ ant
+Buildfile: /usr/local/benchmarksql-5.0/build.xml
+
+init:
+
+compile:
+    [javac] Compiling 11 source files to /usr/local/benchmarksql-5.0/build
+
+dist:
+      [jar] Building jar: /usr/local/benchmarksql-5.0/dist/BenchmarkSQL-5.0.jar
+
+BUILD SUCCESSFUL
+Total time: 0 seconds
+```
+
+7. 编辑配置文件 `run/props.greatsql`，配置 GreatSQL 数据库的连接信息，例如数据库地址、端口、用户名和密码等。
+
+```shell
+$ vim /usr/local/benchmarksql-5.0/run/props.greatsql
+
+db=mysql
+driver=com.mysql.jdbc.Driver
+conn=jdbc:mysql://localhost:3306/bmsql
+user=bmsql
+password=bmsql
+
+warehouses=1000
+loadWorkers=32
+
+terminals=32
+runTxnsPerTerminal=0
+runMins=10
+limitTxnsPerMin=0
+
+terminalWarehouseFixed=true
+
+newOrderWeight=45
+paymentWeight=43
+orderStatusWeight=4
+deliveryWeight=4
+stockLevelWeight=4
+
+resultDirectory=my_result_%tY-%tm-%td_%tH%tM%tS
+osCollectorScript=./misc/os_collector_linux.py
+osCollectorInterval=1
+```
+
+主要参数说明
+- `db=mysql`，指定数据库类型。
+- `driver=com.mysql.jdbc.Driver`，指定驱动程序文件，这里是 MySQL JDBC 驱动。
+- `conn`, `user`, `password`，定义 GreatSQL 数据库连接IP、端口、账号名、密码、默认数据库等。
+- `warehouses`，定义仓库数，仓库数决定性能测试的成绩。对于高配服务器（32C96G以上），建议至少 1000 仓或更高。
+- `loadWorkers`，定义加载数据时的并发数。如果是高配服务器，该值可以设置大一些，例如 100，一般和服务器的逻辑 CPU 核数一样即可。过高的并发可能会导致内存消耗太快，出现报错，导致数据加载需要重新进行。
+- `terminals`，定义性能压测时的并发数。建议并发数不要高于服务器的逻辑 CPU 核数。否则可能产生过多锁等待。
+- `runMins`，定义性能测试持续的时间。时间越久，越能考验数据库的性能和稳定性。建议不要少于 10 分钟，生产环境中机器建议不少于 1 小时。
+
+### 3. 运行 BenchmarkSQL 测试
+
+- **初始化数据库**
+
+创建测试数据库，相应的账户，以及授权：
+
+```sql
+greatsql> CREATE DATABASE bmsql;
+greatsql> CREATE USER bmsql IDENTIFIED BY 'bmsql';
+greatsql> GRANT ALL ON bmsql.* TO bmsql;
+greatsql> SHOW GRANTS FOR bmsql;
++--------------------------------------------------+
+| Grants for bmsql@%                               |
++--------------------------------------------------+
+| GRANT USAGE ON *.* TO `bmsql`@`%`                |
+| GRANT ALL PRIVILEGES ON `bmsql`.* TO `bmsql`@`%` |
++--------------------------------------------------+
+```
+
+运行 `run/runDatabaseBuild.sh`，创建测试数据表并填充数据。
+
+```shell
+$ cd /usr/local/benchmarksql-5.0/run
+$ ./runDatabaseBuild.sh ./props.greatsql
+# ------------------------------------------------------------
+# Loading SQL file ./sql.mysql/tableCreates.sql
+# ------------------------------------------------------------
+Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+create table bmsql_config (
+cfg_name    varchar(30) primary key,
+cfg_value   varchar(50)
+);
+...
+Starting BenchmarkSQL LoadData
+
+driver=com.mysql.jdbc.Driver
+Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+conn=jdbc:mysql://localhost:3306/bmsql
+user=bmsql
+password=***********
+warehouses=5
+loadWorkers=2
+fileLocation (not defined)
+csvNullValue (not defined - using default 'NULL')
+
+Worker 000: Loading ITEM
+Worker 001: Loading Warehouse      1
+Worker 000: Loading ITEM done
+...
+# ------------------------------------------------------------
+# Loading SQL file ./sql.mysql/indexCreates.sql
+# ------------------------------------------------------------
+...
+# ------------------------------------------------------------
+# Loading SQL file ./sql.mysql/buildFinish.sql
+# ------------------------------------------------------------
+Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+-- ----
+-- Extra commands to run after the tables are created, loaded,
+-- indexes built and extra's created.
+-- ----
+```
+
+测试数据加载完毕。
+
+2. 运行测试
+
+运行 `bin/runBenchmark.sh` 来开始压力测试。
+
+```shell
+$ cd /usr/local/benchmarksql-5.0/run
+$ ./runBenchmark.sh ./props.greatsql
+[main] INFO   jTPCC : Term-00,
+[main] INFO   jTPCC : Term-00, +-------------------------------------------------------------+
+[main] INFO   jTPCC : Term-00,      BenchmarkSQL v5.0
+[main] INFO   jTPCC : Term-00, +-------------------------------------------------------------+
+[main] INFO   jTPCC : Term-00,  (c) 2003, Raul Barbosa
+[main] INFO   jTPCC : Term-00,  (c) 2004-2016, Denis Lussier
+[main] INFO   jTPCC : Term-00,  (c) 2016, Jan Wieck
+[main] INFO   jTPCC : Term-00, +-------------------------------------------------------------+
+[main] INFO   jTPCC : Term-00,
+[main] INFO   jTPCC : Term-00, db=mysql
+[main] INFO   jTPCC : Term-00, driver=com.mysql.jdbc.Driver
+[main] INFO   jTPCC : Term-00, conn=jdbc:mysql://localhost:3306/bmsql
+[main] INFO   jTPCC : Term-00, user=bmsql
+...
+[main] INFO   jTPCC : Term-00, copied ./props.greatsql to my_result_2024-08-16_095115/run.properties
+[main] INFO   jTPCC : Term-00, created my_result_2024-08-16_095115/data/runInfo.csv for runID 9
+[main] INFO   jTPCC : Term-00, writing per transaction results to my_result_2024-08-16_095115/data/result.csv
+[main] INFO   jTPCC : Term-00, osCollectorScript=./misc/os_collector_linux.py
+...
+Term-00, Running Average tpmTOTAL: 419069.59    Current tpmTOTAL: 10137792    Memory Usage: 652MB / 3544MBB
+
+```
+
+**提示**
+> 1. 运行 BenchmarkSQL 压测时，OSCollector 组件需要用到 Python 2.x，因此还需要先安装 Python 2.x（执行 `yum install -y python2`）。
+>
+> 2. 如果设置的 terminals 参数值较大的话，也就是压测并发数较大时，可能比较容易发生行锁等待超时，这时可以适当加大 GreatSQL 中的 `innodb_lock_wait_timeout` 参数值（例如 `SET GLOBAL innodb_lock_wait_timeout = 60`）。
+
+3. 清理数据库
+
+测试完成后，运行 `bin/unDatabaseDestroy.sh` 来清理测试数据库。
+
+```shell
+$ cd /usr/local/benchmarksql-5.0/run
+$ ./runDatabaseDestroy.sh ./props.greatsql
+# ------------------------------------------------------------
+# Loading SQL file ./sql.mysql/tableDrops.sql
+# ------------------------------------------------------------
+Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+drop table bmsql_config;
+drop table bmsql_new_order;
+drop table bmsql_order_line;
+drop table bmsql_oorder;
+drop table bmsql_history;
+drop table bmsql_customer;
+drop table bmsql_stock;
+drop table bmsql_item;
+drop table bmsql_district;
+drop table bmsql_warehouse;
+drop sequence bmsql_hist_id_seq;
+```
+
+### 4. 查看结果
+
+测试完成后，会生成测试结果文件，包括事务吞吐量、延迟、CPU 和内存使用情况等信息。
+
+```shell
+$ cd /usr/local/benchmarksql-5.0/run
+$ ls -ltr | grep my_result
+drwxr-xr-x 3 root root   40 Aug 16 09:51 my_result_2024-08-16_095115
+$ cd my_result_2024-08-16_095115
+$ ls -l
+drwxr-xr-x. 2 root root  103 Aug 16 10:10 data
+-rw-r--r--. 1 root root 1002 Aug 16 10:10 run.properties
+
+$ ls -l data/
+-rw-r--r--. 1 root root    15910 Aug 16 10:15 blk_md127.csv
+-rw-r--r--. 1 root root    15268 Aug 16 10:15 net_em1.csv
+-rw-r--r--. 1 root root 35529136 Aug 16 10:15 result.csv
+-rw-r--r--. 1 root root      218 Aug 16 10:10 runInfo.csv
+-rw-r--r--. 1 root root    34612 Aug 16 10:15 sys_info.csv
+```
+
+## 总结
+
+BenchmarkSQL 是一个强大且灵活的工具，用于评估数据库系统在 OLTP 场景下的性能。通过正确配置和优化，你可以得到数据库在特定工作负载下的详尽性能报告，这对于性能调优和容量规划非常有帮助。
+
+
+**扫码关注微信公众号**
+
+![greatsql-wx](../greatsql-wx.jpg)
