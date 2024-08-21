@@ -77,6 +77,11 @@ Cluster.addInstance: Instance check failed (RuntimeError)
 
 也可以利用相同版本号的Percona Xtrabackup执行物理备份，例如利用Percona XtraBackup 8.0.25-17备份GreatSQL 8.0.25-15、GreatSQL 8.0.25-16版本，利用Percona XtraBackup 2.4备份GreatSQL 5.7.36-39版本。
 
+从 GreatSQL 8.0.32-26 版本开始，可以使用自带的 Clone 插件完成全量、增量备份，以及利用 Clone 实现加密、压缩备份，详情参考：
+
+- [Clone 压缩及增量备份](../5-enhance/5-5-clone-compressed-and-incrment-backup.md)
+- [Clone 备份加密](../5-enhance/5-4-security-clone-encrypt.md)
+
 ## 5. 用MySQL Shell创建MGR时新增的 mysql_innodb_cluster_* 账号是干嘛用的
 这是用MySQL Shell创建MGR时才有的特点，这些账户用于后续的节点分布式恢复场景。其账户名规则是：`mysql_innodb_cluster_server_id@%,`
 
@@ -137,7 +142,10 @@ greatsql> ALTER TABLE t1 SECONDARY_LOAD;
 
 6. 不支持MyISAM存储引擎，不支持DDL语法。
 
-7. 其他情况。
+7. 不支持在同一个SQL查询中，混合使用 InnoDB 和 Rapid 引擎。也就是说，当一个 Rapid 引擎表和一个 InnoDB 引擎表之间进行 JOIN 关联查询时，是无法利用 Rapid 引擎来提升查
+询效率，只能两个表都走 InnoDB 引擎的执行计划。
+
+8. 其他情况。
 
 另外，使用Rapid引擎时还有几个注意事项：
 - 用户数据表主引擎只能是InnoDB引擎，不支持MyISAM等其他引擎。
@@ -210,24 +218,7 @@ GreatSQL相对于MySQL官方社区版本有非常大的性能提升，尤其是�
 
 是的，支持，详情参考：[数据脱敏](../5-enhance/5-4-security-data-masking.md)。
 
-## 14. 为什么在GreatSQL中运行一些查询SQL会被hang住一直无响应
-
-可能是因为触发了InnoDB并行查询的bug，请尝试升级到GreatSQL 8.0.32-25版本，或者修改选项 `force_parallel_execute=OFF` 临时关闭InnoDB并行查询特性。
-
-可以参考下面的案例：
-
-- [mysqldump导出108353886字节的数据后，hang](https://greatsql.cn/thread-522-1-1.html)
-- [greatsql执行sql卡死](https://greatsql.cn/thread-422-1-1.html)
-
-## 15. 为什么在GreatSQL中运行一些SQL后数据库crash了，该怎么办
-
-可能是因为触发了某些bug，请尝试升级到GreatSQL 8.0.32-25版本，或者参考文章 [MySQL报障之coredump收集处理流程](https://mp.weixin.qq.com/s/CrV9kgIUnUd4GEru93xjdA) 提到的方法，打包收集相应的coredump文件、my.cnf配置文件、错误日志文件以及能稳定复现的方法，然后联系我们报告bug。
-
-可以参考下面的案例：
-
-- [执行某些 SQL 导致数据库重启](https://greatsql.cn/thread-529-1-1.html)
-
-## 16. 什么是双1 或 双0？
+## 14. 什么是双1 或 双0？
 
 通常地，事务提交后为了保证用户数据不丢失，或者保证在mysqld进程意外crash后不丢失已提交的数据，需要确认以下两个选项值均设置为1，这称为 **双1**：
 - sync_binlog = 1
@@ -253,52 +244,7 @@ greatsql> SET innodb_flush_log_at_trx_commit = 1;
 ERROR 1229 (HY000): Variable 'innodb_flush_log_at_trx_commit' is a GLOBAL variable and should be set with SET GLOBAL
 ```
 
-## 17. 为什么GreatSQL数据库无缘无故停掉或重启了？
-
-以下几种情况的可能性较大：
-
-- 发生了OOM Killer（out-of-memory killer）
-
-简单说，就是被系统判定为内存占用太多，触发OOM KIller机制，杀掉mysqld进程以释放内存。
-
-可以查看操作系统日志文件 `/var/log/messages`，通常会有类似下面的日志内容
-
-```shell
-kernel: Out of memory: Kill process 6033 (mysqld) score 615 or sacrifice child
-kernel: Killed process 6033, UID 498, (mysqld) total-vm:56872260kB, anon-rss:3202560kB, file-rss:40kB
-```
-
-当发生OOM Killer事件时，可以选择适当调低部分设计内存的参数选项，例如 `innodb_buffer_pool_size` 等，也可以适当加大操作系统的物理内存。
-
-此外，如果不想保护mysqld进程不被OOM Killer机制杀掉，可以调整相应进程的 `oom_score_adj` 设置，将其修改为 -1000，例如：
-```shell
-$ ps -ef | grep mysqld
-ps -ef | grep mysqld | grep -v grep
-mysql     597099   1  9 Apr27 ?        21:16:54 /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf
-
-$ cat /proc/597099/oom_score_adj
-0
-
-$ echo -1000 > /proc/597099/oom_score_adj
-
-$ cat /proc/597099/oom_score_adj
--1000
-```
-
-关于 `oom_score_adj` 的值定义如下：
-- 默认为0，表示不调整分数。
-- 如果改为负数，表示尽量不要被Kill。
-- 如果改为正数，表示可以优先被Kill。
-
-更多关于OOM Killer的内容请参考：[深入理解Linux内核OOM killer机制](https://zhuanlan.zhihu.com/p/560714542)。
-
-
-- 管理员意外执行kill -9，杀掉mysqld进程。
-
-- 操作系统意外重启。
-
-
-## 18. 为什么我有事务被阻塞了，却查不到源头
+## 15. 为什么我有事务被阻塞了，却查不到源头
 
 当前有大量事务被阻塞，产生很多表锁、行锁，例如
 
@@ -334,7 +280,7 @@ trx_mysql_thread_id: 0
 - [事务控制](../12-dev-guide/12-6-1-trx-control.md)
 - [表锁住了,而且无法解锁](https://greatsql.cn/thread-487-1-1.html)
 
-## 19. 为什么设置 innodb_numa_interleave = ON 时，启动就会比较慢，像卡住了似的
+## 16. 为什么设置 innodb_numa_interleave = ON 时，启动就会比较慢，像卡住了似的
 
 设置 `innodb_numa_interleave = ON` 时，启动过程可能变慢并且看起来像卡（qiǎ）住了，这是因为 NUMA（非统一内存访问）系统的内存分配机制的复杂性。
 
@@ -362,68 +308,7 @@ NUMA 是一种用于多处理器系统的内存设计，旨在提高系统性能
 
 通过以上方法，应该可以在一定程度上缓解 `innodb_numa_interleave = ON` 造成的启动变慢问题。
 
-## 20. 为什么用 systemd 启动 GreatSQL 时，会报错提示 Failed to execute command: Permission denied
-
-问题现象：GreatSQL 的 mysqld 二进制文件权限设置正确，手工调用也能正常启动，但只要是通过 `systemd` 启动时就会报告 `Permission denied` 错误，例如：
-
-
-```
-systemd[1549425]: greatdb.service: Failed to execute command: Permission denied
-systemd[1549425]: greatdb.service: Failed at step EXEC spawning /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld: Permission denied
--- Subject: Process /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld could not be executed
--- Defined-By: systemd
--- Support: https://access.redhat.com/support
---
--- The process /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld could not be executed and failed.
---
--- The error number returned by this process is 13.
-```
-
-文件权限设置是正常的
-
-```
-$ ls -la /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld 
--rwxr-xr-x 1 mysql mysql 383759416 Feb  2 23:36 /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
-```
-
-出现这种情况，应该是 **SELinux* 导致的。
-
-在开启 **SELinux** 时，如果先把二进制可执行文件放在用户主目录，然后移动到其他目标目录的，就会由于文件的 **安全上下文** 不正确导致上述问题。
-
-可以采用下面方法修复：
-
-1. 首先，执行 `restorecon` 命令将文件和目录的SELinux安全上下文重置为默认值
-```shell
-$ restorecon -rv /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/
-```
-
-2. 关闭 SELinux
-```shell
-$ setenforce 0
-$ sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
-```
-
-再次重试，应该就可以了。
-
-
-## 21. 为什么用 GreatSQL 异常重启，日志中的报错信息有 A long semaphore wait 字样
-
-出现这种情况时，通常是因为 InnoDB 内部的 mutex 或者 lock 互斥等待太久，日志中一般还包含类似下面的内容
-
-```
-Thread XXX has waited at XXX line XXX for 928 seconds the semaphore
-```
-
-这可能是因为当时系统负载太高了，也可能是因为叠加了某些 bug 导致。当信号量互斥等待事件 持续太久（约900秒）后，GreatSQL 就会自行重启（不重启的话其他啥也做不了，也没意义）。
-
-几个可能的原因及可选解决办法
-1. 垃圾SQL太多，需要进行优化垃圾SQL，能看到有些事务修改多行记录，看起来效率也很低
-2. 数据库层面关闭自适应哈希索引（innodb_adaptive_hash_index = OFF），也可能是这个引起的
-3. 加强监控，不少事务活跃时间太久了，一直没提交。垃圾SQL（事务）长时间不结束，会占用更多资源，之后一起玩完。参考 [监控告警](../6-oper-guide/3-monitoring-and-alerting.md)。
-4. 可能系统层I/O设备有故障，能看到多个事务处于PREPARED状态，此时可能因为物理I/O设备故障导致无法提交/刷新数据。
-5. 最后建议升级到 GreatSQL 最新版本，相对更稳定可靠。
-
-## 22. 安装percona-toolkit工具时需要安装perl-DBD-MySQL依赖，但提示和GreatSQL冲突
+## 17. 安装percona-toolkit工具时需要安装perl-DBD-MySQL依赖，但提示和GreatSQL冲突
 
 使用percona-toolkit工具时报错提示缺失perl-DBD-MySQL，在安装perl-DBD-MySQL的时候出现报错和GreatSQL冲突，类似下面的错误信息：
 
@@ -449,7 +334,7 @@ Transaction check error:
 
 同样的问题，可能也会出现在安装其他软件包的时候，例如安装 sysbench 时。
 
-## 23. 部署 GreatSQL VIP功能时，执行 `ldconfig -p` 提示 "file is truncated"
+## 18. 部署 GreatSQL VIP功能时，执行 `ldconfig -p` 提示 "file is truncated"
 
 当 `ldconfig` 尝试读取或处理一个共享库文件时，如果文件大小比预期的小，或者文件末尾被意外截断，就会报告 "file is truncated" 错误。这种情况可能由以下几个原因造成：
 
