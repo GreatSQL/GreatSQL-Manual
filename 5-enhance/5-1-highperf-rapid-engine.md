@@ -806,9 +806,25 @@ GreatSQL Rapid引擎性能表现优异，在32C64G测试机环境下，TPC-H 100
 ```
 ERROR 3877 (HY000): Out of Memory Error: Failed to allocate block of 8192 bytes
 ```
+- 不支持在同一个SQL查询中，混合使用 InnoDB 和 Rapid 引擎。也就是说，当一个 Rapid 引擎表和一个 InnoDB 引擎表之间进行 JOIN 关联查询时，是无法利用 Rapid 引擎来提升查询效率，只能两个表都走 InnoDB 引擎的执行计划。如下例所示（t1 是 InnoDB 引擎表，t3 是 Rapid 引擎表）：
 
+```sql
+greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_OPTIONS FROM information_schema.tables WHERE TABLE_SCHEMA = 'test';
++--------------+------------+---------------------------------------------+
+| TABLE_SCHEMA | TABLE_NAME | CREATE_OPTIONS                              |
++--------------+------------+---------------------------------------------+
+| test         | t1         | SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1" |
+| test         | t3         | SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1" |
++--------------+------------+---------------------------------------------+
 
-
+greatsql> EXPLAIN SELECT /*+ SET_VAR(use_secondary_engine = ON) */ * FROM t1, t3 WHERE t1.b = t3.b;
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------------------+
+| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra                                      |
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------------------+
+|  1 | SIMPLE      | t3    | NULL       | ALL  | NULL          | NULL | NULL    | NULL |    1 |   100.00 | NULL                                       |
+|  1 | SIMPLE      | t1    | NULL       | ALL  | NULL          | NULL | NULL    | NULL |    2 |    50.00 | Using where; Using join buffer (hash join) |
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------------------+
+```
 
 **扫码关注微信公众号**
 
