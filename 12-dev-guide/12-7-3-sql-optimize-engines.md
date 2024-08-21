@@ -42,7 +42,7 @@ greatsql> show engines;
 
 - OLAP 场景
 
-在 OLAP 场景中，推荐选用 Rapid 引擎，该引擎在 [GreatSQL 8.0.32-25 版本](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231228.md#特性增强)中开始引入，在 TPC-H 测试中性能表现非常优异，测试报告详见：[GreatSQL TPC-H 性能测试报告](../10-optimze/3-3-benchmark-greatsql-tpch-report.md)。
+在 OLAP 场景中，推荐选用 Rapid 引擎，该引擎在 [GreatSQL 8.0.32-25 版本](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231228.md#特性增强)中开始引入，在 TPC-H 测试中性能表现非常优异，测试报告详见：[GreatSQL TPC-H 性能测试报告](../10-optimize/3-3-benchmark-greatsql-tpch-report.md)。
 
 Rapid 引擎适用于以读多写很少的业务场景，尤其适用于非实时业务分析的场景。更多关于 Rapid 引擎的内容详见：[Rapid 引擎](../5-enhance/5-1-highperf-rapid-engine.md)。
 

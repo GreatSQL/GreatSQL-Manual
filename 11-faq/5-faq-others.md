@@ -197,7 +197,7 @@ GreatSQL相对于MySQL官方社区版本有非常大的性能提升，尤其是�
 - [GreatSQL重磅特性，InnoDB并行并行查询优化测试](https://mp.weixin.qq.com/s/pK90W9xT_V59yvgxRwcn8A)
 - [GreatSQL & NVIDIA InfiniBand NVMe SSD性能测试](https://mp.weixin.qq.com/s/F9804_7H1WiJ6xD0E1AueQ)
 - [GreatSQL & DapuStor Roealsen5 NVMe SSD性能测试](https://mp.weixin.qq.com/s/QrIZ8Fu69Bzq5MvNZwtTww)
-- GreatSQL TPC-H 性能测试报告：[在线报告](../10-optimze/3-3-benchmark-greatsql-tpch-report.md)、[PDF文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/Presentations/27%E3%80%81benchmark-greatsql-tpch-report-20240228.pdf)
+- GreatSQL TPC-H 性能测试报告：[在线报告](../10-optimize/3-3-benchmark-greatsql-tpch-report.md)、[PDF文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/Presentations/27%E3%80%81benchmark-greatsql-tpch-report-20240228.pdf)
 
 ## 12. 运行GreatSQL时，必须先安装jemalloc包吗
 

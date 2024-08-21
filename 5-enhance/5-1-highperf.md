@@ -5,7 +5,7 @@
 
 - 支持 [大规模并行、基于内存查询、高压缩比的高性能 Rapid 引擎](./5-1-highperf-rapid-engine.md)，可将数据分析性能提升几个数量级。在 32C64G 测试机环境下，TPC-H SF100 测试中 22 条 SQL 总耗时仅需不到80秒。并且针对 TPC-H 测试数据的压缩比平均可达到 7 倍多。
 
-![GreatSQL Rapid 引擎 TPC-H SF100 性能测试表现突出](../10-optimze/greatsql-tpch-sf100-vs-sf300.jpg)
+![GreatSQL Rapid 引擎 TPC-H SF100 性能测试表现突出](../10-optimize/greatsql-tpch-sf100-vs-sf300.jpg)
 
 ![GreatSQL Rapid 引擎数据压缩比平均 7 倍多](./5-1-highperf-rapid-engine-01.png)
 

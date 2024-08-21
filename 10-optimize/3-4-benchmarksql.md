@@ -369,6 +369,9 @@ osCollectorInterval=1
 - `osCollectorSSHAddr`，需要收集系统性能的主机。
 - `osCollectorDevices`，操作系统中被收集服务器的网卡名称和磁盘名称。
 
+**提醒**：
+> 启用系统信息收集时（osCollectorScript 参数设置不为空），可能会发生
+
 ### 3. 运行 BenchmarkSQL 测试
 
 - **初始化数据库**

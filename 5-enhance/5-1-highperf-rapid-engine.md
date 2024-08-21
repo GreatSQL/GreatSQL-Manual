@@ -785,7 +785,7 @@ GreatSQL Rapid引擎性能表现优异，在32C64G测试机环境下，TPC-H 100
 | TPC-H 100GB | 184570593436 | 28728373248 | 6.42 | 
 | TPC-H 500GB | 1167795142848 | 146723045376 | 7.96 | 
 
-更多关于 Rapid 引擎 TPC-H 测试报告详情请参考：[GreatSQL TPC-H 性能测试报告](../10-optimze/3-3-benchmark-greatsql-tpch-report.md)。
+更多关于 Rapid 引擎 TPC-H 测试报告详情请参考：[GreatSQL TPC-H 性能测试报告](../10-optimize/3-3-benchmark-greatsql-tpch-report.md)。
 
 ## 构建专属AP查询服务器
 

@@ -27,7 +27,7 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 
 ## 仲裁节点产生的系统负载很低
 
-对一个包含仲裁节点的 MGR 集群执行 [sysbench 性能压测](../10-optimze/3-1-benchmark-sysbench.md)，观察压测期间各节点负载数据，先看 **Primary** 节点：
+对一个包含仲裁节点的 MGR 集群执行 [sysbench 性能压测](../10-optimize/3-1-benchmark-sysbench.md)，观察压测期间各节点负载数据，先看 **Primary** 节点：
 ```
 $ top
 ...

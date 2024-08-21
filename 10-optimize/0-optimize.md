@@ -7,8 +7,8 @@
 
 遵循良好的SQL应用开发规范，做好数据库性能优化，避免数据库成为业务系统的瓶颈，提升系统稳定性、可靠性，给业务带来更大价值。
 
-## [硬件、系统优化](./1-hardware-and-os-optimze.md)
-## [GreatSQL优化](./2-greatsql-optimze.md)
+## [硬件、系统优化](./1-hardware-and-os-optimize.md)
+## [GreatSQL优化](./2-greatsql-optimize.md)
 ## [性能测试](./3-performance-benchmark.md)
 
 

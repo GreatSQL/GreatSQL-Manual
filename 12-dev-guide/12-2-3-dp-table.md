@@ -122,7 +122,7 @@ greatsql> SHOW TABLES;
 ```
 ## 表的创建参考
 
-详情可见：[Schema设计规范参考](../10-optimze/2-1-schema-design-refer.md)
+详情可见：[Schema设计规范参考](../10-optimize/2-1-schema-design-refer.md)
 
 举例几个《Java开发手册》之字段命名
 

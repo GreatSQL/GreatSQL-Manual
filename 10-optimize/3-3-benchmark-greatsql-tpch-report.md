@@ -1146,8 +1146,8 @@ ORDER BY
 ### 参考资料
 
 - TPC-H官网：[http://www.tpc.org/tpch](http://www.tpc.org/tpch)
-- GreatSQL安装指南：[https://greatsql.cn/docs/8032-25/user-manual/4-install-guide/0-install-guide.html](https://greatsql.cn/docs/8032-25/user-manual/4-install-guide/0-install-guide.html)
-- TPC-H性能测试指南：[https://greatsql.cn/docs/8032-25/user-manual/10-optimze/3-2-benchmark-tpch.html](https://greatsql.cn/docs/8032-25/user-manual/10-optimze/3-2-benchmark-tpch.html)
+- GreatSQL安装指南：[https://greatsql.cn/docs/4-install-guide/0-install-guide.html](https://greatsql.cn/docs/4-install-guide/0-install-guide.html)
+- TPC-H性能测试指南：[https://greatsql.cn/docs/10-optimize/3-2-benchmark-tpch.html](https://greatsql.cn/docs/10-optimize/3-2-benchmark-tpch.html)
 - TPC-H测试建表DDL及查询SQL：[https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/tpch/3.0.1](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/tpch/3.0.1)
 - duckdb_dbgen.py脚本：[https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/duckdb_dbgen.py](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/duckdb_dbgen.py)
 

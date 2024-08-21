@@ -14,7 +14,7 @@ unbuntu系统下安装sysbench
 $ apt-get install sysbench -y
 ```
 
-若使用 yum / apt-get 安装不上，可尝试使用源码编译安装，详见：[sysbench性能测试](../10-optimze/3-1-benchmark-sysbench.md)
+若使用 yum / apt-get 安装不上，可尝试使用源码编译安装，详见：[sysbench性能测试](../10-optimize/3-1-benchmark-sysbench.md)
 
 查看sysbench版本
 ```bash
