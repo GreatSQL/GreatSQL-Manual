@@ -8,9 +8,9 @@
 
 ##  下载测试数据集压缩包
 上述三个测试数据集下载地址分别是：
-- https://github.com/datacharmer/test_db
-- https://downloads.mysql.com/docs/world-db.tar.gz
-- https://downloads.mysql.com/docs/sakila-db.tar.gz
+- [https://github.com/datacharmer/test_db](https://github.com/datacharmer/test_db)
+- [https://downloads.mysql.com/docs/world-db.tar.gz](https://downloads.mysql.com/docs/world-db.tar.gz)
+- [https://downloads.mysql.com/docs/sakila-db.tar.gz](https://downloads.mysql.com/docs/sakila-db.tar.gz)
 
 分别下载到本地，并解压缩到 `/tmp/testdb` 目录下：
 ```
