@@ -12,7 +12,7 @@
 
 mysql客户端登入时，不读取全部metadata，避免影响性能以及产生MDL等待。
 
-- skip_name_resolve = 1
+- skip_name_resolve = ON
 
 不进行DNS反解析，提高用户端连接性能。
 
@@ -37,7 +37,7 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 
 采用WRITESET模式提高从节点事务并行回放度。
 
-- slave_preserve_commit_order = 1
+- slave_preserve_commit_order = ON
 
 从节点回放事务时，要保证事务顺序，避免和主节点数据不一致。
 
