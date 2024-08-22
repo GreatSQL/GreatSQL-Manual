@@ -124,11 +124,11 @@ $ grep innodb_buffer_pool_size /data/GreatSQL/mysqld-auto.cnf
 
 ### 日志管理
 
-数据库运行期间，会生成各种日志，包括请求日志（general log）、错误日志（error log）、慢查询日志（slow query log）、二进制日志（binary log）、中继日志（relay log）等。
+数据库运行期间，会生成各种日志，包括 [通用日志（general log）](../2-about-greatsql/4-7-greatsql-general-log.md)、[错误日志（error log）](../2-about-greatsql/4-1-greatsql-error-log.md)、[慢查询日志（slow query log）](../2-about-greatsql/4-2-greatsql-slow-log.md)、[二进制日志（binary log）](../2-about-greatsql/4-3-greatsql-binary-log.md)、[中继日志（relay log）](../2-about-greatsql/4-4-greatsql-relay-log.md) 等。
 
 默认情况下，只会启用error log、binary log、relay log，而general log、slow query log则默认不会启用。
 
-此外，还有InnoDB存储引擎层的redo log（重做日志）和undo log（撤销日志）。
+此外，还有InnoDB存储引擎层的 [redo log（重做日志）](../2-about-greatsql/4-5-greatsql-redo-log.md) 和 [undo log（撤销日志）](../2-about-greatsql/4-6-greatsql-undo-log.md)。
 
 | 日志 | 简述 |
 | --- | --- |
