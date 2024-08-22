@@ -228,6 +228,7 @@ greatsql> SELECT STAGE, STATE, CAST(BEGIN_TIME AS TIME) AS "START TIME",
 **提醒：** 
 1. 在 Clone 过程中，如果被强行 KILL 终止的话，recipient 节点上的数据会被清空，只剩下接近刚初始化完的新实例，请谨慎操作。
 2. 从GreatSQL 8.0.32-25 版本开始，Clone 支持加密备份及解密，详情请见文档：[Clone 备份加密](../5-enhance/5-4-security-clone-encrypt.md)。
+2. 从GreatSQL 8.0.32-26 版本开始，Clone 支持加增量备份和压缩备份，详情请见文档：[Clone 备份加密](../5-enhance/5-5-clone-compressed-and-incrment-backup.md)。
 
 在 recipient 节点上完成 Clone 备份后，就等同于在 recipient 也做了一次数据恢复，这个节点还可以作为主从复制的从节点，也可以作为MGR组复制的新节点，一举多得。
 
