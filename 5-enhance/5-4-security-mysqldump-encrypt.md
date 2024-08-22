@@ -1,9 +1,7 @@
 # mysqldump备份加密
 ---
 
-
-
-GreatSQL 8.0.32-25支持在mysqldump进行逻辑备份时产生加密备份文件，并且也支持对加密后的备份文件解密导入。
+从 [GreatSQL 8.0.32-25 版本](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231228.md) 开始支持在 *mysqldump* 进行逻辑备份时产生加密备份文件，并且也支持对加密后的备份文件解密导入。
 
 下面是具体使用方法。
 
