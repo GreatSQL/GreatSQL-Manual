@@ -19,7 +19,7 @@ MGR最多可支持9个节点，无论是单主还是多主模式。
 当整个MGR集群都关闭再重启时，也可以用MySQL Shell实现一键自动快速拉起，详见：[万答#12，MGR整个集群挂掉后，如何才能自动选主，不用手动干预](https://mp.weixin.qq.com/s/07o1poO44zwQIvaJNKEoPA)。
 
 ## 4. 为什么启动MGR后，多了个33061端口
-当启用MGR服务后，GreatSQL默认会监听33061端口，该端口用于MGR节点间的通信。因此当服务器间有防火墙策略时，记得针对该端口开放。
+默认地，当启用MGR服务后，GreatSQL默认会监听33061端口，该端口用于MGR节点间的通信。因此当服务器间有防火墙策略时，记得针对该端口开放。
 
 也可以自行定义该端口，例如 `group_replication_local_address=192.168.0.1:33062`。
 
@@ -266,6 +266,8 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 5. 手动启动MGR集群（先启动Primary节点，后启动Secondary节点），更推荐用GreatSQL Shell启动MGR集群，详情参考：[重启MGR集群，如何自动选主](https://mp.weixin.qq.com/s/07o1poO44zwQIvaJNKEoPA)；
 
+更多关于 GreatSQL 版本升级或迁移的内容请参考：[GreatSQL 5.7升级到8.0](../7-migrate-and-upgrade/1-upgrade-to-greatsql8.md#升级greatsql-8-0-25到8-0-32)。
+
 ## 18. 为什么手动搭建MGR时报caching_sha2_password错，或某个节点状态一直处于RECOVERING
 
 这是由于8.0.4中新引入 `caching_sha2_password` 身份验证插件，它对密码安全性要求更高，要求用户认证过程中在网络传输的密码是加密的，所以导致的这个问题的出现。
@@ -274,19 +276,19 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 详情参考：[MGR新节点RECOVERING状态的分析与解决：caching_sha2_password验证插件的影响](https://mp.weixin.qq.com/s/G9bpThAR-fYHHZsA8l4uuw)。
 
-## 19. 某个MGR成员节点发生报错Duplicate entry...Error_code: 1062; handler error HA_ERR_FOUND_DUPP_KEY (1062)，怎么处理
+## 19. 某个MGR成员节点发生报错`Duplicate entry...Error_code: 1062; handler error HA_ERR_FOUND_DUPP_KEY (1062)`，怎么处理
 
 这是因为该成员节点上应用事务时发生重复冲突报错了，可能是该节点有部分数据由于手动操作或误操作等原因造成不一致。
 
 这种情况下，如果数据量较小，则建议直接重建该节点后再加入MGR集群；如果数据量较大，则考虑手动修复不一致的数据后再加入MGR集群，数据修复可以考虑采用 [gt-checksum工具](https://gitee.com/GreatSQL/gt-checksum)。
 
-## 20. 某个MGR成员节点发生报错This member has more executed transactions than those present in the group，怎么处理
+## 20. 某个MGR成员节点发生报错`This member has more executed transactions than those present in the group`，怎么处理
 
 这是因为该成员节点有部分本地事务，和MGR全局事务产生冲突，较大可能是该节点有由于手动操作或误操作等原因造成。
 
 这种情况下，如果数据量较小，则建议直接重建该节点后再加入MGR集群；如果数据量较大，则考虑手动修复不一致的数据后再加入MGR集群，数据修复可以考虑采用 [gt-checksum工具](https://gitee.com/GreatSQL/gt-checksum)。
 
-## 21. 为什么用GreatSQL Shell创建/接管MGR集群时报错，提示Access denied
+## 21. 为什么用GreatSQL Shell创建/接管MGR集群时报错，提示`Access denied`
 
 请用管理员创建MGR服务专用账户时，加上 `WITH GRANT OPTION` 选项。
 

@@ -123,7 +123,7 @@ greatsql> show global status like 'PQ_%';
 ```
 相较而言，建议采用 [Rapid 引擎](../5-enhance/5-1-highperf-rapid-engine.md) 提升查询效率，其提升效果更为明显。
 
-## 8. 为什么一个表已经设置了SECONDARY_ENGINE=rapid却还无法使用Rapid引擎加速查询
+## 8. 为什么一个表已经设置了 `SECONDARY_ENGINE=rapid` 却还无法使用Rapid引擎加速查询
 
 可能存在以下几种原因导致无法使用Rapid引擎加速查询：
 
@@ -132,7 +132,7 @@ greatsql> show global status like 'PQ_%';
 greatsql> ALTER TABLE t1 SECONDARY_LOAD;
 ```
 
-2. 用户数据表中用到了暂时还不支持的数据类型，目前支持BOOL\INT\FLOAT\DOUBLE\DECIMAL\等数据类型，其他数据类型暂不支持。
+2. 用户数据表中用到了暂时还不支持的数据类型，目前支持 *BOOL\INT\FLOAT\DOUBLE\DECIMAL* 等数据类型，其他数据类型暂不支持。
 
 3. 用户SQL请求中包含了暂时还不支持的函数。
 
@@ -149,7 +149,7 @@ greatsql> ALTER TABLE t1 SECONDARY_LOAD;
 
 另外，使用Rapid引擎时还有几个注意事项：
 - 用户数据表主引擎只能是InnoDB引擎，不支持MyISAM等其他引擎。
-- 数据库实例重启后，查询个别Rapid引擎表可能会提示无法使用Rapid引擎加速，这时可以尝试执行 ALTER TABLE ... SECONDARY_LOAD 将该表再次加载到Rapid引擎中，实际上无需重新加载一次，速度非常快，之后就可以使用Rapid引擎了。
+- 数据库实例重启后，查询个别Rapid引擎表可能会提示无法使用Rapid引擎加速，这时可以尝试执行 `ALTER TABLE ... SECONDARY_LOAD` 将该表再次加载到Rapid引擎中，实际上无需重新加载一次，速度非常快，之后就可以使用Rapid引擎了。
 
 ## 9. MySQL 5.7可以和GreatSQL 5.7混用datadir吗
 是可以的。
@@ -280,7 +280,7 @@ trx_mysql_thread_id: 0
 - [事务控制](../12-dev-guide/12-6-1-trx-control.md)
 - [表锁住了,而且无法解锁](https://greatsql.cn/thread-487-1-1.html)
 
-## 16. 为什么设置 innodb_numa_interleave = ON 时，启动就会比较慢，像卡住了似的
+## 16. 为什么设置 `innodb_numa_interleave = ON` 时，启动就会比较慢，像卡住了似的
 
 设置 `innodb_numa_interleave = ON` 时，启动过程可能变慢并且看起来像卡（qiǎ）住了，这是因为 NUMA（非统一内存访问）系统的内存分配机制的复杂性。
 
