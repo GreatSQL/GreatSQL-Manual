@@ -191,6 +191,8 @@ mysql           hard    nproc          65535
 
 开启NUMA并正确设置后，在某次测试中，OLTP性能提升约10% ~ 20%。
 
+从 GreatSQL 8.0.32-26 开始支持 [NUMA 亲和性优化](../5-enhance/5-1-highperf-numa-affinity.md)，对高负载场景下的性能优化也有帮助。
+
 以CentOS为例，打开 `/etc/default/grub` 文件，确保文件内容中没有 `NUMA=OFF` 字样，如果有的话就删掉：
 ```
 GRUB_TIMEOUT=5
