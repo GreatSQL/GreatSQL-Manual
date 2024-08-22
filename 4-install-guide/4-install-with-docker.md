@@ -183,8 +183,6 @@ networks:
 
 如果不想要仲裁节点，则可以修改最后一个节点的属性 `MYSQL_MGR_ARBITRATOR: 0` 就行了。
 
-另外，利用 docker-compose 方式暂时无法构建多主模式的MGR集群，需要手动部署。
-
 启动三个实例：
 ```
 $ docker-compose -f /data/docker-compose/mgr-3nodes.yml up -d
@@ -392,7 +390,7 @@ MySQL 8.0.26开始，可以为view change单独指定一个GTID前缀，避免�
 非必选项。
 
 
-更多关于如何利用Docker/Docker-Compose完成GreatSQL初始化并构建MGR集群的详情请查看 [**GreatSQL-Docker项目**](https://gitee.com/GreatSQL/GreatSQL-Docker)。
+更多关于如何利用Docker/Docker-Compose完成GreatSQL初始化并构建MGR集群的详情请查看 [**GreatSQL-Docker项目**](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL)。
 
 
 **扫码关注微信公众号**
