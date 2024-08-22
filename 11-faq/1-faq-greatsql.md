@@ -16,9 +16,9 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 ### 3.1 二进制包、RPM包
 二进制包下载地址：[https://gitee.com/GreatSQL/GreatSQL/releases](https://gitee.com/GreatSQL/GreatSQL/releases)
 
-GreatSQL至少提供CentOS 7、CentOS 8两种操作系统，以及X86和ARM两种不同架构下的二进制包、RPM包。
+GreatSQL至少提供CentOS 7、CentOS 8两种操作系统，以及X86和ARM两种不同架构下的二进制包、RPM包、SRC RPM包。
 
-除此外，GreatSQL还提供适用于国产化操作系统的二进制包或RPM包。
+除此外，GreatSQL 还提供适用于部分国产化操作系统的二进制包或RPM包，以及支持国密加密算法的二进制包。
 
 ### 3.2 源码
 可以直接用git clone的方式下载GreatSQL源码，例如：
@@ -36,7 +36,19 @@ GreatSQL提供Docker镜像，可直接从docker hub拉取：
 $ docker pull docker.io/greatsql/greatsql
 
 # 或自行指定版本号
-$ docker pull docker.io/greatsql/greatsql:8.0.32-25
+$ docker pull docker.io/greatsql/greatsql:8.0.32-26
+```
+
+若由于网络原因无法从 docker.io 拉取 GreatSQL 镜像的话，可以改成从阿里云 ACR 拉取，方法如下：
+
+```shell
+$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
+```
+
+也可以从腾讯云 TCR 拉取：
+
+```shell
+$ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql
 ```
 
 ### 3.4 Ansible安装包
@@ -67,47 +79,27 @@ GreatSQL提供Ansible一键安装包，可在gitee或github下载：
 一、文档
 目前GreatSQL相关文档全部发布在gitee上（[https://gitee.com/GreatSQL/GreatSQL-Doc/](https://gitee.com/GreatSQL/GreatSQL-Doc/)），主要有以下几部分
 
-1. GreatSQL历史版本
+1. [GreatSQL历史版本](../1-docs-intro/1-2-release-history.md)
 
-- [历史版本变更说明](../1-docs-intro/1-2-release-history.md)
+2. [《深入浅出MGR》系列专栏文章](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/deep-dive-mgr)
 
-2. 《深入浅出MGR》系列
-
-- 专栏文章：[https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/deep-dive-mgr](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/deep-dive-mgr)
-
-3. 《GreatSQL用户手册》
-
-- [GreatSQL用户手册](https://greatsql.cn/docs/)
+3. [《GreatSQL用户手册》](https://greatsql.cn/docs/)
 
 二、视频
 
-1. 《实战MGR》
+1. [《实战MGR》](https://greatsql.cn/smx_course-lesson.html?op=video&ids=5)
 
-- [实战MGR](https://greatsql.cn/smx_course-lesson.html?op=video&ids=5)
+2. [《深入浅出MGR》](https://greatsql.cn/smx_course-lesson.html?op=video&ids=6)
 
-2. 《深入浅出MGR》
+3. [《零基础学习MySQL》](https://greatsql.cn/smx_course-lesson.html?op=video&ids=7)
 
-- [深入浅出MGR](https://greatsql.cn/smx_course-lesson.html?op=video&ids=6)
+4. [《GreatSQL GCA课程》](https://greatsql.cn/smx_course-lesson.html?op=video&ids=10)
 
-3. 《零基础学习MySQL》
+5. [《GreatSQL GCP课程》](https://greatsql.cn/smx_course-lesson.html?op=video&ids=11)
 
-- [零基础学习MySQL](https://greatsql.cn/smx_course-lesson.html?op=video&ids=7)
+6. [GreatSQL新版本发布会](https://greatsql.cn/smx_course-lesson.html?op=video&ids=9)
 
-4. 《GreatSQL GCA课程》
-
-- [GreatSQL GCA课程](https://greatsql.cn/smx_course-lesson.html?op=video&ids=10)
-
-5. 《GreatSQL GCP课程》
-
-- [GreatSQL GCP课程](https://greatsql.cn/smx_course-lesson.html?op=video&ids=11)
-
-6. GreatSQL新版本发布会
-
-- [GreatSQL新版本发布会](https://greatsql.cn/smx_course-lesson.html?op=video&ids=9)
-
-7. 其他公开分享
-
-- [其他公开分享](https://greatsql.cn/smx_course-lesson.html?op=video&ids=4)
+7. [其他公开分享](https://greatsql.cn/smx_course-lesson.html?op=video&ids=4)
 
 您学习完上述课程后，还可以报名参加GreatSQL GCA或GCP认证考试，详见：[GreatSQL GCA/GCP培训认证](https://greatsql.cn/docs/community/4-greatsql-certified.html)。
 
