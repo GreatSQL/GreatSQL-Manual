@@ -1,7 +1,7 @@
-# 表空间国密加密
+# 国密算法加密支持
 ---
 
-
+GreatSQL 支持在通信加密和 InnoDB 表空间加密时采用国密算法，为此 GreatSQL 特地发布国密版本二进制包，在 [下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26) 中搜索 *支持国密特性二进制包* 关键字并下载相应的二进制包。
 
 ## 编译安装BabaSSL
 
@@ -33,8 +33,9 @@ $ openssl ciphers|grep SM
 TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_SM4_GCM_SM3:TLS_SM4_CCM_SM3... 
 ```
 
-## 启用国密支持
-修改 my.cnf 配置文件，增加以下国密支持选项：
+## 启用通信国密加密支持
+
+修改 my.cnf 配置文件，增加以下通信国密加密支持选项：
 ```
 #enable openssl & SM
 require_secure_transport = ON
@@ -50,6 +51,8 @@ Environment=LD_LIBRARY_PATH=/usr/local/lib64
 ```
 
 如果是直接在命令行下手动方式启动GreatSQL，则确保BabaSSL已经启用的情况下，再次重启GreatSQL服务。
+
+> 再次提醒，需要下载特定 GreatSQL 二进制包才支持国密加密算法。
 
 ## 登入测试
 再次登入GreatSQL，确认国密支持已生效：
@@ -189,8 +192,8 @@ SELECT SCHEMA_NAME, DEFAULT_ENCRYPTION FROM information_schema.SCHEMATA WHERE DE
 ```
 
 更多详情请见MySQL文档：
-- https://dev.mysql.com/doc/refman/8.0/en/keyring.html
-- https://dev.mysql.com/doc/refman/8.0/en/innodb-data-encryption.html
+- [https://dev.mysql.com/doc/refman/8.0/en/keyring.html](https://dev.mysql.com/doc/refman/8.0/en/keyring.html)
+- [https://dev.mysql.com/doc/refman/8.0/en/innodb-data-encryption.html](https://dev.mysql.com/doc/refman/8.0/en/innodb-data-encryption.html)
 
 
 **扫码关注微信公众号**
