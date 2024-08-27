@@ -4,7 +4,7 @@
 [![](https://img.shields.io/badge/License-GPL_v2.0-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)
 [![](https://img.shields.io/badge/release-8.0.32_26-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)
 
-最后更新：2024-08-26。
+最后更新：2024-08-27。
 
 本文档适用版本：GreatSQL 8.0.32-26。
 
@@ -45,7 +45,7 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 更多信息详见文档：[高可用](./5-enhance/5-2-ha.md)。
 
 ### [高性能](./5-enhance/5-1-highperf.md)
-相对 MySQL 及 Percona Server For MySQL 的性能表现更稳定优异，支持 Rapid 引擎、事务无锁化、并行 LOAD DATA、异步删除大表、线程池、非阻塞式 DDL、NUMA 亲和调度优化 等特性，在 TPC-C 测试中相对 MySQL 性能提升超过 30%，在 TPC-H 测试中的性能表现是 MySQL 的十几倍甚至上百倍。
+相对 MySQL 及 Percona Server For MySQL 的性能表现更稳定优异，支持 Rapid 引擎、事务无锁化、并行 LOAD DATA、异步删除大表、线程池、非阻塞式 DDL、NUMA 亲和调度优化 等特性，在 [TPC-C 测试中相对 MySQL 性能提升超过 30%](./10-optimize/3-5-benchmark-greatsql-vs-mysql-tpcc-report.md)，在 [TPC-H 测试中的性能表现是 MySQL 的十几倍甚至上百倍](./10-optimize/3-3-benchmark-greatsql-tpch-report.md)。
 
 - 支持 [大规模并行、基于内存查询、高压缩比的高性能 Rapid 引擎](./5-enhance/5-1-highperf-rapid-engine.md)，可将数据分析性能提升几个数量级。
 - 优化 InnoDB 事务系统，实现了大锁拆分及无锁化等多种优化方案，OLTP 场景整体性能提升约 20%。
