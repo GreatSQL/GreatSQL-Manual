@@ -175,7 +175,7 @@ $ dmesg | grep -i numa
   | MySQL 8.0.32 | 346493.57 | 337568.95 |
   | GreatSQL 性能提升 | 31.75% | 33.77% |
 
-  ![GreatSQL vs MySQL 并发 32 客户端 BenchmarkSQL TPC-C 测试结果对比](./greatsql803226-vs-mysql-32-terminals-tpcc-benchmarksql-report.png)
+  ![GreatSQL vs MySQL 并发 32 客户端 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-32-terminals-tpcc-benchmarksql-report.png)
   
   - GreatSQL 8.0.32-26 vs MySQL 8.0.32 并发 64 客户端 BenchmarkSQL TPC-C 测试结果对比
 
@@ -185,7 +185,7 @@ $ dmesg | grep -i numa
   | MySQL 8.0.32 |  |  |
   | GreatSQL 性能提升 |  |  |
   
-  ![GreatSQL vs MySQL 并发 64 客户端 BenchmarkSQL TPC-C 测试结果对比](./greatsql803226-vs-mysql-64-terminals-tpcc-benchmarksql-report.png)
+  ![GreatSQL vs MySQL 并发 64 客户端 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-64-terminals-tpcc-benchmarksql-report.png)
 
 ## BenchmarkSQL 测试数据
 
@@ -200,7 +200,7 @@ $ dmesg | grep -i numa
 | GreatSQL 8.0.32-26 | 450620.65 | 456953.65 | 419828.7 | 459993.95 | 459402.05 | 455620.1 | 414715.6 | 418527.6 |
 | MySQL 8.0.32 | 343997.05 | 345936.55 | 324826.95 | 352615.8 | 352121.45 | 348762.3 | 335528.25 | 319743.1 |
 
-![GreatSQL vs MySQL 并发 32 客户端，IBP = 128G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./greatsql803226-vs-mysql-32-terminals-ibp-128g-tpcc-benchmarksql-data-detail.png)
+![GreatSQL vs MySQL 并发 32 客户端，IBP = 128G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-32-terminals-ibp-128g-tpcc-benchmarksql-data-detail.png)
 
 - IBP = 256G
 
@@ -209,21 +209,21 @@ $ dmesg | grep -i numa
 | GreatSQL 8.0.32-26 | 452826 | 449903.4 | 451065.25 | 453021.5 | 451434.85 | 450367 | 450668.8 | 448747.2 |
 | MySQL 8.0.32 | 339873.7 | 311245.45 | 339739.45 | 344684.4 | 329512.2 | 332257.85 | 331289.35 | 306099.75 |
 
-![GreatSQL vs MySQL 并发 32 客户端，IBP = 256G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./greatsql803226-vs-mysql-32-terminals-ibp-256g-tpcc-benchmarksql-data-detail.png)
+![GreatSQL vs MySQL 并发 32 客户端，IBP = 256G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-32-terminals-ibp-256g-tpcc-benchmarksql-data-detail.png)
 
 ### GreatSQL 8.0.32-26 vs MySQL 8.0.32 并发 32 客户端 BenchmarkSQL TPC-C 测试数据曲线图
 
 - GreatSQL 8.0.32-26 with 32-terminals & IBP=128G
-![GreatSQL 8.0.32-26 并发 32 客户端 & 128G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./greatsql803226-32-terminals-ibp-128g-tpm_nopm.png)
+![GreatSQL 8.0.32-26 并发 32 客户端 & 128G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-greatsql803226-32-terminals-ibp-128g-tpm_nopm.png)
 
 - MySQL 8.0.32 with 32-terminals & IBP=128G
-![MySQL 8.0.32 并发 32 客户端 & 128G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./mysql8032-32-terminals-ibp-128g-tpm_nopm.png)
+![MySQL 8.0.32 并发 32 客户端 & 128G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-mysql8032-32-terminals-ibp-128g-tpm_nopm.png)
 
 - GreatSQL 8.0.32-26 with 32-terminals & IBP=256G
-![GreatSQL 8.0.32-26 并发 32 客户端 & 256G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./greatsql803226-32-terminals-ibp-256g-tpm_nopm.png)
+![GreatSQL 8.0.32-26 并发 32 客户端 & 256G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-greatsql803226-32-terminals-ibp-256g-tpm_nopm.png)
 
 - MySQL 8.0.32 with 32-terminals & IBP=256G
-![MySQL 8.0.32 并发 32 客户端 & 256G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./mysql8032-32-terminals-ibp-256g-tpm_nopm.png)
+![MySQL 8.0.32 并发 32 客户端 & 256G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-mysql8032-32-terminals-ibp-256g-tpm_nopm.png)
 
 ### GreatSQL 8.0.32-26 vs MySQL 8.0.32 并发 64 客户端 BenchmarkSQL TPC-C 测试数据
 
@@ -236,7 +236,7 @@ $ dmesg | grep -i numa
 | GreatSQL 8.0.32-26 | 
 | MySQL 8.0.32 | 
 
-![GreatSQL vs MySQL 并发 64 客户端，IBP = 128G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./greatsql803226-vs-mysql-64-terminals-ibp-128g-tpcc-benchmarksql-data-detail.png)
+![GreatSQL vs MySQL 并发 64 客户端，IBP = 128G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-64-terminals-ibp-128g-tpcc-benchmarksql-data-detail.png)
 
 - IBP = 256G
 
@@ -245,7 +245,7 @@ $ dmesg | grep -i numa
 | GreatSQL 8.0.32-26 | 
 | MySQL 8.0.32 | 
 
-![GreatSQL vs MySQL 并发 64 客户端，IBP = 256G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./greatsql803226-vs-mysql-64-terminals-ibp-256g-tpcc-benchmarksql-data-detail.png)
+![GreatSQL vs MySQL 并发 64 客户端，IBP = 256G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-64-terminals-ibp-256g-tpcc-benchmarksql-data-detail.png)
 
 ### GreatSQL 8.0.32-26 vs MySQL 8.0.32 并发 64 客户端 BenchmarkSQL TPC-C 测试数据曲线图
 
