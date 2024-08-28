@@ -42,7 +42,7 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 | CPU      | Intel(R) Xeon(R) Gold 6238 CPU @ 2.10GHz * 4                              |
 | 内存     | 377G                                                                      |
 | 磁盘     | Dell Express Flash CD5 3.84T SFF * 2                                      |
-| 数据库   | GreatSQL 8.0.32-26 GreatSQL, Release 26, Revision a68b3034c3d<br/>- MySQL 8.0.32 MySQL Community Server        |
+| 数据库   | GreatSQL 8.0.32-26 GreatSQL, Release 26, Revision a68b3034c3d<br/>MySQL 8.0.32 MySQL Community Server        |
 
 **服务器详细信息**
 
@@ -181,15 +181,15 @@ $ dmesg | grep -i numa
 
   | tpmC | IBP = 128G | IBP = 256G | 
   | :--- | ---: | ---: |
-  | GreatSQL 8.0.32-26 |  |  |
-  | MySQL 8.0.32 |  |  |
-  | GreatSQL 性能提升 |  |  |
+  | GreatSQL 8.0.32-26 | 686652.31 | 677036.36 |
+  | MySQL 8.0.32 | 573634.69 | 554112.65 |
+  | GreatSQL 性能提升 | 19.70% | 22.18% |
   
   ![GreatSQL vs MySQL 并发 64 客户端 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-64-terminals-tpcc-benchmarksql-report.png)
 
-## BenchmarkSQL 测试数据
+## 详细测试数据
 
-### GreatSQL 8.0.32-26 vs MySQL 8.0.32 并发 32 客户端 BenchmarkSQL TPC-C 测试数据
+### 并发 32 客户端 TPC-C 测试数据
 
 总共测试 8 轮，每轮测试持续 20 分钟。
 
@@ -211,7 +211,7 @@ $ dmesg | grep -i numa
 
 ![GreatSQL vs MySQL 并发 32 客户端，IBP = 256G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-32-terminals-ibp-256g-tpcc-benchmarksql-data-detail.png)
 
-### GreatSQL 8.0.32-26 vs MySQL 8.0.32 并发 32 客户端 BenchmarkSQL TPC-C 测试数据曲线图
+### 并发 32 客户端 TPC-C 测试数据曲线图
 
 - GreatSQL 8.0.32-26 with 32-terminals & IBP=128G
 ![GreatSQL 8.0.32-26 并发 32 客户端 & 128G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-greatsql803226-32-terminals-ibp-128g-tpm_nopm.png)
@@ -225,7 +225,7 @@ $ dmesg | grep -i numa
 - MySQL 8.0.32 with 32-terminals & IBP=256G
 ![MySQL 8.0.32 并发 32 客户端 & 256G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-mysql8032-32-terminals-ibp-256g-tpm_nopm.png)
 
-### GreatSQL 8.0.32-26 vs MySQL 8.0.32 并发 64 客户端 BenchmarkSQL TPC-C 测试数据
+### 并发 64 客户端 TPC-C 测试数据
 
 总共测试 8 轮，每轮测试持续 20 分钟。
 
@@ -233,8 +233,8 @@ $ dmesg | grep -i numa
 
 | IBP = 128G | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 | Round 7 | Round 8 |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| GreatSQL 8.0.32-26 | 
-| MySQL 8.0.32 | 
+| GreatSQL 8.0.32-26 | 644678.45 | 661334 | 695643.15 | 695282.7 | 697940 | 678463 | 698050.35 | 679853 |
+| MySQL 8.0.32 | 588542 | 601269 | 551370.4 | 572702.75 | 573581.35 | 562770.3 | 542034.95 | 565207.05 |
 
 ![GreatSQL vs MySQL 并发 64 客户端，IBP = 128G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-64-terminals-ibp-128g-tpcc-benchmarksql-data-detail.png)
 
@@ -242,17 +242,24 @@ $ dmesg | grep -i numa
 
 | IBP = 256G | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 | Round 7 | Round 8 |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| GreatSQL 8.0.32-26 | 
-| MySQL 8.0.32 | 
+| GreatSQL 8.0.32-26 | 664553 | 693832.95 | 653430 | 653009.2 | 662021 | 681223 | 694121.4 | 690073.2 |
+| MySQL 8.0.32 | 530745.1 | 557727.85 | 495667.35 | 582648 | 540697.1 | 537221.8 | 568941.6 | 560807.1 |
 
 ![GreatSQL vs MySQL 并发 64 客户端，IBP = 256G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-64-terminals-ibp-256g-tpcc-benchmarksql-data-detail.png)
 
-### GreatSQL 8.0.32-26 vs MySQL 8.0.32 并发 64 客户端 BenchmarkSQL TPC-C 测试数据曲线图
+### 并发 64 客户端 TPC-C 测试数据曲线图
 
 - GreatSQL 8.0.32-26 with 64-terminals & IBP=128G
+![GreatSQL 8.0.32-26 并发 64 客户端 & 128G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-greatsql803226-64-terminals-ibp-128g-tpm_nopm.png)
+
 - MySQL 8.0.32 with 64-terminals & IBP=128G
+![MySQL 8.0.32 并发 64 客户端 & 128G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-mysql8032-64-terminals-ibp-128g-tpm_nopm.png)
+
 - GreatSQL 8.0.32-26 with 64-terminals & IBP=256G
+![GreatSQL 8.0.32-26 并发 64 客户端 & 256G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-greatsql803226-64-terminals-ibp-256g-tpm_nopm.png)
+
 - MySQL 8.0.32 with 64-terminals & IBP=256G
+![MySQL 8.0.32 并发 64 客户端 & 256G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-mysql8032-64-terminals-ibp-256g-tpm_nopm.png)
 
 ### 小结
 
@@ -279,6 +286,7 @@ warehouses=2000
 loadWorkers=128
 
 terminals=32
+//terminals=64
 runTxnsPerTerminal=0
 runMins=20
 limitTxnsPerMin=0
@@ -319,7 +327,7 @@ taskset -pc 0-110 ${mysqld_pid} && taskset -pc ${mysqld_pid}
 
 - 由于测试资源有限，本次只测试单机模式，没有测试主从复制及 MGR 等场景。
 
-### GreatSQL / MySQL 数据库主要相关参数配置
+### 数据库主要相关参数配置
 
 ```ini
 [mysqld]
