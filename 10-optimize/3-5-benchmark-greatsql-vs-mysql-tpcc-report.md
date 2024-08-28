@@ -1,6 +1,6 @@
 # GreatSQL vs MySQL TPC-C 性能测试
 
-**GreatSQL TPC-H 性能测试报告**
+**GreatSQL TPC-C 性能测试报告**
 
 **（2024 年 8 月 28 日）**
 
