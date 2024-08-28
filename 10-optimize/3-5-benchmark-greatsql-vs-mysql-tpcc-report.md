@@ -144,7 +144,7 @@ $ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
 21474836480 bytes (21 GB) copied, 12.0639 s, 1.8 GB/s
 ```
 
-服务器关闭 NUMA 设置
+- 5. 服务器关闭 NUMA 设置
 
 ```shell
 $ cat /etc/default/grub
@@ -168,8 +168,8 @@ $ dmesg | grep -i numa
 1. 无论innodb_buffer_pool_size（以下简称IBP）是否充足，GreatSQL 8.0.32-26 的 TPC-C 测试性能都高于 MySQL 8.0.32。
 2. **在并发 32 客户端测试中，GreatSQL 8.0.32-26 的 TPC-C 测试性能相对 MySQL 8.0.32 提升 30%+**。
 3. **在并发 64 客户端测试中，GreatSQL 8.0.32-26 的 TPC-C 测试性能相对 MySQL 8.0.32 提升约 20%**。
-3. GreatSQL 8.0.32-26 比 MySQL 8.0.32 在 TPC-C 测试中性能表现更好，也更稳定（测试过程中性能表现稳定，抖动小）。
-4. GreatSQL 8.0.32-26 vs MySQL 8.0.32 在 TPC-C 测试中性能数据对比如下表所示
+4. GreatSQL 8.0.32-26 比 MySQL 8.0.32 在 TPC-C 测试中性能表现更好，也更稳定（测试过程中性能表现稳定，抖动小）。
+5. GreatSQL 8.0.32-26 vs MySQL 8.0.32 在 TPC-C 测试中性能数据对比如下表所示
   - GreatSQL 8.0.32-26 vs MySQL 8.0.32 并发 32 客户端 BenchmarkSQL TPC-C 测试结果对比
 
   | tpmC | IBP = 128G | IBP = 256G | 
@@ -394,6 +394,11 @@ performance_schema = OFF
 ```
 
 ### 参考资料
+
+- [TPC-C官网](https://www.tpc.org/tpcc/)
+- [GreatSQL安装指南](../4-install-guide/0-install-guide.md)
+- [BenchmarkSQL 性能测试](./3-4-benchmarksql.md)
+
 
 **扫码关注微信公众号**
 
