@@ -258,11 +258,10 @@ node   0   1   2   3
 sched_affinity_numa_aware = ON
 sched_affinity_foreground_thread = 0-31,32-63,64-95
 sched_affinity_log_writer = 96-100
-sched_affinity_log_flusher = 101-104
-sched_affinity_log_write_notifier = 105-108
-sched_affinity_log_flush_notifier = 109-112
-sched_affinity_log_closer = 113-116
-sched_affinity_log_checkpointer = 117-120
+sched_affinity_log_flusher = 101-105
+sched_affinity_log_write_notifier = 106-110
+sched_affinity_log_flush_notifier = 111-115
+sched_affinity_log_checkpointer = 116-120
 sched_affinity_purge_coordinator = 121-124
 ```
 通过以上的设置，可以让前端用户线程和后台线程分别绑定不同的物理 CPU 上（不同 NUMA 节点），达到更好的整体性能表现。
