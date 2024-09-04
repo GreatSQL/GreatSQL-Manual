@@ -61,7 +61,7 @@ log_error_verbosity=3
 
 此外，想要启用MGR还有几个要求：
 - 每个节点都要启用binlog。
-- 每个节点都要转存binlog，即设置 `log_slave_updates=1`。
+- 每个节点都要转存binlog，即设置 `log_replica_updates=1`。
 - binlog format务必是row模式，即 `binlog_format=ROW`。
 - 每个节点的 `server_id` 及 `server_uuid` 不能相同。
 - 在8.0.20之前，要求 `binlog_checksum=NONE`，但是从8.0.20后，可以设置 `binlog_checksum=CRC32`。
@@ -70,11 +70,11 @@ log_error_verbosity=3
 - 所有节点上的表名大小写参数 `lower_case_table_names` 设置要求一致。
 - 最好在局域网内部署MGR，而不要跨公网，网络延迟太大的话，会导致MGR性能很差或很容易出错。
 - 建议启用 writeset 模式，即设置以下几个参数
-    - `slave_parallel_type = LOGICAL_CLOCK`
-    - `slave_parallel_workers = N`，N>0，可以设置为逻辑CPU数的2倍
+    - `replica_parallel_type = LOGICAL_CLOCK`
+    - `replica_parallel_workers = N`，N>0，可以设置为逻辑CPU数的2倍
     - `binlog_transaction_dependency_tracking = WRITESET`
-    - `slave_preserve_commit_order = 1`
-    - `slave_checkpoint_period = 2`
+    - `replica_preserve_commit_order = 1`
+    - `replica_checkpoint_period = 2`
 
 
 ## MGR使用建议

@@ -4,7 +4,7 @@
 在使用 GreatSQL MGR 的时候，有以下几条注意事项：
 
 - 最多只支持9个节点。
-- 每个节点都要启用 Binlog，且都要启用转存 Binlog，即设置 `log_slave_updates=1`。
+- 每个节点都要启用 Binlog，且都要启用转存 Binlog，即设置 `log_replica_updates=1`。
 - 要求 Binlog format务必是 ROW 模式，即 `binlog_format=ROW`。
 - 每个节点的 `server_id` 及 `server_uuid` 不能相同。
 - 在 8.0.20 之前，要求 `binlog_checksum=NONE`，但是从 8.0.20 后，可以设置 `binlog_checksum=CRC32`。

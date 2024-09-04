@@ -77,9 +77,7 @@ $ source ~/.bash_profile
 
 ###  修改my.cnf
 
-建议参考下面这份my.cnf模板，并根据实际情况做些适当调整：
-
-[my.cnf for GreatSQL 8.0.32-26](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)
+请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
 ```
 [client]
@@ -97,11 +95,12 @@ datadir    = /data/GreatSQL
 socket    = /data/GreatSQL/mysql.sock
 pid-file = mysql.pid
 character-set-server = UTF8MB4
-skip_name_resolve = 1
-#若你的MySQL数据库主要运行在境外，请务必根据实际情况调整本参数
+skip_name_resolve = ON
 default_time_zone = "+8:00"
+bind_address = "0.0.0.0"
+secure_file_priv = /data/GreatSQL
 
-#performance setttings
+# Performance
 lock_wait_timeout = 3600
 open_files_limit    = 65535
 back_log = 1024
@@ -122,128 +121,105 @@ tmp_table_size = 96M
 max_heap_table_size = 96M
 max_allowed_packet = 64M
 net_buffer_shrink_interval = 180
-#GIPK
-loose-sql_generate_invisible_primary_key = ON
+sql_generate_invisible_primary_key = ON
+loose-lock_ddl_polling_mode = ON
+loose-lock_ddl_polling_runtime = 200
 
-#log settings
+# Logs
 log_timestamps = SYSTEM
-log_error = /data/GreatSQL/error.log
+log_error = error.log
 log_error_verbosity = 3
-slow_query_log = 1
-log_slow_extra = 1
-slow_query_log_file = /data/GreatSQL/slow.log
-#设置slow log文件大小1G及总文件数10
-max_slowlog_size = 1073741824
-max_slowlog_files = 10
+slow_query_log = ON
+log_slow_extra = ON
+slow_query_log_file = slow.log
 long_query_time = 0.01
-log_queries_not_using_indexes = 1
+log_queries_not_using_indexes = ON
 log_throttle_queries_not_using_indexes = 60
 min_examined_row_limit = 100
-log_slow_admin_statements = 1
-log_slow_slave_statements = 1
+log_slow_admin_statements = ON
+log_slow_replica_statements = ON
 log_slow_verbosity = FULL
-log_bin = /data/GreatSQL/binlog
+log_bin = binlog
 binlog_format = ROW
 sync_binlog = 1
 binlog_cache_size = 4M
 max_binlog_cache_size = 6G
 max_binlog_size = 1G
-#控制binlog总大小，避免磁盘空间被撑爆
 binlog_space_limit = 500G
-binlog_rows_query_log_events = 1
+binlog_rows_query_log_events = ON
 binlog_expire_logs_seconds = 604800
 binlog_checksum = CRC32
 gtid_mode = ON
-enforce_gtid_consistency = TRUE
+enforce_gtid_consistency = ON
 
-#myisam settings
-key_buffer_size = 32M
-myisam_sort_buffer_size = 128M
-
-#replication settings
-relay_log_recovery = 1
-slave_parallel_type = LOGICAL_CLOCK
-#并行复制线程数可以设置为逻辑CPU数量的2倍
-slave_parallel_workers = 64
+# Replication
+relay-log = relaylog
+relay_log_recovery = ON
+replica_parallel_type = LOGICAL_CLOCK
+replica_parallel_workers = 16
 binlog_transaction_dependency_tracking = WRITESET
-slave_preserve_commit_order = 1
-slave_checkpoint_period = 2
+replica_preserve_commit_order = ON
+replica_checkpoint_period = 2
+loose-rpl_read_binlog_speed_limit = 100
 
-#启用InnoDB并行查询优化功能
-loose-force_parallel_execute = OFF
-#设置每个SQL语句的并行查询最大并发度
-loose-parallel_default_dop = 8
-#设置系统中总的并行查询线程数，可以和最大逻辑CPU数量一样
-loose-parallel_max_threads = 64
-#并行执行时leader线程和worker线程使用的总内存大小上限，可以设置物理内存的5-10%左右
-loose-parallel_memory_limit = 12G
-
-#parallel load data
-loose-gdb_parallel_load_chunk_size = 4M
-
-#mgr settings
+# MGR
 loose-plugin_load_add = 'mysql_clone.so'
 loose-plugin_load_add = 'group_replication.so'
 loose-group_replication_group_name = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"
-#MGR本地节点IP:PORT，请自行替换
 loose-group_replication_local_address = "172.16.16.10:33061"
-#MGR集群所有节点IP:PORT，请自行替换
 loose-group_replication_group_seeds = '172.16.16.10:33061,72.16.16.12:33061,72.16.16.12:33061'
-loose-group_replication_start_on_boot = ON
+loose-group_replication_communication_stack = "XCOM"
+loose-group_replication_recovery_use_ssl = OFF
+loose-group_replication_ssl_mode = DISABLED
+loose-group_replication_start_on_boot = OFF
 loose-group_replication_bootstrap_group = OFF
 loose-group_replication_exit_state_action = READ_ONLY
 loose-group_replication_flow_control_mode = "DISABLED"
 loose-group_replication_single_primary_mode = ON
+loose-group_replication_enforce_update_everywhere_checks = OFF
 loose-group_replication_majority_after_mode = ON
 loose-group_replication_communication_max_message_size = 10M
-loose-group_replication_arbitrator = 0
+loose-group_replication_arbitrator = OFF
 loose-group_replication_single_primary_fast_mode = 1
 loose-group_replication_request_time_threshold = 100
 loose-group_replication_primary_election_mode = GTID_FIRST
 loose-group_replication_unreachable_majority_timeout = 0
 loose-group_replication_member_expel_timeout = 5
 loose-group_replication_autorejoin_tries = 288
+loose-group_replication_recovery_get_public_key = ON
+loose-group_replication_donor_threshold = 100
 report_host = "172.16.16.10"
 
-#mgr vip
-loose-plugin_load_add = 'greatdb_ha.so'
-loose-greatdb_ha_enable_mgr_vip = 1
-
-#innodb settings
+# InnoDB
 innodb_buffer_pool_size = 16G
 innodb_buffer_pool_instances = 8
 innodb_data_file_path = ibdata1:12M:autoextend
 innodb_flush_log_at_trx_commit = 1
 innodb_log_buffer_size = 32M
-innodb_log_file_size = 2G
-innodb_log_files_in_group = 3
 innodb_redo_log_capacity = 6G
 innodb_doublewrite_files = 2
 innodb_max_undo_log_size = 4G
-# 根据您的服务器IOPS能力适当调整
-# 一般配普通SSD盘的话，可以调整到 10000 - 20000
-# 配置高端PCIe SSD卡的话，则可以调整的更高，比如 50000 - 80000
 innodb_io_capacity = 4000
 innodb_io_capacity_max = 8000
 innodb_open_files = 65534
-#提醒：当需要用CLONE加密特性时，不要选用O_DIRECT模式，否则会比较慢
 innodb_flush_method = O_DIRECT
 innodb_lru_scan_depth = 4000
 innodb_lock_wait_timeout = 10
-innodb_rollback_on_timeout = 1
-innodb_print_all_deadlocks = 1
+innodb_rollback_on_timeout = ON
+innodb_print_all_deadlocks = ON
 innodb_online_alter_log_max_size = 4G
-innodb_print_ddl_logs = 0
-innodb_status_file = 1
-innodb_status_output = 0
-innodb_status_output_locks = 1
+innodb_print_ddl_logs = ON
+innodb_status_file = ON
+innodb_status_output = OFF
+innodb_status_output_locks = ON
 innodb_sort_buffer_size = 64M
-innodb_adaptive_hash_index = 0
-#开启NUMA支持
-innodb_numa_interleave = ON
-innodb_print_lock_wait_timeout_info = 1
-#自动杀掉超过5分钟不活跃事务，避免行锁被长时间持有
+innodb_adaptive_hash_index = OFF
+innodb_numa_interleave = OFF
+innodb_spin_wait_delay = 20
+innodb_print_lock_wait_timeout_info = ON
+innodb_change_buffering = none
 kill_idle_transaction = 300
+innodb_data_file_async_purge = ON
 
 #innodb monitor settings
 #innodb_monitor_enable = "module_innodb,module_server,module_dml,module_ddl,module_trx,module_os,module_purge,module_log,module_lock,module_buffer,module_index,module_ibuf_system,module_buffer_page,module_adaptive_hash"

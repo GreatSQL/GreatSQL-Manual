@@ -41,7 +41,7 @@ datadir=/data/GreatSQL
 port=3306
 server_id=103306
 log-bin
-log_slave_updates=1
+log_replica_updates=1
 gtid_mode=ON
 enforce_gtid_consistency=ON
 ```
@@ -137,7 +137,7 @@ datadir=/data/GreatSQL
 port=3306
 server_id=113306
 log-bin
-log_slave_updates=1
+log_replica_updates=1
 gtid_mode=ON
 enforce_gtid_consistency=ON
 
