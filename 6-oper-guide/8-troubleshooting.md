@@ -126,7 +126,7 @@ kernel: Killed process 6033, UID 498, (mysqld) total-vm:56872260kB, anon-rss:320
 
 当发生OOM Killer事件时，可以选择适当调低部分设计内存的参数选项，例如 `innodb_buffer_pool_size` 等，也可以适当加大操作系统的物理内存。
 
-此外，如果不想保护mysqld进程不被OOM Killer机制杀掉，可以调整相应进程的 `oom_score_adj` 设置，将其修改为 -1000，例如：
+此外，如果想保护mysqld进程不被OOM Killer机制杀掉，可以调整相应进程的 `oom_score_adj` 设置，将其修改为 -1000，例如：
 ```shell
 $ ps -ef | grep mysqld
 ps -ef | grep mysqld | grep -v grep
