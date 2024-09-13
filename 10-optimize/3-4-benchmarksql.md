@@ -60,7 +60,7 @@ Apache Ant(TM) version 1.10.5 compiled on June 24 2019
 
 ### 2. 配置 BenchmarkSQL
 
-1. 修改 `src/client/jTPCC.java` 文件 119 行附近，增加 MySQL/GraetSQL 数据库相关内容。
+1. 修改 `src/client/jTPCC.java` 文件 119 行附近，增加 MySQL/GreatSQL 数据库相关内容。
 
 ```java
 117         if (iDB.equals("firebird"))
