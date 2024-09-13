@@ -76,6 +76,7 @@
 - [梁熙民](https://gitee.com/daydreammirror)
 - [lingoYS](https://greatsql.cn/home.php?mod=space&uid=1753&do=profile)
 - [jillwx](https://gitee.com/jillwx)
+- [uest](https://gitee.com/uest)
 
 
 **扫码关注微信公众号**
