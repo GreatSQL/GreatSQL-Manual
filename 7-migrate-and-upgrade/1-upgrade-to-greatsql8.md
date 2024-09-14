@@ -91,6 +91,69 @@ GreatSQL 8.0相对于GreatSQL 5.7有着众多优秀新特性，包括且不仅�
 
 更多详情请见：[What Is New in MySQL 8.0](https://dev.mysql.com/doc/refman/8.0/en/mysql-nutshell.html)。
 
+### 升级检查
+
+在正式开始前，推荐使用 GreatSQL Shell 对旧的数据库实例进行一次全面的检查，确认是否存在升级后可能不兼容的地方。
+
+在这里下载 [GreatSQL Shell 最新版本](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)。
+
+下载完后解压缩放在 */usr/local* 目录下。
+
+```shell
+$ tar xf /tmp/greatsql-shell-8.0.32-25-glibc2.28-x86_64.tar.xz -C /usr/local
+```
+
+执行下面的命令运行 GreatSQL Shell 进行升级前检查：
+
+```shell
+$ /usr/local/greatsql-shell-8.0.32-25-glibc2.28-x86_64/bin/mysqlsh -- util checkForServerUpgrade --socket=/data/GreatSQL/mysql.sock --target-version=8.0.32 --output-format=JSON --config-path=/etc/my.cnf > /tmp/upgradecheck_57_to_8032.log
+```
+
+其中：
+- `-- util checkForServerUpgrade` 表示要进行升级前检查；
+- `--socket` 指定本地 SOCKET 文件，也可以改成账号密码格式，例如：`user:passwrod@127.0.0.1:3306`；
+- `--target-version` 指定升级后的版本号，如果不指定，则默认和 GreatSQL Shell 当前版本号一致；
+- `--output-format` 指定输出日志为格式，默认是 JSON；
+- `--config-path` 指定要检查的配置文件路径；
+
+检查完毕后，需要手动确认结果中是否有标记为 Errors 级别的事项，这些事项都必须先修复。
+
+```
+$ mysqlsh -- util checkForServerUpgrade --socket=./data/mysql.sock --target-version=8.0.32 --output-format=JSON --config-path=./my.cnf > /tmp/upgradecheck_57_to_8032.log
+...
+    "serverAddress": "%2Fdata%2FGreatSQL%2Fmysql.sock",
+    "serverVersion": "5.7.36-39 (GreatSQL, Release 39, Revision a2ce7ad3400)",
+    "targetVersion": "8.0.32",
+    "errorCount": 0,
+    "warningCount": 16,
+    "noticeCount": 1,
+    "summary": "No fatal errors were found that would prevent an upgrade, but some potential issues were detected. Please ensure that the reported issues are not significant before upgrading.",
+...
+```
+
+GreatSQL Shell 会执行多项详细检查，逐一报告检查结果并给出进一步建议，这些检查项主要有：
+- 是否存在不支持的数据或索引类型，或者某些数据类型定义不合理/超限等；
+- 是否存在数据表名大小写不兼容问题，注意设置正确的 `lower_case_table_names` 参数值；
+- 数据对象名是否包含保留字/关键字，需要将对象名用反引号括起来，详情参考：[保留字、关键字](../2-about-greatsql/7-greatsql-keywords.md)；
+- 是否存在使用 utf8mb3 字符集，建议转换为 utf8mb4；
+- 是否存在不支持的 SQL MODE 设置值；
+- 是否存在 '0000-00-00' 这种日期格式，在 8.0 版本中默认是不允许的；
+- 是否存在不兼容的函数用法；
+- 是否存在不支持的系统变量参数名；
+- 是否存在孤立的 frm 文件；
+
+以及其他等等，从检查结果日志文件中也能看到所有的检查项及其结果。
+
+GreatSQL Shell 支持利用 *greatsql/greatsql_shell* 这个 Docker 容器来完成升级检查：
+```
+$ docker pull greatsql/greatsql_shell
+$ docker run -itd --hostname greatsqlsh --name greatsqlsh greatsql/greatsql_shell bash
+$ docker cp /etc/my.cnf greatsqlsh:/tmp/
+$ docker exec -it greatsqlsh bash -c "mysqlsh -- util checkForServerUpgrade user:password@127.0.0.1:3306 --target-version=8.0.32 --output-format=JSON --config-path=/tmp/my.cnf" > /tmp/upgradecheck_57_to_8032.log
+```
+
+在上面的操作过程里，需要先把宿主环境中的 */etc/my.cnf* 配置参数文件拷贝到容器中。
+
 ### 升级准备
 
 首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-26版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-26)，至于选择RPM还是二进制包看具体情况及个人喜好。

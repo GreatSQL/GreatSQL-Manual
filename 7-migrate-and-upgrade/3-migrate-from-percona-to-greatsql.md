@@ -53,6 +53,8 @@ GreatSQL相对于Percona有着众多优秀特性，包括且不仅限以下：
 
 首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-25版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，至于选择RPM还是二进制包看具体情况及个人喜好。
 
+推荐使用 GreatSQL Shell 进行升级前的检查工作，并提前修复整改可能存在的问题，详情参考：[升级检查](./1-upgrade-to-greatsql8.md#升级检查)。
+
 本文选用二进制包方式安装。
 
 正式迁移/升级之前，务必做好数据备份，可以采用以下几种方式：
