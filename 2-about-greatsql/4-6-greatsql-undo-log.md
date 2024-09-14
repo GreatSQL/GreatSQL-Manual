@@ -119,6 +119,33 @@ greatsql> SET GLOBAL innodb_undo_log_truncate = ON;
 
 Purge 线程的主要工作是清空释放 Undo 表空间，默认地，每进行 *128* 次 purge 工作后就会确认是否可以清理 Undo 表空间，这个频率由 `innodb_purge_rseg_truncate_frequency` 参数定义，默认值是 *128*，它可以在线动态调整。
 
+如果数据库服务器当前有大事务/长事务一直活跃，长时间没有结束（提交/回滚），或者有大量回滚段等待被清理，那么 Undo 日志文件可能会非常大，甚至能超过 TB 级别，例如：
+
+```
+2.0T        undo_001
+3.8T        undo_002
+```
+
+这种情况下，执行 `SHOW ENGINE INNODB STATUS\G` 查看事务及回滚段清理状态：
+
+```sql
+greatsql> SHOW ENGINE INNODB STATUS\G
+...
+------------
+TRANSACTIONS
+------------
+Trx id counter 68724736927
+Purge done for trx's n:o < 74690025805 undo n:o < 0 state: running
+History list length 2009890459
+...
+---TRANSACTION 68724705927, ACTIVE 13610 sec recovered trx
+ROLLING BACK 1 lock struct(s), heap size 1136, 0 row lock(s), undo log entries 365137207
+...
+```
+从上述结果可以看到当前数据库中有大量（超过 20 亿条记录）回滚段还没来得及被清理，同时还有个事务活跃了 13610 秒还没结束，这个事务产生了 365137207 个回滚段，这是非常恐怖的现象，平时一定要做好对大事务/长事务，以及回滚段堆积情况的监控。
+
+遇到上述情况时，可以先适当降低前端应用业务的请求量，以降低对数据库的读写压力。另外可以尝试加大 `innodb_buffer_pool_size` 以提高 InnoDB 处理性能，同时能耐心等待回滚段被清理完毕。通过周期性观察 **History list length** 数值变化，计算出回滚段清理的速率，从而估算出预计什么时候能清理完毕。
+
 ### Undo 表空间相关状态变量
 
 下面几个状态变量可以用来观察 Undo 表空间的使用情况：
