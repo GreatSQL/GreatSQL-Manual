@@ -193,6 +193,31 @@ Total:         381G         86G         16G
 
 通过观察一段时间内的内存使用趋势，可以初步判断是否有内存泄漏的风险。如果 **used** 值持续上升，而 **buff/cache** 和 **available** 值没有相应的变化，可能存在内存泄漏的风险。
 
+有时候，数据库运行较长时间后执行 `top` 时可能会看到 *mysqld* 进程消耗的内存占比较高，例如下面这样：
+
+```shell
+   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+391734 mysql     20   0  228.5g 209.6g  34908 S  5179 80.6  11367:01 mysqld
+  3271 root      20   0  727544  25964   6892 S   1.5  0.0   6690:04 node_exporter
+```
+
+通常 *mysqld* 进程消耗的内存占比不应超过 70%，如果是类似上面这种情况，较大概率是内存相关参数设置不合理，或者存在内存泄漏的问题，可以先确认以下几个情况：
+- 服务器物理内存多大；
+- 检查参数 `innodb_buffer_pool_size` 是否设置过大，一般设置为物理内存的 50%，上限一般不超过 70%；
+- 检查参数 `max_connection` 是否设置过大，应适当调低；
+- 检查参数 `read_buffer_size / read_rnd_buffer_size / join_buffer_size / sort_buffer_size` 等设置是否过大，通常设置不超过 4MB 就够用；
+- 检查参数 `tmp_table_size / max_heap_table_size` 等设置是否过大，通常设置不超过 128MB 就够用；
+
+以上内存相关参数设置都可以在线动态调整，可以先分别适当调低。如果不确定怎么设置合适，可以利用 [my.cnf生成工具](https://imysql.com/my-cnf-wizard.html) 生成一份 my.cnf 参考模板。
+
+如果形势紧急，可以考虑执行下面的操作尝试回收部分内存碎片：
+
+```shell
+$ gdb --batch --pid `pidof mysqld` --ex 'call malloc_trim(0)'
+```
+
+**提醒**：上述操作在线上生产环境存在一定风险，请谨慎评估是否执行。
+
 ### 4. 检查磁盘 I/O 负载状态
 
 `iostat` 是一个用于监控 Linux 系统中 CPU 使用情况和磁盘 I/O 统计信息的强大工具。它是 `sysstat` 包的一部分，可以提供详细的系统性能数据。`iostat` 可以帮助了解 CPU 和磁盘子系统的负载情况，这对于性能分析和故障排除非常重要。
