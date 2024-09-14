@@ -154,6 +154,8 @@ $ docker exec -it greatsqlsh bash -c "mysqlsh -- util checkForServerUpgrade user
 
 在上面的操作过程里，需要先把宿主环境中的 */etc/my.cnf* 配置参数文件拷贝到容器中。
 
+关于如何利用 GreatSQL Shell 执行升级前检查，更多信息请参考：[Upgrade Checker Utility](https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-utilities-upgrade.html)。
+
 ### 升级准备
 
 首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-26版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-26)，至于选择RPM还是二进制包看具体情况及个人喜好。
