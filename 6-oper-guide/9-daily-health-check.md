@@ -218,6 +218,8 @@ $ gdb --batch --pid `pidof mysqld` --ex 'call malloc_trim(0)'
 
 **提醒**：上述操作在线上生产环境存在一定风险，请谨慎评估是否执行。
 
+最后，强烈建议在运行 GreatSQL 数据库时，安装 *jemalloc* 取代原生的 *glibc*，它的内存分配管理效率更高也更安全，详情参考：[安装准备](../4-install-guide/1-install-prepare.md#其他)。
+
 ### 4. 检查磁盘 I/O 负载状态
 
 `iostat` 是一个用于监控 Linux 系统中 CPU 使用情况和磁盘 I/O 统计信息的强大工具。它是 `sysstat` 包的一部分，可以提供详细的系统性能数据。`iostat` 可以帮助了解 CPU 和磁盘子系统的负载情况，这对于性能分析和故障排除非常重要。
