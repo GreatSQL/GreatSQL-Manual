@@ -125,7 +125,7 @@ GreatSQL支持将审计日志写入数据表中，并且设置审计日志入表
 CREATE TABLE test.t1(c1 INT, c2 INT) ENGINE = InnoDB ENCRYPTION = 'Y';
 ```
 
-更多信息详见文档：[GreatSQL中的表空间加密国密支持](../../5-enhance/5-4-security-innodb-tablespace-encrypt.md)。
+更多信息详见文档：[GreatSQL中的表空间加密国密支持](../../5-enhance/5-4-security-encrypt-with-gmssl.md)。
 
 #### CLONE备份加密
 GreatSQL支持在利用CLONE备份时同步进行加密操作，提升备份文件安全性，避免备份文件被盗或泄漏时造成损失。
