@@ -142,10 +142,14 @@ analyzing CPU 0:
   current policy: frequency should be within 800 MHz and 4.80 GHz.
                   The governor "performance" may decide which speed to use
 ```
-> **注意**
-> 如果输出内容不是 The governor "performance" 而是 The governor "powersave" 的话，则要注意了。
-> The governor "powersave" 表示 cpufreq 的节能策略使用 powersave，需要调整为 performance 策略。
-> 如果是虚拟机或者云主机，则不需要调整，命令输出通常为 Unable to determine current policy。
+::: tip 注意
+
+如果输出内容不是 The governor "performance" 而是 The governor "powersave" 的话，则要注意了。
+
+The governor "powersave" 表示 cpufreq 的节能策略使用 powersave，需要调整为 performance 策略。
+
+如果是虚拟机或者云主机，则不需要调整，命令输出通常为 Unable to determine current policy。
+:::
 
 3. **关闭透明大页**
 
