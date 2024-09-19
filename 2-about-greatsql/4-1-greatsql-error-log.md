@@ -41,7 +41,7 @@ log-error = /data/GreatSQL/error.log
 GreatSQL 错误日志是以文本文件形式存储的，可以使用文本编辑器直接查看。查询错误日志的存储路径：
 
 ```sql
-greatsql> SHOW VARIABLES LIKE 'log_error%';
+SHOW VARIABLES LIKE 'log_error%';
 +----------------------------+----------------------------------------+
 | Variable_name              | Value                                  |
 +----------------------------+----------------------------------------+
@@ -63,7 +63,7 @@ greatsql> SHOW VARIABLES LIKE 'log_error%';
 默认情况下，`log_error_services` 具有以下可选值：
 
 ```sql
-greatsql> SELECT @@GLOBAL.log_error_services;
+SELECT @@GLOBAL.log_error_services;
 +----------------------------------------+
 | @@GLOBAL.log_error_services            |
 +----------------------------------------+
@@ -95,7 +95,7 @@ greatsql> SELECT @@GLOBAL.log_error_services;
 从 GreatSQL 5.7.2 开始新增了 `log_timestamps` 这个参数，用于设置 [错误日志](#)、[通用日志](./4-7-greatsql-general-log.md) 中时间戳的记录方式。参数默认值为 *UTC*（简单说就是 UTC+0 时区），这会使得日志中记录的时间采用比中国采用的时区慢 8 小时，日志查看起来就没那么方便了。
 
 ```sql
-greatsql> SHOW GLOBAL VARIABLES LIKE 'log_timestamps';
+SHOW GLOBAL VARIABLES LIKE 'log_timestamps';
 +----------------+-------+
 | Variable_name  | Value |
 +----------------+-------+
@@ -106,7 +106,7 @@ greatsql> SHOW GLOBAL VARIABLES LIKE 'log_timestamps';
 
 可以在线修改全局参数设定：
 ```sql
-greatsql> SET GLOBAL log_timestamps = system;
+SET GLOBAL log_timestamps = system;
 ```
 
 也可以修改 my.cnf 配置文件使其持久化生效（下次数据库实例重启后生效）：
@@ -133,21 +133,22 @@ $ mysqladmin -uroot -p flush-logs error
 也可以在完成 `cp` 备份后，连入 GreatSQL 后执行相应的 SQL 命令刷新错误日志：
 
 ```sql
-greatsql> FLUSH ERROR LOGS;
+FLUSH ERROR LOGS;
 ```
 
-
-> 如果 GreatSQL 日志文件被其他进程打开或被锁定，执行 `mysqladmin flush-logs error` 操作可能会失败
+::: tip 提示
+如果 GreatSQL 日志文件被其他进程打开或被锁定，执行 `mysqladmin flush-logs error` 操作可能会失败
+:::
 
 如果出现以下错误提示：
 
-```sql
+```bash
 mysqladmin: refresh failed; error: 'Could not open file '/data/GreatSQL/error.log' for error logging.'
 ```
 
 可以再进行下面的操作：
 
-```shell
+```bash
 # 备份旧错误日志
 $ cd /data/GreatSQL
 $ mv error.log error-`date +'%Y%m%d'`.log
@@ -156,7 +157,9 @@ $ mv error.log error-`date +'%Y%m%d'`.log
 $ echo '' > error.log
 ```
 
-> 不要在服务器上用 vi 等方式在线打开错误日志文件，这可能会文件句柄修改，使得该文件状态异常，并造成不可意料的磁盘满问题。
+::: warning 警告
+不要在服务器上用 vi 等方式在线打开错误日志文件，这可能会文件句柄修改，使得该文件状态异常，并造成不可意料的磁盘满问题。
+:::
 
 **扫码关注微信公众号**
 

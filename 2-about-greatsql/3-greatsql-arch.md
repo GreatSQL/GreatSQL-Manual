@@ -26,8 +26,8 @@ GreatSQL 对从 TCP/IP 传输过来的账号密码做身份认证、权限鉴定
 
 例如:
 
-```shell
-$ mysql -uroot -p
+```bash
+mysql -uroot -p
 ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
 ```
 
@@ -58,7 +58,7 @@ SQL 语句在语法解析之后、查询之前会使用查询优化器确定 SQL
 例如下面的 JOIN 语句：
 
 ```sql
-greatsql> SELECT * FROM tb1 JOIN tb2 USING(ID) WHERE tb1.a=1 and tb2.a=2;
+SELECT * FROM tb1 JOIN tb2 USING(ID) WHERE tb1.a=1 and tb2.a=2;
 ```
 
 那就有两种方法可以选择：
@@ -85,7 +85,7 @@ GreatSQL 支持多个存储引擎，每个引擎都具备独特的特性。Great
 GreatSQL 支持的存储引擎如下：
 
 ```sql
-greatsql> SHOW ENGINES;
+SHOW ENGINES;
 +--------------------+---------+----------------------------------------------------------------------------+--------------+------+------------+
 | Engine             | Support | Comment                                                                    | Transactions | XA   | Savepoints |
 +--------------------+---------+----------------------------------------------------------------------------+--------------+------+------------+

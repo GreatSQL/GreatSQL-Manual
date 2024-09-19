@@ -85,27 +85,26 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 
 运行 GreatSQL 时如果有 jemalloc 支持，则数据库进程的内存分配会更稳定、高效，因此建议安装 jemalloc（非必须）。以 CentOS 8 系统为例，采用类似下面的方法安装 jemalloc 软件包：
 
-```
+```bash
 # 先安装 epel 源
-$ yum install -y epel-release
+yum install -y epel-release
 
 # 再安装jemalloc
-$ yum -y install jemalloc jemalloc-devel
+yum -y install jemalloc jemalloc-devel
 ```
 
 也可以把自行安装的动态库so文件路径加到系统配置文件中，例如：
 
-```
-$ cat /etc/ld.so.conf
+```bash
+cat /etc/ld.so.conf
 /usr/local/lib64/
 ```
 
 而后执行下面的操作加载libjemalloc库，并确认是否已存在
 
-```
-$ ldconfig
-
-$ ldconfig -p | grep libjemalloc
+```bash
+ldconfig && ldconfig -p | grep libjemalloc
+...
         libjemalloc.so.1 (libc6,x86-64) => /usr/local/lib64/libjemalloc.so.1
         libjemalloc.so (libc6,x86-64) => /usr/local/lib64/libjemalloc.so
 ```
@@ -120,22 +119,26 @@ $ ldconfig -p | grep libjemalloc
 
 以 CentOS 8 系统为例，采用类似下面的命令安装 GreatSQL：
 
-```
-#首先，查找GreatSQL是否已安装
-$ yum search greatsql
+```bash
+# 首先，查找GreatSQL是否已安装
+yum search greatsql
 ...
 No matches found.
 
-#然后安装
-$ rpm -ivh --nodeps greatsql-client-8.0.32-26.1.el8.x86_64.rpm greatsql-devel-8.0.32-26.1.el8.x86_64.rpm greatsql-icu-data-files-8.0.32-26.1.el8.x86_64.rpm greatsql-mysql-router-8.0.32-26.1.el8.x86_64.rpm greatsql-server-8.0.32-26.1.el8.x86_64.rpm greatsql-shared-8.0.32-26.1.el8.x86_64.rpm greatsql-test-8.0.32-26.1.el8.x86_64.rpm
+# 然后安装
+rpm -ivh --nodeps greatsql-client-8.0.32-26.1.el8.x86_64.rpm greatsql-devel-8.0.32-26.1.el8.x86_64.rpm greatsql-icu-data-files-8.0.32-26.1.el8.x86_64.rpm greatsql-mysql-router-8.0.32-26.1.el8.x86_64.rpm greatsql-server-8.0.32-26.1.el8.x86_64.rpm greatsql-shared-8.0.32-26.1.el8.x86_64.rpm greatsql-test-8.0.32-26.1.el8.x86_64.rpm
 ```
 
-**提示**：正式安装 GreatSQL RPM 包时，可能还需要依赖 openssl、Perl 等其他软件包，此处为快速演示，因此加上 `--nodeps` 参数，忽略相应的依赖关系检查。安装完毕后，如果因为依赖关系无法启动，请再行安装相应软件依赖包。
+::: tip 提示
+
+正式安装 GreatSQL RPM 包时，可能还需要依赖 openssl、Perl 等其他软件包，此处为快速演示，因此加上 `--nodeps` 参数，忽略相应的依赖关系检查。安装完毕后，如果因为依赖关系无法启动，请再行安装相应软件依赖包。
+:::
 
 安装完成后，GreatSQL 会自行完成初始化，可以再检查是否已加入系统服务或已启动：
 
-```
-$ systemctl status mysqld
+```bash
+systemctl status mysqld
+...
 ● mysqld.service - MySQL Server
    Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)
 ...
@@ -165,28 +168,28 @@ $ systemctl status mysqld
 
 安装 rmp-build、cmake、gcc 等编译环境必要的软件包
 
-```shell
-$ dnf install -y  bison cmake cyrus-sasl-devel gcc-c++ gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc krb5-devel libaio-devel libcurl-devel libssh libtirpc-devel m4 make ncurses-devel numactl-devel openldap-devel openssl openssl-devel pam-devel perl perl-Carp perl-Data-Dumper perl-Errno perl-Exporter perl-File-Temp perl-Getopt-Long perl-JSON perl-Memoize perl-Time-HiRes readline-devel rpm-build time vim-common zlib-devel
+```bash
+dnf install -y  bison cmake cyrus-sasl-devel gcc-c++ gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc krb5-devel libaio-devel libcurl-devel libssh libtirpc-devel m4 make ncurses-devel numactl-devel openldap-devel openssl openssl-devel pam-devel perl perl-Carp perl-Data-Dumper perl-Errno perl-Exporter perl-File-Temp perl-Getopt-Long perl-JSON perl-Memoize perl-Time-HiRes readline-devel rpm-build time vim-common zlib-devel
 ```
 
 创建相应的目录
 
-```shell
-$ mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+```bash
+mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 ```
 
 将下载后的 *src.rpm* 文件放在 *SRPMS* 目录下
 
-```shell
-$ ls -l /root/rpmbuild/SRPMS
+```bash
+ls -l /root/rpmbuild/SRPMS
 -rw-r--r-- 1 root root 496724859 Aug  2 14:01 greatsql-8.0.32-26.1.noarch.src.rpm
 ```
 
 编译 GreatSQL RPM 包
 
-```shell
-$ cd /root/rpmbuild/
-$ rpmbuild --define "_smp_mflags -j16" --define 'dist .el8' --define "_topdir /root/rpmbuild/" --rebuild ./SRPMS/greatsql-8.0.32-26.1.noarch.src.rpm > ./rpmbuild.log 2>&1
+```bash
+cd /root/rpmbuild/
+rpmbuild --define "_smp_mflags -j16" --define 'dist .el8' --define "_topdir /root/rpmbuild/" --rebuild ./SRPMS/greatsql-8.0.32-26.1.noarch.src.rpm > ./rpmbuild.log 2>&1
 ```
 
 参数 *dist* 支持以下常见 OS 标签（如需支持更多标签请告诉我们）：
@@ -343,10 +346,10 @@ GreatSQL同时也是gitee（码云）平台上的GVP项目，详见：[https://g
 
 GreatSQL 致力于保持开源的开放性。GreatSQL 采用 GPLv2 协议。
 
-## 温馨提示
+::: tip 温馨提示
 
 [如果您在使用 GreatSQL，请告诉我们，将有机会获得精美礼品和免费技术支持](https://wj.qq.com/s2/11543483/9e09/)。
-
+:::
 
 **扫码关注微信公众号**
 

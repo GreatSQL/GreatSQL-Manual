@@ -8,7 +8,9 @@ Binlog 即 Binary Log，二进制日志文件，也叫作变更日志（Update L
 
 Binlog 以事件（Event）形式记录并保存在二进制文件中，利用这些 Events，可以很方便地再现数据变更的全过程，所以 Binlog 常用于主从复制、MGR 等场景。
 
-> 如果是想记录所有的请求，则需要使用 [通用日志](./4-7-greatsql-general-log.md)
+::: tip
+如果是想记录所有的请求，则需要使用 [通用日志](./4-7-greatsql-general-log.md)。
+:::
 
 ## 应用场景
 
@@ -27,7 +29,7 @@ Binlog 主要的应用场景有以下几种：
 执行下面命令查看 Binlog 是否已启用，默认是启用的：
 
 ```sql
-greatsql> SHOW VARIABLES LIKE '%log_bin%';
+SHOW VARIABLES LIKE '%log_bin%';
 +---------------------------------+-----------------------------+
 | Variable_name                   | Value                       |
 +---------------------------------+-----------------------------+
@@ -121,8 +123,9 @@ binlog_transaction_dependency_tracking = WRITESET
 
   对于高并发的写操作，设置为 WRITESET 通常能提供更好的并行度。
 
-
-> 有条件的话，最好不要将数据库文件与 Binlog 日志文件放在同一个物理磁盘上，一方面降低物理 I/O 读写请求的竞争，还可以降低故障单点风险，避免二者同时损坏。
+::: tip 提示
+有条件的话，最好不要将数据库文件与 Binlog 日志文件放在同一个物理磁盘上，一方面降低物理 I/O 读写请求的竞争，还可以降低故障单点风险，避免二者同时损坏。
+:::
 
 
 ## 查看 Binlog
@@ -134,7 +137,7 @@ GreatSQL 服务进程每次重启，Binlog 文件后缀的数字会自动递增�
 执行下面的命令查看当前所有 Binlog 文件列表及大小：
 
 ```sql
-greatsql> SHOW BINARY LOGS;
+SHOW BINARY LOGS;
 +---------------+------------+-----------+
 | Log_name      | File_size  | Encrypted |
 +---------------+------------+-----------+
@@ -146,9 +149,10 @@ greatsql> SHOW BINARY LOGS;
 
 数据库的所有变更操作都会记录到 Binlog 中，但 Binlog 是二进制而非明文格式，无法直接以明文方式查看，需要借助 `mysqlbinlog` 工具：
 
-```shell
-$ cd /data/GreatSQL
-$ mysqlbinlog ./binlog.000102 | less
+```bash
+cd /data/GreatSQL
+mysqlbinlog ./binlog.000102 | less
+
 ...
 # at 972
 #240704 14:20:52 server id 3306  end_log_pos 1058 CRC32 0x1752752f      GTID    last_committed=1        sequence_number=2       rbr_only=yes    original_committed_timestamp=1
@@ -201,8 +205,9 @@ Kp+AEA==
 
 再次增加 `--base64-output=decode-rows` 参数就可以看到解码成明文后的结果：
 
-```shell
-$ mysqlbinlog -vvv --base64-output=decode-rows ./binlog.000102 | less
+```bash
+mysqlbinlog -vvv --base64-output=decode-rows ./binlog.000102 | less
+
 ...
 # at 972
 #240704 14:20:52 server id 3306  end_log_pos 1058 CRC32 0x1752752f      GTID    last_committed=1        sequence_number=2       rbr_only=yes    original_committed_timestamp=1720074052491915   immediate_commit_timestamp=1720074052492308     transaction_length=1244
@@ -283,22 +288,22 @@ COMMIT/*!*/;
 
 关于 `mysqlbinlog` 工具的参数还有很多，例如只解析对某个库的操作或者某个时间段内的操作等。简单分享几个常用的语句，更多操作可以参考文档：[mysqlbinlog](https://dev.mysql.com/doc/refman/8.0/en/mysqlbinlog.html)。
 
-```shell
+```bash
 # 查看参数帮助
-$ mysqlbinlog --no-defaults --help
+mysqlbinlog --no-defaults --help
 
 # 查看最后 100 行
-$ mysqlbinlog --no-defaults --base64-output=decode-rows -vv binlog.000028 |tail - 100
+mysqlbinlog --no-defaults --base64-output=decode-rows -vv binlog.000028 |tail - 100
 
 # 根据 position 查找
-$ mysqlbinlog --no-defaults --base64-output=decode-rows -vv binlog.000028 |grep -A 20 '619'
+mysqlbinlog --no-defaults --base64-output=decode-rows -vv binlog.000028 |grep -A 20 '619'
 ```
 
 用 `mysqlbinlog` 工具读取出的 Binlog Events 内容比较多，还可以在 GreatSQL 中执行下面的命令查看处理后的简单版本事件内容：
 
 ```sql
 -- 参考用法 SHOW BINLOG EVENTS [IN 'log_name'] [FROM pos] [LIMIT [offset,] row_count];
-greatsql> SHOW BINLOG EVENTS IN 'binlog.000102' FROM 1142 LIMIT 1\G
+SHOW BINLOG EVENTS IN 'binlog.000102' FROM 1142 LIMIT 1\G
 *************************** 1. row ***************************
    Log_name: mgr01.002583
         Pos: 1142
@@ -323,19 +328,19 @@ End_log_pos: 1596
 
 ```sql
 -- a、查询第一个最早的 Binlog 日志:
-greatsql> SHOW BINLOG EVENTS\G
+SHOW BINLOG EVENTS\G
 
 -- b、指定查询 binlog.088802 这个文件
-greatsql> SHOW BINLOG EVENTS IN 'binlog.088802'\G
+SHOW BINLOG EVENTS IN 'binlog.088802'\G
 
 -- c、指定查询 binlog.080802 这个文件，从 pos = 391 开始查起:
-greatsql> SHOW BINLOG EVENTS IN 'binlog.080802' FROM 391\G
+SHOW BINLOG EVENTS IN 'binlog.080802' FROM 391\G
 
 -- d、指定查询 binlog.000802 这个文件，从 pos = 391 开始查起，查询 5 个 Events
-greatsql> SHOW BINLOG EVENTS IN 'binlog.000802' FROM 391 LIMIT 5\G
+SHOW BINLOG EVENTS IN 'binlog.000802' FROM 391 LIMIT 5\G
 
 -- e、指定查询 binlog.880002 这个文件，从 pos = 391 开始查起，偏移量 2（即中间跳过 2 个 Events），查询 5 个 Events
-greatsql> SHOW BINLOG EVENTS IN 'binlog.880002' FROM 391 LIMIT 2,5\G
+SHOW BINLOG EVENTS IN 'binlog.880002' FROM 391 LIMIT 2,5\G
 ```
 
 ## 使用 Binlog 恢复数据
@@ -343,7 +348,7 @@ greatsql> SHOW BINLOG EVENTS IN 'binlog.880002' FROM 391 LIMIT 2,5\G
 利用 `mysqlbinlog` 恢复数据的方法如下：
 
 ```sql
-$ mysqlbinlog [option] filename | mysql -h'hostname' –u'user' -p'password'
+mysqlbinlog [option] filename | mysql -h'hostname' –u'user' -p'password'
 ```
 
 上述命令的作用是用 `mysqlbinlog` 来读取 Binlog Events，然后通过管道直接将 Events 恢复到指定数据库中。
@@ -354,12 +359,14 @@ $ mysqlbinlog [option] filename | mysql -h'hostname' –u'user' -p'password'
   - start-position 和 stop-position：可以指定恢复数据的开始位置和结束位置。
   - database：只读取指定的数据库相关的 Events。
 
-> 使用 `mysqlbinlog` 进行数据恢复操作时，必须按 Binlog 文件编号正序操作，不能跳跃和倒序操作
+::: warning 警告
+使用 `mysqlbinlog` 进行数据恢复操作时，必须按 Binlog 文件编号正序操作，不能跳跃和倒序操作。
+:::
 
 下面是一个利用 Binlog 恢复数据的例子：
-```shell
-$ cd /data/GreatSQL
-$ mysqlbinlog --no-defaults --start-position=236 --stop-position=1071 --database=greatsql binlog.000002 | mysql -h192.168.0.11 -uroot -p'GreatSQL@202X' -f greatsql
+```bash
+cd /data/GreatSQL
+mysqlbinlog --no-defaults --start-position=236 --stop-position=1071 --database=greatsql binlog.000002 | mysql -h192.168.0.11 -uroot -p'GreatSQL@202X' -f greatsql
 ```
 上述命令的作用是读取 Binlog 中指定的起止点位，并且限定了只读 greatsql 这个数据库下的 Events，然后通过管道直接将 Events 恢复到 192.168.0.11 这个数据库实例中。
 
@@ -382,16 +389,16 @@ binlog_expire_logs_seconds = 604800
 
 ```sql
 -- 删除编号比指定的 log_name 更小的所有 Binlog
-greatsql> PURGE BINARY LOGS TO 'log_name';
+PURGE BINARY LOGS TO 'log_name';
 
 -- 删除指定日期 datetime_expr 之前的所有 Binlog
-greatsql> PURGE BINARY LOGS BEFORE 'datetime_expr';
+PURGE BINARY LOGS BEFORE 'datetime_expr';
 ```
 
 下面是相应的示例：
 ```sql
 -- 1. 查看当前所有的 Binlog
-greatsql> SHOW BINARY LOGS;
+SHOW BINARY LOGS;
 +---------------+-----------+-----------+
 | Log_name      | File_size | Encrypted |
 +---------------+-----------+-----------+
@@ -403,11 +410,11 @@ greatsql> SHOW BINARY LOGS;
 +---------------+-----------+-----------+
 
 -- 删除 'binlog.002587' 之前的所有 Binlog
-greatsql> PURGE BINARY LOGS TO 'binlog.002587';
+PURGE BINARY LOGS TO 'binlog.002587';
 Query OK, 0 rows affected (0.07 sec)
 
 -- 再次查看剩下的 Binlog
-greatsql> SHOW BINARY LOGS;
+SHOW BINARY LOGS;
 +---------------+-----------+-----------+
 | Log_name      | File_size | Encrypted |
 +---------------+-----------+-----------+
@@ -415,11 +422,13 @@ greatsql> SHOW BINARY LOGS;
 +---------------+-----------+-----------+
 
 -- 或者用 BEFORE 指定时间参数
-greatsql> purge binary logs before '2024-07-04 15:30';
+purge binary logs before '2024-07-04 15:30';
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-> 无论何种方式删除 Binlog，都务必要先进行备份，避免误操作后无法恢复
+::: warning 警告
+无论何种方式删除 Binlog，都务必要先进行备份，避免误操作后无法恢复。
+:::
 
 ## 深入理解 Binlog
 
@@ -433,9 +442,11 @@ Binlog 刷盘流程如下：
 
 ![Binlog 写入机制](./4-3-greatsql-binary-log-02.png#pic_center)
 
-> 上图的 Write 动作是指把 Binlog Events 写入到文件系统的 Page cache，没有立即把数据同步刷新到磁盘，所以速度比较快。
->
-> 上图的 fsync 动作才是真正将数据持久化刷新到磁盘的操作。
+::: tip
+上图的 Write 动作是指把 Binlog Events 写入到文件系统的 Page cache，没有立即把数据同步刷新到磁盘，所以速度比较快。
+
+其中的 fsync 动作才是真正将数据持久化刷新到磁盘的操作。
+:::
 
 参数 `sync_binlog` 用于设置 Write 和 fsync 的时机，它的默认值是 1。
 

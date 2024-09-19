@@ -14,13 +14,13 @@ GreatSQL 数据库默认不会记录 Slow Log，需要手动设置相关参数�
 
 可以在线执行下面的命令启用 Slow Log：
 ```sql
-greatsql> SET GLOBAL slow_query_log = ON;
+SET GLOBAL slow_query_log = ON;
 ```
 
 执行下面的命令查看 Slow Log 启用与否，以及其他相关配置：
 
 ```sql
-greatsql> SELECT * FROM performance_schema.global_variables WHERE VARIABLE_NAME LIKE 'slow_query_log%' OR VARIABLE_NAME LIKE 'long_q%';
+SELECT * FROM performance_schema.global_variables WHERE VARIABLE_NAME LIKE 'slow_query_log%' OR VARIABLE_NAME LIKE 'long_q%';
 +-----------------------------------+-------------------------------+
 | VARIABLE_NAME                     | VARIABLE_VALUE                |
 +-----------------------------------+-------------------------------+
@@ -39,7 +39,7 @@ greatsql> SELECT * FROM performance_schema.global_variables WHERE VARIABLE_NAME 
 再看判定慢查询响应时长阈值设置参数 `long_query_time`，执行如下命令：
 
 ```sql
-greatsql> SHOW VARIABLES LIKE 'long_query_time';
+SHOW VARIABLES LIKE 'long_query_time';
 +-----------------+-----------+
 | Variable_name   | Value     |
 +-----------------+-----------+
@@ -49,12 +49,12 @@ greatsql> SHOW VARIABLES LIKE 'long_query_time';
 
 它支持在线动态修改全局设定，修改完后，会对再次创建的新连接会话生效（当前会话不能立即生效）：
 ```sql
-greatsql> SET GLOBAL long_query_time = 0.01;
+SET GLOBAL long_query_time = 0.01;
 ```
 
 也支持只修改会话级设定，会对当前连接会话立即生效：
 ```sql
-greatsql> SET long_query_time = 0.01;
+SET long_query_time = 0.01;
 ```
 
 - slow_query_log
@@ -100,7 +100,7 @@ long_query_time = 0.01
 也就是说，当 `min_examined_row_limit` 参数值大于 0 时，一个 SQL 请求需要同时满足响应耗时超过 `long_query_time` 并且它扫描读取的行数超过 `min_examined_row_limit` 才会最终被判定为慢查询。
 
 ```sql
-greatsql> SHOW VARIABLES LIKE 'min_examined_row_limit';
+SHOW VARIABLES LIKE 'min_examined_row_limit';
 +------------------------+-------+
 | Variable_name          | Value |
 +------------------------+-------+
@@ -177,10 +177,10 @@ greatsql> SHOW VARIABLES LIKE 'min_examined_row_limit';
 把慢查询时长阈值设置为 1 秒：
 
 ```sql
-greatsql> SET GLOBAL slow_query_log = ON;
-greatsql> SET GLOBAL long_query_time = 1;
-greatsql> SET long_query_time = 1;
-greatsql> SHOW VARIABLES LIKE '%long_query_time%';
+SET GLOBAL slow_query_log = ON;
+SET GLOBAL long_query_time = 1;
+SET long_query_time = 1;
+SHOW VARIABLES LIKE '%long_query_time%';
 +-----------------+----------+
 | Variable_name   | Value    |
 +-----------------+----------+
@@ -191,7 +191,7 @@ greatsql> SHOW VARIABLES LIKE '%long_query_time%';
 执行一次总耗时超过 1 秒的 SQL 请求：
 
 ```sql
-greatsql> SELECT * FROM `student` WHERE id > 1000 AND `name` = 'Yunxi';
+SELECT * FROM `student` WHERE id > 1000 AND `name` = 'Yunxi';
 +---------+-------+-------+------+---------+
 | 9999715 |   707 | Yunxi |  863 |      71 |
 .......省略
@@ -200,7 +200,7 @@ greatsql> SELECT * FROM `student` WHERE id > 1000 AND `name` = 'Yunxi';
 166949 rows in set (3.94 sec)
 
 -- 查询当前有多少次慢查询记录
-greatsql> SHOW GLOBAL STATUS LIKE 'Slow_queries';
+SHOW GLOBAL STATUS LIKE 'Slow_queries';
 +---------------+-------+
 | Variable_name | Value |
 +---------------+-------+
@@ -210,7 +210,7 @@ greatsql> SHOW GLOBAL STATUS LIKE 'Slow_queries';
 
 查看慢查询日志文件，此次慢查询已被记录：
 
-```shell
+```sql
 # Time: 2022-12-14T15:01:34.892085Z
 # User@Host: root[root] @ localhost []  Id:     8
 # Query_time: 3.985637  Lock_time: 0.000138 Rows_sent: 165346  Rows_examined: 9900000 Thread_id: 8 Errno: 0 Killed: 0 Bytes_received: 0 Bytes_sent: 4848540 Read_first: 0 Read_last: 0 Read_key: 1 Read_next: 9900000 Read_prev: 0 Read_rnd: 0 Read_rnd_next: 0 Sort_merge_passes: 0 Sort_range_count: 0 Sort_rows: 0 Sort_scan_count: 0 Created_tmp_disk_tables: 0 Created_tmp_tables: 0 Start: 2022-12-14T15:01:30.906448Z End: 2022-12-14T15:01:34.892085Z Schema: slow Rows_affected: 0
@@ -250,13 +250,14 @@ SELECT * FROM `student` WHERE id>100000 AND `name`='Yunxi';
 - [Percona Toolkit 神器全攻略](https://mp.weixin.qq.com/s/x37JiZoeZ5deFHhvNU1IDQ)
 
 ## 关闭慢查询日志
-
-> 除非确实不需要关注 SQL 执行效率，否则不建议建议关闭慢查询日志
+::: tip 提示
+除非确实不需要关注 SQL 执行效率，否则不建议建议关闭慢查询日志。
+:::
 
 可以执行下面的命令，在线动态关闭慢查询日志：
 
 ```sql
-greatsql> SET GLOBAL slow_query_log = off;
+SET GLOBAL slow_query_log = off;
 ```
 
 也可以通过修改 my.cnf 配置文件，使之在下次重启后持久化生效（默认情况下是未开启慢查询日志的）：
@@ -269,22 +270,24 @@ slow_query_log = OFF
 
 建议管理员定期（比如每天或每周利用定时任务处理）关注和分析慢查询日志，在分析完历史慢查询日之后，就可以进行备份后清空，避免日志内容持续堆积：
 
-```shell
-$ cd /data/GreatSQL
-$ cp slow.log slow-`date +'%Y%m%d'`.log
-$ echo '' > slow.log
+```bash
+cd /data/GreatSQL
+cp slow.log slow-`date +'%Y%m%d'`.log
+echo '' > slow.log
 
 # 刷新慢查询日志文件
-$ mysqladmin -uroot -p flush-logs slow
+mysqladmin -uroot -p flush-logs slow
 ```
 
 也可以在完成 `cp` 备份后，连入 GreatSQL 后执行相应的 SQL 命令刷新慢查询日志：
 
 ```sql
-greatsql> FLUSH SLOW LOGS;
+FLUSH SLOW LOGS;
 ```
 
-> 不要在服务器上用 vi 等方式在线打开慢查询日志文件，这可能会文件句柄修改，使得该文件状态异常，并造成不可意料的磁盘满问题。
+::: warning 警告
+不要在服务器上用 vi 等方式在线打开慢查询日志文件，这可能会文件句柄修改，使得该文件状态异常，并造成不可意料的磁盘满问题。
+:::
 
 
 **扫码关注微信公众号**

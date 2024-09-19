@@ -14,9 +14,12 @@ GreatSQL 版本号采用点分位命名规则（X.Y.Z-R）模式，其中
 
 以 GreatSQL 8.0.32-26 版本为例，登入到 GreatSQL 数据库后，执行 `\s` 或 `status` 命令就可以得到以下信息：
 
-```
+```bash
+# 登入到 GreatSQL
 $ mysql -hlocalhost -S/data/GreatSQL/mysql.sock -uroot -p
 ...
+
+# 在GreatSQL 中执行 \s 即可查看版本号
 > \s
 ...
 Server version:        8.0.32-26 GreatSQL, Release 26, Revision a68b3034c3d
@@ -43,14 +46,14 @@ Server version:        8.0.32-26 GreatSQL, Release 26, Revision a68b3034c3d
 
 执行下面的命令启动 GreatSQL 服务：
 
-```shell
-$ systemctl start greatsql
+```bash
+systemctl start greatsql
 ```
 
 在 GreatSQL 中执行下面的命令查看数据库列表：
 
 ```sql
-greatsql> SHOW DATABASES;
+SHOW DATABASES;
 +-------------------------------+
 | Database                      |
 +-------------------------------+
