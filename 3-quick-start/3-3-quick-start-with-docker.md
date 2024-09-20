@@ -13,8 +13,10 @@ GreatSQL Docker 镜像仓库主页：[https://hub.docker.com/repository/docker/g
 
 本文使用的 Docker 版本是 20.10.10
 
-```shell
+```bash
 $ docker --version
+
+...
 Docker version 20.10.10, build b485636
 ```
 
@@ -22,18 +24,22 @@ Docker version 20.10.10, build b485636
 
 ### 1. 启动Docker服务
 
-```shell
-$ systemctl start docker
+```bash
+systemctl start docker
 ```
 
 ### 2. 搜索、拉取GreatSQL镜像
 
-```shell
+```bash
 $ docker search greatsql
+
+...
 NAME                DESCRIPTION   STARS     OFFICIAL   AUTOMATED
 greatsql/greatsql                 4
 
 $ docker pull greatsql
+
+...
 Using default tag: latest
 latest: Pulling from greatsql/greatsql
 a1d0c7532777: Already exists
@@ -46,25 +52,27 @@ docker.io/greatsql/greatsql:latest
 
 若由于网络原因无法从 docker.io 拉取 GreatSQL 镜像的话，可以改成从阿里云拉取，方法如下：
 
-```shell
-$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
+```bash
+docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
 ```
 
 ### 3. 创建一个新容器
 
 容器中会安装并启动GreatSQL数据库
 
-```shell
+```bash
 $ docker run -d --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EMPTY_PASSWORD=1 greatsql/greatsql
 
+...
 4f351e22cea990b177589970ac5374f4b3366d2c0f69e923475f82c51da4b934
 ```
 容器的命名和容器内主机名均为greatsql。
 
 确认容器状态：
 
-```shell
+```bash
 $ docker ps -a | grep greatsql
+
 ...
 4f351e22cea9   greatsql/greatsql     "/docker-entrypoint.…"   About a minute ago   Up About a minute          3306/tcp, 33060-33061/tcp   greatsql
 ...
@@ -73,8 +81,10 @@ $ docker ps -a | grep greatsql
 
 ### 4. 进入容器
 
-```shell
+```bash
 $ docker exec -it greatsql bash
+
+...
 [root@greatsql /]# cd /data/GreatSQL/
 [root@greatsql GreatSQL]# ls
  auto.cnf        binlog.index      client-key.pem   '#file_purge'         ibdata1          '#innodb_temp'   mysql.sock           public_key.pem    sys
@@ -86,14 +96,14 @@ $ docker exec -it greatsql bash
 
 在容器中登入GreatSQL数据库：
 
-```shell
+```bash
 [root@greatsql GreatSQL]# mysql -uroot
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-[root@GreatSQL][(none)]>\s
+[root@GreatSQL][(none)]> status;
 --------------
 ...
 Server version:        8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
@@ -105,9 +115,9 @@ Threads: 2  Questions: 6  Slow queries: 0  Opens: 119  Flush tables: 3  Open tab
 
 如果想要在 Docker 容器中执行某个 SQL 脚本，需要先将该 SQL 脚本拷贝到容器中，再执行相应的 SQL 脚本，如下例所示：
 
-```shell
+```bash
 # 先从宿主拷贝文件到容器中
-$ docker cp /opt/greatsql-test.sql greatsql:/tmp/
+docker cp /opt/greatsql-test.sql greatsql:/tmp/
 ```
 
 其中
@@ -118,22 +128,20 @@ $ docker cp /opt/greatsql-test.sql greatsql:/tmp/
 
 接下来，可以直接在宿主环境中调用执行容器中的 SQL 脚本
 
-```shell
-$ docker exec -it greatsql bash -c "mysql -f < /tmp/greatsql-test.sql"
+```bash
+docker exec -it greatsql bash -c "mysql -f < /tmp/greatsql-test.sql"
 ```
 
 上述方法有可能由于一些环境变量等原因无法执行，这时可以先进入容器再执行 SQL 脚本
 
-```shell
+```bash
 # 先进入容器
-$ docker exec -it greatsql bash
+docker exec -it greatsql bash
 
 # 再在容器中执行一个 SQL 脚本
-$ mysql -f < /tmp/greatsql-test.sql
+mysql -f < /tmp/greatsql-test.sql
 ```
 这样就可以了。
-
-
 
 **扫码关注微信公众号**
 

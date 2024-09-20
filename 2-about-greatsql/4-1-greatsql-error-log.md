@@ -38,19 +38,23 @@ log-error = /data/GreatSQL/error.log
 
 ## 查看错误日志
 
-GreatSQL 错误日志是以文本文件形式存储的，可以使用文本编辑器直接查看。查询错误日志的存储路径：
+GreatSQL 错误日志是以文本文件形式存储的，可以使用文本编辑器直接查看。执行下面的命令查询错误日志的存储路径：
 
 ```sql
-SHOW VARIABLES LIKE 'log_error%';
+SHOW VARIABLES LIKE 'log_error';
+```
+
+::: details 查看运行结果
+```sql
+greatsql> SHOW VARIABLES LIKE 'log_error';
 +----------------------------+----------------------------------------+
 | Variable_name              | Value                                  |
 +----------------------------+----------------------------------------+
 | log_error                  | /data/GreatSQL/error.log                |
-| log_error_services         | log_filter_internal; log_sink_internal |
-| log_error_suppression_list |                                        |
-| log_error_verbosity        | 2                                      |
 +----------------------------+----------------------------------------+
 ```
+:::
+
 上述结果表明当前 GreatSQL 的错误日志文件路径是 */data/GreatSQL/error.log*。
 
 ## 相关参数
@@ -63,7 +67,7 @@ SHOW VARIABLES LIKE 'log_error%';
 默认情况下，`log_error_services` 具有以下可选值：
 
 ```sql
-SELECT @@GLOBAL.log_error_services;
+greatsql> SELECT @@GLOBAL.log_error_services;
 +----------------------------------------+
 | @@GLOBAL.log_error_services            |
 +----------------------------------------+
@@ -95,7 +99,7 @@ SELECT @@GLOBAL.log_error_services;
 从 GreatSQL 5.7.2 开始新增了 `log_timestamps` 这个参数，用于设置 [错误日志](#)、[通用日志](./4-7-greatsql-general-log.md) 中时间戳的记录方式。参数默认值为 *UTC*（简单说就是 UTC+0 时区），这会使得日志中记录的时间采用比中国采用的时区慢 8 小时，日志查看起来就没那么方便了。
 
 ```sql
-SHOW GLOBAL VARIABLES LIKE 'log_timestamps';
+greatsql> SHOW GLOBAL VARIABLES LIKE 'log_timestamps';
 +----------------+-------+
 | Variable_name  | Value |
 +----------------+-------+

@@ -63,24 +63,23 @@ GreatSQL 支持主流的 Linux 操作系统环境。
 以 /dev/nvme0n1 数据盘为例，具体操作步骤如下：
 
 1. **将整个分区都格式化为xfs文件系统**
-```
-$ mkfs.xfs -f -L /data /dev/nvme0n1
+```bash
+mkfs.xfs -f -L /data /dev/nvme0n1
 ```
 
 2. **修改 `/etc/fstab` 系统文件，增加数据库专用分区**
-```
-$ vim /etc/fstab
-...
+```ini
 LABEL=/data /data    xfs     defaults,noatime,nodiratime,inode64 0 0
 ```
 3. **创建 `/data` 目录，挂载分区**
-```
-$ mkdir -p /data && mount /data
+```bash
+mkdir -p /data && mount /data
 ```
 
 4. **检查分区挂载结果**
-```
+```bash
 $ mount | grep /data
+
 ...
 /dev/nvme0n1 on /data type xfs (rw,noatime,nodiratime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
 ```
@@ -89,32 +88,37 @@ $ mount | grep /data
 
 数据库服务器通常运行在内部网络，此外部署MGR时也需要对内网开放多个TCP端口，因此可以关闭防火墙及selinux设置。
 
-**提醒：** 虽然数据部署在内部网络，但也要时刻警惕数据泄漏的风险，做好必要的安全防护措施。
+::: tip 小贴士
+虽然数据部署在内部网络，但也要时刻警惕数据泄漏的风险，做好必要的安全防护措施。
+:::
 
 1. **关闭防火墙服务**
-```
-$ systemctl stop firewalld ; systemctl disable firewalld
+```bash
+systemctl stop firewalld ; systemctl disable firewalld
 ```
 
 2. **关闭selinux**
-```
-$ setenforce 0
-$ sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
+```bash
+setenforce 0
+sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
 ```
 
 ## 关闭swap
 
 运行 GreatSQL 建议配置足够的物理内存。如果内存不足，不建议使用 swap 作为缓冲，因为这会降低性能。建议永久关闭系统 swap。
+```bash
+echo "vm.swappiness = 0">> /etc/sysctl.conf
+swapoff -a && swapon -a
+sysctl -p
 ```
-$ echo "vm.swappiness = 0">> /etc/sysctl.conf
-$ swapoff -a && swapon -a
-$ sysctl -p
-```
-**提示**：对于 `vm.swappiness=0` 的设置，业内有些不同看法。
 
-一种观点是：不建议设置为0，因为某种意义上存在风险，当系统内存不够用时，不会尝试去使用swap，而直接触发oom-kill机制，这可能会导致GreatSQL服务进程被kill，这在设置非双1的场景中可能会导致部分事务数据丢失。
+::: tip 小贴士
+对于 `vm.swappiness=0` 的设置，业内有以下两种不同看法。
+:::
 
-另一种观点是：建议设置为0，因为当使用swap时，通常会导致数据库响应速度下降非常严重，对业务端体验非常差，这种情况下，不如直接kill或重启服务进程，避免引发雪崩效应。
+- 一种观点是：**不建议设置为0**，因为某种意义上存在风险，当系统内存不够用时，不会尝试去使用swap，而直接触发oom-kill机制，这可能会导致GreatSQL服务进程被kill，这在设置非双1的场景中可能会导致部分事务数据丢失。
+
+- 另一种观点是：**建议设置为0**，因为当使用swap时，通常会导致数据库响应速度下降非常严重，对业务端体验非常差，这种情况下，不如直接kill或重启服务进程，避免引发雪崩效应。
 
 对于上述两种观点，请用户自行选择判断。
 
@@ -123,21 +127,26 @@ $ sysctl -p
 1. **修改数据库分区的 I/O Scheduler 设置为 noop / deadline**
 
 先查看当前设置
-```
+```bash
 $ cat /sys/block/nvme0n1/queue/scheduler
+
+...
 none
 ```
 这样没问题，如果不是 noop 或 deadline，可以动手修改：
-```
-$ echo 'noop' > /sys/block/nvme0n1/queue/scheduler
+
+```bash
+echo 'noop' > /sys/block/nvme0n1/queue/scheduler
 ```
 这样修改后立即生效，无需重启。
 
 2. **确认CPU性能模式设置**
 
 先检查当前的设置模式
-```
+```bash
 $ cpupower frequency-info --policy
+
+...
 analyzing CPU 0:
   current policy: frequency should be within 800 MHz and 4.80 GHz.
                   The governor "performance" may decide which speed to use
@@ -156,32 +165,32 @@ The governor "powersave" 表示 cpufreq 的节能策略使用 powersave，需要
 建议关闭透明大页（Transparent Huge Pages / THP）。OLTP型数据库内存访问模式通常是稀疏的而非连续的。当高阶内存碎片化比较严重时，分配 THP 页面会出现较高的延迟，反而影响性能。
 
 先检查当前设置：
-```
+```bash
 $ cat /sys/kernel/mm/transparent_hugepage/enabled
+
+...
 always madvise [never]
 ```
 如果输出结果不是 **never** 的话，则需要执行下面的命令关闭：
-```
-$ echo never > /sys/kernel/mm/transparent_hugepage/enabled
-$ echo never > /sys/kernel/mm/transparent_hugepage/defrag
+```bash
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
 ```
 
 4. **优化内核参数**
 建议调整优化下面几个内核参数：
-```
-$ echo "fs.file-max = 1000000" >> /etc/sysctl.conf
-$ echo "net.core.somaxconn = 32768" >> /etc/sysctl.conf
-$ echo "net.ipv4.tcp_syncookies = 0" >> /etc/sysctl.conf
-$ echo "vm.overcommit_memory = 1" >> /etc/sysctl.conf
-$ sysctl -p
+```bash
+echo "fs.file-max = 1000000" >> /etc/sysctl.conf
+echo "net.core.somaxconn = 32768" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_syncookies = 0" >> /etc/sysctl.conf
+echo "vm.overcommit_memory = 1" >> /etc/sysctl.conf
+sysctl -p
 ```
 
 5. **修改mysql用户使用资源上限**
 
 修改 `/etc/security/limits.conf` 系统文件，调高mysql系统账户的上限：
-```
-$ vim /etc/security/limits.conf
-...
+```ini
 mysql           soft    nofile         65535
 mysql           hard    nofile         65535
 mysql           soft    stack          32768
@@ -198,7 +207,7 @@ mysql           hard    nproc          65535
 从 GreatSQL 8.0.32-26 开始支持 [NUMA 亲和性优化](../5-enhance/5-1-highperf-numa-affinity.md)，对高负载场景下的性能优化也有帮助。
 
 以CentOS为例，打开 `/etc/default/grub` 文件，确保文件内容中没有 `NUMA=OFF` 字样，如果有的话就删掉：
-```
+```ini
 GRUB_TIMEOUT=5
 GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
 GRUB_DEFAULT=saved
@@ -211,7 +220,7 @@ GRUB_DISABLE_RECOVERY="true"
 
 如果修改了 `/etc/default/grub` 文件，需要重新生成UEFI启动文件：
 ```
-$ grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
+grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
 ```
 
 然后重启操作系统，使之生效。
@@ -219,22 +228,17 @@ $ grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
 操作系统层开启NUMA后，还要记得修改GreatSQL配置选项 `innodb_numa_interleave = ON`，确保InnoDB在分配内存时使用正确的NUMA策略。
 
 如果采用手动方式启动GreatSQL服务进程，还可以在启动时加上 `numactl --interleave=all`，例如：
-```
-$ numactl --interleave=all /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld &
+```bash
+numactl --interleave=all /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld &
 ```
 
-如果采用 `systemd` 来启动 GreatSQL服务进程，则可以修改 `/etc/systemd/system.conf` 配置文件，增加一行：
-```
-...
-[Manager]
-...
+如果采用 `systemd` 来启动 GreatSQL服务进程，则可以修改 `/etc/systemd/system.conf` 配置文件，在 *[Manager]* 这个区间内增加一行：
+```ini
 NUMAPolicy=interleave
-#NUMAMask=
-...
 ```
 修改完毕后，重新加载 `systemd` 配置，确保NUMA策略生效：
-```
-$ systemctl daemon-reload
+```bash
+systemctl daemon-reload
 ```
 
 ## 其他
@@ -246,19 +250,21 @@ $ systemctl daemon-reload
 如果需要配置yum源，可以参考[这篇文档](https://developer.aliyun.com/mirror/centos)。
 
 安装GreatSQL RPM包时，要先安装这些相关依赖包。
-```
-$ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
+```bash
+yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
 ```
 如果有更多依赖包需要安装，请自行添加。如果报告个别依赖包安装失败或者找不到就删掉，然后重试。
 
 添加/修改系统文件 `/etc/sysconfig/mysql`：
-```
+```ini
 LD_PRELOAD=/usr/lib64/libjemalloc.so
 THP_SETTING=never
 ```
 确认文件 `/usr/lib64/libjemalloc.so` 是否存在（可能是个软链接文件）：
-```
+```bash
 $ ls -la /usr/lib64/libjemalloc.so*
+
+...
 lrwxrwxrwx 1 root root     16 Oct  2  2019 /usr/lib64/libjemalloc.so -> libjemalloc.so.2
 -rwxr-xr-x 1 root root 608096 Oct  2  2019 /usr/lib64/libjemalloc.so.2
 ```
@@ -275,12 +281,12 @@ lrwxrwxrwx 1 root root     16 Oct  2  2019 /usr/lib64/libjemalloc.so -> libjemal
 - **安装其他常用辅助工具包**
 
 建议提前安装DBA常用的辅助工具包：
-```
-$ yum install -y net-tools perf sysstat iotop tmux
+```bash
+yum install -y net-tools perf sysstat iotop tmux
 ```
 
 安装完 `sysstat` 包之后，编辑文件 `/etc/cron.d/sysstat`，修改sysstat运行频率（将原先每10分钟运行调整为每1分钟运行）：
-```
+```ini
 #*/10 * * * * root  /usr/lib64/sa/sa1 1 1
 */1 * * * * root  /usr/lib64/sa/sa1 1 1
 ```

@@ -22,6 +22,8 @@
 查看机器的glibc版本，以选择正确的安装包：
 ```bash
 $ ldd --version
+
+...
 ldd (GNU libc) 2.28
 ```
 如果您的glibc版本为2.28或更高版本，请选择带有"glibc2.28"标识的安装包；如果您的glibc版本为2.17，请选择带有"glibc2.17"标识的安装包。
@@ -31,22 +33,22 @@ ldd (GNU libc) 2.28
 - GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
 
 将下载的二进制包放到安装目录下，并解压缩：
-```
-$ cd /usr/local
-$ curl -o GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz https://product.greatdb.com/GreatSQL-8.0.32-26/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
-$ tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+```bash
+cd /usr/local
+curl -o GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz https://product.greatdb.com/GreatSQL-8.0.32-26/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 同时修改设置，将GreatSQL加入 `PATH` 环境变量：
-```
-$ echo 'export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
-$ source ~/.bash_profile
+```bash
+echo 'export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
+source ~/.bash_profile
 ```
 
-**提示**：安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
+安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
 
-```
-$ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
+```bash
+yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
 ```
 
 如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](./1-install-prepare.md)。
@@ -57,8 +59,7 @@ $ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-too
 
 请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
-```
-$ vim my.cnf
+```ini
 [client]
 socket    = /data/GreatSQL/mysql.sock
 [mysql]
@@ -213,25 +214,26 @@ performance_schema_instrument = '%lock%=on'
 ```
 
 ###  新建mysql用户
-```
-$ /sbin/groupadd mysql
-$ /sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
+```bash
+/sbin/groupadd mysql
+/sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
 ```
 
 ###  新建 datadir
 
 新建数据库主目录，并修改权限模式及属主：
 
-```
-$ mkdir -p /data/GreatSQL
-$ chown -R mysql:mysql /data/GreatSQL
-$ chmod -R 700 /data/GreatSQL
+```bash
+mkdir -p /data/GreatSQL
+chown -R mysql:mysql /data/GreatSQL
+chmod -R 700 /data/GreatSQL
 ```
 
 ###  增加GreatSQL系统服务
-```
-$ vim /lib/systemd/system/greatsql.service
 
+推荐采用systemd来管理GreatSQL服务，执行 `vim /lib/systemd/system/greatsql.service` 命令，添加下面的内容：
+
+```ini
 [Unit]
 Description=GreatSQL Server
 Documentation=man:mysqld(8)
@@ -278,8 +280,8 @@ PrivateTmp=false
 务必确认文件中目录及文件名是否正确。
 
 执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
-```
-$ systemctl daemon-reload
+```bash
+systemctl daemon-reload
 ```
 
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
@@ -287,14 +289,15 @@ $ systemctl daemon-reload
 ## 启动GreatSQL
 
 执行下面的命令启动GreatSQL服务
-```
-$ systemctl start greatsql
+```bash
+systemctl start greatsql
 ```
 
 如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
-```
+```bash
 $ systemctl status greatsql
 
+...
 ● greatsql.service - GreatSQL Server
    Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; vendor preset: disabled)
    Active: failed (Result: exit-code) since Fri 2024-07-08 10:02:03 CST; 1min 14s ago
@@ -314,15 +317,18 @@ systemd[1]: greatsql.service: Main process exited, code=exited, status=1/FAILURE
 systemd[1]: greatsql.service: Failed with result 'exit-code'.
 systemd[1]: Failed to start GreatSQL Server.
 ```
+
 只需手动创建 `/var/lib/mysql-files` 目录，再次启动GreatSQL服务即可：
-```
-$ mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
-$ systemctl start greatsql
+```bash
+mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
+systemctl start greatsql
 ```
 
 检查服务是否已启动，以及进程状态：
-```
+```bash
 $ systemctl status greatsql
+
+...
 ● greatsql.service - GreatSQL Server
    Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; vendor preset: disabled)
    Active: active (running) since Tue 2024-07-12 10:08:06 CST; 6min ago
@@ -340,14 +346,20 @@ systemd[1]: Starting GreatSQL Server...
 systemd[1]: Started GreatSQL Server.
 
 $ ps -ef | grep mysqld
+
+...
 mysql      60231       1  2 10:08 ?        00:00:10 /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld
 
 $ ss -lntp | grep mysqld
+
+...
 LISTEN 0      70                 *:33060            *:*    users:(("mysqld",pid=60231,fd=38))
 LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=60231,fd=43))
 
 # 查看数据库文件
 $ ls /data/GreatSQL
+
+...
  auto.cnf        ca-key.pem        error.log           '#ib_archive'    '#innodb_redo'       mysql.ibd         performance_schema   server-key.pem   undo_002
  binlog.000001   ca.pem           '#file_purge'         ib_buffer_pool   innodb_status.258   mysql.pid         private_key.pem      slow.log
  binlog.000002   client-cert.pem  '#ib_16384_0.dblwr'   ibdata1         '#innodb_temp'       mysql.sock        public_key.pem       sys
@@ -362,7 +374,9 @@ $ ls /data/GreatSQL
 
 ```bash
 $ grep -i root /data/GreatSQL/error.log
-... A temporary password is generated for root@localhost: ji!pjndiw5sJ
+
+...
+A temporary password is generated for root@localhost: ji!pjndiw5sJ
 ```
 
 复制该密码，将用于首次登入GreatSQL所需。
@@ -371,13 +385,16 @@ $ grep -i root /data/GreatSQL/error.log
 
 ```sql
 $ mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
+
+...
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 11
 Server version: 8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ...
-greatsql> \s
+
+greatsql> status;
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 ```
 
@@ -387,7 +404,7 @@ ERROR 1820 (HY000): You must reset your password using ALTER USER statement befo
 greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@2022';  #<--修改密码
 Query OK, 0 rows affected (0.02 sec)
 
-greatsql> \s
+greatsql> status;
 ...
 Server version:         8.0.32-26
 ...
@@ -407,25 +424,21 @@ P.S，如果暂时不想使用仲裁节点特性的话，则可以继续使用�
 
 将二进制文件包放在 `/usr/local` 目录下，解压缩：
 
-```
-$ cd /usr/local/
-$ tar xf greatsql-shell-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+```bash
+cd /usr/local/
+tar xf greatsql-shell-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
 ```
 
-修改家目录下的profile文件，加入PATH：
+修改家目录下的 *profile* 文件 `vim ~/.bash_profile`，加入PATH：
 
-```
-$ vim ~/.bash_profile
-
-...
+```ini
 PATH=$PATH:$HOME/bin:/usr/local/greatsql-shell-8.0.32-26-Linux-glibc2.28-x86_64/bin
-
 export PATH
 ```
 
 加载，使之生效
-```
-$ source ~/.bash_profile
+```bash
+source ~/.bash_profile
 ```
 
 这样就可以直接执行 `mysqlsh`，而无需每次都加上全路径了。
@@ -433,13 +446,15 @@ $ source ~/.bash_profile
 运行 GreatSQL Shell 8.0.32-26 需要安装 Python 3.8 依赖
 
 ```shell
-$ dnf install -y libssh python38 python38-libs python38-pyyaml
-$ pip3.8 install --user certifi pyclamd
+dnf install -y libssh python38 python38-libs python38-pyyaml
+pip3.8 install --user certifi pyclamd
 ```
 
 接下来就可以直接使用mysqlsh了
 ```bash
 $ mysqlsh
+
+...
 MySQL Shell 8.0.32
 
 Copyright (c) 2016, 2021, Oracle and/or its affiliates.
@@ -452,7 +467,9 @@ Type '\help' or '\?' for help; '\quit' to exit.
 
 GreatSQL Shell就可以正常使用，并继续构建MGR集群了。
 
-> 推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)
+::: tip 小贴士
+推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)。
+:::
 
 **扫码关注微信公众号**
 

@@ -24,8 +24,9 @@
   指定中继日志文件的名称和路径，可以只设置文件名，也可以设置全路径。例如：`relay_log = /data/GreatSQL/relay-log`，则会在 /data/GreatSQL 目录下生成以 relay-log 开头以数字编号为后缀的中继日志文件。例如：
 
 ```bash
-ls -la relay-log*
+$ ls -la relay-log*
 
+...
 -rw-r----- 1 mysql mysql 204 Jul  5 14:49 relay-log.000001
 -rw-r----- 1 mysql mysql 204 Jul  5 14:49 relay-log.000002
 -rw-r----- 1 mysql mysql 204 Jul  5 14:49 relay-log.000003
@@ -49,6 +50,7 @@ CHANGE MASTER TO MASTER_AUTO_POSITION = 1 FOR CHANNEL 'repl-channel-01';
 ```bash
 ls -la relay-log*
 
+...
 -rw-r----- 1 mysql mysql 180 Jul  5 14:56 relay-log.000001
 -rw-r----- 1 mysql mysql  19 Jul  5 14:56 relay-log.index
 -rw-r----- 1 mysql mysql 228 Jul  5 14:57 relay-log-repl@002dchannel@002d01.000001
@@ -60,8 +62,9 @@ ls -la relay-log*
 类似地，如果当前服务器是 MGR 组复制中的一个成员节点，那么其中继日志文件名就是另一个样子的了，例如：
 
 ```bash
-ls -la relay-log*
+$ ls -la relay-log*
 
+...
 -rw-r----- 1 mysql mysql 180 Jul  5 14:56 relay-log.000001
 -rw-r----- 1 mysql mysql 231 Jul  5 14:57 relay-log-group_replication_recovery.000001
 -rw-r----- 1 mysql mysql 231 Jul  5 14:57 relay-log-group_replication_recovery.000002
@@ -70,11 +73,12 @@ ls -la relay-log*
 -rw-r----- 1 mysql mysql  19 Jul  5 14:56 relay-log.index
 ```
 
-有次也不难想象，当一个服务器既是主从复制的从服务器，又是 MGR 组复制里的成员节点时，它的中继日志会有好几组并存，例如：
+由此也不难想象，当一个服务器既是主从复制的从服务器，又是 MGR 组复制里的成员节点时，它的中继日志会有好几组并存，例如：
 
 ```bash
-ls -la relay-log*
+$ ls -la relay-log*
 
+...
 -rw-r----- 1 mysql mysql 180 Jul  5 14:56 relay-log.000001
 -rw-r----- 1 mysql mysql 231 Jul  5 15:00 relay-log-group_replication_recovery.000001
 -rw-r----- 1 mysql mysql 231 Jul  5 15:00 relay-log-group_replication_recovery.000002
@@ -136,10 +140,12 @@ SHOW RELAYLOG EVENTS [IN 'log_name'] [FROM pos] [LIMIT [offset,] row_count]
 
 ### 检查中继日志
 
-可以使用 `SHOW SLAVE STATUS` 命令来查看中继日志的状态和当前处理的位置。例如：
+可以使用 `SHOW SLAVE STATUS` 命令来查看中继日志的状态和当前处理的位置。
 
+::: details 查看运行结果
 ```sql
-SHOW SLAVE STATUS\G
+greatsql> SHOW SLAVE STATUS\G
+
 ...
                Relay_Log_File: relay-log.000001
                 Relay_Log_Pos: 4
@@ -148,6 +154,7 @@ SHOW SLAVE STATUS\G
       Slave_SQL_Running_State: Replica has read all relay log; waiting for more updates
 ...
 ```
+:::
 
 上述结果中，从 `Relay_Log_File` 和 `Relay_Log_Pos` 字段就可以看到中继日志当前的最新文件名以及当前事件处理的位置。
 

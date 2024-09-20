@@ -11,7 +11,7 @@
 这里采用系统安装后默认的yum源，并生成缓存。
 
 ```bash
-$ yum clean all && yum makecache
+yum clean all && yum makecache
 ```
 
 在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
@@ -19,8 +19,8 @@ $ yum clean all && yum makecache
 ###  关闭selinux
 
 ```bash
-$ setenforce=0
-$ sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
+setenforce=0
+sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
 ```
 
 ###  选择下载GreatSQL二进制包
@@ -29,6 +29,8 @@ $ sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
 
 ```bash
 $ cat /etc/os-release
+
+...
 NAME="openEuler"
 VERSION="20.03 (LTS-SP3)"
 ID="openEuler"
@@ -37,6 +39,8 @@ PRETTY_NAME="openEuler 20.03 (LTS-SP3)"
 ANSI_COLOR="0;31"
 
 $ ldd --version
+
+...
 ldd (GNU libc) 2.28
 ```
 
@@ -46,16 +50,16 @@ ldd (GNU libc) 2.28
 
 将下载的二进制包放到安装目录下，并解压缩：
 
-```
-$ cd /usr/local
-$ tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+```bash
+cd /usr/local
+tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 同时修改设置，将GreatSQL加入 `PATH` 环境变量：
 
-```
-$ echo 'export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
-$ source ~/.bash_profile
+```bash
+echo 'export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
+source ~/.bash_profile
 ```
 
 接下来准备开始安装GreatSQL二进制包。
@@ -66,7 +70,7 @@ $ source ~/.bash_profile
 
 请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
-```
+```ini
 [client]
 socket    = /data/GreatSQL/mysql.sock
 [mysql]
@@ -221,29 +225,26 @@ performance_schema_instrument = '%lock%=on'
 
 ###  新建mysql用户
 
-```
-$ /sbin/groupadd mysql
-$ /sbin/useradd -g mysql -M mysql -s /sbin/nologin
+```bash
+/sbin/groupadd mysql
+/sbin/useradd -g mysql -M mysql -s /sbin/nologin
 ```
 
 ###  新建 datadir
 
 新建数据库主目录，并修改权限模式及属主：
 
-
-```
-$ mkdir -p /data/GreatSQL 
-$ chown -R mysql:mysql /data/GreatSQL
-$ chmod -R 700 /data/GreatSQL
+```bash
+mkdir -p /data/GreatSQL 
+chown -R mysql:mysql /data/GreatSQL
+chmod -R 700 /data/GreatSQL
 ```
 
 ###  配置GreatSQL systemd服务
 
-推荐采用systemd来管理GreatSQL服务，可参考这份文件，或根据实际安装目录编辑文件：
+推荐采用systemd来管理GreatSQL服务，执行 `vim /lib/systemd/system/greatsql.service` 命令，添加下面的内容：
 
-```
-$ vi /lib/systemd/system/greatsql.service
-
+```ini
 [Unit]
 Description=GreatSQL Server
 Documentation=man:mysqld(8)
@@ -289,8 +290,8 @@ PrivateTmp=false
 
 执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
 
-```
-$ systemctl daemon-reload
+```bash
+systemctl daemon-reload
 ```
 
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
@@ -299,8 +300,8 @@ $ systemctl daemon-reload
 
 执行下面的命令启动GreatSQL服务
 
-```
-$ systemctl start greatsql
+```bash
+systemctl start greatsql
 ```
 
 如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
@@ -308,6 +309,7 @@ $ systemctl start greatsql
 ```bash
 $ systemctl status greatsql
 
+...
 ● greatsql.service - GreatSQL Server
    Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; vendor preset: disabled)
    Active: failed (Result: exit-code) since Wed 2024-07-08 14:02:14 CST; 2s ago
@@ -330,14 +332,16 @@ systemd[1]: greatsql.service: Failed with result 'exit-code'.
 只需手动创建 `/var/lib/mysql-files` 目录，再次启动GreatSQL服务即可：
 
 ```bash
-$ mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
-$ systemctl start greatsql
+mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
+systemctl start greatsql
 ```
 
 检查服务是否已启动，以及进程状态：
 
 ```bash
 $ systemctl status greatsql
+
+...
 ● greatsql.service - GreatSQL Server
    Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; vendor preset: disabled)
    Active: active (running) since Wed 2024-07-08 14:02:36 CST; 4s ago
@@ -369,7 +373,9 @@ LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=
 
 ```bash
 $ grep -i root /data/GreatSQL/error.log
-... A temporary password is generated for root@localhost: ji!pjndiw5sJ
+
+...
+A temporary password is generated for root@localhost: ji!pjndiw5sJ
 ```
 
 复制该密码，将用于首次登入GreatSQL所需。
@@ -384,7 +390,7 @@ Server version: 8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ...
-greatsql> \s
+greatsql> status;
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 ```
 
@@ -394,7 +400,7 @@ ERROR 1820 (HY000): You must reset your password using ALTER USER statement befo
 greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@2022';  #<--修改密码
 Query OK, 0 rows affected (0.02 sec)
 
-greatsql> \s
+greatsql> status;
 ...
 mysql  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL, Release 26, Revision 444164cc78e)
 
@@ -431,7 +437,9 @@ GreatSQL数据库安装并初始化完毕。
 
 GreatSQL Shell就可以正常使用，并继续构建MGR集群了。
 
-> 推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)
+::: tip 小贴士
+推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)。
+:::
 
 **扫码关注微信公众号**
 

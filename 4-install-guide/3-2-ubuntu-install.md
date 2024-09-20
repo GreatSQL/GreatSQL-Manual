@@ -6,15 +6,20 @@
 
 环境介绍
 
-```Bash
+```bash
 $ lsb_release -a
+
+...
 LSB Version:    core-11.1.0ubuntu4-noarch:security-11.1.0ubuntu4-noarch
 Distributor ID: Ubuntu
 Description:    Ubuntu 22.04.3 LTS
 Release:        22.04
 Codename:       jammy
 ----
+
 $ getconf GNU_LIBC_VERSION
+
+...
 glibc 2.35
 ```
 
@@ -25,6 +30,8 @@ glibc 2.35
 查看机器的glibc版本，以选择正确的安装包：
 ```bash
 $ getconf GNU_LIBC_VERSION
+
+...
 glibc 2.35
 ```
 如果您的glibc版本为2.28或更高版本，请选择带有"glibc2.28"标识的安装包；如果您的glibc版本为2.17，请选择带有"glibc2.17"标识的安装包。
@@ -35,17 +42,21 @@ glibc 2.35
 
 将下载的二进制包放到安装目录下，并解压缩：
 
-```Plain
-$ cd /usr/local
-$ curl -o GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz https://product.greatdb.com/GreatSQL-8.0.32-26/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
-$ tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+```bash
+cd /usr/local
+curl -o GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz https://product.greatdb.com/GreatSQL-8.0.32-26/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
 ```
 
-**提示** 安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
+安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
 
-> 包名称在centos和Ubuntu上是不同的,若要安装其它依赖包请使用`apt search <包名>`查找
+```bash
+sudo apt-get install -y libaio-dev libnuma-dev libnuma1 net-tools openssl libssl-dev libjemalloc2 libjemalloc-dev libdigest-md5-perl
+```
 
-`$ sudo apt-get install -y libaio-dev libnuma-dev libnuma1 net-tools openssl libssl-dev libjemalloc2 libjemalloc-dev libdigest-md5-perl` 更详细的请参考：[安装准备](./1-install-prepare.md)。
+::: tip 小贴士
+包名称在centos和Ubuntu上是不同的,若要安装其它依赖包请使用`apt search <包名>`查找。
+:::
 
 - `pkg-config`: 在 Ubuntu 中，pkg-config 工具已经预安装，无需额外安装。
 - `perl`: Perl 已经预安装在 Ubuntu 中，无需额外安装。
@@ -68,8 +79,7 @@ $ tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
 
 请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
-```Plain
-$ vim /etc/mysql/my.cnf
+```ini
 [client]
 socket    = /data/GreatSQL/mysql.sock
 [mysql]
@@ -225,9 +235,9 @@ performance_schema_instrument = '%lock%=on'
 
 ###  新建mysql用户
 
-```Plain
-$ /sbin/groupadd mysql
-$ /sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
+```bash
+/sbin/groupadd mysql
+/sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
 ```
 
 ###  新建 datadir
@@ -235,32 +245,31 @@ $ /sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
 新建数据库主目录，并修改权限模式及属主：
 
 
-```Plain
-$ mkdir -p /data/GreatSQL
-$ chown -R mysql:mysql /data/GreatSQL
-$ chmod -R 700 /data/GreatSQL
+```bash
+mkdir -p /data/GreatSQL
+chown -R mysql:mysql /data/GreatSQL
+chmod -R 700 /data/GreatSQL
 ```
 
 ## 启动GreatSQL
 
 把GreatSQL添加进环境变量
 
-```Plain
+```bash
 sudo sh -c 'echo "export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:\$PATH" >> /etc/profile'
-# 刷新文件使得生效
 source /etc/profile
 ```
 
 初始化GreatSQL
 
-```Plain
-$ nohup mysqld --defaults-file=/etc/mysql/my.cnf --initialize-insecure --user=mysql
+```bash
+nohup mysqld --defaults-file=/etc/mysql/my.cnf --initialize-insecure --user=mysql
 ```
 
 启动GreatSQL
 
-```Plain
-$ mysqld --defaults-file=/etc/mysql/my.cnf&
+```bash
+mysqld --defaults-file=/etc/mysql/my.cnf &
 ```
 
 因为本文示例环境在Docker中，所以不采用systemd管理GreatSQL服务，但无论是RPM、二进制包还是Ansible等何种方式安装GreatSQL，都建议采用systemd来管理GreatSQL服务。在Docker容器环境中，无需利用systemd来管理GreatSQL，直接整个容器启停即可。
@@ -275,7 +284,9 @@ $ mysqld --defaults-file=/etc/mysql/my.cnf&
 
 ```bash
 $ grep -i root /data/GreatSQL/error.log
-... A temporary password is generated for root@localhost: ji!pjndiw5sJ
+
+...
+A temporary password is generated for root@localhost: ji!pjndiw5sJ
 ```
 
 复制该密码，将用于首次登入GreatSQL所需。
@@ -290,7 +301,7 @@ Server version: 8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ...
-greatsql> \s
+greatsql> status;
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 ```
 
@@ -300,7 +311,7 @@ ERROR 1820 (HY000): You must reset your password using ALTER USER statement befo
 greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@2022';  #<--修改密码
 Query OK, 0 rows affected (0.02 sec)
 
-greatsql> \s
+greatsql> status;
 ...
 Server version:         8.0.32-26
 ...
@@ -315,7 +326,7 @@ GreatSQL数据库安装并初始化完毕。
 解压`mysql-shell-8.0.32-linux-glibc2.12-x86-64bit.tar.gz`
 
 ```bash
-$ tar zxf mysql-shell-8.0.32-linux-glibc2.12-x86-64bit.tar.gz
+tar zxf mysql-shell-8.0.32-linux-glibc2.12-x86-64bit.tar.gz
 ```
 
 直接运行即可

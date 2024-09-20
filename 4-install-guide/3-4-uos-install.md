@@ -11,7 +11,7 @@
 这里采用系统安装后默认的yum源，并生成缓存。
 
 ```bash
-$ yum clean all && yum makecache
+yum clean all && yum makecache
 ```
 
 在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
@@ -20,6 +20,18 @@ $ yum clean all && yum makecache
 
 本文使用的统信UOS系统如下：
 
+```bash
+# 查看操作系统信息
+cat /etc/product-info
+
+# 查看内核版本
+uname -a
+
+# 查看glibc版本
+ldd --version
+```
+
+::: details 查看运行结果
 ```bash
 $ cat /etc/product-info
 UnionTech OS Server 20 1050e 20220222 x86_64 
@@ -30,25 +42,28 @@ Linux gip 4.19.90-2201.4.0.0135.up1.uel20.x86_64 #1 SMP Mon Feb 21 18:36:21 UTC 
 $ ldd --version
 ldd (GNU libc) 2.28
 ```
+:::
 
 那么在这个环境下，既glibc2.28，可选 [GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26) 这个二进制包进行安装。若glibc为2.17，请选择带有"glibc2.17"标识的安装包。
 
 当然了，也可以选择相应的minimal包，minimal版本是对二进制文件进行strip后，所以文件尺寸较小，功能上没本质区别，但不支持gdb debug功能，可以放心使用。
 
-> 若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.0.32-26-Linux-glibc2.28-aarch64.tar.xz`
+::: tip 小贴士
+若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.0.32-26-Linux-glibc2.28-aarch64.tar.xz`。
+:::
 
 将下载的二进制包放到安装目录下，并解压缩：
 
-```
-$ cd /usr/local
-$ tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+```bash
+cd /usr/local
+tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 同时修改设置，将GreatSQL加入 `PATH` 环境变量：
 
-```
-$ echo 'export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
-$ source ~/.bash_profile
+```bash
+echo 'export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
+source ~/.bash_profile
 ```
 
 接下来准备开始安装GreatSQL二进制包。
@@ -59,7 +74,7 @@ $ source ~/.bash_profile
 
 请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
-```
+```ini
 [client]
 socket    = /data/GreatSQL/mysql.sock
 [mysql]
@@ -214,9 +229,9 @@ performance_schema_instrument = '%lock%=on'
 
 ###  新建mysql用户
 
-```
-$ /sbin/groupadd mysql
-$ /sbin/useradd -g mysql -M mysql -s /sbin/nologin
+```bash
+/sbin/groupadd mysql
+/sbin/useradd -g mysql -M mysql -s /sbin/nologin
 ```
 
 ### 新建 datadir
@@ -224,19 +239,17 @@ $ /sbin/useradd -g mysql -M mysql -s /sbin/nologin
 新建数据库主目录，并修改权限模式及属主：
 
 
-```
-$ mkdir -p /data/GreatSQL 
-$ chown -R mysql:mysql /data/GreatSQL
-$ chmod -R 700 /data/GreatSQL
+```bash
+mkdir -p /data/GreatSQL 
+chown -R mysql:mysql /data/GreatSQL
+chmod -R 700 /data/GreatSQL
 ```
 
 ###  配置GreatSQL systemd服务
 
-推荐采用systemd来管理GreatSQL服务，可参考这份文件，或根据实际安装目录编辑文件：
+推荐采用systemd来管理GreatSQL服务，执行 `vim /lib/systemd/system/greatsql.service` 命令，添加下面的内容：
 
-```
-$ vim /lib/systemd/system/greatsql.service
-
+```ini
 [Unit]
 Description=GreatSQL Server
 Documentation=man:mysqld(8)
@@ -285,8 +298,8 @@ PrivateTmp=false
 
 执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
 
-```
-$ systemctl daemon-reload
+```bash
+systemctl daemon-reload
 ```
 
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
@@ -296,14 +309,20 @@ $ systemctl daemon-reload
 执行下面的命令启动GreatSQL服务
 
 ```bash
-$ systemctl start greatsql
+systemctl start greatsql
 ```
 
 如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
 
 ```bash
+systemctl status greatsql
+```
+
+::: details 查看运行结果
+```bash
 $ systemctl status greatsql
 
+...
 ● greatsql.service - GreatSQL Server
    Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; vendor preset: disabled)
    Active: failed (Result: exit-code) since Wed 2024-07-08 14:02:14 CST; 2s ago
@@ -322,18 +341,28 @@ systemd[1]: Started GreatSQL Server.
 systemd[1]: greatsql.service: Main process exited, code=exited, status=1/FAILURE
 systemd[1]: greatsql.service: Failed with result 'exit-code'.
 ```
+:::
 
 只需手动创建 `/var/lib/mysql-files` 目录，再次启动GreatSQL服务即可：
 
 ```bash
-$ mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
-$ systemctl start greatsql
+mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
+systemctl start greatsql
 ```
 
 检查服务是否已启动，以及进程状态：
 
 ```bash
+systemctl status greatsql
+ps -ef | grep mysqld
+ss -lntp | grep mysqld
+```
+
+::: details 查看运行结果
+```bash
 $ systemctl status greatsql
+
+...
 ● greatsql.service - GreatSQL Server
    Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; vendor preset: disabled)
    Active: active (running) since Wed 2024-07-08 14:02:36 CST; 4s ago
@@ -349,12 +378,17 @@ systemd[1]: Starting GreatSQL Server...
 systemd[1]: Started GreatSQL Server.
 
 $ ps -ef | grep mysqld
+
+...
 mysql     818929       1  4 14:08 ?        00:00:07 /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld
 
 $ ss -lntp | grep mysqld
+
+...
 LISTEN 0      70                 *:33060            *:*    users:(("mysqld",pid=60231,fd=38))
 LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=60231,fd=43))
 ```
+:::
 
 可以看到，GreatSQL服务已经正常启动了。
 
@@ -364,15 +398,26 @@ LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=
 在上面进行GreatSQL初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
 
 ```bash
-$ grep -i root /data/GreatSQL/error.log
-... A temporary password is generated for root@localhost: ji!pjndiw5sJ
+grep -i root /data/GreatSQL/error.log
 ```
+
+::: details 查看运行结果
+```bash
+$ grep -i root /data/GreatSQL/error.log
+
+...
+A temporary password is generated for root@localhost: ji!pjndiw5sJ
+```
+:::
 
 复制该密码，将用于首次登入GreatSQL所需。
 
-部分GreatSQL二进制包方式安装后，有可能初始化的root密码是空的，这种情况下可以直接登入并修改成安全密码。
+```bash
+mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
+```
 
-```sql
+::: details 查看运行结果
+```bash
 $ mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 11
@@ -380,17 +425,21 @@ Server version: 8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ...
-greatsql> \s
-ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 ```
+:::
+
+部分GreatSQL二进制包方式安装后，有可能初始化的root密码是空的，这种情况下可以直接登入并修改成安全密码。
 
 首次登入立刻提醒该密码已过期，需要修改，执行类似下面的命令修改即可：
 
 ```sql
+greatsql> status;
+ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
+
 greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@2022';  #<--修改密码
 Query OK, 0 rows affected (0.02 sec)
 
-greatsql> \s
+greatsql> status;
 ...
 mysql  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL, Release 26, Revision 444164cc78e)
 

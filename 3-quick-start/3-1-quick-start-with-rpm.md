@@ -17,16 +17,17 @@
 
 ## 运行环境配置
 关闭selinux和防火墙
-```
+
+```bash
 #关闭selinux
-$ setenforce=0
-$ sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
+setenforce=0
+sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
 
 #关闭防火墙
-$ systemctl disable firewalld
-$ systemctl stop firewalld
-$ systemctl disable iptables
-$ systemctl stop iptables
+systemctl disable firewalld
+systemctl stop firewalld
+systemctl disable iptables
+systemctl stop iptables
 ```
 
 另外，要先确认yum源可用，因为安装GreatSQL时还要先安装其他依赖包，通过yum安装最省事。
@@ -36,8 +37,10 @@ $ systemctl stop iptables
 ## 安装依赖包
 
 安装GreatSQL RPM包时，要先安装这些相关依赖包。
-```
+```bash
 $ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools \
+
+...
   openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 \
   python2 perl-JSON perl-Test-Simple
 ```
@@ -47,8 +50,10 @@ $ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-too
 ## 安装RPM包
 
 执行下面的命令安装PRM包，如果一切顺利的话，相应的过程如下所示：
-```shell
-$ rpm -ivh --nodeps greatsql*rpm
+```bash
+rpm -ivh --nodeps greatsql*rpm
+
+...
 Verifying...                          ################################# [100%]
 Preparing...                          ################################# [100%]
 Updating / installing...
@@ -61,8 +66,10 @@ Updating / installing...
 
 安装 GreatSQL RPM 包的时候，可能会报告类似下面的依赖包错误提示，
 
-```shell
+```bash
 $ rpm -ivh greatsql*rpm
+
+...
 error: Failed dependencies:
         perl(Lmo) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
         perl(Lmo::Meta) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
@@ -76,8 +83,10 @@ error: Failed dependencies:
 
 上述这些依赖包可以先忽略，不影响 GreatSQL 正常使用。这时可以加上 `--nodeps --force` 强制忽略即可，例如：
 
-```shell
+```bash
 $ rpm -ivh --nodeps --force greatsql*rpm
+
+...
 Preparing...                          ################################# [100%]
 Updating / installing...
    1:greatsql-shared-8.0.32-26.1.el8  ################################# [ 20%]
@@ -89,41 +98,9 @@ Updating / installing...
 
 ## 启动GreatSQL
 
-启动GreatSQL服务前，先修改systemd文件，调高一些limit上限，避免出现文件数、线程数不够用的告警。
-
-编辑/创建 `/lib/systemd/system/mysqld.service` 文件：
-
-```shell
-$ vim /lib/systemd/system/mysqld.service
-```
-
-在 *[Service]* 区间增加下面几行内容：
+启动GreatSQL服务前，先修改systemd文件 `vim /lib/systemd/system/mysqld.service`，在 *[Server]* 区间增加下面几行内容，调高一些limit上限，避免出现文件数、线程数不够用的告警。
 
 ```ini
-[Unit]
-Description=GreatSQL Server
-Documentation=https://greatsql.cn/docs/
-After=network.target
-After=syslog.target
-
-[Install]
-WantedBy=multi-user.target
-
-[Service]
-User=mysql
-Group=mysql
-Type=notify
-TimeoutSec=0
-PermissionsStartOnly=true
-
-ExecStartPre=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
-ExecStart=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf $MYSQLD_OPTS
-EnvironmentFile=-/etc/sysconfig/mysql
-Restart=on-failure
-RestartPreventExitStatus=1
-Environment=MYSQLD_PARENT_PID=1
-PrivateTmp=false
-
 # some limits
 # file size
 LimitFSIZE=infinity
@@ -144,20 +121,22 @@ TasksAccounting=false
 
 保存退出，然后重载 systemd，如果没问题就不会报错：
 
-```shell
-$ systemctl daemon-reload
+```bash
+systemctl daemon-reload
 ```
 
 执行下面的命令启动GreatSQL服务
 
-```shell
-$ systemctl start mysqld
+```bash
+systemctl start mysqld
 ```
 
 检查服务是否已启动，以及进程状态：
 
-```shell
+```bash
 $ systemctl status mysqld
+
+...
 ● mysqld.service - MySQL Server
    Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)
    Active: active (running) since Wed 2024-07-06 10:35:57 CST; 42s ago
@@ -172,9 +151,13 @@ $ systemctl status mysqld
 ...
 
 $ ps -ef | grep mysqld
+
+...
 mysql      43653       1  3 10:35 ?        00:00:02 /usr/sbin/mysqld
 
 $ ss -lntp | grep mysqld
+
+...
 LISTEN 0      70                 *:33060            *:*    users:(("mysqld",pid=43653,fd=23))
 LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=43653,fd=26))
 
@@ -190,8 +173,10 @@ $ ls /var/lib/mysql
 
 RPM 方式安装 GreatSQL 后，会随机生成管理员 root 的密码，通过搜索日志文件获取：
 
-```shell
+```bash
 $ grep -i root /var/log/mysqld.log
+
+...
 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: K<f9Iapd#wwp
 ```
 
@@ -199,8 +184,10 @@ $ grep -i root /var/log/mysqld.log
 
 首次登入 GreatSQL 后，要立即修改 root 密码，否则无法执行其他操作，并且新密码要符合一定安全规则：
 
-```shell
+```bash
 $ mysql -uroot -p
+
+...
 Enter password:     #<--这个地方粘贴上面复制的随机密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
@@ -212,13 +199,13 @@ Copyright (c) 2000, 2021, Oracle and/or its affiliates.
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-greatsql> \s   #<--想执行一个命令，提示要先修改密码
+greatsql> status;   #<--想执行一个命令，提示要先修改密码
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 
 greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@202X';  #<--修改密码
 Query OK, 0 rows affected (0.02 sec)
 
-greatsql> \s   #<--就可以正常执行其他命令了
+greatsql> status;   #<--就可以正常执行其他命令了
 --------------
 mysql  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL, Release 26, Revision 444164cc78e)
 
@@ -253,22 +240,20 @@ greatsql> SHOW DATABASES;  #<--查看数据库列表
 | sys                |
 +--------------------+
 4 rows in set (0.01 sec)
-
-greatsql>
 ```
 
 ## 关闭/重启 GreatSQL
 
 执行下面的命令关闭 GreatSQL 数据库。
 
-```shell
-$ systemctl stop mysqld
+```bash
+systemctl stop mysqld
 ```
 
 执行下面的命令重启 GreatSQL 数据库。
 
-```shell
-$ systemctl restart mysqld
+```bash
+systemctl restart mysqld
 ```
 
 至此，RPM 包方式安装 GreatSQL 数据库完成。

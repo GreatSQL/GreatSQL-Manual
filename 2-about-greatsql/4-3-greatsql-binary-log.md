@@ -29,7 +29,7 @@ Binlog 主要的应用场景有以下几种：
 执行下面命令查看 Binlog 是否已启用，默认是启用的：
 
 ```sql
-SHOW VARIABLES LIKE '%log_bin%';
+greatsql> SHOW VARIABLES LIKE '%log_bin%';
 +---------------------------------+-----------------------------+
 | Variable_name                   | Value                       |
 +---------------------------------+-----------------------------+
@@ -137,7 +137,7 @@ GreatSQL 服务进程每次重启，Binlog 文件后缀的数字会自动递增�
 执行下面的命令查看当前所有 Binlog 文件列表及大小：
 
 ```sql
-SHOW BINARY LOGS;
+greatsql> SHOW BINARY LOGS;
 +---------------+------------+-----------+
 | Log_name      | File_size  | Encrypted |
 +---------------+------------+-----------+
@@ -150,10 +150,11 @@ SHOW BINARY LOGS;
 数据库的所有变更操作都会记录到 Binlog 中，但 Binlog 是二进制而非明文格式，无法直接以明文方式查看，需要借助 `mysqlbinlog` 工具：
 
 ```bash
-cd /data/GreatSQL
-mysqlbinlog ./binlog.000102 | less
+cd /data/GreatSQL && mysqlbinlog ./binlog.000102 | less
+```
 
-...
+::: details 查看运行结果
+```
 # at 972
 #240704 14:20:52 server id 3306  end_log_pos 1058 CRC32 0x1752752f      GTID    last_committed=1        sequence_number=2       rbr_only=yes    original_committed_timestamp=1
 720074052491915   immediate_commit_timestamp=1720074052492308     transaction_length=1244
@@ -192,6 +193,7 @@ Kp+AEA==
 '/*!*/;
 ...
 ```
+:::
 
 从上面的输出结果中看不出来具体的 SQL 语句是什么，这是因为 Binlog 文件存储的是经过编码后的二进制内容。
 
@@ -207,7 +209,10 @@ Kp+AEA==
 
 ```bash
 mysqlbinlog -vvv --base64-output=decode-rows ./binlog.000102 | less
+```
 
+::: details 查看运行结果
+```
 ...
 # at 972
 #240704 14:20:52 server id 3306  end_log_pos 1058 CRC32 0x1752752f      GTID    last_committed=1        sequence_number=2       rbr_only=yes    original_committed_timestamp=1720074052491915   immediate_commit_timestamp=1720074052492308     transaction_length=1244
@@ -284,6 +289,8 @@ BEGIN
 COMMIT/*!*/;
 ...
 ```
+:::
+
 这个结果很轻松就能看懂 Binlog 里具体记录了什么事件。
 
 关于 `mysqlbinlog` 工具的参数还有很多，例如只解析对某个库的操作或者某个时间段内的操作等。简单分享几个常用的语句，更多操作可以参考文档：[mysqlbinlog](https://dev.mysql.com/doc/refman/8.0/en/mysqlbinlog.html)。
@@ -299,11 +306,16 @@ mysqlbinlog --no-defaults --base64-output=decode-rows -vv binlog.000028 |tail - 
 mysqlbinlog --no-defaults --base64-output=decode-rows -vv binlog.000028 |grep -A 20 '619'
 ```
 
-用 `mysqlbinlog` 工具读取出的 Binlog Events 内容比较多，还可以在 GreatSQL 中执行下面的命令查看处理后的简单版本事件内容：
+用 `mysqlbinlog` 工具读取出的 Binlog Events 内容比较多，还可以在 GreatSQL 中执行 SQL 命令 `SHOW BINLOG EVENTS` 查看处理后的简单版本事件内容：
 
 ```sql
--- 参考用法 SHOW BINLOG EVENTS [IN 'log_name'] [FROM pos] [LIMIT [offset,] row_count];
-SHOW BINLOG EVENTS IN 'binlog.000102' FROM 1142 LIMIT 1\G
+-- 参考用法
+SHOW BINLOG EVENTS [IN 'log_name'] [FROM pos] [LIMIT [offset,] row_count];
+```
+
+实际运行结果：
+```sql
+greatsql> SHOW BINLOG EVENTS IN 'binlog.000102' FROM 1142 LIMIT 1\G
 *************************** 1. row ***************************
    Log_name: mgr01.002583
         Pos: 1142
@@ -318,6 +330,7 @@ End_log_pos: 1596
 (16, rand(), rand(), ROUND(RAND()*1024000), ROUND(RAND()*1024000)),
 (32, rand(), rand(), ROUND(RAND()*1024000), ROUND(RAND()*1024000))
 ```
+:::
 
 - `IN 'log_name'：` 指定要查询的 Binlog 文件名（不指定就是第一个 Binlog 文件）。
 - `FROM pos：` 指定从哪个 position 起始点开始查起（不指定就是从整个文件首个 position 开始算）。
@@ -398,7 +411,7 @@ PURGE BINARY LOGS BEFORE 'datetime_expr';
 下面是相应的示例：
 ```sql
 -- 1. 查看当前所有的 Binlog
-SHOW BINARY LOGS;
+greatsql> SHOW BINARY LOGS;
 +---------------+-----------+-----------+
 | Log_name      | File_size | Encrypted |
 +---------------+-----------+-----------+
@@ -410,11 +423,11 @@ SHOW BINARY LOGS;
 +---------------+-----------+-----------+
 
 -- 删除 'binlog.002587' 之前的所有 Binlog
-PURGE BINARY LOGS TO 'binlog.002587';
+greatsql> PURGE BINARY LOGS TO 'binlog.002587';
 Query OK, 0 rows affected (0.07 sec)
 
 -- 再次查看剩下的 Binlog
-SHOW BINARY LOGS;
+greatsql> SHOW BINARY LOGS;
 +---------------+-----------+-----------+
 | Log_name      | File_size | Encrypted |
 +---------------+-----------+-----------+
@@ -422,7 +435,7 @@ SHOW BINARY LOGS;
 +---------------+-----------+-----------+
 
 -- 或者用 BEFORE 指定时间参数
-purge binary logs before '2024-07-04 15:30';
+greatsql> PURGE BINARY LOGS BEFORE '2024-07-04 15:30';
 Query OK, 0 rows affected (0.00 sec)
 ```
 

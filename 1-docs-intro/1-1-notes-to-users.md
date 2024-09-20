@@ -16,16 +16,17 @@ GreatSQL 版本号采用点分位命名规则（X.Y.Z-R）模式，其中
 
 ```bash
 # 登入到 GreatSQL
-mysql -hlocalhost -S/data/GreatSQL/mysql.sock -uroot -p
+$ mysql -hlocalhost -S/data/GreatSQL/mysql.sock -uroot -p
 ...
 
-# 在GreatSQL 中执行 \s 即可查看版本号
-> \s
+# 在GreatSQL 中执行 status 即可查看版本号
+greatsql> status;
 ...
 Server version:        8.0.32-26 GreatSQL, Release 26, Revision a68b3034c3d
 ...
 ```
-那么
+
+其中
 - 大版本号X对应：8
 - 小版本号Y对应：0
 - 补丁版本Z对应：32
@@ -50,10 +51,10 @@ Server version:        8.0.32-26 GreatSQL, Release 26, Revision a68b3034c3d
 systemctl start greatsql
 ```
 
-在 GreatSQL 中执行下面的命令查看数据库列表：
+在 GreatSQL 中执行SQL命令 `SHOW DATABASES` 查看数据库列表：
 
 ```sql
-SHOW DATABASES;
+greatsql> SHOW DATABASES;
 +-------------------------------+
 | Database                      |
 +-------------------------------+
@@ -70,7 +71,6 @@ SHOW DATABASES;
 +-------------------------------+
 14 rows in set (0.00 sec)
 ```
-
 
 **扫码关注微信公众号**
 

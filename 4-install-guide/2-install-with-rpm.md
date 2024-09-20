@@ -22,6 +22,8 @@
 查看机器的glibc版本，以选择正确的安装包：
 ```bash
 $ ldd --version
+
+...
 ldd (GNU libc) 2.28
 ```
 如果您的glibc版本为2.28或更高版本，请选择带有"el8"标识的rpm包；如果您的glibc版本为2.17，请选择带有"el7"标识的rpm包。
@@ -37,8 +39,10 @@ ldd (GNU libc) 2.28
 ##  安装GreatSQL RPM包
 
 执行下面的命令安装PRM包，如果一切顺利的话，相应的过程如下所示：
-```
+```bash
 $ rpm -ivh greatsql*rpm
+
+...
 Verifying...                          ################################# [100%]
 Preparing...                          ################################# [100%]
 Updating / installing...
@@ -53,15 +57,17 @@ Updating / installing...
 **提示**：
 1. 安装GreatSQL RPM包需要先安装其他依赖包，可执行下面命令完成：
 
-```
-$ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
+```bash
+yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
 ```
 
 如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](./1-install-prepare.md)。
 
 其他部分依赖包，如果通过yum还是无法安装，则加上 `--nodeps --force` 强制忽略即可，例如：
-```
+```bash
 $ rpm -ivh greatsql*rpm
+
+...
 error: Failed dependencies:
         perl(Lmo) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
         perl(Lmo::Meta) is needed by greatsql-server-8.0.32-26.1.el8.x86_64
@@ -75,6 +81,8 @@ error: Failed dependencies:
 #上述这些依赖包可以先忽略，不影响GreatSQL正常使用
 
 $ rpm -ivh --nodeps --force greatsql*rpm
+
+...
 Preparing...                          ################################# [100%]
 Updating / installing...
    1:greatsql-shared-8.0.32-26.1.el8  ################################# [ 20%]
@@ -91,7 +99,7 @@ Updating / installing...
 ### 修改 /etc/my.cnf 配置文件
 
 请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
-```
+```ini
 #my.cnf
 [client]
 socket	= /data/GreatSQL/mysql.sock
@@ -250,21 +258,17 @@ performance_schema_instrument = '%lock%=on'
 
 新建数据库主目录，并修改权限模式及属主：
 
-```
-$ mkdir -p /data/GreatSQL
-$ chown -R mysql:mysql /data/GreatSQL
-$ chmod -R 700 /data/GreatSQL
+```bash
+mkdir -p /data/GreatSQL
+chown -R mysql:mysql /data/GreatSQL
+chmod -R 700 /data/GreatSQL
 ```
 
 ##  启动GreatSQL
 
-启动GreatSQL服务前，先修改systemd文件，调高一些limit上限，避免出现文件数、线程数不够用的告警。
-```
-# 在[Server]区间增加下面几行内容
-$ vim /lib/systemd/system/mysqld.service
-...
-[Service]
+启动GreatSQL服务前，先修改systemd文件 `vim /lib/systemd/system/mysqld.service`，在 *[Server]* 区间增加下面几行内容，调高一些limit上限，避免出现文件数、线程数不够用的告警。
 
+```ini
 # some limits
 # file size
 LimitFSIZE=infinity
@@ -285,18 +289,20 @@ TasksAccounting=false
 ```
 
 保存退出，然后再执行命令重载systemd，如果没问题就不会报错：
-```
-$ systemctl daemon-reload
+```bash
+systemctl daemon-reload
 ```
 
 执行下面的命令启动GreatSQL服务
-```
-$ systemctl start mysqld
+```bash
+systemctl start mysqld
 ```
 
 检查服务是否已启动，以及进程状态：
-```
+```bash
 $ systemctl status mysqld
+
+...
 ● mysqld.service - MySQL Server
    Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)
    Active: active (running) since Fri 2024-07-08 14:10:14 CST; 5min ago
@@ -314,14 +320,20 @@ systemd[1]: Starting MySQL Server...
 systemd[1]: Started MySQL Server.
 
 $ ps -ef | grep mysqld
+
+...
 mysql      43653       1  3 10:35 ?        00:00:02 /usr/sbin/mysqld
 
 $ ss -lntp | grep mysqld
+
+...
 LISTEN 0      70                 *:33060            *:*    users:(("mysqld",pid=43653,fd=23))
 LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=43653,fd=26))
 
 # 查看数据库文件
 $ ls /data/GreatSQL
+
+...
  auto.cnf        ca-key.pem        error.log           '#ib_archive'    '#innodb_redo'       mysql.ibd         performance_schema   server-key.pem   undo_002
  binlog.000001   ca.pem           '#file_purge'         ib_buffer_pool   innodb_status.258   mysql.pid         private_key.pem      slow.log
  binlog.000002   client-cert.pem  '#ib_16384_0.dblwr'   ibdata1         '#innodb_temp'       mysql.sock        public_key.pem       sys
@@ -330,22 +342,26 @@ $ ls /data/GreatSQL
 可以看到，GreatSQL服务已经正常启动了。
 
 顺便确认动态库 `jemalloc` 成功加载：
-```
+```bash
 $ lsof -p 43653 | grep -i jema
+
+...
 mysqld  52003 mysql  mem       REG              253,0     608096   68994440 /usr/lib64/libjemalloc.so.2
 ```
 
 ##  连接登入GreatSQL
 
 RPM方式安装GreatSQL后，会随机生成管理员root的密码，通过搜索日志文件获取：
-```
+```bash
 $ grep -i root /data/GreatSQL/error.log
+
+...
 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: ahaA(ACmw8wy
 ```
 可以看到，root账户的密码是："ahaA(ACmw8wy" (不包含双引号)，复制到粘贴板里。
 
 首次登入GreatSQL后，要立即修改root密码，否则无法执行其他操作，并且新密码要符合一定安全规则：
-```
+```bash
 $ mysql -uroot -p
 Enter password:     #<--这个地方粘贴上面复制的随机密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
@@ -358,13 +374,13 @@ Copyright (c) 2000, 2021, Oracle and/or its affiliates.
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-greatsql> \s   #<--想执行一个命令，提示要先修改密码
+greatsql> status;   #<--想执行一个命令，提示要先修改密码
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 
 greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@202X';  #<--修改密码
 Query OK, 0 rows affected (0.02 sec)
 
-greatsql> \s   #<--就可以正常执行其他命令了
+greatsql> status;   #<--就可以正常执行其他命令了
 --------------
 mysql  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL, Release 26, Revision 444164cc78e)
 
@@ -399,20 +415,18 @@ greatsql> SHOW DATABASES;  #<--查看数据库列表
 | sys                |
 +--------------------+
 4 rows in set (0.01 sec)
-
-greatsql>
 ```
 
 ##  关闭/重启GreatSQL
 
 执行下面的命令关闭GreatSQL数据库。
-```
-$ systemctl stop mysqld
+```bash
+systemctl stop mysqld
 ```
 
 执行下面的命令重启GreatSQL数据库。
-```
-$ systemctl restart mysqld
+```bash
+systemctl restart mysqld
 ```
 
 GreatSQL数据库安装并初始化完毕。
@@ -428,33 +442,29 @@ P.S，如果暂时不想使用仲裁节点特性的话，则可以继续使用�
 - greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 
 将二进制文件包放在 `/usr/local` 目录下，解压缩：
-```
-$ cd /usr/local/
-$ tar xf greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
+```bash
+cd /usr/local/
+tar xf greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 ```
 
-修改家目录下的profile文件，加入PATH：
-```
-$ vim ~/.bash_profile
-
-...
+修改家目录下的profile文件 `vim ~/.bash_profile`，加入PATH：
+```ini
 PATH=$PATH:$HOME/bin:/usr/local/greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64/bin
-
 export PATH
 ```
 
 加载，使之生效
-```
-$ source ~/.bash_profile
+```bash
+source ~/.bash_profile
 ```
 
 这样就可以直接执行 `mysqlsh`，而无需每次都加上全路径了。
 
 运行 GreatSQL Shell 8.0.32-25 需要安装 Python 3.8 依赖
 
-```shell
-$ dnf install -y libssh python38 python38-libs python38-pyyaml
-$ pip3.8 install --user certifi pyclamd
+```bash
+dnf install -y libssh python38 python38-libs python38-pyyaml
+pip3.8 install --user certifi pyclamd
 ```
 
 接下来就可以直接使用mysqlsh了
@@ -487,7 +497,7 @@ GreatSQL Shell就可以正常使用，并继续构建MGR集群了。
 ### MGR节点预检查
 
 用管理员账号 root 连接到第一个节点：
-```
+```js
 #在本地通过socket方式登入
 $ mysqlsh -S/data/GreatSQL/mysql.sock -u root
 Please provide the password for 'root@.%2Fmysql.sock': ********  <-- 输入root密码
@@ -501,7 +511,7 @@ WARNING: Found errors loading plugins, for more details look at the log at: /roo
 ```
 
 接下来，执行 `dba.configureInstance()`命令开始检查当前实例是否准备好了，可以作为MGR集群的一个节点：
-```
+```js
 # 开始配置MGR节点
 MySQL  172.16.16.10:3306 ssl  JS > dba.configureInstance();
 Configuring local MySQL instance listening at port 3306 for use in an InnoDB cluster...
@@ -538,7 +548,7 @@ The instance 'GreatSQL-01:3306' is already ready to be used in an InnoDB cluster
 在正式初始化MGR集群前，再次提醒要先再其他节点完成上述初始化工作。
 
 上述另外两个节点也初始化完毕后，利用mysqlsh客户端，指定新建MGR的管理账号**GreatSQL**登入PRIMARY节点，准备创建MGR集群：
-```
+```js
 $ mysqlsh --uri GreatSQL@172.16.16.10:3306
 Please provide the password for 'GreatSQL@172.16.16.10:3306': *************
 Save password for 'GreatSQL@172.16.16.10:3306'? [Y]es/[N]o/Ne[v]er (default No): yes
@@ -572,7 +582,7 @@ MySQL  172.16.16.10:3306 ssl  JS >
 ### 逐个添加实例
 
 可以在GreatSQL-01（PRIMARY）节点上直接添加其他节点，也可以用mysqlsh客户端登入其他节点执行添加节点操作。这里采用前者：
-```
+```js
 # 此时mysqlsh客户端还保持连接到GreatSQL-01节点
 # 可以直接添加GreatSQL-02节点
 MySQL  172.16.16.10:3306 ssl  JS > c.addInstance('GreatSQL@172.16.16.11:3306');  <-- 添加GreatSQL-02节点
@@ -625,9 +635,10 @@ State recovery already finished for 'GreatSQL-02:3306'
 # 新节点 GreatSQL-02:3306 已加入集群
 The instance 'GreatSQL-02:3306' was successfully added to the cluster.
 ```
+
 这就将 GreatSQL-02 节点加入MGRT集群中了，此时可以先查看下集群状态。
 
-```
+```js
 MySQL  172.16.16.10:3306 ssl  JS > c.status()
 {
     "clusterName": "GreatSQLMGR",
@@ -671,13 +682,14 @@ MySQL  172.16.16.10:3306 ssl  JS > c.status()
 ### 添加仲裁节点
 
 编辑 GreatSQL-03 节点上的 `/etc/my.cnf` 配置文件，加入/修改下面这行内容：
-```
+```ini
 loose-group_replication_arbitrator = 1
 ```
 其作用就是指定该节点作为**仲裁节点**，保存退出，重启该节点GreatSQL数据库。
 
 然后照着第三步的操作，调用 `dba.addInstance()` 添加新节点，就可以直接将仲裁节点加入MGR集群了，再次查看集群状态：
-```
+
+```js
 MySQL  172.16.16.10:3306 ssl  JS > c.status()
 {
     "clusterName": "GreatSQLMGR",

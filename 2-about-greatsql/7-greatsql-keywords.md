@@ -10,24 +10,24 @@
 
 如下面的例子：
 ```sql
-CREATE TABLE interval (begin INT, end INT);
+greatsql> CREATE TABLE interval (begin INT, end INT);
 ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'interval (begin INT, end INT)' at line 1
 ```
 
 这是因为 **interval** 是保留字，需要用 "`" 引用包括才行，而 **begin**/**end** 只是关键字，不需要特殊处理，修改如下：
 ```sql
-CREATE TABLE `interval`(begin INT, end INT);
+greatsql> CREATE TABLE `interval`(begin INT, end INT);
 Query OK, 0 rows affected (0.08 sec)
 ```
 
 另外，要注意的是，从 GreatSQL 8.0.32-24 开始，开启 Oracle 兼容模式（`SET sql_mode = ORACLE`）后，对象名都需要特殊处理才行，例如：
 ```sql
-CREATE TABLE `interval`(`begin` INT, `end` INT);
+greatsql> CREATE TABLE `interval`(`begin` INT, `end` INT);
 Query OK, 0 rows affected (0.02 sec)
 ```
 或
 ```sql
-CREATE TABLE "interval"("begin" INT, "end" INT);
+greatsql> CREATE TABLE "interval"("begin" INT, "end" INT);
 Query OK, 0 rows affected (0.02 sec)
 ```
 在上面的两个例子中，用双引号 **"** 或 **`** 均可。
@@ -36,7 +36,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 通过查询视图 `information_schema.KEYWORDS` 也可以找到保留字和关键字的信息（其中RESERVED=1的表示是保留字，其余是关键字）：
 ```sql
-SELECT * FROM information_schema.KEYWORDS WHERE WORD LIKE '%int%';
+greatsql> SELECT * FROM information_schema.KEYWORDS WHERE WORD LIKE '%int%';
 +----------------------------------------+----------+
 | WORD                                   | RESERVED |
 +----------------------------------------+----------+

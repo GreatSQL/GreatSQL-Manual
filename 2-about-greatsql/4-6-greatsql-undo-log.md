@@ -64,7 +64,7 @@ CREATE UNDO TABLESPACE greatsql_undo_001 ADD DATAFILE 'greatsql_undo_001.ibu';
 
 ```sql
 -- 查看当前都有哪些Undo表空间文件
-SELECT FILE_ID, TABLESPACE_NAME, FILE_NAME, STATUS FROM INFORMATION_SCHEMA.FILES
+greatsql> SELECT FILE_ID, TABLESPACE_NAME, FILE_NAME, STATUS FROM INFORMATION_SCHEMA.FILES
           WHERE FILE_TYPE LIKE 'UNDO LOG';
 +------------+-------------------+-------------------------+--------+
 | FILE_ID    | TABLESPACE_NAME   | FILE_NAME               | STATUS |
@@ -74,7 +74,7 @@ SELECT FILE_ID, TABLESPACE_NAME, FILE_NAME, STATUS FROM INFORMATION_SCHEMA.FILES
 | 4294967023 | greatsql_undo_001 | ./greatsql_undo_001.ibu | NORMAL |
 +------------+-------------------+-------------------------+--------+
 
-SELECT SPACE, NAME, FILE_SIZE, STATE FROM information_schema.INNODB_TABLESPACES 
+greatsql> SELECT SPACE, NAME, FILE_SIZE, STATE FROM information_schema.INNODB_TABLESPACES 
           WHERE SPACE_TYPE = 'Undo';
 +------------+-------------------+-----------+--------+
 | SPACE      | NAME              | FILE_SIZE | STATE  |
@@ -85,8 +85,8 @@ SELECT SPACE, NAME, FILE_SIZE, STATE FROM information_schema.INNODB_TABLESPACES
 +------------+-------------------+-----------+--------+
 
 -- 将 greatsql_undo_001 设置为不活跃后再删除
-ALTER UNDO TABLESPACE greatsql_undo_001 SET INACTIVE;
-DROP UNDO TABLESPACE greatsql_undo_001;
+greatsql> ALTER UNDO TABLESPACE greatsql_undo_001 SET INACTIVE;
+greatsql> DROP UNDO TABLESPACE greatsql_undo_001;
 ```
 
 ### 清理 Undo 表空间
@@ -133,7 +133,8 @@ Purge 线程的主要工作是清空释放 Undo 表空间，默认地，每进�
 这种情况下，执行 `SHOW ENGINE INNODB STATUS\G` 查看事务及回滚段清理状态：
 
 ```sql
-SHOW ENGINE INNODB STATUS\G
+greatsql> SHOW ENGINE INNODB STATUS\G
+
 ...
 ------------
 TRANSACTIONS
@@ -155,7 +156,7 @@ ROLLING BACK 1 lock struct(s), heap size 1136, 0 row lock(s), undo log entries 3
 下面几个状态变量可以用来观察 Undo 表空间的使用情况：
 
 ```sql
-SHOW STATUS LIKE 'Innodb_undo_tablespaces%';
+greatsql> SHOW STATUS LIKE 'Innodb_undo_tablespaces%';
 +----------------------------------+-------+
 | Variable_name                    | Value |
 +----------------------------------+-------+

@@ -55,7 +55,7 @@ Redo Log 有两种类型：使用中（ordinary）、备用的（spare）。Inno
 每个已使用的 Redo Log 文件都有相应的起止 LSN 值：
 
 ```sql
-SELECT FILE_ID, FILE_NAME, START_LSN, END_LSN, SIZE_IN_BYTES, IS_FULL, CONSUMER_LEVEL
+greatsql> SELECT FILE_ID, FILE_NAME, START_LSN, END_LSN, SIZE_IN_BYTES, IS_FULL, CONSUMER_LEVEL
           FROM performance_schema.innodb_redo_log_files;
 +---------+-----------------------------+-------------+-------------+---------------+---------+----------------+
 | FILE_ID | FILE_NAME                   | START_LSN   | END_LSN     | SIZE_IN_BYTES | IS_FULL | CONSUMER_LEVEL |
@@ -209,7 +209,7 @@ DDL 变更以及其他 InnoDB 内部活动相关日志刷新不受本参数影�
 Redo Log 相关状态变量有以下这些
 
 ```sql
-SHOW GLOBAL STATUS LIKE 'innodb%redo%';
+greatsql> SHOW GLOBAL STATUS LIKE 'innodb%redo%';
 +-------------------------------------+-------------+
 | Variable_name                       | Value       |
 +-------------------------------------+-------------+

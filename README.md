@@ -102,12 +102,20 @@ cat /etc/ld.so.conf
 
 而后执行下面的操作加载libjemalloc库，并确认是否已存在
 
+
 ```bash
 ldconfig && ldconfig -p | grep libjemalloc
+```
+
+::: details 查看运行结果
+```bash
+$ ldconfig && ldconfig -p | grep libjemalloc
+
 ...
         libjemalloc.so.1 (libc6,x86-64) => /usr/local/lib64/libjemalloc.so.1
         libjemalloc.so (libc6,x86-64) => /usr/local/lib64/libjemalloc.so
 ```
+:::
 
 如果无法通过 yum 直接安装 jemalloc，可以自行下载 RPM 包，地址：[https://centos.pkgs.org/8/epel-x86_64/jemalloc-5.2.1-2.el8.x86_64.rpm.html](https://centos.pkgs.org/8/epel-x86_64/jemalloc-5.2.1-2.el8.x86_64.rpm.html)
 
@@ -138,6 +146,12 @@ rpm -ivh --nodeps greatsql-client-8.0.32-26.1.el8.x86_64.rpm greatsql-devel-8.0.
 
 ```bash
 systemctl status mysqld
+```
+
+::: details 查看运行结果
+```bash
+$ systemctl status mysqld
+
 ...
 ● mysqld.service - MySQL Server
    Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)
@@ -153,6 +167,7 @@ systemctl status mysqld
            └─1137732 /usr/sbin/mysqld
 ...
 ```
+:::
 
 就可以正常启动 GreatSQL 服务了。
 
@@ -178,12 +193,7 @@ dnf install -y  bison cmake cyrus-sasl-devel gcc-c++ gcc-toolset-11 gcc-toolset-
 mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 ```
 
-将下载后的 *src.rpm* 文件放在 *SRPMS* 目录下
-
-```bash
-ls -l /root/rpmbuild/SRPMS
--rw-r--r-- 1 root root 496724859 Aug  2 14:01 greatsql-8.0.32-26.1.noarch.src.rpm
-```
+将下载后的 *src.rpm* 文件放在 */root/rpmbuild/SRPMS* 目录下
 
 编译 GreatSQL RPM 包
 

@@ -20,7 +20,7 @@ SET GLOBAL slow_query_log = ON;
 执行下面的命令查看 Slow Log 启用与否，以及其他相关配置：
 
 ```sql
-SELECT * FROM performance_schema.global_variables WHERE VARIABLE_NAME LIKE 'slow_query_log%' OR VARIABLE_NAME LIKE 'long_q%';
+greatsql> SELECT * FROM performance_schema.global_variables WHERE VARIABLE_NAME LIKE 'slow_query_log%' OR VARIABLE_NAME LIKE 'long_q%';
 +-----------------------------------+-------------------------------+
 | VARIABLE_NAME                     | VARIABLE_VALUE                |
 +-----------------------------------+-------------------------------+
@@ -39,7 +39,7 @@ SELECT * FROM performance_schema.global_variables WHERE VARIABLE_NAME LIKE 'slow
 再看判定慢查询响应时长阈值设置参数 `long_query_time`，执行如下命令：
 
 ```sql
-SHOW VARIABLES LIKE 'long_query_time';
+greatsql> SHOW VARIABLES LIKE 'long_query_time';
 +-----------------+-----------+
 | Variable_name   | Value     |
 +-----------------+-----------+
@@ -100,7 +100,7 @@ long_query_time = 0.01
 也就是说，当 `min_examined_row_limit` 参数值大于 0 时，一个 SQL 请求需要同时满足响应耗时超过 `long_query_time` 并且它扫描读取的行数超过 `min_examined_row_limit` 才会最终被判定为慢查询。
 
 ```sql
-SHOW VARIABLES LIKE 'min_examined_row_limit';
+greatsql> SHOW VARIABLES LIKE 'min_examined_row_limit';
 +------------------------+-------+
 | Variable_name          | Value |
 +------------------------+-------+
@@ -180,18 +180,12 @@ SHOW VARIABLES LIKE 'min_examined_row_limit';
 SET GLOBAL slow_query_log = ON;
 SET GLOBAL long_query_time = 1;
 SET long_query_time = 1;
-SHOW VARIABLES LIKE '%long_query_time%';
-+-----------------+----------+
-| Variable_name   | Value    |
-+-----------------+----------+
-| long_query_time | 1.000000 |
-+-----------------+----------+
 ```
 
 执行一次总耗时超过 1 秒的 SQL 请求：
 
 ```sql
-SELECT * FROM `student` WHERE id > 1000 AND `name` = 'Yunxi';
+greatsql> SELECT * FROM `student` WHERE id > 1000 AND `name` = 'Yunxi';
 +---------+-------+-------+------+---------+
 | 9999715 |   707 | Yunxi |  863 |      71 |
 .......省略
@@ -200,7 +194,7 @@ SELECT * FROM `student` WHERE id > 1000 AND `name` = 'Yunxi';
 166949 rows in set (3.94 sec)
 
 -- 查询当前有多少次慢查询记录
-SHOW GLOBAL STATUS LIKE 'Slow_queries';
+greatsql> SHOW GLOBAL STATUS LIKE 'Slow_queries';
 +---------------+-------+
 | Variable_name | Value |
 +---------------+-------+

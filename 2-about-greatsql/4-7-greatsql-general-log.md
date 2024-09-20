@@ -44,7 +44,7 @@ SET GLOBAL general_log_file = '/data/GreatSQL/general.log';
 可以使用以下命令查看通用日志的当前状态：
 
 ```sql
-SHOW GLBOAL VARIABLES LIKE 'general_log%';
+greatsql> SHOW GLBOAL VARIABLES LIKE 'general_log%';
 +------------------+----------------------------+
 | Variable_name    | Value                      |
 +------------------+----------------------------+
@@ -58,7 +58,7 @@ SHOW GLBOAL VARIABLES LIKE 'general_log%';
 通用日志是以文本文件的形式存储在文件系统中的，可以使用文本编辑器直接打开日志文件。
 
 ```bash
-cd /data/GreatSQL && cat general.log
+$ cd /data/GreatSQL && cat general.log
 
 ...
 /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld, Version: 8.0.32-26 (GreatSQL, Release 26, Revision 444164cc78e), Time: 2024-07-08T10:23:05.166725+08:00. started with:
