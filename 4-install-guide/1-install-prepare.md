@@ -142,7 +142,7 @@ analyzing CPU 0:
   current policy: frequency should be within 800 MHz and 4.80 GHz.
                   The governor "performance" may decide which speed to use
 ```
-::: tip 注意
+::: tip 小贴士
 
 如果输出内容不是 The governor "performance" 而是 The governor "powersave" 的话，则要注意了。
 

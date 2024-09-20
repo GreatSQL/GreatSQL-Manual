@@ -8,7 +8,7 @@ Binlog 即 Binary Log，二进制日志文件，也叫作变更日志（Update L
 
 Binlog 以事件（Event）形式记录并保存在二进制文件中，利用这些 Events，可以很方便地再现数据变更的全过程，所以 Binlog 常用于主从复制、MGR 等场景。
 
-::: tip
+::: tip 小贴士
 如果是想记录所有的请求，则需要使用 [通用日志](./4-7-greatsql-general-log.md)。
 :::
 
@@ -87,15 +87,15 @@ binlog_transaction_dependency_tracking = WRITESET
 
   设置 Binlog 格式，支持三种可选：STATEMENT（语句格式）、ROW（行格式）、MIXED（混合格式）。默认是 ROW 格式，也强烈建议设置为 ROW 格式。
 
-  - STATEMENT
+  - **STATEMENT**
     
     在 STATEMENT 模式下，二进制日志记录的是执行的每个 SQL 语句。这是最早的一种二进制日志格式，适用于较少依赖复杂 SQL 语句的场景。优点：生成的日志文件较小；复制开销较低。缺点：某些情况下，重放 SQL 语句可能导致非预期结果（如包含非确定性函数）；可能需要在复制环境中添加额外的锁，以确保一致性。
 
-  - ROW
+  - **ROW**
 
     在 ROW 模式下，二进制日志记录的是每一行数据的变化。也就是说，它记录了数据行的具体更改而不是 SQL 语句本身。优点：适用于所有类型的 SQL 语句，确保复制的一致性；更加精确，适合高复杂度和高并发环境。缺点：生成的日志文件较大，特别是对于批量操作；复制时开销较高，传输更多数据。
 
-  - MIXED
+  - **MIXED**
 
     MIXED 模式结合了 STATEMENT 和 ROW 模式。在这种模式下，MySQL 通常会选择 STATEMENT 模式来记录日志，但在某些需要精确性的情况下（如非确定性函数或包含用户变量的语句），会自动切换到 ROW 模式。优点：综合了两者的优点，适应性更强；提高了复制的准确性和性能。缺点：日志大小和性能开销介于 STATEMENT 和 ROW 之间。
 
@@ -117,13 +117,13 @@ binlog_transaction_dependency_tracking = WRITESET
 
   用于控制 GreatSQL 主服务器在生成 Binlog 时如何跟踪事务依赖关系。这对于提高从服务器的并行复制性能非常重要。可选值包括：
  
-  - COMMIT_ORDER，按事务提交的顺序跟踪依赖关系。这是默认值。适用于大多数工作负载，但并行度较低。
-  - WRITESET：基于事务的写集合跟踪依赖关系。事务之间如果没有写集合冲突，则可以并行执行。适合有高并发写操作的工作负载。
-  - WRITESET_SESSION，基于写集合并按会话跟踪依赖关系。这意味着即使写集合之间没有冲突，但如果同一会话的事务，它们还是会按顺序执行。适用于事务之间存在一定顺序但又需要高并行度的场景。
+  - **COMMIT_ORDER**，按事务提交的顺序跟踪依赖关系。这是默认值。适用于大多数工作负载，但并行度较低。
+  - **WRITESET**：基于事务的写集合跟踪依赖关系。事务之间如果没有写集合冲突，则可以并行执行。适合有高并发写操作的工作负载。
+  - **WRITESET_SESSION**，基于写集合并按会话跟踪依赖关系。这意味着即使写集合之间没有冲突，但如果同一会话的事务，它们还是会按顺序执行。适用于事务之间存在一定顺序但又需要高并行度的场景。
 
   对于高并发的写操作，设置为 WRITESET 通常能提供更好的并行度。
 
-::: tip 提示
+::: tip 小贴士
 有条件的话，最好不要将数据库文件与 Binlog 日志文件放在同一个物理磁盘上，一方面降低物理 I/O 读写请求的竞争，还可以降低故障单点风险，避免二者同时损坏。
 :::
 
@@ -197,11 +197,11 @@ Kp+AEA==
 
 如果从上述已知信息里，还是能看出几个关键信息的，主要有：
 
-- 发生的时间点："#240704 14:20:52"，对应的 Unix 时间戳："TIMESTAMP=1720074052"。
-- 服务器对应的 `server_id` 和 `server_uuid` 分别是："server id 3306" 和 "46dda72d-ceec-11ee-be3f-d08e7908bcb1"。
-- 从 "rbr_only=yes" 可以看出来设置了 `binlog_format = ROW`。
-- 从 "Table_map: `greatsql`.`t_803225`" 知道对应的库表，它在 Binlog 中映射的 "table id 400"。
-- 从 "Write_rows:" 可知这是一个写入操作（如果是更新操作，则对应 "Update_rows"）。
+- 发生的时间点：**#240704 14:20:52**，对应的 Unix 时间戳：**TIMESTAMP=1720074052**。
+- 服务器对应的 `server_id` 和 `server_uuid` 分别是：**server id 3306** 和 **46dda72d-ceec-11ee-be3f-d08e7908bcb1**。
+- 从 **rbr_only=yes** 可以看出来设置了 `binlog_format = ROW`。
+- 从 **Table_map: \`greatsql\`.\`t_803225\`** 知道对应的库表，它在 Binlog 中映射的 **table id 400**。
+- 从 **Write_rows:** 可知这是一个写入操作（如果是更新操作，则对应 **Update_rows**）。
 
 再次增加 `--base64-output=decode-rows` 参数就可以看到解码成明文后的结果：
 
@@ -353,11 +353,11 @@ mysqlbinlog [option] filename | mysql -h'hostname' –u'user' -p'password'
 
 上述命令的作用是用 `mysqlbinlog` 来读取 Binlog Events，然后通过管道直接将 Events 恢复到指定数据库中。
 
-- filename：指定 Binlog 日志文件名。
-- option：可选项，比较常用的参数是 start-date、stop-date、start-position、stop-position、database。
-  - start-date 和 stop-date：可以指定恢复数据库的起始时间点和结束时间点。
-  - start-position 和 stop-position：可以指定恢复数据的开始位置和结束位置。
-  - database：只读取指定的数据库相关的 Events。
+- `filename`：指定 Binlog 日志文件名。
+- `option`：可选项，比较常用的参数是 `start-date`、`stop-date`、`start-position`、`stop-position`、`database`。
+  - `start-date` 和 `stop-date`：可以指定恢复数据库的起始时间点和结束时间点。
+  - `start-position` 和 `stop-position`：可以指定恢复数据的开始位置和结束位置。
+  - `database`：只读取指定的数据库相关的 Events。
 
 ::: warning 警告
 使用 `mysqlbinlog` 进行数据恢复操作时，必须按 Binlog 文件编号正序操作，不能跳跃和倒序操作。
@@ -442,7 +442,7 @@ Binlog 刷盘流程如下：
 
 ![Binlog 写入机制](./4-3-greatsql-binary-log-02.png#pic_center)
 
-::: tip
+::: tip 小贴士
 上图的 Write 动作是指把 Binlog Events 写入到文件系统的 Page cache，没有立即把数据同步刷新到磁盘，所以速度比较快。
 
 其中的 fsync 动作才是真正将数据持久化刷新到磁盘的操作。

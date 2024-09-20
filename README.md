@@ -129,7 +129,7 @@ No matches found.
 rpm -ivh --nodeps greatsql-client-8.0.32-26.1.el8.x86_64.rpm greatsql-devel-8.0.32-26.1.el8.x86_64.rpm greatsql-icu-data-files-8.0.32-26.1.el8.x86_64.rpm greatsql-mysql-router-8.0.32-26.1.el8.x86_64.rpm greatsql-server-8.0.32-26.1.el8.x86_64.rpm greatsql-shared-8.0.32-26.1.el8.x86_64.rpm greatsql-test-8.0.32-26.1.el8.x86_64.rpm
 ```
 
-::: tip 提示
+::: tip 小贴士
 
 正式安装 GreatSQL RPM 包时，可能还需要依赖 openssl、Perl 等其他软件包，此处为快速演示，因此加上 `--nodeps` 参数，忽略相应的依赖关系检查。安装完毕后，如果因为依赖关系无法启动，请再行安装相应软件依赖包。
 :::
@@ -346,7 +346,7 @@ GreatSQL同时也是gitee（码云）平台上的GVP项目，详见：[https://g
 
 GreatSQL 致力于保持开源的开放性。GreatSQL 采用 GPLv2 协议。
 
-::: tip 温馨提示
+::: tip 小贴士
 
 [如果您在使用 GreatSQL，请告诉我们，将有机会获得精美礼品和免费技术支持](https://wj.qq.com/s2/11543483/9e09/)。
 :::

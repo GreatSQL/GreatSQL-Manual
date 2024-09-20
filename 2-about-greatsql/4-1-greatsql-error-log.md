@@ -122,12 +122,12 @@ log_timestamps = system
 
 ```shell
 # 备份后清空
-$ cd /data/GreatSQL
-$ cp error.log error-`date +'%Y%m%d'`.log
-$ echo '' > error.log
+cd /data/GreatSQL
+cp error.log error-`date +'%Y%m%d'`.log
+echo '' > error.log
 
 # 刷新错误日志文件
-$ mysqladmin -uroot -p flush-logs error
+mysqladmin -uroot -p flush-logs error
 ```
 
 也可以在完成 `cp` 备份后，连入 GreatSQL 后执行相应的 SQL 命令刷新错误日志：
@@ -136,7 +136,7 @@ $ mysqladmin -uroot -p flush-logs error
 FLUSH ERROR LOGS;
 ```
 
-::: tip 提示
+::: tip 小贴士
 如果 GreatSQL 日志文件被其他进程打开或被锁定，执行 `mysqladmin flush-logs error` 操作可能会失败
 :::
 
@@ -150,11 +150,11 @@ mysqladmin: refresh failed; error: 'Could not open file '/data/GreatSQL/error.lo
 
 ```bash
 # 备份旧错误日志
-$ cd /data/GreatSQL
-$ mv error.log error-`date +'%Y%m%d'`.log
+cd /data/GreatSQL
+mv error.log error-`date +'%Y%m%d'`.log
 
 # 清空误日志文件
-$ echo '' > error.log
+echo '' > error.log
 ```
 
 ::: warning 警告

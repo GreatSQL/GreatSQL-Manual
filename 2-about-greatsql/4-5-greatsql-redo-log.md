@@ -22,7 +22,7 @@ Redo Log 对 InnoDB 很重要，主要以下几点原因：
 
 ```sql
 -- 修改 Redo Log 总容量为 8GB
-greatsql> SET GLOBAL innodb_redo_log_capacity = 8589934592;
+SET GLOBAL innodb_redo_log_capacity = 8589934592;
 ```
 调整 Redo Log 总容量后，需要先把 buffer pool 中的脏页刷新到磁盘中，再完成收缩或扩展；如果是把调小，则需要尽快刷脏页；如果是调大，则刷脏页的动作会慢一些。
 
@@ -55,7 +55,7 @@ Redo Log 有两种类型：使用中（ordinary）、备用的（spare）。Inno
 每个已使用的 Redo Log 文件都有相应的起止 LSN 值：
 
 ```sql
-greatsql> SELECT FILE_ID, FILE_NAME, START_LSN, END_LSN, SIZE_IN_BYTES, IS_FULL, CONSUMER_LEVEL
+SELECT FILE_ID, FILE_NAME, START_LSN, END_LSN, SIZE_IN_BYTES, IS_FULL, CONSUMER_LEVEL
           FROM performance_schema.innodb_redo_log_files;
 +---------+-----------------------------+-------------+-------------+---------------+---------+----------------+
 | FILE_ID | FILE_NAME                   | START_LSN   | END_LSN     | SIZE_IN_BYTES | IS_FULL | CONSUMER_LEVEL |
@@ -119,11 +119,13 @@ greatsql> SELECT FILE_ID, FILE_NAME, START_LSN, END_LSN, SIZE_IN_BYTES, IS_FULL,
 - 实例 Shutdown 时。
 - 切换 Binlog 文件时。
 
-> Redo Log Buffer 写入 Redo Log 文件时有可能并不是立即同步刷新到磁盘文件的，可能只是写到操作系统的 page cache 中，再由操作系统执行刷新同步到磁盘文件。
->
-> 这种情况下，如果发生宕机，那么数据可能会丢失。
->
-> 因此，在要求数据高可靠性的环境中，务必设置 `innodb_flush_log_at_trx_commit=1`。
+::: tip 小贴士
+Redo Log Buffer 写入 Redo Log 文件时有可能并不是立即同步刷新到磁盘文件的，可能只是写到操作系统的 page cache 中，再由操作系统执行刷新同步到磁盘文件。
+
+这种情况下，如果发生宕机，那么数据可能会丢失。
+
+因此，在要求数据高可靠性的环境中，务必设置 `innodb_flush_log_at_trx_commit=1`。
+:::
 
 ### Checkpoint（检查点）
 
@@ -194,7 +196,9 @@ Redo Log 相关的调整优化操作，主要参考以下几条原则：
 
 ![Redo log buffer不同刷盘模式](./4-5-greatsql-redo-Log-06.png)
 
-> DDL 变更以及其他 InnoDB 内部活动相关日志刷新不受本参数影响。
+::: tip 小贴士
+DDL 变更以及其他 InnoDB 内部活动相关日志刷新不受本参数影响。
+:::
 
 - `innodb_flush_log_at_timeout`
 
@@ -205,7 +209,7 @@ Redo Log 相关的调整优化操作，主要参考以下几条原则：
 Redo Log 相关状态变量有以下这些
 
 ```sql
-greatsql> SHOW GLOBAL STATUS LIKE 'innodb%redo%';
+SHOW GLOBAL STATUS LIKE 'innodb%redo%';
 +-------------------------------------+-------------+
 | Variable_name                       | Value       |
 +-------------------------------------+-------------+

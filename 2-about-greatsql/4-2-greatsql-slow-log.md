@@ -250,7 +250,7 @@ SELECT * FROM `student` WHERE id>100000 AND `name`='Yunxi';
 - [Percona Toolkit 神器全攻略](https://mp.weixin.qq.com/s/x37JiZoeZ5deFHhvNU1IDQ)
 
 ## 关闭慢查询日志
-::: tip 提示
+::: tip 小贴士
 除非确实不需要关注 SQL 执行效率，否则不建议建议关闭慢查询日志。
 :::
 

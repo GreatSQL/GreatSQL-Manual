@@ -16,7 +16,7 @@ GreatSQL 版本号采用点分位命名规则（X.Y.Z-R）模式，其中
 
 ```bash
 # 登入到 GreatSQL
-$ mysql -hlocalhost -S/data/GreatSQL/mysql.sock -uroot -p
+mysql -hlocalhost -S/data/GreatSQL/mysql.sock -uroot -p
 ...
 
 # 在GreatSQL 中执行 \s 即可查看版本号

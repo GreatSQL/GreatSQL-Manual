@@ -22,7 +22,9 @@ Undo Log（撤销日志）是 InnoDB 存储引擎用来保证事务的一致性�
 
 这些为了事务回滚而记录的数据，在数据库中称之为 **撤销日志** 或 **回滚日志**，在本文统称为 **Undo Log**。
 
-> 只读操作 `SELECT` 并不会修何用户数据，所以它不需要记录相应的 Undo 日志。
+::: tip 小贴士
+只读操作 `SELECT` 并不会修何用户数据，所以它不需要记录相应的 Undo 日志。
+:::
 
 ## Undo 表空间
 
@@ -45,14 +47,16 @@ GreatSQL 数据库初始化时，默认先初始化 *2* 个 Undo 表空间，Inn
 在运行过程中，随着大事务、长事务的出现，可能会导致 Undo 表空间不断增长。为了避免单个 Undo 表空间文件增长过多，可以在线创建新的 Undo 表空间，例如：
 
 ```sql
-greatsql> CREATE UNDO TABLESPACE greatsql_undo_001 ADD DATAFILE 'greatsql_undo_001.ibu';
+CREATE UNDO TABLESPACE greatsql_undo_001 ADD DATAFILE 'greatsql_undo_001.ibu';
 ```
 
 用户自行创建的 Undo 表空间文件必须以 *.ibu* 为后缀，暂不支持自定义文件相对路径，但支持自定义绝对路径，且绝对路径必须在 `innodb_directory` 定义的范围内。
 
 在 GreatSQL 启动过程中，InnoDB 会扫描 `innodb_directory` 参数定义的所有目录及其子目录，确认是否有 Undo 表空间文件。参数 `innodb_data_home_dir, innodb_undo_directory, datadir` 定义的目录，也都会被追加到 `innodb_directory` 扫描范围内。
 
-> 虽然在启动过程中 InnoDB 会自动扫描发现所有的 Undo 表空间文件，但请不要随意移动这些文件，避免影响 crash recovery 工作。
+::: tip 小贴士
+虽然在启动过程中 InnoDB 会自动扫描发现所有的 Undo 表空间文件，但请不要随意移动这些文件，避免影响 crash recovery 工作。
+:::
 
 从 8.0.14 开始，管理员通过 `CREATE UNDO TABLESPACE` 创建的 Undo 表空间，可以通过 `DROP UNDO TABLESPACE` 来删除，前提是这个 Undo 表空间是空的（没被使用）。
 
@@ -60,7 +64,7 @@ greatsql> CREATE UNDO TABLESPACE greatsql_undo_001 ADD DATAFILE 'greatsql_undo_0
 
 ```sql
 -- 查看当前都有哪些Undo表空间文件
-greatsql> SELECT FILE_ID, TABLESPACE_NAME, FILE_NAME, STATUS FROM INFORMATION_SCHEMA.FILES
+SELECT FILE_ID, TABLESPACE_NAME, FILE_NAME, STATUS FROM INFORMATION_SCHEMA.FILES
           WHERE FILE_TYPE LIKE 'UNDO LOG';
 +------------+-------------------+-------------------------+--------+
 | FILE_ID    | TABLESPACE_NAME   | FILE_NAME               | STATUS |
@@ -70,7 +74,7 @@ greatsql> SELECT FILE_ID, TABLESPACE_NAME, FILE_NAME, STATUS FROM INFORMATION_SC
 | 4294967023 | greatsql_undo_001 | ./greatsql_undo_001.ibu | NORMAL |
 +------------+-------------------+-------------------------+--------+
 
-greatsql> SELECT SPACE, NAME, FILE_SIZE, STATE FROM information_schema.INNODB_TABLESPACES 
+SELECT SPACE, NAME, FILE_SIZE, STATE FROM information_schema.INNODB_TABLESPACES 
           WHERE SPACE_TYPE = 'Undo';
 +------------+-------------------+-----------+--------+
 | SPACE      | NAME              | FILE_SIZE | STATE  |
@@ -81,8 +85,8 @@ greatsql> SELECT SPACE, NAME, FILE_SIZE, STATE FROM information_schema.INNODB_TA
 +------------+-------------------+-----------+--------+
 
 -- 将 greatsql_undo_001 设置为不活跃后再删除
-greatsql> ALTER UNDO TABLESPACE greatsql_undo_001 SET INACTIVE;
-greatsql> DROP UNDO TABLESPACE greatsql_undo_001;
+ALTER UNDO TABLESPACE greatsql_undo_001 SET INACTIVE;
+DROP UNDO TABLESPACE greatsql_undo_001;
 ```
 
 ### 清理 Undo 表空间
@@ -100,7 +104,7 @@ InnoDB 要求至少有两个活跃可用的 Undo 表空间才可以启用自动�
 设置系统参数 `innodb_undo_log_truncate = ON` 即可启用自动清理模式：
 
 ```sql
-greatsql> SET GLOBAL innodb_undo_log_truncate = ON;
+SET GLOBAL innodb_undo_log_truncate = ON;
 ```
 
 在自动清理模式下，一旦有个 Undo 表空间文件大小超过 `innodb_max_undo_log_size` 参数设定的阈值后，就会开始自动清理。参数 `innodb_max_undo_log_size` 可以在线动态调整，默认值 *1GB*。
@@ -129,7 +133,7 @@ Purge 线程的主要工作是清空释放 Undo 表空间，默认地，每进�
 这种情况下，执行 `SHOW ENGINE INNODB STATUS\G` 查看事务及回滚段清理状态：
 
 ```sql
-greatsql> SHOW ENGINE INNODB STATUS\G
+SHOW ENGINE INNODB STATUS\G
 ...
 ------------
 TRANSACTIONS
@@ -142,7 +146,7 @@ History list length 2009890459
 ROLLING BACK 1 lock struct(s), heap size 1136, 0 row lock(s), undo log entries 365137207
 ...
 ```
-从上述结果可以看到当前数据库中有大量（超过 20 亿条记录）回滚段还没来得及被清理，同时还有个事务活跃了 13610 秒还没结束，这个事务产生了 365137207 个回滚段，这是非常恐怖的现象，平时一定要做好对大事务/长事务，以及回滚段堆积情况的监控。
+从上述结果可以看到当前数据库中**有大量（超过 20 亿条记录）回滚段还没来得及被清理**，同时还有个事务**持续活跃 13610 秒还没结束**，这个事务产生了 365137207 个回滚段，这是非常恐怖的现象，平时一定要做好对大事务/长事务，以及回滚段堆积情况的监控。
 
 遇到上述情况时，可以先适当降低前端应用业务的请求量，以降低对数据库的读写压力。另外可以尝试加大 `innodb_buffer_pool_size` 以提高 InnoDB 处理性能，同时能耐心等待回滚段被清理完毕。通过周期性观察 **History list length** 数值变化，计算出回滚段清理的速率，从而估算出预计什么时候能清理完毕。
 
@@ -151,7 +155,7 @@ ROLLING BACK 1 lock struct(s), heap size 1136, 0 row lock(s), undo log entries 3
 下面几个状态变量可以用来观察 Undo 表空间的使用情况：
 
 ```sql
-greatsql> SHOW STATUS LIKE 'Innodb_undo_tablespaces%';
+SHOW STATUS LIKE 'Innodb_undo_tablespaces%';
 +----------------------------------+-------+
 | Variable_name                    | Value |
 +----------------------------------+-------+
@@ -173,7 +177,7 @@ greatsql> SHOW STATUS LIKE 'Innodb_undo_tablespaces%';
 
 ![Undo Log日志的存储机制](./4-6-greatsql-undo-log-01.png)
 
-如上图，可以看到，Undo Log 里除了存储数据更新前的内容，还需要记录 ROW_ID（6 字节的 DB_ROW_ID 或是聚集索引键值）、TRX_ID（6 字节，事务 ID）、ROLL_PTR（7 字节，回滚段指针）。其中回滚指针总是指向同一条记录的上一个版本，最终会形成一条回滚链，方便找到该条记录的各个历史版本。
+如上图，可以看到，Undo Log 里除了存储数据更新前的内容，还需要记录 *ROW_ID（6 字节的 DB_ROW_ID 或是聚集索引键值）*、*TRX_ID（6 字节，事务 ID）*、*ROLL_PTR（7 字节，回滚段指针）*。其中回滚指针总是指向同一条记录的上一个版本，最终会形成一条回滚链，方便找到该条记录的各个历史版本。
 
 ## 回滚段与事务的关系
 
@@ -219,11 +223,13 @@ InnoDB page size 默认为 16 KB，因此一个回滚段里最多可以支持 10
 |用户创建的临时表 | 既有 `INSERT`，又有 `UPDATE` 或 `DELETE` | innodb_page_size / 16 / 2 * innodb_rollback_segments |
 
 
-> 1. 在 MySQL 5.5 之前的版本（不含 5.5）中，InnoDB 只支持 1 个回滚段，因此它能支持的并发事务数上限为 1024。
-> 
-> 2. 从 MySQL 5.5 版本开始，InnoDB 支持最大 128 个回滚段，因此它能支持的并发事务数上限提高到了 128*1024=131072。
->
-> 3. 参数 `innodb_rollback_segments` 在 8.0 版本以前的旧名为 `innodb_undo_logs`。
+::: tip 小贴士
+1. 在 MySQL 5.5 之前的版本（不含 5.5）中，InnoDB 只支持 1 个回滚段，因此它能支持的并发事务数上限为 1024。
+
+2. 从 MySQL 5.5 版本开始，InnoDB 支持最大 128 个回滚段，因此它能支持的并发事务数上限提高到了 128*1024=131072。
+
+3. 参数 `innodb_rollback_segments` 在 8.0 版本以前的旧名为 `innodb_undo_logs`。
+:::
 
 ### 回滚段与事务
 
@@ -259,7 +265,9 @@ InnoDB page size 默认为 16 KB，因此一个回滚段里最多可以支持 10
   - 扫描 Undo Log 发现有事务没完成进行回滚。
 - 若在 9 之后系统宕机，内存映射中变更的数据还来不及刷回磁盘，那么系统恢复之后，可以根据Redo Log把数据刷回磁盘。
 
-> InnoDB 在进行 crash recovery 时，会进一步检查 Redo Log 和 Binlog，判断该事务是否同时也已经写了 Binlog，是的话就会再次提交。如果一个事务在 Redo Log 中只处于 Prepare 状态，但 Binlog 还没写成功，那就会回滚。
+::: tip 小贴士
+InnoDB 在进行 crash recovery 时，会进一步检查 Redo Log 和 Binlog，判断该事务是否同时也已经写了 Binlog，是的话就会再次提交。如果一个事务在 Redo Log 中只处于 Prepare 状态，但 Binlog 还没写成功，那就会回滚。
+:::
 
 流程图：![Undo log刷盘流程](./4-6-greatsql-undo-log-03.png)
 

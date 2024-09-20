@@ -28,13 +28,13 @@ general_log_file = /data/GreatSQL/general.log
 
 ```sql
 -- 启用通用日志
-greatsql> SET GLOBAL general_log = ON;
+SET GLOBAL general_log = ON;
 
 -- 禁用通用日志
-greatsql> SET GLOBAL general_log = OFF;
+SET GLOBAL general_log = OFF;
 
 -- 设置通用日志文件路径
-greatsql> SET GLOBAL general_log_file = '/data/GreatSQL/general.log';
+SET GLOBAL general_log_file = '/data/GreatSQL/general.log';
 ```
 
 通用日志支持在线动态启用或禁用，以及设置日志文件路径。
@@ -44,7 +44,7 @@ greatsql> SET GLOBAL general_log_file = '/data/GreatSQL/general.log';
 可以使用以下命令查看通用日志的当前状态：
 
 ```sql
-greatsql> SHOW GLBOAL VARIABLES LIKE 'general_log%';
+SHOW GLBOAL VARIABLES LIKE 'general_log%';
 +------------------+----------------------------+
 | Variable_name    | Value                      |
 +------------------+----------------------------+
@@ -57,9 +57,10 @@ greatsql> SHOW GLBOAL VARIABLES LIKE 'general_log%';
 
 通用日志是以文本文件的形式存储在文件系统中的，可以使用文本编辑器直接打开日志文件。
 
-```shell
-$ cd /data/GreatSQL
-$ cat general.log
+```bash
+cd /data/GreatSQL && cat general.log
+
+...
 /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld, Version: 8.0.32-26 (GreatSQL, Release 26, Revision 444164cc78e), Time: 2024-07-08T10:23:05.166725+08:00. started with:
 Tcp port: 3306  Unix socket: /data/GreatSQL/mysql.sock
 Time                 Id Command    Argument
@@ -78,13 +79,13 @@ Time                 Id Command    Argument
 
 在 GreatSQL 中，可以使用 `mysqladmin flush-logs general` 命令来刷新通用日志（它的实际作用是：先关闭文件句柄，再重新打开），例如：
 
-```shell
-$ mysqladmin -uroot -p flush-logs general
+```bash
+mysqladmin -uroot -p flush-logs general
 ```
 也可以执行下面的命令完成通用日志刷新：
 
 ```sql
-greatsql> FLUSH GENERAL LOGS;
+FLUSH GENERAL LOGS;
 ```
 
 新的通用日志会直接覆盖旧的查询日志，因此通常是先备份旧的日志文件后清空它，并立即执行刷新操作，重新生成通用日志文件。

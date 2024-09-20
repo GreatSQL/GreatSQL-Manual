@@ -9,25 +9,25 @@
 当使用关键字（Keywords）作为表明、列名、内置函数名等对象名时，无需特殊处理，不会报 SQL 语法错误。
 
 如下面的例子：
-```
-greatsql> CREATE TABLE interval (begin INT, end INT);
+```sql
+CREATE TABLE interval (begin INT, end INT);
 ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'interval (begin INT, end INT)' at line 1
 ```
 
 这是因为 **interval** 是保留字，需要用 "`" 引用包括才行，而 **begin**/**end** 只是关键字，不需要特殊处理，修改如下：
-```
-greatsql> CREATE TABLE `interval`(begin INT, end INT);
+```sql
+CREATE TABLE `interval`(begin INT, end INT);
 Query OK, 0 rows affected (0.08 sec)
 ```
 
 另外，要注意的是，从 GreatSQL 8.0.32-24 开始，开启 Oracle 兼容模式（`SET sql_mode = ORACLE`）后，对象名都需要特殊处理才行，例如：
-```
-greatsql> CREATE TABLE `interval`(`begin` INT, `end` INT);
+```sql
+CREATE TABLE `interval`(`begin` INT, `end` INT);
 Query OK, 0 rows affected (0.02 sec)
 ```
 或
-```
-greatsql> CREATE TABLE "interval"("begin" INT, "end" INT);
+```sql
+CREATE TABLE "interval"("begin" INT, "end" INT);
 Query OK, 0 rows affected (0.02 sec)
 ```
 在上面的两个例子中，用双引号 **"** 或 **`** 均可。
@@ -35,8 +35,8 @@ Query OK, 0 rows affected (0.02 sec)
 综上，强烈建议在 SQL 开发、编写 SQL 语句时，对象名都用 **"** 或 **`** 将其引用起来，避免报 SQL 语法错误，保证应用程序的容错性。
 
 通过查询视图 `information_schema.KEYWORDS` 也可以找到保留字和关键字的信息（其中RESERVED=1的表示是保留字，其余是关键字）：
-```
-greatsql> SELECT * FROM information_schema.KEYWORDS WHERE WORD LIKE '%int%';
+```sql
+SELECT * FROM information_schema.KEYWORDS WHERE WORD LIKE '%int%';
 +----------------------------------------+----------+
 | WORD                                   | RESERVED |
 +----------------------------------------+----------+
@@ -58,7 +58,7 @@ greatsql> SELECT * FROM information_schema.KEYWORDS WHERE WORD LIKE '%int%';
 ```
 
 其中，GreatSQL 相对 MySQL 新增的保留字、关键字如下：
-```
+```sql
 +----------------------------------------+----------+
 | WORD                                   | RESERVED |
 +----------------------------------------+----------+
