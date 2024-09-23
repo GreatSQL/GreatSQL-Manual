@@ -66,7 +66,7 @@ CPU: Intel i7-8850H (12) @ 4.300GHz
 GPU: Intel CoffeeLake-H GT2 [UHD Graphics 630] 
 Memory: 239MiB / 15787MiB
 
-$ ldd -version
+$ ldd --version
 ldd (GNU libc) 2.38
 ```
 
