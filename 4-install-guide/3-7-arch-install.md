@@ -43,7 +43,7 @@ Arch Linux在更新内核的时候会立即删除旧内核（因为内核也是�
 
 ## 安装Arch Linux
 
-安装Arch Linux的过程这里就不再详细介绍了，可以前往Arch Linux的官方文档查看详细的安装流程：https://arch-linux.osrc.com/rookie/pre-install.html
+安装Arch Linux的过程这里就不再详细介绍了，可以前往Arch Linux的官方文档查看详细的安装流程：[https://arch-linux.osrc.com/rookie/pre-install.html](https://arch-linux.osrc.com/rookie/pre-install.html)。
 
 下面，将展示成功安装完成的Arch Linux环境
 

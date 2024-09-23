@@ -25,8 +25,8 @@ GreatSQL中对执行计划进行多线程改造，每个子线程执行计划与
 ### 设置系统参数
 通过全局参数 `force_parallel_execute` 来控制是否启用并行查询；使用全局参数 `parallel_default_dop` 来控制使用多少线程去并行查询。上述参数在使用过程中，随时可以修改，无需重启数据库。
 
-例如，想要开启并行执行，且并发度设置为4：
-```
+例如，想要开启并行执行，且并发度设置为4，修改 *my.cnf* 配置文件的 *[mysqld]* 区间：
+```ini
 force_parallel_execute = on;
 parallel_default_dop = 4;
 ```

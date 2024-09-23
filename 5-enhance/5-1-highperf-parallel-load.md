@@ -45,14 +45,14 @@
 然后执行 `LOAD DATA` 语句导入文件。
 
 ```sql
-greatsql> LOAD DATA INFILE '/tmp/load.txt' INTO TABLE t1;
+LOAD DATA INFILE '/tmp/load.txt' INTO TABLE t1;
 ```
 
 2. **LOAD 语句增加 HINT 启用**
 
 ```sql
-greatsql> LOAD /*+ SET_VAR(gdb_parallel_load = ON) SET_VAR(gdb_parallel_load_chunk_size = 65536) SET_VAR(gdb_parallel_load_workers = 16) */
-          DATA INFILE '/tmp/load.txt' INTO TABLE t1;
+LOAD /*+ SET_VAR(gdb_parallel_load = ON) SET_VAR(gdb_parallel_load_chunk_size = 65536) SET_VAR(gdb_parallel_load_workers = 16) */
+    DATA INFILE '/tmp/load.txt' INTO TABLE t1;
 ```
 
 ## 检查并行导入进度
@@ -62,7 +62,7 @@ Worker 线程会创建新的 session 导入文件块，可通过执行 `SHOW PRO
 语句的格式为：
 
 ```sql
-greatsql> LOAD /*parallel load worker(chunk_no:xxx)*/ DATA INFILE 'session_id:worker_no' INTO ...
+LOAD /*parallel load worker(chunk_no:xxx)*/ DATA INFILE 'session_id:worker_no' INTO ...
 ```
 
 其中 `chunk_no` 代表文件块的编号，每新产生一个文件块时 `chunk_no` 增加1，可通过文件原始大小除以 `gdb_parallel_load_chunk_size`，得到 `chunk_no` 并大致判断出导入进度。

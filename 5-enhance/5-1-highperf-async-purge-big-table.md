@@ -124,7 +124,7 @@
 
 新增系统表 `information_schema.INNODB_ASYNC_PURGE_FILES`，展示临时文件清理进度。
 
-```
+```sql
 # 表结构
 CREATE TEMPORARY TABLE `INNODB_ASYNC_PURGE_FILES` (
   `log_id` bigint(21) unsigned NOT NULL DEFAULT '0',

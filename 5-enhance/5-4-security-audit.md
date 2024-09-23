@@ -76,8 +76,9 @@ server_version:
 
 如果没启用审计入表特性，则审计日志存储在外部日志文件中，默认文件为 `audit.log`，在 `datadir` 目录下，例如：
 
-```shell
+```bash
 $ cat audit.log
+
 ...
 <AUDIT_RECORD
   NAME="Query"
@@ -141,9 +142,11 @@ greatsql> SHOW VARIABLES LIKE 'audit%';
 
 审计日志功能总开关，设置是否启用该功能。
 
-> 执行 SOURCE install_audit_log.sql 安装审计插件后，会自动设置 audit_log_enabled = 1 启用审计功能。
->
-> 也可以在不卸载审计插件的情况下，执行 `SET GLOBAL audit_log_enabled = 0` 临时禁用审计功能。
+::: tip 小贴士
+执行 `SOURCE install_audit_log.sql` 安装审计插件后，会自动设置 `audit_log_enabled = 1` 启用审计功能。
+
+也可以在不卸载审计插件的情况下，执行 `SET GLOBAL audit_log_enabled = 0` 临时禁用审计功能。
+:::
 
 - audit_log_to_table
 
@@ -171,10 +174,12 @@ greatsql> SHOW VARIABLES LIKE 'audit%';
 
 设置审计日志存盘策略，当 `audit_log_handler=FILE` 时才有效，可选值有：
 
-- ASYNCHRONOUS（默认），使用内存缓冲区存储日志，如果缓冲区已满，不丢弃消息。
-- PERFORMANCE，使用内存缓冲区存储日志，如果缓冲区已满，则丢弃消息。
-- SEMISYNCHRONOUS，直接记录到文件，不刷新&同步每个事件。
-- SYNCHRONOUS，直接记录到文件，刷新并同步每个事件。
+- **ASYNCHRONOUS（默认）**，使用内存缓冲区存储日志，如果缓冲区已满，不丢弃消息。
+- **PERFORMANCE**，使用内存缓冲区存储日志，如果缓冲区已满，则丢弃消息。
+- **SEMISYNCHRONOUS**，直接记录到文件，不刷新&同步每个事件。
+- **SYNCHRONOUS**，直接记录到文件，刷新并同步每个事件。
+
+<br/>
 
 - audit_log_file
 
@@ -303,10 +308,13 @@ greatsql> SHOW VARIABLES LIKE 'audit%';
 | Allowed values       | ALL, LOGINS, QUERIES, NONE          |
 
 设定审计日志应该记录哪些事件，可能的值为：
-- ALL，将记录所有事件。
-- 登录，只记录登录事件。
-- 查询，只记录查询事件。
-- NONE，不会记录任何事件。
+
+  - **ALL**，将记录所有事件。
+  - **LOGINS**，只记录登录事件。
+  - **QUERIES**，只记录查询事件。
+  - **NONE**，不会记录任何事件。
+
+<br/>
 
 - audit_log_rotate_on_size
 
@@ -394,19 +402,19 @@ greatsql> SHOW VARIABLES LIKE 'audit%';
 
 
 ## 应用案例
-```
+```sql
 -- 启用审计入表特性
-greatsql> SET GLOBAL audit_log_to_table = 1;
+SET GLOBAL audit_log_to_table = 1;
 
 -- 排除部分管理员角色用户的操作记录
 -- 注意，这里只是排除，而不是禁止管理员的操作
-greatsql> SET PERSIST audit_log_exclude_accounts = 'root@localhost, admin@%, app_adm@%';
+SET PERSIST audit_log_exclude_accounts = 'root@localhost, admin@%, app_adm@%';
 
 -- 重置排除名单，注意这里要设置 = NULL，而不是 = 'NULL'
-greatsql> SET PERSIST audit_log_exclude_accounts = NULL;
+SET PERSIST audit_log_exclude_accounts = NULL;
 
 -- 查看审计日志（按时间倒序）
-greatsql> SELECT * FROM sys_audit.audit_log ORDER BY timestamp DESC LIMIT 10;
+SELECT * FROM sys_audit.audit_log ORDER BY timestamp DESC LIMIT 10;
 ```
 
 

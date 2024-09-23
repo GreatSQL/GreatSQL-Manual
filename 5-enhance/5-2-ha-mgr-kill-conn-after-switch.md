@@ -11,20 +11,21 @@
 
 - 启用 `greatdb_ha` 插件
 
-修改 **my.cnf**，添加下面两行
+修改 **my.cnf**，在 *[mysqld]* 区间添加下面内容
 
-```
+```ini
+[mysqld]
 plugin_load_add = greatdb_ha.so
 
 #MGR切主后断开旧Priamry节点上的所有应用连接
 loose-greatdb_ha_mgr_exit_primary_kill_connection_mode = 1
 ```
 
-或者在GreatSQL启动后，手动启用
+或者在 GreatSQL 启动后，手动执行下面的 SQL 命令启用
 
-```
-greatsql> INSTALL PLUGIN greatdb_ha SONAME 'greatdb_ha.so';
-greatsql> SET GLOBAL greatdb_ha_mgr_exit_primary_kill_connection_mode = 1;
+```sql
+INSTALL PLUGIN greatdb_ha SONAME 'greatdb_ha.so';
+SET GLOBAL greatdb_ha_mgr_exit_primary_kill_connection_mode = 1;
 ```
 
 ## 其他
@@ -32,10 +33,6 @@ greatsql> SET GLOBAL greatdb_ha_mgr_exit_primary_kill_connection_mode = 1;
 在MGR中，当Primary节点因故障处于少数派时，该节点此时不能提供写服务，但是可以提供读服务。如果此时也想让该节点断开所有应用连接，还需设置 `group_replication_unreachable_majority_timeout` 不为0。在等待 `group_replication_unreachable_majority_timeout` 时间后，旧Primary节点会主动退出MGR集群，从而触发Primary切换这个动作，也就会自动断开所有应用连接。
 
 如果想确保旧Primary节点退出后其他多数派节点才能选出新Primary节点，可以设置 `group_replication_unreachable_majority_timeout` < `group_replication_member_expel_timeout`，这样可以确保处于少数派的旧Primary完全退出后，多数派才会重新选出新Primary节点。
-
-
-
-
 
 
 **扫码关注微信公众号**

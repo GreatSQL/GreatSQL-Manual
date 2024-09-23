@@ -28,14 +28,14 @@
 
   可以在运行时通过命令动态修改这个参数，无需重启服务。例如，要限制速度为 100KB/s，执行下面命令：
 ```sql
-greatsql> SET GLOBAL rpl_read_binlog_speed_limit = 100;
+SET GLOBAL rpl_read_binlog_speed_limit = 100;
 ```
 
 - 配置文件设置
 
   若要使该设置持久化生效，可以在配置文件中添加或修改以下内容：
 
-  ```
+  ```ini
   [mysqld]
   rpl_read_binlog_speed_limit = 100
   ```

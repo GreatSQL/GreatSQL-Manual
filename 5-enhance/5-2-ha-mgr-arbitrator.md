@@ -13,7 +13,7 @@ GreatSQL中新增仲裁节点（投票节点）角色，使得可以用更低的
 `group_replication_arbitrator = true`
 
 当集群中只剩下 Arbitrator 节点时，则会自动退出。
-```
+```sql
 greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+----------------------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST  | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION | MEMBER_COMMUNICATION_STACK |
@@ -28,13 +28,16 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 ## 仲裁节点产生的系统负载很低
 
 对一个包含仲裁节点的 MGR 集群执行 [sysbench 性能压测](../10-optimize/3-1-benchmark-sysbench.md)，观察压测期间各节点负载数据，先看 **Primary** 节点：
-```
+```bash
 $ top
+
 ...
   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
 20198 mysql     20   0   11.9g   3.4g  23440 S 207.6 21.6  21:33.48 mysqld
 
 $ vmstat -S m 1
+
+...
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  1  3      0   5637    152   6385    0    0     0 56311 53024 53892 36 17 43  3  0
@@ -47,13 +50,16 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 ```
 
 在其中一个 **Secondary** 节点上：
-```
+```bash
 $ top
+
 ...
   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
 26824 mysql     20   0   11.6g   3.0g  22880 S 175.7 19.4  19:27.34 mysqld
 
 $ vmstat -S m 1
+
+...
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  2  0      0   2089    128  10757    0    0     0 53671 31463 46803 30 11 55  4  0
@@ -67,13 +73,16 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 ```
 
 在 **Arbitrator** 节点上：
-```
+```bash
 $ top
+
 ...
   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
 16997 mysql     20   0   11.2g   2.5g  22184 S  29.6 16.4   3:47.84 mysqld
 
 $ vmstat -S m 1
+
+...
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  1  0      0   6145    141   7095    0    0     0    44 17767 16010  4  4 93  0  0
@@ -84,10 +93,11 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 ```
 可以看到负载明显小了很多，这就可以在一个服务器上跑多个仲裁节点角色。
 
-## 注意事项
+::: warning 注意事项
 
 1. 在有仲裁节点的情况下，将单主切换成多主模式时，需要把投票节点先关闭再进行切换，否则可能会导致切换失败，并且仲裁节点报错退出MGR。
 2. 仲裁节点在 GreatSQL 中才支持，MySQL 社区版不支持，因此也无法采用 MySQL Shell 社区版管理包含仲裁节点的 MGR 集群，需要改用 [GreatSQL Shell](../8-mgr/3-mgr-maintain-admin.md) 进行管理。
+:::
 
 
 

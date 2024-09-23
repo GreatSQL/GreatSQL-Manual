@@ -251,7 +251,7 @@ greatsql> SELECT gen_rnd_ssn();
 
 先创建一个`cn_cities.txt`词典，并加载到数据库中
 
-```sql
+```bash
 $ cat cn_cities.txt 
 Beijing
 Shanghai
@@ -285,7 +285,7 @@ greatsql> SELECT gen_dictionary_drop('testdict');
 
 创建另一个`fruit`词典并载入
 
-```sql
+```bash
 $ cat fruit.txt          
 apple
 watermelon
@@ -312,7 +312,7 @@ greatsql> SELECT gen_blacklist('apple','fruit','testdict');
 +-------------------------------------------+
 1 row in set (0.00 sec)
 
-# 如果这个str在第一个词典中没有，则会直接输出这个srt
+-- 如果这个str在第一个词典中没有，则会直接输出这个srt
 greatsql> SELECT gen_blacklist('apples','fruit','testdict');
 +--------------------------------------------+
 | gen_blacklist('apples','fruit','testdict') |
@@ -333,7 +333,7 @@ greatsql> SELECT gen_dictionary('testdict') AS City;
 +---------+
 1 row in set (0.00 sec)
 
-# 还可以配合 ELT() 函数从多个字典中随机抽取
+-- 还可以配合 ELT() 函数从多个字典中随机抽取
 greatsql> SELECT gen_dictionary(ELT(gen_range(1,3), 'fruit', 'testdict'));
 +----------------------------------------------------------+
 | gen_dictionary(ELT(gen_range(1,3), 'fruit', 'testdict')) |
@@ -359,7 +359,7 @@ greatsql> SELECT gen_dictionary(ELT(gen_range(1,3), 'fruit', 'testdict'));
 
 开始使用前，需要先导入 `sys_masking.sql` SQL 脚本文件以完成相关配置
 ```sql
-greatsql> SOURCE %basedir%/share/sys_masking.sql;
+SOURCE %basedir%/share/sys_masking.sql;
 ```
 其中，"%basedir%" 表示 GreatSQL 的安装目录。
 
@@ -384,7 +384,7 @@ sys_masking.drop_label_by_name | 根据标签名称删除脱敏标签
 - 1. 将想要脱敏的数据对象设置标签
 
 ```sql
-greatsql> CALL sys_masking.create_label('greatsql', 't1', 'c3', 'mask_greatsql_t1_c3');
+CALL sys_masking.create_label('greatsql', 't1', 'c3', 'mask_greatsql_t1_c3');
 ```
 
 调用 `sys_masking.create_label()` 函数为 `greatsql.t1.c3` 这个列（`greatsql.t1` 表中的 `c3` 列）加上 "mask_greatsql_t1_c3" 标签。
@@ -392,7 +392,7 @@ greatsql> CALL sys_masking.create_label('greatsql', 't1', 'c3', 'mask_greatsql_t
 - 2. 创建一个脱敏策略
 
 ```sql
-greatsql> CALL sys_masking.create_policy('policy1', 'maskall', '*' );
+CALL sys_masking.create_policy('policy1', 'maskall', '*' );
 ```
 
 调用 `sys_masking.create_policy()` 函数新建一个名为 "policy1" 的策略, 该策略的行为是调用 `maskall()` 函数将所有数据替换成字符 "*"。
@@ -400,7 +400,7 @@ greatsql> CALL sys_masking.create_policy('policy1', 'maskall', '*' );
 - 3. 对脱敏策略添加指定标签，使之生效
 
 ```sql
-greatsql> CALL sys_masking.policy_add_label('policy1', 'mask_greatsql_t1_c3');
+CALL sys_masking.policy_add_label('policy1', 'mask_greatsql_t1_c3');
 ```
 
 调用 `sys_masking.policy_add_label()` 函数对策略 "policy1" 添加指定标签 "mask_greatsql_t1_c3"，使得该标签下的所有数据对象在查询返回结果时都会被脱敏，例如：
@@ -414,12 +414,14 @@ greatsql> SELECT c1, c2, c3 FROM greatsql.t1 LIMIT 1;
 +----+--------+-------------------+--------------------+
 ```
 
-> 此时需要改成用普通用户连入查询，该脱敏规则默认对具有管理权限的账户不生效
+::: tip 小贴士
+此时需要改成用普通用户连入查询，该脱敏规则默认对具有管理权限的账户不生效。
+:::
 
 - 4. 单独将授权账户 "user2@%" 设置为对脱敏策略 "policy1" 不生效，也就是对 "user2@%" 账户的查询请求不启用脱敏策略，例如：
 
 ```sql
-greatsql> CALL sys_masking.policy_add_user('policy1', 'user2@%');
+CALL sys_masking.policy_add_user('policy1', 'user2@%');
 ```
 
 ```sql
@@ -598,7 +600,7 @@ sys_masking.create_label('db_name', 'table_name', 'field_name', 'label_name');
 如下例所示，对数据对象 `greatsql.t1.c1`（库.表.列）创建标签 "label1"：
 
 ```sql
-greatsql> CALL sys_masking.create_label('greatsql', 't1', 'c3', 'label1') ;
+CALL sys_masking.create_label('greatsql', 't1', 'c3', 'label1') ;
 ```
 
 - 2. 创建脱敏策略 
@@ -620,13 +622,13 @@ sys_masking.create_policy('policy_name', 'mask_function', 'args')
 如下例所示，创建名为 "policy1" 的策略，该策略的行为是调用 `mask_inside()` 函数将查询结果中的 0-5 个字符内容替换成 "#"：
 
 ```sql
-greatsql> CALL sys_masking.create_policy('policy1', 'mask_inside', '0,5,#') ;
+CALL sys_masking.create_policy('policy1', 'mask_inside', '0,5,#') ;
 ```
 
 或者如下例所示，创建名为 "policy1" 的策略，该策略的行为是调用 `maskall()` 函数将所有数据替换成字符 "*"：
 
 ```sql
-greatsql> CALL sys_masking.create_policy('policy1', 'maskall', '*') ;
+CALL sys_masking.create_policy('policy1', 'maskall', '*') ;
 ```
 
 - 3. 将脱敏策略应用于指定标签
@@ -644,7 +646,7 @@ sys_masking.policy_add_label('policy_name', 'label_name')
 如下例所示，将策略 "policy1" 应用于标签 "label1"：
 
 ```sql
-greatsql> CALL sys_masking.policy_add_label('policy1', 'label1') 
+CALL sys_masking.policy_add_label('policy1', 'label1') 
 ```
 
 - 4. 添加排除策略的特殊账户（可选操作，非必须）
@@ -663,7 +665,7 @@ sys_masking.policy_add_user('policy_name', 'user_name')
 如下例所示，将策略 "policy1" 对账户 "user2@%" 添加排除规则。
 
 ```sql
-greatsql> CALL sys_masking.policy_add_user('policy1', 'user2@%');
+CALL sys_masking.policy_add_user('policy1', 'user2@%');
 ```
 
 - 5. 启用/禁用脱敏策略
@@ -678,14 +680,14 @@ sys_masking.policy_enable('policy_name', policy_enabled)
 - policy_name，策略名，不区分大小写，不能为空，且必须大于等于3个字符长度；策略名参数必须加上引号，否则会报错。
 - policy_enabled，策略启用与否开关，默认为 "1"，表示启用策略；如果设置为 "0"，则表示禁用策略。
 
-如下例所示，修改策略 "policy1" 状态为启用/禁用：
+如下例所示，执行 SQL 命令修改策略 "policy1" 状态为启用/禁用：
 
 ```sql
 -- 启用策略
-greatsql> CALL sys_masking.policy_enable('policy1', 1);
+CALL sys_masking.policy_enable('policy1', 1);
 
 -- 禁用策略
-greatsql> CALL sys_masking.policy_enable('policy1', 0);
+CALL sys_masking.policy_enable('policy1', 0);
 ```
 
 - 6. 删除策略
@@ -702,7 +704,7 @@ sys_masking.drop_policy('policy_name')
 如下例所示，删除策略 "policy1"：
 
 ```sql
-greatsql> CALL sys_masking.drop_policy('policy1');
+CALL sys_masking.drop_policy('policy1');
 ```
 
 - 7. 删除策略与标签的对应关系
@@ -721,7 +723,7 @@ sys_masking.policy_delete_label('policy_name', 'label_name')
 如下例所示，删除策略 "policy1" 与标签 "label1" 的关系：
 
 ```sql
-greatsql> CALL sys_masking.policy_delete_label('policy1', 'label1');
+CALL sys_masking.policy_delete_label('policy1', 'label1');
 ```
 
 - 8. 删除策略排除的特殊用户
@@ -741,7 +743,7 @@ sys_masking.policy_delete_user('policy_name', 'user_name')
 
 ```sql
 -- 删除策略排除的特殊用户
-greatsql> CALL sys_masking.policy_delete_user('policy1', 'user2@%');
+CALL sys_masking.policy_delete_user('policy1', 'user2@%');
 ```
 
 - 9. 指定名称方式删除标签
@@ -758,7 +760,7 @@ sys_masking.drop_label_by_name(label)
 如下例所示，删除标签 "label1"：
 
 ```sql
-greatsql> CALL sys_masking.drop_label_by_name('label1');
+CALL sys_masking.drop_label_by_name('label1');
 ```
 
 - 10. 指定 ID 方式删除标签
@@ -887,7 +889,7 @@ create_time| 创建时间
 脱敏策略需要在 `enable_data_masking` 全局变量设置为 "ON" 的情况下才会生效：
 
 ```sql
-greatsql> SET GLOBAL enable_data_masking = ON;
+SET GLOBAL enable_data_masking = ON;
 ```
 
 如果管理员手动修改了 `sys_masking` 元数据库中的数据，可能会导致策略应用错误，在执行 `FLUSH PRIVILEGES` 时也会引发报错，在错误日志中会有详细记录。
@@ -899,7 +901,7 @@ greatsql> SET GLOBAL enable_data_masking = ON;
 执行 `sys_masking.sql` 脚本初始化 `sys_masking` 元数据库并启用基于策略的脱敏功能：
 
 ```sql
-greatsql> SOURCE %basedir%/share/sys_masking.sql;
+SOURCE %basedir%/share/sys_masking.sql;
 ```
 其中，"%basedir%" 表示 GreatSQL 的安装目录。
 
@@ -912,10 +914,10 @@ greatsql> SOURCE %basedir%/share/sys_masking.sql;
 执行下面的命令卸载禁用基于策略的脱敏功能：
 
 ```sql
-greatsql> SET GLOBAL enable_data_masking = OFF;
-greatsql> DROP DATABASE sys_masking;
-greatsql> DROP TABLESPACE gdb_sys_masking;
-greatsql> FLUSH PRIVILEGES;
+SET GLOBAL enable_data_masking = OFF;
+DROP DATABASE sys_masking;
+DROP TABLESPACE gdb_sys_masking;
+FLUSH PRIVILEGES;
 ```
 
 推荐相关阅读：[MySQL企业版之数据脱敏功能](https://mp.weixin.qq.com/s/74pUYuPRUp-BkvjI0ysoCg)。

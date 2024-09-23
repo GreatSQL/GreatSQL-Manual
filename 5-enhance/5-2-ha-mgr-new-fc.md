@@ -19,13 +19,16 @@
 
 该选项默认为60秒，可在线动态修改，例如：
 ```sql
-greatsql> SET GLOBAL group_replication_flow_control_replay_lag_behind = 60;
+SET GLOBAL group_replication_flow_control_replay_lag_behind = 60;
 ```
 正常情况下，该参数无需调整。
 
-**提示**：
-1. 在GreatSQL中，启用新的流控机制后（`group_replication_flow_control_mode=QUOTA`），只有 `group_replication_flow_control_replay_lag_behind` 参数有作用。原先关于流控的几个选项 `group_replication_flow_control*` 等都不再起作用，但仍然查看和修改。
-2. Percona 8.0.30中对选项 `group_replication_flow_control_mode` 新增可选值 `MAJORITY`，在GreatSQL中也不起作用。
+::: tip 小贴士
+
+1. 在GreatSQL中，启用新的流控机制后（`group_replication_flow_control_mode=QUOTA`），只有 `group_replication_flow_control_replay_lag_behind` 参数有作用。原先关于流控的几个选项 `group_replication_flow_control*` 等都不再起作用，但仍然可以查看和修改。
+
+2. 在 Percona 8.0.30 中对选项 `group_replication_flow_control_mode` 新增可选值 `MAJORITY`，在GreatSQL中也不起作用。
+:::
 
 
 在GreatSQL的global status中，还新增了两个状态参数：

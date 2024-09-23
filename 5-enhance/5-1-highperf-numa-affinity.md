@@ -20,8 +20,10 @@ NUMA(Non Uniform Memory Access)即非一致内存访问架构。
 
 想要判断服务器设备的 NUMA 状态，可以通过命令 `numactl --hardware` 来获取信息，Linux 系统通常都是支持的：
 
-```shell
+```bash
 $ numactl --hardware
+
+...
 available: 1 nodes (0)
 node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175
 node 0 size: 370088 MB
@@ -33,8 +35,10 @@ node   0
 
 上述结果中看到只有 1 个节点，说明该服务器当前把 NUMA 给关闭了，换一个服务器查看：
 
-```shell
+```bash
 $ numactl --hardware
+
+...
 available: 4 nodes (0-3)
 node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
 node 0 size: 130059 MB
@@ -89,8 +93,8 @@ node   0   1   2   3
 
 想要启用 NUMA 亲和性支持，需要依赖操作系统层的 libnuma 库。需要先安装以下依赖包：
 
-```shell
-$ yum install -y numactl numactl-devel numactl-libs
+```bash
+yum install -y numactl numactl-devel numactl-libs
 ```
 
 默认地，GreatSQL 二进制包或 RPM 包都已支持 NUMA 亲和调度优化特性。如果需要用 GreatSQL 源码包编译二进制文件，那么在编译时要加上 `-DWITH_NUMA=ON` 参数，就可以启用 NUMA 亲和调度优化支持。
@@ -231,6 +235,8 @@ $ yum install -y numactl numactl-devel numactl-libs
 
 ```shell
 $ numactl --hardware
+
+...
 available: 4 nodes (0-3)
 node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
 node 0 size: 130059 MB
@@ -252,9 +258,10 @@ node   0   1   2   3
   3:  33  32  16  10
 ```
 
-下面是一个设置参考：
+下面是一个 *my.cnf* 配置文件设置参考模板：
 
-```
+```ini
+[mysqld]
 sched_affinity_numa_aware = ON
 sched_affinity_foreground_thread = 0-31,32-63,64-95
 sched_affinity_log_writer = 96-100
@@ -312,8 +319,10 @@ sched_affinity_purge_coordinator = 121-124
 
 测试机：
 
-```shell
+```bash
 $ cat /etc/os-release
+
+...
 cat /etc/os-release
 NAME="CentOS Linux"
 VERSION="8"
@@ -330,12 +339,16 @@ CENTOS_MANTISBT_PROJECT="CentOS-8"
 CENTOS_MANTISBT_PROJECT_VERSION="8"
 
 $ free -ht
+
+...
               total        used        free      shared  buff/cache   available
 Mem:          382Gi       8.4Gi       365Gi        93Mi       9.0Gi       340Gi
 Swap:         4.0Gi          0B       4.0Gi
 Total:        386Gi       8.4Gi       369Gi
 
 $ lscpu
+
+...
 Architecture:                    aarch64
 CPU op-mode(s):                  64-bit
 Byte Order:                      Little Endian
@@ -371,6 +384,8 @@ Vulnerability Tsx async abort:   Not affected
 Flags:                           fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma dcpop asimddp asimdfhm
 
 $ nvme list
+
+...
 Node             SN                   Model                                    Namespace Usage                      Format           FW Rev
 ---------------- -------------------- ---------------------------------------- --------- -------------------------- ---------------- --------
 /dev/nvme0n1     PHLN018200FD3P2BGN   INTEL SSDPE2KE032T8                      1           3.20  TB /   3.20  TB    512   B +  0 B   VDV10152
@@ -379,12 +394,14 @@ $ df -hT | grep ssd
 /dev/nvme0n1            xfs       3.0T  1.5T  1.5T  49% /ssd2
 
 $ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
+
+...
 20480+0 records in
 20480+0 records out
 21474836480 bytes (21 GB) copied, 8.69131 s, 2.5 GB/s
 ```
 
-GreatSQL 配置文件主要内容：
+GreatSQL 配置文件 *my.cnf* 中的主要内容：
 
 ```ini
 [mysqld]

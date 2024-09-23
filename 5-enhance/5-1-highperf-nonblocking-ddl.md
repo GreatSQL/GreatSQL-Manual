@@ -7,20 +7,20 @@
 1. 首先修改锁等待时长选项 `lock_wait_timeout`，将其设置为 100 秒。
 
 ```sql
-greatsql> SET lock_wait_timeout = 100;
+SET lock_wait_timeout = 100;
 ```
 
 2. 修改选项 `lock_ddl_polling_mode` 设置，启用该功能。
 
 ```sql
-greatsql> SET lock_ddl_polling_mode = ON;
+SET lock_ddl_polling_mode = ON;
 ```
 该选项支持在 Session 会话中单独设置，也可以修改 Global 级别设置（修改完 Global 级别设置后，不会对当前 Session 立即生效，只对新建立的 Session 生效）。
 
 3. 可根据业务特点或需要，修改选项 `lock_ddl_polling_runtime`，设置每次尝试申请 MDL-X 锁的时长。
 
 ```sql
-greatsql> SET lock_ddl_polling_runtime = 1000;
+SET lock_ddl_polling_runtime = 1000;
 ```
 
 4. 新增选项
@@ -48,8 +48,8 @@ greatsql> SET lock_ddl_polling_runtime = 1000;
 在下面的案例开始之前，已经先修改相关的两个选项，再重新建立三个连接会话：
 
 ```sql
-greatsql> SET GLOBAL lock_ddl_polling_mode = ON;
-greatsql> SET GLOBAL lock_ddl_polling_runtime = 200;
+SET GLOBAL lock_ddl_polling_mode = ON;
+SET GLOBAL lock_ddl_polling_runtime = 200;
 ```
 
 | 时间线 | Session 1 | Session 2 | Session 3 |

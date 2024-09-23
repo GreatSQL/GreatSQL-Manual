@@ -11,7 +11,7 @@ GreatSQL 支持在通信加密和 InnoDB 表空间加密时采用国密算法，
 
 铜锁/Tongsuo是一个提供现代密码学算法和安全通信协议的开源基础密码库，为存储、网络、密钥管理、隐私计算等诸多业务场景提供底层的密码学基础能力，实现数据在传输、使用、存储等过程中的私密性、完整性和可认证性，为数据生命周期中的隐私和安全提供保护能力。
 
-```
+```bash
 # 下载源码，编译安装
 $ wget https://github.com/Tongsuo-Project/Tongsuo/releases/download/8.3.2/BabaSSL-8.3.2.tar.gz
 $ tar zxf BabaSSL-8.3.2.tar.gz
@@ -35,35 +35,39 @@ TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_S
 
 ## 启用通信国密加密支持
 
-修改 my.cnf 配置文件，增加以下通信国密加密支持选项：
-```
+修改 `my.cnf` 配置文件，在 `[mysqld]` 区间中增加以下通信国密加密支持选项：
+```ini
+[mysqld]
 #enable openssl & SM
 require_secure_transport = ON
 tls_ciphersuites = "TLS_SM4_GCM_SM3:TLS_SM4_CCM_SM3"
 tls_version = 'TLSv1.3'
 ```
 
-如果是采用 systemd 启动GreatSQL，则修改服务文件：
-```
+如果是采用 systemd 启动 GreatSQL，则修改服务文件：
+```bash
 $ vim /lib/systemd/system/greatsql.service
+
 ...
 Environment=LD_LIBRARY_PATH=/usr/local/lib64
 ```
 
 如果是直接在命令行下手动方式启动GreatSQL，则确保BabaSSL已经启用的情况下，再次重启GreatSQL服务。
 
-> 再次提醒，需要下载特定 GreatSQL 二进制包才支持国密加密算法。
+::: tip 小贴士
+再次提醒，需要下载特定的 GreatSQL 二进制包才支持国密加密算法。
+:::
 
 ## 登入测试
 再次登入GreatSQL，确认国密支持已生效：
-```
-# 用tcp协议登入，确认国密算法生效
-$ mysql -hxx -uxx -pxx --protocol=tcp -P3306
-greatsql> \s
+```sql
+-- 用tcp协议登入，确认国密算法生效
+-- mysql -hxx -uxx -pxx --protocol=tcp -P3306
+greatsql> status;
 ...
 SSL:                    Cipher in use is TLS_SM4_GCM_SM3
 
-# 确认相关配置选项正确性
+-- 确认相关配置选项正确性
 greatsql> SELECT * FROM performance_schema.global_variables WHERE variable_name IN ('require_secure_transport', 'tls_ciphersuites', 'tls_version');
 +--------------------------+---------------------------------+
 | VARIABLE_NAME            | VARIABLE_VALUE                  |
@@ -78,25 +82,27 @@ greatsql> SELECT * FROM performance_schema.global_variables WHERE variable_name 
 在开始对数据库对象设置加密之前，要先生成一份master keyring file。
 
 新建一个专用于存储GreatSQL master keyring file 的目录（注意：不能放在 datadir 目录下），并修改相应的属主及权限模式：
-```
+```bash
 # datadir是 /data/GreatSQL，要区分开
-$ mkdir /opt/GreatSQL/keyring
-$ chown -R mysql:mysql /opt/GreatSQL/keyring
-$ chmod -R 750 /opt/GreatSQL/keyring
+mkdir /opt/GreatSQL/keyring
+chown -R mysql:mysql /opt/GreatSQL/keyring
+chmod -R 750 /opt/GreatSQL/keyring
 ```
 
-修改 my.cnf，配置相关选项：
-```
+修改 `my.cnf` 配置文件，在 `[mysqld]` 区间配置相关选项：
+```ini
+[mysqld]
 loose-plugin-load=keyring_file.so
 keyring_file_data=/opt/GreatSQL/keyring/master_keyring
 ```
 
 也可以在线执行下面的命令启用keyring_file plugin：
+```sql
+INSTALL PLUGIN keyring_file soname 'keyring_file.so';
 ```
-greatsql> INSTALL PLUGIN keyring_file soname 'keyring_file.so';
-```
+
 重启GreatSQL，确认这个plugin已启用，并且相关选项也是生效的：
-```
+```sql
 greatsql> SELECT * FROM information_schema.PLUGINS WHERE plugin_name = 'keyring_file'\G
 *************************** 1. row ***************************
            PLUGIN_NAME: keyring_file
@@ -118,8 +124,9 @@ greatsql> SELECT * FROM performance_schema.global_variables WHERE variable_name 
 | keyring_file_data | /opt/GreatSQL/keyring/master_keyring |
 +-------------------+--------------------------------------+
 ```
+
 刚初始化时的master key还是个空文件，需要重新生成一份：
-```
+```sql
 greatsql> system ls -la /opt/GreatSQL/keyring/master_keyring
 -rw-r----- 1 mysql mysql 0 Apr 21 16:35 /opt/GreatSQL/keyring/master_keyring
 
@@ -131,7 +138,7 @@ greatsql> system ls -la /opt/GreatSQL/keyring/master_keyring
 ```
 
 接下来就可以对多种数据库对象（库、表、表空间）设置是否加密。
-```
+```sql
 -- 设置该库下新建的表默认加密
 greatsql> ALTER DATABASE test encryption = 'Y';
 
@@ -150,14 +157,15 @@ Create Table: CREATE TABLE `t1` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ENCRYPTION='Y'
 
-greatsql> ALTER TABLE t1 ENCRYPTION='N';  -- 取消加密
+-- 取消加密
+greatsql> ALTER TABLE t1 ENCRYPTION='N';
 ```
 **注意：** keyring文件需要做好备份，万一不慎被删除、修改或移走，都会导致被加密的数据库对象无法被正确读取，这时就可以将备份文件恢复回去。
 
 ## 查看元数据
 可以在 `performance_schema` 和 `information_schema` 中查看加密相关元数据信息：
 
-```
+```sql
 -- 查看当前的master key
 greatsql> SELECT * FROM performance_schema.keyring_keys;
 +--------------------------------------------------+-----------+----------------+

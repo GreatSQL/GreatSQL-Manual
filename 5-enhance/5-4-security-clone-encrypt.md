@@ -4,16 +4,17 @@
 从 GreatSQL 8.0.32-25 起支持在执行 Clone 备份时加密备份文件，以及对加密后的备份文件解密。
 
 ## CLONE备份加密
-在执行 Clone 前，先设置选项 `clone_encrypt_key_path` 开启加密功能。
+在执行 Clone 前，执行下面的 SQL 命令先设置选项 `clone_encrypt_key_path` 以开启加密功能。
 
 ```sql
-greatsql> set global clone_encrypt_key_path = 'PATH/mysql_encrypt_key'
+SET GLOBAL clone_encrypt_key_path = 'PATH/mysql_encrypt_key'
 ```
 
 其中，`mysql_encrypt_key` 密钥文件的内容类似下面这样：
 
-```shell
+```bash
 $ cat mysql_encrypt_key
+
 aes-128-cbc
 Jmfyvubtms66kIcHwHco8XeOYPA6GiQb86U
 1234567890123456
@@ -29,40 +30,42 @@ Jmfyvubtms66kIcHwHco8XeOYPA6GiQb86U
 想要执行CLONE备份，需要先给运行的用户至少授予 `BACKUP_ADMIN` 权限，例如：
 
 ```sql
-greatsql> CREATE USER bkuser IDENTIFIED BY 'bkuser';
-greatsql> GRANT SELECT, BACKUP_ADMIN ON *.* TO bkuser;
+CREATE USER bkuser IDENTIFIED BY 'bkuser';
+GRANT SELECT, BACKUP_ADMIN ON *.* TO bkuser;
 ```
 
 如果要备份远程实例，还需要先设置好选项 `clone_valid_donor_list`（如果是将本地实例CLONE备份到本地存储中则不需要设置），例如：
 
 ```sql
-greatsql> SET GLOBAL clone_valid_donor_list = '172.17.140.10:3306';
+SET GLOBAL clone_valid_donor_list = '172.17.140.10:3306';
 ```
 
 再设置密钥文件路径（要确保GreatSQL数据库进程有权限访问这个密钥文件）：
 
 ```sql
-greatsql> SET GLOBAL clone_encrypt_key_path = '/data/backup/mysql_encrypt_key';
+SET GLOBAL clone_encrypt_key_path = '/data/backup/mysql_encrypt_key';
 ```
 
 接下来就可以执行CLONE备份了，例如：
 
 ```sql
 -- 将本地实例备份到本地存储中
-greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/20230515';
+CLONE LOCAL DATA DIRECTORY = '/data/backup/20230515';
 
 -- 或者将远程实例备份到本地存储中
-greatsql> CLONE INSTANCE FROM bkuser@172.17.140.10:3306 IDENTIFIED BY 'bkuser' DATA DIRECTORY = '/data/backup/20230515';
+CLONE INSTANCE FROM bkuser@172.17.140.10:3306 IDENTIFIED BY 'bkuser' DATA DIRECTORY = '/data/backup/20230515';
 ```
 
 查看加密备份文件：
 
-```shell
+```bash
 # 进入数据备份目录
 $ cd /data/backup/20230515
 
 # 查看备份文件
 $ ls -a
+
+...
  .   '#clone'    ib_buffer_pool.xbcrypt  '#innodb_redo'   mysql.ibd.xbcrypt   sys_audit.ibd.xbcrypt   test               undo_002.xbcrypt
  ..   greatsql   ibdata1.xbcrypt          mysql           sys                 sys_mac.ibd.xbcrypt     undo_001.xbcrypt
 ```
@@ -79,10 +82,9 @@ $ ls -a
 
 ### 解密整个数据备份目录
 
-把解密工作封装在小脚本中：
+把解密工作封装在脚本文件 `/data/backup/clone_decrypt_files.sh` 中：
 
-```shell
-$ cat /data/backup/clone_decrypt_files.sh
+```ini
 # 调用 mysqldecrypt 工具解密整个目录
 #!/bin/sh
 export PATH=$PATH:/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin
@@ -103,9 +105,9 @@ mysqldecrypt --clone-decrypt \
 
 有时候，只需要恢复单个表，而不需要恢复整个数据库，`mysqldecrypt` 支持只解密指定文件，可以满足这种需求。
 
-同样地，把解密工作封装在小脚本中：
-```shell
-$ cat /data/backup/clone_decrypt_dir.sh
+同样地，把解密工作封装在脚本文件 `/data/backup/clone_decrypt_dir.sh` 中：
+
+```ini
 # 调用 mysqldecrypt 工具对加密文件逐个解密
 #!/bin/sh
 export PATH=$PATH:/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin

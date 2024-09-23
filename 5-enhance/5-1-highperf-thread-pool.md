@@ -11,9 +11,9 @@ GreatSQL中引入线程池（**Thread pool**）特性，可以避免在连接数
 
 启用线程池特性后将能有效减少线程数量，从而减少上下文（**Context**）切换和锁争用。线程池特性对于OLTP场景（尤其是更耗CPU的查询请求）效果更佳。
 
-在my.cnf配置文件将设置选项 `thread_handling` 值设为 **pool-of-threads** ，并重启GreatSQL服务即可启用线程池特性：
+在 *my.cnf* 配置文件 *[mysqld]* 区间中将参数 `thread_handling` 值设为 **pool-of-threads** ，并重启GreatSQL服务即可启用线程池特性：
 
-```
+```ini
 [mysqld]
 thread_handling = "pool-of-threads"
 ```

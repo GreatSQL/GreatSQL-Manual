@@ -46,8 +46,6 @@ ERROR 1238 (HY000): Variable 'replicate_server_mode' is a read only variable
 - [基于MySQL多通道主主双向复制的机房容灾方案](https://mp.weixin.qq.com/s/1f8cTzQ_KZiBw9VeadO7KA)
 
 
-
-
 **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

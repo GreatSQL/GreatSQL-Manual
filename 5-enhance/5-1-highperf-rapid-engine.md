@@ -48,7 +48,7 @@ greatsql> SHOW ENGINES;
 ###  卸载Rapid引擎
 执行下面的SQL命令即可卸载Rapid引擎：
 ```sql
-greatsql> UNINSTALL PLUGIN rapid;
+UNINSTALL PLUGIN rapid;
 ```
 如果当前没有任何数据表加载到Rapid引擎中，则可以直接卸载成功。如果已有数据表加载到Rapid引擎中，则会有类似下面的提示：
 ```sql
@@ -65,7 +65,7 @@ greatsql> SHOW WARNINGS;
 ```
 意思是当前Rapid引擎被使用中，还不能被卸载，这是需要将相关数据表从Rapid引擎中移除：
 ```sql
-greatsql> ALTER TABLE t1 SECONDARY_ENGINE = NULL;
+ALTER TABLE t1 SECONDARY_ENGINE = NULL;
 ```
 
 等到所有数据表都从Rapid引擎中移除后，再次执行 `SHOW ENGINES` 就能看到已经不再支持Rapid引擎了。查看日志，也能看到类似下面的内容：
@@ -371,9 +371,9 @@ COMMITTED_GTID_SET: 4fb86f5b-b028-11ee-92b8-d08e7908bcb1:1-335
 ```
 如上所示，当前的增量导入任务正在运行中，任务开始的GTID位置是：`xxx:1-331`，当前最新GTID是：`xxx:1-335`，当前增量任务进度的GTID是：`xxx:335`，对应的binlog file & position分别是 **binlog.000002** 和 **3589965**。
 
-也可以在启动增量导入任务时，指定初始的GTID位置，例如：
+也可以在启动增量导入任务时，指定初始的GTID位置，例如执行下面的 SQL 命令：
 ```sql
-greatsql> SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK('tpch1g', 't1', '4fb86f5b-b028-11ee-92b8-d08e7908bcb1:1-335');
+SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK('tpch1g', 't1', '4fb86f5b-b028-11ee-92b8-d08e7908bcb1:1-335');
 ```
 增量导入任务会跳过GTID值为 1-335 区间的事务，从下一个事务开始继续增量导入。当binlog被意外清除时，默认方式（不带GTID参数）启动的增量导入任务可能会失败，这时就可以先停止增量导入任务，对该表执行一次全量导入，在全量导入完成后再次启动增量导入任务，启动任务时指定GTID参数即可。
 
@@ -663,20 +663,24 @@ greatsql> SELECT ...
 ERROR 3877 (HY000): Out of Memory Error: failed to pin block of size 262KB (234.2MB/134.2MB used)
 ```
 在该SQL查询请求执行期间，还会产生较大临时文件，例如：
-```
+```bash
 $ ls -lh duckdb.data.tmp/
+
+...
 -rw-r-----. 1 mysql mysql 277M Jan 30 02:38 duckdb_temp_storage-0.tmp
 ```
 
 或者，当有个表需要一次性全量导入加载到Rapid引擎中时，也可能会产生较大的临时文件，例如：
 ```sql
 -- 本例中，lineitem表大小1.4GB，有600万行数据
-greatsql> ALTER TABLE lineitem SECONDARY_LOAD;
+ALTER TABLE lineitem SECONDARY_LOAD;
 ```
 
 在另一个终端观察临时文件大小：
-```
+```bash
 $ ls -lh duckdb.data.tmp/
+
+...
 -rw-r-----. 1 mysql mysql 860M Jan 30 02:47 duckdb_temp_storage-0.tmp
 ```
 这种情况下，需要适当调大 `rapid_memory_limit` 的值。
@@ -697,10 +701,10 @@ $ ls -lh duckdb.data.tmp/
 用户数据表的统计信息和索引统计信息，暂不支持Rapid引擎视图查看，只能查看主引擎相关视图：
 ```sql
 -- 查看表统计信息
-greatsql> SHOW TABLE STATUS LIKE 't1';
+SHOW TABLE STATUS LIKE 't1';
 
 -- 查看索引统计信息
-greatsql> SHOW INDEX FROM t1;
+SHOW INDEX FROM t1;
 ```
 
 ###  执行计划

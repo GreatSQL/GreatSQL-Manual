@@ -32,7 +32,7 @@ GreatSQL对Oracle的兼容主要通过以下三种不同方案来实现：
 
 示例：
 
-```
+```sql
 greatsql> CREATE TABLE t1(
 id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 c1 CLOB NOT NULL DEFAULT '', 
@@ -203,7 +203,7 @@ GreatSQL支持Oracle风格的存储程序使用方式，部分存储程序部分
 
 - Oracle环境下的存储程序用法:
 
-```
+```sql
 CREATE OR REPLACE EDITIONABLE FUNCTION f0(delta INT DEFAULT 0) RETURN TIMESTAMP AS
     cnt INT := 10;
 BEGIN
@@ -216,7 +216,7 @@ SELECT f0() FROM DUAL ;
 
 - GreatSQL **原生模式**下的存储程序用法:
 
-```
+```sql
 CREATE OR REPLACE FUNCTION f1(delta INT) RETURNS TIMESTAMP
 BEGIN
     DECLARE cnt INT DEFAULT 10;
@@ -229,7 +229,7 @@ SELECT f0(2) FROM DUAL ;
 
 - GreatSQL **兼容模式** 下存储程序用法:
 
-```
+```sql
 SET sql_mode = ORACLE;
 
 CREATE OR REPLACE FUNCTION f0(delta INT DEFAULT 0) RETURN TIMESTAMP AS
