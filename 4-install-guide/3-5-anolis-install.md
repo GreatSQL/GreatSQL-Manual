@@ -6,10 +6,10 @@
 
 环境介绍
 
-```Bash
+```bash
 $ cat /etc/anolis-release
 Anolis OS release 8.8
-----
+
 $ getconf GNU_LIBC_VERSION
 glibc 2.28
 ```
@@ -21,14 +21,18 @@ glibc 2.28
 先安装wget
 
 ```bash
-$ yum install -y wget
+yum install -y wget
 ```
+::: tip 小贴士
+用 curl 下载也是可以的。
+:::
+
 查看机器的glibc版本，以选择正确的安装包：
 ```bash
 $ ldd --version
 ldd (GNU libc) 2.28
 ```
-如果您的glibc版本为2.28或更高版本，请选择带有"glibc2.28"标识的安装包；如果您的glibc版本为2.17，请选择带有"glibc2.17"标识的安装包。
+如果您的glibc版本为2.28或更高版本，请选择带有 *glibc2.28* 标识的安装包；如果您的glibc版本为2.17，请选择带有 *glibc2.17* 标识的安装包。
 
 [点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)下载最新的安装包，下载以下二进制包就可以：
 
@@ -37,29 +41,27 @@ ldd (GNU libc) 2.28
 将下载的二进制包放到安装目录下，并解压缩：
 
 ```bash
-$ cd /usr/local
-$ curl -o GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz https://product.greatdb.com/GreatSQL-8.0.32-26/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
-$ tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+cd /usr/local
+curl -o GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz https://product.greatdb.com/GreatSQL-8.0.32-26/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
 ```
-
-**提示**：安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
 
 安装GreatSQL需要先安装其他依赖包，可执行下面命令完成： 
 
-```
-$ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
+```bash
+yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
 ```
 
 如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](./1-install-prepare.md)。
 
-选择安装`jemalloc jemalloc-devel`jemalloc并库不是必须的，用它的好处是可以优化内存管理性能等，有条件的话尽量启用。
+选择安装 *jemalloc* 并不是必须的，用它的好处是可以优化内存管理性能等，有条件的话尽量启用。
 
 ```bash
-$ yum install epel-release  -y
-$ yum install jemalloc jemalloc-devel -y
+yum install epel-release  -y
+yum install jemalloc jemalloc-devel -y
 ```
 
-进入到`GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin`目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其它信息则已经不缺必要软件包
+进入到 *GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin* 目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其它信息则已经不缺必要软件包
 
 ## 启动前准备
 
@@ -67,8 +69,7 @@ $ yum install jemalloc jemalloc-devel -y
 
 请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
-```sql
-$ vi /etc/my.cnf
+```ini
 [client]
 socket  = /data/GreatSQL/mysql.sock
 [mysql]
@@ -78,9 +79,6 @@ no-auto-rehash
 [mysqld]
 user    = mysql
 port    = 3306
-#主从复制或MGR集群中，server_id记得要不同
-#另外，实例启动时会生成 auto.cnf，里面的 server_uuid 值也要不同
-#server_uuid的值还可以自己手动指定，只要符合uuid的格式标准就可以
 server_id = 3306
 basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
 datadir = /data/GreatSQL
@@ -225,8 +223,8 @@ performance_schema_instrument = '%lock%=on'
 ###  新建mysql用户
 
 ```bash
-$ /sbin/groupadd mysql
-$ /sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
+/sbin/groupadd mysql
+/sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
 ```
 
 ###  新建 datadir
@@ -235,9 +233,9 @@ $ /sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
 
 
 ```bash
-$ mkdir -p /data/GreatSQL
-$ chown -R mysql:mysql /data/GreatSQL
-$ chmod -R 700 /data/GreatSQL
+mkdir -p /data/GreatSQL
+chown -R mysql:mysql /data/GreatSQL
+chmod -R 700 /data/GreatSQL
 ```
 
 ## 启动GreatSQL
@@ -245,21 +243,20 @@ $ chmod -R 700 /data/GreatSQL
 把GreatSQL添加进环境变量
 
 ```bash
-$ sh -c 'echo "export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:\$PATH" >> /etc/profile'
-# 刷新文件使得生效
-$ source /etc/profile
+echo 'export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
+source /etc/profile
 ```
 
 初始化GreatSQL
 
 ```bash
-$ mysqld --defaults-file=/etc/my.cnf --initialize-insecure --user=mysql
+mysqld --defaults-file=/etc/my.cnf --initialize-insecure --user=mysql
 ```
 
 启动GreatSQL
 
 ```bash
-$ mysqld --defaults-file=/etc/my.cnf&
+mysqld --defaults-file=/etc/my.cnf &
 ```
 
 因为本文示例环境在Docker中，所以不采用systemd管理GreatSQL服务，但无论是RPM、二进制包还是Ansible等何种方式安装GreatSQL，都建议采用systemd来管理GreatSQL服务。在Docker容器环境中，无需利用systemd来管理GreatSQL，直接整个容器启停即可。
@@ -273,15 +270,26 @@ $ mysqld --defaults-file=/etc/my.cnf&
 在上面进行GreatSQL初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
 
 ```bash
-$ grep -i root /data/GreatSQL/error.log
-... A temporary password is generated for root@localhost: ji!pjndiw5sJ
+grep -i root /data/GreatSQL/error.log
 ```
+
+::: details 查看运行结果
+```bash
+$ grep -i root /data/GreatSQL/error.log
+
+...
+A temporary password is generated for root@localhost: ji!pjndiw5sJ
+```
+:::
 
 复制该密码，将用于首次登入GreatSQL所需。
 
-部分GreatSQL二进制包方式安装后，有可能初始化的root密码是空的，这种情况下可以直接登入并修改成安全密码。
+```bash
+mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
+```
 
-```sql
+::: details 查看运行结果
+```bash
 $ mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 11
@@ -289,17 +297,20 @@ Server version: 8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ...
-greatsql> \s
-ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 ```
+:::
+部分GreatSQL二进制包方式安装后，有可能初始化的root密码是空的，这种情况下可以直接登入并修改成安全密码。
 
-首次登入立刻提醒该密码已过期，需要修改，执行类似下面的命令修改即可：
+首次登入立刻提醒该密码已过期，需要修改，执行 SQL 命令 `ALTER USER USER() IDENTIFIED BY` 修改即可：
 
 ```sql
+greatsql> status;
+ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
+
 greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@2022';  #<--修改密码
 Query OK, 0 rows affected (0.02 sec)
 
-greatsql> \s
+greatsql> status;
 ...
 Server version:         8.0.32-26
 ...
@@ -317,7 +328,9 @@ GreatSQL数据库安装并初始化完毕。
 
 GreatSQL Shell就可以正常使用，并继续构建MGR集群了。
 
-> 推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)
+::: tip 小贴士
+推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)。
+:::
 
 **扫码关注微信公众号**
 

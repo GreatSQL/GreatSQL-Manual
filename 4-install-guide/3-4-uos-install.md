@@ -314,10 +314,6 @@ systemctl start greatsql
 
 如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
 
-```bash
-systemctl status greatsql
-```
-
 ::: details 查看运行结果
 ```bash
 $ systemctl status greatsql
@@ -430,7 +426,7 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 部分GreatSQL二进制包方式安装后，有可能初始化的root密码是空的，这种情况下可以直接登入并修改成安全密码。
 
-首次登入立刻提醒该密码已过期，需要修改，执行类似下面的命令修改即可：
+首次登入立刻提醒该密码已过期，需要修改，执行 SQL 命令 `ALTER USER USER() IDENTIFIED BY` 修改即可：
 
 ```sql
 greatsql> status;
@@ -476,7 +472,9 @@ GreatSQL数据库安装并初始化完毕。
 
 GreatSQL Shell就可以正常使用，并继续构建MGR集群了。
 
-> 推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)
+::: tip 小贴士
+推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)。
+:::
 
 **扫码关注微信公众号**
 

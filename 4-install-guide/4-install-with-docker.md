@@ -5,35 +5,42 @@
 
 本文使用的 Docker 版本是 20.10.10
 
-```shell
+```bash
 $ docker --version
 Docker version 20.10.10, build b485636
 ```
 
 docker-compose 版本是 2.15.0
 
-```shell
+```bash
 $ docker-compose --version
 Docker Compose version v2.15.0 
 ```
 
 ##  安装Docker
 直接用yum/dnf安装Docker，非常省事
-```
-$ yum install -y docker
+```bash
+yum install -y docker
 ```
 
 之后启动 Docker 服务，并设置开机自启动
-```
-$ systemctl enable docker
-$ systemctl start docker
+```bash
+systemctl enable docker
+systemctl start docker
 ```
 
 ##  拉取GreatSQL镜像，并创建容器
 ###  拉取镜像
 拉取GreatSQL官方镜像
+```bash
+docker pull greatsql/greatsql
 ```
+
+::: details 查看运行结果
+```bash
 $ docker pull greatsql/greatsql
+
+...
 Using default tag: latest
 Trying to pull repository docker.io/greatsql/greatsql ...
 latest: Pulling from docker.io/greatsql/greatsql
@@ -42,22 +49,23 @@ Digest: sha256:27255f94207ceec4302d4fb6f83c4b610e177f57e66347766befb69d1bae91e8
 Status: Downloaded newer image for greatsql/greatsql:latest
 docker.io/greatsql/greatsql:latest
 ```
+:::
 
 若由于网络原因无法从 docker.io 拉取 GreatSQL 镜像的话，可以改成从阿里云 ACR 拉取，方法如下：
 
-```shell
-$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
+```bash
+docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
 ```
 
 也可以从腾讯云 TCR 拉取：
 
-```shell
-$ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql
+```bash
+docker pull ccr.ccs.tencentyun.com/greatsql/greatsql
 ```
 
 检查是否成功拉取
 
-```
+```bash
 $ docker images
 REPOSITORY                    TAG                 IMAGE ID            CREATED             SIZE
 docker.io/greatsql/greatsql   latest              a930afc72d88        8 weeks ago         923 MB
@@ -66,15 +74,16 @@ docker.io/greatsql/greatsql   latest              a930afc72d88        8 weeks ag
 ###  创建新容器
 
 之后，就可以直接创建一个新的容器了，先用常规方式
-```
-$ docker run -d --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EMPTY_PASSWORD=1 greatsql/greatsql
+```bash
+docker run -d --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EMPTY_PASSWORD=1 greatsql/greatsql
 ```
 
 容器的命名和容器内主机名均为greatsql。
 
 确认容器状态：
-```
+```bash
 $ docker ps -a | grep greatsql
+
 ...
 4f351e22cea9   greatsql/greatsql     "/docker-entrypoint.…"   About a minute ago   Up About a minute          3306/tcp, 33060-33061/tcp   greatsql
 ...
@@ -84,7 +93,7 @@ $ docker ps -a | grep greatsql
 ###  容器管理
 
 进入容器查看
-```
+```bash
 $ docker exec -it greatsql /bin/bash
 [root@greatsql /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
@@ -104,7 +113,7 @@ Threads: 2  Questions: 18  Slow queries: 0  Opens: 119  Flush tables: 3  Open ta
 手工管理Docker比较麻烦，建议采用 `docker-compose` ，它可以更方便的管理docker容器。
 
 先用yum安装docker-compose，并确认版本号
-```
+```bash
 $ yum install -y docker-compose
 
 $ docker-compose --version
@@ -112,9 +121,14 @@ docker-compose version 1.29.2, build 5becea4c
 ```
 
 编辑一个yaml文件，准备部署包含仲裁节点的三节点MGR集群：
+
+```bash
+mkdir -p /data/docker-compose
+vim /data/docker-compose/mgr-3nodes.yml
 ```
-$ mkdir -p /data/docker-compose
-$ cat /data/docker-compose/mgr-3nodes.yml
+
+::: details mgr-3nodes.yml 文件详细内容
+```ini
 version: '2'
 
 services:
@@ -179,31 +193,47 @@ networks:
       config:
         - subnet: 172.18.0.0/24
 ```
+:::
+
 关于GreatSQL容器启动选项说明，详见[GreatSQL For Docker文档](https://hub.docker.com/r/greatsql/greatsql)。
 
 如果不想要仲裁节点，则可以修改最后一个节点的属性 `MYSQL_MGR_ARBITRATOR: 0` 就行了。
 
 启动三个实例：
+
+```bash
+docker-compose -f /data/docker-compose/mgr-3nodes.yml up -d
 ```
-$ docker-compose -f /data/docker-compose/mgr-3nodes.yml up -d
+
+::: details 查看运行结果
+```
 Creating network "docker-compose_mgr_net" with the default driver
 Creating mgr2 ... done
 Creating mgr3 ... done
 Creating mgr4 ... done
 ```
+:::
 
 查看运行状态：
+```bash
+docker-compose -f /data/docker-compose/mgr-3nodes.yml ps
 ```
-$ docker-compose -f /data/docker-compose/mgr-3nodes.yml ps
+
+::: details 查看运行结果
+```
 Name             Command              State               Ports
 ----------------------------------------------------------------------------
 mgr2   /docker-entrypoint.sh mysqld   Up      3306/tcp, 33060/tcp, 33061/tcp
 mgr3   /docker-entrypoint.sh mysqld   Up      3306/tcp, 33060/tcp, 33061/tcp
 mgr4   /docker-entrypoint.sh mysqld   Up      3306/tcp, 33060/tcp, 33061/tcp
 ```
+:::
+
 容器刚创建完还需要过一小段时间才能完成GreatSQL的初始化以及MGR集群自动构建，视服务器性能不同而定，一般需要30秒至四分钟左右。
 
-进入被选为PRIMARY节点的容器mgr2，查看MGR集群状态：
+进入被选为PRIMARY节点的容器mgr2，查看MGR集群状态。
+
+::: details 查看运行结果
 ```
 $ docker exec -it mgr2 bash
 [root@mgr2 /]# mysql
@@ -232,11 +262,15 @@ Threads: 11  Questions: 52  Slow queries: 0  Opens: 145  Flush tables: 3  Open t
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
 3 rows in set (0.01 sec)
 ```
+:::
+
 可以看到，包含仲裁节点的三节点MGR集群已自动构建完毕。
 
 ##  构建MGR集群（多主模式）
 
 下面是一个docker-compose的配置文件参考 `/data/docker/mgr-multi-primary.yml`:
+
+::: details mgr-multi-primary.yml 文件详细内容
 ```
 version: '2'
 
@@ -305,18 +339,21 @@ networks:
       config:
         - subnet: 172.18.0.0/24
 ```
+:::
 
 启动所有容器:
-```
-$ docker-compse -f /data/docker/mgr-multi-primary.yml up -d
+```bash
+docker-compse -f /data/docker/mgr-multi-primary.yml up -d
 ```
 
 容器启动后，会自行进行MySQL实例的初始化并自动构建MGR集群。
 
 进入第一个容器，确认实例启动并成为MGR的Primary节点：
-```
+
+```bash
 $ docker exec -it mgr2 bash
 $ mysql
+
 ...
 [root@GreatSQL][(none)]> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+

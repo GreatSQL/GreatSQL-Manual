@@ -7,7 +7,7 @@ GreatSQL支持在单主（Single-Primary）模式下，在读写节点（以下�
 
 绑定动态VIP支持IPv4 和 IPv6。
 
-**特别提醒**：
+::: danger 特别提醒
 
 1. 动态VIP解绑以后，通过读写VIP与MGR Primary节点建立的连接会被主动kill掉，前提是需要添加配置 `bind_address="0.0.0.0"`；如果绑定某个固定IP地址，则无法实现MGR Primary节点切换后主动kill连接。该特性可参考：[MGR切主后断开应用连接](./5-2-ha-mgr-kill-conn-after-switch.md)。
 
@@ -16,35 +16,42 @@ GreatSQL支持在单主（Single-Primary）模式下，在读写节点（以下�
 3. 动态绑定VIP需要新启动一个额外通信端口，请修改防火墙规则，确保该端口不会被屏蔽。
 
 4. 只支持MGR单主模式（single-primary mode），不支持多主模式（multi-primary mode），所以要确保这两个选项设置正确值 `group_replication_single_primary_mode = ON` 以及 `group_replication_enforce_update_everywhere_checks= FALSE`。
+:::
 
 ## 启用内置VIP插件
 - 开启新插件
-```
+
+在 *my.cnf* 配置文件 *[mysqld]* 区间中，增加下面这行配置：
+```ini
+[mysqld]
 plugin_load_add=greatdb_ha.so
 ```
 
-或者在启动数据库实例后， 执行
-```
-install plugin greatdb_ha soname 'greatdb_ha.so';
+或者在启动数据库实例后，执行下面的 SQL 命令：
+```sql
+INSTALL PLUGIN greatdb_ha SONAME 'greatdb_ha.so';
 ```
 
 ## 新增配置参数
+
+在 *my.cnf* 配置文件 *[mysqld]* 区间中，增加下面的配置项。
+
 - 配置开启内置支持绑定VIP功能
-```
+```ini
 loose-greatdb_ha_enable_mgr_vip = 1
 ```
 - 配置Primary节点绑定的VIP
-```
+```ini
 loose-greatdb_ha_mgr_vip_ip = "172.17.140.250"
 ```
 
 - 配置ARP包广播重复次数。当节点绑定浮动IP以后，会广播ARP包来更新广播域内的ARP缓存，此参数是广播次数，默认是5次，合法取值范围为3-20
-```
+```ini
 loose-greatdb_ha_send_arp_packge_times = 5
 ```
 
 - 配置Secondary节点绑定的VIP，如果想绑定多个只读VIP，只需用逗号 `,` 隔开
-```
+```ini
 loose-greatdb_ha_mgr_read_vip_ips = "172.17.140.251"
 
 # 或绑定多个只读VIP
@@ -52,12 +59,12 @@ loose-greatdb_ha_mgr_read_vip_ips = "172.17.140.251"
 ```
 
 - 当只读VIP所在节点意外不可用后的处理方式，可选值为 `["TO_PRIMARY", "TO_ANOTHER_SECONDARY"]`。设置为 `TO_PRIMARY` 表示重新将只读VIP绑定到Primary节点上；设置为 `TO_ANOTHER_SECONDARY` 表示重新将只读VIP绑定到另外的Secondary节点上；默认值是 `TO_PRIMARY`，即重新绑定到Primary节点上。
-```
+```ini
 loose-greatdb_ha_mgr_read_vip_floating_type = "TO_ANOTHER_SECONDARY"
 ```
 
 - 配置动态绑定VIP服务专用通信端口，通过该端口进行通信数据传输。当MGR节点发生状态变更时，Primary节点根据预设的VIP绑定关系，按照 **变更小、平均分配** 的原则重新分配VIP绑定关系，并将VIP绑定关系通过专用通信端口发送给Secondary节点，Secondary节点根据绑定关系解绑或绑定指定VIP。
-```
+```ini
 loose-greatdb_ha_port = 33062
 ```
 
@@ -67,22 +74,22 @@ loose-greatdb_ha_port = 33062
   - 3. 不能通过此命令修改写vip的绑定关系
   - 4. 不能通过此命令添加或移除vip(即拓扑关系里面的vip只能是读、写vip中的成员)
   - 5. 不能通过此命令添加或移除成员(即拓扑关系里面的uuid只能是先有mgr集群中的uuid，不能增加也不能删除)
-```
-> SET GLOABL greatdb_ha_vip_tope = "node1_uuid1::vip1; node2_uuid2::vip2,vip3; node3_uuid3::vip4";
+```sql
+SET GLOABL greatdb_ha_vip_tope = "node1_uuid1::vip1; node2_uuid2::vip2,vip3; node3_uuid3::vip4";
 ```
 
 - 配置要绑定的网卡名，插件会将vip绑定到MGR主（Primary）节点所在机器的指定网卡上，比如配置为eth0，为了防止网卡原有的ip被覆盖，实际绑定后，会绑定在名为eth0:0的网卡上
-```
+```ini
 loose-greatdb_ha_mgr_vip_nic = 'eth0'
 ```
 
 - 配置掩码
-```
+```ini
 loose-greatdb_ha_mgr_vip_mask = '255.255.255.0'
 ```
 
 - 目前只支持在单主模式下才能启用内置vip特性，所以还需要设置下面参数：
-```
+```ini
 loose-group_replication_single_primary_mode= TRUE
 loose-group_replication_enforce_update_everywhere_checks= FALSE
 ```
@@ -93,7 +100,7 @@ loose-group_replication_enforce_update_everywhere_checks= FALSE
 - 上述参数支持在线动态修改。
 
 上述配置说明的完整示例如下（MGR组内每个实例都需要配置）：
-```
+```ini
 [mysqld]
 #GreatSQL MGR vip
 plugin-load-add=greatdb_ha.so
@@ -120,7 +127,7 @@ loose-group_replication_enforce_update_everywhere_checks=0
 配置VIP需要相关内核权限，获取相关权限有两种方式，以下三选一即可（推荐采用方法一）：
 
 1. 【推荐方法】修改systemd服务文件，增加AmbientCapabilities参数，例如：
-```
+```ini
 [Unit]
 Description=GreatSQL Server
 Documentation=man:mysqld(8)
@@ -135,8 +142,8 @@ Group=mysql
 Type=notify
 TimeoutSec=0
 PermissionsStartOnly=true
-ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
-ExecStart=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
+ExecStartPre=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
+ExecStart=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
 EnvironmentFile=-/etc/sysconfig/mysql
 LimitNOFILE = 10000
 Restart=on-failure
@@ -151,21 +158,25 @@ AmbientCapabilities=CAP_NET_ADMIN CAP_NET_RAW
 **备注**：感谢社区用户 **芬达** 提供的建议方法。
 
 2. 通过setcap命令为mysqld二进制文件添加 `CAP_NET_ADMIN` 和 `CAP_NET_RAW` 的capability。具体命令如下：
-```shell
+```bash
 #执行该命令需要sudo权限或root
-$ setcap CAP_NET_ADMIN,CAP_NET_RAW+ep /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
+setcap CAP_NET_ADMIN,CAP_NET_RAW+ep /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld
 ```
 
 然后将GreatSQL二进制包的`lib/private`子目录加载到`LD_LIBRARY_PATH`中：
-```
+```bash
 $ cat /etc/ld.so.conf.d/greatsql.conf
-/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/private
+
+...
+/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/lib/private
 ```
 
 执行 `ldconfig && ldconfig -p | grep -i libpro` 确认配置无误：
-```
+```bash
 $ ldconfig && ldconfig -p | grep -i 'libprotobuf.so'
-	libprotobuf.so.3.19.4 (libc6,x86-64) => /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/private/libprotobuf.so.3.19.4
+
+...
+	libprotobuf.so.3.19.4 (libc6,x86-64) => /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/lib/private/libprotobuf.so.3.19.4
 ```
 
 之后启动GreatSQL即可。
@@ -196,13 +207,13 @@ GreatSQL Docker 镜像不支持在 Docker 中使用 VIP 功能。原因如下：
 
 想要在 Docker 容器中使用 VIP，在创建容器时，需要先加上 `--privileged` 参数，例如：
 
-```shell
-$ docker run -itd --privileged --hostname t1 --name t1 centos:8 bash
+```bash
+docker run -itd --privileged --hostname t1 --name t1 centos:8 bash
 ```
 
 进入容器，并查看初始 IP 信息：
 
-```shell
+```bash
 [root@t1 /]# ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -218,7 +229,7 @@ $ docker run -itd --privileged --hostname t1 --name t1 centos:8 bash
 
 执行提权操作并确认：
 
-```shell
+```bash
 [root@t1 /]# setcap CAP_NET_ADMIN,CAP_NET_RAW+ep /usr/sbin/mysqld
 [root@t1 /]# chown root:root /usr/sbin/mysqld
 
@@ -253,7 +264,7 @@ report_port = 3306
 
 在已经完成 GreatSQL 数据初始化操作之后，启动 GreatSQL 服务进程（确认是以 root 身份运行）：
 
-```shell
+```bash
 [root@t1 /]# /usr/sbin/mysqld &
 
 [root@t1 /]# ps -ef | grep mysqld
@@ -286,7 +297,7 @@ root        1518       1  1 07:02 ?        00:00:23 /usr/sbin/mysqld
 
 查看 VIP 绑定状态：
 
-```shell
+```bash
 [root@t1 /]# ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -302,8 +313,10 @@ root        1518       1  1 07:02 ?        00:00:23 /usr/sbin/mysqld
 
 在外部宿主系统环境下检测 VIP 是否可连通：
 
-```shell
+```bash
 $ ping 172.17.0.40
+
+...
 PING 172.17.0.40 (172.17.0.40) 56(84) bytes of data.
 64 bytes from 172.17.0.40: icmp_seq=1 ttl=64 time=0.038 ms
 64 bytes from 172.17.0.40: icmp_seq=2 ttl=64 time=0.032 ms

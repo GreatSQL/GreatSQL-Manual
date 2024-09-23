@@ -306,6 +306,7 @@ systemctl start greatsql
 
 如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
 
+::: details 查看运行结果
 ```bash
 $ systemctl status greatsql
 
@@ -328,6 +329,7 @@ systemd[1]: Started GreatSQL Server.
 systemd[1]: greatsql.service: Main process exited, code=exited, status=1/FAILURE
 systemd[1]: greatsql.service: Failed with result 'exit-code'.
 ```
+:::
 
 只需手动创建 `/var/lib/mysql-files` 目录，再次启动GreatSQL服务即可：
 
@@ -394,7 +396,7 @@ greatsql> status;
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 ```
 
-首次登入立刻提醒该密码已过期，需要修改，执行类似下面的命令修改即可：
+首次登入立刻提醒该密码已过期，需要修改，执行 SQL 命令 `ALTER USER USER() IDENTIFIED BY` 修改即可：
 
 ```sql
 greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@2022';  #<--修改密码

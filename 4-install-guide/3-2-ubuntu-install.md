@@ -89,9 +89,6 @@ no-auto-rehash
 [mysqld]
 user    = mysql
 port    = 3306
-#主从复制或MGR集群中，server_id记得要不同
-#另外，实例启动时会生成 auto.cnf，里面的 server_uuid 值也要不同
-#server_uuid的值还可以自己手动指定，只要符合uuid的格式标准就可以
 server_id = 3306
 basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
 datadir = /data/GreatSQL
@@ -256,7 +253,7 @@ chmod -R 700 /data/GreatSQL
 把GreatSQL添加进环境变量
 
 ```bash
-sudo sh -c 'echo "export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:\$PATH" >> /etc/profile'
+echo 'export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
 source /etc/profile
 ```
 
@@ -305,7 +302,7 @@ greatsql> status;
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 ```
 
-首次登入立刻提醒该密码已过期，需要修改，执行类似下面的命令修改即可：
+首次登入立刻提醒该密码已过期，需要修改，执行 SQL 命令 `ALTER USER USER() IDENTIFIED BY` 修改即可：
 
 ```sql
 greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@2022';  #<--修改密码

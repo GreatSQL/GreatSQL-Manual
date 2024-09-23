@@ -15,10 +15,9 @@ CentOS的systemd服务配置脚本存放在 `/usr/lib/systemd/` 目录下，并�
 
 另一个服务配置文件 `/lib/systemd/system/mysqld@.service` 是用于管理单机多实例场景的，可以参考这篇文章：[单机多实例](../6-oper-guide/5-multi-instances.md)。
 
-如果是采用二进制包安装GreatSQL，需要手动编辑服务配置文件，例如：
-```
-$ vim /lib/systemd/system/greatsql.service
+如果是采用二进制包安装GreatSQL，需要手动编辑服务配置文件，内容参考如下内容：
 
+```ini
 [Unit]
 Description=GreatSQL Server
 Documentation=man:mysqld(8)
@@ -68,34 +67,39 @@ PrivateTmp=false
 务必确认文件中目录及文件名是否正确。
 
 执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
-```
-$ systemctl daemon-reload
+```bash
+systemctl daemon-reload
 ```
 
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
 
 下面分别是启动、关闭、重启GreatSQL服务操作：
-```
-$ systemctl start greatsql
-...
-$ systemctl stop greatsql
-...
-$ systemctl restart greatsql
+```bash
+systemctl start greatsql
+systemctl stop greatsql
+systemctl restart greatsql
 ```
 
-如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
+如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会发生错误，可执行 `journalctl -ex` 查看具体报错信息：
+```bash
+journalctl -ex
 ```
+
+::: details 查看运行结果
+```bash
 $ journalctl -ex
+
 ...
 mysqld_pre_systemd[1257969]: mktemp: failed to create file via template ‘/var/lib/mysql-files/install-validate-password-plugin.XXXXXX.sql’: No such file or directory
 mysqld_pre_systemd[1257969]: chmod: cannot access '': No such file or directory
 ...
 ```
+:::
 
 需手动创建 `/var/lib/mysql-files` 目录，再次启动GreatSQL服务即可：
-```
-$ mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
-$ systemctl start greatsql
+```bash
+mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
+systemctl start greatsql
 ```
 
 

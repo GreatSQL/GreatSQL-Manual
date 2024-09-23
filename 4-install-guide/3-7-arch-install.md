@@ -37,7 +37,9 @@ Arch Linux在更新内核的时候会立即删除旧内核（因为内核也是�
 
 不同于 Debian 系列的 `apt / dpkg` 和 Red Hat 系列的 `dnf（yum）/ rpm` 包管理体系，Arch Linux只用了一个工具 pacman 就解决了获取和安装两个功能。这降低了为 Arch Linux 制作软件包的门槛，这也是 AUR 几乎能涵盖整个 Linux 软件生态的主要原因。但是这也导致 pacman 不支持虚包（virtual package）。
 
-> 更多介绍前往Arch Linux社区网站：https://www.archlinuxcn.org/
+::: tip 小贴士
+更多介绍前往Arch Linux社区网站：[https://www.archlinuxcn.org](https://www.archlinuxcn.org)。
+:::
 
 ## 安装Arch Linux
 
@@ -64,7 +66,7 @@ CPU: Intel i7-8850H (12) @ 4.300GHz
 GPU: Intel CoffeeLake-H GT2 [UHD Graphics 630] 
 Memory: 239MiB / 15787MiB
 
-$ lcc -version
+$ ldd -version
 ldd (GNU libc) 2.38
 ```
 
@@ -79,16 +81,15 @@ ldd (GNU libc) 2.38
 Arch Linux系统缺少wget需要先安装wget
 
 ```bash
-$ pacman -S wget
+pacman -S wget
 ```
 
 将二进制安装包下载在`/usr/local`目录下,并解压
 
 ```bash
-$ cd /usr/local
-$ wget https://product.greatdb.com/GreatSQL-8.0.32-26/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
-# 解压
-$ tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+cd /usr/local
+wget https://product.greatdb.com/GreatSQL-8.0.32-26/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 ### 运行环境配置
@@ -112,23 +113,20 @@ libnuma.so.1 => not found
 使用pacman安装libaio和numactl
 
 ```bash
-$ pacman -S libaio
-$ pacman -S numactl
+pacman -S libaio
+pacman -S numactl
 ```
 
 最后检查下若不显示其它信息则已经不缺必要软件包
 ```bash
-$ ldd mysqld mysql | grep "not found"
+ldd mysqld mysql | grep "not found"
 ```
 
 ### 创建配置文件及新建用户与目录
 
 请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
-> 注意，若内存不够充足请调低 `innodb_buffer_pool_size`
-
-```sql
-$ vi /etc/my.cnf
+```ini
 [client]
 socket  = /data/GreatSQL/mysql.sock
 [mysql]
@@ -138,9 +136,6 @@ no-auto-rehash
 [mysqld]
 user    = mysql
 port    = 3306
-#主从复制或MGR集群中，server_id记得要不同
-#另外，实例启动时会生成 auto.cnf，里面的 server_uuid 值也要不同
-#server_uuid的值还可以自己手动指定，只要符合uuid的格式标准就可以
 server_id = 3306
 basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
 datadir = /data/GreatSQL
@@ -284,12 +279,12 @@ performance_schema_instrument = '%lock%=on'
 
 接下来新建mysql用户和新建数据库主目录，并修改权限模式及属主
 
-```sql
-$ /sbin/groupadd mysql
-$ /sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
-$ mkdir -p /data/GreatSQL
-$ chown -R mysql:mysql /data/GreatSQL
-$ chmod -R 700 /data/GreatSQL
+```bash
+/sbin/groupadd mysql
+/sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
+mkdir -p /data/GreatSQL
+chown -R mysql:mysql /data/GreatSQL
+chmod -R 700 /data/GreatSQL
 ```
 
 如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件
@@ -297,13 +292,14 @@ $ chmod -R 700 /data/GreatSQL
 所以手动创建`/var/lib/mysql-files` 目录
 
 ```bash
-$ mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
+mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
 ```
 
 ### 增加GreatSQL系统服务
 
-```bash
-$ vim /lib/systemd/system/greatsql.service
+推荐采用systemd来管理GreatSQL服务，执行 `vim /lib/systemd/system/greatsql.service` 命令，添加下面的内容：
+
+```ini
 [Unit]
 Description=GreatSQL Server
 Documentation=man:mysqld(8)
@@ -353,15 +349,23 @@ PrivateTmp=false
 把GreatSQL添加进环境变量
 
 ```bash
-$ echo 'export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
-$ source ~/.bash_profile
+echo 'export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
+source ~/.bash_profile
 ```
 
 执行下面的命令启动GreatSQL服务
 
-```sql
+```bash
+systemctl start greatsql
+systemctl status greatsql
+```
+
+::: details 查看运行结果
+```
 $ systemctl start greatsql
 $ systemctl status greatsql
+
+...
 ● greatsql.service - GreatSQL Server
      Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; preset: disabled)
      Active: active (running) since Fri 2024-07-08 10:30:29 CST; 4s ago
@@ -379,12 +383,15 @@ systemd[1]: Starting GreatSQL Server...
 (mysqld)[712708]: greatsql.service: Referenced but unset environment variable evaluates to an empty string: MYSQLD_OPTS
 systemd[1]: Started GreatSQL Server.
 ```
+:::
 
 在上面进行GreatSQL初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
 
 ```bash
 $ grep -i root /data/GreatSQL/error.log
-... A temporary password is generated for root@localhost: ji!pjndiw5sJ
+
+...
+A temporary password is generated for root@localhost: ji!pjndiw5sJ
 ```
 
 复制该密码，将用于首次登入GreatSQL所需。
@@ -397,10 +404,10 @@ Enter password:
 Server version: 8.0.32-26
 ```
 
-首次登入立刻提醒该密码已过期，需要修改，执行类似下面的命令修改即可：
+首次登入立刻提醒该密码已过期，需要修改，执行 SQL 命令 `ALTER USER USER() IDENTIFIED BY` 修改即可：
 
 ```sql
-greatsql> alter user 'root'@'localhost' identified by 'GreatSQL@2022';
+greatsql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'GreatSQL@2022';
 Query OK, 0 rows affected (0.02 sec)
 ```
 
@@ -415,9 +422,9 @@ GreatSQL数据库安装并初始化完毕
 下载相应的MySQL Shell安装包（目前只提供二进制安装包）并解压
 
 ```bash
-$ cd /usr/local
-$ wget https://product.greatdb.com/GreatSQL-8.0.32-25/greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
-$ tar xf greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
+cd /usr/local
+wget https://product.greatdb.com/GreatSQL-8.0.32-25/greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
+tar xf greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 进入bin目录查看下缺少什么依赖
@@ -433,20 +440,20 @@ $ ldd mysqlsh | grep "not found"
 安装上缺失的依赖
 
 ```sql
-$ pacman -S core/openssl-1.1
-$ pacman -S archlinuxcn/python39
+pacman -S core/openssl-1.1
+pacman -S archlinuxcn/python39
 ```
 
 因为下载的Python版本过高，所以采用软连接的方式
 
 ```
-$ ln -s /usr/lib/libpython3.9.so.1.0 /usr/lib64/libpython3.8.so.1.0
+ln -s /usr/lib/libpython3.9.so.1.0 /usr/lib64/libpython3.8.so.1.0
 ```
 
 再次检查下还有没有缺失依赖
 
 ```bash
-$ ldd mysqlsh | grep "not found"
+ldd mysqlsh | grep "not found"
 ```
 
 没有缺失依赖的话，接下来就可以体验MySQL Shell了
@@ -464,7 +471,9 @@ WARNING: Found errors loading plugins, for more details look at the log at: /roo
  MySQL  Py > 
 ```
 
-> 推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)
+::: tip 小贴士
+推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)。
+:::
 
 **扫码关注微信公众号**
 

@@ -69,9 +69,6 @@ no-auto-rehash
 [mysqld]
 user    = mysql
 port    = 3306
-#主从复制或MGR集群中，server_id记得要不同
-#另外，实例启动时会生成 auto.cnf，里面的 server_uuid 值也要不同
-#server_uuid的值还可以自己手动指定，只要符合uuid的格式标准就可以
 server_id = 3306
 basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
 datadir    = /data/GreatSQL
@@ -294,6 +291,8 @@ systemctl start greatsql
 ```
 
 如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
+
+::: details 查看运行结果
 ```bash
 $ systemctl status greatsql
 
@@ -317,6 +316,7 @@ systemd[1]: greatsql.service: Main process exited, code=exited, status=1/FAILURE
 systemd[1]: greatsql.service: Failed with result 'exit-code'.
 systemd[1]: Failed to start GreatSQL Server.
 ```
+:::
 
 只需手动创建 `/var/lib/mysql-files` 目录，再次启动GreatSQL服务即可：
 ```bash
@@ -398,7 +398,7 @@ greatsql> status;
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 ```
 
-首次登入立刻提醒该密码已过期，需要修改，执行类似下面的命令修改即可：
+首次登入立刻提醒该密码已过期，需要修改，执行 SQL 命令 `ALTER USER USER() IDENTIFIED BY` 修改即可：
 
 ```sql
 greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@2022';  #<--修改密码

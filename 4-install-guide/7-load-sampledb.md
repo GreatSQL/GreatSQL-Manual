@@ -1,4 +1,4 @@
-# 导入测试数据集
+# 导入测试数据
 ---
 
 安装完GreatSQL数据库后，如果是用于教学或测试场景，可以导入几个通用的测试数据集，主要有：
@@ -13,7 +13,8 @@
 - [https://downloads.mysql.com/docs/sakila-db.tar.gz](https://downloads.mysql.com/docs/sakila-db.tar.gz)
 
 分别下载到本地，并解压缩到 `/tmp/testdb` 目录下：
-```
+
+```bash
 $ ls -l /tmp/testdb
 
 drwxr-xr-x 2  500  500      100 Aug  1 06:06 sakila-db  #<--sakila 测试数据集
@@ -26,16 +27,18 @@ drwxr-xr-x 2  500  500       60 Aug  1 06:06 world-db   #<--world 测试数据�
 
 ##  导入测试数据集
 ###  导入employees数据集
-employees测试数据文件包中提供了导入方法说明，基本上照着做就行：
-```
-$ cd /tmp/testdb/test_db
-$ cat README.md
-...
+employees测试数据文件包中提供了导入方法说明文档 *README.md*，基本上照着做就行。
+
+在 Linux 终端命令行模式下，执行下面的命令导入测试数据（在这里，采用具有最高权限的root账户导入，所以略过创建测试账户这个环节，下同）：
+```bash
+mysql -f < employees.sql
 ```
 
-开始导入（在这里，采用具有最高权限的root账户导入，所以略过创建测试账户这个环节，下同）：
-```
+::: details 查看运行结果
+```bash
 $ mysql -f < employees.sql
+
+...
 INFO
 CREATING DATABASE STRUCTURE
 INFO
@@ -55,9 +58,15 @@ LOADING salaries
 data_load_time_diff
 00:02:28
 ```
+:::
 
-导入完成后，还可以执行校验程序，确认导入的结果无误：
+导入完成后，连接 GreatSQL 执行下面的 SQL 命令，完成数据校验，确认导入的结果无误：
+```sql
+SOURCE /tmp/testdb/test_db/test_employees_md5.sql;
 ```
+
+::: details 查看运行结果
+```sql
 greatsql> SOURCE /tmp/testdb/test_db/test_employees_md5.sql;
 +----------------------+
 | INFO                 |
@@ -111,13 +120,21 @@ greatsql> SOURCE /tmp/testdb/test_db/test_employees_md5.sql;
 | count   | OK     |
 +---------+--------+
 ```
+:::
+
 看起来验证无误。
 
 ###  导入world数据集
 执行下面的命令导入world数据集：
+```sql
+SOURCE /tmp/testdb/world-db/world.sql;
 ```
+
+::: details 查看运行结果
+```sql
 greatsql> SOURCE /tmp/testdb/world-db/world.sql;
 ...
+
 greatsql> SELECT COUNT(*) FROM city;
 +----------+
 | count(*) |
@@ -139,13 +156,22 @@ greatsql> SELECT COUNT(*) FROM countrylanguage;
 |      984 |
 +----------+
 ```
+:::
 导入完毕。
 
 ###  导入Sakila数据集
 执行下面的命令初始化Sakila测试数据库：
+
+```sql
+SOURCE /tmp/testdb/sakila-db/sakila-schema.sql;
+SOURCE /tmp/testdb/sakila-db/sakila-data.sql;
 ```
+
+::: details 查看运行结果
+```sql
 greatsql> SOURCE /tmp/testdb/sakila-db/sakila-schema.sql;
 greatsql> SOURCE /tmp/testdb/sakila-db/sakila-data.sql;
+
 greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE, ENGINE, TABLE_ROWS 
   FROM information_schema.TABLES WHERE table_schema = 'sakila';
 +--------------+----------------------------+------------+--------+------------+
@@ -176,6 +202,8 @@ greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE, ENGINE, TABLE_ROWS
 | sakila       | store                      | BASE TABLE | InnoDB |          2 |
 +--------------+----------------------------+------------+--------+------------+
 ```
+:::
+
 导入完毕。
 
 接下来就可以运行查询和测试了。
