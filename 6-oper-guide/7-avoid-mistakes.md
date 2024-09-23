@@ -28,7 +28,15 @@
 1. 不要在生产环境执行删除操作，而是改成RENAME操作，先改名，确认无误后再删除，而不是直接删除。
 1. 在数据库中设置 `sql_safe_updates=1`，尽量避免被全表更新、删除的风险。
 
-其他更多安全防范措施有待持续更新补充 ...
+万一发生误删数据或者误操作大面积更新数据，可以参考下面几种方法进行闪回或挽救：
+
+1. [MySQL数据误删除的总结](https://mp.weixin.qq.com/s/zMtgC24j7iIJ9xwbNo6AYQ)
+1. [MySQL闪回工具binlog2sql](https://mp.weixin.qq.com/s/hEE12-LeCUsC1zKH48hcag)
+1. [my2sql工具之快速入门](https://mp.weixin.qq.com/s/APgBs7MvJuxJvLwg5i7N_w)
+1. [Slave被误写入数据如何恢复到主库](https://mp.weixin.qq.com/s/yoUNEehE6eOBQ7uFqSR48A)
+1. [延迟从库加上MASTER_DELAY，主库宕机后如何快速恢复服务](https://mp.weixin.qq.com/s/qlAhbJq_ZPB5OXDd_zTQNw)
+1. [一个延迟库恢复的案例](https://mp.weixin.qq.com/s/i8cvftodUhkcejswuLSQ3w)
+1. [浅谈MySQL闪回的实现](https://mp.weixin.qq.com/s/ZuXS2UcgGS2p2x3p9mTwQg)
 
 ##  数据安全维护建议
 
