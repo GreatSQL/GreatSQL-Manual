@@ -99,14 +99,16 @@ GreatSQL 8.0相对于GreatSQL 5.7有着众多优秀新特性，包括且不仅�
 
 下载完后解压缩放在 */usr/local* 目录下。
 
-```shell
-$ tar xf /tmp/greatsql-shell-8.0.32-25-glibc2.28-x86_64.tar.xz -C /usr/local
+```bash
+tar xf /tmp/greatsql-shell-8.0.32-25-glibc2.28-x86_64.tar.xz -C /usr/local
 ```
 
 执行下面的命令运行 GreatSQL Shell 进行升级前检查：
 
-```shell
-$ /usr/local/greatsql-shell-8.0.32-25-glibc2.28-x86_64/bin/mysqlsh -- util checkForServerUpgrade --socket=/data/GreatSQL/mysql.sock --target-version=8.0.32 --output-format=JSON --config-path=/etc/my.cnf > /tmp/upgradecheck_57_to_8032.log
+```bash
+/usr/local/greatsql-shell-8.0.32-25-glibc2.28-x86_64/bin/mysqlsh -- util checkForServerUpgrade \
+  --socket=/data/GreatSQL/mysql.sock --target-version=8.0.32 \
+  --output-format=JSON --config-path=/etc/my.cnf > /tmp/upgradecheck_57_to_8032.log
 ```
 
 其中：
@@ -118,8 +120,10 @@ $ /usr/local/greatsql-shell-8.0.32-25-glibc2.28-x86_64/bin/mysqlsh -- util check
 
 检查完毕后，需要手动确认结果中是否有标记为 Errors 级别的事项，这些事项都必须先修复。
 
-```
-$ mysqlsh -- util checkForServerUpgrade --socket=./data/mysql.sock --target-version=8.0.32 --output-format=JSON --config-path=./my.cnf > /tmp/upgradecheck_57_to_8032.log
+```bash
+mysqlsh -- util checkForServerUpgrade \
+  --socket=./data/mysql.sock --target-version=8.0.32 \
+  --output-format=JSON --config-path=./my.cnf > /tmp/upgradecheck_57_to_8032.log
 ...
     "serverAddress": "%2Fdata%2FGreatSQL%2Fmysql.sock",
     "serverVersion": "5.7.36-39 (GreatSQL, Release 39, Revision a2ce7ad3400)",
@@ -145,11 +149,12 @@ GreatSQL Shell 会执行多项详细检查，逐一报告检查结果并给出�
 以及其他等等，从检查结果日志文件中也能看到所有的检查项及其结果。
 
 GreatSQL Shell 支持利用 *greatsql/greatsql_shell* 这个 Docker 容器来完成升级检查：
-```
-$ docker pull greatsql/greatsql_shell
-$ docker run -itd --hostname greatsqlsh --name greatsqlsh greatsql/greatsql_shell bash
-$ docker cp /etc/my.cnf greatsqlsh:/tmp/
-$ docker exec -it greatsqlsh bash -c "mysqlsh -- util checkForServerUpgrade user:password@127.0.0.1:3306 --target-version=8.0.32 --output-format=JSON --config-path=/tmp/my.cnf" > /tmp/upgradecheck_57_to_8032.log
+```bash
+docker pull greatsql/greatsql_shell
+docker run -itd --hostname greatsqlsh --name greatsqlsh greatsql/greatsql_shell bash
+docker cp /etc/my.cnf greatsqlsh:/tmp/
+docker exec -it greatsqlsh bash -c "mysqlsh -- util checkForServerUpgrade user:password@127.0.0.1:3306 \
+  --target-version=8.0.32 --output-format=JSON --config-path=/tmp/my.cnf" > /tmp/upgradecheck_57_to_8032.log
 ```
 
 在上面的操作过程里，需要先把宿主环境中的 */etc/my.cnf* 配置参数文件拷贝到容器中。
@@ -169,7 +174,7 @@ $ docker exec -it greatsqlsh bash -c "mysqlsh -- util checkForServerUpgrade user
 3. 利用主从复制或MGR，在其中一个节点执行备份，或者令某个节点临时下线/退出，作为备用节点。
 
 需要特别注意的事，您原先运行中的GreatSQL/MySQL 5.7版本，可能也是从其他旧版本中升级而来的，此时有可能MySQL系统库下的部分元数据表还是旧格式。这种情况下，需要先在原来的环境下执行 `mysql_upgrade` 进行升级修复旧格式。例如：
-```
+```bash
 # 切换到当前运行的数据库实例datadir下
 $ cd /data/GreatSQL
 
@@ -223,8 +228,8 @@ Checking if update is needed.
 
 备份完成后，关闭数据库实例，在关闭数据库实例前，务必确保设置选项 `innodb_fast_shutdown=0`，以确保得到的是个干净的、正常关闭的数据库文件集。
 
-首先修改 `my.cnf`，增加一行
-```
+首先修改 `my.cnf` 配置文件，在 `[mysqld]` 区间中增加一行内容
+```ini
 upgrade = FORCE
 ```
 

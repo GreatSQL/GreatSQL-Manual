@@ -718,7 +718,7 @@ pt-secure-collect用于收集、清理、打包和加密数据
 
 **用法**
 
-- pt-secure-collect [<flags>] <command> [<args> ...]
+- `pt-secure-collect [<flags>] <command> [<args> ...]`
 
 默认情况下，pt-secure-collect 将收集以下输出：
 

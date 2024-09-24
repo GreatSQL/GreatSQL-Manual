@@ -10,7 +10,7 @@
 
 下载时要选择和操作系统相同 glibc 版本的二进制包，用下面方法确认
 
-```shell
+```bash
 $ ldd --version | grep GNU
 ldd (GNU libc) 2.28
 
@@ -19,19 +19,19 @@ x86_64
 ```
 可以看到是 x86_64 平台下的 glibc 2.28 版本，因此选择二进制包文件：**greatsql-shell-8.0.32-25-glibc2.28-x86_64.tar.xz**。
 
-由于编译环境限制，我们没有提供全平台的 GreatSQL Shell 二进制包，如果有需要，请参考 [GreatSQL Shell Build仓库](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build) 自行构建适合您的运行环境的二进制包文件。
+由于编译环境限制，没有提供全平台的 GreatSQL Shell 二进制包，如果有需要，请参考 [GreatSQL Shell Build仓库](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build) 自行构建适合您的运行环境的二进制包文件。
 
 运行 GreatSQL Shell 8.0.32-25 需要依赖 Python 3.8 环境，需要先执行下面命令完成相关依赖安装
 
-```shell
-$ yum install -y libssh python38 python38-libs python38-pyyaml
-$ pip3.8 install --user certifi pyclamd
+```bash
+yum install -y libssh python38 python38-libs python38-pyyaml
+pip3.8 install --user certifi pyclamd
 ```
 
 接下来准备好一个包含仲裁节点的三节点 MGR 集群：
 
 ```sql
-greatsql> select * from performance_schema.replication_group_members;
+greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST  | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
@@ -43,8 +43,8 @@ greatsql> select * from performance_schema.replication_group_members;
 
 首先用 `mysqlsh` 客户端连接MGR集群中的任意节点，通常选择连接主节点。若想使用手工操作则不需要这一步
 
-```
-$ mysqlsh --uri GreatSQL@172.16.16.10:3306
+```bash
+mysqlsh --uri GreatSQL@172.16.16.10:3306
 ```
 
 
@@ -59,11 +59,13 @@ $ mysqlsh --uri GreatSQL@172.16.16.10:3306
 
 在GreatSQL Shell中，可以调用 `setPrimaryInstance()` 函数进行切换：
 
-```sql
+```js
 #首先获取mgr cluster对象
 MySQL  172.16.16.10:3306 ssl  JS > c=dba.getCluster()
+
 #查看当前各节点列表 
 MySQL  172.16.16.10:3306 ssl  JS > c.status()
+
 {
     "clusterName": "GreatSQLMGR",
     "defaultReplicaSet": {
@@ -111,6 +113,7 @@ MySQL  172.16.16.10:3306 ssl  JS > c.status()
 
 #执行切换
 MySQL  172.16.16.10:3306 ssl  JS > c.setPrimaryInstance('172.16.16.11:3306')
+
 Setting instance '172.16.16.11:3306' as the primary instance of cluster 'MGR1'...
 
 #罗列了三个节点各自发生的变化
@@ -132,7 +135,7 @@ The instance '172.16.16.11:3306' was successfully elected as primary.
 
 ```sql
 # 将Primary角色切换到第二个节点
-greatsql> select group_replication_set_as_primary('b05c0838-6850-11ec-a06b-00155d064000');
+greatsql> SELECT group_replication_set_as_primary('b05c0838-6850-11ec-a06b-00155d064000');
 +--------------------------------------------------------------------------+
 | group_replication_set_as_primary('b05c0838-6850-11ec-a06b-00155d064000') |
 +--------------------------------------------------------------------------+
@@ -140,7 +143,7 @@ greatsql> select group_replication_set_as_primary('b05c0838-6850-11ec-a06b-00155
 +--------------------------------------------------------------------------+
 1 row in set (1.00 sec)
 
-greatsql> select * from performance_schema.replication_group_members;
+greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST  | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
@@ -163,8 +166,9 @@ greatsql> select * from performance_schema.replication_group_members;
 
 首先，从单主模式切换到多主模式：
 
-```sql
+```js
 MySQL  172.16.16.10:3306 ssl  JS > c.switchToMultiPrimaryMode()
+
 Switching cluster 'GreatSQLMGR' to Multi-Primary mode...
 
 Instance '172.16.16.10:3306' remains PRIMARY.
@@ -178,36 +182,35 @@ The cluster successfully switched to Multi-Primary mode.
 手工启动仲裁节点：
 
 ```sql
-greatsql> start group_replication;
+greatsql> START group_replication;
 ERROR 3092 (HY000): The server is not configured properly to be an active member of the group. Please see more details on error log.
 ```
 
 发现启动失败了，检查错误日志，可以看到有类似下面的信息：
 
-```sql
+```
 [ERROR] [MY-011529] [Repl] Plugin group_replication reported: 'The member configuration is not compatible with the group configuration. Variables such as group_replication_single_primary_mode or group_replication_enforce_update_everywhere_checks must have the same value on every server in the group. (member configuration option: [group_replication_single_primary_mode], group configuration option: [group_replication_enforce_update_everywhere_checks]).'
 ```
 
 这是因为，通过GreatSQL Shell管理MGR时，会跟随单主/多主模式的不同，动态修改选项 `group_replication_enforce_update_everywhere_checks` 的值。仲裁节点中，该选项值和其他节点不同，所以需要先手动修改： 
 
 ```sql
-# 先手动关闭单主模式
-greatsql> set global group_replication_single_primary_mode=OFF;
+-- 先手动关闭单主模式
+SET GLOBAL group_replication_single_primary_mode=OFF;
 
-# 再修改选项值，和其他节点保持一致
-greatsql> set global group_replication_enforce_update_everywhere_checks=ON;
+-- 再修改选项值，和其他节点保持一致
+SET GLOBAL group_replication_enforce_update_everywhere_checks=ON;
 ```
 
 而后再次启动MGR服务即可。
 
 ```sql
-greatsql> start group_replication;
-Query OK, 0 rows affected (2.65 sec)
+START group_replication;
 ```
 
 再次查看MGR的状态：
 
-```sql
+```js
  MySQL  172.16.16.10:3306 ssl  JS > c.status()
 ...
                 "address": "172.16.16.10:3306",
@@ -224,8 +227,9 @@ Query OK, 0 rows affected (2.65 sec)
 切换成单主模式时可以指定某个节点作为新的主节点，如果不指定则会根据规则自动选择一个新的主节点
 指定 *172.16.16.10:3306* 作为新主：
 
-```sql
+```js
 MySQL  172.16.16.10:3306 ssl  JS > c.switchToSinglePrimaryMode("172.16.16.10:3306")
+
 Switching cluster 'GreatSQLMGR' to Single-Primary mode...
 
 Instance '172.16.16.10:3306' remains PRIMARY.
@@ -240,12 +244,9 @@ The cluster successfully switched to Single-Primary mode.
 可以看到切换成功了，而且仲裁节点没有报错退出，如果还是有报错的话，重置上述两个选项，再次启动MGR服务即可：
 
 ```sql
-greatsql> set global group_replication_enforce_update_everywhere_checks=OFF;
-
-greatsql> set global group_replication_single_primary_mode=ON;
-
-greatsql> start group_replication;
-Query OK, 0 rows affected (2.85 sec)
+SET GLOBAL group_replication_enforce_update_everywhere_checks=OFF;
+SET GLOBAL group_replication_single_primary_mode=ON;
+START group_replication;
 ```
 
 ### 手动方式切换
@@ -253,16 +254,16 @@ Query OK, 0 rows affected (2.85 sec)
 在命令行模式下，可以调用`group_replication_switch_to_single_primary_mode()` 和 `group_replication_switch_to_multi_primary_mode()` 来切换单主/多主模式
 
 ```sql
-#直接调用函数即可
-greatsql> select group_replication_switch_to_multi_primary_mode();
+-- 直接调用函数即可
+greatsql> SELECT group_replication_switch_to_multi_primary_mode();
 +--------------------------------------------------+
 | group_replication_switch_to_multi_primary_mode() |
 +--------------------------------------------------+
 | Mode switched to multi-primary successfully.     |
 +--------------------------------------------------+
 
-#查看各节点状态
-greatsql> select * from performance_schema.replication_group_members;
+-- 查看各节点状态
+greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST  | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
@@ -271,9 +272,9 @@ greatsql> select * from performance_schema.replication_group_members;
 | group_replication_applier | b0f86046-6850-11ec-92fe-00155d064000 | 172.16.16.12 |        3306 | ONLINE       | ARBITRATOR  | 8.0.32         |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 
-#切换成单主模式时可以指定某个节点的 server_uuid，如果不指定则会根据规则自动选择一个新的主节点
-#在这里，我选择了指定mgr1节点作为新主
-greatsql> select group_replication_switch_to_single_primary_mode('af39db70-6850-11ec-94c9-00155d064000');
+-- 切换成单主模式时可以指定某个节点的 server_uuid，如果不指定则会根据规则自动选择一个新的主节点
+-- 在这里，我选择了指定mgr1节点作为新主
+greatsql> SELECT group_replication_switch_to_single_primary_mode('af39db70-6850-11ec-94c9-00155d064000');
 +-----------------------------------------------------------------------------------------+
 | group_replication_switch_to_single_primary_mode('af39db70-6850-11ec-94c9-00155d064000') |
 +-----------------------------------------------------------------------------------------+
@@ -294,8 +295,9 @@ greatsql> select group_replication_switch_to_single_primary_mode('af39db70-6850-
 
 后切换到连接主节点的GreatSQL Shell终端上，首先获取cluster对象，再进行添加新节点操作：
 
-```sql
+```js
 MySQL  172.16.16.10:3306 ssl  JS > c=dba.getCluster()
+
 MySQL  172.16.16.10:3306 ssl  JS > c.addInstance("GreatSQL@172.16.16.13:3306")
 
 NOTE: The target instance '172.16.16.13:3306' has not been pre-provisioned (GTID set is empty). The Shell is unable to decide whether incremental state recovery can correctly provision it.
@@ -344,15 +346,15 @@ The instance '172.16.16.13:3306' was successfully added to the cluster.
 下面演示如何利用Clone进行一次全量数据恢复，假定要新增的节点是 *172.16.16.13* （给它命名为 mgr4）。
 
 ```sql
-#在mgr4上设置捐献者
-#为了降低对Primary节点的影响，建议选择其他Secondary节点
-greatsql> set global clone_valid_donor_list='172.16.16.11:3306';
+-- 在mgr4上设置捐献者
+-- 为了降低对Primary节点的影响，建议选择其他Secondary节点
+SET GLOBAL clone_valid_donor_list='172.16.16.11:3306';
 
-#停掉mgr服务（如果有的话），关闭super_read_only模式，然后开始复制数据
-#注意这里要填写的端口是3306（MySQL正常服务端口），而不是33061这个MGR服务专用端口
-greatsql> stop group_replication; 
-greatsql> set global super_read_only=0; 
-greatsql> clone INSTANCE FROM GreatSQL@172.16.16.11:3306 IDENTIFIED BY 'GreatSQL';
+-- 关闭 MGR 服务（如果有的话），关闭super_read_only模式，然后开始复制数据
+-- 注意这里要填写的端口是3306（MySQL正常服务端口），而不是33061这个MGR服务专用端口
+STOP group_replication; 
+SET GLOBAL super_read_only=0; 
+CLONE INSTANCE FROM GreatSQL@172.16.16.11:3306 IDENTIFIED BY 'GreatSQL';
 ```
 
 全量复制完数据后，该节点会进行一次自动重启。重启完毕后，再次确认 `group_replication_group_name`、`group_replication_local_address`、`group_replication_group_seeds` 这些选项值是否正确，如果没问题，执行 `start group_replication` 后，该节点应该就可以正常加入集群了。
@@ -366,7 +368,7 @@ greatsql> clone INSTANCE FROM GreatSQL@172.16.16.11:3306 IDENTIFIED BY 'GreatSQL
 
 删除节点比较简单，调用 `removeInstance()` 函数即可：
 
-```
+```js
 MySQL  172.16.16.10:3306 ssl  JS > c.removeInstance("GreatSQL@172.16.16.13:3306")
 The instance will be removed from the InnoDB cluster. Depending on the instance
 being the Seed or not, the Metadata session might become invalid. If so, please
@@ -389,7 +391,7 @@ The instance '172.16.16.13:3306' was successfully removed from the cluster.
 
 在GreatSQL Shell里，可以调用 `rejoinInstance()` 函数将异常的节点重新加回集群：
 
-```
+```js
  MySQL  172.16.16.10:3306 ssl  JS > c.rejoinInstance('172.16.16.13:3306');
  
 Rejoining instance '172.16.16.13:3306' to cluster 'GreatSQLMGR'...

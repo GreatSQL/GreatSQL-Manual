@@ -19,9 +19,11 @@ MySQL Router第一次启动时要先初始化
 
 `--user=mysqlrouter` 是运行mysqlrouter进程的系统用户名
 
-```
+```bash
 $ mysqlrouter --bootstrap GreatSQL@172.16.16.10:3306 --user=mysqlrouter
+
 Please enter MySQL password for GreatSQL:   <-- 输入密码
+
 # 然后mysqlrouter开始自动进行初始化
 # 它会自动读取MGR的元数据信息，自动生成配置文件
 Please enter MySQL password for GreatSQL:
@@ -77,7 +79,7 @@ tcp        0      0 0.0.0.0:8443            0.0.0.0:*               LISTEN      
 
 **mysqlrouter** 初始化时自动生成的配置文件是 `/etc/mysqlrouter/mysqlrouter.conf`，主要是关于R/W、RO不同端口的配置，例如：
 
-```
+```ini
 [routing:greatsqlMGR_rw]
 bind_address=0.0.0.0
 bind_port=6446
@@ -90,11 +92,11 @@ protocol=classic
 ##  确认读写分离效果
 现在，用客户端连接到6446（读写）端口，确认连接的是PRIMARY节点：
 ```sql
-$ mysql -h172.16.16.10 -u GreatSQL -p -P6446
-Enter password:
-...
-#记住下面几个 MEMBER_ID
-greatsql> select MEMBER_ID,MEMBER_ROLE from performance_schema.replication_group_members;
+-- 连接登入GreatSQL
+-- mysql -h172.16.16.10 -u GreatSQL -p -P6446
+
+-- 记住下面几个 MEMBER_ID
+greatsql> SELECT MEMBER_ID,MEMBER_ROLE FROM performance_schema.replication_group_members;
 +--------------------------------------+-------------+
 | MEMBER_ID                            | MEMBER_ROLE |
 +--------------------------------------+-------------+
@@ -103,7 +105,7 @@ greatsql> select MEMBER_ID,MEMBER_ROLE from performance_schema.replication_group
 | 5596116c-11d9-11ec-8624-70b5e873a570 | SECONDARY   |
 +--------------------------------------+-------------+
 
-greatsql> select @@server_uuid;
+greatsql> SELECT @@server_uuid;
 +--------------------------------------+
 | @@server_uuid                        |
 +--------------------------------------+
@@ -114,10 +116,10 @@ greatsql> select @@server_uuid;
 
 同样地，连接6447（只读）端口，确认连接的是SECONDARY节点：
 ```sql
-$ mysql -h172.16.16.10 -u GreatSQL -p -P6447
-Enter password:
-...
-greatsql> select @@server_uuid;
+-- 连接登入GreatSQL
+-- mysql -h172.16.16.10 -u GreatSQL -p -P6447
+
+greatsql> SELECT @@server_uuid;
 +--------------------------------------+
 | @@server_uuid                        |
 +--------------------------------------+
@@ -137,11 +139,13 @@ MySQL Router连接读写节点（Primary节点）默认的策略是 **first-avai
 接下来模拟PRIMARY节点宕机或切换时，**mysqlrouter** 也能实现自动故障转移。
 
 登入MGR集群任意节点：
-```
+```js
 $ mysqlsh --uri GreatSQL@172.16.16.10:3306
 ...
 MySQL  172.16.16.10:3306 ssl  JS >  var c=dba.getCluster();
+
 MySQL  172.16.16.10:3306 ssl  JS >  c.setPrimaryInstance('172.16.16.11:3306');   <-- 切换PRIMARY节点
+
 Setting instance '172.16.16.11:3306' as the primary instance of cluster 'MGR1'...
 
 Instance '172.16.16.10:3306' was switched from PRIMARY to SECONDARY.   <-- 切换了，从PRIMARY到SECONDARY
@@ -154,10 +158,12 @@ The instance '172.16.16.11:3306' was successfully elected as primary.
 ```
 
 回到前面连接6446端口的那个会话，再次查询 **server_uuid**，此时会发现连接自动断开了：
+
 ```sql
-greatsql> select @@server_uuid;
+greatsql> SELECT @@server_uuid;
 ERROR 2013 (HY000): Lost connection to MySQL server during query
-greatsql> select @@server_uuid;
+
+greatsql> SELECT @@server_uuid;
 ERROR 2006 (HY000): MySQL server has gone away
 No connection. Trying to reconnect...
 Connection id:    157990

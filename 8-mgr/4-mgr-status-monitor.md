@@ -70,8 +70,9 @@ RECEIVED_TRANSACTION_SET: 6cfb873b-573f-11ec-814a-d08e7908bcb1:1-3078139
 
 使用`status()`，可以查看当前各节点列表，以及各节点状态
 
-```sql
+```js
 MySQL  172.16.16.10:3306 ssl  JS > c.status()
+
 {
     "clusterName": "GreatSQLMGR",
     "defaultReplicaSet": {

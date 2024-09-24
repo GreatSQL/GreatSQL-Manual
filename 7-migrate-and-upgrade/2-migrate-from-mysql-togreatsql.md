@@ -156,12 +156,12 @@ GreatSQL数据库是不支持直接原地(in-place)降级的，因此需要采�
 因此，只有一种方法，那就是 **逻辑备份+导入**。
 
 首先，用 `mysqldump` 备份全部数据：
-```
-$ mysqldump -S/data/MySQL/mysql.sock -A --triggers --routines --events > /backup/MySQL/fullbackup-`date +'%Y%m%d'`.sql
+```bash
+mysqldump -S/data/MySQL/mysql.sock -A --triggers --routines --events > /backup/MySQL/fullbackup-`date +'%Y%m%d'`.sql
 ```
 
 将备份文件copy到GreatSQL版本环境中，并执行导入即可，导入过程中可能会报错，加上 `-f` 选项并忽略这些错误就好（高版本中有些表在低版本中不存在，略过）。
-```
+```bash
 $ mysql -S/data/GreatSQL/mysql.sock -f < /backup/MySQL/fullbackup-`date +'%Y%m%d'`.sql
 
 #可能会报告类似下面的错误信息，忽略即可

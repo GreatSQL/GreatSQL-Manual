@@ -26,13 +26,14 @@ $ cd /usr/local
 $ tar xf GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
 $ cd GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64
 $ ls
+
 bin    COPYING-jemalloc  include  LICENSE         LICENSE-test  mysqlrouter-log-rotate  README.router  run    support-files
 cmake  docs              lib      LICENSE.router  man           README                  README-test    share  var
 ```
 
 ###  初始化GreatSQL
 首先准备好 */etc/my.cnf* 配置文件：
-```sql
+```ini
 #/etc/my.cnf
 [mysqld]
 user = mysql
@@ -48,15 +49,15 @@ enforce_gtid_consistency=ON
 本文仅以能正常启动GreatSQL和部署MGR为目的，所以这份配置文件极为简单，如果想要在正式场合使用，可以参考[这份配置文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example)。
 
 先初始化GreatSQL：
-```
-$ mkdir -p /data/GreatSQL && chown -R mysql:mysql /data/GreatSQL
-$ /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf --initialize-insecure
+```bash
+mkdir -p /data/GreatSQL && chown -R mysql:mysql /data/GreatSQL
+/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf --initialize-insecure
 ```
 **注意**：不要在生产环境中使用 `--initialize-insecure` 选项进行初始化安装，因为这么做的话，超级管理员root账号默认是空密码，任何人都可以使用该账号登录数据库，存在安全风险，本文中只是为了演示方便才这么做。
 
 启动GreatSQL：
-```
-$ /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf &
+```bash
+/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf &
 ```
 如果不出意外，则能正常启动GreatSQL。用同样的方法也完成对另外两个节点的初始化。
 
@@ -66,7 +67,8 @@ $ /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-fil
 接下来准备初始化MGR的第一个节点，也称之为 **引导节点**。
 
 修改 */etc/my.cnf* ，增加以下几行和MGR相关的配置参数：
-```
+```ini
+[mysqld]
 plugin_load_add='group_replication.so'
 group_replication_group_name="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"
 group_replication_local_address= "172.16.16.10:33061"
@@ -79,7 +81,7 @@ report-host=172.16.16.10
 
 利用这份配置文件，重启GreatSQL，之后就应该能看到已经成功加载 `group_replicaiton` 插件了：
 ```sql
-greatsql> show plugins;
+greatsql> SHOW PLUGINS;
 ...
 +---------------------------------+----------+--------------------+----------------------+---------+
 | Name                            | Status   | Type               | Library              | License |
@@ -91,44 +93,47 @@ greatsql> show plugins;
 
 如果没正确加载，也可以登入GreatSQL自行手动加载这个plugin：
 ```sql
-greatsql> install plugin group_replication soname 'group_replication.so';
+INSTALL PLUGIN group_replication SONAME 'group_replication.so';
 ```
 
 接下来，创建MGR服务专用账户，并准备配置MGR服务通道：
 ```sql
-#每个节点都要单独创建用户，因此这个操作没必要记录binlog并复制到其他节点
-greatsql> set session sql_log_bin=0;
-greatsql> create user repl@'%' identified with mysql_native_password by 'repl';
-greatsql> GRANT BACKUP_ADMIN, REPLICATION SLAVE ON *.* TO `repl`@`%`;
-#创建完用户后继续启用binlog记录
-greatsql> set session sql_log_bin=1;
+-- 每个节点都要单独创建用户，因此这个操作没必要记录binlog并复制到其他节点
+SET SESSION sql_log_bin=0;
+CREATE USER repl@'%' IDENTIFIED WITH mysql_native_password BY 'repl';
+GRANT BACKUP_ADMIN, REPLICATION SLAVE ON *.* TO `repl`@`%`;
 
-#配置MGR服务通道
-#通道名字 group_replication_recovery 是固定的，不能修改
-greatsql> CHANGE MASTER TO MASTER_USER='repl', MASTER_PASSWORD='repl' FOR CHANNEL 'group_replication_recovery';
+-- 创建完用户后继续启用binlog记录
+greatsql> SET SESSION sql_log_bin=1;
+
+-- 配置MGR服务通道
+-- 通道名字 group_replication_recovery 是固定的，不能修改
+CHANGE MASTER TO MASTER_USER='repl', MASTER_PASSWORD='repl' FOR CHANNEL 'group_replication_recovery';
 ```
 
 接着执行下面的命令，将其设置为MGR的引导节点（只有第一个节点需要这么做）后即可直接启动MGR服务：
 ```sql
-greatsql> set global group_replication_bootstrap_group=ON;
-greatsql> start group_replication;
+SET GLOBAL group_replication_bootstrap_group=ON;
+START group_replication;
 ```
-**提醒**：当整个MGR集群重启时，第一个启动的节点也要先设置为引导模式，然后再启动其他节点。除此外，请勿设置引导模式。
+::: tip 提醒
+当整个MGR集群重启时，第一个启动的节点也要先设置为引导模式，然后再启动其他节点。除此外，请勿设置引导模式。
+:::
 
 而后，查看MGR服务状态：
 ```sql
-greatsql> select * from performance_schema.replication_group_members;
+greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST  | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 | group_replication_applier | 4ebd3504-11d9-11ec-8f92-70b5e873a570 | 172.16.16.10 |        3306 | ONLINE       | PRIMARY     | 8.0.32         |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 ```
-好了，第一个节点初始化完成。
+第一个节点初始化完成。
 
 ###  继续设置另外两个节点
 继续使用下面这份 */etc/my.cnf* 配置文件模板：
-```sql
+```ini
 #my.cnf
 [mysqld]
 user = mysql
@@ -148,25 +153,27 @@ group_replication_local_address= "172.16.16.11:33061"
 group_replication_group_seeds= "172.16.16.10:33061,172.16.16.11:33061,172.16.16.12:33061"
 report-host=172.16.16.11
 ```
-**提醒**：上面的几个选项中，`server_id`、`group_replication_local_address` 和 `report_host` 这三个选项要修改为正确的值。在一个MGR集群中，各节点设置的 `server_id` 和 `server_uuid` 要是唯一的，但是 `group_replication_group_name` 的值要一样，这是该MGR集群的唯一标识。
+::: tip 提醒
+上面的几个选项中，`server_id`、`group_replication_local_address` 和 `report_host` 这三个选项要修改为正确的值。在一个MGR集群中，各节点设置的 `server_id` 和 `server_uuid` 要是唯一的，但是 `group_replication_group_name` 的值要一样，这是该MGR集群的唯一标识。
+:::
 
 重启GreatSQL实例后（`report-host` 是只读选项，需要重启才能生效），创建MGR服务专用账号及配置MGR服务通道：
 ```sql
-greatsql> set session sql_log_bin=0;
-greatsql> create user repl@'%' identified with mysql_native_password by 'repl';
-greatsql> GRANT BACKUP_ADMIN, REPLICATION SLAVE ON *.* TO `repl`@`%`;
-greatsql> set session sql_log_bin=1;
+SET SESSION sql_log_bin=0;
+CREATE USER repl@'%' IDENTIFIED WITH mysql_native_password BY 'repl';
+GRANT BACKUP_ADMIN, REPLICATION SLAVE ON *.* TO `repl`@`%`;
+SET SESSION sql_log_bin=1;
 
-greatsql> CHANGE MASTER TO MASTER_USER='repl', MASTER_PASSWORD='repl' FOR CHANNEL 'group_replication_recovery';
+CHANGE MASTER TO MASTER_USER='repl', MASTER_PASSWORD='repl' FOR CHANNEL 'group_replication_recovery';
 ```
 
 接下来即可直接启动MGR服务（除了第一个节点外，其余节点都不需要再设置引导模式）：
-```
-greatsql> start group_replication;
+```sql
+START group_replication;
 ```
 再次查看MGR节点状态：
 ```sql
-greatsql> select * from performance_schema.replication_group_members;
+greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST  | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
@@ -178,14 +185,16 @@ greatsql> select * from performance_schema.replication_group_members;
 看到上面这个集群共有3个节点处于ONLINE状态，其中 *172.16.16.10* 是 **PRIMARY** 节点，其余两个都是 **SECONDARY** 节点，也就是说当前这个集群采用 **单主** 模式。如果采用多主模式，则所有节点的角色都是 **PRIMARY**。
 
 ###  向MGR集群中写入数据
-接下来我们连接到 **PRIMARY** 节点，创建测试库表并写入数据：
+接下来连接到 **PRIMARY** 节点，创建测试库表并写入数据：
 ```sql
-$mysql -h172.16.16.10 -uroot -Spath/mysql.sock
-greatsql> create database mgr;
-greatsql> use mgr;
-greatsql> create table t1(c1 int unsigned not null primary key);
-greatsql> insert into t1 select rand()*10240;
-greatsql> select * from t1;
+-- 先连接进入GreatSQL
+-- mysql -h172.16.16.10 -uroot -Spath/mysql.sock
+
+greatsql> CREATE DATABASE mgr;
+greatsql> USE MGR;
+greatsql> CREATE TABLE t1(c1 int unsigned not null primary key);
+greatsql> INSERT INTO t1 SELECT RAND()*10240;
+greatsql> SELECT * FROM t1;
 +------+
 | c1   |
 +------+
@@ -194,9 +203,10 @@ greatsql> select * from t1;
 ```
 再连接到其中一个 **SECONDARY** 节点，查看刚刚在 **PRIMARY** 写入的数据是否可以看到：
 ```sql
-$mysql -h172.16.16.11 -uroot -Spath/mysql.sock
-greatsql> use mgr;
-greatsql> select * from t1;
+-- 先连接进入GreatSQL
+-- mysql -h172.16.16.11 -uroot -Spath/mysql.sock
+greatsql> USE mgr;
+greatsql> SELECT * FROM t1;
 +------+
 | c1   |
 +------+
@@ -211,7 +221,9 @@ greatsql> select * from t1;
 
 接下来介绍如何利用 GreatSQL Shell 基于 GreatSQL 8.0.32-32 构建一个三节点的MGR集群。
 
-> 只有 GreatSQL Shell 支持仲裁节点（投票节点）特性，MySQL Shell 社区版不支持。
+::: tip 小贴士
+只有 GreatSQL Shell 支持仲裁节点（投票节点）特性，MySQL Shell 社区版不支持。
+:::
 
 ###  安装准备
 准备好下面三台服务器：
@@ -228,7 +240,7 @@ greatsql> select * from t1;
 
 下载时要选择和操作系统相同 glibc 版本的二进制包，用下面方法确认
 
-```shell
+```bash
 $ ldd --version | grep GNU
 ldd (GNU libc) 2.28
 
@@ -237,13 +249,13 @@ x86_64
 ```
 可以看到是 x86_64 平台下的 glibc 2.28 版本，因此选择二进制包文件：**greatsql-shell-8.0.32-25-glibc2.28-x86_64.tar.xz**。
 
-由于编译环境限制，我们没有提供全平台的 GreatSQL Shell 二进制包，如果有需要，请参考 [GreatSQL Shell Build仓库](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build) 自行构建适合您的运行环境的二进制包文件。
+由于编译环境限制，没有提供全平台的 GreatSQL Shell 二进制包，如果有需要，请参考 [GreatSQL Shell Build仓库](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build) 自行构建适合您的运行环境的二进制包文件。
 
 运行 GreatSQL Shell 8.0.32-25 需要依赖 Python 3.8 环境，需要先执行下面命令完成相关依赖安装
 
-```shell
-$ yum install -y libssh python38 python38-libs python38-pyyaml
-$ pip3.8 install --user certifi pyclamd
+```bash
+yum install -y libssh python38 python38-libs python38-pyyaml
+pip3.8 install --user certifi pyclamd
 ```
 
 接下来直接利用 GreatSQL Shell 部署MGR
@@ -255,9 +267,10 @@ $ pip3.8 install --user certifi pyclamd
 3. 逐个添加实例。
 
 首先，用管理员账号 root 连接到第一个节点：
-```sql
-#在本地通过socket方式登入
+```bash
+# 在本地通过socket方式登入
 $ mysqlsh -Spath/mysql.sock -u root
+
 Please provide the password for 'root@.%2Fmysql.sock': ********
 Save password for 'root@.%2Fmysql.sock'? [Y]es/[N]o/Ne[v]er (default No): yes
 MySQL Shell 8.0.32
@@ -266,8 +279,9 @@ MySQL Shell 8.0.32
 执行命令 `\status` 查看当前节点的状态，确认连接正常可用。
 
 执行 `dba.configureInstance()` 命令开始检查当前实例是否满足安装MGR集群的条件，如果不满足可以直接配置成为MGR集群的一个节点：
-```sql
+```js
 MySQL  localhost  JS > dba.configureInstance()
+
 Configuring local MySQL instance listening at port 3306 for use in an InnoDB cluster...
 
 This instance reports its own address as 172.16.16.10:3306
@@ -280,7 +294,8 @@ ERROR: User 'root' can only connect from 'localhost'. New account(s) with proper
 3) Ignore and continue
 4) Cancel
 
-Please select an option [1]: 2 <-- 这里我们选择方案2，即创建一个最小权限账号
+Please select an option [1]: 2 <-- 这里选择方案2，即创建一个最小权限账号
+
 Please provide an account name (e.g: icroot@%) to have it created with the necessary
 privileges or leave empty and press Enter to cancel.
 Account Name: GreatSQL
@@ -297,14 +312,17 @@ The instance '172.16.16.10:3306' is already ready to be used in an InnoDB cluste
 Successfully enabled parallel appliers.
 ```
 完成检查并创建完新用户后，退出当前的管理员账户，并用新创建的MGR专用账户登入，准备初始化创建一个新集群：
-```sql
-$ mysqlsh --uri GreatSQL@172.16.16.10:3306
+```js
+-- 先连接进入GreatSQL
+-- mysqlsh --uri GreatSQL@172.16.16.10:3306
 Please provide the password for 'GreatSQL@172.16.16.10:3306': ********
 Save password for 'GreatSQL@172.16.16.10:3306'? [Y]es/[N]o/Ne[v]er (default No): yes
 MySQL Shell 8.0.32
 ...
+
 #定义一个变量名c，方便下面引用
 MySQL  172.16.16.10:3306 ssl  JS > c = dba.createCluster('MGR1');
+
 A new InnoDB cluster will be created on instance '172.16.16.10:3306'.
 
 Validating instance configuration at 172.16.16.10:3306...
@@ -324,24 +342,29 @@ one server failure.
 ```
 这就完成了MGR集群的初始化并加入第一个节点（引导节点）。
 
-**提示**：参数 `group_replication_communication_stack` 的默认值是 XCOM。但是在利用 GreatSQL Shell 的 `create_cluster()` 函数创建并初始化 MGR 集群时，参数 `communicationStack` 默认值则是 MYSQL，这里存在差异。因此，建议在这里显式指定 `communicationStack` 参数值为 XCOM，例如：
+::: tip 提示
+参数 `group_replication_communication_stack` 的默认值是 XCOM。但是在利用 GreatSQL Shell 的 `create_cluster()` 函数创建并初始化 MGR 集群时，参数 `communicationStack` 默认值则是 MYSQL，这里存在差异。因此，建议在这里显式指定 `communicationStack` 参数值为 XCOM。
+:::
 
-```sql
-MySQL  172.16.16.10:3306 ssl  JS > c = dba.createCluster('MGR1', {"communicationStack": "xcom"});
+例如，执行下面的命令修改设置：
+```js
+c = dba.createCluster('MGR1', {"communicationStack": "xcom"});
 ```
 
 如果是 JS 风格的写法则是下面这样的：
 
-```sql
-MySQL  172.16.16.10:3306 ssl  JS > dba.createCluster("MGR1", {"communicationStack": "xcom"})
+```js
+dba.createCluster("MGR1", {"communicationStack": "xcom"})
 ```
 
-> 因目前采用 MYSQL 协议可能存在风险，所以建议采用 XCOM 协议
->
-> 采用 MYSQL 协议的风险可参考文章：[新的MGR MySQL协议报错BUG](https://mp.weixin.qq.com/s/N-poOiG8zAAmLI0-S79zDg)
+::: warning 风险提醒
+因目前采用 MYSQL 协议可能存在风险，所以建议采用 XCOM 协议。
+
+采用 MYSQL 协议的风险可参考文章：[新的MGR MySQL协议报错BUG](https://mp.weixin.qq.com/s/N-poOiG8zAAmLI0-S79zDg)。
+:::
 
 接下来，用同样方法先用 root 账号分别登入到另外两个节点，完成节点的检查并创建最小权限级别用户（此过程略过。。。注意各节点上创建的用户名、密码都要一致），之后回到第一个节点，执行 `addInstance()` 添加另外两个节点。
-```sql
+```js
 MySQL  172.16.16.10:3306 ssl JS > c.addInstance('GreatSQL@172.16.16.11:3306');<--这里要指定MGR专用账号
 
 WARNING: A GTID set check of the MySQL instance at '172.16.16.11:3306' determined that it contains transactions that do not originate from the cluster, which must be discarded before it can join the cluster.
@@ -354,6 +377,7 @@ WARNING: Discarding these extra GTID events can either be done manually or by co
 Having extra GTID events is not expected, and it is recommended to investigate this further and ensure that the data can be removed prior to choosing the clone recovery method.
 
 Please select a recovery method [C]lone/[A]bort (default Abort): Clone  <-- 选择用Clone方式从第一个节点全量复制数据
+
 Validating instance configuration at 172.16.16.11:3306...
 
 This instance reports its own address as 172.16.16.11:3306
@@ -395,7 +419,7 @@ The instance '172.16.16.11:3306' was successfully added to the cluster.  <-- 新
 用同样的方法，将 172.16.16.12:3306 实例也加入到集群中。
 
 现在，一个有这三节点的MGR集群已经部署完毕，来确认下：
-```sql
+```js
 MySQL  172.16.16.10:3306 ssl  JS > c.describe()
 {
     "clusterName": "MGR1",
@@ -430,9 +454,10 @@ MySQL  172.16.16.10:3306 ssl  JS > c.describe()
 对于已经在运行中的MGR集群，也是可以用 GreatSQL Shell 接管的。只需要在调用 `createCluster()` 函数时，加上 `"adoptFromGR":"true"` 选项即可。实际上不加这个选项的话，GreatSQL Shell 也会自动检测到该MGR集群已存在，并询问是否要接管。
 
 在这里简单演示下：
-```sql
-#不加上 "adoptFromGr":"true" 选项
+```js
+# 不加上 "adoptFromGr":"true" 选项
 MySQL  172.16.16.10:3306 ssl  JS > c = dba.createCluster('MGR1');
+
 A new InnoDB cluster will be created on instance '172.16.16.10:3306'.
 
 You are connected to an instance that belongs to an unmanaged replication group.
@@ -441,8 +466,9 @@ Do you want to setup an InnoDB cluster based on this replication group? [Y/n]:
 可以看到，会有提示信息询问是否要接管。
 
 如果加上 `"adoptFromGr":"true"` 选项，则会直接创建集群，不再询问：
-```sql
+```js
 MySQL  172.16.16.10:3306 ssl JS > c=dba.createCluster('MGR1', {"adoptFromGr":"true"});
+
 A new InnoDB cluster will be created based on the existing replication group on instance '172.16.16.10:3306'.
 
 Creating InnoDB cluster 'MGR1' on '172.16.16.10:3306'...
@@ -460,10 +486,11 @@ Dba.getCluster: Unable to get an InnoDB cluster handle. The instance '192.168.6.
 ```
 
 这种情况下，可以调用 `dba.dropMetadataSchema()` 函数删除元数据，再调用 `dba.createCluster()` 接管集群：
-```sql
+```js
 #确保不影响正常业务的话，删除无用MGR元数据
 MySQL  172.16.16.10:3306 ssl  JS > dba.dropMetadataSchema()
 Are you sure you want to remove the Metadata? [y/N]: y
+
 Metadata Schema successfully removed.
 
 #接管现有集群
@@ -474,7 +501,7 @@ Metadata Schema successfully removed.
 
 ###  使用 GreatSQL Shell 的窍门
 在 GreatSQL Shell 中，也是可以启用pager（分页器）的，像下面这样设置即可：
-```
+```js
 mysqlsh> shell.enablePager()
 mysqlsh> shell.options["pager"]="less -i -n -S";
 Pager has been set to 'less -i -n -S'.

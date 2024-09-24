@@ -6,7 +6,7 @@
 
 ## 参数选项设置
 下面是几个MGR相关参数选项设置建议：
-```sql
+```ini
 #建议只用单主模式
 loose-group_replication_single_primary_mode=ON
 

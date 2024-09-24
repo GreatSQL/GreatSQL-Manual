@@ -15,7 +15,7 @@
 5. 网络成为瓶颈，导致消息延迟大。
 6. 其他GreatSQL常见性能瓶颈导致。
 
-接下来，我们针对以上几种情况，分别进行瓶颈分析并给出优化建议。
+接下来，针对以上几种情况，分别进行瓶颈分析并给出优化建议。
 
 ## 优化建议
 ### 本地节点存在性能瓶颈
@@ -39,13 +39,13 @@
 
 还可以通过监控事务状态，防止有个别事务运行时间过久：
 ```sql
-# 活跃时间最长的事务
+-- 活跃时间最长的事务
 greatsql> SELECT * FROM information_schema.innodb_trx ORDER BY trx_started ASC LIMIT N;
 
-# 等待时间最长的事务
+-- 等待时间最长的事务
 greatsql> SELECT * FROM sys.innodb_lock_waits ORDER BY wait_age_secs DESC LIMIT N;
 
-# 要特别关注的大事务
+-- 要特别关注的大事务
 greatsql> SELECT * FROM information_schema.innodb_trx WHERE
   trx_lock_structs >= 5 OR    -- 超过5把锁
   trx_rows_locked >= 100 OR   -- 超过100行被锁
