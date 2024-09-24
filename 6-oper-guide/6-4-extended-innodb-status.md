@@ -71,7 +71,7 @@ srv_master_thread log flush and writes: 0
 
 InnoDB 有一个源线程，它根据服务器状态每秒执行一次后台任务。如果服务器处于工作负载状态，源线程将运行以下操作: 执行后台表删除；自适应地执行更改缓冲区合并；将重做日志刷新到磁盘；如果需要满足其大小限制，则从字典缓存中逐出表；建立一个检查点。如果服务器空闲:由于检查点年龄而需要，则执行后台表删除、刷新和/或检查重做日志；以完整 I/O 容量执行更改缓冲区合并；如果需要，从字典缓存中逐出表；并设置一个检查点。
 
-> 以下状态变量的范围(Scope)都是全局的（Global）、数据类型（Data type）都是数字（Numeric）
+以下状态变量的范围(Scope)都是全局的（Global）、数据类型（Data type）都是数字（Numeric）。
 
 - Innodb_master_thread_active_loops:此变量显示针对活动服务器状态执行上述一秒循环的次数
 - Innodb_master_thread_idle_loops:该变量显示在空闲服务器状态下执行上述一秒循环的次数
@@ -115,7 +115,7 @@ Hash table size 553253, node heap has 0 buffer(s)
 0.00 hash searches/s, 0.00 non-hash searches/s
 ```
 
-> 以下状态变量的范围(Scope)都是全局的（Global）、数据类型（Data type）都是数字（Numeric）
+以下状态变量的范围(Scope)都是全局的（Global）、数据类型（Data type）都是数字（Numeric）。
 
 - Innodb_ibuf_free_list:记录当前Insert Buffer中空闲列表的长度
 - Innodb_ibuf_segment_size:记录Insert Buffer每个段的大小
@@ -143,7 +143,7 @@ Max checkpoint age           5422668288
 8931689 log i/o's done, 0.00 log i/o's/second
 ```
 
-> 以下状态变量的范围(Scope)都是全局的（Global）、数据类型（Data type）都是数字（Numeric）
+以下状态变量的范围(Scope)都是全局的（Global）、数据类型（Data type）都是数字（Numeric）。
 
 - Innodb_lsn_current:该变量显示当前日志序列号
 - Innodb_lsn_flushed:该变量显示当前已写入并刷新到磁盘的最大 LSN
@@ -177,7 +177,7 @@ LRU len: 99056, unzip_LRU len: 0
 I/O sum[0]:cur[0], unzip sum[0]:cur[0]
 ```
 
-> 以下状态变量的范围(Scope)都是全局的（Global）、数据类型（Data type）都是数字（Numeric）
+以下状态变量的范围(Scope)都是全局的（Global）、数据类型（Data type）都是数字（Numeric）。
 
 - Innodb_mem_adaptive_hash:该变量显示自适应哈希索引的当前大小（以字节为单位）
 - Innodb_mem_dictionary:该变量显示 InnoDB 内存中数据字典信息的当前大小（以字节为单位）
@@ -206,7 +206,7 @@ LIST OF TRANSACTIONS FOR EACH SESSION:
 0 lock struct(s), heap size 1128, 0 row lock(s)
 ```
 
-> 以下状态变量的范围(Scope)都是全局的（Global）、数据类型（Data type）都是数字（Numeric）
+以下状态变量的范围(Scope)都是全局的（Global）、数据类型（Data type）都是数字（Numeric）。
 
 - Innodb_max_trx_id:该变量显示下一个空闲交易 ID 号
 - Innodb_oldest_view_low_limit_trx_id:该变量显示最高事务 ID，在该 ID 之上，当前最早打开的读取视图看不到任何事务更改。如果没有开放视野则为零

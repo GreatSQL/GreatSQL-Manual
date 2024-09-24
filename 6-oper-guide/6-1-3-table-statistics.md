@@ -24,7 +24,9 @@ greatsql> SELECT * FROM INFORMATION_SCHEMA.TABLE_STATISTICS WHERE TABLE_NAME='sy
 | ROWS_CHANGED           | 表中的行数已更改                   |
 | ROWS_CHANGED_X_INDEXES | 表中已更改的行数乘以已更改的索引数 |
 
-> 注意：表统计信息的当前实现不支持分区表。
+::: warning 注意
+表统计信息的当前实现不支持分区表。
+:::
 
 
 **扫码关注微信公众号**

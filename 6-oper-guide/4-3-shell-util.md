@@ -8,20 +8,23 @@ MySQL Shell是一个客户端工具，可用于方便管理和操作MySQL，支�
 MySQL Shell中提供了Utilities工具包，可用于对数据库进行备份和恢复，可支持实例级、Schema级、数据表级三个不同级别的数据备份和恢复功能。并且支持兼容性检查、并行导入导出、以及备份文件压缩特性，备份恢复效率比mysqldump更高。
 
 在开始进行备份和恢复前，要先连接登入数据库，这里采用通过本地socket方式连接：
-```
+```bash
 $ mysqlsh -S/data/GreatSQL/mysql.sock -uroot -p
+
 MySQL Shell 8.0.32
 ...
 Server version: 8.0.32-26  GreatSQL, Release 26, Revision 444164cc78e
 No default schema selected; type \use <schema> to set one.
+
  MySQL  localhost  JS >
 ```
 
 ##  实例级备份恢复
 ### 备份整个实例
 调用 `util.dumpInstance` 方法备份整个实例：
-```
+```js
  MySQL  localhost  JS > util.dumpInstance("/data/backup/20230830")
+
 Acquiring global read lock
 Global read lock acquired
 Initializing - done
@@ -58,19 +61,19 @@ Average compressed throughput: 22.42 MB/s
 Util.dumpInstance: Cannot proceed with the dump, the specified directory '/data/backup/20230830' already exists at the target location /data/backup/20230830 and is not empty. (ArgumentError)
 ```
 
-执行备份时，默认并发4个线程，可以通过设置参数 `threads` 调整并发线程数，例如：
-```
- MySQL  localhost  JS > util.dumpInstance("/data/backup/20230830", {threads: 8})
-```
-
-还可以在备份时指定分片大小，由参数 `bytesPerChunk` 控制，默认每个分片是64M，例如：
-```
- MySQL  localhost  greatsql  JS > util.dumpInstance("/data/backup/20230830", {threads: 8, bytesPerChunk: "16M"})
+执行备份时，默认并发4个线程，可以通过设置参数 `threads` 调整并发线程数，例如下面的命令：
+```js
+util.dumpInstance("/data/backup/20230830", {threads: 8})
 ```
 
-如果要同时备份存储过程、存储函数、event等元数据，可以设置相应的参数，例如：
+还可以在备份时指定分片大小，由参数 `bytesPerChunk` 控制，默认每个分片是64M，例如下面的命令：
+```js
+util.dumpInstance("/data/backup/20230830", {threads: 8, bytesPerChunk: "16M"})
 ```
- MySQL  localhost  greatsql  JS > util.dumpInstance("/data/backup/20230830", {events: true, triggers: true, routines: true})
+
+如果要同时备份存储过程、存储函数、event等元数据，可以设置相应的参数，例如下面的命令：
+```js
+util.dumpInstance("/data/backup/20230830", {events: true, triggers: true, routines: true})
 ```
 见名知意，分别对应即可，这里不赘述。
 
@@ -85,8 +88,9 @@ Util.loadDump: local_infile disabled in server (MYSQLSH 53025)
 ```
 
 调用 `util.loadDump` 方法恢复整个实例：
-```
+```js
  MySQL  localhost  JS > util.loadDump("/data/backup/20230830", {excludeSchemas: ["sys_audit"]})
+
 Loading DDL and Data from '/data/backup/20230830' using 4 threads.
 Opening dump...
 Target is GreatSQL 8.0.32-26. Dump was produced from GreatSQL 8.0.32-26
@@ -106,8 +110,9 @@ Recreating indexes - done
 因为GreatSQL默认会初始化 `sys_audit` 这个用于审计功能的Schema，导入时要设置忽略这个Schema，而 `mysql`/`sys`/`information_schema`/`performance_schema` 等几个系统级Schema会被MySQL Shell识别并忽略，无需额外设置策略。也就是说，利用`util.loadDump()`进行恢复时，并不会覆盖当前实例中的几个系统Schema。
 
 在进行恢复时，如果目标实例中已有对应的数据对象，则可能会报告类似下面的错误：
-```
+```js
  MySQL  localhost  JS > util.loadDump("/data/backup/20230830")
+
 Loading DDL and Data from '/data/backup/20230830' using 4 threads.
 Opening dump...
 Target is GreatSQL 8.0.32-26 Dump was produced from GreatSQL 8.0.32-26
@@ -126,34 +131,34 @@ Util.loadDump: While 'Scanning metadata': Duplicate objects found in destination
 ##  Schema级备份恢复
 ### 备份整个Schema
 调用 `util.dumpSchema` 方法备份单个Schema：
-```
- MySQL  localhost  greatsql  JS > util.dumpSchemas(["greatsql"], "/data/backup/20230830/greatsql")
+```js
+util.dumpSchemas(["greatsql"], "/data/backup/20230830/greatsql")
 ```
 
 ### 恢复整个Schema
 调用 `util.loadDump` 方法恢复Schema：
-```
- MySQL  localhost  JS > util.loadDump("/data/backup/20230830", {includeSchemas: ["greatsql"]})
+```js
+util.loadDump("/data/backup/20230830", {includeSchemas: ["greatsql"]})
 ```
 可以看到，和恢复整个实例时调用的方法是一样的，只不过是指定了 `includeSchemas` 参数，也就是只恢复该Schema，其余的忽略。
 
 ##  Table级备份恢复
 ### 备份单个Table
 调用 `util.dumpTables` 方法备份单个Table：
-```
- MySQL  localhost  greatsql  JS > util.dumpTables("greatsql", ["t1", "t2", "t3"], "/data/backup/20230830/greatsql")
+```js
+util.dumpTables("greatsql", ["t1", "t2", "t3"], "/data/backup/20230830/greatsql")
 ```
 上述命令的作用是导出数据库 *greatsql* 中的 *t1/t2/t3* 三个表。
 
 ### 恢复单个Table
 调用 `util.loadDump` 或 `util.importTable` 方法恢复单个Table：
-```
- MySQL  localhost  JS > util.loadDump("/data/backup/20230830/greatsql/", { includeTables: ["greatsql.t1", "greatsql.t2", "greatsql.t3"]})
+```js
+util.loadDump("/data/backup/20230830/greatsql/", { includeTables: ["greatsql.t1", "greatsql.t2", "greatsql.t3"]})
 ```
 
 或者
-```
- MySQL  localhost  JS > util.importTable("/data/backup/20230830/greatsql/greatsql@t1@*.zst", {schema: "greatsql", table: "t1"})
+```js
+util.importTable("/data/backup/20230830/greatsql/greatsql@t1@*.zst", {schema: "greatsql", table: "t1"})
 ```
 
 **注意：** 调用 `util.importTable`方法只能恢复单表数据，意思是需要先创建好一个空表，并且不支持同时恢复多表。

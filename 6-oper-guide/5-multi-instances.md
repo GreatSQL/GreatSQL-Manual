@@ -15,10 +15,8 @@
 
 ##  添加systemd服务文件
 
-手动编辑systemd服务文件：
-```
-$ vim /lib/systemd/system/greatsql@.service
-
+手动编辑systemd服务文件 `/lib/systemd/system/greatsql@.service`（文件内容参考下方样例）：
+```ini
 [Unit]
 Description=GreatSQL Server
 Documentation=man:mysqld(8)
@@ -54,7 +52,7 @@ PrivateTmp=false
 ##  编辑 /etc/my.cnf 配置文件
 
 可以直接利用原来的 `/etc/my.cnf` 配置文件，将 `datadir`、`port`、`socket`、`server_id` 等几个选项注释掉，然后在文件末尾再加入类似下面的内容：
-```
+```ini
 # 注意这里的写法和mysqld_multi不同
 [mysqld@mgr01]
 datadir=/data/GreatSQL/mgr01
@@ -76,13 +74,14 @@ group_replication_local_address= "172.16.16.10:33071"
 ```
 
 重新加载systemd，使其生效：
-```
-$ systemctl daemon-reload
+```bash
+systemctl daemon-reload
 ```
 
 即可识别到这些新增加的服务列表了：
-```
+```bash
 $ systemctl -l
+
 ...
 greatsql@mgr01.service                              loaded active running   GreatSQL Server...
 greatsql@mgr02.service                              loaded active running   GreatSQL Server...
@@ -91,8 +90,8 @@ greatsql@mgr03.service                              loaded active running   Grea
 ```
 
 现在可以直接执行类似下面的命令启停多实例服务：
-```
-$ systemctl start greatsql@mgr01
+```bash
+systemctl start greatsql@mgr01
 ```
 
 这就可以在单机环境下很方便的管理多实例服务了。

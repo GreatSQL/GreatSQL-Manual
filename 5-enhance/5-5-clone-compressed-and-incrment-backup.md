@@ -10,16 +10,16 @@
 
 #### 备份远程实例
 
-连接到 donor 实例上，执行下面的命令安装 mysqlbackup 组件：
+连接到 donor 实例上，执行下面的 SQL 命令安装 mysqlbackup 组件：
 
 ```sql
-greatsql> INSTALL COMPONENT "file://component_mysqlbackup";
+INSTALL COMPONENT "file://component_mysqlbackup";
 ```
 
-再连接到 recipient 实例上，执行下面的命令进行在线全量热备：
+再连接到 recipient 实例上，执行下面的 SQL 命令进行在线全量热备：
 
 ```sql
-greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306
+CLONE INSTANCE FROM repl@172.16.16.10:3306
           IDENTIFIED BY 'GreatSQL@2023'
           DATA DIRECTORY = '/data/backup/clone-full/20240610'
           ENABLE PAGE TRACK;
@@ -57,14 +57,16 @@ BINLOG_POSITION: 0
 
 #### 备份本地实例
 
-如果是对本地实例进行全量备份，则会简单些，执行类似下面的命令即可：
+如果是对本地实例进行全量备份，则会简单些，执行类似下面的 SQL 命令即可：
 
 ```sql
-greatsql> INSTALL COMPONENT "file://component_mysqlbackup";
+-- 安装 mysqlbackup 组件
+INSTALL COMPONENT "file://component_mysqlbackup";
 
-greatsql> CLONE LOCAL DATA
-	  DIRECTORY = '/data/backup/clone-full/20240610'
-          ENABLE PAGE TRACK;
+-- 开始Clone备份
+CLONE LOCAL DATA
+  DIRECTORY = '/data/backup/clone-full/20240610'
+  ENABLE PAGE TRACK;
 ```
 
 同样地，如果不需要增量备份，则不要加上 `ENABLE PAGE TRACK` 子句。
@@ -75,13 +77,13 @@ greatsql> CLONE LOCAL DATA
 
 #### 对远程实例执行增量备份
 
-连接到 recipient 实例上，执行下面的命令执行增量备份：
+连接到 recipient 实例上，执行下面的 SQL 命令执行增量备份：
 
 ```sql
-greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306
-          IDENTIFIED BY 'GreatSQL@2023'
-	  DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
-	  ENABLE PAGE TRACK START_LSN = 21083116;
+CLONE INSTANCE FROM repl@172.16.16.10:3306
+  IDENTIFIED BY 'GreatSQL@2023'
+  DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
+  ENABLE PAGE TRACK START_LSN = 21083116;
 ```
 
 上述命令的作用是对远程实例 *172.16.16.10:3306* 执行增量备份，增备的起始点 *LSN = 21083116*，增备文件存放在 */data/backup/clone-incr/20240610-21083116* 中。
@@ -89,31 +91,31 @@ greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306
 除了指定起始 LSN 方式外，还可以指定基于本地备份目录执行增量备份：
 
 ```sql
-greatsql> CLONE INSTANCE FROM repl@172.16.16.10:3306
-          IDENTIFIED BY 'GreatSQL@2023'
-	  DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
-	  ENABLE PAGE TRACK
-	  INCREMENT BASED DIRECTORY = '/data/backup/clone-full/20240610';
+CLONE INSTANCE FROM repl@172.16.16.10:3306
+  IDENTIFIED BY 'GreatSQL@2023'
+  DATA DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
+  ENABLE PAGE TRACK
+  INCREMENT BASED DIRECTORY = '/data/backup/clone-full/20240610';
 ```
 上述命令指定本次增备任务是在已有的别分目录 */data/backup/clone-full/20240610* 基础上，自动识别起始 LSN 后执行增备，这个方法的好处是避免手误写错 *START_LSN* 值。
 
 #### 对本地实例执行增量备份
 
-执行下面的命令，完成针对本地实例的增量备份：
+执行下面的 SQL 命令，完成针对本地实例的增量备份：
 
 ```sql
-greatsql> CLONE LOCAL DATA
-          DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
-          ENABLE PAGE TRACK START_LSN = 21083116;
+CLONE LOCAL DATA
+  DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
+  ENABLE PAGE TRACK START_LSN = 21083116;
 ```
 
 同样地，也可以指定基于本地备份目录执行增备：
 
 ```sql
-greatsql> CLONE LOCAL DATA
-          DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
-          ENABLE PAGE TRACK
-          INCREMENT BASED DIRECTORY = '/data/backup/clone-full/20240610';
+CLONE LOCAL DATA
+  DIRECTORY = '/data/backup/clone-incr/20240610-21083116'
+  ENABLE PAGE TRACK
+  INCREMENT BASED DIRECTORY = '/data/backup/clone-full/20240610';
 ```
 
 ## Clone 增备数据恢复
@@ -207,26 +209,27 @@ BINLOG_POSITION: 0
 
 **1. 先准备好数据恢复的工作目录。**
 
-```shell
+```bash
 # 创建工作目录
-$ mkdir -p /data/restore && chown -R mysql:mysql /data/restore/
+mkdir -p /data/restore && chown -R mysql:mysql /data/restore/
 ```
 
 **2. 将全量备份文件及复制到工作目录下**
 
-```shell
+```bash
 # 复制备份文件到目标工作目录下（不要直接在备份结果目录上进行恢复，至少留一份原始备份副本）
-$ cp -rfp /data/backup/clone-full/20240618/ /data/restore/
-$ chown -R mysql:mysql /data/restore/
+cp -rfp /data/backup/clone-full/20240618/ /data/restore/
+chown -R mysql:mysql /data/restore/
 ```
 
 **3. 在恢复工作目录下启动数据库**
 
-如果不打算进行后续的增量备份恢复，那进行到这里就行了，可以基于这个工作目录，准备好一个合适的 my.cnf 配置文件，然后直接启动一个新的数据库实例。
+如果不打算进行后续的增量备份恢复，那进行到这里就行了，可以基于这个工作目录，准备好一个合适的 `my.cnf` 配置文件（参考下方样例），然后直接启动一个新的数据库实例。
 
-```shell
+```bash
 $ cd /data/restore/20240618
 $ cat my.cnf
+
 [mysqld]
 basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
 datadir = /data/restore/20240618
@@ -240,9 +243,9 @@ skip-networking
 
 如果不打算进行后续的增备恢复，则可以直接启动 GreatSQL 服务：
 
-```shell
-$ cd /data/restore/20240618
-$ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf &
+```bash
+cd /data/restore/20240618
+/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf &
 ```
 
 如果还要继续后面的增备恢复，就先不启动数据库实例，继续往下进行。
@@ -253,22 +256,23 @@ $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-fil
 
 创建增备恢复目标目录：
 
-```shell
-$ mkdir -p /data/restore/increment && chown -R mysql:mysql /data/restore/
+```bash
+mkdir -p /data/restore/increment && chown -R mysql:mysql /data/restore/
 ```
 
 复制第一次增量备份文件到目标目录：
 
-```shell
-$ cp -rfp /data/backup/clone-incr/20240618-202406181041/ /data/restore/increment
-$ chown -R mysql:mysql /data/restore/
+```bash
+cp -rfp /data/backup/clone-incr/20240618-202406181041/ /data/restore/increment
+chown -R mysql:mysql /data/restore/
 ```
 
 对第一次增量备份文件进行恢复
 
-```shell
+```bash
 $ cd /data/restore/20240618
 $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf --clone_incremental_dir=/data/restore/increment/20240618-202406181041
+
 [System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld (mysqld 8.0.32-26) starting as process 914938
 [Warning] [MY-010075] [Server] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: f982e941-2d42-11ef-9a06-d08e7908bcb1.
 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
@@ -281,7 +285,7 @@ $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-fil
 
 复制第二次增量备份文件到目标目录：
 
-```shell
+```bash
 $ cp -rfp /data/backup/clone-incr/20240618-202406181350/ /data/restore/increment
 $ chown -R mysql:mysql /data/restore/
 
@@ -289,6 +293,7 @@ $ chown -R mysql:mysql /data/restore/
 $ cd /data/restore/20240618
 $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf \
   --clone_incremental_dir=/data/restore/increment/20240618-202406181350
+
 ...
 [System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld (mysqld 8.0.32-26) starting as process 915395
 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
@@ -301,11 +306,12 @@ $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-fil
 
 **6. 启动数据库实例。**
 
-启动实例前，需要确认 my.cnf 中关键参数配置和原来实例中的要保持一致，尤其是 `lower_case_table_names`，并进行适当的调整。
+启动实例前，需要确认 `my.cnf` 中关键参数配置和原来实例中的要保持一致，尤其是 `lower_case_table_names`，并进行适当的调整（参考下方样例）。
 
-```shell
+```bash
 $ cd /data/restore/20240618
 $ cat my.cnf
+
 [mysqld]
 basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
 datadir = /data/restore/20240618
@@ -373,26 +379,26 @@ greatsql> SHOW BINARY LOGS;
 
 **3. 指定 Binlog 文件及点位，进行指定时间点恢复。**
 
-```shell
+```bash
 # 进入原来的数据库实例存储 Binlog 的目录下
-$ cd /data/GreatSQL
+cd /data/GreatSQL
 
 # 调用 mysqlbinlog 工具，指定起止点位，解析 Binlog 完成恢复
-$ mysqlbinlog ./binlog.000013 --start-position=29832341 \
+mysqlbinlog ./binlog.000013 --start-position=29832341 \
   --stop-position=29838644 | mysql -S/data/restore/20240618/mysql.sock -uroot -p
 ```
 
 解析 Binlog 恢复时，也可以改成指定截止时间点：
 
-```shell
-$ mysqlbinlog ./binlog.000013 --start-position=29832341 \
+```bash
+mysqlbinlog ./binlog.000013 --start-position=29832341 \
   --stop-datetime="2024-06-18 16:00:00" | mysql -S/data/restore/20240618/mysql.sock -uroot -p
 ```
 
 也可以不指定截止点位，则表示恢复到最新事务，例如：
 
-```shell
-$ mysqlbinlog ./binlog.000013 --start-position=29832341 | mysql -S/data/restore/20240618/mysql.sock -uroot -p
+```bash
+mysqlbinlog ./binlog.000013 --start-position=29832341 | mysql -S/data/restore/20240618/mysql.sock -uroot -p
 ```
 
 利用 Clone 在线热备及增备功能，再结合 Binlog 大大提升 GreatSQL 的数据恢复可靠性，满足了可以恢复到任意指定时间点的需求。
@@ -419,23 +425,26 @@ GreatSQL 8.0.32-26 版本开始支持 Clone 备份文件压缩功能，只需设
 
 #### 开启备份文件压缩功能
 
+执行下面的 SQL 命令开启 Clone 压缩功能：
 ```sql
-greatsql> SET GLOBAL clone_file_compress = CLONE_FILE_COMPRESS_ZSTD;
+SET GLOBAL clone_file_compress = CLONE_FILE_COMPRESS_ZSTD;
 ```
 
 #### 执行 Clone 备份
 
+执行下面的 SQL 命令进行 Clone 备份并开启 page tracking：
 ```sql
 -- 备份本地实例，并开启 page tracking
-greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-compressed/20240708'
-          ENABLE PAGE TRACK;
+CLONE LOCAL DATA DIRECTORY = '/data/backup/clone-compressed/20240708'
+  ENABLE PAGE TRACK;
 ```
 
 查看备份文件，确认压缩结果
 
-```shell
+```bash
 $ ls -la /data/backup/clone-compressed/20240708
-total 50744
+
+...
 drwxr-x--- 7 mysql mysql     4096 Jul  8 12:16  .
 drwxr-x--- 3 mysql mysql       22 Jul  8 12:16  ..
 drwxr-x--- 2 mysql mysql      115 Jul  8 12:16 '#clone'
@@ -470,18 +479,20 @@ drwxr-x--- 2 mysql mysql     4096 Jul  8 12:16  tpch1g
 
 #### 在全备基础上，再做一次增备（压缩）
 
+执行下面的 SQL 命令完成（压缩）增备：
 ```sql
-greatsql> CLONE LOCAL DATA
-	  DIRECTORY = '/data/backup/clone-compressed-incr/20240708-202407081218'
-          ENABLE PAGE TRACK
-          INCREMENT BASED DIRECTORY '/data/backup/clone-compressed/20240708';
+CLONE LOCAL DATA
+  DIRECTORY = '/data/backup/clone-compressed-incr/20240708-202407081218'
+  ENABLE PAGE TRACK
+  INCREMENT BASED DIRECTORY '/data/backup/clone-compressed/20240708';
 ```
 
 查看备份文件，确认压缩结果
 
-```shell
+```bash
 $ ls -la /data/backup/clone-compressed-incr/20240708-2024070812
-total 176
+
+...
 drwxr-x--- 7 mysql mysql   4096 Jul  8 12:18  .
 drwxr-x--- 3 mysql mysql     33 Jul  8 12:18  ..
 drwxr-x--- 2 mysql mysql    115 Jul  8 12:18 '#clone'
@@ -509,9 +520,11 @@ drwxr-x--- 2 mysql mysql   4096 Jul  8 12:18  tpch1g
 
 解压缩时需要用到 `zstd_decompress` 和 `lz4_decompress` 是 GreatSQL 提供的解压缩工具，它们位于 *basedir/bin* 目录下，需要将该目录加到环境变量 **PATH** 中，否则就需要指定全路径：
 
-```shell
+```bash
 $ export PATH=$PATH:/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin
 $ which zstd_decompress
+
+..
 /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/zstd_decompress
 ```
 
@@ -519,13 +532,15 @@ $ which zstd_decompress
 
 在开始使用压缩后的备份文件恢复前，需要先解压缩：
 
-```shell
+```bash
 # 无论如何，不要忘记再做一次备份，避免误操作影响原来的备份文件
 $ cp -rfp /data/backup/clone-compressed/20240708 /data/restore/
 
 # 解压缩
 $ cd /data/restore/20240618
 $ for f in `find . -iname "*\.zstd"`; do zstd_decompress $f $(dirname $f)/$(basename $f .zstd); rm -f $f; done
+
+...
 decompress file: ./sys/sys_config.ibd.zstd
 decompress file: ./sys/dbms_alert_info.ibd.zstd
 ...
@@ -534,7 +549,8 @@ decompress file: ./#innodb_redo/#ib_redo0.zstd
 
 # 确认解压缩后的文件
 $ ls -la
-total 299644
+
+...
 drwxr-x--- 7 mysql mysql      4096 Jul  8 14:05  .
 drwxr-xr-x 4 root  root         39 Jul  8 14:04  ..
 drwxr-x--- 2 mysql mysql       115 Jul  8 12:16 '#clone'
@@ -565,23 +581,25 @@ drwxr-x--- 2 mysql mysql      4096 Jul  8 14:05  tpch1g
 
 以上是假定备份压缩采用的是 *zstd* 方式，如果是 *lz4* 则改成类似下面这样（修改文件后缀，以及调用的解压缩工具）：
 
-```shell
+```bash
 # 解压缩
-$ cd /data/restore/20240618
-$ for f in `find . -iname "*\.lz4"`; do lz4_decompress $f $(dirname $f)/$(basename $f .lz4); rm $f; done
+cd /data/restore/20240618
+for f in `find . -iname "*\.lz4"`; do lz4_decompress $f $(dirname $f)/$(basename $f .lz4); rm $f; done
 ```
 
 #### 解压缩增备文件
 
 如果还要恢复增备压缩文件，同样地，也要先进行解压缩操作：
 
-```shell
+```bash
 # 不厌其烦地提醒，要先做好备份，不要对原备份文件直接操作
 $ cp -rfp /data/backup/clone-compressed-incr/20240708-2024070812 /data/restore/increment
 
 # 解压缩
 $ cd /data/restore/increment/20240708-2024070812
 $ for f in `find . -iname "*\.zstd"`; do zstd_decompress $f $(dirname $f)/$(basename $f .zstd); rm -f $f; done
+
+...
 decompress file: ./ibdata1.delta.zstd
 ...
 decompress file: ./sys/dbms_alert_info.ibd.delta.zstd
@@ -591,11 +609,12 @@ decompress file: ./sys/dbms_alert_info.ibd.delta.zstd
 
 准备好一个合适的 my.cnf 配置文件，然后应用 *.delta* 文件，即可完成全量备份恢复：
 
-```shell
+```bash
 $ cd /data/restore/20240708
 
 # 检查确认 my.cnf 文件内容
 $ cat my.cnf
+
 [mysqld]
 basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
 datadir = /data/restore/20240708
@@ -611,10 +630,11 @@ skip-networking
 
 在这里要特别注意的是，在对全量压缩备份的第一次恢复过程中，启动 *mysqld* 程序时既要指定 `datadir=/data/restore/20240708`，同时也要指定 `clone_incremental_dir=/data/restore/20240708`，这样才能对 *.delta* 文件进行恢复操作。类似下面这样：
 
-```shell
+```bash
 $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf \
   --clone_incremental_dir=/data/restore/20240708
 
+...
 [Warning] [MY-010097] [Server] Insecure configuration for --secure-log-path: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
 [System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.17-x86_64/bin/mysqld (GreatSQL 8.0.32-26) starting as process 1637442
 [Warning] [MY-010075] [Server] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: 0c2b81ce-3cfd-11ef-be21-d08e7908bcb1.
@@ -622,7 +642,9 @@ $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-fil
 [Warning] [MY-012091] [InnoDB] Allocated tablespace ID 7 for sys_audit, old maximum was 0
 ```
 
-> 也就是说，在对 Clone 压缩备份文件执行恢复时，同时要把恢复目录当做增量备份目录以完成对 .delta 文件的恢复
+::: tip 小贴士
+也就是说，在对 Clone 压缩备份文件执行恢复时，同时要把恢复目录当做增量备份目录以完成对 .delta 文件的恢复。
+:::
 
 可根据需要自行调整 my.cnf 配置文件内容。
 
@@ -632,11 +654,12 @@ $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-fil
 
 将增备压缩文件解压缩后，准备好一个合适的 my.cnf 配置文件，配合全备文件目录，执行增备文件的恢复应用：
 
-```shell
+```bash
 $ cd /data/restore/20240618
 
 # 检查确认 my.cnf 文件内容
 $ cat my.cnf
+
 [mysqld]
 basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
 datadir = /data/restore/20240618
@@ -649,11 +672,12 @@ skip-networking
 
 接下来启动 *mysqld* 程序，将 `--clone_incremental_dir` 参数指向增量备份恢复数据目录，在应用完全部增量备份数据后，进程就会自动退出，而不是继续进入服务启动阶段。
 
-```shell
+```bash
 # 启动 GreatSQL，将参数 --clone_incremental_dir 指向增备恢复文件
 $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf \
   --clone_incremental_dir=/data/restore/20240618-202406181530
 
+...
 [Warning] [MY-010097] [Server] Insecure configuration for --secure-log-path: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
 [System] [MY-010116] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.17-x86_64/bin/mysqld (mysqld 8.0.32-23)
 [Warning] [MY-010075] [Server] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: d1405fbb-3cf7-11ef-8d84-d08e7908bcb1.
@@ -669,9 +693,9 @@ $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-fil
 
 全备、增备文件全部应用完后，接下来可以启动数据库实例：
 
-```shell
-$ cd /data/restore/20240618
-$ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf &
+```bash
+cd /data/restore/20240618
+/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=./my.cnf &
 ```
 可根据需要自行调整 my.cnf 配置文件内容。
 
@@ -699,7 +723,7 @@ $ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-fil
 在执行 Clone 备份时，加上 `ENABLE PAGE TRACK` 子句即可启用 *page tracking*：
 
 ```sql
-greatsql> CLONE ... ENABLE PAGE TRACK;
+CLONE ... ENABLE PAGE TRACK;
 ```
 
 还可以调用 `mysqlbackup_page_track_set()` 函数来启用 *page tracking*：
@@ -760,8 +784,10 @@ greatsql> SHOW GLOBAL STATUS LIKE '%lsn%';
 
 开启 *page tracking* 后，会在 `%datadir%/#ib_archive` 目录下生成相关新文件记录 *tablespace id* 和 *page no* 变化情况：
 
-```shell
+```bash
 $ find ./#ib_archive/ -type f | xargs ls -l
+
+...
 -rw-r----- 1 mysql mysql 49152 Jun 18 09:50 ./#ib_archive/ib_dblwr/dblwr_0
 -rw-r----- 1 mysql mysql     0 Jun 17 17:55 ./#ib_archive/page_group_21483396843/durable
 -rw-r----- 1 mysql mysql 32768 Jun 18 09:39 ./#ib_archive/page_group_21483396843/ib_page_0
@@ -829,8 +855,9 @@ greatsql> SELECT mysqlbackup_page_track_purge_up_to(21635193850);
 
 再次查看 `%datadir%/#ib_archive` 目录下相关文件：
 
-```shell
+```bash
 $ find ./#ib_archive/ -type f | xargs ls -l
+
 -rw-r----- 1 mysql mysql 49152 Jun 18 09:55 ./#ib_archive/ib_dblwr/dblwr_0
 ```
 可以看到，相关的数据文件都已经被清除。
@@ -994,11 +1021,11 @@ greatsql> SELECT * FROM performance_schema.clone_status;
 +------+------+-------------+-------------------------+-------------------------+----------------+------------------------------------------------+----------+---------------+-------------+-----------------+---------------+-------------+----------------+-------------+
 ```
 
-如果需要终止 ID = 4 的增备任务，可以通过如下命令：
+如果需要终止 ID = 4 的增备任务，可以通过如下 SQL 命令：
 
 ```sql
 -- 在上例中，ID = 4 的增备任务已完成（Completed），无法在事后终止。
-greatsql> KILL 11;
+KILL 11;
 ```
 
 注意：被终止的备份任务，不能再次启动，目前也不支持备份任务暂停。

@@ -28,7 +28,9 @@ greatsql> SELECT * FROM INFORMATION_SCHEMA.INDEX_STATISTICS WHERE TABLE_NAME='sy
 | INDEX_NAME   | 索引名称（在 SHOW CREATE TABLE 中可见） |
 | ROWS_READ    | 从此索引读取的行数                      |
 
-> 注意：索引统计信息的当前实现不支持分区表
+::: warning 注意
+索引统计信息的当前实现不支持分区表。
+:::
 
 
 **扫码关注微信公众号**

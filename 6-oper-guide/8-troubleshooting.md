@@ -31,8 +31,8 @@ log_error_verbosity = 3
 - 可能因为操作系统环境兼容性或其他原因，导致 `mysqld_pre_systemd` 这个初始化脚本无法正确工作。
 
 这时可以改成手动初始化，确认 GreatSQL 工作正常：
-```shell
-$ /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --no-defaults --user=mysql --log_error_verbosity=3 --datadir=/data/GreatSQL --initialize
+```bash
+/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --no-defaults --user=mysql --log_error_verbosity=3 --datadir=/data/GreatSQL --initialize
 ```
 如果手动初始化工作正常，再进一步排查 `mysqld_pre_systemd` 脚本哪里工作异常。
 
@@ -52,9 +52,9 @@ pid_file = greatsql.pid
 ```
 如果该参数设置为包含完整文件目录时，则要确保其上级目录是存在的且有写入权限，例如设置 `pid_file = /data/run/greatsql/3306.pid`，这时要确保目录 `/data/run/greatsql/` 是存在的，并且 GreatSQL 进程的运行用户对其有写入权限。
 
-```
-$ mkdir -p /data/run/greatsql/
-$ chown -R mysql:mysql /data/run/greatsql/
+```bash
+mkdir -p /data/run/greatsql/
+chown -R mysql:mysql /data/run/greatsql/
 ```
 
 ## 无法连接 GreatSQL，提示 `Can 't connect to local MySQL server through socket '/tmp/mysql.sock'` 错误
@@ -86,8 +86,8 @@ socket = /data/GreatSQL/mysql.sock
 
 这种情况下，改成用 TCP/IP 方式连接 GreatSQL 数据库即可。例如：
 
-```shell
-$ mysql -h127.0.0.1 -uroot -P3306 -p'xx'
+```bash
+mysql -h127.0.0.1 -uroot -P3306 -p'xx'
 ```
 
 如果不影响应用业务正常使用的话（应用业务通常是采用 TCP/IP 方式连接，不通过本地 socket 文件连接），所以一般没必要急着重启 GreatSQL 服务，等到下一次业务例行维护时再重启即可。
@@ -119,7 +119,7 @@ $ mysql -h127.0.0.1 -uroot -P3306 -p'xx'
 
 可以查看操作系统日志文件 `/var/log/messages`，通常会有类似下面的日志内容
 
-```shell
+```
 kernel: Out of memory: Kill process 6033 (mysqld) score 615 or sacrifice child
 kernel: Killed process 6033, UID 498, (mysqld) total-vm:56872260kB, anon-rss:3202560kB, file-rss:40kB
 ```
@@ -127,7 +127,7 @@ kernel: Killed process 6033, UID 498, (mysqld) total-vm:56872260kB, anon-rss:320
 当发生OOM Killer事件时，可以选择适当调低部分设计内存的参数选项，例如 `innodb_buffer_pool_size` 等，也可以适当加大操作系统的物理内存。
 
 此外，如果想保护mysqld进程不被OOM Killer机制杀掉，可以调整相应进程的 `oom_score_adj` 设置，将其修改为 -1000，例如：
-```shell
+```bash
 $ ps -ef | grep mysqld
 ps -ef | grep mysqld | grep -v grep
 mysql     597099   1  9 Apr27 ?        21:16:54 /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf
@@ -172,8 +172,9 @@ systemd[1549425]: greatdb.service: Failed at step EXEC spawning /data/GreatSQL-8
 
 文件权限设置是正常的
 
-```
+```bash
 $ ls -la /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld 
+
 -rwxr-xr-x 1 mysql mysql 383759416 Feb  2 23:36 /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
 ```
 
@@ -184,14 +185,14 @@ $ ls -la /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
 可以采用下面方法修复：
 
 1. 首先，执行 `restorecon` 命令将文件和目录的SELinux安全上下文重置为默认值
-```shell
-$ restorecon -rv /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/
+```bash
+restorecon -rv /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/
 ```
 
 2. 关闭 SELinux
-```shell
-$ setenforce 0
-$ sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
+```bash
+setenforce 0
+sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
 ```
 
 再次重试，应该就可以了。
@@ -209,7 +210,7 @@ Thread XXX has waited at XXX line XXX for 928 seconds the semaphore
 
 几个可能的原因及可选解决办法
 1. 垃圾SQL太多，需要进行优化垃圾SQL，能看到有些事务修改多行记录，看起来效率也很低
-2. 数据库层面关闭自适应哈希索引（innodb_adaptive_hash_index = OFF），也可能是这个引起的
+2. 数据库层面关闭自适应哈希索引（`innodb_adaptive_hash_index = OFF`），也可能是这个引起的
 3. 加强监控，不少事务活跃时间太久了，一直没提交。垃圾SQL（事务）长时间不结束，会占用更多资源，之后一起玩完。参考 [监控告警](../6-oper-guide/3-monitoring-and-alerting.md)。
 4. 可能系统层I/O设备有故障，能看到多个事务处于PREPARED状态，此时可能因为物理I/O设备故障导致无法提交/刷新数据。
 5. 最后建议升级到 GreatSQL 最新版本，相对更稳定可靠。

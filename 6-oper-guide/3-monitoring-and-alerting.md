@@ -23,7 +23,7 @@ TPS、QPS好比高速公路收费站闸机每分钟能通过多少辆车，而SQ
 前者通过增设闸机数量（提高并发度），即可提高处理能力；而后者则需要通过优化闸机处理机制（优化数据库 & 每条SQL），才能提高响应效率。
 
 在GreatSQL中，可以利用 `benchmark()` 函数来衡量SQL平均响应耗时：
-```
+```sql
 greatsql> \help benchmark
 Name: 'BENCHMARK'
 Description:
@@ -44,8 +44,8 @@ greatsql> SELECT BENCHMARK(1000000,AES_ENCRYPT('hello','goodbye'));
 并且可以在业务空闲时段取得该值作为基准数据，再根据业务高峰时期的耗时作为对比，即可知道业务高峰期SQL平均响应耗时增加了多少，效率降低了多少。
 
 例如：
-```
-time mysql -q -N -s -e "SELECT BENCHMARK(100000,AES_ENCRYPT('hello','goodbye'))"
+```bash
+$ time mysql -q -N -s -e "SELECT BENCHMARK(100000,AES_ENCRYPT('hello','goodbye'))"
 0
 
 real    0m0.024s
@@ -58,7 +58,7 @@ sys     0m0.004s
 ## 锁、等待事件
 
 ### 当前行锁数量
-```
+```sql
 greatsql> SELECT * FROM performance_schema.global_status WHERE variable_name = 'Innodb_row_lock_current_waits';
 +-------------------------------+----------------+
 | VARIABLE_NAME                 | VARIABLE_VALUE |
@@ -68,8 +68,8 @@ greatsql> SELECT * FROM performance_schema.global_status WHERE variable_name = '
 ```
 当该值大于0的时候，就要立即发出告警，表示当前存在行锁等待事件，要检查是否有事务持有行锁未释放。
 
-### IBP wait free
-```
+### InnoDB buffer pool wait free
+```sql
 greatsql> SELECT * FROM performance_schema.global_status WHERE variable_name = 'Innodb_buffer_pool_wait_free';
 +-------------------------------+----------------+
 | VARIABLE_NAME                 | VARIABLE_VALUE |
@@ -80,7 +80,7 @@ greatsql> SELECT * FROM performance_schema.global_status WHERE variable_name = '
 当该值大于0的时候，就要立即发出告警，表示InnoDB Buffer Pool严重不够用，如果物理内存足够，则适当加大，或者迁移到更高内存的服务器上。
 
 ### InnoDB log wait
-```
+```sql
 greatsql> SELECT * FROM performance_schema.global_status WHERE variable_name = 'Innodb_log_waits';
 +------------------+----------------+
 | VARIABLE_NAME    | VARIABLE_VALUE |
@@ -91,7 +91,7 @@ greatsql> SELECT * FROM performance_schema.global_status WHERE variable_name = '
 当该值大于0的时候，就要立即发出告警，表示InnoDB Log Buffer严重不够用，如果物理内存足够，则适当加大，或者迁移到更高内存的服务器上。
 
 ### InnoDB Purge Lag
-```
+```sql
 greatsql> SELECT `COUNT`,`COMMENT` FROM information_schema.INNODB_METRICS WHERE NAME = 'trx_rseg_history_len';
 +-------+-------------------------------------+
 | COUNT | COMMENT                             |
@@ -115,7 +115,7 @@ History list length 4
 这些事务中可能对数据库执行大量修改操作，需要持有行锁、MDL锁等资源，如果事务长时间不提交/回滚，则可能对其他业务请求造成严重影响，这些请求可能会被长时间阻塞。
 
 因此，需要关注运行中的大事务、长事务，一旦发现超过阈值，就应当发出告警。
-```
+```sql
 # 找到活跃时间最长的事务
 greatsql> SELECT * FROM information_schema.INNODB_TRX ORDER BY trx_started ASC LIMIT 1;
 
@@ -134,7 +134,7 @@ greatsql> SELECT * FROM information_schema.INNODB_TRX WHERE
 ## MGR监控
 
 对MGR除了监控其服务状态外，更重要的是监控各节点间的事务延迟情况，以此判断各节点的事务处理能力，以及评估是否需要提升服务器配置等级。
-```
+```sql
 greatsql> SELECT MEMBER_ID AS id, COUNT_TRANSACTIONS_IN_QUEUE AS trx_tobe_certified,
   COUNT_TRANSACTIONS_REMOTE_IN_APPLIER_QUEUE AS relaylog_tobe_applied,
   COUNT_TRANSACTIONS_CHECKED AS trx_chkd,

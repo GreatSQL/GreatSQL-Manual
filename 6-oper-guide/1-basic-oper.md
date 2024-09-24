@@ -10,28 +10,28 @@
 如果是RPM包方式安装GreatSQL，则服务名为 `mysqld`，如果采用二进制包和Ansible方式安装，则服务名为 `greatsql`。为了方便，本文中统一约定为 `greatsql`。
 
 **启动服务**
-```
-$ systemctl start greatsql
+```bash
+systemctl start greatsql
 ```
 
 **停止服务**
-```
-$ systemctl stop greatsql
+```bash
+systemctl stop greatsql
 ```
 
 **重启服务**
-```
-$ systemctl restart greatsql
+```bash
+systemctl restart greatsql
 ```
 
 **查看服务状态**
-```
-$ systemctl status greatsql
+```bash
+systemctl status greatsql
 ```
 
 如果执行过程中有报错，则运行下面的命令查看错误信息：
-```
-$ journalctl -ex
+```bash
+journalctl -ex
 ```
 
 更多关于利用systemd管理GreatSQL服务的内容请参考：[利用systemd管理GreatSQL](../4-install-guide/8-greatsql-with-systemd.md)。
@@ -43,7 +43,7 @@ $ journalctl -ex
 可以通过SQL命令在线修改GreatSQL中的大多数参数选项并立即生效。
 
 首先，查看要修改的参数选项当前值：
-```
+```sql
 greatsql> SHOW GLOBAL VARIABLES LIKE 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
@@ -53,12 +53,12 @@ greatsql> SHOW GLOBAL VARIABLES LIKE 'innodb_buffer_pool_size';
 ```
 
 执行SET命令修改该选项值：
-```
-# 修改为8G
+```sql
+-- 修改为8G
 greatsql> SET GLOBAL innodb_buffer_pool_size = 8589934592;
 Query OK, 0 rows affected (0.00 sec)
 
-# 再次查看，确认生效
+-- 再次查看，确认生效
 greatsql> SHOW GLOBAL VARIABLES LIKE 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
@@ -70,7 +70,7 @@ greatsql> SHOW GLOBAL VARIABLES LIKE 'innodb_buffer_pool_size';
 直接在线修改选项值有个风险，就是只记得动态修改当前值，但是忘记修改 `my.cnf` 中的选项，数据库重启后，这个修改会被重置。
 
 因此，建议用另一种方式修改：
-```
+```sql
 greatsql> SET PERSIST innodb_buffer_pool_size = 4294967296;
 Query OK, 0 rows affected (0.00 sec)
 
@@ -94,7 +94,7 @@ greatsql> SHOW GLOBAL VARIABLES LIKE 'innodb_buffer_pool_size';
 第一种是直接修改 `my.cnf` 文件，保存退出，数据库下次重启时就会生效了。
 
 第二种是执行 `SET PERSIST_ONLY` 修改，这时候只会将新的选项值记录到 `mysqld-auto.cnf` 中，并不会立即修改内存中的选项值。
-```
+```sql
 greatsql> SHOW GLOBAL VARIABLES LIKE 'innodb_buffer_pool_size';
 +-------------------------+------------+
 | Variable_name           | Value      |
@@ -144,7 +144,8 @@ $ grep innodb_buffer_pool_size /data/GreatSQL/mysqld-auto.cnf
 
 数据库运行过程中，随着用户对数据库不断执行各种操作，binlog会不断增加，默认设置是30天（`binlog_expire_logs_seconds
 = 2592000`）才会自动清理，因此当可用磁盘空间较为紧张时，就需要手动执行清理binlog操作。例如：
-```
+```sql
+-- 列出当前所有binlog
 greatsql> SHOW BINARY LOGS;
 +---------------------+------------+
 | Log_name            | File_size  |
@@ -157,13 +158,13 @@ greatsql> SHOW BINARY LOGS;
 +---------------------+------------+
 42 rows in set (0.00 sec)
 
-# 可以看到共有42个binlog
-# 举例现在只想保留最近2个，其余都清除
+-- 可以看到共有42个binlog
+-- 举例现在只想保留最近2个，其余都清除
 greatsql> PURGE BINARY LOGS TO 'greatsql-bin.001465';
 Query OK, 0 rows affected (1.99 sec)
 
-# 再次查看
-# 当前对数据库正在做压测，所以又很快生成了很多binlog
+-- 再次查看
+-- 当前对数据库正在做压测，所以又很快生成了很多binlog
 greatsql> SHOW BINARY LOGS;
 +---------------------+------------+
 | Log_name            | File_size  |
@@ -176,17 +177,21 @@ greatsql> SHOW BINARY LOGS;
 +---------------------+------------+
 17 rows in set (0.00 sec)
 
-# 重新设置binlog自动清理周期为7天
+-- 重新设置binlog自动清理周期为7天
 greatsql> SET PERSIST binlog_expire_logs_seconds = 604800;
 ```
-**提醒：** 清理binlog前，请务必记得做好备份，避免影响后续的数据库恢复需要。
+
+::: warning 警告
+清理binlog前，请务必记得做好备份，避免影响后续的数据库恢复需要。
+:::
 
 ### 清理slow query log
 
 当启用记录slow query log时，可能会因为业务压力较大，或者因为`long_query_time`阈值设置太低，或者因为设置了`log_queries_not_using_indexes = ON`而记录大量无索引SQL请求，最终导致slow query log文件过大，也需要定期检查清理。
 
 下面是适用于大多数业务场景的slow query log设置参考：
-```
+```ini
+[mysqld]
 slow_query_log = 1
 log_slow_extra = 1
 log_slow_verbosity = FULL
@@ -202,22 +207,23 @@ log_slow_slave_statements = 1
 ```
 
 可以执行下面的命令清理slow query log，清理前也记得先做好备份：
+```bash
+cp slow.log slow.log-`date +%Y%m%d`
+echo '' > slow.log
 ```
-$ cp slow.log slow.log-`date +%Y%m%d`
-$ echo '' > slow.log
 
-# 再进入GreatSQL，执行SQL命令
-greatsql> FLUSH SLOW LOGS;
+再连接进入GreatSQL，执行SQL命令
+```sql
+FLUSH SLOW LOGS;
 ```
 这样就可以清空slow query log了。
 
 ### 清理general log/error log
 
 和清理slow query log差不多，也是先做好日志文件备份，然后执行SQL命令：
-```
-greatsql> FLUSH GENERAL LOGS;
-
-greatsql> FLUSH ERROR LOGS;
+```sql
+FLUSH GENERAL LOGS;
+FLUSH ERROR LOGS;
 ```
 
 详情参考文档：[FLUSH Statement](https://dev.mysql.com/doc/refman/8.0/en/flush.html)。
@@ -235,17 +241,16 @@ greatsql> FLUSH ERROR LOGS;
 
 首先，执行下面的SQL，找到那些可能存在索引统计信息不准确的表：
 
->
-> 工作方式
->
-> 1、扫描所有索引统计信息
->
-> 2、包含主键列的辅助索引统计值，对比主键索引列的统计值，得到一个百分比stat_pct
->
-> 3、根据stat_pct排序，值越低说明辅助索引统计信息越不精确，越是需要关注
->
+::: tip 工作方式
 
-```
+1、扫描所有索引统计信息
+
+2、包含主键列的辅助索引统计值，对比主键索引列的统计值，得到一个百分比stat_pct
+
+3、根据stat_pct排序，值越低说明辅助索引统计信息越不精确，越是需要关注
+:::
+
+```sql
 greatsql> SET @statdb = 'greatsql';
 SELECT 
 a.database_name ,
@@ -325,7 +330,7 @@ ORDER BY stat_pct;
 当然了，在检查分析业务SQL时，通常也会查看其执行计划，如果发现个别SQL执行计划不如预期，也可能是索引统计信息不准确导致，这时也可以人工确认下。
 
 在业务负载低谷时段执行下面的命令更新索引统计信息：
-```
+```sql
 greatsql> ANALYZE TABLE t1;
 +-------------+---------+----------+----------+
 | Table       | Op      | Msg_type | Msg_text |
@@ -357,12 +362,12 @@ MySQL 8.0.24之前，如果该表上有请求还未结束，这时候再执行 `
 如果碎片率特别高，而且对性能影响也的确特别严重的话，就需要重整表空间消除碎片了。
 
 首先，执行下面的SQL命令查看哪些表碎片率可能较高：
-```
+```sql
 greatsql> SELECT TABLE_SCHEMA as `db`, TABLE_NAME as `tbl`, 
-1-(TABLE_ROWS*AVG_ROW_LENGTH)/(DATA_LENGTH + INDEX_LENGTH + DATA_FREE) AS `fragment_pct`,
-TABLE_ROWS
-FROM information_schema.TABLES WHERE 
-TABLE_SCHEMA = 'greatsql' AND TABLE_ROWS >= 10000 ORDER BY fragment_pct DESC, TABLE_ROWS DESC;
+  1-(TABLE_ROWS*AVG_ROW_LENGTH)/(DATA_LENGTH + INDEX_LENGTH + DATA_FREE) AS `fragment_pct`,
+  TABLE_ROWS
+  FROM information_schema.TABLES WHERE 
+  TABLE_SCHEMA = 'greatsql' AND TABLE_ROWS >= 10000 ORDER BY fragment_pct DESC, TABLE_ROWS DESC;
 +----------+----------+--------------+------------+
 | db       | tbl      | fragment_pct | TABLE_ROWS |
 +----------+----------+--------------+------------+
@@ -376,13 +381,15 @@ TABLE_SCHEMA = 'greatsql' AND TABLE_ROWS >= 10000 ORDER BY fragment_pct DESC, TA
 查询结果以碎片率倒序排序，排在前面的碎片率更高。当然了，如果表的数据量很少，可能会导致这个统计不准确，也要识别下。
 
 如果表数据量较小，或者表空间文件较小，则可以直接执行下面的SQL命令重整表空间消除碎片：
-```
-greatsql> ALTER TABLE sbtest1 ENGINE = innodb;
+```sql
+ALTER TABLE sbtest1 ENGINE = innodb;
 ```
 
 如果表数据量较大，或者表空间文件较大，则**强烈建议**采用 `pt-online-schema-change` 工具重整表空间消除碎片，例如：
-```
+```bash
 $ pt-online-schema-change --socket=/data/GreatSQL/mysql.sock --alter "ENGINE=InnoDB" D=greatsql,t=sbtest1
+
+...
 No slaves found.  See --recursion-method if host greatsql has slaves.
 Not checking slave lag because no slaves were found and --check-slave-lag was not specified.
 Operation, tries, wait:
@@ -413,7 +420,9 @@ Successfully altered `greatsql`.`sbtest1`.
 ```
 这就完成表空间重整，可以有效消除碎片。
 
-**提醒：** 重整表空间时，注意系统剩余磁盘空间是否足够，因为重整期间可能会将整个表复制一遍，把磁盘空间撑爆。
+::: tip 小贴士
+重整表空间时，注意系统剩余磁盘空间是否足够，因为重整期间可能会将整个表复制一遍，把磁盘空间撑爆。
+:::
 
 数据库日常运行过程中，需要关注哪些事项，需要做哪些例行检查，可以参考下面几个资源：
 
@@ -423,9 +432,7 @@ Successfully altered `greatsql`.`sbtest1`.
 
 ### 配置GreatSQL客户端
 推荐采用下面的GreatSQL客户端配置参数：
-```
-$ vim /etc/my.cnf
-...
+```ini
 [mysql]
 loose-skip-binary-as-hex
 prompt = "greatsql [\\u@\\h][\\d]>"

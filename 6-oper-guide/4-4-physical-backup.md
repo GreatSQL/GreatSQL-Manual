@@ -9,12 +9,13 @@
 - 在主从复制架构的从节点停机维护时，copy整个数据文件目录。
 - 在MGR架构的从节点停机维护时，copy整个数据文件目录。
 
-**注意：** 
+::: warning 注意
 
 1. 如果想要通过文件系统层进行物理备份，则在停机维护前，最好先设置 `innodb_fast_shutdown=0`，然后再关闭该实例，以确保可以获得一份干净的数据文件。
 2. 进行物理备份时，还要同时备份相应的my.cnf配置文件，因为在恢复时相关的参数选项要保持一致。
 3. 如果`datadir`目录下有`mysqld-auto.cnf`这个配置文件，也要备份。
 4. 在`datadir`目录下的`auto.cnf`文件记录的是该实例的`server_uuid`，在做恢复时如果不需要保留原值，则可以删除该文件，在实例启动时会自动重新生成一个新的`server_uuid`。通常也不建议保留，因为有可能会和现有的实例产生冲突。
+:::
 
 需要恢复时，直接将物理备份文件copy到相应目录下，修改文件属主及权限模式，确认相应的my.cnf中的配置无误后，直接启动GreatSQL服务进程即可。
 
@@ -47,13 +48,15 @@
 
 ### 常规全量备份
 
-```
+```bash
 $ xtrabackup --backup --datadir=/data/GreatSQL/ --target-dir=/backup/GreatSQL/full/`date +'%Y%m%d'`/
+
 ...
 xtrabackup: Transaction log of lsn (46865086) to (46876581) was copied.
 230822 10:24:59 completed OK!
 
 $ ls /backup/GreatSQL/`date +'%Y%m%d'`/
+
 backup-my.cnf   binlog.000007  mysql.ibd                      db1   undo_001                xtrabackup_checkpoints  xtrabackup_tablespaces
 ib_buffer_pool  binlog.index   mysql_innodb_cluster_metadata  sys   undo_002                xtrabackup_info
 ibdata1         mysql          performance_schema             db2   xtrabackup_binlog_info  xtrabackup_logfile
@@ -74,8 +77,9 @@ ibdata1         mysql          performance_schema             db2   xtrabackup_b
 
 ### 只备份部分库表
 
-```
+```bash
 $ xtrabackup --backup --datadir=/data/GreatSQL/ --tables="db1.t_user_*,db2.t_log_*" --target-dir=/backup/GreatSQL/partial/`date +'%Y%m%d'`/
+
 ...
 xtrabackup: Transaction log of lsn (48318000) to (48324707) was copied.
 230822 10:45:46 completed OK!
@@ -88,14 +92,14 @@ ib_buffer_pool  binlog.000006  mysql.ibd     db2  undo_002  xtrabackup_checkpoin
 ### 压缩备份
 
 在原来的基础上增加 `--compress` 选项即可，例如：
-```
-$ xtrabackup --backup --compress --datadir=/data/GreatSQL/ --target-dir=/backup/GreatSQL/full/`date +'%Y%m%d'`/
+```bash
+xtrabackup --backup --compress --datadir=/data/GreatSQL/ --target-dir=/backup/GreatSQL/full/`date +'%Y%m%d'`/
 ```
 通常而言，大概有4倍左右的压缩比。
 
 ### 并行压缩，并且流式备份
-```
-$ xtrabackup --backup --stream=xbstream --compress --compress-threads=4 --datadir=/data/GreatSQL/ > /backup/GreatSQL/full/xbk-`date +'%Y%m%d'`.xbstream
+```bash
+xtrabackup --backup --stream=xbstream --compress --compress-threads=4 --datadir=/data/GreatSQL/ > /backup/GreatSQL/full/xbk-`date +'%Y%m%d'`.xbstream
 ```
 并发4个线程压缩，并且采用流文件方式备份。
 
@@ -104,14 +108,16 @@ $ xtrabackup --backup --stream=xbstream --compress --compress-threads=4 --datadi
 Xtrabackup还支持增量备份，即在上一次备份的基础上，只备份发生新变化的数据。
 
 发起增量备份前，得先有一份全量备份，才能有所谓的增量。
-```
+```bash
 # 假定全备文件放在 /backup/GreatSQL/ 目录下
 # 发起增量备份
-$ xtrabackup --backup --incremental-basedir=/backup/GreatSQL/full/`date +'%Y%m%d'`/ --target-dir=/backup/GreatSQL/inc-backup/`date +'%Y%m%d%H'`/
+xtrabackup --backup --incremental-basedir=/backup/GreatSQL/full/`date +'%Y%m%d'`/ --target-dir=/backup/GreatSQL/inc-backup/`date +'%Y%m%d%H'`/
 ```
+
 查看`xtrabackup_info`和`xtrabackup_checkpoints`文件内容：
-```
+```bash
 $ cat xtrabackup_info
+
 ...
 innodb_from_lsn = 91534393  <--全备的LSN
 innodb_to_lsn = 98570737  <--本次增背后的LSN
@@ -135,9 +141,10 @@ flushed_lsn = 98574369
 ### 全备还原
 
 Xtrabackup备份文件不能直接用来拉起数据库，需要先做预处理：
-```
+```bash
 $ cd /backup/GreatSQL/full/`date +'%Y%m%d'`/
 $ xtrabackup --prepare --target-dir=./
+
 ...
 Starting shutdown...
 Log background threads are being closed...
@@ -149,9 +156,10 @@ Number of pools: 1
 预处理没问题的话，就可以将数据文件copy/move到数据库目录下，用于拉起。
 
 目标目录需要先清空，否则会报错。
-```
+```bash
 $ cd /backup/GreatSQL/full/`date +'%Y%m%d'`/
 $ xtrabackup --copy-back --target-dir=./ --datadir=/data/GreatSQL
+
 ...
 230825 17:01:08 [01] Copying ./xtrabackup_master_key_id to /data/GreatSQL/xtrabackup_master_key_id
 230825 17:01:08 [01]        ...done
@@ -159,6 +167,7 @@ $ xtrabackup --copy-back --target-dir=./ --datadir=/data/GreatSQL
 
 # 如果不想copy，而是move的话，修改下即可
 $ xtrabackup --move-back --target-dir=./ --datadir=/data/GreatSQL
+
 ...
 230825 17:02:01 [01] Moving ./xtrabackup_master_key_id to /data/GreatSQL/xtrabackup_master_key_id
 230825 17:02:01 [01]        ...done
@@ -168,29 +177,32 @@ $ xtrabackup --move-back --target-dir=./ --datadir=/data/GreatSQL
 ### 全量压缩备份还原
 
 先将流式文件恢复成正常压缩文件
-```
-$ cd /backup/GreatSQL/full/`date +'%Y%m%d'`
-$ xbstream -x < xbk-`date +'%Y%m%d'`.xbstream
+```bash
+cd /backup/GreatSQL/full/`date +'%Y%m%d'`
+xbstream -x < xbk-`date +'%Y%m%d'`.xbstream
 ```
 
 再进行解压缩：
-```
-$ cd /backup/GreatSQL/full/`date +'%Y%m%d'`
-$ xtrabackup --decompress --target-dir=.
+```bash
+cd /backup/GreatSQL/full/`date +'%Y%m%d'`
+xtrabackup --decompress --target-dir=.
 ```
 
 然后和上面一样，先 *--prepare* 后，再将还原出来的数据文件 *--copy-back* 到数据库目录下拉起即可。
 
-P.S，解压缩过程中需要安装 `qpress`，可以从[这里下载源码或二进制文件](https://github.com/PierreLvx/qpress)。
+::: tip 小贴士
+解压缩过程中需要安装 `qpress`，可以从[这里下载源码或二进制文件](https://github.com/PierreLvx/qpress)。
+:::
 
 ### 增量备份还原
 
 假定每天0点做一次全备，每小时做一次相对0点的增备，现在需要还原到当天8:00的增备时间点。可以像下面这么做：
 
 首先，在全备文件目录下执行下面的操作（不执行事务回滚操作）：
-```
+```bash
 $ cd /backup/GreatSQL/full/20230825
 $ xtrabackup --prepare --apply-log-only --target-dir=/backup/GreatSQL/full/20230825
+
 ...
 Log background threads are being closed...
 Shutdown completed; log sequence number 101667236
@@ -199,8 +211,9 @@ Number of pools: 1
 ```
 
 接下来应用增备日志：
-```
+```bash
 $ xtrabackup --prepare --apply-log-only --target-dir=/backup/GreatSQL/full/20230825 --incremental-dir=/backup/GreatSQL/inc-backup/2023082508
+
 ...
 incremental backup from 101659735 is enabled.
 xtrabackup: cd to /backup/GreatSQL/full/20230825
@@ -219,8 +232,9 @@ Applying /backup/GreatSQL/inc-backup/2023082508//ibdata1.delta to ./ibdata1...
 ```
 
 之后将还原后的数据文件copy/move到目标目录即可：
-```
+```bash
 $ xtrabackup --copy-back --target-dir=/backup/GreatSQL/full/20230825 --datadir=/data/GreatSQL
+
 ...
 230825 17:26:52 [01] Copying ./xtrabackup_info to /data/GreatSQL/xtrabackup_info
 230825 17:26:52 [01]        ...done

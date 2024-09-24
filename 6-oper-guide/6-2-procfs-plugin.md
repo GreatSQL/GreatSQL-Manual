@@ -17,7 +17,7 @@ ProcFS 插件通过对 GreatSQL 运行 SQL 查询来提供对 Linux 性能计数
 
 ## 手动安装插件
 
-建议将该插件作为软件包的一部分安装。如果需要，可以手动安装此插件。执行以下命令：
+建议将该插件作为软件包的一部分安装。如果需要，可以手动安装此插件。执行以下 SQL 命令：
 
 ```sql
 greatsql> INSTALL PLUGIN procfs SONAME 'procfs.so';
@@ -36,7 +36,9 @@ root用户不包含此权限，需要给自己授权
 greatsql> GRANT ACCESS_PROCFS ON *.* TO 'user'@'host';
 ```
 
-> 重要！SELinux 策略或 AppArmor 配置文件可能会阻止访问 ProcFS 插件所需的文件位置，例如“/proc/sys/fs/file-nr”目录或“/proc/irq/”下的任何子目录或文件。编辑策略或配置文件以确保插件具有必要的访问权限。如果策略和配置文件不允许访问，则插件可能会出现意外行为。
+::: warning 重要提醒
+SELinux 策略或 AppArmor 配置文件可能会阻止访问 ProcFS 插件所需的文件位置，例如“/proc/sys/fs/file-nr”目录或“/proc/irq/”下的任何子目录或文件。编辑策略或配置文件以确保插件具有必要的访问权限。如果策略和配置文件不允许访问，则插件可能会出现意外行为。
+:::
 
 ## 使用 ProcFS 插件
 
@@ -55,7 +57,9 @@ CONTENTS: Linux version 6.6.3-arch1-1 (linux@archlinux) (gcc (GCC) 13.2.1 202308
 1 row in set (0.00 sec)
 ```
 
-> 若不加 WHERE 条件则输出所有信息
+::: tip 小贴士
+若不加 WHERE 条件则输出所有信息。
+:::
 
 例如可以查看DEV信息：
 
@@ -131,10 +135,10 @@ ProcFS 插件限制如下：
 
 ## 卸载插件
 
-以下语句删除 procfs 插件
+以下 SQL 命令删除 procfs 插件
 
 ```sql
-greatsql> UNINSTALL PLUGIN procfs;
+UNINSTALL PLUGIN procfs;
 ```
 
 

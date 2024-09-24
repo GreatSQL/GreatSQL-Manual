@@ -7,23 +7,24 @@
 
 ##  全库备份
 运行 `mysqldump` 时指定 `-A / --all-databases` 参数可以备份全库数据，如果还要备份存储过程、存储函数、视图、event时，还需要再指定 `--triggers --routines --events` 这三个参数：
-```
-$ mysqldump -S/data/GreatSQL/mysql.sock -A --triggers --routines --events > /backup/GreatSQL/fullbackup-`date +'%Y%m%d'`.sql
+```bash
+mysqldump -S/data/GreatSQL/mysql.sock -A --triggers --routines --events > /backup/GreatSQL/fullbackup-`date +'%Y%m%d'`.sql
 ```
 这就完成了备份全部数据，并且备份触发器、存储函数、event等其他元数据。
 
 如果不想备份触发器、存储函数、event的话，则去掉上述几个选项 `--triggers --routines --events`。
 
 通常，在进行逻辑备份时，还会利用管道同步压缩，使得备份文件更小：
-```
-$ mysqldump -S/data/GreatSQL/mysql.sock -A --triggers --routines --events | gzip > /backup/GreatSQL/fullbackup-`date +'%Y%m%d'`.sql.gz
+```bash
+mysqldump -S/data/GreatSQL/mysql.sock -A --triggers --routines --events | gzip > /backup/GreatSQL/fullbackup-`date +'%Y%m%d'`.sql.gz
 ```
 
 ##  单库备份
 
-```
-$ export db="greatsql"
-$ mysqldump -S/data/GreatSQL/mysql.sock --triggers --routines --events -B ${db} | gzip > /backup/GreatSQL/${db}-`date +'%Y%m%d'`.sql.gz
+```bash
+export db="greatsql"
+
+mysqldump -S/data/GreatSQL/mysql.sock --triggers --routines --events -B ${db} | gzip > /backup/GreatSQL/${db}-`date +'%Y%m%d'`.sql.gz
 ```
 
 如果不是备份全库数据，此时可能会有如下提示：
@@ -37,28 +38,29 @@ Warning: A partial dump from a server that has GTIDs will by default include the
 
 ##  单表备份
 
-```
-$ export db="greatsql"
-$ export table="t1"
-$ mysqldump -S/data/GreatSQL/mysql.sock --triggers --routines --events ${db} ${table} | gzip > /backup/GreatSQL/${db}-${table}-`date +'%Y%m%d'`.sql.gz
+```bash
+export db="greatsql"
+export table="t1"
+
+mysqldump -S/data/GreatSQL/mysql.sock --triggers --routines --events ${db} ${table} | gzip > /backup/GreatSQL/${db}-${table}-`date +'%Y%m%d'`.sql.gz
 ```
 
 ##  只备份部分数据
 
 运行 `mysqldump` 时，加上 `-w / --where` 选项，可以指定 WHERE过滤条件，达到只备份某一部分数据的目的，例如：
-```
-$ export db="greatsql"
-$ export table="t1"
+```bash
+export db="greatsql"
+export table="t1"
 
 # 只备份单表的部分数据
-$ mysqldump -S/data/GreatSQL/mysql.sock -w "id>=10000" ${db} ${table} > /backup/GreatSQL/${db}-${table}-partial-`date +'%Y%m%d'`.sql
+mysqldump -S/data/GreatSQL/mysql.sock -w "id>=10000" ${db} ${table} > /backup/GreatSQL/${db}-${table}-partial-`date +'%Y%m%d'`.sql
 
 # 备份单库所有表的部分数据
-$ mysqldump -S/data/GreatSQL/mysql.sock -f -w "id>=10000" -B ${db} > /backup/GreatSQL/${db}-partial-`date +'%Y%m%d'`.sql
+mysqldump -S/data/GreatSQL/mysql.sock -f -w "id>=10000" -B ${db} > /backup/GreatSQL/${db}-partial-`date +'%Y%m%d'`.sql
 ```
 
 如果个别表没有where条件中指定的列名，则会报告类似下面的错误：
-```
+```bash
 mysqldump: Couldn't execute 'SELECT /*!40001 SQL_NO_CACHE */ * FROM `t4` WHERE id>=1000000': Unknown column 'id' in 'where clause' (1054)
 ```
 
@@ -68,49 +70,56 @@ mysqldump: Couldn't execute 'SELECT /*!40001 SQL_NO_CACHE */ * FROM `t4` WHERE i
 
 `mysqldump` 逻辑备份文件恢复时很简单，只需调用mysql客户端执行恢复，有两种方式：
 
-在mysql客户端工具里，执行 `source` 指令导入SQL文件，这种方式的缺点是终端会一直输出执行的结果，很不友好。用法是：
-```
-> USE db;
-> SOURCE path/file.sql;
+在mysql客户端工具里，执行 `SOURCE` 指令导入SQL文件，这种方式的缺点是终端会一直输出执行的结果，很不友好。用法是：
+```sql
+USE db;
+SOURCE path/file.sql;
 ```
 
 例如：
+```sql
+USE greatsql;
+SOURCE /backup/GreatSQL/greatsql-20230830.sql;
 ```
-greatsql> USE greatsql;
-greatsql> SOURCE /backup/GreatSQL/greatsql-20230830.sql;
-```
-**提示：** 如果要恢复的SQL文件中不包含 `use db` 这样切换到指定库名的话，就需要先自己手动执行 `use db` 这个操作。
+
+::: tip 小贴士
+如果要恢复的SQL文件中不包含 `USE db` 这样切换到指定库名的话，就需要先自己手动执行 `USE db` 这个操作。
+:::
 
 或者利用命令行的重定向方式：
+```bash
+mysql -f -S/data/GreatSQL/mysql.sock greatsql < /backup/GreatSQL/greatsql-20230830.sql;
 ```
-$ mysql -f -S/data/GreatSQL/mysql.sock greatsql < /backup/GreatSQL/greatsql-20230830.sql;
-```
-**提示：** 如果要恢复的SQL文件中不包含 `use db` 这样切换到指定库名的话，就需要在调用mysql客户端时指定相应的库名`greatsql`，下同。
+::: tip 小贴士
+如果要恢复的SQL文件中不包含 `USE db` 这样切换到指定库名的话，就需要在调用mysql客户端时指定相应的库名`greatsql`，下同。
+:::
 
 又或者在操作系统命令行模式下，直接用管道方式导入SQL文件：
-```
-$ cat /backup/GreatSQL/greatsql-20230830.sql | mysql -f -S/data/GreatSQL/mysql.sock greatsql
+```bash
+cat /backup/GreatSQL/greatsql-20230830.sql | mysql -f -S/data/GreatSQL/mysql.sock greatsql
 ```
 
 甚至还可以利用 `sed` 提取实现只恢复部分数据。
 
 例1：提取备份文件中，数据库db1到db2之间的所有数据，即只恢复db1这个库
-```
-$ export DB1="db1"
-$ export DB2="db2"
-$ sed -n "/^-- Current Database: \`$DB1\`/,/^-- Current Database: \`$DB2\`/p" /backup/GreatSQL/greatsql-20230830.sql | mysql -f -S/data/GreatSQL/mysql.sock
+```bash
+export DB1="db1"
+export DB2="db2"
+
+sed -n "/^-- Current Database: \`$DB1\`/,/^-- Current Database: \`$DB2\`/p" /backup/GreatSQL/greatsql-20230830.sql | mysql -f -S/data/GreatSQL/mysql.sock
 ```
 
 例2：提取备份文件中，数据表tb1到tb2之间的所有数据，即只恢复tb1这个表
-```
-TB1="tb1"
-TB2="tb2"
-$ sed -n "/^-- Table structure for table \`$TB1\`/,/^-- Table structure for table \`$TB2\`/p" /backup/GreatSQL/greatsql-20230830.sql | mysql -f -S/data/GreatSQL/mysql.sock greatsql
+```bash
+export TB1="tb1"
+export TB2="tb2"
+
+sed -n "/^-- Table structure for table \`$TB1\`/,/^-- Table structure for table \`$TB2\`/p" /backup/GreatSQL/greatsql-20230830.sql | mysql -f -S/data/GreatSQL/mysql.sock greatsql
 ```
 
 例3：向 `sed` 传递参数，只提取指定行号的数据：
-```
-$ sed -n "100,200p" /backup/GreatSQL/greatsql-20230830.sql | mysql -f -S/data/GreatSQL/mysql.sock greatsql
+```bash
+sed -n "100,200p" /backup/GreatSQL/greatsql-20230830.sql | mysql -f -S/data/GreatSQL/mysql.sock greatsql
 ```
 即：提取备份文件中第100-200行之间的数据进行恢复。
 

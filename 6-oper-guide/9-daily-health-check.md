@@ -19,16 +19,18 @@
 
 安装 *OpenIPMI* 及 *ipmitool*
 
-```shell
-$ yum install -y OpenIPMI ipmitool
+```bash
+yum install -y OpenIPMI ipmitool
 ```
 
 列举几个 *ipmitool* 常用主机监控命令
 
 - `ipmitool sel list`，打印所有硬件日志
 
-```shell
+```bash
 $ ipmitool sel list
+
+...
 Drive Slot / Bay #0xac | Drive Present () | Deasserted     <- 硬盘更换事件
 Power Supply #0x86 | Power Supply AC lost | Asserted       <- 断电事件
 Power Supply #0x77 | Fully Redundant | Asserted            <- 增加双电冗余保护
@@ -39,8 +41,9 @@ Memory #0x53 | Correctable ECC (@DIMMO6 (CPU4)) | Asserted <- 内存ECC校验报
 
 - `ipmitool sensor`，打印所有传感器信息
 
-```shell
+```bash
 $ ipmitool sensor
+
 ...
 <-- 所有温度传感器
 Temp             | 61.000     | degrees C  | ok    | na        | 3.000     | na        | na        | 104.000   | na
@@ -83,7 +86,7 @@ Fan6 Status      | 0x0        | discrete   | 0x0980| na        | na        | na 
 可以运行 `vmstat` 查看当前服务器主机的整体系统运行状态。`vmstat` 是一个在 Linux 系统中常用的系统监控工具，它可以实时地报告虚拟内存统计信息以及其他有关系统活动的信息。`vmstat` 可以帮助了解系统的内存使用情况、进程调度、磁盘 I/O 活动等。
 
 下面是一个正在进行压力测试的服务器上运行 `vmstat -S m 1 10` 得到的结果
-```shell
+```bash
 $ vmstat -S m 1
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
@@ -132,7 +135,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 下面是一个正在进行压力测试的服务器上运行 `mpstat 1 10` 得到的结果
 
-```shell
+```bash
 $ mpstat 1 11
 Linux 3.10.0-1160.el7.x86_64 (59)     09/09/2024     _x86_64_    (176 CPU)
 
@@ -170,7 +173,7 @@ Average:     all   13.99    0.00    2.63    0.13    0.00    0.69    0.00    0.00
 
 下面是一个正在进行压力测试的服务器上运行 `free -ht` 得到的结果
 
-```shell
+```bash
 $ free -ht
               total        used        free      shared  buff/cache   available
 Mem:           377G         86G         12G         77M        278G        289G
@@ -195,7 +198,10 @@ Total:         381G         86G         16G
 
 有时候，数据库运行较长时间后执行 `top` 时可能会看到 *mysqld* 进程消耗的内存占比较高，例如下面这样：
 
-```shell
+```bash
+$ top
+
+...
    PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
 391734 mysql     20   0  228.5g 209.6g  34908 S  5179 80.6  11367:01 mysqld
   3271 root      20   0  727544  25964   6892 S   1.5  0.0   6690:04 node_exporter
@@ -212,11 +218,13 @@ Total:         381G         86G         16G
 
 如果形势紧急，可以考虑执行下面的操作尝试回收部分内存碎片：
 
-```shell
-$ gdb --batch --pid `pidof mysqld` --ex 'call malloc_trim(0)'
+```bash
+gdb --batch --pid `pidof mysqld` --ex 'call malloc_trim(0)'
 ```
 
-**提醒**：上述操作在线上生产环境存在一定风险，请谨慎评估是否执行。
+::: danger 危险警示
+上述操作在线上生产环境存在一定风险，请谨慎评估是否执行。
+:::
 
 最后，强烈建议在运行 GreatSQL 数据库时，安装 *jemalloc* 取代原生的 *glibc*，它的内存分配管理效率更高也更安全，详情参考：[安装准备](../4-install-guide/1-install-prepare.md#其他)。
 
@@ -226,7 +234,7 @@ $ gdb --batch --pid `pidof mysqld` --ex 'call malloc_trim(0)'
 
 下面是一个正在进行压力测试的服务器上运行 `iostat` 得到的结果
 
-```shell
+```bash
 $ iostat -dmx 1 10 | grep nvme0n1p1
 Linux 3.10.0-1160.el7.x86_64 (59)     09/09/2024     _x86_64_    (176 CPU)
 

@@ -38,45 +38,46 @@ Clone 操作的流程大致如下：
 
 ## 使用 Clone 备份数据
 ### 准备工作
-上面提到，Clone 是以插件方式工作的，所以在开始用之前要先安装该插件：
+上面提到，Clone 是以插件方式工作的，所以在开始用之前要先执行下面的 SQL 命令安装该插件：
 
 ```sql
-greatsql> INSTALL PLUGIN clone SONAME 'mysql_clone.so';
+INSTALL PLUGIN clone SONAME 'mysql_clone.so';
 ```
 
 只要 `plugin_dir` 选项设置无误，执行完上面命令即可完成插件安装。
 
 如果要 Clone 远程实例数据，则还需要给建立远程连接的用户至少加上相应的授权，在 donor 节点至少加上 `BACKUP_ADMIN` 权限，而在 recipient 节点至少加上 `CLONE_ADMIN` 授权。这样才能满足从 donor 节点 Clone 数据，在 recipient 节点接收和覆盖数据的要求。
 
-因为每个数据库实例有可能既是 donor 节点，又是 recipient 节点，如果是为了方便省事，可以在相关节点统一授予 `CLONE_ADMIN` 和 `BACKUP_ADMIN` 权限：
+因为每个数据库实例有可能既是 donor 节点，又是 recipient 节点，如果是为了方便省事，可以在相关节点统一授予 `CLONE_ADMIN` 和 `BACKUP_ADMIN` 权限，执行下面的 SQL 命令：
 
 ```sql
-greatsql> GRANT CLONE_ADMIN, BACKUP_ADMIN ON *.* TO clone_user@'%';
+GRANT CLONE_ADMIN, BACKUP_ADMIN ON *.* TO clone_user@'%';
 ```
 
 如果对生产环境权限控制更为严格的话，最好还是区分清楚。
 
-开始备份前，先在当前实例中，新建一个MyISAM表，并写入几行数据：
+开始备份前，先在当前实例中，新建一个 MyISAM 表，并写入几行数据，执行下面的 SQL 命令：
 
 ```sql
-greatsql> USE greatsql;
-greatsql> CREATE TABLE t4 (id INT PRIMARY KEY)ENGINE=myisam;
-greatsql> INSERT INTO t4 SELECT RAND()*10240;
-greatsql> INSERT INTO t4 SELECT RAND()*10240;
-greatsql> INSERT INTO t4 SELECT RAND()*10240;
+USE greatsql;
+CREATE TABLE t4 (id INT PRIMARY KEY)ENGINE=myisam;
+INSERT INTO t4 SELECT RAND()*10240;
+INSERT INTO t4 SELECT RAND()*10240;
+INSERT INTO t4 SELECT RAND()*10240;
 ```
 
 ### Clone 备份本地数据
 
-执行下面的命令即可实现对本地实例的 Clone 备份：
-```
-greatsql> CLONE LOCAL DATA DIRECTORY = '/data/backup/clone/20230831';
+执行下面的 SQL 命令即可实现对本地实例的 Clone 备份：
+```sql
+CLONE LOCAL DATA DIRECTORY = '/data/backup/clone/20230831';
 ```
 只要 GreatSQL 服务进程属主用户对本地存储目标路径有写入权限即可，并且上述路径如果没有先创建好，在 Clone 备份时也会先行自动创建。
 
 备份结束后，查看本地存储路径下都有哪些文件：
-```
+```bash
 $ ls -l /data/backup/clone/20230831
+
 drwxr-x--- 2 mysql mysql       89 Aug 31 14:54 '#clone'
 drwxr-x--- 2 mysql mysql       91 Aug 31 14:54  greatsql
 -rw-r----- 1 mysql mysql     5679 Aug 31 14:54  ib_buffer_pool
@@ -90,6 +91,7 @@ drwxr-x--- 2 mysql mysql       27 Aug 31 14:54  sys_audit
 -rw-r----- 1 mysql mysql 16777216 Aug 31 14:54  undo_002
 
 $ ls -l /nvme/backup/clone/20230831/greatsql/
+
 -rw-r----- 1 mysql mysql  92274688 Aug 31 15:18 t1.ibd
 -rw-r----- 1 mysql mysql    114688 Aug 31 15:18 t2.ibd
 -rw-r----- 1 mysql mysql    114688 Aug 31 15:18 t3.ibd
@@ -97,8 +99,9 @@ $ ls -l /nvme/backup/clone/20230831/greatsql/
 看到只备份了数据（包含redo和undo log，但没有double write buffer和ibtmp1文件），不备份系统配置文件，以及binlog、MyISAM表（没有t4.MYD等文件）。
 
 如果把这个备份数据恢复到一个空实例并启动，就会发现存在表t4，但是个空表：
-```
+```bash
 $ ls -la /data/GreatSQL-restore/greatsql
+
 ...
 -rw-r-----  1 mysql mysql  92274688 Aug 31 15:18 t1.ibd
 -rw-r-----  1 mysql mysql    114688 Aug 31 15:18 t2.ibd
@@ -110,15 +113,15 @@ $ ls -la /data/GreatSQL-restore/greatsql
 
 
 ### Clone 备份远程数据
-在开始备份远程节点数据前，需要先在 recipient 节点设置 `clone_valid_donor_list` 选项，指定 donor 节点：
+在开始备份远程节点数据前，需要先在 recipient 节点设置 `clone_valid_donor_list` 选项，指定 donor 节点，执行下面的 SQL 命令：
 
 ```sql
-greatsql> SET GLOBAL clone_valid_donor_list = '172.16.16.10:3306';
+SET GLOBAL clone_valid_donor_list = '172.16.16.10:3306';
 ```
 
 否则在执行 Clone 备份时会报告下面的错误：
 
-```sql
+```
 ERROR 3869 (HY000): Clone system configuration: 172.16.16.10:3306 is not found in clone_valid_donor_list:
 ```
 
@@ -153,7 +156,7 @@ greatsql> SHOW GRANTS FOR repl;
 在 Clone 过程中，还支持实时查看其状态和进度：
 
 ```sql
-# 查看状态
+-- 查看状态
 greatsql> SELECT * FROM performance_schema.clone_status\G
 *************************** 1. row ***************************
              ID: 1
@@ -169,7 +172,7 @@ greatsql> SELECT * FROM performance_schema.clone_status\G
 BINLOG_POSITION: 0
   GTID_EXECUTED:
 
-# 查看进度
+-- 查看进度
 greatsql> SELECT * FROM performance_schema.clone_progress;
 +------+-----------+-------------+----------------------------+----------------------------+---------+-------------+-------------+-------------+------------+---------------+
 | ID   | STAGE     | STATE       | BEGIN_TIME                 | END_TIME                   | THREADS | ESTIMATE    | DATA        | NETWORK     | DATA_SPEED | NETWORK_SPEED |
@@ -183,15 +186,14 @@ greatsql> SELECT * FROM performance_schema.clone_progress;
 |    1 | RECOVERY  | Not Started | NULL                       | NULL                       |       0 |           0 |           0 |           0 |          0 |             0 |
 +------+-----------+-------------+----------------------------+----------------------------+---------+-------------+-------------+-------------+------------+---------------+
 
-# 经过处理后可读性更好的视图
-
+-- 经过处理后可读性更好的视图
 greatsql> SELECT STATE, CAST(BEGIN_TIME AS DATETIME) AS "START TIME",
-CASE WHEN END_TIME IS NULL THEN
-LPAD(sys.format_time(POWER(10,12) * (UNIX_TIMESTAMP(now()) - UNIX_TIMESTAMP(BEGIN_TIME))), 10, ' ')
-ELSE
-LPAD(sys.format_time(POWER(10,12) * (UNIX_TIMESTAMP(END_TIME) - UNIX_TIMESTAMP(BEGIN_TIME))), 10, ' ')
-END AS DURATION
-FROM performance_schema.clone_status;
+  CASE WHEN END_TIME IS NULL THEN
+  LPAD(sys.format_time(POWER(10,12) * (UNIX_TIMESTAMP(now()) - UNIX_TIMESTAMP(BEGIN_TIME))), 10, ' ')
+  ELSE
+  LPAD(sys.format_time(POWER(10,12) * (UNIX_TIMESTAMP(END_TIME) - UNIX_TIMESTAMP(BEGIN_TIME))), 10, ' ')
+  END AS DURATION
+  FROM performance_schema.clone_status;
 +-------------+---------------------+------------+
 | STATE       | START TIME          | DURATION   |
 +-------------+---------------------+------------+
@@ -225,10 +227,11 @@ greatsql> SELECT STAGE, STATE, CAST(BEGIN_TIME AS TIME) AS "START TIME",
 ```
 通过这些元数据，即可推算出大概的总耗时，以及预计还需要多长时间才能完成。
 
-**提醒：** 
+::: tip 提醒 
 1. 在 Clone 过程中，如果被强行 KILL 终止的话，recipient 节点上的数据会被清空，只剩下接近刚初始化完的新实例，请谨慎操作。
 2. 从GreatSQL 8.0.32-25 版本开始，Clone 支持加密备份及解密，详情请见文档：[Clone 备份加密](../5-enhance/5-4-security-clone-encrypt.md)。
 2. 从GreatSQL 8.0.32-26 版本开始，Clone 支持加增量备份和压缩备份，详情请见文档：[Clone 压缩及增量备份](../5-enhance/5-5-clone-compressed-and-incrment-backup.md)。
+:::
 
 在 recipient 节点上完成 Clone 备份后，就等同于在 recipient 也做了一次数据恢复，这个节点还可以作为主从复制的从节点，也可以作为MGR组复制的新节点，一举多得。
 
