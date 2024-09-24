@@ -34,7 +34,7 @@ MGR最多可支持9个节点，无论是单主还是多主模式。
 可以的，但非常不推荐。
 
 此外，由于MGR默认的allowlist不包含公网地址，因此需要将公网地址加进去，例如：
-```
+```ini
 group_replication_ip_allowlist='192.0.2.0/24, 114.114.114.0/24'
 ```
 
@@ -56,7 +56,7 @@ fe80::/10 prefix  - link-local unicast addresses
 
 ## 7. 怎么查看MGR当前是单主还是多主模式
 执行下面的命令：
-```
+```sql
 greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+-----------...-+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID ... | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
@@ -70,16 +70,19 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 如果只看到一个节点的 `MEMBER_ROLE` 值为 **PRIMARY**，则表示这是单主模式。如果看到所有节点上该状态值均为 **PRIMARY**，则表示这是多主模式。
 
 另外，也可以通过查询GreatSQL选项值来确认：
-```
+```bash
 $ mysqladmin var|grep -i group_replication_single_primary_mode
+
 | group_replication_single_primary_mode        | ON
 ```
 值为 **ON**，这表示采用单主模式。如果该值为 **OFF**，则表示采用多主模式。
 
 在MySQL Shell中也可以查看状态来确认：
-```
+```js
 MySQL  GreatSQL:3306 ssl  JS > var c=dba.getCluster()
+
 MySQL  GreatSQL:3306 ssl  JS > c.describe() /* 或者 c.status() */
+
 ...
         "topologyMode": "Single-Primary"
 ...
@@ -89,7 +92,7 @@ P.S，强烈建议采用单主模式，遇到bug或其他问题的概率更低�
 
 ## 8. 怎么切换单主或多主
 在GreatSQL客户端命令行模式下，执行下面的命令即可：
-```
+```sql
 -- 从单主切换为多主
 greatsql> SELECT group_replication_switch_to_multi_primary_mode();
 +--------------------------------------------------+
@@ -106,8 +109,10 @@ greatsql> SELECT group_replication_switch_to_single_primary_mode();
 | Mode switched to single-primary successfully.     |
 +---------------------------------------------------+
 ```
-**注意：** 切换时会重新选主，新的主节点有可能不是切换之前的那个，这时可以运行下面的命令来重新指定：
-```
+
+::: warning 注意
+切换时会重新选主，新的主节点有可能不是切换之前的那个，这时可以运行下面的命令来重新指定：
+```sql
 greatsql> SELECT group_replication_set_as_primary('ed5fe7ba-37c2-11ec-8e12-70b5e873a570');
 +--------------------------------------------------------------------------+
 | group_replication_set_as_primary('ed5fe7ba-37c2-11ec-8e12-70b5e873a570') |
@@ -115,11 +120,14 @@ greatsql> SELECT group_replication_set_as_primary('ed5fe7ba-37c2-11ec-8e12-70b5e
 | Primary server switched to: ed5fe7ba-37c2-11ec-8e12-70b5e873a570         |
 +--------------------------------------------------------------------------+
 ```
+:::
 
 也可以通过MySQL Shell来操作：
-```
+```js
 MySQL  GreatSQL:3306 ssl  JS > var c=dba.getCluster()
+
 > c.switchToMultiPrimaryMode()  /*切换为多主模式*/
+
 Switching cluster 'MGR27' to Multi-Primary mode...
 
 Instance 'GreatSQL:3306' was switched from SECONDARY to PRIMARY.
@@ -130,6 +138,7 @@ Instance 'GreatSQL:3309' remains PRIMARY.
 The cluster successfully switched to Multi-Primary mode.
 
 > c.switchToSinglePrimaryMode()  /*切换为单主模式*/
+
 Switching cluster 'MGR27' to Single-Primary mode...
 
 Instance 'GreatSQL:3306' remains PRIMARY.
@@ -144,6 +153,7 @@ WARNING: Existing connections that expected a R/W connection must be disconnecte
 The cluster successfully switched to Single-Primary mode.
 
 > c.setPrimaryInstance('GreatSQL:3309');  /*重新设置主节点*/
+
 Setting instance 'GreatSQL:3309' as the primary instance of cluster 'MGR27'...
 
 Instance 'GreatSQL:3306' was switched from PRIMARY to SECONDARY.
@@ -159,12 +169,12 @@ P.S，强烈建议采用单主模式，遇到bug或其他问题的概率更低�
 ## 9. MySQL Router支持单机多实例部署吗
 是的，支持。
 在MySQL Router初始化部署时，添加 `--name`、`--directory` 及端口号等参数即可，例如：
-```
--- 部署第一个实例
-$ mysqlrouter --bootstrap mymgr@192.168.1.1:3306 --name=MGR1 --directory=/etc/mysqlrouter/MGR1  --user=mysqlrouter --conf-base-port=6446 --https-port=8443
+```bash
+# 部署第一个实例
+mysqlrouter --bootstrap mymgr@192.168.1.1:3306 --name=MGR1 --directory=/etc/mysqlrouter/MGR1  --user=mysqlrouter --conf-base-port=6446 --https-port=8443
 
--- 部署第二个实例
-$ mysqlrouter --bootstrap mymgr@192.168.1.1:4306 --name=MGR2 --directory=/etc/mysqlrouter/MGR2  --user=mysqlrouter --conf-base-port=7446 --https-port=9443
+# 部署第二个实例
+mysqlrouter --bootstrap mymgr@192.168.1.1:4306 --name=MGR2 --directory=/etc/mysqlrouter/MGR2  --user=mysqlrouter --conf-base-port=7446 --https-port=9443
 ```
 然后每个实例用各自目录下的 `start.sh` 和 `stop.sh` 脚本启停即可。
 
@@ -187,22 +197,25 @@ $ mysqlrouter --bootstrap mymgr@192.168.1.1:4306 --name=MGR2 --directory=/etc/my
 ## 13. 多个MGR集群，是否可以共用ARBITRATOR节点
 不可以，不同集群的ARBITRATOR节点可以交叉部署，同一集群不能放一起。也可以在一台专属服务器上部署多实例，专门用作ARBITRATOR节点。
 仲裁节点对系统负载的影响很小，可以参考下面的数据：
-```
-#Primary节点
+```bash
+# 在Primary节点服务器上观察
+$ vmstat -S m 1
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  3  1      0    894    206  12238    0    0     0 27186 32669 44745 12  8 68 13  0
  1  0      0    893    206  12239    0    0     0 27555 34887 47219 12 10 64 14  0
  2  1      0    891    206  12240    0    0     0 27756 35025 47353 13  8 66 13  0
 
-#Secondary节点
+# 在Secondary节点服务器上观察
+$ vmstat -S m 1
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  1  3      0   1950    168  11988    0    0     0 27236 23333 35077 25 19 42 15  0
  2  2      0   1946    168  11990    0    0     0 25950 22254 34017 23 21 42 13  0
  1  0      0   1943    168  11993    0    0     0 26382 21943 33385 24 20 41 14  0
 
-#Arbitrator节点
+# 在Arbitrator节点服务器上观察
+$ vmstat -S m 1
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  0  0     22    328    193  14132    0    0     0     0 13587 14159  2  2 96  0  0

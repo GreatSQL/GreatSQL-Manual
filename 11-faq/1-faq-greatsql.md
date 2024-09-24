@@ -22,39 +22,40 @@ GreatSQL至少提供CentOS 7、CentOS 8两种操作系统，以及X86和ARM两�
 
 ### 3.2 源码
 可以直接用git clone的方式下载GreatSQL源码，例如：
-```
-# 可从gitee下载
-$ git clone https://gitee.com/GreatSQL/GreatSQL.git
+```bash
+# 从gitee下载
+git clone https://gitee.com/GreatSQL/GreatSQL.git
 
 # 或从github下载
-$ git clone https://github.com/GreatSQL/GreatSQL.git
+git clone https://github.com/GreatSQL/GreatSQL.git
 ```
+
 ### 3.3 Docker镜像
 GreatSQL提供Docker镜像，可直接从docker hub拉取：
-```
+```bash
 # 直接下载最新版本
-$ docker pull docker.io/greatsql/greatsql
+docker pull docker.io/greatsql/greatsql
 
 # 或自行指定版本号
-$ docker pull docker.io/greatsql/greatsql:8.0.32-26
+docker pull docker.io/greatsql/greatsql:8.0.32-26
 ```
 
 若由于网络原因无法从 docker.io 拉取 GreatSQL 镜像的话，可以改成从阿里云 ACR 拉取，方法如下：
 
-```shell
-$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
+```bash
+docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
 ```
 
 也可以从腾讯云 TCR 拉取：
 
-```shell
-$ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql
+```bash
+docker pull ccr.ccs.tencentyun.com/greatsql/greatsql
 ```
 
 ### 3.4 Ansible安装包
 GreatSQL提供Ansible一键安装包，可在gitee或github下载：
-- https://gitee.com/GreatSQL/GreatSQL-Ansible/releases
-- https://github.com/GreatSQL/GreatSQL-Ansible/releases
+- [https://gitee.com/GreatSQL/GreatSQL-Ansible/releases](https://gitee.com/GreatSQL/GreatSQL-Ansible/releases)
+- [https://github.com/GreatSQL/GreatSQL-Ansible/releases](https://github.com/GreatSQL/GreatSQL-Ansible/releases)
 
 从GreatSQL 8.0.32-25版本开始，GreatSQL Ansible暂停更新，如果您需要通过Ansible安装GreatSQL，可以采用芬达老师提供的**dbops**，详见：[dbops](https://gitee.com/fanderchan/dbops)。
 
@@ -136,8 +137,9 @@ GreatSQL 数据库是一款 **开源免费** 数据库，没有 XC 资质。如�
 
 为什么在 openEuler 系统中用 yum/dnf 安装 greatsql 时会提示类似下面的错误：
 
-```shell
+```bash
 $ dnf install greatsql-server
+
 ...
 Error:
  Problem: problem with installed package openssl-devel-1:3.0.12-4.oe2403.x86_64
@@ -147,8 +149,9 @@ Error:
 
 这是因为 GreatSQL 在 openEuler 中安装时需要依赖 compat-openssl-devel 包，而这个包和系统默认的 openssl 包产生冲突了，因此会有上述报错。可以在安装时加上 --allowerasing 参数，这时就会自动解决冲突问题，安装 compat-openssl-devel 以替换 openssl-devel 包：
 
-```shell
+```bash
 $ dnf install -y --allowerasing greatsql-server
+
 ...
 Removing dependent packages:
  openssl-devel                                    x86_64                          1:3.0.12-4.oe2403                             @OS                                  14 M

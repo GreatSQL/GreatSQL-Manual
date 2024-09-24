@@ -3,7 +3,7 @@
 
 ## 1. 怎么查看MGR从节点是否有延迟
 首先，可以执行下面的命令查看当前除了 **PRIMARY** 节点外，其他节点的 `trx_tobe_certified` 或 `relaylog_tobe_applied` 值是否较大：
-```
+```sql
 [root@GreatSQL]> SELECT MEMBER_ID AS id, COUNT_TRANSACTIONS_IN_QUEUE AS trx_tobe_certified, COUNT_TRANSACTIONS_REMOTE_IN_APPLIER_QUEUE AS relaylog_tobe_applied, COUNT_TRANSACTIONS_CHECKED AS trx_chkd, COUNT_TRANSACTIONS_REMOTE_APPLIED AS trx_done, COUNT_TRANSACTIONS_LOCAL_PROPOSED AS proposed FROM performance_schema.replication_group_member_stats;
 +--------------------------------------+-------------------+---------------------+----------+----------+----------+
 | id                                   |trx_tobe_certified |relaylog_tobe_applied| trx_chkd | trx_done | proposed |
@@ -17,7 +17,7 @@
 其中，`relaylog_tobe_applied` 的值表示远程事务写到relay log后，等待回放的事务队列，`trx_tobe_certified` 表示等待被认证的事务队列大小，这二者任何一个值大于0，都表示当前有一定程度的延迟。
 
 另外，也可以查看接收到的事务和已执行完的事务之间的差距来判断：
-```
+```sql
 [root@GreatSQL]> SELECT RECEIVED_TRANSACTION_SET FROM performance_schema.replication_connection_status WHERE  channel_name = 'group_replication_applier' UNION ALL SELECT variable_value FROM performance_schema.global_variables WHERE  variable_name = 'gtid_executed'\G
 *************************** 1. row ***************************
 RECEIVED_TRANSACTION_SET: 6cfb873b-573f-11ec-814a-d08e7908bcb1:1-3124520
@@ -50,7 +50,7 @@ RECEIVED_TRANSACTION_SET: 6cfb873b-573f-11ec-814a-d08e7908bcb1:1-3078139
 
 在向 MGR 集群中导入 mysqldump 备份文件时遇到报错，错误信息类似下面这样：
 
-```sql
+```
 ERROR 3098 (HY000) at line 1: The table does not comply with the requirements by an external plugin.
 ```
 

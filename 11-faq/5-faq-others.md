@@ -44,8 +44,8 @@
 是可以的，并且会复制到所有MGR节点，但是仅能创建空表，业务上不能写入数据。
 
 往无主键的InnoDB表中写入数据时，会报告类似下面的错误：
-```
-[root@GreatSQL] [test]> insert into t3 select 1;
+```sql
+[root@GreatSQL] [test]> INSERT INTO t3 SELECT 1;
 ERROR 3098 (HY000): The table does not comply with the requirements by an external plugin.
 ```
 同理，也可以创建MyISAM表，但写入时会提示失败。
@@ -105,8 +105,8 @@ scheme of mysql_innodb_cluster_r[10_numbers].
 3. 优化器认为可用资源不足，"无法"使用并行查询。
 
 例如，有个场景是因为 `parallel_memory_limit` 设置过低，优化器判断SQL的cost较大，所以只是尝试去使用并行，但没发挥最大优势
-```
-greatsql> show global status like 'PQ_%';
+```sql
+greatsql> SHOW GLOBAL STATUS LIKE 'PQ_%';
 | PQ_memory_refused  | 0     |
 | PQ_memory_used     | 0     |  <-- 没真正用上，因为可用buffer不够
 | PQ_threads_refused | 82    |
@@ -114,8 +114,8 @@ greatsql> show global status like 'PQ_%';
 ```
 
 在调大 `parallel_memory_limit` 之后就好了
-```
-greatsql> show global status like 'PQ_%';
+```sql
+greatsql> SHOW GLOBAL STATUS LIKE 'PQ_%';
 | PQ_memory_refused  | 0       |
 | PQ_memory_used     | 4801552 |  <-- PQ消耗的内存
 | PQ_threads_refused | 82      |
@@ -129,7 +129,7 @@ greatsql> show global status like 'PQ_%';
 
 1. 可能是因为该表还没有做一次全量加载到Rapid引擎的操作，需要执行类似下面的命令来完成：
 ```sql
-greatsql> ALTER TABLE t1 SECONDARY_LOAD;
+ALTER TABLE t1 SECONDARY_LOAD;
 ```
 
 2. 用户数据表中用到了暂时还不支持的数据类型，目前支持 *BOOL\INT\FLOAT\DOUBLE\DECIMAL* 等数据类型，其他数据类型暂不支持。
@@ -173,7 +173,7 @@ greatsql> ALTER TABLE t1 SECONDARY_LOAD;
 这句话的意思是，由于MGR的事务认证线程不支持gap lock，因此在MGR中，不能实现跨节点间的RR隔离级别保证。也就是说，在s1、s2两个MGR节点间，无法像是在同一个本地节点间实现RR隔离级别保证。
 
 例如下面这样：
-> 表t1，只有一个主键列id，已有3条数据：1、3、10，采用RR级别。
+
 
 **案例1：**
 
@@ -183,6 +183,10 @@ greatsql> ALTER TABLE t1 SECONDARY_LOAD;
 |T2|insert into t1 select 6;<br/>commit;<br/>select * from t1;<br/>\|  1 \|<br/>\|  3 \|<br/>\|  6 \|<br/>\| 10 \|||
 |T3| | begin;<br/>select * from t1 where id>=3; -- 还是只有两条记录<br/>\|  3 \|<br/>\| 10 \||
 |T4||begin;<br/>select * from t1 where id>=3 for update; -- 可以看到新插入的记录<br/>\|  3 \|<br/>\|  6 \|<br/>\| 10 \||
+
+::: tip 小贴士
+表t1，只有一个主键列id，已有3条数据：1、3、10，采用RR级别。
+:::
 
 **案例2（先删掉上面插入的6这条记录）：**
 
@@ -312,8 +316,9 @@ NUMA 是一种用于多处理器系统的内存设计，旨在提高系统性能
 
 使用percona-toolkit工具时报错提示缺失perl-DBD-MySQL，在安装perl-DBD-MySQL的时候出现报错和GreatSQL冲突，类似下面的错误信息：
 
-```shell
+```bash
 $ yum install perl-DBD-MySQL
+
 ...
 Installing:
 perl-DBD-MySQL                                 x86_64                                 4.023-6.el7                                       base                                 140 k
