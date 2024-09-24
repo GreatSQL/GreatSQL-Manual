@@ -25,19 +25,20 @@ sysbench是一个基于 LuaJIT 的可编写脚本的多线程基准测试工具�
 
 **2. 解压缩**
 
-```
-$ cd /opt
-$ tar xf sysbench-1.0.20.tar.gz
+```bash
+cd /opt
+tar xf sysbench-1.0.20.tar.gz
 ```
 
 **3. 编译sysbench**
 
 在开始编译前，已经将GreatSQL二进制包安装到 /usr/local 目录下，并且先对 `libperconaserverclient.so` 文件做个软链接：
-```
-$ cd /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/
+```bash
+$ cd /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/lib/
+
 $ ls -la
-drwxr-xr-x  6 root root      298 Aug 21 09:36 .
-drwxrwxr-x 14 root root     4096 Aug 21 09:37 ..
+
+...
 -rw-r--r--  1 root root   230864 Aug 21 09:17 libcoredumper.a
 -rw-r--r--  1 root root  1450924 Aug 21 09:17 libkmip.a
 -rw-r--r--  1 root root   156718 Aug 21 09:18 libkmippp.a
@@ -56,20 +57,20 @@ $ ln -s libperconaserverclient.so.21.2.32 libmysqlclient.so
 
 否则在下面的编译中可能会提示报错：
 ```
-configure: error: cannot find MySQL client libraries in /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/
+configure: error: cannot find MySQL client libraries in /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/lib/
 ```
 
 另外，编译安装sysbench需要提前安装 gcc/automake/libtool 等必要的工具。
 
 开始编译
-```
-$ cd sysbench-1.0.20
-$ ./autogen.sh
-$ ./configure --prefix=/usr/local/sysbench \
---with-mysql \
---with-mysql-includes=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/include/ \
---with-mysql-libs=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/ \
-&& make && make install
+```bash
+cd sysbench-1.0.20
+./autogen.sh
+./configure --prefix=/usr/local/sysbench \
+  --with-mysql \
+  --with-mysql-includes=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/include/ \
+  --with-mysql-libs=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/lib/ \
+  && make && make install
 ```
 
 编译参数说明：
@@ -83,8 +84,8 @@ $ ./configure --prefix=/usr/local/sysbench \
 **4. 运行sysbench，确认可用**
 
 在开始运行sysbench前，要先修改 `LD_LIBRARY_PATH` 环境变量，加上GreatSQL二进制文件包的lib目录：
-```
-$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/
+```bash
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/lib/
 ```
 
 要不然可能会报错，提示找不到客户端动态库文件：
@@ -92,12 +93,13 @@ $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/GreatSQL-8.0.32-25-Linux-gl
 error while loading shared libraries: libperconaserverclient.so.21: cannot open shared object file: No such file or directory
 ```
 
-```
+```bash
 $ cd /usr/local/sysbench/bin
 $ cp -rf ../share/sysbench/* .
 $ ldd ./sysbench  #<-- 确认可以找到所有动态库文件
+
 ...
-        libperconaserverclient.so.21 => /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/libperconaserverclient.so.21 (0x00007f6bbcd9d000)
+        libperconaserverclient.so.21 => /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/lib/libperconaserverclient.so.21 (0x00007f6bbcd9d000)
 ...
 $ ./sysbench --version
 sysbench 1.0.20 
@@ -122,23 +124,34 @@ sysbench默认支持以下几种OLTP测试方案：
 
 ## 执行压力测试
 
+先修改 `PATH` 环境变量，加上 sysbench 可执行二进制文件所在路径：
+
+```bash
+export PATH=$PATH:/usr/local/sysbench/bin
+```
+
 **1. 运行以下命令，初始化数据库**
 
-```
-$ cd /usr/local/sysbench/bin
-$ ./sysbench ./oltp_read_write.lua --db-driver=mysql --mysql-host=x.x.x.x --mysql-port=xxxx --mysql-user=x --mysql-password=x --mysql-db=sbtest --report-interval=1 --percentile=99 --rand-type=uniform --tables=16 --table_size=1000000 --threads=16 --time=600 prepare
+```bash
+cd /usr/local/share/sysbench
+
+sysbench ./oltp_read_write.lua --db-driver=mysql --mysql-host=x.x.x.x --mysql-port=xxxx --mysql-user=x --mysql-password=x --mysql-db=sbtest --report-interval=1 --percentile=99 --rand-type=uniform --tables=16 --table_size=1000000 --threads=16 --time=600 prepare
 ```
 
 **2. 运行以下命令，执行测试**
 
-```
-$ ./sysbench ./oltp_read_write.lua --db-driver=mysql --mysql-host=x.x.x.x --mysql-port=xxxx --mysql-user=x --mysql-password=x --mysql-db=sbtest --report-interval=1 --percentile=99 --rand-type=uniform --tables=16 --table_size=1000000 --threads=16 --time=600 run
+```bash
+cd /usr/local/share/sysbench
+
+sysbench ./oltp_read_write.lua --db-driver=mysql --mysql-host=x.x.x.x --mysql-port=xxxx --mysql-user=x --mysql-password=x --mysql-db=sbtest --report-interval=1 --percentile=99 --rand-type=uniform --tables=16 --table_size=1000000 --threads=16 --time=600 run
 ```
 
 **3. 压测完毕，清除数据**
 
-```
-$ ./sysbench ./oltp_read_write.lua --db-driver=mysql --mysql-host=x.x.x.x --mysql-port=xxxx --mysql-user=x --mysql-password=x --mysql-db=sbtest --report-interval=1 --percentile=99 --rand-type=uniform --tables=16 --table_size=1000000 --threads=16 --time=600 cleanup
+```bash
+cd /usr/local/share/sysbench
+
+sysbench ./oltp_read_write.lua --db-driver=mysql --mysql-host=x.x.x.x --mysql-port=xxxx --mysql-user=x --mysql-password=x --mysql-db=sbtest --report-interval=1 --percentile=99 --rand-type=uniform --tables=16 --table_size=1000000 --threads=16 --time=600 cleanup
 ```
 
 参数说明：
@@ -183,9 +196,10 @@ $ ./sysbench ./oltp_read_write.lua --db-driver=mysql --mysql-host=x.x.x.x --mysq
 10. 每轮测试结束后，最好清空所有数据，在下一轮新的测试开始前，重新初始化填充数据。
 
 下面是我常用的sysbench压测参数供参考：
-```
-$ cd /usr/local/sysbench/bin
-$ ./sysbench ./oltp_read_write.lua \
+```bash
+cd /usr/local/share/sysbench
+
+sysbench ./oltp_read_write.lua \
 ...
 --tables=64 \
 --table_size= 10000000 \

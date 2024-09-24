@@ -17,17 +17,17 @@ TPC-H是TPC(Transaction Processing Performance Council)组织提供的工具包�
 
 **2. 下载完后，解压缩，并复制 `makefile.suite` 文件**
 
-```
-$ unzip 41aa248b-48a5-11ee-8bef-d08e7908bcb1-tpc-h-tool.zip
-$ cd TPC-H_Tools_v3.0.1
-$ cd dbgen
-$ cp makefile.suite Makefile
+```bash
+unzip 41aa248b-48a5-11ee-8bef-d08e7908bcb1-tpc-h-tool.zip
+cd TPC-H_Tools_v3.0.1
+cd dbgen
+cp makefile.suite Makefile
 ```
 
 **3. 修改Makefile以适配**
 
-```
-$ vim Makefile
+参考下方内容，修改 `Makefile` 文件：
+```ini
 CC      = gcc
 # Current values for DATABASE are: INFORMIX, DB2, TDAT (Teradata)
 #                                  SQLSERVER, SYBASE, ORACLE, VECTORWISE
@@ -41,8 +41,8 @@ WORKLOAD = TPCH
 
 **4. 修改tpcd.h文件，在文件末尾新增几行MYSQL宏定义**
 
-```
-$ vim tpcd.h
+参考下方内容，修改 `tpcd.h` 文件：
+```ini
 #ifdef MYSQL
 #define GEN_QUERY_PLAN ""
 #define START_TRAN "START TRANSACTION"
@@ -64,12 +64,13 @@ $ vim tpcd.h
 
 可根据实际情况，生成 1、10、100、1000 等不同数据集比例因子（Scale Factor）级别的测试数据，例如 30：
 
-```Bash
-$ ./dbgen -vf -s 30
+```bash
+./dbgen -vf -s 30
 ```
 最后会生成数个 .tbl 文件：
-```
+```bash
 $ ls -lh
+
 -rw-r--r-- 1 root root 703M Jul 19 15:36 customer.tbl
 -rw-r--r-- 1 root root  23G Jul 19 15:36 lineitem.tbl
 -rw-r--r-- 1 root root 2.2K Jul 19 15:36 nation.tbl
@@ -95,12 +96,12 @@ SELECT /*+ SET_VAR(use_secondary_engine=1) SET_VAR(secondary_engine_cost_thresho
 ```
 
 也可参考下面的方法手动生成22个TPC-H测试查询SQL：
-```
+```bash
 # 生成22个SQL文件
-$ for i in $(seq 1 22); do ./qgen -d $i -s 1000 > tpch_queries_"$i".sql; done
+for i in $(seq 1 22); do ./qgen -d $i -s 1000 > tpch_queries_"$i".sql; done
 
 # 转换文件格式
-$ dos2unix *.sql
+dos2unix *.sql
 ```
 
 参数 `-s 1000` 表示测试数据集比例因子是 1000，不同比例因子的区别在于第 11 个查询SQL中的条件因子，在 tpch_queries_11.sql 中也已注明：
@@ -229,22 +230,22 @@ create table lineitem ( l_orderkey    bigint not null,
 2. 并行导入数据
 
 可以利用GreatSQL提供的 [并行 LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md) 特性并行导入测试数据，提高导入效率：
-```
-$ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/region.tbl' into table region FIELDS TERMINATED BY '|'; analyze table region;" tpch
+```bash
+mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/region.tbl' into table region FIELDS TERMINATED BY '|'; analyze table region;" tpch
 
-$ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/nation.tbl' into table nation FIELDS TERMINATED BY '|'; analyze table nation;" tpch
+mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/nation.tbl' into table nation FIELDS TERMINATED BY '|'; analyze table nation;" tpch
 
-$ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/supplier.tbl' into table supplier FIELDS TERMINATED BY '|'; analyze table supplier;" tpch
+mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/supplier.tbl' into table supplier FIELDS TERMINATED BY '|'; analyze table supplier;" tpch
 
-$ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/part.tbl' into table part FIELDS TERMINATED BY '|'; analyze table part;" tpch
+mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/part.tbl' into table part FIELDS TERMINATED BY '|'; analyze table part;" tpch
 
-$ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/customer.tbl' into table customer FIELDS TERMINATED BY '|'; analyze table customer;" tpch
+mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/customer.tbl' into table customer FIELDS TERMINATED BY '|'; analyze table customer;" tpch
 
-$ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/partsupp.tbl' into table partsupp FIELDS TERMINATED BY '|'; analyze table partsupp;" tpch
+mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/partsupp.tbl' into table partsupp FIELDS TERMINATED BY '|'; analyze table partsupp;" tpch
 
-$ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/orders.tbl' into table orders FIELDS TERMINATED BY '|'; analyze table orders;" tpch
+mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/orders.tbl' into table orders FIELDS TERMINATED BY '|'; analyze table orders;" tpch
 
-$ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/lineitem.tbl' into table lineitem FIELDS TERMINATED BY '|'; analyze table lineitem;" tpch
+mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/data/lineitem.tbl' into table lineitem FIELDS TERMINATED BY '|'; analyze table lineitem;" tpch
 ```
 
 还可以进一步设置并行 LOAD DATA 的并行线程数以及分片大小，详情参考文档：[并行 LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md)。
@@ -254,18 +255,18 @@ $ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch
 ### 开始TPC-H测试
 
 在开始测试前，先调低 `long_query_time` 的值（甚至可以设置为0），使得可以记录所有TPC-H查询测试请求：
-```
-# 设置 long_query_time = 1ms
-greatsql> set global long_query_time = 0.001;
+```sql
+-- 设置 long_query_time = 1ms
+SET GLOBAL long_query_time = 0.001;
 
-# 甚至设置为 0，即记录所有请求
-#greatsql> set global long_query_time = 0;
+-- 甚至设置为 0，即记录所有请求
+SET GLOBAL long_query_time = 0;
 ```
 
-在前面 **4. 生成TPC-H测试查询SQL** 中已经生成了测试22个测试查询SQL文件，逐一执行这些查询文件，也可以写个小脚本来执行，并分别记录运行耗时：
+在前面 **4. 生成TPC-H测试查询SQL** 中已经生成了测试22个测试查询SQL文件，逐一执行这些查询文件，也可以写个脚本来执行，并分别记录运行耗时：
 
-```
-$ cat run-thch.sh
+编辑脚本 `run-tpch.sh`，内容如下所示：
+```bash
 #!/bin/bash
 workdir=/data/tpch
 tpchdb="tpch"
@@ -317,7 +318,7 @@ done
 
 在运行查询SQL时，也要观察相关指标：
 
-```SQL
+```sql
 greatsql> SHOW GLOBAL STATUS LIKE 'Secondary_engine_execution_count';
 +----------------------------------+-------+
 | Variable_name                    | Value |

@@ -45,8 +45,9 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 - 1. 操作系统
 
-```shell
+```bash
 $ cat /etc/os-release
+
 NAME="CentOS Linux"
 VERSION="7 (Core)"
 ID="centos"
@@ -66,8 +67,9 @@ REDHAT_SUPPORT_PRODUCT_VERSION="7"
 
 - 2. CPU
 
-```shell
+```bash
 $ lscpu
+
 Architecture:          x86_64
 CPU op-mode(s):        32-bit, 64-bit
 Byte Order:            Little Endian
@@ -100,7 +102,7 @@ Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca 
 
 - 3. 内存
 
-```shell
+```bash
 $ free -ht
               total        used        free      shared  buff/cache   available
 Mem:           251G        167G         22G        7.2M         61G         82G
@@ -112,7 +114,7 @@ Total:         255G        168G         24G
 
 磁盘设备型号
 
-```shell
+```bash
 $ nvme list
 Node             SN                   Model                                    Namespace Usage                      Format           FW Rev
 ---------------- -------------------- ---------------------------------------- --------- -------------------------- ---------------- --------
@@ -121,15 +123,16 @@ Node             SN                   Model                                    N
 
 磁盘挂载参数、文件系统
 
-```shell
+```bash
 $ df -hT | grep ssd
 /dev/nvme0n1            xfs       3.0T  1.5T  1.5T  49% /ssd2
 ```
 
 NVMe SSD设备简单测速
 
-```shell
+```bash
 $ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
+
 20480+0 records in
 20480+0 records out
 21474836480 bytes (21 GB) copied, 8.69131 s, 2.5 GB/s
@@ -138,8 +141,8 @@ $ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
 **提示**：在下面运行TPC-H测试时，设置了Rapid引擎最大可使用的内存及线程数。
 
 ```sql
-greatsql> SET GLOBAL rapid_memory_limit = 68719476736;
-greatsql> SET GLOBAL rapid_worker_threads = 32;
+SET GLOBAL rapid_memory_limit = 68719476736;
+SET GLOBAL rapid_worker_threads = 32;
 ```
 
 ##  测试表结构和数据量
@@ -215,11 +218,12 @@ GreatSQL SF100 vs SF300（32C64G）对比示意图如下
 
 运行 TPC-H `dbgen` 工具，生成数据文件，一共会生成 8 个表对应的 tbl 数据文件，例如：
 
-```shell
+```bash
 $ ./dbgen -vf -s 100
 ...
 
 $ ls -l *tbl
+
 -rw-r--r-- 1 root root  2463490271 Sep 26 09:20 customer.tbl
 -rw-r--r-- 1 root root 79579694556 Sep 26 09:20 lineitem.tbl
 -rw-r--r-- 1 root root        2224 Sep 26 09:20 nation.tbl
@@ -236,9 +240,11 @@ $ ls -l *tbl
 
 参考GreatSQL社区提供的TPC-H数据库表初始化脚本：[tpch-create-table.sql](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/tpch-create-table.sql)，完成TPC-H测试数据库表创建。
 
-```shell
+```bash
 $ mysql -f < tpch-create-table.sql
+
 $ mysqlshow tpch100
+
 Database: tpch100
 +----------+
 |  Tables  |
@@ -270,21 +276,21 @@ Database: tpch100
 先执行下面命令，动态修改Rapid引擎最大可使用内存，其余相关选项均为默认值：
 
 ```sql
-greatsql> SET GLOBAL rapid_memory_limit = 68719476736;
-greatsql> SET GLOBAL rapid_worker_threads = 32;
+SET GLOBAL rapid_memory_limit = 68719476736;
+SET GLOBAL rapid_worker_threads = 32;
 ```
 
 之后，执行以下命令加载测试数据到secondary engine：
 
 ```sql
-greatsql> alter table customer secondary_load;
-alter table lineitem secondary_load;
-alter table nation secondary_load;
-alter table orders secondary_load;
-alter table part secondary_load;
-alter table partsupp secondary_load;
-alter table region secondary_load;
-alter table supplier secondary_load;
+ALTER TABLE customer secondary_load;
+ALTER TABLE lineitem secondary_load;
+ALTER TABLE nation secondary_load;
+ALTER TABLE orders secondary_load;
+ALTER TABLE part secondary_load;
+ALTER TABLE partsupp secondary_load;
+ALTER TABLE region secondary_load;
+ALTER TABLE supplier secondary_load;
 ```
 
 这个过程需要一定时间，请耐心等待。
@@ -301,7 +307,7 @@ alter table supplier secondary_load;
 
 3. 每次执行SQL都会记录其起止时间，及其耗时，如下面例所示：
 
-```shell
+```bash
 [2023-09-27 01:38:45] BEGIN RUN TPC-H Q1 1 times
 [2023-09-27 01:38:46] TPC-H Q1 END, COST: 1.301s
 

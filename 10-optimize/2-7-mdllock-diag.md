@@ -9,13 +9,13 @@
 MDL锁全称为Metadata Lock（元数据锁）。在MySQL/GreatSQL中，DDL是不支持事务特性的，当事务和DDL同时操作同一个表，可能会出现各种意想不到问题，如事务特性被破坏、binlog顺序错乱等。为了解决类似这些问题，MySQL在5.5开始引入了MDL锁(Metadata Locking)。也就是说，MDL锁的作用是保证表元数据的一致性，避免DDL和DML并行导致元数据不一致。
 
 MDL锁的范围主要包括以下几种：
-- GLOBAL级，即全局读锁，例如执行`FLUSH TABLES WITH READ LOCK`。
-- TABLE/TABLESPACE/SCHEMA级，保护元数据。
-- FUNCTION/PROCEDURE/TRIGGER/EVENT级，保护元数据。
-- COMMIT，用于阻塞事务提交，例如在事务提交前，MDL锁还没释放，此时提交会被阻塞。
-- BACKUP，全局备份锁以及单表备份锁，8.0以后新增备份锁。
-- USER_LEVEL_LOCK，用户级自定义锁。 
-- FOREIGN_KEY/CHECK_CONSTRAINT，约束校验锁。
+- **GLOBAL**，即全局读锁，例如执行`FLUSH TABLES WITH READ LOCK`。
+- **TABLE/TABLESPACE/SCHEMA**，保护元数据。
+- **FUNCTION/PROCEDURE/TRIGGER/EVENT**，保护元数据。
+- **COMMIT**，用于阻塞事务提交，例如在事务提交前，MDL锁还没释放，此时提交会被阻塞。
+- **BACKUP**，全局备份锁以及单表备份锁，8.0以后新增备份锁。
+- **USER_LEVEL_LOCK**，用户级自定义锁。 
+- **FOREIGN_KEY/CHECK_CONSTRAINT**，约束校验锁。
 
 还有其他MDL锁范围，这里未能全部列出，MySQL仍在持续优化MDL锁。
 
@@ -26,11 +26,11 @@ MDL锁是Server层的锁，对象级锁。
 发起DML请求时，会对表同时申请MDL共享锁（只读锁）；发起DDL请求时，会对表同时申请MDL排他锁（写锁）。申请MDL加锁的操作会形成一个队列，队列中写锁获取优先级高于读锁。
 
 通过查询 `performance_schema.metadata_locks` 可以看到当前的MDL加锁及锁等待信息，不过要先进行相应的设置：
-```
-# 1. 打开PFS中MDL观测开关
-greatsql> UPDATE setup_consumers SET ENABLED = 'YES' WHERE NAME ='global_instrumentation';
+```sql
+-- 1. 打开PFS中MDL观测开关
+UPDATE setup_consumers SET ENABLED = 'YES' WHERE NAME ='global_instrumentation';
 
-greatsql> UPDATE setup_instruments SET ENABLED = 'YES' WHERE NAME =‘wait/lock/metadata/sql/mdl';
+UPDATE setup_instruments SET ENABLED = 'YES' WHERE NAME =‘wait/lock/metadata/sql/mdl';
 ```
 
 下面模拟几种场景，分别观察MDL锁的不同加锁表现。
@@ -38,14 +38,14 @@ greatsql> UPDATE setup_instruments SET ENABLED = 'YES' WHERE NAME =‘wait/lock/
 **1. 发起一个事务，提交DML请求**
 
 在会话1中发起下面的请求：
-```
-greatsql> begin;
-greatsql> update t1 set k=rand()*102400 where id = 3;
+```sql
+BEGIN;
+UPDATE t1 SET k=RAND()*102400 WHERE id = 3;
 ```
 
 在另一个会话中，观察MDL加锁情况：
-```
-greatsql> select * from performance_schema.metadata_locks\G
+```sql
+greatsql> SELECT * FROM performance_schema.metadata_locks\G
 *************************** 1. row ***************************
           OBJECT_TYPE: TABLE               #<-- 表级锁
         OBJECT_SCHEMA: greatsql
@@ -63,12 +63,12 @@ OBJECT_INSTANCE_BEGIN: 139835142929568
 **2. 发起一个显式LOCK WRITE请求**
 
 会话1：
-```
-greatsql> LOCK TABLE t1 WRITE;
+```sql
+LOCK TABLE t1 WRITE;
 ```
 
 会话2：
-```
+```sql
 greatsql> SELECT * FROM performance_schema.metadata_locks;
 +---------------+--------------------+----------------+-------------+-----------------------+----------------------+---------------+-------------+-------------------+-----------------+----------------+
 | OBJECT_TYPE   | OBJECT_SCHEMA      | OBJECT_NAME    | COLUMN_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE            | LOCK_DURATION | LOCK_STATUS | SOURCE            | OWNER_THREAD_ID | OWNER_EVENT_ID |
@@ -86,13 +86,13 @@ greatsql> SELECT * FROM performance_schema.metadata_locks;
 **3. 发起一个显式LOCK READ请求**
 
 会话1：
-```
-greatsql> LOCK TABLE t1 READ;
+```sql
+LOCK TABLE t1 READ;
 ```
 
 会话2：
-```
-greatsql> select * from performance_schema.metadata_locks\G
+```sql
+greatsql> SELECT * FROM performance_schema.metadata_locks\G
 *************************** 1. row ***************************
           OBJECT_TYPE: TABLE
         OBJECT_SCHEMA: greatsql
@@ -111,13 +111,13 @@ OBJECT_INSTANCE_BEGIN: 139835167440320
 **4. 发起一个DDL请求**
 
 会话1：
-```
-greatsql> ALTER TABLE t1 ADD c2 INT UNSIGNED NOT NULL;
+```sql
+ALTER TABLE t1 ADD c2 INT UNSIGNED NOT NULL;
 ```
 
 会话2：
-```
-greatsql> select * from performance_schema.metadata_locks\G
+```sql
+greatsql> SELECT * FROM performance_schema.metadata_locks\G
 +---------------+--------------------+------------------+-------------+-----------------------+---------------------+---------------+-------------+--------------------+-----------------+----------------+
 | OBJECT_TYPE   | OBJECT_SCHEMA      | OBJECT_NAME      | COLUMN_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE           | LOCK_DURATION | LOCK_STATUS | SOURCE             | OWNER_THREAD_ID | OWNER_EVENT_ID |
 +---------------+--------------------+------------------+-------------+-----------------------+---------------------+---------------+-------------+--------------------+-----------------+----------------+
@@ -136,12 +136,12 @@ greatsql> select * from performance_schema.metadata_locks\G
 **5. 发起一个备份锁**
 会话1：
 
-```
-greatsql> LOCK INSTANCE FOR BACKUP;
+```sql
+LOCK INSTANCE FOR BACKUP;
 ```
 
 会话2：
-```
+```sql
 greatsql> SELECT * FROM performance_schema.metadata_locks\G
 *************************** 1. row ***************************
           OBJECT_TYPE: BACKUP LOCK
@@ -161,7 +161,7 @@ OBJECT_INSTANCE_BEGIN: 139835167443600
 会话1：
 
 ```
-greatsql> FLUSH TABLES WITH READ LOCK;
+FLUSH TABLES WITH READ LOCK;
 ```
 
 会话2：
@@ -205,7 +205,7 @@ MDL锁是比较粗粒度的锁，一旦出现写锁等待，不但当前操作�
 | | | SELECT * FROM t1 WHERE id=5;<br/>被MDL阻塞，进入等待|
 
 这时，如果执行 `SHOW PROCESSLIST` 就可以看到会话2 & 3的状态都是等待获得MDL锁：
-```
+```sql
 | 13365 | root                      | localhost           | greatsql | Sleep                                      |      41 |                                                          | NULL                                        |      41867 |         1 |             1 |
 | 13366 | root                      | localhost           | greatsql | Query                                      |      14 | Waiting for table metadata lock                          | ALTER TABLE t1 ADD c2 INT UNSIGNED NOT NULL |      13943 |         0 |             0 |
 | 13368 | root                      | localhost           | greatsql | Query                                      |       5 | Waiting for table metadata lock                          | SELECT * FROM t1 WHERE id=5                 |       5701 |         0 |             0 |
@@ -231,7 +231,7 @@ greatsql> SELECT * FROM performance_schema.metadata_locks;
 ```
 
 这个视角可读性太差了，改成查看 `sys.schema_table_lock_waits` 更清晰：
-```
+```sql
 greatsql> SELECT * FROM sys.schema_table_lock_waits\G
 *************************** 1. row ***************************
                object_schema: greatsql

@@ -15,8 +15,8 @@
 ## MySQL Router + GreatSQL MGR 实现单IDC内高可用
 
 首先，构建一个三节点的MGR集群，该集群包含Primary、Secondary、Arbitrator三种节点。
-```
-greatsql> select * from performance_schema.replication_group_members;
+```sql
+greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST  | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+

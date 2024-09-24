@@ -12,34 +12,34 @@ GreatSQL支持在单主（Single-Primary）模式下，在读写节点绑定动�
 
 ## 启用内置vip插件
 - 开启新插件
-```
+```ini
 plugin_load_add=greatdb_ha.so
 ```
 
 或者在启动数据库实例后， 执行
-```
-install plugin greatdb_ha soname 'greatdb_ha.so';
+```sql
+INSTALL PLUGIN greatdb_ha SONAME 'greatdb_ha.so';
 ```
 
 ## 新增配置参数
 - 配置开启内置vip功能
-```
+```ini
 loose-greatdb_ha_enable_mgr_vip = 1
 ```
 - 配置vip
-```
+```ini
 loose-greatdb_ha_mgr_vip_ip = 172.17.140.1
 ```
 - 配置要绑定的网卡名，插件会将vip绑定到MGR主所在机器的指定网卡上，比如配置为eth0，为了防止网卡原有的ip被覆盖，实际绑定后，会绑定在名为eth0:0的网卡上
-```
+```ini
 loose-greatdb_ha_mgr_vip_nic = 'eth0'
 ```
 - 配置掩码
-```
+```ini
 loose-greatdb_ha_mgr_vip_mask = '255.255.255.0'
 ```
 - 目前只支持在单主模式下才能启用内置vip特性，所以还需要设置下面参数：
-```
+```ini
 loose-group_replication_single_primary_mode= TRUE
 loose-group_replication_enforce_update_everywhere_checks= FALSE
 ```
@@ -48,7 +48,7 @@ loose-group_replication_enforce_update_everywhere_checks= FALSE
 - 上述参数支持在线动态修改。
 
 上述配置说明的完整示例如下（MGR组内每个实例都需要配置）：
-```
+```ini
 [mysqld]
 #GreatSQL MGR vip
 plugin-load-add=greatdb_ha.so
@@ -68,7 +68,7 @@ loose-group_replication_enforce_update_everywhere_checks=0
 配置VIP需要相关内核权限，获取相关权限有两种方式，以下三选一即可（推荐采用方法一）：
 
 1. 【推荐方法】修改systemd服务文件，增加AmbientCapabilities参数，例如：
-```
+```ini
 [Unit]
 Description=GreatSQL Server
 Documentation=man:mysqld(8)
@@ -99,20 +99,22 @@ AmbientCapabilities=CAP_NET_ADMIN CAP_NET_RAW
 **备注**：感谢社区用户 **芬达** 提供的建议方法。
 
 2. 通过setcap命令为mysqld二进制文件添加 `CAP_NET_ADMIN` 和 `CAP_NET_RAW` 的capability。具体命令如下：
-```shell
+```bash
 #执行该命令需要sudo权限或root
-$ setcap CAP_NET_ADMIN,CAP_NET_RAW+ep /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
+setcap CAP_NET_ADMIN,CAP_NET_RAW+ep /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
 ```
 
 然后将GreatSQL二进制包的`lib/private`子目录加载到`LD_LIBRARY_PATH`中：
-```
+```bash
 $ cat /etc/ld.so.conf.d/greatsql.conf
+
 /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/private
 ```
 
 执行 `ldconfig && ldconfig -p | grep -i libpro` 确认配置无误：
-```
+```bash
 $ ldconfig && ldconfig -p | grep -i 'libprotobuf.so'
+
 	libprotobuf.so.3.19.4 (libc6,x86-64) => /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/private/libprotobuf.so.3.19.4
 ```
 

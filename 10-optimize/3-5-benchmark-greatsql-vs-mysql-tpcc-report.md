@@ -50,8 +50,9 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 - 1. 操作系统
 
-```shell
+```bash
 $ cat /etc/os-release
+
 NAME="CentOS Linux"
 VERSION="7 (Core)"
 ID="centos"
@@ -71,8 +72,9 @@ REDHAT_SUPPORT_PRODUCT_VERSION="7"
 
 - 2. CPU
 
-```shell
+```bash
 $ lscpu
+
 Architecture:          x86_64
 CPU op-mode(s):        32-bit, 64-bit
 Byte Order:            Little Endian
@@ -102,7 +104,7 @@ Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca 
 
 - 3. 内存
 
-```shell
+```bash
 $ free -ht
               total        used        free      shared  buff/cache   available
 Mem:           377G        159G        3.4G         67M        214G        215G
@@ -114,8 +116,9 @@ Total:         381G        159G        7.1G
 
 磁盘设备型号
 
-```shell
+```bash
 $ nvme list
+
 Node             SN                   Model                                    Namespace Usage                      Format           FW Rev
 ---------------- -------------------- ---------------------------------------- --------- -------------------------- ---------------- --------
 /dev/nvme0n1     70L0A03YTAHR         Dell Express Flash CD5 3.84T SFF         1           3.24  TB /   3.84  TB    512   B +  0 B   1.1.1
@@ -124,7 +127,7 @@ Node             SN                   Model                                    N
 
 磁盘挂载参数、文件系统、ioscheduler
 
-```shell
+```bash
 $ df -hT | grep /ssd1
 /dev/md127              xfs       7.0T  2.5T  4.6T  35% /ssd1
 
@@ -137,8 +140,9 @@ none
 
 NVMe SSD设备简单测速
 
-```shell
+```bash
 $ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
+
 20480+0 records in
 20480+0 records out
 21474836480 bytes (21 GB) copied, 12.0639 s, 1.8 GB/s
@@ -146,8 +150,9 @@ $ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
 
 - 5. 服务器关闭 NUMA 设置
 
-```shell
+```bash
 $ cat /etc/default/grub
+
 GRUB_TIMEOUT=5
 GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
 GRUB_DEFAULT=saved
@@ -308,7 +313,7 @@ stockLevelWeight=4
 
 - 数据库初始化后总大小约182G。
 
-```shell
+```bash
 $ du -sch /data/GreatSQL/bmsql/
 182G	/data/GreatSQL/bmsql/
 182G	total
@@ -316,7 +321,7 @@ $ du -sch /data/GreatSQL/bmsql/
 
 - 由于测试资源有限，BenchmarkSQL 和 mysqld 运行在同一台服务器上，因此 BenchmarkSQL 的并发连接数控制为 32 和 64，没有设置更大，并利用 taskset 限定CPU资源。
 
-```shell
+```bash
 $ cat bmsql-taskset.sh
 
 ps -ef|grep -v grep|grep java

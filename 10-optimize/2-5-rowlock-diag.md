@@ -72,9 +72,9 @@ InnoDB行锁有几种不同的加锁粒度（范围）：
 选项 `innodb_status_output_locks` 用于设置是否在执行 `SHOW ENGINE INNODB STATUS` 时显示行锁信息，默认关闭，建议打开。
 
 选用sysbench创建的标准测试表观察，先采用两个不同视角来看表数据的组织顺序：
-```
-greatsql> select id, k           greatsql> select k, id
-  from t1 order by id;            from t1 order by k;
+```sql
+greatsql> SELECT id, k           greatsql> SELECT k, id
+  FROM t1 ORDER BY id;            FROM t1 ORDER BY k;
 +----+--------+               +--------+----+
 | id | k      |               | k      | id |
 +----+--------+               +--------+----+
@@ -93,7 +93,7 @@ greatsql> select id, k           greatsql> select k, id
 也就是分别根据主键索引、辅助索引的组织顺序读取数据，有助于理解下面加锁的例子。
 
 启动一个事务，并锁定一行数据：
-```
+```sql
 greatsql> BEGIN; SELECT * FROM t1 WHERE k = 211310 FOR UPDATE;
 ...
 *************************** 1. row ***************************
@@ -104,7 +104,7 @@ pad: 75239007095-21240899951-18845450077-03788416707-63186498182
 ```
 
 在另一个会话观察行锁信息：
-```
+```sql
 greatsql> SHOW ENGINE INNODB STATUS\G
 ...
 # 事务ID，事务活跃时长
@@ -148,8 +148,8 @@ Record lock, heap no 6 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
 在这个视角下基本上解释清楚行锁信息了。
 
 再换个视角来查看：
-```
-greatsql> select * from performance_schema.data_locks;
+```sql
+greatsql> SELECT * FROM performance_schema.data_locks;
 +--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+------------+
 | ENGINE | ENGINE_LOCK_ID                          | ENGINE_TRANSACTION_ID | THREAD_ID | EVENT_ID | OBJECT_SCHEMA | OBJECT_NAME | PARTITION_NAME | SUBPARTITION_NAME | INDEX_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE | LOCK_MODE     | LOCK_STATUS | LOCK_DATA  |
 +--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+------------+
@@ -160,7 +160,7 @@ greatsql> select * from performance_schema.data_locks;
 +--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+------------+
 
 # 去掉一些用处不大的信息后
-greatsql> select ENGINE_LOCK_ID, ENGINE_TRANSACTION_ID, INDEX_NAME, LOCK_TYPE, LOCK_MODE, LOCK_STATUS, LOCK_DATA from performance_schema.data_locks;
+greatsql> SELECT ENGINE_LOCK_ID, ENGINE_TRANSACTION_ID, INDEX_NAME, LOCK_TYPE, LOCK_MODE, LOCK_STATUS, LOCK_DATA FROM performance_schema.data_locks;
 +-----------------------------------------+-----------------------+------------+-----------+---------------+-------------+------------+
 | ENGINE_LOCK_ID                          | ENGINE_TRANSACTION_ID | INDEX_NAME | LOCK_TYPE | LOCK_MODE     | LOCK_STATUS | LOCK_DATA  |
 +-----------------------------------------+-----------------------+------------+-----------+---------------+-------------+------------+
@@ -198,7 +198,7 @@ ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction
 ```
 
 在事务2等待获得行锁期间，可以观察到行锁等待的情况。
-```
+```sql
 greatsql> SHOW ENGINE INNODB STATUS\G
 ...
 
@@ -249,8 +249,8 @@ Record lock, heap no 6 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
 ```
 
 或者换个视角观察：
-```
-greatsql> select * from sys.innodb_locK_waits\G
+```sql
+greatsql> SELECT * FROM sys.innodb_locK_waits\G
 *************************** 1. row ***************************
                 wait_started: 2023-09-07 14:03:53
                     wait_age: 00:00:31					#<-- 行锁等待了31秒

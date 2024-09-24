@@ -21,7 +21,7 @@ BenchmarkSQL 支持 MySQL（Percona Server for MySQL、GreatSQL）、PostgreSQL�
 
 下载完 BenchmarkSQL 压缩包后，解压缩放在 /usr/local 目录下
 
-```shell
+```bash
 $ cd /usr/local
 $ curl -OL -o benchmarksql-5.0.zip "https://jaist.dl.sourceforge.net/project/benchmarksql/benchmarksql-5.0.zip?viasf=1"
 $ unzip benchmarksql-5.0.zip
@@ -34,21 +34,21 @@ build.xml  doc  HOW-TO-RUN.txt  lib  README.md  run  src
 
 此外，还要安装 Apache Ant，它是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具。用于编译 Benchmark SQL。
 
-```shell
-$ yum install -y java-1.8.0-openjdk ant
+```bash
+yum install -y java-1.8.0-openjdk ant
 ```
 
 配置 Apache-Ant 的环境变量：
 
-```shell
-$ echo 'export APACH_HOME=/usr/share/doc/ant-1.9.4' >> ~/.bash_profile
-$ echo 'export PATH=${ANT_HOME}/bin:$PATH' >> ~/.bash_profile
-$ source ~/.bash_profile
+```bash
+echo 'export APACH_HOME=/usr/share/doc/ant-1.9.4' >> ~/.bash_profile
+echo 'export PATH=${ANT_HOME}/bin:$PATH' >> ~/.bash_profile
+source ~/.bash_profile
 ```
 
 检查 Java 运行环境是否可用：
 
-```shell
+```bash
 $ java -version
 openjdk version "1.8.0_312"
 OpenJDK Runtime Environment (build 1.8.0_312-b07)
@@ -106,9 +106,9 @@ Apache Ant(TM) version 1.10.5 compiled on June 24 2019
 
 3. 编辑一份适合 MySQL/GreatSQL 的表 DDL 文件。 
 
-```shell
-$ cd /usr/local/benchmarksql-5.0/run
-$ cp -rf sql.common/ sql.mysql
+```bash
+cd /usr/local/benchmarksql-5.0/run
+cp -rf sql.common/ sql.mysql
 ```
 
 编辑 `sql.mysql/tableCreates.sql` 文件，对每个表都加上使用 InnoDB 引擎的声明，以及每个表都要有显式主键的定义。此外，还要对 `bmsql_oorder` 表额外增加一个索引，根据对测试过程中产生的慢查询日志进行分析，增加该索引可有效提升测试性能。
@@ -252,14 +252,14 @@ create table bmsql_stock (
 
 4. 修改 `run/runDatabaseBuild.sh` 文件 17 行附近，定义数据加载结束时的后续工作。
 
-```shell
+```bash
  17 #AFTER_LOAD="indexCreates foreignKeys extraHistID buildFinish"
  18 AFTER_LOAD="indexCreates buildFinish"
 ```
 
 5. 修改 `run/funcs.sh` 文件 31 和 54 行附近，添加 MySQL/GreatSQL 数据库类型。
 
-```shell
+```bash
  28         firebird)
  29             cp="../lib/firebird/*:../lib/*"
  30             ;;
@@ -275,7 +275,7 @@ create table bmsql_stock (
 
 访问 [MySQL官网下载站](https://downloads.mysql.com/archives/c-j/)，下载 MySQL 驱动 jar 包：
 
-```shell
+```bash
 $ cd /usr/local/benchmarksql-5.0/lib
 $ mkdir -p mysql
 $ cd mysql
@@ -297,7 +297,7 @@ Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class 
 
 6. 重新编译修改后的源码。
 
-```shell
+```bash
 $ cd /usr/local/benchmarksql-5.0
 $ ant
 Buildfile: /usr/local/benchmarksql-5.0/build.xml
@@ -316,9 +316,8 @@ Total time: 0 seconds
 
 7. 编辑配置文件 `run/props.greatsql`，配置 GreatSQL 数据库的连接信息，例如数据库地址、端口、用户名和密码等。
 
-```shell
-$ vim /usr/local/benchmarksql-5.0/run/props.greatsql
-
+参考下方内容，编辑 `/usr/local/benchmarksql-5.0/run/props.greatsql` 文件：
+```ini
 db=mysql
 driver=com.mysql.jdbc.Driver
 conn=jdbc:mysql://localhost:3306/bmsql
@@ -369,9 +368,6 @@ osCollectorInterval=1
 - `osCollectorSSHAddr`，需要收集系统性能的主机。
 - `osCollectorDevices`，操作系统中被收集服务器的网卡名称和磁盘名称。
 
-**提醒**：
-> 启用系统信息收集时（osCollectorScript 参数设置不为空），可能会发生
-
 ### 3. 运行 BenchmarkSQL 测试
 
 - **初始化数据库**
@@ -393,9 +389,10 @@ greatsql> SHOW GRANTS FOR bmsql;
 
 运行 `run/runDatabaseBuild.sh`，创建测试数据表并填充数据。
 
-```shell
+```bash
 $ cd /usr/local/benchmarksql-5.0/run
 $ ./runDatabaseBuild.sh ./props.greatsql
+
 # ------------------------------------------------------------
 # Loading SQL file ./sql.mysql/tableCreates.sql
 # ------------------------------------------------------------
@@ -441,14 +438,16 @@ Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class 
 
 运行 `bin/runBenchmark.sh` 来开始压力测试。
 
-**提示**
-> 1. 运行 BenchmarkSQL 压测时，OSCollector 组件需要用到 Python 2.x，因此还需要先安装 Python 2.x（执行 `yum install -y python2`）。
->
-> 2. 如果设置的 terminals 参数值较大的话，也就是压测并发数较大时，可能比较容易发生行锁等待超时，这时可以适当加大 GreatSQL 中的 `innodb_lock_wait_timeout` 参数值（例如 `SET GLOBAL innodb_lock_wait_timeout = 60`）。
+::: tip 提示
+1. 运行 BenchmarkSQL 压测时，OSCollector 组件需要用到 Python 2.x，因此还需要先安装 Python 2.x（执行 `yum install -y python2`）。
 
-```shell
+2. 如果设置的 terminals 参数值较大的话，也就是压测并发数较大时，可能比较容易发生行锁等待超时，这时可以适当加大 GreatSQL 中的 `innodb_lock_wait_timeout` 参数值（例如 `SET GLOBAL innodb_lock_wait_timeout = 60`）。
+:::
+
+```bash
 $ cd /usr/local/benchmarksql-5.0/run
 $ ./runBenchmark.sh ./props.greatsql
+
 [main] INFO   jTPCC : Term-00,
 [main] INFO   jTPCC : Term-00, +-------------------------------------------------------------+
 [main] INFO   jTPCC : Term-00,      BenchmarkSQL v5.0
@@ -489,9 +488,10 @@ Term-00, Running Average tpmTOTAL: 421384.59    Current tpmTOTAL: 83449452    Me
 
 测试完成后，运行 `bin/unDatabaseDestroy.sh` 来清理测试数据库。
 
-```shell
+```bash
 $ cd /usr/local/benchmarksql-5.0/run
 $ ./runDatabaseDestroy.sh ./props.greatsql
+
 # ------------------------------------------------------------
 # Loading SQL file ./sql.mysql/tableDrops.sql
 # ------------------------------------------------------------
@@ -513,7 +513,7 @@ drop sequence bmsql_hist_id_seq;
 
 测试完成后，会生成测试结果文件，包括事务吞吐量、延迟、CPU 和内存使用情况等信息。
 
-```shell
+```bash
 $ cd /usr/local/benchmarksql-5.0/run
 $ ls -ltr | grep my_result
 drwxr-xr-x 3 root root   40 Aug 16 09:51 my_result_2024-08-16_095115
@@ -534,17 +534,18 @@ $ ls -l data/
 
 在此之前，需要先安装 R 语言运行环境。
 
-```shell
-$ yum install -y epel-release
-$ yum makecache 
-$ yum install -y R
+```bash
+yum install -y epel-release
+yum makecache 
+yum install -y R
 ```
 
 生成测试报告：
 
-```shell
+```bash
 $ cd /usr/local/benchmarksql-5.0/run
 $ ./generateReport.sh ./my_result_2024-08-16_104010
+
 Generating my_result_2024-08-16_104010/tpm_nopm.png ...  OK
 Generating my_result_2024-08-16_104010/latency.png ... OK
 Generating my_result_2024-08-16_104010/cpu_utilization.png ... OK
@@ -556,6 +557,7 @@ Generating my_result_2024-08-16_104010/net_em1_kbps.png ... OK
 Generating my_result_2024-08-16_104010/report.html ... OK
 
 $ ls my_result_2024-08-16_104010/
+
 blk_md127_iops.png  cpu_utilization.png  dirty_buffers.png  net_em1_iops.png  report.html     tpm_nopm.png
 blk_md127_kbps.png  data                 latency.png        net_em1_kbps.png  run.properties
 ```

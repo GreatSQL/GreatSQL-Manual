@@ -17,8 +17,8 @@
 ## 单机多实例部署MGR集群
 
 首先，参考文档：[单机多实例](../6-oper-guide/5-multi-instances.md) 完成单机多实例环境部署，并构建MGR集群。
-```
-greatsql> select MEMBER_ID,MEMBER_HOST,MEMBER_PORT,MEMBER_ROLE from performance_schema.replication_group_members;
+```sql
+greatsql> SELECT MEMBER_ID,MEMBER_HOST,MEMBER_PORT,MEMBER_ROLE FROM performance_schema.replication_group_members;
 +--------------------------------------+-------------+-------------+-------------+
 | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_ROLE |
 +--------------------------------------+-------------+-------------+-------------+
