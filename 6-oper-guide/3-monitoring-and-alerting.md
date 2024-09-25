@@ -102,7 +102,7 @@ greatsql> SELECT `COUNT`,`COMMENT` FROM information_schema.INNODB_METRICS WHERE 
 greatsql> pager cat - | grep -i 'History list length'
 PAGER set to 'cat - | grep -i 'History list length''
 
-# 或者换一种方式查看
+-- 或者换一种方式查看
 greatsql> SHOW ENGINE INNODB STATUS\G
 History list length 4
 ```
@@ -116,14 +116,14 @@ History list length 4
 
 因此，需要关注运行中的大事务、长事务，一旦发现超过阈值，就应当发出告警。
 ```sql
-# 找到活跃时间最长的事务
-greatsql> SELECT * FROM information_schema.INNODB_TRX ORDER BY trx_started ASC LIMIT 1;
+-- 找到活跃时间最长的事务
+SELECT * FROM information_schema.INNODB_TRX ORDER BY trx_started ASC LIMIT 1;
 
-# 找到等待时间最长的事务
-greatsql> SELECT * FROM sys.innodb_lock_waits ORDER BY wait_age_secs DESC LIMIT 1;
+-- 找到等待时间最长的事务
+SELECT * FROM sys.innodb_lock_waits ORDER BY wait_age_secs DESC LIMIT 1;
 
-# 找到特别需要关注的事务
-greatsql> SELECT * FROM information_schema.INNODB_TRX WHERE
+-- 找到特别需要关注的事务
+SELECT * FROM information_schema.INNODB_TRX WHERE
   trx_lock_structs >= 5 OR    -- 持有超过5把锁
   trx_rows_locked >= 100 OR   -- 超过100行被锁
   trx_rows_modified >= 100 OR -- 超过100行被修改

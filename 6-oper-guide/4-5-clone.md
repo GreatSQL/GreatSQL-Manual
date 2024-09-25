@@ -78,6 +78,7 @@ CLONE LOCAL DATA DIRECTORY = '/data/backup/clone/20230831';
 ```bash
 $ ls -l /data/backup/clone/20230831
 
+...
 drwxr-x--- 2 mysql mysql       89 Aug 31 14:54 '#clone'
 drwxr-x--- 2 mysql mysql       91 Aug 31 14:54  greatsql
 -rw-r----- 1 mysql mysql     5679 Aug 31 14:54  ib_buffer_pool
@@ -92,6 +93,7 @@ drwxr-x--- 2 mysql mysql       27 Aug 31 14:54  sys_audit
 
 $ ls -l /nvme/backup/clone/20230831/greatsql/
 
+...
 -rw-r----- 1 mysql mysql  92274688 Aug 31 15:18 t1.ibd
 -rw-r----- 1 mysql mysql    114688 Aug 31 15:18 t2.ibd
 -rw-r----- 1 mysql mysql    114688 Aug 31 15:18 t3.ibd
@@ -121,7 +123,7 @@ SET GLOBAL clone_valid_donor_list = '172.16.16.10:3306';
 
 否则在执行 Clone 备份时会报告下面的错误：
 
-```
+```log
 ERROR 3869 (HY000): Clone system configuration: 172.16.16.10:3306 is not found in clone_valid_donor_list:
 ```
 

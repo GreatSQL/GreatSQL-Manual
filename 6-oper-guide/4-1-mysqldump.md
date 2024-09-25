@@ -28,7 +28,7 @@ mysqldump -S/data/GreatSQL/mysql.sock --triggers --routines --events -B ${db} | 
 ```
 
 如果不是备份全库数据，此时可能会有如下提示：
-```
+```log
 Warning: A partial dump from a server that has GTIDs will by default include the GTIDs of all transactions, even those that changed suppressed parts of the database. If you don't want to restore GTIDs, pass --set-gtid-purged=OFF. To make a complete dump, pass --all-databases --triggers --routines --events.
 ```
 
@@ -60,7 +60,7 @@ mysqldump -S/data/GreatSQL/mysql.sock -f -w "id>=10000" -B ${db} > /backup/Great
 ```
 
 如果个别表没有where条件中指定的列名，则会报告类似下面的错误：
-```bash
+```log
 mysqldump: Couldn't execute 'SELECT /*!40001 SQL_NO_CACHE */ * FROM `t4` WHERE id>=1000000': Unknown column 'id' in 'where clause' (1054)
 ```
 

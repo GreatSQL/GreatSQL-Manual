@@ -8,7 +8,7 @@
 
 在启动 GreatSQL 时，可能会遇到类似下面的报错信息：
 
-```
+```log
 [ERROR] [MY-011011] [Server] Failed to find valid data directory.
 [ERROR] [MY-010020] [Server] Data Dictionary initialization failed.
 [ERROR] [MY-010119] [Server] Aborting
@@ -119,7 +119,7 @@ mysql -h127.0.0.1 -uroot -P3306 -p'xx'
 
 可以查看操作系统日志文件 `/var/log/messages`，通常会有类似下面的日志内容
 
-```
+```log
 kernel: Out of memory: Kill process 6033 (mysqld) score 615 or sacrifice child
 kernel: Killed process 6033, UID 498, (mysqld) total-vm:56872260kB, anon-rss:3202560kB, file-rss:40kB
 ```
@@ -157,8 +157,7 @@ $ cat /proc/597099/oom_score_adj
 
 问题现象：GreatSQL 的 mysqld 二进制文件权限设置正确，手工调用也能正常启动，但只要是通过 `systemd` 启动时就会报告 `Permission denied` 错误，例如：
 
-
-```
+```log
 systemd[1549425]: greatdb.service: Failed to execute command: Permission denied
 systemd[1549425]: greatdb.service: Failed at step EXEC spawning /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld: Permission denied
 -- Subject: Process /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld could not be executed
@@ -202,7 +201,7 @@ sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
 
 出现这种情况时，通常是因为 InnoDB 内部的 mutex 或者 lock 互斥等待太久，日志中一般还包含类似下面的内容
 
-```
+```log
 Thread XXX has waited at XXX line XXX for 928 seconds the semaphore
 ```
 

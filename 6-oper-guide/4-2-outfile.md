@@ -14,19 +14,19 @@ SELECT * INTO OUTFILE '/tmp/OUTFILE-t1.txt' FROM t1;
 ```
 
 指定的导出文件必须放在选项 `secure_file_priv` 指向的目录下，否则会报告类似下面的错误：
-```
+```log
 ERROR 1290 (HY000): The MySQL server is running with the --secure-file-priv option so it cannot execute this statement
 ```
 
 如果目标文件已经存在，则会报告类似下面的错误：
-```
+```log
 ERROR 1086 (HY000): File '/tmp/OUTFILE-t1.txt' already exists
 ```
 这时需要先将目标文件删除或改名以避免冲突。
 
 导出的文件是纯文本格式，每列数据间默认用"\t"分隔开，如果有需要还可以自行指定行、列数据的分隔符，例如：
 ```sql
-greatsql> SELECT * INTO OUTFILE '/tmp/OUTFILE-t1.txt' 
+SELECT * INTO OUTFILE '/tmp/OUTFILE-t1.txt' 
  FIELDS TERMINATED BY '$$$' 
  OPTIONALLY ENCLOSED BY '"' 
  ESCAPED BY '\'' 
@@ -79,7 +79,7 @@ LOAD DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1;
 ```
 
 如果导入的目标表中已有数据，这可能会造成重复冲突，产生类似下面的报错：
-```
+```log
 ERROR 1062 (23000): Duplicate entry '1' for key 't1.PRIMARY'
 ```
 
@@ -87,7 +87,7 @@ ERROR 1062 (23000): Duplicate entry '1' for key 't1.PRIMARY'
 
 如上面例子所示，导出时如果执行了一些分隔符参数，导入时也要再加上这些参数：
 ```sql
-greatsql> LOAD DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1
+LOAD DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1
  FIELDS TERMINATED BY '$$$'
  OPTIONALLY ENCLOSED BY '"'
  ESCAPED BY '\\'
@@ -97,7 +97,7 @@ greatsql> LOAD DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1
 ::: tip 小贴士
 
 和`OUTFILE`一样，`LOAD DATA`指定的导入文件必须放在选项 `secure_file_priv` 指向的目录下，否则会报告类似下面的错误：
-```
+```log
 ERROR 1290 (HY000): The MySQL server is running with the --secure-file-priv option so it cannot execute this statement
 ```
 :::

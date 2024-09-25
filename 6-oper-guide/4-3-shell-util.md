@@ -57,7 +57,7 @@ Average compressed throughput: 22.42 MB/s
 ```
 
 **注意：** 备份的目标位置 */data/backup/20230832* 必须是个空目录才行，否则会报告类似下面的错误：
-```
+```log
 Util.dumpInstance: Cannot proceed with the dump, the specified directory '/data/backup/20230830' already exists at the target location /data/backup/20230830 and is not empty. (ArgumentError)
 ```
 
@@ -82,7 +82,7 @@ util.dumpInstance("/data/backup/20230830", {events: true, triggers: true, routin
 先初始化一个全新实例，再利用上面的备份完成恢复。
 
 首先，要先设置 `local_infile=1`，否则执行恢复时会报告下面的错误：
-```
+```log
 ERROR: The 'local_infile' global system variable must be set to ON in the target server, after the server is verified to be trusted.
 Util.loadDump: local_infile disabled in server (MYSQLSH 53025)
 ```
@@ -164,7 +164,7 @@ util.importTable("/data/backup/20230830/greatsql/greatsql@t1@*.zst", {schema: "g
 **注意：** 调用 `util.importTable`方法只能恢复单表数据，意思是需要先创建好一个空表，并且不支持同时恢复多表。
 
 如果要恢复的表没有先创建好空表，则会报告如下错误：
-```
+```log
 Importing from multiple files to table `greatsql`.`t1` in MySQL Server at .%2Fmgr05%2Fmysql.sock using 8 threads
 ERROR: [Worker002] greatsql@t1@@0.tsv.zst: MySQL Error 1146 (42S02): Table 'greatsql.t1' doesn't exist: LOAD DATA LOCAL INFILE '/data/backup/20230830/greatsql/greatsql@t1@@0.tsv.zst' INTO TABLE `greatsql`.`t1` FIELDS TERMINATED BY '     ' ESCAPED BY '\\' LINES STARTING BY '' TERMINATED BY '\n'
 0% (0 bytes / 8.94 MB), 0.00 B/s
