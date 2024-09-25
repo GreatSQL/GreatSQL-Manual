@@ -159,7 +159,7 @@ greatsql> SELECT * FROM performance_schema.data_locks;
 | INNODB | 139846278460776:685:5:6:139846301868752 |            5315754169 |     11576 |       98 | greatsql      | t1          | NULL           | NULL              | idx_k      |       139846301868752 | RECORD    | X,GAP         | GRANTED     | 347368, 10 |
 +--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+------------+
 
-# 去掉一些用处不大的信息后
+-- 去掉一些用处不大的信息后
 greatsql> SELECT ENGINE_LOCK_ID, ENGINE_TRANSACTION_ID, INDEX_NAME, LOCK_TYPE, LOCK_MODE, LOCK_STATUS, LOCK_DATA FROM performance_schema.data_locks;
 +-----------------------------------------+-----------------------+------------+-----------+---------------+-------------+------------+
 | ENGINE_LOCK_ID                          | ENGINE_TRANSACTION_ID | INDEX_NAME | LOCK_TYPE | LOCK_MODE     | LOCK_STATUS | LOCK_DATA  |
@@ -193,7 +193,7 @@ greatsql> SELECT ENGINE_LOCK_ID, ENGINE_TRANSACTION_ID, INDEX_NAME, LOCK_TYPE, L
 | t2 | |begin;<br/>begin; update t1 set pad=rand() where k=211310; |
 
 则事务2的请求会被阻塞，直至行锁等待超时退出，报告：
-```
+```log
 ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction
 ```
 

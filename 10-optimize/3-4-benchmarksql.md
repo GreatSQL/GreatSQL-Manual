@@ -291,7 +291,7 @@ $ ls -l
 
 如果还是用较早版本的驱动（例如 *mysql-connector-java-8.0.30.jar*），可能会有类似下面的提示：
 
-```
+```log
 Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
 ```
 

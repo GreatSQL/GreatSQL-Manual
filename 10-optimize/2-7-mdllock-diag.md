@@ -134,6 +134,7 @@ greatsql> SELECT * FROM performance_schema.metadata_locks\G
 也是要申请好几个锁。
 
 **5. 发起一个备份锁**
+
 会话1：
 
 ```sql
@@ -158,14 +159,15 @@ OBJECT_INSTANCE_BEGIN: 139835167443600
 ```
 
 **6. 发起FTWRL锁**
+
 会话1：
 
-```
+```sql
 FLUSH TABLES WITH READ LOCK;
 ```
 
 会话2：
-```
+```sql
 greatsql> SELECT * FROM performance_schema.metadata_locks\G
 *************************** 1. row ***************************
           OBJECT_TYPE: GLOBAL
@@ -205,6 +207,7 @@ MDL锁是比较粗粒度的锁，一旦出现写锁等待，不但当前操作�
 | | | SELECT * FROM t1 WHERE id=5;<br/>被MDL阻塞，进入等待|
 
 这时，如果执行 `SHOW PROCESSLIST` 就可以看到会话2 & 3的状态都是等待获得MDL锁：
+
 ```sql
 | 13365 | root                      | localhost           | greatsql | Sleep                                      |      41 |                                                          | NULL                                        |      41867 |         1 |             1 |
 | 13366 | root                      | localhost           | greatsql | Query                                      |      14 | Waiting for table metadata lock                          | ALTER TABLE t1 ADD c2 INT UNSIGNED NOT NULL |      13943 |         0 |             0 |
@@ -212,7 +215,8 @@ MDL锁是比较粗粒度的锁，一旦出现写锁等待，不但当前操作�
 ```
 
 查看 `performance_schema.metadata_locks` 可以看到当前MDL锁的状态是这样的：
-```
+
+```sql
 greatsql> SELECT * FROM performance_schema.metadata_locks;
 +---------------+---------------+------------------+-------------+-----------------------+---------------------+---------------+-------------+--------------------+-----------------+----------------+
 | OBJECT_TYPE   | OBJECT_SCHEMA | OBJECT_NAME      | COLUMN_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE           | LOCK_DURATION | LOCK_STATUS | SOURCE             | OWNER_THREAD_ID | OWNER_EVENT_ID |

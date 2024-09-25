@@ -56,7 +56,7 @@ $ ln -s libperconaserverclient.so.21.2.32 libmysqlclient.so
 ```
 
 否则在下面的编译中可能会提示报错：
-```
+```log
 configure: error: cannot find MySQL client libraries in /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/lib/
 ```
 
@@ -89,7 +89,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/GreatSQL-8.0.32-26-Linux-glib
 ```
 
 要不然可能会报错，提示找不到客户端动态库文件：
-```
+```log
 error while loading shared libraries: libperconaserverclient.so.21: cannot open shared object file: No such file or directory
 ```
 
@@ -215,7 +215,7 @@ sysbench ./oltp_read_write.lua \
 
 sysbench性能压测结束后，打印输出类似以下面的内容：
 
-```
+```log
 SQL statistics:
     queries performed:
         read:                            61109440
