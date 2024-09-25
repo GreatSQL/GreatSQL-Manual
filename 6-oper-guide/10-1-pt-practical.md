@@ -66,13 +66,13 @@ another      long_name  500
 当查看 vmstat 时，有时会遇到列对齐不整齐的情况。此时，可以使用 `pt-align` 工具来解决这个问题
 
 ```bash
-# 未使用pt-align工具
+-- 未使用pt-align工具
 $ vmstat
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  1  0 205472 181304     60 948960    0    0     0     1    1    1  1  2 98  0  0
 
-# 使用pt-align工具
+-- 使用pt-align工具
 $ vmstat | pt-align
 r b   swpd   free buff  cache si so bi bo in cs us sy id wa st
 2 0 205472 181260   60 948992  0  0  0  1  1  1  1  2 98  0  0
@@ -83,7 +83,7 @@ r b   swpd   free buff  cache si so bi bo in cs us sy id wa st
 当查看 iostat 时，有时会遇到列对齐不整齐的情况。此时，可以使用 `pt-align` 工具来解决这个问题
 
 ```bash
-# 未使用pt-align工具
+-- 未使用pt-align工具
 $ iostat
 avg-cpu:  %user   %nice %system %iowait  %steal   %idle
            0.86    0.00    1.51    0.00    0.00   97.62
@@ -93,7 +93,7 @@ sda               0.11         0.33         1.31    6746368   27046909
 dm-0              0.09         0.30         1.23    6263958   25261569
 dm-1              0.03         0.02         0.09     452072    1782864
 
-# 使用pt-align工具
+-- 使用pt-align工具
 $ iostat | pt-align
 0.86    0.00 1.51      0.00      0.00    97.62   
 Device: tps  kB_read/s kB_wrtn/s kB_read kB_wrtn 
@@ -260,7 +260,7 @@ greatsql> SELECT count(*) FROM archiver_test;
 
 ```bash
 pt-archiver --source h=localhost,P=3306,u=root,D=test_db,t=archiver_test --charset=utf8mb4  --ask-pass --dest h=localhost,P=3306,u=root,D=test_db,t=archiver_test2 --ask-pass --where "id<100" --limit 1000 --commit-each
-# 会让你输入密码（源端）和（目标端）密码
+-- 会让你输入密码（源端）和（目标端）密码
 ```
 
 伪代码如下
@@ -391,12 +391,12 @@ $ pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --tablesize
 #### 查找修改过的表
 
 ```bash
-# 30分钟之内
+-- 30分钟之内
 $ pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --mmin -30
 `mysql`.`gtid_executed`
 `test_db`.`archiver_test`
 
-# 30分钟之前
+-- 30分钟之前
 $ pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --mmin +30
 `aptest`.`sys_dept`
 `aptest`.`sys_user`
@@ -718,8 +718,9 @@ pt-secure-collect用于收集、清理、打包和加密数据
 
 **用法**
 
+```bash
 - pt-secure-collect [<flags>] <command> [<args> ...]
-
+```
 默认情况下，pt-secure-collect 将收集以下输出：
 
 - pt-stalk
@@ -789,9 +790,9 @@ pt-secure-collect encrypt /data/pt_secure_collect.txt --outfile=/data/pt_secure_
 ::: details 查看运行结果
 ```bash
 $ pt-secure-collect encrypt /data/pt_secure_collect.txt --outfile=/data/pt_secure_collect.aes
-Encryption password:  # 这里输入加密密码
-Re type password:     # 再次输入加密密码
-INFO[2024-03-12 09:36:39] Encrypting file "/data/pt_secure_collect.txt" into "/data/pt_secure_collect.aes"  # 加密成功
+Encryption password:  -- 这里输入加密密码
+Re type password:     -- 再次输入加密密码
+INFO[2024-03-12 09:36:39] Encrypting file "/data/pt_secure_collect.txt" into "/data/pt_secure_collect.aes"  -- 加密成功
 ```
 :::
 
@@ -802,7 +803,7 @@ $ ls
 pt_secure_collect.aes pt_secure_collect.txt
 
 $ cat pt_secure_collect.aes
-5�66~x�y��+�    ?i`��pESϡ>()�g�,�e�u #乱码
+5�66~x�y��+�    ?i`��pESϡ>()�g�,�e�u -- 乱码
 ```
 
 #### 解密文件
@@ -812,7 +813,7 @@ pt-secure-collect decrypt /data/pt_secure_collect.aes
 ::: details 查看运行结果
 ```bash
 $ pt-secure-collect decrypt /data/pt_secure_collect.aes
-Encryption password: # 输入加密的密码
+Encryption password: -- 输入加密的密码
 INFO[2024-03-12 09:41:35] Decrypting file "/data/pt_secure_collect.aes" into "pt_secure_collect" 
 ```
 :::
@@ -829,7 +830,7 @@ select * from test where id =2;
 
 ```bash
 $ pt-secure-collect decrypt /data/pt_secure_collect.aes
-Encryption password:  # 这里假设输入错误密码
+Encryption password:  -- 这里假设输入错误密码
 INFO[2024-03-12 09:44:45] Decrypting file "/data/pt_secure_collect.aes" into "pt_secure_collect" 
 
 $ cat pt_secure_collect
@@ -866,3 +867,8 @@ ip = hostname
 如果不隐去主机可以使用`--no-sanitize-hostnames`
 如果不隐去查询可以使用`--no-sanitize-queries`
 :::
+
+
+**扫码关注微信公众号**
+
+![greatsql-wx](../greatsql-wx.jpg)
