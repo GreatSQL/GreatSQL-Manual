@@ -11,14 +11,14 @@
 
 安装完成后，GreatSQL数据库运行环境如下：
 
-- GreatSQL配置文件为：*/etc/my.cnf*
-- GreatSQL服务程序文件为：*/usr/sbin/mysqld*
-- 数据主目录datadir为： */var/lib/mysql*
-- mysql.sock套接字文件为： */var/lib/mysql/mysql.sock*
-- 错误日志文件为： */var/log/mysqld.log*
-- 监听TCP端口为：*3306*
-- CLI客户端为：*/usr/bin/mysql*
-- 管理工具为：*/usr/bin/mysqladmin*
+- GreatSQL配置文件为：`/etc/my.cnf`
+- GreatSQL服务程序文件为：`/usr/sbin/mysqld`
+- 数据主目录datadir为： `/var/lib/mysql`
+- mysql.sock套接字文件为： `/var/lib/mysql/mysql.sock`
+- 错误日志文件为： `/var/log/mysqld.log`
+- 监听TCP端口为：`3306`
+- CLI客户端为：`/usr/bin/mysql`
+- 管理工具为：`/usr/bin/mysqladmin`
 - GreatSQL数据库中root账户的密码已修改为：`GreatSQL@202X`
 
 ## 安装样例数据库
@@ -32,9 +32,11 @@
 打开链接 [https://dev.mysql.com/doc/index-other.html](https://dev.mysql.com/doc/index-other.html) ，页面滚动到 "Example Databases" 这部分内容，分别下载相应的压缩包文件，放在 `/data/ExampleDBs` 目录下。
 
 分别解开压缩包文件：
-```shell
+```bash
 $ cd /data/ExampleDBs
 $ ls -la 
+
+...
 drwxr-xr-x 2  500  500        72 Jul  1  2023 sakila-db
 -rw-r--r-- 1 root root    732287 Jul  1  2023 sakila-db.tar.gz
 drwxr-xr-x 4 root root      4096 Jul  5  2023 test_db
@@ -44,7 +46,7 @@ drwxr-xr-x 2  500  500        23 Jul  1  2023 world-db
 ```
 
 连入GreatSQL，测试数据库可用
-```shell
+```bash
 $ mysql -S /var/lib/mysql/mysql.sock -uroot -p -e 'SELECT VERSION()'
 Enter password:   <-- 这里输入密码 GreatSQL@202X，支持复制粘贴方式
 +-----------+
@@ -56,7 +58,7 @@ Enter password:   <-- 这里输入密码 GreatSQL@202X，支持复制粘贴方�
 由于mysql.sock套接字文件默认位于 `/var/lib/mysql/mysql.sock`，下面的例子中将不再显式指定 `-S /var/lib/mysql/mysql.sock` 参数，如果在你的环境中不是这样，请自行修改参数值。
 
 在本章内容中，为了使用方便，把数据库中的root账户密码修改为空，**但这是一种不安全行为，不推荐，请不要在生产环境中也这么做**。
-```shell
+```bash
 # 修改root账户为空密码
 $ mysqladmin -uroot -p'GreatSQL@202X' password ''
 mysqladmin: [Warning] Using a password on the command line interface can be insecure.
@@ -68,7 +70,7 @@ mysqld is alive
 ```
 
 接下来分别导入这些样例数据：
-```shell
+```bash
 # 导入sakila样例数据
 $ cd /data/ExampleDBs/sakila-db
 $ mysql -uroot -f < ./sakila-schema.sql
@@ -150,7 +152,7 @@ $ mysql -uroot -f < ./world.sql
 ```
 
 这就完成了3个样例数据库导入工作，再次查看导入结果：
-```shell
+```bash
 $ mysql -uroot -e 'SHOW TABLE STATUS' employees
 +----------------------+--------+---------+------------+---------+----------------+-------------+-----------------+--------------+-----------+----------------+---------------------+---------------------+------------+--------------------+----------+----------------+---------+
 | Name                 | Engine | Version | Row_format | Rows    | Avg_row_length | Data_length | Max_data_length | Index_length | Data_free | Auto_increment | Create_time         | Update_time         | Check_time | Collation          | Checksum | Create_options | Comment |

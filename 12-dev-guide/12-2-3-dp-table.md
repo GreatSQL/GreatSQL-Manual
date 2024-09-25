@@ -22,16 +22,16 @@ CREATE TABLE [IF NOT EXISTS] tablename(
 创建一个test_greatsql的表
 表里包括id(idb编号)、name(姓名)、sex(性别)、address(地址)四个字段
 ```sql
-greatsql> CREATE TABLE test_greatsql(
-          id INT NOT NULL AUTO_INCREMENT,
-          ename VARCHAR(10) NOT NULL,
-          sex CHAR(1) NOT NULL,
-          address VARCHAR(20) NOT NULL,
-          PRIMARY KEY(id)
-          );
-Query OK, 0 rows affected (0.02 sec)
+CREATE TABLE test_greatsql(
+  id INT NOT NULL AUTO_INCREMENT,
+  ename VARCHAR(10) NOT NULL,
+  sex CHAR(1) NOT NULL,
+  address VARCHAR(20) NOT NULL,
+  PRIMARY KEY(id)
+  );
 ```
 使用`SHOW CREATE TABLE test_greatsql \G`可得到更全面的建表信息
+
 ```sql
 greatsql> SHOW CREATE TABLE test_greatsql \G
 *************************** 1. row ***************************
@@ -53,8 +53,7 @@ DROP TABLE [IF EXISTS] tablename;
 ```
 例如，删除test_greatsql表
 ```sql
-greatsql> DROP TABLE test_greatsql;
-Query OK, 0 rows affected (0.02 sec)
+DROP TABLE test_greatsql;
 ```
 ### 清空表
 不删除表结构，只删除内容
@@ -63,8 +62,7 @@ TRUNCATE TABLE tablename;
 ```
 例如，清空test_greatsql表
 ```sql
-greatsql> TRUNCATE TABLE test_greatsql;
-Query OK, 0 rows affected (0.01 sec)
+TRUNCATE TABLE test_greatsql;
 ```
 ## 表的修改
 ### 添加字段
@@ -73,8 +71,7 @@ ALTER TABLE tablename ADD COLUMN_NAME COLUMN_TYPE;
 ```
 例如，在test_greatsql表中添加age字段
 ```sql
-greatsql> ALTER TABLE test_greatsql ADD age INT;
-Query OK, 0 rows affected (0.02 sec)
+ALTER TABLE test_greatsql ADD age INT;
 ```
 ### 修改字段
 ```sql
@@ -82,8 +79,7 @@ ALTER TABLE tablename MODIFY COLUMN_NAME COLUMN_TYPE;
 ```
 例如，将test_greatsql表的age字段修改为varchar类型
 ```sql
-greatsql> ALTER TABLE test_greatsql MODIFY age VARCHAR(10);
-Query OK, 0 rows affected (0.02 sec)
+ALTER TABLE test_greatsql MODIFY age VARCHAR(10);
 ```
 ### 删除字段
 ```sql
@@ -91,24 +87,23 @@ ALTER TABLE tablename DROP COLUMN_NAME;
 ```
 例如，删除test_greatsql表的age字段
 ```sql
-greatsql> ALTER TABLE test_greatsql DROP age;
-Query OK, 0 rows affected (0.02 sec)
+ALTER TABLE test_greatsql DROP age;
 ```
 ### 重命名表
 ```sql
 RENAME TABLE old_tablename TO new_tablename;
-或
+
+-- 或
 ALTER TABLE old_tablename RENAME TO new_tablename;
 ```
 例如，将test_greatsql表重命名为test_greatsql1
 ```sql
-greatsql> RENAME TABLE test_greatsql TO test_greatsql1;
-Query OK, 0 rows affected (0.02 sec)
+RENAME TABLE test_greatsql TO test_greatsql1;
 ```
 ## 表的查看
 ### 查看数据库中的表
 ```sql
-greatsql> SHOW TABLES;
+SHOW TABLES;
 ```
 例如，查看test数据库中的表
 ```sql

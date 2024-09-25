@@ -285,14 +285,14 @@ JSON 数据类型理论上可以存储任何有效的 JSON 文档，包括数字
 
 1. **创建表并使用JSON字段**：
 ```sql
-greatsql> CREATE TABLE t1(
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    data JSON);
+CREATE TABLE t1(
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  data JSON);
 ```
 
 2. **插入JSON数据**：
 ```sql
-greatsql> INSERT INTO t1(data) VALUES ('{"name": "乌孙怀玉", "age": 30, "city": "Beijing"}');
+INSERT INTO t1(data) VALUES ('{"name": "乌孙怀玉", "age": 30, "city": "Beijing"}');
 ```
 
 3. **查询JSON数据**：
@@ -326,18 +326,19 @@ greatsql> SELECT data->>'$.name' AS name FROM t1 WHERE id = 1;
 +--------------+
 ```
 
-> `->` 操作符：用于从 JSON 字段中提取 JSON 值。返回的值仍然是 JSON 格式。
->
-> `->>` 操作符：用于从 JSON 字段中提取纯文本值。返回的值是纯文本格式。
+其中
+- `->` 操作符：用于从 JSON 字段中提取 JSON 值。返回的值仍然是 JSON 格式。
+
+- `->>` 操作符：用于从 JSON 字段中提取纯文本值。返回的值是纯文本格式。
 
 4. **更新JSON数据**：
 ```sql
-greatsql> UPDATE t1 SET data = JSON_SET(data, '$.age', 31) WHERE id = 1;
+UPDATE t1 SET data = JSON_SET(data, '$.age', 31) WHERE id = 1;
 ```
 
 5. **删除JSON字段的某个属性**：
 ```sql
-greatsql> UPDATE t1 SET data = JSON_REMOVE(data, '$.city') WHERE id = 1;
+UPDATE t1 SET data = JSON_REMOVE(data, '$.city') WHERE id = 1;
 ```
 
 6. 使用注意事项
@@ -449,10 +450,11 @@ BLOB（Binary Large Object）数据类型用于存储二进制数据，如图像
 
 2. 在每个数据页中存储的每行记录实际上最大长度大约是 `innodb_page_size` 的一半，默认配置下约为 8KB（`innodb_page_size` 默认值为 16KB）。如果设置 `innodb_page_size` 为 32KB，则数据页中存储的每行记录实际的最大长度约为 16KB。超出的部分，会根据各列的实际长度倒序排，依次将最大的列数据存储在额外的page中（称为 off-page），直到剩下的列总长度不大于 `innodb_page_size` 的一半为止，这个处理方式也称为行溢出（overflow），用于存储超长列的页称为溢出页（overflow page）。
 
-**建议**
-> 1. 设计表结构时，尽量保证所有列长度加起来不超过 `innodb_page_size` 的一半大小。可能存储较大数据的列，尤其是较长的 VARCHAR 列（一般是指长度超过 512 字节），以及 TEXT/BLOB 列，最好是将它们单独放在另外的表中，和其他 INT 等较小的列区分开。
-> 
-> 2. 存储实际用户数据时，尽量保证存储的行长度不超过 `innodb_page_size` 的一半大小，一旦超过就会发生行溢出，对性能影响较大。
+::: tip 建议
+1. 设计表结构时，尽量保证所有列长度加起来不超过 `innodb_page_size` 的一半大小。可能存储较大数据的列，尤其是较长的 VARCHAR 列（一般是指长度超过 512 字节），以及 TEXT/BLOB 列，最好是将它们单独放在另外的表中，和其他 INT 等较小的列区分开。
+
+2. 存储实际用户数据时，尽量保证存储的行长度不超过 `innodb_page_size` 的一半大小，一旦超过就会发生行溢出，对性能影响较大。
+:::
 
 示例：
 

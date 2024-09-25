@@ -24,7 +24,7 @@ greatsql> SHOW GLOBAL VARIABLES LIKE "thread_handling";
 ### 如何开启线程池特性
 
 在my.cnf配置文件将设置选项`thread_handling`值设为`pool-of-threads`，并重启GreatSQL服务即可启用线程池特性：
-```sql
+```ini
 [mysqld]
 thread_handling = "pool-of-threads"
 ```
@@ -42,7 +42,7 @@ thread_handling = "pool-of-threads"
 
 使用`SHOW GLOBAL VARIABLES LIKE`即可查看相关参数值
 ```sql
-greatsql> SHOW GLOBAL VARIABLES LIKE "%max_connect%";
+SHOW GLOBAL VARIABLES LIKE "%max_connect%";
 ```
 
 在开发中建议设置这些参数，以提升连接GreatSQL性能。
@@ -57,7 +57,7 @@ greatsql> SHOW GLOBAL VARIABLES LIKE "%max_connect%";
 
 使用`SET GLOBAL`即可修改这些相关参数值
 ```sql
-greatsql> SET GLOBAL max_connect_errors=1000;
+SET GLOBAL max_connect_errors=1000;
 ```
 
 

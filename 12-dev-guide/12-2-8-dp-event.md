@@ -14,7 +14,7 @@
 1. **检查事件调度器状态**
 
 ```sql
-greatsql> SHOW VARIABLES LIKE 'event_scheduler';
+SHOW VARIABLES LIKE 'event_scheduler';
 ```
 
 2. **启用事件调度器**
@@ -32,13 +32,13 @@ event_scheduler=ON
 - 在线动态启用
 
 ```sql
-greatsql> SET GLOBAL event_scheduler = ON;
+SET GLOBAL event_scheduler = ON;
 ```
 
 - 还可以在线动态关闭
 
 ```sql
-greatsql> SET GLOBAL event_scheduler = OFF;
+SET GLOBAL event_scheduler = OFF;
 ```
 
 
@@ -62,7 +62,7 @@ DO
 1. **创建一个每分钟执行一次的事件**
 
 ```sql
-greatsql> CREATE EVENT my_1m_event
+CREATE EVENT my_1m_event
 ON SCHEDULE EVERY 1 MINUTE
 DO
     INSERT INTO log_table (aid, message, log_time) VALUES (0, 'Event triggered', NOW());
@@ -71,7 +71,7 @@ DO
 2. **创建一个在特定时间点只执行一次的事件**
 
 ```sql
-greatsql> CREATE EVENT my_once_event
+CREATE EVENT my_once_event
 ON SCHEDULE AT '2024-05-23 12:00:00'
 DO
     UPDATE my_table SET status = 1, update_time = NOW() WHERE aid = 1;
@@ -87,7 +87,7 @@ DO
 3. **创建一个每天执行一次的事件**
 
 ```sql
-greatsql> CREATE EVENT my_daily_event
+CREATE EVENT my_daily_event
 ON SCHEDULE EVERY 1 DAY
 STARTS '2024-05-23 00:00:00'
 DO
@@ -103,8 +103,9 @@ DO
 
 ```sql
 -- 先改名，后修改事件执行频率
-greatqsl> ALTER EVENT my_1m_event RENAME TO my_2m_event;
-greatsql> ALTER EVENT my_2m_event
+ALTER EVENT my_1m_event RENAME TO my_2m_event;
+
+ALTER EVENT my_2m_event
 ON SCHEDULE EVERY 2 MINUTE;
 ```
 
@@ -113,7 +114,7 @@ ON SCHEDULE EVERY 2 MINUTE;
 可以使用 `DROP EVENT` 语句删除事件：
 
 ```sql
-greatsql> DROP EVENT IF EXISTS my_2m_event;
+DROP EVENT IF EXISTS my_2m_event;
 ```
 
 ## 查看事件
@@ -121,14 +122,14 @@ greatsql> DROP EVENT IF EXISTS my_2m_event;
 可以通过 `SHOW EVENTS` 语句查看数据库中的事件：
 
 ```sql
-greatsql> SHOW EVENTS;
+SHOW EVENTS;
 ```
 
 或查询 `information_schema` 数据库中的 `EVENTS` 表：
 
 ```sql
 -- 查询条件中的 greatsql 替换成你自己的数据库名
-greatsql> SELECT * FROM information_schema.EVENTS WHERE EVENT_SCHEMA = 'greatsql';
+SELECT * FROM information_schema.EVENTS WHERE EVENT_SCHEMA = 'greatsql';
 ```
 
 当事件执行遇到错误（例如因为 SQL 写错）则会记录到错误日志中，类似下面这样：

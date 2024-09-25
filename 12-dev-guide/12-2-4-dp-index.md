@@ -89,15 +89,15 @@ ALTER TABLE 表名 ADD 索引类型 索引名称(字段);
 ```
 例如，创建普通索引
 ```sql
-greatsql> ALTER TABLE test ADD INDEX index_name(id);
+ALTER TABLE test ADD INDEX index_name(id);
 ```
 例如，创建唯一索引
 ```sql
-greatsql> ALTER TABLE test ADD UNIQUE index_name(id);
+ALTER TABLE test ADD UNIQUE index_name(id);
 ```
 例如，创建联合索引
 ```sql
-greatsql> ALTER TABLE test ADD INDEX index_name(id, name);
+ALTER TABLE test ADD INDEX index_name(id, name);
 ```
 ### CREATE INDEX
 
@@ -112,15 +112,15 @@ CREATE 索引类型 索引名称 on 表名(字段);
 ```
 例如，创建普通索引
 ```sql
-greatsql> CREATE INDEX index_name ON test(id);
+CREATE INDEX index_name ON test(id);
 ```
 例如，创建唯一索引
 ```sql
-greatsql> CREATE UNIQUE INDEX index_name ON test(id);
+CREATE UNIQUE INDEX index_name ON test(id);
 ```
 例如，创建联合索引
 ```sql
-greatsql> CREATE INDEX index_name ON test(id, name);
+CREATE INDEX index_name ON test(id, name);
 ```
 ## 索引的删除
 使用`ALTER TABLE`删除索引的基本语法格式如下：
@@ -131,16 +131,22 @@ ALTER TABLE table_name DROP INDEX index_name;
 ```sql
 DROP INDEX index_name ON table_name;
 ```
-> 1. 在需要大量删除表数据，修改表数据时，可以考虑先删除索引。等修改完数据之后再插入
-> 2. AUTO_INCREMENT 约束字段的唯一索引不能被删除
-> 3. 删除表中的列时，如果要删除的列为索引的组成部分，则该列也会从索引中删除。如果组成索引的所有列都被删除，则整个索引将被删除。
+
+::: tip 小贴士
+1. 在需要大量删除表数据，修改表数据时，可以考虑先删除索引。等修改完数据之后再插入。
+
+2. AUTO_INCREMENT 约束字段的唯一索引不能被删除。
+
+3. 删除表中的列时，如果要删除的列为索引的组成部分，则该列也会从索引中删除。如果组成索引的所有列都被删除，则整个索引将被删除。
+:::
 
 ### 删除主键索引
 如果一个主键是自增长的，不能直接删除该列的主键索引，应当先取消自增长，再删除主键特性
 ```sql
-# 重新定义列类型
+-- 重新定义列类型
 ALTER TABLE tablename MODIFY id INT ;
-# 删除主键索引
+
+-- 删除主键索引
 ALTER TABLE tablename DROP PRIMARY KEY;
 ```
 ## 不可见索引
@@ -164,7 +170,7 @@ CREATE TABLE tablename(
 ```
 举例：
 ```sql
-greatsql> CREATE TABLE t1(a int, b int, INDEX idx_b (b) INVISIBLE);
+CREATE TABLE t1(a int, b int, INDEX idx_b (b) INVISIBLE);
 ```
 此时这个索引`idx_b`是不可见的，无法使用。
 
@@ -172,11 +178,13 @@ greatsql> CREATE TABLE t1(a int, b int, INDEX idx_b (b) INVISIBLE);
 
 为已经存在的表设置不可见索引，其语法形式如下：
 ```sql
-CREATE [UNIQUE | FULLTEXT | SPATIAL] INDEX index_name ON table_name (col_name[length] [ASC | DESC] ,...) [INVISIBLE|VISIBLE]
+CREATE [UNIQUE | FULLTEXT | SPATIAL] INDEX index_name
+  ON table_name (col_name[length] [ASC | DESC] ,...) [INVISIBLE|VISIBLE]
 ```
+
 举例：
 ```sql
-greatsql> CREATE INDEX idx_b ON t1 (b) INVISIBLE;
+CREATE INDEX idx_b ON t1 (b) INVISIBLE;
 ```
 在t1表中创建不可见索引idx_b，此时该索引不可见。
 
@@ -184,11 +192,12 @@ greatsql> CREATE INDEX idx_b ON t1 (b) INVISIBLE;
 #### ALTER TABLE创建索引
 语法如下：
 ```sql
-ALTER TABLE table_name ADD [UNIQUE | FULLTEXT | SPATIAL] INDEX index_name (col_name[length],...) INVISIBLE
+ALTER TABLE table_name ADD [UNIQUE | FULLTEXT | SPATIAL] INDEX
+  index_name (col_name[length],...) INVISIBLE
 ```
 举例创建不可见索引idx_b：
 ```sql
-greatsql> ALTER TABLE t1 ADD INDEX idx_b (b) INVISIBLE;
+ALTER TABLE t1 ADD INDEX idx_b (b) INVISIBLE;
 ```
 在t1表中创建不可见索引idx_b，此时该索引不可见。
 #### ALTER TABLE修改索引可见性
@@ -198,13 +207,18 @@ ALTER TABLE table_name MODIFY INDEX index_name INVISIBLE|VISIBLE;
 ```
 举例,将t1表中的索引idx_b设置为不可见：
 ```sql
-greatsql> ALTER TABLE t1 MODIFY INDEX idx_b INVISIBLE;
+ALTER TABLE t1 MODIFY INDEX idx_b INVISIBLE;
 ```
 举例,将t1表中的索引idx_b设置为可见：
 ```sql
-greatsql> ALTER TABLE t1 MODIFY INDEX idx_b VISIBLE;
+ALTER TABLE t1 MODIFY INDEX idx_b VISIBLE;
 ```
-> 不可见索引时，其内容保持实时更新。若长期不用，建议直接删除，以减少对插入、更新和删除操作的性能影响。
+
+::: tip 小贴士
+索引设置不可见后，索引数据仍保持实时更新。
+
+若长期不用，建议一段时间后将其删除，以减少对数据插入、更新和删除操作的性能影响。
+:::
 
 ## 降序索引
 
@@ -214,7 +228,7 @@ GreatSQL在8.0版本之前创建的仍然是升序索引，使用时进行反向
 
 举例创建 t1 表，并创建联合索引 idx_a_b，其中 a 升序，b 降序
 ```sql
-greatsql> CREATE TABLE t1(a int, b int, index idx_a_b(a, b desc) ) ;
+CREATE TABLE t1(a int, b int, index idx_a_b(a, b desc) ) ;
 ```
 查看数据表 t1 的结构，结果如下
 ```sql

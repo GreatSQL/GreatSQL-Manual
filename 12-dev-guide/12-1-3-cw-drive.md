@@ -11,20 +11,21 @@
 
 ### 示例
 
-前往Maven官网：https://mvnrepository.com/
+前往Maven官网：[https://mvnrepository.com/](https://mvnrepository.com/)。
 
-搜索MySQL下载MySQL/GreatSQL对应的驱动包
+搜索MySQL下载MySQL/GreatSQL对应的驱动包。
 
 ![maven](./12-1-3-cw-drive01.png)
 
-点击`MySQL Connector Java`进入后选择与GreatSQL版本对应的驱动即可
+点击`MySQL Connector Java`进入后选择与GreatSQL版本对应的驱动即可。
 
 ![meven02](./12-1-3-cw-drive02.png)
 
 进入对应的驱动版本内
 
-- 1.可下载用于连接的jar包
-- 2.或直接复制下方Meven代码到Meven仓库中
+1.可下载用于连接的jar包。
+
+2.或直接复制下方Meven代码到Meven仓库中。
 
 ![meven](./12-1-3-cw-drive03.png)
 
@@ -127,15 +128,15 @@ func main() {
 
 ### 示例
 
-在Python项目中使用`pip`命令安装驱动
+执行下面的命令，使用`pip`命令安装驱动
 
 ```python
-$ pip install mysql-connector-python
+pip install mysql-connector-python
 ```
 
-并在代码中创建数据库连接
+并在代码中配置数据库连接相关参数
 
-```bash
+```python
 db = mysql.connector.connect(
     host="localhost",
     user="root",

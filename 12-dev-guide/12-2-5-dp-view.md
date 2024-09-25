@@ -44,6 +44,7 @@ SELECT c1, c2, ...
 2. **更新视图**：如果视图定义允许（通常是基于单个表且不包含聚合函数、`DISTINCT`、`GROUP BY` 等），还可以通过视图更新基表数据。
    ```sql
    UPDATE view_name SET column = value WHERE condition;
+
    DELETE FROM view_name WHERE condition;
    ```
 

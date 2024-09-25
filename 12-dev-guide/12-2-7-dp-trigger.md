@@ -48,7 +48,7 @@ END;
 假设我们有一个订单表（orders）和一个订单记录表（orders_log），每当有新订单插入（`INSERT`）到订单表时，我们希望自动增加一次订单记录表。
 
 ```sql
-greatsql> CREATE TRIGGER trg_after_insert_orders
+CREATE TRIGGER trg_after_insert_orders
 AFTER INSERT ON orders
 FOR EACH ROW
 BEGIN
@@ -59,7 +59,7 @@ END;
 如果是想要在插入订单表（orders）前先写入订单记录表（orders_log），则只需要将 `AFTER` 关键字改成 `BEFORE`，像下面这样：
 
 ```sql
-greatsql> CREATE TRIGGER trg_before_insert_orders
+CREATE TRIGGER trg_before_insert_orders
 BEFORE INSERT ON orders
 FOR EACH ROW
 BEGIN
@@ -119,7 +119,7 @@ ACTION_REFERENCE_NEW_TABLE: NULL
 - 删除触发器
 
 ```sql
-greatsql> DROP TRIGGER trg_after_insert_orders;
+DROP TRIGGER trg_after_insert_orders;
 ```
 
 

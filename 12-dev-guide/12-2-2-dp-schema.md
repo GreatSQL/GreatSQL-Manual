@@ -11,26 +11,32 @@
 ## 库的创建
 在GreatSQL中，库的创建使用`CREATE SCHEMA`语句。
 ```sql
-greatsql> CREATE SCHEMA [IF NOT EXISTS] db_name;
+CREATE SCHEMA [IF NOT EXISTS] db_name;
 ```
 也可以带上字符集的创建库
 ```sql
-greatsql> CREATE SCHEMA [IF NOT EXISTS] db_name CHARACTER SET utf8mb4;
+CREATE SCHEMA [IF NOT EXISTS] db_name CHARACTER SET utf8mb4;
 ```
 
 ## 库的删除
 在GreatSQL中，库的删除使用`DROP SCHEMA`语句。
 ```sql
-greatsql> DROP SCHEMA [IF EXISTS] db_name;
+DROP SCHEMA [IF EXISTS] db_name;
 ```
-> 注意！删除库后，库下的所有表都会被全部删除，删除前一定要检查仔细
+
+::: warning 注意
+删除库后，库下的所有表都会被全部删除，删除前一定要检查仔细。
+:::
+
 ## 库的修改
 在GreatSQL中，库的修改使用`ALTER SCHEMA`语句。
 ```sql
-greatsql> ALTER SCHEMA [IF EXISTS] db_name;
+ALTER SCHEMA [IF EXISTS] db_name;
 ```
 ## 库的查询
+
 在GreatSQL中，库的查询使用`SHOW SCHEMA`语句。
+
 ```sql
 greatsql> SHOW DATABASES;
 +--------------------+

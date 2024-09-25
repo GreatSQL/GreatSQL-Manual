@@ -30,14 +30,16 @@ GreatSQL 也支持子分区，即在一个分区内再进行分区。支持以�
 在开始之前，先关闭 GIPKs 特性，创建分区时不支持隐藏主键列：
 
 ```sql
-greatsql> SET sql_generate_invisible_primary_key=OFF;
+SET sql_generate_invisible_primary_key=OFF;
 ```
 
 ### RANGE 分区
 
 RANGE 分区的做法是基于一个给定连续区间的列值，对数据进行分区。最常见的是基于时间字段，分区的列最好是整型，如果日期型的可以使用函数转换为整型。
 
-> RANGE 分区列最好是直接采用整型，这样可以减少数据转换/运算过程，提升效率
+::: tip 小贴士
+RANGE 分区列最好是直接采用整型，这样可以减少数据转换/运算过程，提升效率。
+:::
 
 例如，按照年份进行分区：
 
@@ -80,7 +82,9 @@ greatsql> SELECT * FROM sales PARTITION(p1);
 +------+------------+---------+
 ```
 
-> 在实际使用中，经常采用 RANGE 分区，尤其是存储便于后期定时归档（删除）的数据，例如日志
+::: tip 小贴士
+在实际使用中，经常采用 RANGE 分区，尤其是存储便于后期定时归档（删除）的数据，例如日志。
+:::
 
 当插入新记录时，如果分区的列值或相应分区表达式返回值为 NULL，则总是将其写入到最小的那个分区，例如：
 
@@ -108,7 +112,9 @@ greatsql> SELECT * FROM sales PARTITION(p0);
 
 LIST 分区和 RANGE 分区类似。区别在于 LIST 是枚举值列表的集合，而 RANGE 是连续的区间值的集合。LIST 分区常用于区分有限数量枚举类型，例如地区、某种状态值等。
 
-> 由于要事先定义好 LIST 分区枚举值，后期维护可能会有点麻烦，实际使用的场景相对较少
+::: tip 小贴士
+由于要事先定义好 LIST 分区枚举值，后期维护可能会有点麻烦，实际使用的场景相对较少。
+:::
 
 例如，按照地区进行分区：
 
@@ -240,7 +246,9 @@ greatsql> INSERT INTO customers1 VALUES(6, '宇文娅欣', 2, 3);
 ERROR 1526 (HY000): Table has no partition for value from column_list
 ```
 
-> COLUMNS 分区的规则有点复杂，在实际应用中相对较少
+::: tip 小贴士
+COLUMNS 分区的规则有点复杂，在实际应用中相对较少。
+:::
 
 ### HASH 分区
 
@@ -318,7 +326,9 @@ greatsql> SELECT * FROM orders PARTITION(p0);
 
 ```
 
-> 线性 HASH 分区更适合数据量大的场景；但它相对于 HASH 分区，数据分布不均匀的概率更大。
+::: tip 小贴士
+线性 HASH 分区更适合数据量大的场景；但它相对于 HASH 分区，数据分布不均匀的概率更大。
+:::
 
 ### KEY 分区
 
@@ -331,7 +341,7 @@ KEY 分区和 HASH 分区差不多，不同之处有：
 
 ```sql
 -- 表没有定义主键，如果 KEY 分区没指定列，会报错
-greatsql> CREATE TABLE k1 (
+CREATE TABLE k1 (
     id INT NOT NULL,
     name VARCHAR(20)
 )
@@ -340,14 +350,14 @@ PARTITIONS 2;
 ERROR 1488 (HY000): Field in list of fields for partition function not found in table
 
 -- 如果没有主键或不允许为NULL的唯一索引键（可以用于聚集索引），则 KEY 分区必须指定某个列
-greatsql> CREATE TABLE k1 (
+CREATE TABLE k1 (
     id INT NOT NULL,
     name VARCHAR(20)
 )
 PARTITION BY KEY(id)
 PARTITIONS 2;
 
-greatsql> CREATE TABLE k1 (
+CREATE TABLE k1 (
     id INT NOT NULL,
     name VARCHAR(20),
     UNIQUE KEY(id)
@@ -685,13 +695,13 @@ ERROR 1737 (HY000): Found a row that does not match the partition
 当某个分区有较多碎片时，可以重建该分区
 
 ```sql
-greatsql> ALTER TABLE sales REBUILD PARTITION p0;
+ALTER TABLE sales REBUILD PARTITION p0;
 ```
 
 或者当某个分区中删除大量数据后，此时有很多空闲磁盘空间待回收，也可以对这个分区进行优化
 
 ```sql
-greatsql ALTER TABLE sales OPTIMIZE PARTITION p0;
+ALTER TABLE sales OPTIMIZE PARTITION p0;
 ```
 
 ## 注意事项

@@ -40,8 +40,8 @@ greatsql> SHOW VARIABLES LIKE 'character%';
 
 提供两个系统变量来表示。`character_set_server`与`collation_server`。启动服务器程序时通过启动选项或程序运行中通过set 语句进行修改这两个变量。比如配置文件中配置：
 
-```sql
- [server] 
+```ini
+ [mysqld]
  character_set_server=utf8mb4  
  collation_server=utf8mb4_bin
 ```
@@ -53,10 +53,14 @@ greatsql> SHOW VARIABLES LIKE 'character%';
 对应的语句：
 
 ```sql
-create/alter database 数据库名 [character set 字符集名称][collate 比较规则名称] ;
+CREATE/ALTER database_name 数据库名 [CHARACTER SET 字符集名称][COLLATE 比较规则名称] ;
+```
+
 例如：
-create database test character set utf8mb4 collate utf8mb4_0900_bin;
-alter database test character set utf8mb4 collate utf8mb4_0900_ai_ci;
+```sql
+CREATE DATABASE test CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin;
+
+ALTER DATABASE test CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 ```
 
 ### 表级别
@@ -66,14 +70,19 @@ alter database test character set utf8mb4 collate utf8mb4_0900_ai_ci;
 对应的语句：
 
 ```sql
-create table table_name(列信息)
-[character set 字符集名称][collate 比较规则名称];
-alter table table_name
-[character set 字符集名称][collate 比较规则名称];
+CREATE TABLE table_name(列信息)
+[CHARACTER SET 字符集名称][COLLATE 比较规则名称];
+
+ALTER TABLE table_name
+[CHARACTER SET 字符集名称][COLLATE 比较规则名称];
+```
 
 例如：
-create table t1(id int,c1 varchar(30)) character set utf8mb4 collate utf8mb4_0900_bin;
-alter table t1 character set utf8 collate utf8mb4_0900_ai_ci;
+```sql
+CREATE TABLE t1(id int, 
+  c1 varchar(30)) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin;
+
+ALTER TABLE t1 CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 ```
 
 这里注意一下，字符集和比较规则是相互关联的，如果在修改时仅指定了字符集，那么比较规则也会随之变为修改后的字符集默认的比较规则。如果仅指定了比较规则，那么字符集也会变为比较规则对应的字符集。这么说来的话，只需要指定比较规则就够了。
@@ -87,8 +96,8 @@ alter table t1 character set utf8 collate utf8mb4_0900_ai_ci;
 对应的语句：
 
 ```sql
-create table table_name(列名 字符串类型 [character set 字符集名称] [collate 比较规则名称]，其他列...);
-alter table table_name modify 列名 字符串类型 [character set 字符集名称] [collate 比较规则名称];
+CREATE TABLE table_name(列名 字符串类型 [CHARACTER SET 字符集名称] [COLLATE 比较规则名称]，其他列...);
+ALTER TABLE table_name MODIFY 列名 字符串类型 [CHARACTER SET 字符集名称] [COLLATE 比较规则名称];
 ```
 
 修改列信息时注意：修改列时不指定字符集，即使创建时指定了字符集，也会使用表的字符集和比较规则。如果修改后的列字符集不能表示列中存储的数据，则会报错。
@@ -97,25 +106,27 @@ alter table table_name modify 列名 字符串类型 [character set 字符集名
 
 在GreatSQL 5.7版本可以在`my.cnf`配置文件中加入字符集配置，然后重启服务器即可
 
-```bash
-$ vim /etc/my.cnf
+```ini
+[mysqld]
 character_set_server=utf8
 ```
 
-> 但是原库、原表的设定不会发生变化，参数修改只对新建的数据库生效。
+::: tip 小贴士
+但是原库、原表的设定不会发生变化，参数修改只对新建的数据库生效。
+:::
 
-GreatSQL 5.7 版本中，以前创建的库，创建的表字符集还是`latin1`
+GreatSQL 5.7 版本中，以前创建的库，创建的表字符集还是`latin1`。
 
 修改已创建数据库的字符集
 
 ```sql
-greatsql> ALTER DATABASE db_name CHARACTER SET 'utf8';
+ALTER DATABASE db_name CHARACTER SET 'utf8';
 ```
 
 修改已创建数据表的字符集
 
 ```sql
-greatsql> ALTER TABLE table_name CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE table_name CONVERT TO CHARACTER SET 'utf8';
 ```
 
 ## 字符集介绍
@@ -241,7 +252,7 @@ greatsql> SHOW GLOBAL VARIABLES LIKE "character_set_database";
 ```
 接下来测试乱码
 ```sql
-greatsql> select _utf8'GreatSQL社区';
+greatsql> SELECT _utf8'GreatSQL社区';
 +----------------+
 | GreatSQL社区   |
 +----------------+
@@ -249,7 +260,7 @@ greatsql> select _utf8'GreatSQL社区';
 +----------------+
 1 row in set, 1 warning (0.00 sec)
 
-greatsql> select _gbk'GreatSQL社区';
+greatsql> SELECT _gbk'GreatSQL社区';
 +-------------------+
 | GreatSQL绀惧尯    |
 +-------------------+
@@ -258,11 +269,11 @@ greatsql> select _gbk'GreatSQL社区';
 1 row in set (0.01 sec)
 ```
 
-1.客户端发送请求时会将字符'GreatSQL社区'按照utf8进行编码，英文不受影响，但中文"社区"编码也就是：`&#x793E;&#x533A;`
+1. 客户端发送请求时会将字符 `GreatSQL社区` 按照utf8进行编码，英文不受影响，但中文 `社区` 编码也就是：`&#x793E;&#x533A;`
 
-2.服务器收到请求后发现有前缀_gbk，则不会将其后边的字节`&#x793E;&#x533A;`进行从`character_set_client`到`character_set_connection`的转换，而是直接把`&#x793E;&#x533A;`认为是某个字符串由gbk编码后得到的字节序列。
+2. 服务器收到请求后发现有前缀 `_gbk`，则不会将其后边的字节 `&#x793E;&#x533A;` 进行从 `character_set_client` 到 `character_set_connection` 的转换，而是直接把 `&#x793E;&#x533A;` 认为是某个字符串由gbk编码后得到的字节序列。
 
-3.再把上述`&#x793E;&#x533A;`从gbk转换为`character_set_results`，也就是utf8。`&#x793E;&#x533A;`在gbk中代表汉字'绀惧尯'。
+3. 再把上述 `&#x793E;&#x533A;` 从gbk转换为 `character_set_results`，也就是 utf8。`&#x793E;&#x533A;` 在gbk中代表汉字 `绀惧尯`。
 
 ## 扩展阅读
 
