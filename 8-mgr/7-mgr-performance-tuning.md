@@ -40,13 +40,13 @@
 还可以通过监控事务状态，防止有个别事务运行时间过久：
 ```sql
 -- 活跃时间最长的事务
-greatsql> SELECT * FROM information_schema.innodb_trx ORDER BY trx_started ASC LIMIT N;
+SELECT * FROM information_schema.innodb_trx ORDER BY trx_started ASC LIMIT N;
 
 -- 等待时间最长的事务
-greatsql> SELECT * FROM sys.innodb_lock_waits ORDER BY wait_age_secs DESC LIMIT N;
+SELECT * FROM sys.innodb_lock_waits ORDER BY wait_age_secs DESC LIMIT N;
 
 -- 要特别关注的大事务
-greatsql> SELECT * FROM information_schema.innodb_trx WHERE
+SELECT * FROM information_schema.innodb_trx WHERE
   trx_lock_structs >= 5 OR    -- 超过5把锁
   trx_rows_locked >= 100 OR   -- 超过100行被锁
   trx_rows_modified >= 100 OR -- 超过100行被修改

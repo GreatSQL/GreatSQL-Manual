@@ -188,7 +188,7 @@ ERROR 3092 (HY000): The server is not configured properly to be an active member
 
 发现启动失败了，检查错误日志，可以看到有类似下面的信息：
 
-```
+```log
 [ERROR] [MY-011529] [Repl] Plugin group_replication reported: 'The member configuration is not compatible with the group configuration. Variables such as group_replication_single_primary_mode or group_replication_enforce_update_everywhere_checks must have the same value on every server in the group. (member configuration option: [group_replication_single_primary_mode], group configuration option: [group_replication_enforce_update_everywhere_checks]).'
 ```
 
