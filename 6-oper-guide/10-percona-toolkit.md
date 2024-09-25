@@ -4,7 +4,9 @@
 
 Percona Toolkit简称（PT工具），是一组高级命令行工具，用于管理MySQL/GreatSQL的工具。可以用它来执行各种难以手动执行的MySQL/GreatSQL和系统任务。其功能包括检查主从复制的数据一致性、检查重复索引、定位IO占用高的表文件、在线DDL等，DBA熟悉掌握PT工具后将极大提高工作效率。
 
-> 全文约定：`$`为命令提示符、`greatsql>`为GreatSQL数据库提示符。在后续阅读中，依据此约定进行理解与操作
+::: tip 小贴士
+`$`为命令提示符、`greatsql>`为GreatSQL数据库提示符。
+:::
 
 ### 使用包管理器安装
 
@@ -110,7 +112,7 @@ pt-fifo-split             pt-k8s-debug-collector   pt-pg-summary            pt-s
 pt-find                   pt-kill                  pt-pmp                   pt-stalk`
 ```
 
-### [实用类](./10-1-1-pt-practical.md)
+### [实用类](./10-1-pt-practical.md)
 
 | 工具命令               | 工具用途                                              |
 | ---------------------- | ----------------------------------------------------- |
@@ -122,7 +124,7 @@ pt-find                   pt-kill                  pt-pmp                   pt-s
 | pt-k8s-debug-collector | 从 k8s/OpenShift 集群收集调试数据（日志、资源状态等） |
 | pt-secure-collect      | 收集、清理、打包和加密数据                            |
 
-### [配置类](./10-1-2-pt-configuration.md)
+### [配置类](./10-2-pt-configuration.md)
 
 | 工具命令            | 工具描述                             |
 | ------------------- | ------------------------------------ |
@@ -130,7 +132,7 @@ pt-find                   pt-kill                  pt-pmp                   pt-s
 | pt-mysql-summary    | 对GreatSQL/MySQL配置和STATUS进行汇总 |
 | pt-variable-advisor | 分析参数，并提出建议                 |
 
-### [监控类](./10-1-3-pt-monitoring.md)
+### [监控类](./10-3-pt-monitoring.md)
 
 | 工具命令           | 工具描述                       |
 | ------------------ | ------------------------------ |
@@ -141,7 +143,7 @@ pt-find                   pt-kill                  pt-pmp                   pt-s
 | pt-mongodb-summary | 收集有关 MongoDB 集群的信息    |
 | pt-pg-summary      | 收集有关 PostgreSQL 集群的信息 |
 
-### [系统类](./10-1-4-pt-system.md)
+### [系统类](./10-4-pt-system.md)
 
 | 工具命令      | 工具描述                     |
 | ------------- | ---------------------------- |
@@ -152,7 +154,7 @@ pt-find                   pt-kill                  pt-pmp                   pt-s
 | pt-stalk      | 出现问题时，收集诊断数据     |
 | pt-summary    | 收集和显示系统概况           |
 
-### [开发类](./10-1-5-pt-development.md)
+### [开发类](./10-5-pt-development.md)
 
 | 工具命令                 | 工具描述                           |
 | ------------------------ | ---------------------------------- |
@@ -161,7 +163,7 @@ pt-find                   pt-kill                  pt-pmp                   pt-s
 | pt-show-grants           | 规范化和打印权限                   |
 | pt-upgrade               | 在多个服务器上执行查询，并比较不同 |
 
-### [复制类](./10-1-6-pt-replication.md)
+### [复制类](./10-6-pt-replication.md)
 
 | 工具命令                | 工具描述                                 |
 | ----------------------- | ---------------------------------------- |
@@ -173,7 +175,7 @@ pt-find                   pt-kill                  pt-pmp                   pt-s
 | pt-table-sync           | 高效同步表数据                           |
 | pt-galera-log-explainer | 对多个Galera日志进行过滤、聚合和汇总     |
 
-### [性能类](./10-1-7-pt-performance.md)
+### [性能类](./10-7-pt-performance.md)
 
 | 工具命令                | 工具描述                                                    |
 | ----------------------- | ----------------------------------------------------------- |
