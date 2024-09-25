@@ -79,6 +79,7 @@ CREATE TABLE sub_table (
 -- 在 main_table 中插入一条记录  
 greatsql> INSERT INTO main_table (name) VALUES ('Record 1');
 Query OK, 1 row affected (0.01 sec)
+
 -- 查看 main_table 中的记录  
 greatsql> SELECT * FROM main_table;
 +----+----------+
@@ -91,7 +92,6 @@ greatsql> SELECT * FROM main_table;
 -- 在 sub_table 中插入两条记录，该记录引用了 main_table 中的 id 字段  
 greatsql> INSERT INTO sub_table (main_id, data) VALUES (1, 'SubData 1');  
 greatsql> INSERT INTO sub_table (main_id, data) VALUES (1, 'SubData 2');  
-Query OK, 1 row affected (0.05 sec)
 
 -- 可以看到 sub_table 中有两条记录
 greatsql> SELECT * FROM sub_table;
@@ -105,6 +105,7 @@ greatsql> SELECT * FROM sub_table;
   
 -- 现在尝试使用 REPLACE INTO 替换 main_table 中的记录  
 greatsql> REPLACE INTO main_table (id, name) VALUES (1, 'New Record 1');
+
 -- 查看 main_table 中的记录  
 greatsql> SELECT * FROM main_table;
 +----+--------------+

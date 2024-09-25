@@ -1,5 +1,4 @@
 # 生成随机测试数据
----
 
 本节介绍使用 **mysql_random_data_load**、Shell脚本、存储过程/函数向GreatSQL数据库生存随机测试数据。
 
@@ -8,11 +7,14 @@
 ## mysql_random_data_load 生成随机数据
 
 **mysql_random_data_load** 是使用 Go 语言开发的 MySQL/GreatSQL 随机造数工具，可从下方链接中直接下载编译完成的二进制程序。
- > https://github.com/Percona-Lab/mysql_random_data_load
 
- 下载后，解压到任意目录：
- ```bash
+> [https://github.com/Percona-Lab/mysql_random_data_load](https://github.com/Percona-Lab/mysql_random_data_load)
+
+下载后，解压到任意目录：
+
+```bash
 $ tar -xvzf mysql_random_data_load_0.1.12_Linux_x86_64.tar.gz
+
 $ ls
 LICENSE  mysql_random_data_load  README.md
 ```
@@ -67,8 +69,8 @@ CREATE TABLE `t3` (
   `tcol28` double(4,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-Query OK, 0 rows affected, 9 warnings (0.03 sec)
 ```
+
 要生成 100K 随机行，只需运行：
 ```bash
 $ ./mysql_random_data_load test_db t3 100000 --user=root --password=GreatSQL@2024
@@ -77,13 +79,13 @@ INFO[2024-05-08T17:07:49+08:00] Starting
    0s [====================================================================] 100%
 INFO[2024-05-08T17:07:49+08:00] 100000 rows inserted   
 ```
-- test_db：数据库名
-- t3：表名
-- 100000：行数
-- --user=root：用户名
-- --password=root：密码
+- `test_db`：数据库名
+- `t3`：表名
+- `100000`：要插入的行数
+- `--user=root`：用户名
+- `--password=root`：密码
 
-`mysql_random_data_load`不关心这个表有哪些列，它都能自动进行填充
+`mysql_random_data_load`不关心这个表有哪些列，它都能自动进行填充。
 
 生成的随机数据入下所示
 ```sql
@@ -144,11 +146,11 @@ CREATE TABLE `test_shell` (
 在使用 `vi` 或 `vim` 编辑器创建一个新的 Shell 脚本文件
 
 ```bash
-$ vim random_data.sh
+vim random_data.sh
 ```
 ### 编写Shell脚本
 进入文件后，按下`i`键，左下方出现 `--- INSERT ---` 表示进入编辑模式，然后输入/粘贴以下内容
-```bash
+```ini
 #!/bin/bash  
   
 # 设置输出文件的路径和名称  
@@ -234,6 +236,7 @@ Insert语句已生成并保存到insert_sql.sql文件中
 使用`tail`命令查看生成的Insert语句文件，截取部分内容如下：
 ```bash
 $ tail -n 5 insert_sql.sql
+
 INSERT INTO test_shell (id, name, age, sex, address, phone) VALUES (96, 'Ohky', 65, '男', '地址102105105979711110397105110', '10000016611');
 INSERT INTO test_shell (id, name, age, sex, address, phone) VALUES (97, 'Tydx', 50, '男', '地址10311712012111110110410910697', '10000010900');
 INSERT INTO test_shell (id, name, age, sex, address, phone) VALUES (98, 'Wsrs', 18, '女', '地址112119114106101122118116102104', '10000011526');
@@ -243,7 +246,7 @@ INSERT INTO test_shell (id, name, age, sex, address, phone) VALUES (100, 'Mwsd',
 ### 导入数据
 生成 `insert_sql.sql` 文件后需将此文件导入到GreatSQL中的 `test_db` 库中
 ```bash
-$ mysql -uroot -pGreatSQL@2024 test_db < /data/insert_sql.sql
+mysql -uroot -pGreatSQL@2024 test_db < /data/insert_sql.sql
 ```
 查看test_db库中test_shell表中的数据情况
 ```bash
@@ -264,9 +267,9 @@ $ mysql -uroot -pGreatSQL@2024  -e 'SELECT COUNT(*) FROM test_db.test_shell;'
 创建一张test_book表
 ```sql
 CREATE TABLE IF NOT EXISTS `test_book`(
-	`bookid` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-    `card`INT(10) UNSIGNED NOT NULL,
-	PRIMARY KEY (`bookid`)
+  `bookid` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `card`INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`bookid`)
 );
 ```
 ### 定义存储过程
@@ -275,25 +278,24 @@ CREATE TABLE IF NOT EXISTS `test_book`(
 
 
 ```sql
-greatsql> DROP PROCEDURE IF EXISTS INSERT_DATA;
-greatsql> DELIMITER //
-greatsql> CREATE PROCEDURE INSERT_DATA()   
-            BEGIN  
-                DECLARE n INT DEFAULT 1;
-                -- 此处定义生成20条语句，若要生成更多，可修改此处数字  
-                WHILE n < 21 DO  
-                    INSERT INTO test_book(card) VALUES (FLOOR(1 + (RAND() * 20)));  
-                    SET n = n + 1;  
-                    END WHILE;  
-            END //
-greatsql> DELIMITER ;
+DROP PROCEDURE IF EXISTS INSERT_DATA;
+DELIMITER //
+CREATE PROCEDURE INSERT_DATA()   
+  BEGIN  
+    DECLARE n INT DEFAULT 1;
+    -- 此处定义生成20条语句，若要生成更多，可修改此处数字  
+    WHILE n < 21 DO  
+      INSERT INTO test_book(card) VALUES (FLOOR(1 + (RAND() * 20)));  
+      SET n = n + 1;  
+    END WHILE;  
+  END //
+DELIMITER ;
 ```
-注意：使用了`DELIMITER`来改变命令分隔符，以便在存储过程内部使用分号。
 
 ### 调用存储过程
 可以通过调用INSERT_DATA存储过程来插入数据。
 ```sql
-greatsql> CALL INSERT_DATA();
+CALL INSERT_DATA();
 ```
 ### 查看数据
 查看test_book表中的数据情况，可以看到生成了20条随机数。
@@ -309,7 +311,7 @@ greatsql> SELECT COUNT(*) FROM test_book;
 ### 删除存储过程
 如果不需要存储过程，可以使用`DROP PROCEDURE`删除它。
 ```sql
-greatsql> DROP PROCEDURE INSERT_DATA;
+DROP PROCEDURE INSERT_DATA;
 ```
 
 ## 存储过程和函数生成随机数据
@@ -329,9 +331,10 @@ CREATE TABLE `t1` (
 ) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 ```
 ### 创建函数
+
 开启可以设置函数，否则创建函数时会报错
 ```sql
-greatsql> SET GLOBAL log_bin_trust_function_creators = 1;
+SET GLOBAL log_bin_trust_function_creators = 1;
 ```
 随机字符串函数
 ```sql
@@ -355,6 +358,7 @@ CREATE FUNCTION rand_string ( n INT ) RETURNS VARCHAR ( 255 ) BEGIN
 END // 
 DELIMITER ;
 ```
+
 随机中文函数
 ```sql
 DELIMITER //
@@ -377,6 +381,7 @@ CREATE FUNCTION rand_address ( n INT ) RETURNS VARCHAR ( 255 ) BEGIN
 END // 
 DELIMITER ;
 ```
+
 随机时间
 ```sql
 DELIMITER //
@@ -394,6 +399,7 @@ declare Date VARCHAR(255) default '';
 END // 
 DELIMITER ;
 ```
+
 随机区间数字
 ```sql
 DELIMITER //
@@ -406,6 +412,7 @@ BEGIN
 END//
 DELIMITER ;
 ```
+
 随机电话号码
 ```sql
 DELIMITER //
@@ -433,9 +440,10 @@ CREATE FUNCTION rand_phone ( ) RETURNS CHAR ( 11 ) DETERMINISTIC BEGIN
 END // 
 DELIMITER ;
 ```
+
 查看创建的所有函数
 ```sql
-greatsql> SHOW FUNCTION STATUS LIKE 'rand%' \G 
+SHOW FUNCTION STATUS LIKE 'rand%' \G 
 ```
 ### 创建存储过程
 创建存储过程插入数据
@@ -459,6 +467,7 @@ DELIMITER ;
 greatsql> CALL insert_t1(1000);
 Query OK, 0 rows affected (0.01 sec)
 ```
+
 查看表数据生成情况，截选部分数据
 ```sql
 greatsql> SELECT * FROM t1 LIMIT 10;
@@ -478,6 +487,7 @@ greatsql> SELECT * FROM t1 LIMIT 10;
 +----+------+---------+-------------+---------------------+---------+
 10 rows in set (0.00 sec)
 ```
+
 查看表内数据量情况
 ```sql
 greatsql> SELECT COUNT(*) FROM t1;
@@ -491,13 +501,12 @@ greatsql> SELECT COUNT(*) FROM t1;
 ### 删除函数
 查看创建的所有函数
 ```sql
-greatsql> SHOW FUNCTION STATUS LIKE 'rand%' \G 
+SHOW FUNCTION STATUS LIKE 'rand%' \G 
 ```
 删除函数
 ```sql
-greatsql> DROP FUNCTION rand_string;
+DROP FUNCTION rand_string;
 ```
-
 
 **扫码关注微信公众号**
 

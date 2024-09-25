@@ -9,7 +9,7 @@
 #### 指定列名
 ```sql
 INSERT INTO 表名(column1 [, column2, …, columnn]) 
-VALUES (value1 [,value2, …, valuen]);
+  VALUES (value1 [,value2, …, valuen]);
 ```
 在 INSERT 子句中随意列出列名，但是一旦列出，VALUES中要插入的value1,…valuen需要与column1,…columnn列一一对应。如果类型不同，将无法插入，并且GreatSQL会产生错误。
 
@@ -27,7 +27,7 @@ Records: 2  Duplicates: 0  Warnings: 0
 #### 不指定列名
 ```sql
 INSERT INTO 表名 
-VALUES (value1 [,value2, …, valuen]);
+  VALUES (value1 [,value2, …, valuen]);
 ```
 在INSERT子句中不指定列名，则默认使用表中所有列名。
 举例插入一条数据：
@@ -46,11 +46,11 @@ Records: 2  Duplicates: 0  Warnings: 0
 还可以将SELECT语句查询的结果插入到表中，此时不需要把每一条记录的值一个一个输入，只需要使用一条INSERT语句和一条SELECT语句组成的组合语句即可快速地从一个或多个表中向一个表中插入多行
 ```sql
 INSERT INTO 目标表名
-(tar_column1 [, tar_column2, …, tar_columnn])
-SELECT
-(src_column1 [, src_column2, …, src_columnn])
-FROM 源表名
-[WHERE condition]
+  (tar_column1 [, tar_column2, …, tar_columnn])
+  SELECT
+    (src_column1 [, src_column2, …, src_columnn])
+  FROM 源表名
+  [WHERE condition]
 ```
 - 在 INSERT 语句中加入子查询。
 - 不必再加入 VALUES 子句。

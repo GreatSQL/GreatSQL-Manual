@@ -38,10 +38,10 @@ DEALLOCATE PREPARE stmt_name;
 ### 查询示例
 创建一张user表，并插入三条数据
 ```sql
-greatsql> CREATE TABLE user (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(20) DEFAULT NULL, PRIMARY KEY (id));
-greatsql> INSERT INTO user VALUES (1, '刘一');
-greatsql> INSERT INTO user VALUES (2, '陈二');
-greatsql> INSERT INTO user VALUES (3, '张三');
+CREATE TABLE user (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(20) DEFAULT NULL, PRIMARY KEY (id));
+INSERT INTO user VALUES (1, '刘一');
+INSERT INTO user VALUES (2, '陈二');
+INSERT INTO user VALUES (3, '张三');
 ```
 创建一条名为`stmt1`的预处理语句，SQL语句中的参数使用问号(?)占位
 ```sql
