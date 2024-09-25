@@ -368,8 +368,8 @@ Specify --databases or --all-databases to dump and summarize schemas
   test_db      19
   tpch         17
   
-# 下方部分输出为了紧凑显示，作者将这些列标题设置为垂直输出
-# 需要您从顶部向下阅读，第一列是 char ，第二列是 timestamp
+-- 下方部分输出为了紧凑显示，作者将这些列标题设置为垂直输出
+-- 需要您从顶部向下阅读，第一列是 char ，第二列是 timestamp
               c   t   s   i   t   e   v   f   t   b   s   j   b   m   m   t   d   d   d   d
               h   i   e   n   e   n   a   l   i   i   m   s   l   e   e   i   a   o   a   e
               a   m   t   t   x   u   r   o   n   g   a   o   o   d   d   m   t   u   t   c
@@ -551,3 +551,7 @@ $ pt-variable-advisor localhost --source-of-variables pt_va.txt
 
 这里也推荐一个网页版的[MySQL/GreatSQL状态诊断工具](https://imysql.com/my-state-diag.html)
 :::
+
+**扫码关注微信公众号**
+
+![greatsql-wx](../greatsql-wx.jpg)

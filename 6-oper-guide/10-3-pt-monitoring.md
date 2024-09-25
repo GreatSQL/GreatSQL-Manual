@@ -66,7 +66,7 @@
 如果想存储 pt-deadlock-logger 提取的有关死锁的所有信息，建议使用以下表结构：
 
 ```sql
-# 可以根据 --columns 的字段进行调整
+-- 可以根据 --columns 的字段进行调整
 CREATE TABLE deadlocks (
   server char(20) NOT NULL,
   ts timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -214,7 +214,7 @@ pt-fk-error-logger h=localhost,P=3306,u=root,p='',S=/data/GreatSQL01/mysql.sock 
 人为创建违反索引约束
 
 ```sql
-# 建t_fk1表
+-- 建t_fk1表
 CREATE TABLE `t_fk1` (  
   `id` int unsigned NOT NULL AUTO_INCREMENT,  
   `k` int unsigned NOT NULL DEFAULT '0',  
@@ -224,7 +224,7 @@ CREATE TABLE `t_fk1` (
   KEY `k_2` (`k`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-# 建t_fk2表
+-- 建t_fk2表
 CREATE TABLE `t_fk2` (  
   `id1` int unsigned NOT NULL AUTO_INCREMENT,  
   `id2` int unsigned NOT NULL,  
@@ -415,19 +415,19 @@ pt-query-digest ./slow.log
 **第一部分**
 
 ```bash
-# 用户时间，系统时间，物理内存占用大小，虚拟内存占用大小
+-- 用户时间，系统时间，物理内存占用大小，虚拟内存占用大小
 170ms user time, 0 system time, 29.88M rss, 38.17M vsz
-# 执行工具的时间
+-- 执行工具的时间
 Current date: Thu Mar 21 10:13:18 2024
-# 主机名
+-- 主机名
 Hostname: myarch
-# 被分析的文件名字
+-- 被分析的文件名字
 Files: ./slow.log
-# 语句总数量，唯一的语句数量，QPS，并发数
+-- 语句总数量，唯一的语句数量，QPS，并发数
 Overall: 119 total, 18 unique, 0.00 QPS, 0.00x concurrency _____________
-# 日志记录时间范围
+-- 日志记录时间范围
 Time range: 2024-03-08T09:52:08 to 2024-03-20T14:37:23
-# 属性              总计     最小     最大     平均     95%    标准   中位数
+-- 属性              总计     最小     最大     平均     95%    标准   中位数
 Attribute          total     min     max     avg     95%  stddev  median
 ============     ======= ======= ======= ======= ======= ======= =======
 Exec time           122s   189us     44s      1s      1s      6s   384us
@@ -607,3 +607,7 @@ pt-query-digest --type tcpdump GreatSQL.tcp.txt> tcp_analysis.log
 ::: tip 小贴士
 如果没有tcpdump，请手动安装
 :::
+
+**扫码关注微信公众号**
+
+![greatsql-wx](../greatsql-wx.jpg)
