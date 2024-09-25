@@ -238,7 +238,7 @@ upgrade = FORCE
 **注意：** 这种方法不支持从5.6版本直接升级到8.0。
 
 升级过程的日志输入类似下面这样：
-```
+```log
 ...
 [System] [MY-011012] [Server] Starting upgrade of data directory.
 ...
@@ -252,7 +252,7 @@ upgrade = FORCE
 是不是觉得有点惊喜，有点意外，怎么怎么简单，事实的确如此。
 
 如果有强迫症的话，想要看到完整升级过程，还可以加上两个选项 `log_error_verbosity=3` 以及 `innodb_print_ddl_logs = ON`，输出的日志就会多很多：
-```
+```log
 ...
 [System] [MY-011012] [Server] Starting upgrade of data directory.
 ...
@@ -320,7 +320,7 @@ GreatSQL 8.0.32相对于8.0.25版本，新增了Rapid引擎、更多SQL语法兼
 3. 修改my.cnf，调整basedir，指向新版本二进制包路径。可参考这份[my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)。
 
 4. 重启新的GreatSQL 8.0.32版本数据库服务进程，即可实现原地升级（in-place upgrade），可以看到日志中有类似下面的内容：
-```
+```log
 [Note] [MY-013327] [Server] MySQL server upgrading from version '80025' to '80032'.
 [Note] [MY-012357] [InnoDB] Reading DD tablespace files
 [Note] [MY-012356] [InnoDB] Scanned 7 tablespaces. Validated 7.
@@ -338,7 +338,7 @@ GreatSQL 8.0.32相对于8.0.25版本，新增了Rapid引擎、更多SQL语法兼
 ```
 
 5. 如果设置选项 `innodb_print_ddl_logs=1`，则还能看到升级过程中有大量的DDL升级记录，例如：
-```
+```log
 [System] [MY-013381] [Server] Server upgrade from '80025' to '80032' started.
 [Note] [MY-013386] [Server] Running queries to upgrade MySQL server.
 [Note] [MY-012477] [InnoDB] DDL log insert : [DDL record: REMOVE CACHE, id=6, thread_id=6, table_id=1062, new_file_path=mysql/replication_group_member_actions]
