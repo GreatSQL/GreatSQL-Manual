@@ -51,7 +51,7 @@ ERROR 3098 (HY000): The table does not comply with the requirements by an extern
 同理，也可以创建MyISAM表，但写入时会提示失败。
 
 此外，当欲加入MGR集群的新实例中有无主键的InnoDB表时，如果要通过 **MySQL Shell** 添加该节点，会发出类似下面的报错，无法加入：
-```
+```log
 Validating instance configuration at mgr03:3306...
 
 This instance reports its own address as mgr03:3306
@@ -157,7 +157,9 @@ ALTER TABLE t1 SECONDARY_LOAD;
 不过也提醒下：如果有是在原有MySQL datadir上直接启动GreatSQL的话，记得执行mysql_upgrade哦，要不然是没有MEMBER_ROLE列的。
 
 升级/切换步骤：
+
 1. 执行mysql_upgrade -f -s（至少加 -s，升级system schema）
+
 2.重启实例（重启后才能识别到新的schema metadata）
 
 同理，如果有跑MySQL 8.0.x和GreatSQL 8.0.x版本也是如此。

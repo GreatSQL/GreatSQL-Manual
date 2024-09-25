@@ -250,7 +250,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 ## 16. 有个成员节点无法加入MGR集群，且报错Old incarnation，这是什么情况
 
 这是因为该成员节点曾经加入过MGR集群，但因为节点异常/网络异常/网络分区等原因该成员节点状态异常，且尚未被正式驱逐出MGR集群，MGR组视图中还保留该成员节点的相关信息，因此会提示类似下面的错误：
-```
+```log
 [Warning] [MY-011735] [Repl] Plugin group_replication reported: '[GCS] Old incarnation found while trying to add node ...
 ```
 

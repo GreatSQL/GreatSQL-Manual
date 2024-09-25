@@ -50,7 +50,7 @@ RECEIVED_TRANSACTION_SET: 6cfb873b-573f-11ec-814a-d08e7908bcb1:1-3078139
 
 在向 MGR 集群中导入 mysqldump 备份文件时遇到报错，错误信息类似下面这样：
 
-```
+```log
 ERROR 3098 (HY000) at line 1: The table does not comply with the requirements by an external plugin.
 ```
 
