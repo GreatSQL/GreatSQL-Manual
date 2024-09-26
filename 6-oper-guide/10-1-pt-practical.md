@@ -482,7 +482,7 @@ $ pt-find --socket=/data/GreatSQL/mysql.sock --printf "%T\t%D.%N\n" | sort -rn
 ```
 :::
 
-::: tips 小贴士
+::: tip 小贴士
 输出有些没对齐，可以使用pt-align工具对齐
 ```bash
 $ pt-find --socket=/data/GreatSQL/mysql.sock --printf "%T\t%D.%N\n" | sort -rn | pt-align
@@ -554,7 +554,7 @@ select a?, ?, c? from users? where id = ? and greatsql = ?
 $ pt-fingerprint --match-embedded-numbers --query "select a1, b2, c3 from users4 where id = 5 and greatsql = 666"
 select a1, b2, c3 from users4 where id = ? and greatsql = ?
 ```
-::: tips 小贴士
+::: tip 小贴士
 `--match-md5-checksums`参数使用也是同理，避免MD5值被替换
 :::
 
@@ -674,7 +674,7 @@ pt-kill --user=root --ask-pass --match-info "select|SELECT" --match-command='Que
 pt-kill --user=root --ask-pass --match-info "select|SELECT" --match-command='Query' --busy-time 30 --victims all --interval 10 --daemonize --kill --log=/data/pt_slow.log
 ```
 
-::: tips 小贴士
+::: tip 小贴士
 `--victims`默认是`oldest`只Kill最先发起，存在时间最长的查询。`all Kill`掉所有满足的线程。`all-but-oldest`只保留最长的不Kill其它都Kill掉
 :::
 
@@ -769,7 +769,7 @@ INFO[2024-03-11 17:06:57] Creating tar file "/data/data_collection/data_collecti
 ```
 :::
 
-::: tips 小贴士
+::: tip 小贴士
 `--mysql-port`和`--mysql-host`虽有默认值但是还是需要指定，否则在调用运行其它工具时会报错
 :::
 
@@ -863,7 +863,7 @@ ip = hostname
 ```
 :::
 
-::: tips 小贴士
+::: tip 小贴士
 如果不隐去主机可以使用`--no-sanitize-hostnames`
 如果不隐去查询可以使用`--no-sanitize-queries`
 :::

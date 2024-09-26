@@ -23,7 +23,9 @@
 
 **用法**
 
+```bash
 - pt-deadlock-logger [OPTIONS] DSN
+```
 
 记录 MySQL/GreatSQL 死锁的信息。信息打印到 `STDOUT` ，也可以通过指定 `--dest` 保存到表中。除非指定 `--run-time` 或 `--iterations` ，否则该工具将永远运行
 
@@ -109,7 +111,7 @@ CREATE TABLE deadlocks (
 
 ```sql
 greatsql> CREATE TABLE deadlocks 
-......中间省略
+-- ......中间省略
 Query OK, 0 rows affected (0.06 sec)
 ```
 
@@ -119,7 +121,7 @@ Query OK, 0 rows affected (0.06 sec)
 pt-deadlock-logger h=localhost,P=3306,u=root,p='' --dest h=localhost,P=3307,u=root,p='',D=test_db,t=deadlocks
 ```
 ::: tip 小贴士
-> 因为没有指定`--run-time`所以该工具会一直在当前窗口运行，如果要转到后台运行可以使用`--daemonize`
+因为没有指定`--run-time`所以该工具会一直在当前窗口运行，如果要转到后台运行可以使用`--daemonize`
 :::
 
 人为制造一个死锁
@@ -291,7 +293,9 @@ PHYSICAL RECORD: n_fields 5; compact format; info bits 0
 
 **用法**
 
+```bash
 - pt-mext [OPTIONS] -- COMMAND
+```
 
 ### 选项
 
@@ -330,11 +334,13 @@ Binlog_cache_use                            118                    0
 
 ### 概要
 
-pt-query-digest是用于分析 MySQL/GreatSQL 慢查询的一个工具，它可以分析Binlog、General log、Slowlog，也可以通过SHOWPROCESSLIST或者通过tcpdump抓取的 MySQL/GreatSQL 协议数据来进行分析。可以把分析结果输出到文件中，分析过程是先对查询语句的条件进行参数化，然后对参数化以后的查询进行分组统计，统计出各查询的执行时间、次数、占比等，可以借助分析结果找出问题进行优化。
+pt-query-digest 是用于分析 MySQL/GreatSQL 慢查询的一个工具，它可以分析Binlog、General log、Slowlog，也可以通过 `SHOWPROCESSLIST` 或者通过 `tcpdump` 抓取的 MySQL/GreatSQL 协议数据来进行分析。可以把分析结果输出到文件中，分析过程是先对查询语句的条件进行参数化，然后对参数化以后的查询进行分组统计，统计出各查询的执行时间、次数、占比等，可以借助分析结果找出问题进行优化。
 
 **用法**
 
-- pt-query-digest [OPTIONS] [FILES] [DSN]
+```bash
+pt-query-digest [OPTIONS] [FILES] [DSN]
+```
 
 ### 选项
 
@@ -445,7 +451,7 @@ Query size        15.50k      30     250  133.39  202.40   52.84  143.84
 - median：中位数，把所有值从小到大排列，位置位于中间那个数
 
 ::: tip 小贴士
-> 如果没有命令hostname可能会导致报错`error: Can't exec "hostname"`此时下载`inetutils`即可
+如果没有命令hostname可能会导致报错`error: Can't exec "hostname"`此时下载`inetutils`即可
 :::
 
 **第二部分**
@@ -573,7 +579,7 @@ pt-query-digest  --type=genlog  general.log > general_analysis.log
 
 #### 查询结果存储到表
 
-把查询保存到query_review表或query_review_history表，先来查看下query_review表结构
+把查询保存到 query_review表 或 query_review_history表，先来查看下 query_review表 结构
 
 ```sql
 CREATE TABLE IF NOT EXISTS query_review (
@@ -588,7 +594,7 @@ CREATE TABLE IF NOT EXISTS query_review (
 )
 ```
 
-把查询保存到query_review表，使用`--create-review-table`会自动创建
+把查询保存到 query_review表，使用`--create-review-table`会自动创建
 
 ```bash
 pt-query-digest --user=root,-password='' --review h=localhost,D=test_db,t=query_review --create-review-table slow.log
