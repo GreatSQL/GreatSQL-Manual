@@ -22,7 +22,7 @@
 **用法**
 
 ```bash
-- pt-duplicate-key-checker [OPTIONS] [DSN]
+pt-duplicate-key-checker [OPTIONS] [DSN]
 ```
 
 ### 选项
@@ -153,7 +153,9 @@ redundant_index_non_unique: 1
 
 **用法**
 
-- pt-online-schema-change [OPTIONS] DSN
+```bash
+pt-online-schema-change [OPTIONS] DSN
+```
 
 ### 选项
 

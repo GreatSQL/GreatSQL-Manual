@@ -88,7 +88,7 @@ loose-group_replication_group_name = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaab1"
 ```
 ::: tip 小贴士
 在配置MGR时，需要集群中节点的 my.cnf 部分配置一致，可使用该工具进行比较
-::: tip 小贴士
+::: 
 
 #### 配置文件对比
 
@@ -184,7 +184,7 @@ binlog_rows_query_log_e... ON                                                   
 
 ### 概要
 
-打印出来GreatSQL/MySQL的描述信息，包括：版本信息，数据目录，命令的统计，用户，数据库以及复制等信息还包括各个变量（status、variables）信息和各个变量的比例信息，还有配置文件等信息。
+打印出来 MySQL/GreatSQL 的描述信息，包括：版本信息，数据目录，命令的统计，用户，数据库以及复制等信息还包括各个变量（status、variables）信息和各个变量的比例信息，还有配置文件等信息。
 
 **用法**
 
@@ -199,10 +199,10 @@ pt-mysql-summary [OPTIONS]
 | 参数                    | 含义                                                         |
 | ----------------------- | ------------------------------------------------------------ |
 | --all-databases         | mysqldump 并汇总所有数据库                                   |
-| --ask-pass              | 连接 GreatSQL/MySQL 时提示输入密码                           |
+| --ask-pass              | 连接 MySQL/GreatSQL 时提示输入密码                           |
 | --config                | 读取这个逗号分隔的配置文件列表，如果指定，这必须是命令行上的第一个选项 |
 | --databases             | mysqldump 并总结这个以逗号分隔的数据库列表。如果要转储和汇总所有数据库，请指定 `--all-databases` |
-| --defaults-file         | 只从给定文件中读取 GreatSQL/MySQL 选项                       |
+| --defaults-file         | 只从给定文件中读取 MySQL/GreatSQL 选项                       |
 | --help                  | 显示帮助                                                     |
 | --host                  | 要连接的主机                                                 |
 | --list-encrypted-tables | 包括所有数据库中加密表的列表。这可能会导致速度变慢，因为查询信息模式表可能会很慢。 |
@@ -221,7 +221,7 @@ pt-mysql-summary [OPTIONS]
 pt-mysql-summary --user=root --password=greatsql --host=localhost --port=3306
 ```
 ::: tip 小贴士
-此时会输出所有关于GreatSQL的信息，但是要注意很多输出都是做了四舍五入，并不是精确的数据
+此时会输出所有关于 GreatSQL 的信息，但是要注意很多输出都是做了四舍五入，并不是精确的数据
 不建议此工具远程连接其它数据库，因为可能导致输出数据混乱
 :::
 
@@ -489,7 +489,9 @@ log_queries_not_using_indexes | ON
 
 **用法**
 
-- pt-variable-advisor [OPTIONS] [DSN]
+```bash
+pt-variable-advisor [OPTIONS] [DSN]
+```
 
 ### 选项
 

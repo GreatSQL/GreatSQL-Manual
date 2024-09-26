@@ -233,7 +233,7 @@ pt-fifo-split [OPTIONS] [FILE]
 
 ### 最佳实践
 
-用命令`seq 1 1000000 > hugefile.txt `向hugefile.txt文件插入一百万行数据
+用命令`seq 1 1000000 > hugefile.txt `向 hugefile.txt文件 插入一百万行数据
 
 ```bash
 $ wc -l hugefile.txt           
@@ -390,7 +390,7 @@ Tracing process ID 657147
 
 ### 概要
 
-pt-stalk工具的功能是出现问题时收集 GreatSQL 数据库和系统的诊断信息，可以解决更细粒度的现场故障采集
+pt-stalk 工具的功能是出现问题时收集 GreatSQL 数据库和系统的诊断信息，可以解决更细粒度的现场故障采集
 
 **用法**
 
@@ -562,7 +562,7 @@ Press any key to continue
 
 ### 概要
 
-打印信息涵盖CPU、内存、硬盘、网卡等核心信息，同时展现文件系统、磁盘调度、队列大小、LVM、RAID等详细配置，以及网络链接统计、netstat分析，并突出前10负载与vmstat数据
+打印信息涵盖CPU、内存、硬盘、网卡等核心信息，同时展现文件系统、磁盘调度、队列大小、LVM、RAID等详细配置，以及网络链接统计、netstat分析，并突出前10负载与 vmstat 数据
 
 **用法**
 
