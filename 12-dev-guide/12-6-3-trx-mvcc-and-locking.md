@@ -574,7 +574,7 @@ try restarting transaction                             │                wait_s
 可以执行下面的 SQL 命令，列出当前行锁等待或持有锁太多的事务：
 
 ```sql
-greatsql> SELECT * FROM information_schema.INNODB_TRX WHERE
+SELECT * FROM information_schema.INNODB_TRX WHERE
   trx_lock_structs >= 5 OR    -- 超过5把锁
   trx_rows_locked >= 100 OR   -- 超过100行被锁
   trx_rows_modified >= 100 OR -- 超过100行被修改

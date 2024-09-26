@@ -129,7 +129,8 @@ greatsql> SELECT * FROM (
 
 ```sql
 greatsql> FLUSH STATUS;
-greatsql> -- 执行第一条查询SQL
+
+-- 执行第一条查询SQL
 greatsql> SHOW STATUS LIKE 'Handler_read_%';
 +----------------------------+---------+
 | Variable_name              | Value   |
@@ -144,7 +145,8 @@ greatsql> SHOW STATUS LIKE 'Handler_read_%';
 +----------------------------+---------+
 
 greatsql> FLUSH STATUS;
-greatsql> -- 执行第二条（使用了窗口函数的）查询SQL
+
+-- 执行第二条（使用了窗口函数的）查询SQL
 greatsql> SHOW STATUS LIKE 'Handler_read_%';
 +----------------------------+-------+
 | Variable_name              | Value |

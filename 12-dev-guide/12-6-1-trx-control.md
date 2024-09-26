@@ -5,9 +5,9 @@
 
 在开始之前，先创建测试库表。
 ```sql
-greatsql> CREATE DATABASE trx;
-greatsql> USE trx;
-greatsql> CREATE TABLE `t1` (
+CREATE DATABASE trx;
+USE trx;
+CREATE TABLE `t1` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `c1` int unsigned NOT NULL DEFAULT '0',
   `c2` varchar(20) NOT NULL DEFAULT '',
@@ -50,22 +50,22 @@ greatsql> SELECT * FROM t1;
 - 设置 `autocommit = 0`（关闭自动提交），之后执行 `INSERT`、`UPDATE`、`DELETE`、`SELECT ... FOR UPDATE` 等语句时，都会开启一个新事务
 
 ```sql
-greatsql> SET autocommit = 0;
-greatsql> INSERT INTO t1 VALUES(3, 3, 'row3');
-greatsql> COMMIT;
+SET autocommit = 0;
+INSERT INTO t1 VALUES(3, 3, 'row3');
+COMMIT;
 
-greatsql> SET autocommit = 0;
-greatsql> UPDATE t1 SET c2 = 'row11' WHERE id=1;
-greatsql> COMMIT;
+SET autocommit = 0;
+UPDATE t1 SET c2 = 'row11' WHERE id=1;
+COMMIT;
 
-greatsql> SET autocommit = 0;
-greatsql> DELETE FROM t1 WHERE id=2;
-greatsql> COMMIT;
+SET autocommit = 0;
+DELETE FROM t1 WHERE id=2;
+COMMIT;
 
-greatsql> SET autocommit = 0;
-greatsql> SELECT * FROM t1 WHERE id=3 FOR UPDATE;
-greatsql> UPDATE t1 SET c2 = 'row33' WHERE id=3;
-greatsql> COMMIT;
+SET autocommit = 0;
+SELECT * FROM t1 WHERE id=3 FOR UPDATE;
+UPDATE t1 SET c2 = 'row33' WHERE id=3;
+COMMIT;
 ```
 
 执行完上述事务语句后，再次查询表数据，结果如下所示：

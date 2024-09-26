@@ -309,19 +309,15 @@ greatsql> ROLLBACK;                                                 │
 
 ## 隔离级别设置方法
 
-可以在 my.cnf 配置文件中的 `[mysqld]` 区间设定全局隔离级别，例如：
-```
-$ cat /etc/my.cnf
-...
+可以在 `my.cnf` 配置文件中的 `[mysqld]` 区间设定全局隔离级别，例如：
+```ini
 [mysqld]
-...
 transaction_isolation = REPEATABLE-READ
-...
 ```
 
 也可以在运行时利用SQL命令在线动态修改，例如：
 ```sql
-greatsql> SET [GLOBAL | SESSION] TRANSACTION ISOLATION LEVEL REPEATABLE READ; 
+SET [GLOBAL | SESSION] TRANSACTION ISOLATION LEVEL REPEATABLE READ; 
 ```
 
 在采用SQL命令修改隔离级别时，既可以修改全局（GLOBAL）隔离级别，也可以只修改当前会话（SESSION）隔离级别，甚至还支持只影响下一个事务的隔离级别设置。

@@ -23,19 +23,19 @@ GreatSQL 数据库中常用的事务控制语句包括 `START TRANSACTION`、`CO
 1. **START TRANSACTION**：开始一个事务。在开始一个事务后，所有的数据库操作将被视为一个整体，要么全部成功执行，要么全部回滚。
 
 ```sql
-greatsql> START TRANSACTION;
+START TRANSACTION;
 ```
 
 2. **COMMIT**：提交一个事务，将事务中的所有操作永久保存到数据库中。只有在执行 COMMIT 命令后，事务中的修改才会对其他会话可见。
 
 ```sql
-greatsql> COMMIT;
+COMMIT;
 ```
 
 3. **ROLLBACK**：回滚事务，将事务中的所有操作撤销，数据库恢复到事务开始之前的状态。
 
 ```sql
-greatsql> ROLLBACK;
+ROLLBACK;
 ```
 
 除了以上基本的事务控制语句外，GreatSQL 还支持 `SAVEPOINT` 语句用于设置保存点，可以在事务中进行部分回滚操作。例如：
@@ -43,22 +43,22 @@ greatsql> ROLLBACK;
 - 设置保存点：
 
 ```sql
-greatsql> SAVEPOINT savepoint_name;
+SAVEPOINT savepoint_name;
 ```
 
 - 部分回滚到保存点：
 
 ```sql
-greatsql> ROLLBACK TO SAVEPOINT savepoint_name;
+ROLLBACK TO SAVEPOINT savepoint_name;
 ```
 
 需要注意的是，GreatSQL 默认的事务隔离级别是 **可重复读（REPEATABLE READ）**，可以通过设置 `SET [GLOBAL | SESSION] TRANSACTION ISOLATION LEVEL` 语句来修改隔离级别，也可以在开始事务之前使用 `START TRANSACTION WITH ISOLATION LEVEL` 语句来设置。例如：
 
 ```sql
-greatsql> SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 
 -- 或者下面这样开始一个事务，并在该事务中发起一致性快照读
-greatsql> START TRANSACTION WITH CONSISTENT SNAPSHOT;
+START TRANSACTION WITH CONSISTENT SNAPSHOT;
 ```
 
 以上是 GreatSQL 数据库中常用的事务控制语句及其用法，可以根据具体业务需求来合理应用。

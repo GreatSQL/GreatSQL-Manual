@@ -36,7 +36,7 @@ FROM     标识从哪个表中选择
 ```
 - 选择全部列：
 
-例如查询 `world` 库中 `city` 表的所有数据
+例如，查询 `world` 库中 `city` 表的所有数据
 ```sql
 greatsql> SELECT * FROM world.city;
 +------+------------------------------------+-------------+------------------------+------------+
@@ -54,7 +54,7 @@ greatsql> SELECT * FROM world.city;
 
 - 选择指定的列
 
-例如查询 `world` 库中 `city` 表的 `ID` 和 `Name` 列
+例如，查询 `world` 库中 `city` 表的 `ID` 和 `Name` 列
 ```sql
 greatsql> SELECT ID, Name FROM world.city;
 +------+------------------------------------+
@@ -72,12 +72,12 @@ greatsql> SELECT ID, Name FROM world.city;
 语法如下：
 ```sql
 SELECT col1, col2, ...
-FROM table_name
-WHERE condition;
+  FROM table_name
+  WHERE condition;
 ```
 使用 `WHERE` 子句，将不满足条件的行过滤掉。
 
-例如查询 `world` 库中 `city` 表的数据，满足 `Name = "Kabul"` 的行
+例如，查询 `world` 库中 `city` 表的数据，满足 `Name = "Kabul"` 的行
 ```sql
 greatsql> SELECT * FROM world.city WHERE Name = "Kabul";
 +----+-------+-------------+----------+------------+
@@ -90,7 +90,7 @@ greatsql> SELECT * FROM world.city WHERE Name = "Kabul";
 ## 去重查询
 在 `SELECT` 语句中使用关键字 `DISTINCT` 去除重复行。
 
-例如查询 `world` 库中 `city` 表的 `CountryCode` 列有
+例如，查询 `world` 库中 `city` 表的 `CountryCode` 列有
 ```sql
 greatsql> SELECT CountryCode FROM city;
 +-------------+
@@ -121,7 +121,7 @@ greatsql> SELECT DISTINCT CountryCode FROM city;
 ## 别名查询
 可以使用关键字`AS`给查询结果设置别名
 
-例如查询 `world` 库中 `city` 表的 `CountryCode` 列数据，设置别名 `c`
+例如，查询 `world` 库中 `city` 表的 `CountryCode` 列数据，设置别名 `c`
 ```sql
 greatsql> SELECT CountryCode AS c FROM city;
 +-----+
@@ -139,7 +139,7 @@ greatsql> SELECT CountryCode AS c FROM city;
 - ASC（ascend）: 升序，默认升序
 - DESC（descend）:降序
 
-例如查询 `world` 库中 `city` 表的数据，按照 `Population` 列升序排列
+例如，查询 `world` 库中 `city` 表的数据，按照 `Population` 列升序排列
 ```sql
 greatsql> SELECT * FROM city ORDER BY `Population`;
 +------+---------------------+-------------+-------------+------------+
@@ -152,7 +152,7 @@ greatsql> SELECT * FROM city ORDER BY `Population`;
 | 2316 | Bantam              | CCK         | Home Island |        503 |
 ......下面结果省略
 ```
-例如查询 `world` 库中 `city` 表的数据，按照 `Population` 列降序排列。
+例如，查询 `world` 库中 `city` 表的数据，按照 `Population` 列降序排列。
 ```sql
 greatsql> SELECT * FROM city ORDER BY `Population` DESC;
 +------+-------------------+-------------+------------------+------------+
@@ -166,8 +166,9 @@ greatsql> SELECT * FROM city ORDER BY `Population` DESC;
 ......下面结果省略
 ```
 同时也可以分别对两列一个进行升序一个进行降序排序
-例如查询 `world` 库中 `city` 表的数据，按照 `CountryCode` 列升序排列，再按照 `Population
-列降序排列
+
+例如，查询 `world` 库中 `city` 表的数据，按照 `CountryCode` 列升序排列，再按照 `Population` 列降序排列
+
 ```sql
 greatsql> SELECT * FROM city ORDER BY `CountryCode` ASC,`Population` DESC;
 +-----+----------------+-------------+----------+------------+

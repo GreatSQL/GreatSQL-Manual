@@ -11,13 +11,16 @@
 - sakila database
 
 ## 实际案例分析
-例如在world database中的city表中，想查询那个城市的的人口比Shanghai人口多。整个查询步骤如下：
-1. 查询Shanghai的人口
-2. 在city表找出人口比Shanghai多的城市
+
+例如在 `world` 数据库中的 `city` 表中，想查询哪个城市的的人口比 *Shanghai* 人口多。整个查询步骤如下：
+
+1. 查询 *Shanghai* 的人口
+
+2. 在 `city` 表找出人口比 *Shanghai* 多的城市
 
 **方式1**
 
-首先我们查询Shanghai的人口
+首先查询 *Shanghai* 这个城市（`city = 'Shanghai'`）的人口
 ```sql
 greatsql> SELECT population FROM city WHERE name = 'Shanghai';
 +------------+
@@ -28,7 +31,7 @@ greatsql> SELECT population FROM city WHERE name = 'Shanghai';
 1 row in set (0.01 sec)
 ```
 
-Shanghai人口是9696300，接下来我们查询人口比Shanghai多城市的城市
+查询结果表明 *Shanghai* 人口是 *9696300*，接下来我们查询人口比 *Shanghai* 多城市的城市
 ```sql
 greatsql> SELECT name FROM city WHERE population > 9696300;
 +-----------------+
@@ -40,7 +43,7 @@ greatsql> SELECT name FROM city WHERE population > 9696300;
 +-----------------+
 3 rows in set (0.01 sec)
 ```
-就得出了要的结果，但这样查询效率不高，因为需要先查询Shanghai人口，再查询人口比Shanghai多城市的城市。
+就得出了要的结果，但这样查询效率不高，因为需要先查询 *Shanghai* 人口，再查询人口比 *Shanghai* 多城市的城市。
 
 **方式2**
 
@@ -48,7 +51,8 @@ greatsql> SELECT name FROM city WHERE population > 9696300;
 
 自连接查询示例如下：
 ```sql
-greatsql> SELECT c2.name FROM city c1,city c2 WHERE c1.name = 'Shanghai' AND c1.`population` < c2.`population`;
+greatsql> SELECT c2.name FROM city c1,city c2 WHERE
+  c1.name = 'Shanghai' AND c1.`population` < c2.`population`;
 +-----------------+
 | name            |
 +-----------------+
@@ -63,7 +67,8 @@ greatsql> SELECT c2.name FROM city c1,city c2 WHERE c1.name = 'Shanghai' AND c1.
 
 使用子查询，将Shanghai人口作为子查询，在city表中查询人口比该城市多城市的城市
 ```sql
-greatsql> SELECT name FROM city WHERE population > (SELECT population FROM city WHERE name = 'Shanghai');
+greatsql> SELECT name FROM city WHERE population >
+  (SELECT population FROM city WHERE name = 'Shanghai');
 +-----------------+
 | name            |
 +-----------------+
@@ -100,7 +105,8 @@ SELECT ... FROM table WHERE column = (subquery)
 
 例如在city表中查询人口比该城市多城市的城市
 ```sql
-greatsql> SELECT name FROM city WHERE population > (SELECT population FROM city WHERE name = 'Shanghai');
+greatsql> SELECT name FROM city WHERE population >
+  (SELECT population FROM city WHERE name = 'Shanghai');
 +-----------------+
 | name            |
 +-----------------+
@@ -111,15 +117,14 @@ greatsql> SELECT name FROM city WHERE population > (SELECT population FROM city 
 3 rows in set (0.00 sec)
 ```
 
-
 ## 多行子查询
 
 多行子查询返回多行结果。这些结果通常用于与主查询中的行进行比较，以确定它们是否满足某个条件。由于返回的是多行结果，因此不能直接用于等于或比较操作，而需要使用如 `IN`、`ANY`、`ALL` 等操作符。
 
 例如，使用city表，和country表，找到country为China的所有城市，并只显示前5条记录
 ```sql
-greatesql> SELECT name FROM city WHERE countrycode IN (SELECT code FROM country WHERE name = 'China')LIMIT 5;
-
+greatesql> SELECT name FROM city WHERE countrycode IN
+  (SELECT code FROM country WHERE name = 'China')LIMIT 5;
 +-----------+
 | name      |
 +-----------+
@@ -155,10 +160,10 @@ WHERE co.code IN (
     SELECT countrycode  
     FROM countrylanguage  
     WHERE IsOfficial = 'T'  
-)
-LIMIT 5;
+) LIMIT 5;
 ```
-执行结果如下：
+
+::: details 查看运行结果
 ```sql
 +----------------+--------------+
 | city_name      | country_name |
@@ -171,11 +176,15 @@ LIMIT 5;
 +----------------+--------------+
 5 rows in set (0.01 sec)
 ```
+:::
+
+解析
+
 1. 子查询 `SELECT countrycode FROM countrylanguage WHERE IsOfficial = TRUE` 首先从 countrylanguage 表中选取所有官方语言的国家ID。
+
 2. 主查询通过 `JOIN` 关联 city 和 country 表，并通过 `WHERE` 子句筛选出那些 ID 在子查询结果中的国家。
+
 3. 最后，查询返回这些国家的所有城市名称和对应的国家名称。
-
-
 
 
 **扫码关注微信公众号**

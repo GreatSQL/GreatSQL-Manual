@@ -32,21 +32,22 @@ SELECT * FROM A INNER JOIN B ON A.key = B.key;
 伪代码如下：
 ```sql
 SELECT 字段列表
-FROM A表 INNER JOIN B表
-ON 关联条件
-WHERE 其他子句;
+  FROM A表 INNER JOIN B表
+  ON 关联条件
+  WHERE 其他子句;
 ```
 例如，简单的内连接（INNER JOIN）查询，用于连接 `city` 表和 `country` 表，并基于这两个表之间的共同字段（即city表的CountryCode字段和country表的Code字段）来获取数据。
 ```sql
 SELECT     
-    city.Name AS CityName,  
-    country.Name AS CountryName  
-FROM   city    
-INNER JOIN   country   
-ON city.CountryCode = country.Code
-limit 5;
+  city.Name AS CityName,  
+  country.Name AS CountryName  
+FROM city    
+  INNER JOIN country   
+  ON city.CountryCode = country.Code
+  LIMIT 5;
 ```
-执行结果如下：
+
+::: details 查看运行结果
 ```sql
 +----------------+-------------+
 | CityName       | CountryName |
@@ -59,6 +60,8 @@ limit 5;
 +----------------+-------------+
 5 rows in set (0.00 sec)
 ```
+:::
+
 再举一个较复杂的例子：
 
 三表连接，查询 `city` 表、`country` 表和 `countrylanguage` 表，并基于这三个表之间的共同字段（即city表的
@@ -80,7 +83,8 @@ WHERE
     countrylanguage.IsOfficial = 'T' -- 假设我们只关心是否为官方语言
 LIMIT 5;
 ```
-执行结果如下：
+
+::: details 查看运行结果
 ```sql
 +----------------+-------------+----------+
 | CityName       | CountryName | Language |
@@ -93,6 +97,7 @@ LIMIT 5;
 +----------------+-------------+----------+
 5 rows in set (0.01 sec)
 ```
+:::
 
 ## 左外连接（LEFT OUTER JOIN）
 左外连接基本语法格式如下：
@@ -102,9 +107,9 @@ SELECT * FROM A LEFT JOIN B ON A.key = B.key;
 伪代码如下：
 ```sql
 SELECT 字段列表
-FROM A表 LEFT JOIN B表
-ON 关联条件
-WHERE 其他子句;
+  FROM A表 LEFT JOIN B表
+  ON 关联条件
+  WHERE 其他子句;
 ```
 
 当使用左外连接时，你会从左边的表中选择所有的记录，并只选择与右边表匹配的记录。如果右边的表中没有匹配的记录，则结果集中对应的字段将包含 NULL 值。
@@ -117,10 +122,11 @@ SELECT
 FROM   
     city  
 LEFT JOIN country 
-ON city.CountryCode = country.Code
-LIMIT 5;
+  ON city.CountryCode = country.Code
+  LIMIT 5;
 ```
-执行结果如下：
+
+::: details 查看运行结果
 ```sql
 +----------------+-------------+
 | CityName       | CountryName |
@@ -133,6 +139,8 @@ LIMIT 5;
 +----------------+-------------+
 5 rows in set (0.01 sec)
 ```
+:::
+
 再举一个较复杂的例子：
 
 在world数据库的city、country和countrylanguage三张表的情况下，做一个左外连接来获取所有城市及其对应的国家和官方语言
@@ -142,12 +150,13 @@ SELECT city.name AS 城市名称,
        countrylanguage.language AS 官方语言,
        countrylanguage.percentage AS 说官方语言的人的百分比
 FROM country
-INNER JOIN city ON country.capital = city.id
-INNER JOIN countrylanguage ON country.code = countrylanguage.countrycode
-WHERE countrylanguage.isofficial = 'T'
-LIMIT 5;
+  INNER JOIN city ON country.capital = city.id
+  INNER JOIN countrylanguage ON country.code = countrylanguage.countrycode
+  WHERE countrylanguage.isofficial = 'T'
+  LIMIT 5;
 ```
-执行结果如下：
+
+::: details 查看运行结果
 ```sql
 +--------------+--------------+--------------+-----------------------------------+
 | 城市名称      | 国家名称     | 官方语言      | 说官方语言的人的百分比             |
@@ -160,6 +169,7 @@ LIMIT 5;
 +--------------+--------------+--------------+-----------------------------------+
 5 rows in set (0.00 sec)
 ```
+:::
 ### 左外连接排除B部分
 若要排除B部分，则在WHRER语句中添加`IS NULL`条件，如下：
 ```sql
@@ -177,7 +187,8 @@ LEFT JOIN
 WHERE   
     country.Code IS NULL;
 ```
-结果如下：
+
+查询结果如下：
 ```sql
 Empty set (0.01 sec)
 ```
@@ -186,17 +197,18 @@ Empty set (0.01 sec)
 插入一条数据，测试该语句是否可以查询到为NULL的数据
 ```sql
 -- 取消原表中NOT NULL约束
-greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3)
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
 -- 插入一条数据，该数据没有对应国家
-greatsql> INSERT INTO CITY VALUES(4080,'greatsql',NULL,'GREATSQL',6666);
+greatsql> INSERT INTO CITY VALUES(4080, 'greatsql', NULL, 'GREATSQL', 6666);
 ```
 执行结果如下：
 ```sql
 greatsql> SELECT city.Name AS CityName,country.Name AS CountryName
-FROM city LEFT JOIN country 
-ON city.CountryCode = country.Code  
-WHERE country.Code IS NULL;
-
+  FROM city LEFT JOIN country 
+  ON city.CountryCode = country.Code  
+  WHERE country.Code IS NULL;
 +----------+-------------+
 | CityName | CountryName |
 +----------+-------------+
@@ -208,8 +220,10 @@ WHERE country.Code IS NULL;
 ```sql
 -- 删除这条插入的数据
 greatsql> DELETE FROM CITY WHERE ID=4080;
+
 -- 还原原表中NOT NULL约束
-greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL;
+greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3)
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL;
 ```
 
 ## 右外连接（RIGHT OUTER JOIN）
@@ -220,9 +234,9 @@ SELECT * FROM A RIGHT JOIN B ON A.key = B.key;
 伪代码如下：
 ```sql
 SELECT 字段列表
-FROM A表 RIGHT JOIN B表
-ON 关联条件
-WHERE 其他子句;
+  FROM A表 RIGHT JOIN B表
+  ON 关联条件
+  WHERE 其他子句;
 ```
 当使用右外连接时，你会从右边的表中选择所有的记录，并只选择与左边表匹配的记录。如果左边的表中没有匹配的记录，则结果集中对应的字段将包含 NULL 值。
 
@@ -237,7 +251,8 @@ RIGHT JOIN
     city ON country.Code = city.CountryCode
 LIMIT 5;
 ```
-结果如下：
+
+::: details 查看运行结果
 ```sql
 +-------------+----------------+
 | CountryName | CityName       |
@@ -250,6 +265,8 @@ LIMIT 5;
 +-------------+----------------+
 5 rows in set (0.01 sec)
 ```
+:::
+
 ### 右外连接排除A部分
 若要排除A部分，则在WHRER语句中添加`IS NULL`条件，如下：
 ```sql
@@ -267,7 +284,8 @@ RIGHT JOIN
 WHERE 
     city.CountryCode IS NULL;
 ```
-结果如下：
+
+查询结果如下：
 ```sql
 Empty set (0.01 sec)
 ```
@@ -276,17 +294,18 @@ Empty set (0.01 sec)
 插入一条数据，测试该语句是否可以查询到为NULL的数据
 ```sql
 -- 取消原表中NOT NULL约束
-greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3)
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
 -- 插入一条数据，该数据没有对应国家
 greatsql> INSERT INTO CITY VALUES(4080,'greatsql',NULL,'GREATSQL',6666);
 ```
 执行结果如下：
 ```sql
 greatsql> SELECT country.Name AS CountryName,city.Name AS CityName  
-FROM country RIGHT JOIN city 
-ON country.Code = city.CountryCode
-WHERE city.CountryCode IS NULL;
-
+  FROM country RIGHT JOIN city 
+  ON country.Code = city.CountryCode
+  WHERE city.CountryCode IS NULL;
 +-------------+----------+
 | CountryName | CityName |
 +-------------+----------+
@@ -294,30 +313,34 @@ WHERE city.CountryCode IS NULL;
 +-------------+----------+
 1 row in set (0.00 sec)
 ```
+
 测试完成后还原数据
 ```sql
 -- 删除这条插入的数据
 greatsql> DELETE FROM CITY WHERE ID=4080;
+
 -- 还原原表中NOT NULL约束
-greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL;
+greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3)
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL;
 ```
 ## 全连接
-在GreatSQL中，全连接是用左外的A `union` 右外的B。
+在GreatSQL中，全连接是用左外的A `UNION` 右外的B 查询结果合并而成。
 
 格式如下：
 ```sql
 SELECT 字段列表
-FROM A表 LEFT JOIN B表
-ON 关联条件
-WHERE 等其他子句
+  FROM A表 LEFT JOIN B表
+  ON 关联条件
+  WHERE 等其他子句
 
 UNION 
 
 SELECT 字段列表
-FROM A表 RIGHT JOIN B表
-ON 关联条件
-WHERE 等其他子句;
+  FROM A表 RIGHT JOIN B表
+  ON 关联条件
+  WHERE 等其他子句;
 ```
+
 例如使用GreatSQL来实现一个类似全连接的效果，查询city和country表，获取所有城市和它们对应的国家（如果有的话），以及没有对应城市的国家（如果有的话）：
 ```sql
 -- 使用UNION组合左连接和右连接的结果来实现全连接的效果  
@@ -338,9 +361,10 @@ FROM
     country  
 LEFT JOIN   
     city ON country.Code = city.CountryCode
-limit 5;
+LIMIT 5;
 ```
-执行结果如下：
+
+::: details 查看运行结果
 ```sql
 +----------------+-------------+
 | CityName       | CountryName |
@@ -353,22 +377,25 @@ limit 5;
 +----------------+-------------+
 5 rows in set (0.00 sec)
 ```
+:::
+
 ### 全外连接
-全外连接既使用左外的 (A -  A∩B)  union 右外的（B - A∩B）
+全外连接既使用左外的 (A -  A∩B) `UNION` 右外的 (B - A∩B) 查询结果合并而成。
 语法格式如下：
 ```sql
 SELECT 字段列表
-FROM A表 LEFT JOIN B表
-ON 关联条件
-WHERE 从表关联字段 IS NULL AND 等其他子句
+  FROM A表 LEFT JOIN B表
+  ON 关联条件
+  WHERE 从表关联字段 IS NULL AND 等其他子句
 
 UNION
 
 SELECT 字段列表
-FROM A表 RIGHT JOIN B表
-ON 关联条件
-WHERE 从表关联字段 IS NULL AND 等其他子句
+  FROM A表 RIGHT JOIN B表
+  ON 关联条件
+  WHERE 从表关联字段 IS NULL AND 等其他子句
 ```
+
 例如查询每个国家的城市，以及没有对应城市的国家：
 ```sql
 greatsql> SELECT   
@@ -386,9 +413,10 @@ SELECT
 FROM country LEFT JOIN city 
 ON country.Code = city.CountryCode
 WHERE country.Code IS NULL
-limit 5;
+LIMIT 5;
 ```
-执行结果如下：
+
+查询结果如下：
 ```sql
 Empty set (0.01 sec)
 ```
@@ -397,7 +425,9 @@ Empty set (0.01 sec)
 插入一条数据，测试该语句是否可以查询到为NULL的数据
 ```sql
 -- 取消原表中NOT NULL约束
-greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3)
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
 -- 插入一条数据，该数据没有对应国家
 greatsql> INSERT INTO CITY VALUES(4080,'greatsql',NULL,'GREATSQL',6666);
 ```
@@ -418,8 +448,7 @@ SELECT
 FROM country LEFT JOIN city 
 ON country.Code = city.CountryCode
 WHERE country.Code IS NULL
-limit 5;
-
+LIMIT 5;
 +----------+-------------+
 | CityName | CountryName |
 +----------+-------------+
@@ -427,14 +456,16 @@ limit 5;
 +----------+-------------+
 1 row in set (0.05 sec)
 ```
+
 测试完成后还原数据
 ```sql
 -- 删除这条插入的数据
 greatsql> DELETE FROM CITY WHERE ID=4080;
--- 还原原表中NOT NULL约束
-greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL;
-```
 
+-- 还原原表中NOT NULL约束
+greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3)
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL;
+```
 
 **扫码关注微信公众号**
 

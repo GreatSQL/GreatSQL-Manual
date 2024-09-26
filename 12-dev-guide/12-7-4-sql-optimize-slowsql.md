@@ -5,9 +5,10 @@
 
 ## 慢查询 SQL 相关设置
 
-在默认设置模式下，是不会记录慢查询 SQL 的，需要自行配置，可以参考以下设置模板：
+在默认设置模式下，是不会记录慢查询 SQL 的，需要自行配置，可以参考以下 `my.cnf` 设置模板：
 
-```
+```ini
+[mysqld]
 slow_query_log = 1
 slow_query_log_file = slow.log
 log_slow_extra = 1
@@ -37,7 +38,7 @@ log_slow_slave_statements = 1
 
 一条经典的慢查询 SQL 记录如下：
 
-```
+```log
 # Time: 2022-07-26T09:59:16.979869+08:00
 # User@Host: root[root] @ localhost []  Id: 945574
 # Query_time: 0.001096  Lock_time: 0.000127 Rows_sent: 199  Rows_examined: 1600 Thread_id: 945574 Errno: 0 Killed: 0 Bytes_received: 0 Bytes_sent: 25143 Read_first: 1 Read_last: 0 Read_key: 1601 Read_next: 0 Read_prev: 0 Read_rnd: 0 Read_rnd_next: 1801 Sort_merge_passes: 0 Sort_range_count: 0 Sort_rows: 0 Sort_scan_count: 0 Created_tmp_disk_tables: 0 Created_tmp_tables: 1 Start: 2022-07-26T09:59:16.978773+08:00 End: 2022-07-26T09:59:16.979869+08:00 Schema: sbtest Rows_affected: 0
@@ -67,7 +68,7 @@ select c, count(*) from t1 group by c;
 
 甚至还可以设置 `log_slow_verbosity = 'FULL,profiling'`，在慢查询日志中，记录详细的探针（profiling）信息，例如：
 
-```
+```log
 # Time: 2022-07-26T10:35:15.599728+08:00
 # User@Host: root[root] @ localhost []  Id: 950529
 # Query_time: 0.001020  Lock_time: 0.000118 Rows_sent: 199  Rows_examined: 1600 Thread_id: 950529 Errno: 0 Killed: 0 Bytes_received: 0 Bytes_sent: 25143 Read_first: 1 Read_last: 0 Read_key: 1601 Read_next: 0 Read_prev: 0 Read_rnd: 0 Read_rnd_next: 1801 Sort_merge_passes: 0 Sort_range_count: 0 Sort_rows: 0 Sort_scan_count: 0 Created_tmp_disk_tables: 0 Created_tmp_tables: 1 Start: 2022-07-26T10:35:15.598708+08:00 End: 2022-07-26T10:35:15.599728+08:00 Schema: sbtest Rows_affected: 0
@@ -95,13 +96,13 @@ select c, count(*) from t1 group by c;
 
 本文中以简单分析 slow query log 文件为例：
 
-```shell
-$ pt-query-digest /data/GreatSQL/slow.log > /tmp/slow-digest.txt
+```bash
+pt-query-digest /data/GreatSQL/slow.log > /tmp/slow-digest.txt
 ```
 
 可以不用加任何额外参数，直接分析，并将分析结果输出到另一个文件，在这个文件中可以直接展示各查询的执行时间、次数、占比等信息，例如：
 
-```
+```log
 /* 工具分析日志消耗的用户时间、系统时间，以及物理内存，虚拟内存大小 */
 # 15.7s user time, 360ms system time, 41.25M rss, 186.59M vsz
 # Current date: Sat Jan  7 23:11:32 2022
@@ -130,8 +131,7 @@ $ pt-query-digest /data/GreatSQL/slow.log > /tmp/slow-digest.txt
 
 其次是根据响应总耗时排序，就可以看到哪些 SQL 可能存在性能瓶颈：
 
-```
-...
+```log
 # Profile
 /* 排名、SQL语句ID/标识符、响应总耗时、占比、总请求数、平均每次请求耗时、响应时间Variance-to-mean的比率、SQL语句 */
 # Rank Query ID           Response time    Calls R/Call V/M   Item
@@ -154,7 +154,7 @@ $ pt-query-digest /data/GreatSQL/slow.log > /tmp/slow-digest.txt
 
 接下来是具体某条SQL的分析情况，平均及最大耗时，平均及最大扫描行数，不同响应耗时区间占比情况等：
 
-```
+```log
 # Query 1: 0 QPS, 0x concurrency, ID 0xCBFFFDC5A18B5CD4 at byte 9260279 __
 # This item is included in the report because it matches --limit.
 # Scores: V/M = 0.44
@@ -203,8 +203,8 @@ P.S，还可以利用 `pt-query-digest` 工具将慢查询 SQL 分析后写入�
 
 首先，查看该 SQL 的执行计划：
 
-```
-greatsql> explain select c, count(*) from t1 group by c\G
+```sql
+greatsql> EXPLAIN SELECT c, COUNT(*) FROM t1 GROUP BY c\G
            id: 1
   select_type: SIMPLE
         table: t1
@@ -222,10 +222,10 @@ possible_keys: NULL
 
 针对上述情况，且上面的 SQL 也比较简单，只需要对 `c` 列添加索引即可：
 
-```
-greatsql> alter table t1 add index (c );
+```sql
+greatsql> ALTER TABLE t1 ADD INDEX (c);
 
-# 再次查看执行计划
+-- 再次查看执行计划
 greatsql> explain select c, count(*) from t1 group by c\G
 *************************** 1. row ***************************
            id: 1
