@@ -1,60 +1,60 @@
 # Percona Toolkit 监控类
 
 ::: tip 小贴士
-`$`为命令提示符、`greatsql>`为GreatSQL数据库提示符。
+`$`为 Linux 命令提示符、`greatsql>`为 GreatSQL 数据库提示符。
 :::
 
 ## 监控类
 
-在Percona Toolkit中监控类共有以下工具
+在 Percona Toolkit 中性能类共有以下工具：
 
-- `pt-deadlock-logger`：提取和记录MySQL/GreatSQL死锁
-- `pt-fk-error-logger`：提取和记录外键信息
-- `pt-mext`：并行查看status样本信息
-- `pt-query-digest`：分析查询日志，并产生报告
-- `pt-mongodb-summary`：收集有关 MongoDB 集群的信息
-- `pt-pg-summary`：收集有关 PostgreSQL 集群的信息
+- `pt-deadlock-logger`：提取和记录MySQL/GreatSQL死锁。
+- `pt-fk-error-logger`：提取和记录外键信息。
+- `pt-mext`：并行查看status样本信息。
+- `pt-query-digest`：分析查询日志，并产生报告。
+- `pt-mongodb-summary`：收集有关 MongoDB 集群的信息。
+- `pt-pg-summary`：收集有关 PostgreSQL 集群的信息。
 
 ## pt-deadlock-logger
 
 ### 概要
 
-提取和记录 MySQL/GreatSQL 死锁
+提取和记录 MySQL/GreatSQL 死锁。
 
 **用法**
 
 ```bash
-- pt-deadlock-logger [OPTIONS] DSN
+pt-deadlock-logger [OPTIONS] DSN
 ```
 
-记录 MySQL/GreatSQL 死锁的信息。信息打印到 `STDOUT` ，也可以通过指定 `--dest` 保存到表中。除非指定 `--run-time` 或 `--iterations` ，否则该工具将永远运行
+记录 MySQL/GreatSQL 死锁的信息。信息打印到 `STDOUT` ，也可以通过指定 `--dest` 保存到表中。除非指定 `--run-time` 或 `--iterations` ，否则该工具将永远运行。
 
 ### 选项
 
-该工具所有选项如下
+该工具所有选项如下：
 
 | 参数                | 含义                                                         |
 | ------------------- | ------------------------------------------------------------ |
 | --ask-pass          | 连接 MySQL/GreatSQL 时提示输入密码                           |
 | --charset           | 字符集                                                       |
-| --clear-deadlocks  | 创建一个小的死锁。利用新产生的这个死锁刷新`Engine InnoDB Status`中的死锁信息，间接达到清除`Engine InnoDB Status`中大的死锁信息的结果，表名为`percona_schema.clear_deadlocks`这个表一定不能存在，脚本会自动创建表并在生成死锁后删除表，建表语句`CREATE TABLE percona_schema.clear_deadlocks (a INT PRIMARY KEY) ENGINE=InnoDB` |
+| --clear-deadlocks  | 创建一个小的死锁。<br />利用新产生的这个死锁刷新`Engine InnoDB Status`中的死锁信息，间接达到清除`Engine InnoDB Status`中大的死锁信息的结果，表名为`percona_schema.clear_deadlocks`这个表一定不能存在，脚本会自动创建表并在生成死锁后删除表，建表语句`CREATE TABLE percona_schema.clear_deadlocks (a INT PRIMARY KEY) ENGINE=InnoDB` |
 | --columns           | 结果集字段                                                   |
 | --config            | 读取这个逗号分隔的配置文件列表，如果指定，这必须是命令行上的第一个选项 |
 | --create-dest-table | 创建`--dest`指定的表                                         |
 | --daemonize         | 后台运行                                                     |
 | --database          | 连接到该数据库                                               |
 | --defaults-file     | 只从给定文件中读取 MySQL/GreatSQL 选项                       |
-| --dest              | 用DSN的格式写存储死锁的位置，至少要指定库和表                |
+| --dest              | 用 DSN 的格式写存储死锁的位置，至少要指定库和表                |
 | --help              | 显示帮助                                                     |
 | --host              | 连接到主机                                                   |
 | --interval          | 检查死锁的频率，如果未指定，将默认永远运行                   |
 | --iterations        | 检查死锁的次数，默认情况下，如果没指定，则为无限次数，退出的时间由`--run-time`来限制 |
-| --log               | 守护进程时将所有输出打印到此文件。                           |
+| --log               | 守护进程时将所有输出打印到此文件                           |
 | --numeric-ip        | 将 IP 地址表示为整数。                                       |
 | --password          | 用于连接的密码                                               |
 | --pid               | 创建给定的 PID 文件                                          |
 | --port              | 用于连接的端口号                                             |
-| --quiet             | 不要死锁，仅将错误和警告打印到STDERR                         |
+| --quiet             | 不要死锁，仅将错误和警告打印到 STDERR                         |
 | --run-time          | 退出前要跑多长时间。默认情况下永远运行，每 `--interval` 秒检查一次死锁。 |
 | --set-vars          | 在这个以逗号分隔的 `variable=value` 对列表中设置 MySQL/GreatSQL 变量 |
 | --socket            | 用于连接的套接字文件                                         |
@@ -65,7 +65,7 @@
 
 ### 最佳实践
 
-如果想存储 pt-deadlock-logger 提取的有关死锁的所有信息，建议使用以下表结构：
+如果想存储 `pt-deadlock-logger` 提取的有关死锁的所有信息，建议使用以下表结构：
 
 ```sql
 -- 可以根据 --columns 的字段进行调整
@@ -90,24 +90,24 @@ CREATE TABLE deadlocks (
 ) ENGINE=InnoDB;
 ```
 
-- `server`：发生死锁的（源）服务器
-- `ts`：上次检测到死锁的日期和时间
-- `thread`：GreatSQL线程编号，和`SHOW FULL PROCESSLIST`中的ID一致
-- `txn_id`：InnoDB事务ID
-- `txn_time`：发生死锁时事务处于活动状态的时间
-- `user`：连接的数据库用户名
-- `hostname`：连接的主机
-- `ip`：连接的 IP 地址。如果指定`--numeric-ip`，则将转换为无符号整数
-- `db`：发生死锁的库
-- `tbl`：发生死锁的表
-- `idx`：发生死锁的索引
-- `lock_type`：导致死锁的锁上持有的事务的类型
-- `lock_mode`：导致死锁的锁的锁定模式
-- `wait_hold`：事务是在等待锁还是持有锁
-- `victim`：事务是否被选为死可回滚的事务并进行回滚
-- `query`：导致死锁的查询
+- `server`：发生死锁的（源）服务器。
+- `ts`：上次检测到死锁的日期和时间。
+- `thread`：GreatSQL线程编号，和`SHOW FULL PROCESSLIST`中的ID一致。
+- `txn_id`：InnoDB事务ID。
+- `txn_time`：发生死锁时事务处于活动状态的时间。
+- `user`：连接的数据库用户名。
+- `hostname`：连接的主机。
+- `ip`：连接的 IP 地址。如果指定`--numeric-ip`，则将转换为无符号整数。
+- `db`：发生死锁的库。
+- `tbl`：发生死锁的表。
+- `idx`：发生死锁的索引。
+- `lock_type`：导致死锁的锁上持有的事务的类型。
+- `lock_mode`：导致死锁的锁的锁定模式。
+- `wait_hold`：事务是在等待锁还是持有锁。
+- `victim`：事务是否被选为死可回滚的事务并进行回滚。
+- `query`：导致死锁的查询。
 
-首先创建上方提供的`deadlocks`表，也可在命令中加入`--create-dest-table`自动创建表
+首先创建上方提供的`deadlocks`表，也可在命令中加入`--create-dest-table`自动创建表：
 
 ```sql
 greatsql> CREATE TABLE deadlocks 
@@ -115,16 +115,16 @@ greatsql> CREATE TABLE deadlocks
 Query OK, 0 rows affected (0.06 sec)
 ```
 
-将 host1 主机产生的死锁信息保存在 host2 主机 test_db 库下面的 deadlocks 表中
+将 host1 主机产生的死锁信息保存在 host2 主机 test_db 库下面的 deadlocks 表中：
 
 ```bash
 pt-deadlock-logger h=localhost,P=3306,u=root,p='' --dest h=localhost,P=3307,u=root,p='',D=test_db,t=deadlocks
 ```
 ::: tip 小贴士
-因为没有指定`--run-time`所以该工具会一直在当前窗口运行，如果要转到后台运行可以使用`--daemonize`
+因为没有指定`--run-time`所以该工具会一直在当前窗口运行，如果要转到后台运行可以使用`--daemonize`。
 :::
 
-人为制造一个死锁
+人为制造一个死锁：
 
 | session 1                                   | session 2                                                    |
 | ------------------------------------------- | ------------------------------------------------------------ |
@@ -135,7 +135,7 @@ pt-deadlock-logger h=localhost,P=3306,u=root,p='' --dest h=localhost,P=3307,u=ro
 |                                             | UPDATE t1 SET c2 = 'GreatSQL' WHERE id = 1;                  |
 |                                             | ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting transaction |
 
-查看`deadlocks`表
+查看`deadlocks`表：
 
 ```bash
 +-----------+---------------------+--------+--------+----------+------+-----------+----+---------+-----+---------+-----------+-----------+-----------+--------+--------------------------------------------+
@@ -147,7 +147,7 @@ pt-deadlock-logger h=localhost,P=3306,u=root,p='' --dest h=localhost,P=3307,u=ro
 2 rows in set (0.00 sec)
 ```
 
-`deadlocks`表中记录了锁的细节、类型、SQL语句，比起直接看`SHOW ENGINE INNODB STATUS`方便
+`deadlocks`表中记录了锁的细节、类型、SQL语句，比起直接看`SHOW ENGINE INNODB STATUS`方便。
 
 ## pt-fk-error-logger
 
@@ -207,13 +207,13 @@ CREATE TABLE foreign_key_errors (
 - `ts`：记录时间
 - `error`：错误描述
 
-将host1主机产生的违反外键约束信息保存在host2主机test_db库下面的foreign_key_errors表中
+将host1主机产生的违反外键约束信息保存在host2主机test_db库下面的foreign_key_errors表中：
 
 ```bash
 pt-fk-error-logger h=localhost,P=3306,u=root,p='',S=/data/GreatSQL01/mysql.sock --dest h=localhost,P=3307,u=root,p='',S=/data/GreatSQL02/mysql.sock,D=test_db,t=foreign_key_errors
 ```
 
-人为创建违反索引约束
+人为创建违反索引约束：
 
 ```sql
 -- 建t_fk1表
@@ -236,7 +236,7 @@ CREATE TABLE `t_fk2` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
-往t_fk1表插入数据
+往t_fk1表插入数据：
 
 ```sql
 greatsql> INSERT INTO t_fk1 VALUES(1,1,'a','a');
@@ -244,14 +244,14 @@ greatsql> INSERT INTO t_fk1 VALUES(2,2,'b','b');
 greatsql> INSERT INTO t_fk1 VALUES(3,3,'c','c');
 ```
 
-往t_fk2表插入数据
+往t_fk2表插入数据：
 
 ```sql
 greatsql> INSERT INTO t_fk2 VALUES(5,5);
 ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`test_db`.`t_fk2`, CONSTRAINT `t2_ibfk_1` FOREIGN KEY (`id2`) REFERENCES `t1` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE)
 ```
 
-查看`foreign_key_errors`表
+查看 `foreign_key_errors` 表：
 
 ```SQL
 greatsql> SELECT * FROM foreign_key_errors\G
@@ -289,17 +289,17 @@ PHYSICAL RECORD: n_fields 5; compact format; info bits 0
 
 ### 概要
 
-并排查看 MySQL/GreatSQL `SHOW GLOBAL STATUS` 的例子
+并排查看 MySQL/GreatSQL `SHOW GLOBAL STATUS` 的例子。
 
 **用法**
 
 ```bash
-- pt-mext [OPTIONS] -- COMMAND
+pt-mext [OPTIONS] -- COMMAND
 ```
 
 ### 选项
 
-该工具所有选项如下
+该工具所有选项如下：
 
 | 参数       | 含义                 |
 | ---------- | -------------------- |
@@ -317,14 +317,14 @@ Aborted_connects                             18                    0
 Acl_cache_items_count                         0                    0
 Binlog_cache_disk_use                        15                    0
 Binlog_cache_use                            118                    0
-······下方省略
+# ······下方省略
 ```
 
-- `-i10`：采集间隔
+- `-i10`：采集间隔。
 
-- `-c5`：采集次数
+- `-c5`：采集次数。
 
-- `-r`：相对的
+- `-r`：相对的。
 
 上述命令中会有三次迭代，但只会输出第一次的结果，第二次和第一次相差的结果。意味着这会详细的列出每个变量在这一阶段的一个初始值(第一列)以及每两个采样点的差异值。
 
@@ -334,7 +334,9 @@ Binlog_cache_use                            118                    0
 
 ### 概要
 
-pt-query-digest 是用于分析 MySQL/GreatSQL 慢查询的一个工具，它可以分析Binlog、General log、Slowlog，也可以通过 `SHOWPROCESSLIST` 或者通过 `tcpdump` 抓取的 MySQL/GreatSQL 协议数据来进行分析。可以把分析结果输出到文件中，分析过程是先对查询语句的条件进行参数化，然后对参数化以后的查询进行分组统计，统计出各查询的执行时间、次数、占比等，可以借助分析结果找出问题进行优化。
+pt-query-digest 是用于分析 MySQL/GreatSQL 慢查询的一个工具，它可以分析Binlog、General log、Slowlog，也可以通过 `SHOWPROCESSLIST` 或者通过 `tcpdump` 抓取的 MySQL/GreatSQL 协议数据来进行分析。
+
+可以把分析结果输出到文件中，分析过程是先对查询语句的条件进行参数化，然后对参数化以后的查询进行分组统计，统计出各查询的执行时间、次数、占比等，可以借助分析结果找出问题进行优化。
 
 **用法**
 
@@ -359,10 +361,10 @@ pt-query-digest [OPTIONS] [FILES] [DSN]
 | --daemonize                 | 后台运行                                                     |
 | --database                  | 连接到该数据库                                               |
 | --defaults-file             | 只从给定文件中读取 MySQL/GreatSQL 选项                       |
-| --embedded-attributes       | 两个Perl正则表达式模式，用于捕获查询中嵌入的伪属性           |
+| --embedded-attributes       | 两个 Perl 正则表达式模式，用于捕获查询中嵌入的伪属性           |
 | --expected-range            | 当数量多于或少于预期时解释项目（默认值为5,10）               |
-| --explain                   | 使用此 DSN 运行示例查询的 EXPLAIN 并打印结果                 |
-| --filter                    | 丢弃此Perl代码未返回true的事件                               |
+| --explain                   | 使用此 DSN 运行示例查询的 `EXPLAIN` 并打印结果                 |
+| --filter                    | 丢弃此 Perl 代码未返回 true 的事件                               |
 | --group-by                  | 按事件的哪个属性进行分组                                     |
 | --help                      | 显示帮助                                                     |
 | --history                   | 在给定表中保存每个查询类的指标                               |
@@ -402,7 +404,7 @@ pt-query-digest [OPTIONS] [FILES] [DSN]
 | --socket                    | 用于连接的套接字文件                                         |
 | --timeline                  | 显示事件的时间表                                             |
 | --type                      | 要解析的输入类型                                             |
-| --until                     | 截止时间，配合since可以分析一段时间内的慢查询                |
+| --until                     | 截止时间，配合 since 可以分析一段时间内的慢查询                |
 | --user                      | 登陆的用户                                                   |
 | --variations                | 报告这些属性值的变化数量                                     |
 | --version                   | 显示版本                                                     |
@@ -446,12 +448,12 @@ Query size        15.50k      30     250  133.39  202.40   52.84  143.84
 ......下方省略
 ```
 
-- unique：唯一查询数量，即对查询条件进行参数化以后，总共有多少个不同的查询
-- 95%：把所有值从小到大排列，位置位于95%的那个数
-- median：中位数，把所有值从小到大排列，位置位于中间那个数
+- unique：唯一查询数量，即对查询条件进行参数化以后，总共有多少个不同的查询。
+- 95%：把所有值从小到大排列，位置位于95%的那个数。
+- median：中位数，把所有值从小到大排列，位置位于中间那个数。
 
 ::: tip 小贴士
-如果没有命令hostname可能会导致报错`error: Can't exec "hostname"`此时下载`inetutils`即可
+如果没有命令hostname可能会导致报错`error: Can't exec "hostname"`此时下载`inetutils`即可。
 :::
 
 **第二部分**
@@ -468,16 +470,16 @@ Rank Query ID                            Response time Calls R/Call  V/M   Item
 
 这部分对查询进行参数化并分组，然后对各类查询的执行情况进行分析，结果按总执行时长，从大到小排序。
 
-- Response：总响应时间
-- time：该查询在本次分析中总的时间占比
-- Calls：执行次数，即本次分析总共有多少条这种类型的查询语句
-- R/Call：平均每次执行的响应时间
-- V/M：响应时间Variance-to-mean的比率
-- Item：查询对象
+- Response：总响应时间。
+- time：该查询在本次分析中总的时间占比。
+- Calls：执行次数，即本次分析总共有多少条这种类型的查询语句。
+- R/Call：平均每次执行的响应时间。
+- V/M：响应时间Variance-to-mean的比率。
+- Item：查询对象。
 
 **第三部分**
 
-此部分列出了第一个查询的详细统计结果，列出了执行次数、最大、最小、平均、95%、标准、中位数的统计
+此部分列出了第一个查询的详细统计结果，列出了执行次数、最大、最小、平均、95%、标准、中位数的统计。
 
 ```bash
 Query 1: 0.02 QPS, 0.92x concurrency, ID 0x4029831C8032DEE4724E42576E2C52A6 at byte 1789
@@ -516,27 +518,26 @@ EXPLAIN /*!50100 PARTITIONS*/
 select * from tpch.lineitem where l_suppkey=23045\G
 ```
 
-- Exec time：表示查询的执行时间
-- Lock time：表示查询在等待锁的时间
-- Rows sent：表示查询返回的行数
-- Rows examined：表示查询扫描的行数
-- Rows affected：表示查询影响的行数
-- Bytes sent：表示查询发送的字节数
-- Query size：表示查询的大小
-- Query_time distribution：查询时间的分布，可以看到这个SQL查询执行时间都是10秒以上
-
-- Tables：该SQL查询涉及的表
-- EXPLAIN：查询的SQL语句
+- Exec time：表示查询的执行时间。
+- Lock time：表示查询在等待锁的时间。
+- Rows sent：表示查询返回的行数。
+- Rows examined：表示查询扫描的行数。
+- Rows affected：表示查询影响的行数。
+- Bytes sent：表示查询发送的字节数。
+- Query size：表示查询的大小。
+- Query_time distribution：查询时间的分布，可以看到这个SQL查询执行时间都是10秒以上。
+- Tables：该SQL查询涉及的表。
+- EXPLAIN：查询的SQL语句。
 
 #### 分析指定时间内的查询
 
-分析12小时内的查询
+分析12小时内的查询：
 
 ```bash
 pt-query-digest --since=12h ./slow.log
 ```
 
-分析指定时间段内的查询
+分析指定时间段内的查询：
 
 ```bash
 pt-query-digest slow.log --since '2024-03-19 00:00:00' --until '2024-03-21 23:59:59'
@@ -550,7 +551,7 @@ pt-query-digest --filter '$event->{fingerprint} =~ m/^select/i' slow.log
 
 #### 分析指定用户的查询
 
-修改`m/^root/i'`中的root换成对应用户即可
+修改 `m/^root/i'` 中的root换成对应用户即可：
 
 ```bash
 pt-query-digest --filter '($event->{user} || "") =~ m/^root/i' slow.log
@@ -560,13 +561,13 @@ pt-query-digest --filter '($event->{user} || "") =~ m/^root/i' slow.log
 
 **分析binlog**
 
-分析前要先解析
+分析前要先解析：
 
 ```bash
 mysqlbinlog binlog.000023 > binlog.000023.sql
 ```
 
-解析后在分析binlog
+解析后在分析binlog：
 ```bash
 pt-query-digest  --type=binlog  binlog.000023.sql > binlog_analysis.log
 ```
@@ -579,7 +580,7 @@ pt-query-digest  --type=genlog  general.log > general_analysis.log
 
 #### 查询结果存储到表
 
-把查询保存到 query_review表 或 query_review_history表，先来查看下 query_review表 结构
+把查询保存到 `query_review` 表或 `query_review_history` 表，先来查看下 `query_review` 表结构：
 
 ```sql
 CREATE TABLE IF NOT EXISTS query_review (
@@ -594,7 +595,7 @@ CREATE TABLE IF NOT EXISTS query_review (
 )
 ```
 
-把查询保存到 query_review表，使用`--create-review-table`会自动创建
+把查询保存到 query_review表，使用`--create-review-table`会自动创建：
 
 ```bash
 pt-query-digest --user=root,-password='' --review h=localhost,D=test_db,t=query_review --create-review-table slow.log
@@ -602,16 +603,16 @@ pt-query-digest --user=root,-password='' --review h=localhost,D=test_db,t=query_
 
 #### 分析tcpdump抓取的数据
 
-先使用 `tcpdump` 抓取数据
+先使用 `tcpdump` 抓取数据：
 ```bash
 tcpdump -s 65535 -x -nn -q -tttt -i any -c 1000 port 3306 > GreatSQL.tcp.txt
 ```
-在分析tcpdump抓取的数据
+在分析tcpdump抓取的数据：
 ```bash
 pt-query-digest --type tcpdump GreatSQL.tcp.txt> tcp_analysis.log
 ```
 ::: tip 小贴士
-如果没有tcpdump，请手动安装
+如果没有tcpdump，请手动安装。
 :::
 
 **扫码关注微信公众号**

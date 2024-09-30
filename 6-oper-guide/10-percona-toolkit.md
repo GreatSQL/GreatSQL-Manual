@@ -1,4 +1,4 @@
-# Percona Toolkit 工具集
+# Percona Toolkit
 
 ---
 
@@ -24,19 +24,19 @@ Percona Toolkit简称（PT工具），是一组高级命令行工具，用于管
 
 ### 使用TAR包安装
 
-选择合适的版本和规格下载 [Percona Toolkit](https://www.percona.com/downloads)
+选择合适的版本和规格下载 [Percona Toolkit](https://www.percona.com/downloads) 。
 
 ::: tip 小贴士
-选择合适自己的CPU架构和操作系统版本Percona Toolkit包
+选择合适自己的CPU架构和操作系统版本Percona Toolkit包。
 :::
 
-创建文件夹pt，并将下载的安装包保存于此
+创建 pt 文件夹，并将下载的安装包保存于此。
 
 ```bash
 mkdir /usr/local/pt
 ```
 
-并检查sha256sum码，确保完整性
+并检查 sha256sum 码，确保完整性。
 ```bash
 sha256sum -c percona-toolkit-3.5.7_x86_64.tar.gz.sha256sum
 ```
@@ -49,23 +49,23 @@ percona-toolkit-3.5.7_x86_64.tar.gz: OK
 ```
 :::
 
-解压文件，并添加到环境变量
+解压 percona-toolkit 文件。
 
 ```bash
 tar -xvf percona-toolkit-3.5.7_x86_64.tar.gz
 ```
 
-添加到环境变量
+添加 percona-toolkit 到环境变量。
 ```bash
 echo 'export PATH=/usr/local/pt/percona-toolkit-3.5.7/bin:$PATH' >> ~/.bash_profile
 ```
 
-使环境变量生效
+使环境变量生效。
 ```bash
 source ~/.bash_profile
 ```
 
-选择一个工具查看版本号，确认安装成功
+选择一个工具查看版本号，确认安装成功。
 
 ```bash
 pt-online-schema-change --version
@@ -79,22 +79,22 @@ pt-online-schema-change 3.5.7
 
 ### 使用RPM包安装
 
-> 以下示范环境为 Centos7 - X86_64架构 - ldd (GNU libc) 2.17
+> 以下示范环境为 Centos7 - X86_64架构 - ldd (GNU libc) 2.17。
 
-下载好3.5.7版本的Centos7 RPM包
+下载好 Percona Toolkit 3.5.7 版本 CentOS 7.x RPM 包。
 
 ```bash
 $ ls
 percona-toolkit-3.5.7-1.el7.x86_64.rpm
 ```
 
-使用 rpm 命令安装 Percona Toolkit，如果此时有报缺失依赖，用 YUM 安装即可
+使用 rpm 命令安装 Percona Toolkit，如果此时有报缺失依赖，用 YUM 安装即可。
 
 ```bash
 rpm -ivh --nodeps percona-toolkit-3.5.7-1.el7.x86_64.rpm
 ```
 
-选择一个工具查看版本号，确认安装成功
+选择一个工具查看版本号，确认安装成功。
 
 ```bash
 pt-online-schema-change --version
@@ -108,7 +108,7 @@ pt-online-schema-change 3.5.7
 
 ## Percona Toolkit 包含的工具
 
-3.5.7版本Percona Toolkit工具拥有39个工具，将这39个工具分为七大类(实用类、配置类、监控类、系统类、开发类、复制类、性能类）
+Percona Toolkit 3.5.7 版本中拥有39个工具，将这 39 个工具分为七大类(实用类、配置类、监控类、系统类、开发类、复制类、性能类）
 
 ```bash
 $ ls
@@ -139,16 +139,16 @@ pt-find                   pt-kill                  pt-pmp                   pt-s
 | 工具命令            | 工具描述                             |
 | ------------------- | ------------------------------------ |
 | [pt-config-diff](./10-2-pt-configuration.md#pt-config-diff)      | 比较数据库配置文件和参数             |
-| [pt-mysql-summary](./10-2-pt-configuration.md#pt-mysql-summary)    | 对GreatSQL/MySQL配置和STATUS进行汇总 |
+| [pt-mysql-summary](./10-2-pt-configuration.md#pt-mysql-summary)    | 对 MySQL/GreatSQL 配置和 STATUS 进行汇总 |
 | [pt-variable-advisor](./10-2-pt-configuration.md#pt-variable-advisor) | 分析参数，并提出建议                 |
 
 ### [监控类](./10-3-pt-monitoring.md)
 
 | 工具命令           | 工具描述                       |
 | ------------------ | ------------------------------ |
-| [pt-deadlock-logger](./10-3-pt-monitoring.md#pt-deadlock-logger) | 提取和记录GreatSQL/MySQL死锁   |
+| [pt-deadlock-logger](./10-3-pt-monitoring.md#pt-deadlock-logger) | 提取和记录 MySQL/GreatSQL 死锁   |
 | [pt-fk-error-logger](./10-3-pt-monitoring.md#pt-fk-error-logger) | 提取和记录外键信息             |
-| [pt-mext](./10-3-pt-monitoring.md#pt-mext)            | 并行查看STATUS样本信息         |
+| [pt-mext](./10-3-pt-monitoring.md#pt-mext)            | 并行查看 STATUS 样本信息         |
 | [pt-query-digest](./10-3-pt-monitoring.md#pt-query-digest)    | 分析查询日志，并产生报告       |
 | pt-mongodb-summary | 收集有关 MongoDB 集群的信息    |
 | pt-pg-summary      | 收集有关 PostgreSQL 集群的信息 |
@@ -159,8 +159,8 @@ pt-find                   pt-kill                  pt-pmp                   pt-s
 | ------------- | ---------------------------- |
 | [pt-diskstats](./10-4-pt-system.md#pt-diskstats)  | 查看系统磁盘状态             |
 | [pt-fifo-split](./10-4-pt-system.md#pt-fifo-split) | 模拟切割文件并输出           |
-| [pt-ioprofile](./10-4-pt-system.md#pt-ioprofile)  | 查询进程IO并打印一个IO活动表 |
-| [pt-sift](./10-4-pt-system.md#pt-sift)       | 浏览由pt-stalk创建的文件     |
+| [pt-ioprofile](./10-4-pt-system.md#pt-ioprofile)  | 查询进程 I/O 并打印一个 I/O 活动表 |
+| [pt-sift](./10-4-pt-system.md#pt-sift)       | 浏览由 pt-stalk 创建的文件     |
 | [pt-stalk](./10-4-pt-system.md#pt-stalk)      | 出现问题时，收集诊断数据     |
 | [pt-summary](./10-4-pt-system.md#pt-summary)    | 收集和显示系统概况           |
 
@@ -177,13 +177,13 @@ pt-find                   pt-kill                  pt-pmp                   pt-s
 
 | 工具命令                | 工具描述                                 |
 | ----------------------- | ---------------------------------------- |
-| [pt-heartbeat](./10-6-pt-replication.md#pt-heartbeat)            | 监控GreatSQL/MySQL复制延迟               |
+| [pt-heartbeat](./10-6-pt-replication.md#pt-heartbeat)            | 监控 MySQL/GreatSQL 复制延迟               |
 | [pt-slave-delay](./10-6-pt-replication.md#pt-slave-delay)          | 设定从落后主的时间                       |
-| [pt-slave-find](./10-6-pt-replication.md#pt-slave-find)           | 查找和打印所有GreatSQL/MySQL复制层级关系 |
-| [pt-slave-restart](./10-6-pt-replication.md#pt-slave-restart)        | 监控Salve错误，并尝试重启Salve           |
+| [pt-slave-find](./10-6-pt-replication.md#pt-slave-find)           | 查找和打印所有 MySQL/GreatSQL 复制层级关系 |
+| [pt-slave-restart](./10-6-pt-replication.md#pt-slave-restart)        | 监控 Salve 错误，并尝试重启Salve           |
 | [pt-table-checksum](./10-6-pt-replication.md#pt-table-checksum)       | 校验主从复制一致性                       |
 | [pt-table-sync](./10-6-pt-replication.md#pt-table-sync)           | 高效同步表数据                           |
-| [pt-galera-log-explainer](./10-6-pt-replication.md#pt-galera-log-explainer) | 对多个Galera日志进行过滤、聚合和汇总     |
+| [pt-galera-log-explainer](./10-6-pt-replication.md#pt-galera-log-explainer) | 对多个 Galera 日志进行过滤、聚合和汇总     |
 
 ### [性能类](./10-7-pt-performance.md)
 

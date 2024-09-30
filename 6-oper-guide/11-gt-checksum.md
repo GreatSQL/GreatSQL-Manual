@@ -1,13 +1,14 @@
-# gt-checksum 系列
+# gt-checksum
 
 # 关于 gt-checksum
-gt-checksum是GreatSQL社区开源的一款静态数据库校验修复工具，支持MySQL、Oracle等主流数据库。
+
+gt-checksum 是 GreatSQL 社区开源的一款静态数据库校验修复工具，支持 MySQL、Oracle 等主流数据库。
 
 # 特性
 ---
-MySQL DBA最常用的数据校验&修复工具应该是Percona Toolkit中的pt-table-checksum和pt-table-sync这两个工具，不过这两个工具并不支持MySQL MGR架构，以及国内常见的上云下云业务场景，还有MySQL、Oracle间的异构数据库等多种场景。
+MySQL DBA最常用的数据校验&修复工具应该是 Percona Toolkit 中的 [pt-table-checksum](./10-6-pt-replication.md#pt-table-checksum) 和 [pt-table-sync](./10-6-pt-replication.md#pt-table-sync) 这两个工具，不过这两个工具并不支持MySQL MGR架构，以及国内常见的上云下云业务场景，还有MySQL、Oracle间的异构数据库等多种场景。
 
-GreatSQL开源的gt-checksum工具可以满足上述多种业务需求场景，解决这些痛点。
+GreatSQL 开源的 gt-checksum 工具可以满足上述多种业务需求场景，解决这些痛点。
 
 gt-checksum工具支持以下几种常见业务需求场景：
 1. **MySQL主从复制**：主从复制中断后较长时间才发现，且主从间差异的数据量太多，这时候通常基本上只能重建复制从库，如果利用pt-table-checksum先校验主从数据一致性后，再利用pt-table-sync工具修复差异数据，这个过程要特别久，时间代价太大。
@@ -16,7 +17,7 @@ gt-checksum工具支持以下几种常见业务需求场景：
 4. **异构迁移场景**：有时我们会遇到异构数据迁移场景，例如从Oracle迁移到MySQL，通常存在字符集不同，以及数据类型不同等情况，也需要在迁移结束后进行一次数据校验才放心。
 5. **定期校验场景**：作为DBA在维护高可用架构中为了保证主节点出现异常后能够快速放心切换，就需要保证各节点间的数据一致性，需要定期执行数据校验工作。
 
-以上这些场景，都可以利用gt-chcksum工具来满足。
+以上这些场景，都可以利用 gt-chcksum 工具来满足。
 
 # 下载
 ---
@@ -26,17 +27,17 @@ gt-checksum工具支持以下几种常见业务需求场景：
 
 # 快速运行
 ---
-```shell
+```bash
 # 不带任何参数
-shell> ./gt-checksum
+$ ./gt-checksum
 If no parameters are loaded, view the command with --help or -h
 
 # 查看版本号
-shell> ./gt-checksum -v
+$ ./gt-checksum -v
 gt-checksum version 1.2.1
 
 # 查看使用帮助
-shell> ./gt-checksum -h
+$ ./gt-checksum -h
 NAME:
    gt-checksum - A opensource table and data checksum tool by GreatSQL
 
@@ -45,7 +46,7 @@ USAGE:
 ...
 
 # 数据库授权
-# 想要运行gt-checksum工具，需要至少授予以下几个权限
+# 想要运行 gt-checksum 工具，需要至少授予以下几个权限
 # MySQL端
 # 1.全局权限
 #  a.`REPLICATION CLIENT`
@@ -56,8 +57,8 @@ USAGE:
 #
 # 假设现在要对db1.t1做校验和修复，则可授权如下
 
-mysql> GRANT REPLICATION CLIENT, SESSION_VARIABLES_ADMIN ON *.* to ...;
-mysql> GRANT SELECT, INSERT, DELETE ON db1.t1 to ...;
+greatsql> GRANT REPLICATION CLIENT, SESSION_VARIABLES_ADMIN ON *.* to ...;
+greatsql> GRANT SELECT, INSERT, DELETE ON db1.t1 to ...;
 
 # Oracle端
 # 1.全局权限
@@ -67,7 +68,7 @@ mysql> GRANT SELECT, INSERT, DELETE ON db1.t1 to ...;
 #  b.如果`datafix=table`，则需要`SELECT ANY TABLE、INSERT ANY TABLE、DELETE ANY TABLE`权限
 
 # 指定配置文件，开始执行数据校验，示例：
-shell> ./gt-checksum -f ./gc.conf
+$ ./gt-checksum -f ./gc.conf
 -- gt-checksum init configuration files --
 -- gt-checksum init log files --
 -- gt-checksum init check parameter --
@@ -87,7 +88,7 @@ db1     t1                      ol_w_id,ol_d_id,ol_o_id,ol_number       rows    
 
 
 # 使用命令行传参方式执行数据校验
-shell> ./gt-checksum -S type=mysql,user=checksum,passwd=Checksum@123,host=172.16.0.1,port=3306,charset=utf8 -D type=mysql,user=checksum,passwd=Checksum@123,host=172.16.0.2,port=3306,charset=utf8 -t test.t2 -nit yes
+$ ./gt-checksum -S type=mysql,user=checksum,passwd=Checksum@123,host=172.16.0.1,port=3306,charset=utf8 -D type=mysql,user=checksum,passwd=Checksum@123,host=172.16.0.2,port=3306,charset=utf8 -t test.t2 -nit yes
 -- gt-checksum init configuration files --
 -- gt-checksum init log files --
 -- gt-checksum init check parameter --
@@ -121,34 +122,34 @@ test    t2      id              rows            10,10   no              file
 
 ## 配置oracle client并生效
 ```shell
-shell> unzip instantclient-basic-linux.x64-11.2.0.4.0.zip
-shell> unzip instantclient-sqlplus-linux.x64-11.2.0.4.0.zip
-shell> unzip instantclient-sdk-linux.x64-11.2.0.4.0.zip
-shell> mv instantclient_11_2 /usr/local
-shell> echo "export LD_LIBRARY_PATH=/usr/local/instantclient_11_2:$LD_LIBRARY_PATH" >> /etc/profile
-shell> source /etc/profile
+$ unzip instantclient-basic-linux.x64-11.2.0.4.0.zip
+$ unzip instantclient-sqlplus-linux.x64-11.2.0.4.0.zip
+$ unzip instantclient-sdk-linux.x64-11.2.0.4.0.zip
+$ mv instantclient_11_2 /usr/local
+$ echo "export LD_LIBRARY_PATH=/usr/local/instantclient_11_2:$LD_LIBRARY_PATH" >> /etc/profile
+$ source /etc/profile
 ```
 
 # 源码编译
-gt-checksum工具采用GO语言开发，您可以自行编译生成二进制文件。
+gt-checksum 工具采用 GO 语言开发，您可以自行编译生成二进制文件。
 
-编译环境要求使用golang 1.17及以上版本。
+编译环境要求使用 golang 1.17 及以上版本。
 
 请参考下面方法下载源码并进行编译：
 ```shell
-shell> git clone https://gitee.com/GreatSQL/gt-checksum.git
-shell> go build -o gt-checksum gt-checksum.go
-shell> chmod +x gt-checksum
-shell> mv gt-checksum /usr/local/bin
+$ git clone https://gitee.com/GreatSQL/gt-checksum.git
+$ go build -o gt-checksum gt-checksum.go
+$ chmod +x gt-checksum
+$ mv gt-checksum /usr/local/bin
 ```
 
 也可以直接利用Docker环境编译，在已经准备好Docker运行环境的基础上，执行如下操作即可：
 ```shell
-shell> git clone https://gitee.com/GreatSQL/gt-checksum.git
-shell> cd gt-checksum
-shell> DOCKER_BUILDKIT=1 docker build --build-arg VERSION=v1.2.1 -f Dockerfile -o ./ .
-shell> cd gt-checksum-v1.2.1
-shell> ./gt-checksum -v
+$ git clone https://gitee.com/GreatSQL/gt-checksum.git
+$ cd gt-checksum
+$ DOCKER_BUILDKIT=1 docker build --build-arg VERSION=v1.2.1 -f Dockerfile -o ./ .
+$ cd gt-checksum-v1.2.1
+$ ./gt-checksum -v
 gt-checksum version 1.2.1
 ```
 这就编译完成并可以开始愉快地玩耍了。

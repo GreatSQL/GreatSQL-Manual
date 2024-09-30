@@ -1,25 +1,25 @@
 # Percona Toolkit 系统类
 
 ::: tip 小贴士
-`$`为命令提示符、`greatsql>`为GreatSQL数据库提示符。
+`$`为 Linux 命令提示符、`greatsql>`为 GreatSQL 数据库提示符。
 :::
 
 ## 系统类
 
-在Percona Toolkit中系统类共有以下工具
+在 Percona Toolkit 中性能类共有以下工具：
 
-- `pt-diskstats`：查看系统磁盘状态
-- `pt-fifo-split`：模拟切割文件并输出
-- `pt-ioprofile`：查询进程 I/O 并打印一个 I/O 活动表
-- `pt-stalk`：出现问题时，收集诊断数据
-- `pt-sift`：浏览由 pt-stalk 创建的文件
-- `pt-summary`：收集和显示系统概况
+- `pt-diskstats`：查看系统磁盘状态。
+- `pt-fifo-split`：模拟切割文件并输出。
+- `pt-ioprofile`：查询进程 I/O 并打印一个 I/O 活动表。
+- `pt-stalk`：出现问题时，收集诊断数据。
+- `pt-sift`：浏览由 pt-stalk 创建的文件。
+- `pt-summary`：收集和显示系统概况。
 
 ## pt-diskstats
 
 ### 概要
 
-类似于 iostat 命令，不过它比 iostat 输出的更加详细一点
+类似于 `iostat` 命令，不过它比 `iostat` 输出的更加详细一点。
 
 **用法**
 
@@ -27,11 +27,11 @@
 pt-diskstats [OPTIONS] [FILES]
 ```
 
-打印 GNU/Linux 的磁盘 I/O 统计信息。它有点类似于iostat，但它是交互式的并且更详细。且可以分析从另一台机器收集的样本。
+打印 GNU/Linux 的磁盘 I/O 统计信息。它有点类似于 `iostat`，但它是交互式的并且更详细。且可以分析从另一台机器收集的样本。
 
 ### 选项
 
-该工具所有选项如下
+该工具所有选项如下：
 
 | 参数                | 含义                                                         |
 | ------------------- | ------------------------------------------------------------ |
@@ -52,16 +52,16 @@ pt-diskstats [OPTIONS] [FILES]
 
 ### 最佳实践
 
-注意！在较新的 Linux 内核版本中，为磁盘统计信息返回的字段量更改为 20 个，并导致 pt-diskstat 在这些系统上无法提供任何输出。
-
+::: danger 特别提醒
+在较新的 Linux 内核版本中，为磁盘统计信息返回的字段量更改为 20 个，并导致 pt-diskstat 在这些系统上无法提供任何输出。
 ※[该问题详见](https://perconadev.atlassian.net/jira/software/c/projects/PT/issues/PT-2313?jql=project%20%3D%20%22PT%22%20AND%20text%20~%20%22diskstats%22%20ORDER%20BY%20created%20DESC)
-
 ※[解决方法](https://github.com/percona/percona-toolkit/pull/526/files#diff-c3ecedaa384eecb55bd8fdb37456a89a3dc45a41588ef1ebe231120e965942d8R2247)
+::: 
 
 #### 直接采集分析
 
 ::: tip 小贴士
-`--devices-regex`指定设备名称，根据自身设备而修改
+`--devices-regex`指定设备名称，根据自身设备而修改。
 :::
 
 ```bash
@@ -79,39 +79,37 @@ $ pt-diskstats --interval=1 --iterations=10 --devices-regex=sda --show-timestamp
 :::
 
 
-- `ts`：在`--show-timestamps`操作时候的时间戳。但如果在group-by为all模式下此列显示时间戳偏移量，如果在sample模式下表示分组到每个样本的总时间跨度
-- `device`：设备名称
-- `rd_s`：每秒的平均读取次数
-- `rd_avkb`：读取的平均大小单位kb
-- `rd_mb_s`：每秒读取的平均兆字节数
-- `rd_mrg`：在发送到物理设备之前在队列调度程序中合并在一起的读取请求的百分比
-- `rd_cnc`：根据利特尔定律计算得出的读取操作的平均并发度
-- `rd_rt`：读取操作的平均响应时间，以毫秒为单位
-- `wr_s`：每秒平均写入次数
-- `wr_avkb`：平均写入大小
-- `wr_mb_s`：每秒平均写入的平均大小
-- `wr_mrg`：发送到物理设备之前，在队列调度程序中合并在一起的写入请求的百分比
-- `wr_cnc`：写入操作的平均并发量
-- `wr_rt`：写入操作的平均相应时间
-- `busy`：磁盘繁忙程度
-- `in_prg`：正在进行的请求数
-- `io_s`：物理设备的平均吞吐量，以每秒 I/O 操作数 (IOPS) 为单位
-- `qtime`：平均排队时间
-- `stime`：平均服务时间
+- `ts`：在`--show-timestamps`操作时候的时间戳。但如果在group-by为all模式下此列显示时间戳偏移量，如果在sample模式下表示分组到每个样本的总时间跨度。
+- `device`：设备名称。
+- `rd_s`：每秒的平均读取次数。
+- `rd_avkb`：读取的平均大小单位kb。
+- `rd_mb_s`：每秒读取的平均兆字节数。
+- `rd_mrg`：在发送到物理设备之前在队列调度程序中合并在一起的读取请求的百分比。
+- `rd_cnc`：根据利特尔定律计算得出的读取操作的平均并发度。
+- `rd_rt`：读取操作的平均响应时间，以毫秒为单位。
+- `wr_s`：每秒平均写入次数。
+- `wr_avkb`：平均写入大小。
+- `wr_mb_s`：每秒平均写入的平均大小。
+- `wr_mrg`：发送到物理设备之前，在队列调度程序中合并在一起的写入请求的百分比。
+- `wr_cnc`：写入操作的平均并发量。
+- `wr_rt`：写入操作的平均相应时间。
+- `busy`：磁盘繁忙程度。
+- `in_prg`：正在进行的请求数。
+- `io_s`：物理设备的平均吞吐量，以每秒 I/O 操作数 (IOPS) 为单位。
+- `qtime`：平均排队时间。
+- `stime`：平均服务时间。
 
 #### 采集分析
 
-先收集 /proc/diskstats 的信息，存到一个文件里面，采集一段时候后再通过 pt-diskstats 来计算。这样的好处是，可以了解该段时间内的整体 I/O 性能，而不是瞬间的性能指标
+先收集 `/proc/diskstats` 的信息，存到一个文件里面，采集一段时候后再通过 `pt-diskstats` 来计算。这样的好处是，可以了解该段时间内的整体 I/O 性能，而不是瞬间的性能指标。
 
-使用该 Shell 脚本
+创建该 `collection.sh` 脚本：
 
 ::: tip 小贴士
-采集时间可以修改 LOOPS 参数，采集间隔修改 INTERVAL 参数即可
+采集时间可以修改 LOOPS 参数，采集间隔修改 INTERVAL 参数即可。
 :::
 
 ```ini
-$ vim collection.sh
-
 #!/bin/bash
 INTERVAL=1
 LOOPS=10
@@ -126,18 +124,18 @@ done
 echo `date`
 ```
 
-授权该 Shell 脚本
+授权该 `collection.sh` 脚本：
 
 ```bash
 chmod 755 collection.sh
 ```
 
-运行该 Shell 脚本
+运行该 `collection.sh` 脚本：
 ```bash
 sh collection.sh
 ```
 
-在脚本文件的同一个目录下会生成`diskstats-samples.txt`文本文件，接着使用 pt-diskstats 工具分析即可
+在脚本文件的同一个目录下会生成`diskstats-samples.txt`文本文件，接着使用 `pt-diskstats` 工具分析即可：
 
 ```bash
 pt-diskstats --group-by disk diskstats-samples.txt
@@ -153,7 +151,7 @@ $ pt-diskstats --group-by disk diskstats-samples.txt
 :::
 
 
-不同点是ts列显示包含在输出行中的样本数，其它字段意思和上方一致
+不同点是 ts 列显示包含在输出行中的样本数，其它字段意思和上方一致。
 
 **查看该段时间内 sda 的 iops 变化情况**
 
@@ -181,7 +179,7 @@ pt-diskstats --group-by disk --devices-regex 'sd[a-c]' diskstats-samples.txt
 
 **小技巧**
 
-在使用 pt-diskstats 工具在线分析的时候按 “？” 键，将调出交互式帮助菜单，其中显示哪些键控制程序
+在使用 `pt-diskstats` 工具在线分析的时候按 “？” 键，将调出交互式帮助菜单，其中显示哪些键控制程序：
 
 ```bash
 $ pt-diskstats --devices-regex=sda --show-timestamps
@@ -189,7 +187,7 @@ $ pt-diskstats --devices-regex=sda --show-timestamps
 15:08:06 sda1       0.0     0.0     0.0     0%    0.0     0.0     0.0     0.0     0.0     0%    0.0     0.0   0%      0     0.0    0.0   0.0
 15:08:06 sda2       0.0     0.0     0.0     0%    0.0     0.0     0.0     0.0     0.0     0%    0.0     0.0   0%      0     0.0    0.0   0.0
 15:08:06 sda3       0.0     0.0     0.0     0%    0.0     0.0     0.0     0.0     0.0     0%    0.0     0.0   0%      0     0.0    0.0   0.0
--- 此时输入'?'会弹出提示
+# 此时输入'?'会弹出提示
    You can control this program by key presses:
    ------------------- Key ------------------- ---- Current Setting ----
    A, D, S) Set the group-by mode              A
@@ -207,7 +205,7 @@ $ pt-diskstats --devices-regex=sda --show-timestamps
 
 ### 概要
 
-可以用做切割大文件，切割完成后再分批导入 GreatSQL 数据库中，不会造成效率低以及主从延迟
+可以用做切割大文件，切割完成后再分批导入 GreatSQL 数据库中，不会造成效率低以及主从延迟。
 
 **用法**
 
@@ -217,7 +215,7 @@ pt-fifo-split [OPTIONS] [FILE]
 
 ### 选项
 
-该工具所有选项如下
+该工具所有选项如下：
 
 | 参数         | 含义                                                         |
 | ------------ | ------------------------------------------------------------ |
@@ -233,18 +231,16 @@ pt-fifo-split [OPTIONS] [FILE]
 
 ### 最佳实践
 
-用命令`seq 1 1000000 > hugefile.txt `向 hugefile.txt文件 插入一百万行数据
+用命令 `seq 1 1000000 > hugefile.txt` 向 hugefile.txt文件 插入一百万行数据：
 
 ```bash
 $ wc -l hugefile.txt           
 1000000 hugefile.txt
 ```
 
-脚本文件 fifo_get.sh 获取切割后的数据
+创建脚本文件 `fifo_get.sh` 获取切割后的数据：
 
-```shell
-$ vim fifo_get.sh
-
+```ini
 #!/bin/bash
 filename=/tmp/hugefile
 n=1
@@ -255,7 +251,7 @@ do
 done
 ```
 
-使用 pt-fifo-split 工具切割
+使用 `pt-fifo-split` 工具切割：
 
 ```bash
 pt-fifo-split --lines 10000 --statistics hugefile.txt
@@ -273,8 +269,7 @@ chunks     lines  time  overall  current
 ```
 :::
 
-
-使用脚本工具获取数据
+使用脚本工具获取数据：
 
 ```bash
 $ chmod 755 fifo_get.sh
@@ -283,26 +278,26 @@ $ ls /tmp/hugefile_* 2>/dev/null | wc -l
 100
 ```
 
-接下来就可以把这些切割后的文件导入到 GreatSQL 数据库中了，此时可以用 GreatSQL 的并行LOAD DATA特性，最大导入的加速比大概为20倍
+接下来就可以把这些切割后的文件导入到 GreatSQL 数据库中了，此时可以用 GreatSQL 的并行 LOAD DATA 特性，最大导入的加速比大概为20倍。
 
-使用 LOAD 语句增加 HINT 启用
+使用 LOAD 语句增加 HINT 启用：
 
 ```sql
 greatsql> LOAD /*+ SET_VAR(gdb_parallel_load=ON) SET_VAR(gdb_parallel_load_chunk_size=65536) SET_VAR(gdb_parallel_load_workers=16) */
 DATA INFILE 'hugefile.txt' INTO TABLE t1;
 ```
 
-此处可详见：[GreatSQL 的并行 LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md)
+此处可详见：[GreatSQL 的并行 LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md) 。
 
 ::: tip 小贴士
-当然也可以使用`split`命令来做切割 `split -l 1000 hugefile.txt chunk_`
+当然也可以使用`split`命令来做切割 `split -l 1000 hugefile.txt chunk_` 。 
 :::
 
 ## pt-ioprofile
 
 ### 概要
 
-主要用于监视和分析 GreatSQL/MySQL 进程的 I/O 活动。通过 `strace` 和 `lsof` 来跟踪进程的 I/O 情况，并打印出相关的表文件和活动 I/O 信息。
+主要用于监视和分析 MySQL/GreatSQL 进程的 I/O 活动。通过 `strace` 和 `lsof` 来跟踪进程的 I/O 情况，并打印出相关的表文件和活动 I/O 信息。
 
 **用法**
 
@@ -310,17 +305,17 @@ DATA INFILE 'hugefile.txt' INTO TABLE t1;
 pt-ioprofile [OPTIONS] [FILE]
 ```
 ::: tip 小贴士
-建议使用root权限，可以收集到更多的信息
+建议使用 root 权限，可以收集到更多的信息。
 :::
 ### 选项
 
-该工具所有选项如下
+该工具所有选项如下：
 
 | 参数              | 含义                                          |
 | ----------------- | --------------------------------------------- |
 | --aggregate       | 聚合函数，`sum` 或 `avg`                      |
-| --cell            | 指定单元格的内容，有效值为count、sizes、times |
-| --group-by        | 分组项，有效值为all、filename、pid            |
+| --cell            | 指定单元格的内容，有效值为 `count`、`sizes`、`times` |
+| --group-by        | 分组项，有效值为 `all`、`filename`、`pid`      |
 | --help            | 显示帮助                                      |
 | --profile-pid     | 要分析的 PID 会覆盖 `--profile-process`       |
 | --profile-process | 要分析的进程名称                              |
@@ -330,10 +325,10 @@ pt-ioprofile [OPTIONS] [FILE]
 
 ### 最佳实践
 
-直接使用即可，默认`--cell`为times既I/O操作的时间，默认监听30秒的mysqld进程，并给出30秒内的分析结果
+直接使用即可，默认 `--cell` 为 times 既 I/O 操作的时间，默认监听 30 秒的 mysqld 进程，并给出 30 秒内的分析结果
 
 ::: tip 小贴士
-是要等待30秒后给出分析结果，并不是实时出结果
+是要等待30秒后给出分析结果，并不是实时出结果。
 :::
 
 ```bash
@@ -351,7 +346,7 @@ Tracing process ID 657147
 ```
 :::
 
-可指定`--cell`为sizes既I/O操作的大小
+可指定 `--cell` 为 sizes 既 I/O 操作的大小：
 
 ```bash
 pt-ioprofile --cell=sizes
@@ -369,7 +364,7 @@ Tracing process ID 657147
 :::
 
 
-可指定`--cell`为count既I/O操作的次数
+可指定`--cell`为count既I/O操作的次数：
 
 ```bash
 pt-ioprofile --cell=count 
@@ -390,7 +385,7 @@ Tracing process ID 657147
 
 ### 概要
 
-pt-stalk 工具的功能是出现问题时收集 GreatSQL 数据库和系统的诊断信息，可以解决更细粒度的现场故障采集
+pt-stalk 工具的功能是出现问题时收集 GreatSQL 数据库和系统的诊断信息，可以解决更细粒度的现场故障采集。
 
 **用法**
 
@@ -399,12 +394,12 @@ pt-stalk [OPTIONS]
 ```
 
 ::: tip 小贴士
-建议使用root权限，可以收集到更多的信息
+建议使用root权限，可以收集到更多的信息。
 :::
 
 ### 选项
 
-该工具所有选项如下
+该工具所有选项如下：
 
 | 参数               | 含义                                                         |
 | ------------------ | ------------------------------------------------------------ |
@@ -427,7 +422,7 @@ pt-stalk [OPTIONS]
 | --interval         | 检查触发器是否为 true 的频率                                 |
 | --iterations       | 收集多少次，默认是一直运行                                   |
 | --log              | 守护进程时将所有输出打印到此文件                             |
-| --match            | 监测`SHOW PROCESSLIST`时使用的模式                           |
+| --match            | 监测 `SHOW PROCESSLIST` 时使用的模式                           |
 | --notify-by-email  | 发送收集信息到指定的邮箱中                                   |
 | --password         | 用于连接的密码                                               |
 | --pid              | 创建给定的 PID 文件                                          |
@@ -454,13 +449,13 @@ pt-stalk [OPTIONS]
 
 #### 监控`SHOW GLOBAL STATUS`中的状态值
 
-例如监控`Threads_running`状态值，如果`Threads_running`状态值连续5次超过100，这触发收集主机和数据库的信息
+例如监控 `Threads_running` 状态值，如果 `Threads_running` 状态值连续5次超过100，这触发收集主机和数据库的信息：
 
 ```bash
 pt-stalk --function status --variable Threads_running --cycles 5 --threshold 500 --daemonize --user=root --password=
 ```
 
-有以下三种触发方式
+有以下三种触发方式：
 
 - status
   通过监控`SHOW GLOBAL STATUS`的参数值，`--variable`参数指定的监控的具体是哪个参数，默认`Threads_running`
@@ -473,13 +468,13 @@ pt-stalk --function status --variable Threads_running --cycles 5 --threshold 500
 
 #### 立即收集主机和数据库信息
 
-不等待触发发生，立即收集在60秒内主机和数据库的信息，等待180秒后结束自动退出
+不等待触发发生，立即收集在60秒内主机和数据库的信息，等待180秒后结束自动退出：
 
 ```bash
 pt-stalk --no-stalk --run-time=60 --iterations=1 --user=root --password=
 ```
 
-查看默认诊断数据存放的位置`/var/lib/pt-stalk`
+查看默认诊断数据存放的位置`/var/lib/pt-stalk`：
 
 ```bash
 $ ls /var/lib/pt-stalk                            
@@ -494,13 +489,13 @@ $ ls /var/lib/pt-stalk
 2024_04_07_14_47_10-iostat-overall  2024_04_07_14_47_10-netstat_s       2024_04_07_14_47_10-ps           2024_04_07_14_47_10-vmstat-overall
 ```
 
-有很多采集的文件，从文件名可以看出来，命名方式就是以命令来命名的。同时也可以用`pt-sift`工具来查看产生的文件内容
+有很多采集的文件，从文件名可以看出来，命名方式就是以命令来命名的。同时也可以用`pt-sift`工具来查看产生的文件内容。
 
 ## pt-sift
 
 ### 概要
 
-用于分析、查看`pt-stalk`命令产生的文件内容，并生产概要信息，然后通过输入不同的命令查看不同的内容。如，输入`m`,查看的是`SHOW STATUS`命令的内容。
+用于分析、查看`pt-stalk`命令产生的文件内容，并生产概要信息，然后通过输入不同的命令查看不同的内容。如，输入`m`，查看的是`SHOW STATUS`命令的内容。
 
 **用法**
 
@@ -508,11 +503,11 @@ $ ls /var/lib/pt-stalk
 pt-sift FILE|PREFIX|DIRECTORY
 ```
 
-这是一个交互式的命令
+这是一个交互式的命令。
 
 ### 选项
 
-该工具所有选项如下
+该工具所有选项如下：
 
 | 参数      | 含义     |
 | --------- | -------- |
@@ -523,7 +518,7 @@ pt-sift FILE|PREFIX|DIRECTORY
 
 #### 显示所有pt-stalk收集的信息
 
-可以直接使用`pt-sift`命令，并加上`pt-stalk`工具收集的信息存放地址
+可以直接使用`pt-sift`命令，并加上`pt-stalk`工具收集的信息存放地址：
 
 ```bash
 pt-sift /var/lib/pt-stalk
@@ -531,16 +526,16 @@ pt-sift /var/lib/pt-stalk
 
 此时会跳出一个交互式的命令行，可以通过输入?来查看帮助信息，通过输入不同的命令显示不同的内容
 
-- d：设置在样本磁盘性能统计信息上启动 pt-diskstats 工具的操作
-- i：设置在 less 中查看第一个 INNODB STATUS 样本的操作
-- m：使用 pt-mext 工具并排显示 SHOW STATUS 计数器的前 4 个样本
-- n：以两种方式汇总 netstat 数据的第一个样本：按原始主机和按连接状态
-- j：选择下一个时间戳作为活动样本
-- k：选择前一个时间戳作为活动样本
-- q：退出程序
-- 1：将每个示例的操作设置为默认值，即查看示例的摘要
-- 0：将操作设置为仅列出示例中的文件
-- *：查看所有文件
+- d：设置在样本磁盘性能统计信息上启动 pt-diskstats 工具的操作。
+- i：设置在 less 中查看第一个 INNODB STATUS 样本的操作。
+- m：使用 pt-mext 工具并排显示 SHOW STATUS 计数器的前 4 个样本。
+- n：以两种方式汇总 netstat 数据的第一个样本：按原始主机和按连接状态。
+- j：选择下一个时间戳作为活动样本。
+- k：选择前一个时间戳作为活动样本。
+- q：退出程序。
+- 1：将每个示例的操作设置为默认值，即查看示例的摘要。
+- 0：将操作设置为仅列出示例中的文件。
+- *：查看所有文件。
 
 ```bash
                   ---  COMMANDS  ---
@@ -562,7 +557,7 @@ Press any key to continue
 
 ### 概要
 
-打印信息涵盖CPU、内存、硬盘、网卡等核心信息，同时展现文件系统、磁盘调度、队列大小、LVM、RAID等详细配置，以及网络链接统计、netstat分析，并突出前10负载与 vmstat 数据
+打印信息涵盖 CPU、内存、硬盘、网卡等核心信息，同时展现文件系统、磁盘调度、队列大小、LVM、RAID 等详细配置，以及网络链接统计、netstat 分析，并突出前10负载与 `vmstat` 数据。
 
 **用法**
 
@@ -577,7 +572,7 @@ pt-summary
 | --help                | 显示帮助                                                     |
 | --read-samples        | 从此目录中的文件创建报告                                     |
 | --save-samples        | 将收集到的数据保存在此目录中                                 |
-| --sleep               | 从 vmstat 收集样本时休眠多长时间                             |
+| --sleep               | 从 `vmstat` 收集样本时休眠多长时间                             |
 | --summarize-mounts    | 报告已安装的文件系统和磁盘使用情况                           |
 | --summarize-network   | 有关网络控制器和配置的报告                                   |
 | --summarize-processes | 报告顶级进程和 `vmstat` 输出                                 |
@@ -585,13 +580,13 @@ pt-summary
 
 ### 最佳实践
 
-直接使用即可
+直接使用即可：
 
 ```bash
 pt-summary
 ```
 
- 该段展示当前日期和时间，以及服务器和操作系统的概览
+该段展示当前日期和时间，以及服务器和操作系统的概览：
 
 ```bash
 # Percona Toolkit System Summary Report ######################
@@ -608,7 +603,7 @@ Architecture | CPU = 64-bit, OS = 64-bit
  Virtualized | No virtualization detected
 ```
 
-该段提取自`/proc/cpuinfo`
+该段提取自`/proc/cpuinfo`：
 
 ```bash
 # Processor ##################################################
@@ -618,7 +613,7 @@ Architecture | CPU = 64-bit, OS = 64-bit
       Caches | 12x9216 KB
 ```
 
-该段是内存信息。生成自`free`、`ps`、`sysctl`以及`dmidecode`
+该段是内存信息。生成自`free`、`ps`、`sysctl`以及`dmidecode`：
 
 ```bash
 # Memory #####################################################
@@ -641,7 +636,7 @@ Preferred Node | current
    node0   15787 MB    1165 MB     0 1 2 3 4 5 6 7 8 9 10 11
 ```
 
-该段是挂载文件系统。生成自`mount`和`df`
+该段是挂载文件系统。生成自`mount`和`df`：
 
 ```bash
 # Mounted Filesystems ########################################
@@ -676,7 +671,7 @@ Preferred Node | current
                    /tmp
 ```
 
-该段是磁盘调度信息。提取自`/sys`
+该段是磁盘调度信息。提取自`/sys`：
 
 ```bash
 # Disk Schedulers And Queue Size #############################
@@ -684,7 +679,7 @@ Preferred Node | current
          sda | [mq-deadline] 64
 ```
 
-该段是磁盘分区信息。生成自`fdisk -l`
+该段是磁盘分区信息。生成自`fdisk -l`：
 
 ```bash
 # Disk Partitioning ##########################################
@@ -697,7 +692,7 @@ Device       Type      Start        End               Size
 /dev/sda1    Part       2048 1953523711                  0
 ```
 
-该段是`Kernel Inode State`
+该段是`Kernel Inode State`：
 
 ```bash
 # Kernel Inode State #########################################
@@ -706,7 +701,7 @@ dentry-state | 733944   717873  45      0       291017  0
     inode-nr | 631593   103806
 ```
 
-该段是内核索引节点信息。分别提取自`/proc/sys/fs`目录下同名文件
+该段是内核索引节点信息。分别提取自`/proc/sys/fs`目录下同名文件：
 
 ```bash
 # LVM Volumes ################################################
@@ -715,14 +710,14 @@ Unable to collect information
 Unable to collect information
 ```
 
-该段是RAID控制器。生成自`lvs`
+该段是RAID控制器。生成自`lvs`：
 
 ```bash
 # RAID Controller ############################################
   Controller | No RAID controller detected
 ```
 
-该段是网络配置，生成自`lspci`和`sysctl`
+该段是网络配置，生成自`lspci`和`sysctl`：
 
 ```bash
 # Network Config #############################################
@@ -731,7 +726,7 @@ Unable to collect information
   Port Range | 60999
 ```
 
-该段是网络接口统计，生成自`ip -s link`
+该段是网络接口统计，生成自`ip -s link`：
 
 ```bash
 # Network Connections ########################################
@@ -748,7 +743,7 @@ Unable to collect information
     LISTEN              5
 ```
 
-该段是`TOP`命令前几行
+该段是`TOP`命令前几行：
 
 ```bash
 # Top Processes ##############################################
@@ -764,7 +759,7 @@ Unable to collect information
       9 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker+
 ```
 
-该段是要注意的地方，这里提示`sshd`没运行
+该段是要注意的地方，这里提示 `sshd` 没运行：
 
 ```bash
 # Notable Processes ##########################################
@@ -772,14 +767,14 @@ Unable to collect information
     ?      ?    sshd doesn't appear to be running
 ```
 
-该段是内存管理，这里提示开启了透明大页
+该段是内存管理，这里提示开启了透明大页：
 
 ```bash
 # Memory management ##########################################
 Transparent huge pages are enabled.
 ```
 
-该段表示结束
+该段表示结束：
 
 ```bash
 # The End ####################################################

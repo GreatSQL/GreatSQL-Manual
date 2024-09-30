@@ -1,23 +1,23 @@
 # Percona Toolkit 开发类
 
 ::: tip 小贴士
-`$`为命令提示符、`greatsql>`为GreatSQL数据库提示符。
+`$`为 Linux 命令提示符、`greatsql>`为 GreatSQL 数据库提示符。
 :::
 
 ## 开发类
 
-在Percona Toolkit中开发类共有以下工具
+在 Percona Toolkit 中开发类共有以下工具：
 
-- `pt-duplicate-key-checker`：列出并删除重复的索引和外键
-- `pt-online-schema-change`：在线修改表结构
-- `pt-show-grants`：规范化和打印权限
-- `pt-upgrade`：在多个服务器上执行查询，并比较不同
+- `pt-duplicate-key-checker`：列出并删除重复的索引和外键。
+- `pt-online-schema-change`：在线修改表结构。
+- `pt-show-grants`：规范化和打印权限。
+- `pt-upgrade`：在多个服务器上执行查询，并比较不同。
 
 ## pt-duplicate-key-checker
 
 ### 概要
 
-检查 MySQL/GreatSQL 表中的重复或冗余索引和外键
+检查 MySQL/GreatSQL 表中的重复或冗余索引和外键。
 
 **用法**
 
@@ -32,7 +32,7 @@ pt-duplicate-key-checker [OPTIONS] [DSN]
 | 参数                | 含义                                                         |
 | ------------------- | ------------------------------------------------------------ |
 | --all-structs       | 比较具有不同结构（BTREE、HASH 等）的索引                     |
-| --ask-pass          | 连接MySQL/GreatSQL提示输入密码                               |
+| --ask-pass          | 连接 MySQL/GreatSQL 提示输入密码                               |
 | --charset           | 默认字符集                                                   |
 | --[no]clustered     | 禁用聚集索引的重复键检查                                     |
 | --config            | 读取这个逗号分隔的配置文件列表，如果指定，这必须是命令行上的第一个选项 |
@@ -61,7 +61,7 @@ pt-duplicate-key-checker [OPTIONS] [DSN]
 
 ### 最佳实践
 
-创建一张表，包含两个重复索引
+创建一张表，包含两个重复索引：
 
 ```sql
 -- 创建一张test_table表
@@ -82,7 +82,7 @@ greatsql> CREATE INDEX `idx_age` ON `test_table` (`age`);
 greatsql> CREATE INDEX `idx_name_age` ON `test_table` (`name`, `age`);
 ```
 
-使用`pt-duplicate-key-checker`工具
+使用`pt-duplicate-key-checker`工具：
 
 ```bash
 pt-duplicate-key-checker -uroot --ask-pass --socket=/data/GreatSQL/MySQL.sock -d test_db
@@ -91,7 +91,7 @@ pt-duplicate-key-checker -uroot --ask-pass --socket=/data/GreatSQL/MySQL.sock -d
 ```bash
 $ pt-duplicate-key-checker -uroot --ask-pass --socket=/data/GreatSQL/MySQL.sock -d test_db
  
-Enter password: -- 这里输入密码 
+Enter password: # 这里输入密码 
 # ########################################################################
 # test_db.test_table                                                      
 # ########################################################################
@@ -116,18 +116,18 @@ ALTER TABLE `test_db`.`test_table` DROP INDEX `idx_name`;
 ```
 :::
 
-由上述输出的检查信息中，可以看到，表`test_table`中存在冗余索引，并且给出对应可以删除重复索引的SQL命令
+由上述输出的检查信息中，可以看到表 `test_table` 中存在冗余索引，并且给出对应可以删除重复索引的SQL命令。
 
 结尾的统计信息：
 
-- Size Duplicate Indexes，检查的索引占用空间大小
-- Total Duplicate Indexes，检查的冗余索引数量
-- Total Indexes，检查的总的索引数量
+- Size Duplicate Indexes，检查的索引占用空间大小。
+- Total Duplicate Indexes，检查的冗余索引数量。
+- Total Indexes，检查的总的索引数量。
 
-当然也可以直接看系统表`schema_redundant_indexes`
+当然也可以直接看系统表 `schema_redundant_indexes`：
 
 ```sql
-greatsql> select * from sys.schema_redundant_indexes\G
+greatsql> SELECT * FROM sys.schema_redundant_indexes\G
 *************************** 1. row ***************************
               table_schema: test_db
                 table_name: test_table
@@ -145,11 +145,11 @@ redundant_index_non_unique: 1
 
 ### 概要
 
-在线修改表结构，特点是修改过程中不会造成读写阻塞
+在线修改表结构，特点是修改过程中不会造成读写阻塞。
 
 **原理**
 
-工作原理是创建要更改的表的空副本，根据需要对其进行修改，然后将原始表中的行复制到新表中。复制完成后，它会移走原始表并用新表替换。默认情况下，它还会删除原始表
+工作原理是创建要更改的表的空副本，根据需要对其进行修改，然后将原始表中的行复制到新表中。复制完成后，它会移走原始表并用新表替换。默认情况下，它还会删除原始表。
 
 **用法**
 
@@ -169,13 +169,13 @@ pt-online-schema-change [OPTIONS] DSN
 
 | 参数                            | 含义                                                         |
 | ------------------------------- | ------------------------------------------------------------ |
-| --alter                         | 架构修改，无需 ALTER TABLE 关键字                            |
+| --alter                         | 架构修改，无需 `ALTER TABLE` 关键字                            |
 | --alter-foreign-keys-method     | 用于指定在修改表结构时如何处理外键约束（auto、rebuild_constraints、drop_swap、none） |
-| --[no]analyze-before-swap       | 在与旧表交换之前，对新表执行ANALYZE TABLE                    |
+| --[no]analyze-before-swap       | 在与旧表交换之前，对新表执行 `ANALYZE TABLE`                    |
 | --ask-pass                      | 连接时提示输入密码                                           |
 | --channel                       | 使用复制通道连接到服务器时使用的通道名称                     |
 | --charset                       | 默认字符集                                                   |
-| --[no]check-alter               | 用于控制工具在执行ALTER TABLE语句时是否进行检查              |
+| --[no]check-alter               | 用于控制工具在执行 `ALTER TABLE` 语句时是否进行检查              |
 | --[no]check-foreign-keys        | 检查自引用外键                                               |
 | --check-interval                | 用于指定在检查从库延迟时休眠的时间间隔，默认1秒              |
 | --[no]check-plan                | 检查查询执行计划的安全性                                     |
@@ -192,7 +192,7 @@ pt-online-schema-change [OPTIONS] DSN
 | --default-engine                | 用于指定新表的存储引擎                                       |
 | --data-dir                      | 指定一个目录，用于存放工具在操作过程中创建的一些临时文件     |
 | --remove-data-dir               | 用于在工具操作完成后自动删除在 `--data-dir` 中创建的临时目录和文件 |
-| --defaults-file                 | 只从给定文件中读取GreatSQL选项                               |
+| --defaults-file                 | 只从给定文件中读取 GreatSQL 选项                               |
 | --[no]drop-new-table            | 如果复制原始表失败，则删除新表                               |
 | --[no]drop-old-table            | 重命名后删除原始表                                           |
 | --[no]drop-triggers             | 在旧表上删除触发器                                           |
@@ -204,7 +204,7 @@ pt-online-schema-change [OPTIONS] DSN
 | --host                          | 连接到主机                                                   |
 | --max-flow-ctl                  | 与` --max-lag `相似，但适用于 PXC 集群                       |
 | --max-lag                       | 暂停数据复制，直到所有副本的滞后小于该值，默认1秒            |
-| --max-load                      | 在每个块之后检查 SHOW GLOBAL STATUS，如果任何状态变量高于其阈值，则暂停 |
+| --max-load                      | 在每个块之后检查 `SHOW GLOBAL STATUS`，如果任何状态变量高于其阈值，则暂停 |
 | --preserve-triggers             | 指定时保留旧触发器                                           |
 | --new-table-name                | 交换之前的新表名称                                           |
 | --null-to-not-null              | 允许将允许 NULL 值的列修改为不允许 NULL 值的列               |
@@ -234,12 +234,12 @@ pt-online-schema-change [OPTIONS] DSN
 
 ### 最佳实践
 
-先创建一张表，并插入1万条数据
+先创建一张表，并插入1万条数据：
 
 ```sql
 greatsql> CREATE TABLE test_db.ptosc (id INT PRIMARY KEY AUTO_INCREMENT,k BIGINT NOT NULL,c VARCHAR(255) NOT NULL,pad VARCHAR(255) NOT NULL);
 
-greatsql> select count(*) from ptosc;
+greatsql> SELECT count(*) FROM ptosc;
 +----------+
 | count(*) |
 +----------+
@@ -250,43 +250,43 @@ greatsql> select count(*) from ptosc;
 
 #### 添加一列
 
-使用`pt-online-schema-change`工具添加一列：a，类型为INT
+使用 `pt-online-schema-change` 工具添加 a 列，类型为 INT：
 
 ```bash
 pt-online-schema-change --host=localhost --user=root --ask-pass --alter "ADD COLUMN a INT" D=test_db,t=ptosc --print --execute
 ```
 
 ::: tip 小贴士
-`--print` 是打印工具执行过程
-`--execute` 确认开始
+`--print` 是打印工具执行过程。
+`--execute` 确认开始。
 :::
 
-此时会输出工具的执行过程，来一段段解析
+此时会输出工具的执行过程，来一段段解析：
 
-1. 在执行前的一些状态检查及默认的操作设置
+1. 在执行前的一些状态检查及默认的操作设置：
 
 ```bash
--- 下一行表示工具没有找到任何从服务器（slaves）
+# 下一行表示工具没有找到任何从服务器（slaves）
 No slaves found.  See --recursion-method if host myarch has slaves.
--- 下一行表示工具没有检查从服务器的延迟，因为它没有找到任何从服务器，并且也没有指定 --check-slave-lag 选项来强制检查从服务器的延迟。
+# 下一行表示工具没有检查从服务器的延迟，因为它没有找到任何从服务器，并且也没有指定 --check-slave-lag 选项来强制检查从服务器的延迟。
 Not checking slave lag because no slaves were found and --check-slave-lag was not specified.
--- 以下部分列出了 pt-online-schema-change 工具在更改过程中可能会执行的操作，以及默认的重试次数和等待时间：
+# 以下部分列出了 pt-online-schema-change 工具在更改过程中可能会执行的操作，以及默认的重试次数和等待时间：
 Operation, tries, wait:
--- 分析原表的结构，以准备进行更改。如果失败，将重试 10 次，每次失败后等待 1 秒。
+# 分析原表的结构，以准备进行更改。如果失败，将重试 10 次，每次失败后等待 1 秒。
   analyze_table, 10, 1
--- 从原表复制行到新表。如果复制失败，将重试 10 次，每次失败后等待 0.25 秒。
+# 从原表复制行到新表。如果复制失败，将重试 10 次，每次失败后等待 0.25 秒。
   copy_rows, 10, 0.25
--- 在新表上创建触发器，以便捕获对原表的任何更改，并将这些更改应用到新表。如果失败，将重试 10 次，每次失败后等待 1 秒。
+# 在新表上创建触发器，以便捕获对原表的任何更改，并将这些更改应用到新表。如果失败，将重试 10 次，每次失败后等待 1 秒。
   create_triggers, 10, 1
--- 在切换完成后删除这些触发器。如果失败，将重试 10 次，每次失败后等待 1 秒。
+# 在切换完成后删除这些触发器。如果失败，将重试 10 次，每次失败后等待 1 秒。
   drop_triggers, 10, 1
--- 切换原表和新表，使新表成为活动表。如果失败，将重试 10 次，每次失败后等待 1 秒。
+# 切换原表和新表，使新表成为活动表。如果失败，将重试 10 次，每次失败后等待 1 秒。
   swap_tables, 10, 1
--- 更新与新表相关的任何外键约束。如果失败，将重试 10 次，每次失败后等待 1 秒。
+# 更新与新表相关的任何外键约束。如果失败，将重试 10 次，每次失败后等待 1 秒。
   update_foreign_keys, 10, 1
 ```
 
-2. 创建一张名为`_ptosc_new`的新表
+2. 创建一张名为`_ptosc_new`的新表：
 
 ```bash
 Creating new table...
@@ -300,7 +300,7 @@ CREATE TABLE `test_db`.`_ptosc_new` (
 Created new table test_db._ptosc_new OK.
 ```
 
-3. 对新表`_ptosc_new`增加一列 a
+3. 对新表`_ptosc_new`增加一列 a：
 
 ```bash
 Altering new table...
@@ -308,7 +308,7 @@ ALTER TABLE `test_db`.`_ptosc_new` ADD COLUMN a INT
 Altered `test_db`.`_ptosc_new` OK.
 ```
 
-4. 创建三个触发器DELETE、UPDATE、INSERT
+4. 创建三个触发器 `DELETE`、`UPDATE` 、`INSERT` ：
 
 ```bash
 2024-04-10T14:53:52 Creating triggers...
@@ -336,7 +336,7 @@ Time  : AFTER
 2024-04-10T14:53:52 Created triggers OK.
 ```
 
-5. 拷贝旧表数据到新表
+5. 拷贝旧表数据到新表：
 
 ```bash
 2024-04-10T14:53:52 Copying approximately 9861 rows...
@@ -345,7 +345,7 @@ SELECT /*!40001 SQL_NO_CACHE */ `id` FROM `test_db`.`ptosc` FORCE INDEX(`PRIMARY
 2024-04-10T14:53:52 Copied rows OK.
 ```
 
-6. 分析新表，并交换新旧表，最后删除旧表
+6. 分析新表，并交换新旧表，最后删除旧表：
 
 ```bash
 2024-04-10T14:53:52 Analyzing new table...
@@ -357,7 +357,7 @@ DROP TABLE IF EXISTS `test_db`.`_ptosc_old`
 2024-04-10T14:53:52 Dropped old table `test_db`.`_ptosc_old` OK.
 ```
 
-7. 删除触发器，完成所有操作
+7. 删除触发器，完成所有操作：
 
 ```bash
 2024-04-10T14:53:52 Dropping triggers...
@@ -370,14 +370,14 @@ Successfully altered `test_db`.`ptosc`.
 
 #### 修改字符集
 
-将表 ptosc 的 c 字段的字符集修改为 utf8mb4
+将表 ptosc 的 c 字段的字符集修改为 utf8mb4：
 
 ```bash
 pt-online-schema-change --host=localhost --user=root --ask-pass --alter "modify column c varchar(255) character set utf8mb4" D=test_db,t=ptosc --alter-foreign-keys-method=auto --execute
 ```
 
 ::: tip 小贴士
-这里设置了一个`--alter-foreign-keys-method`用于设置外键约束的处理方法，设置为`auto`就是自动选择处理方法
+这里设置了一个`--alter-foreign-keys-method`用于设置外键约束的处理方法，设置为`auto`就是自动选择处理方法。
 :::
 
 #### 删除一列
@@ -396,33 +396,33 @@ pt-online-schema-change --host=localhost --user=root --ask-pass --alter "drop fo
 
 在使用该工具时，需要注意以下几点：
 
-1. 工具在运行过程中，避免对原表进行更改，可能会出现数据不一致
-2. 使用该工具前要充分测试
-3. 最好在业务低峰时候操作
+1. 工具在运行过程中，避免对原表进行更改，可能会出现数据不一致。
+2. 使用该工具前要充分测试。
+3. 最好在业务低峰时候操作。
 
 ## pt-show-grants
 
 ### 概要
 
-显示当前数据库中所有用户的授权情况，并以 GRANT 语句现实，方便复制到其他数据库上执行
+显示当前数据库中所有用户的授权情况，并以 GRANT 语句现实，方便复制到其他数据库上执行。
 
 **用法**
 
 ```bash
-- pt-show-grants [OPTIONS] [DSN]
+pt-show-grants [OPTIONS] [DSN]
 ```
 
 ### 选项
 
 | 参数                       | 含义                                                         |
 | -------------------------- | ------------------------------------------------------------ |
-| --ask-pass                 | 连接MySQL/GreatSQL提示输入密码                               |
+| --ask-pass                 | 连接 MySQL/GreatSQL 提示输入密码                               |
 | --charset                  | 默认字符集                                                   |
 | --config                   | 读取这个逗号分隔的配置文件列表，如果指定，这必须是命令行上的第一个选项 |
 | --databases                | 仅检查此逗号分隔的数据库列表                                 |
 | --defaults-file            | 只从给定文件中读取 MySQL/GreatSQL 选项                       |
-| --drop                     | 在输出中的每个用户之前添加 DROP USER                         |
-| --flush                    | 输出后添加 FLUSH PRIVILEGES                                  |
+| --drop                     | 在输出中的每个用户之前添加 `DROP USER`                         |
+| --flush                    | 输出后添加 `FLUSH PRIVILEGES`                                  |
 | --[no]header               | 打印转储标题，默认有标题                                     |
 | --help                     | 显示帮助                                                     |
 | --host                     | 连接到主机                                                   |
@@ -431,8 +431,8 @@ pt-online-schema-change --host=localhost --user=root --ask-pass --alter "drop fo
 | --password                 | 连接时使用的密码                                             |
 | --pid                      | 创建给定的 PID 文件                                          |
 | --port                     | 用于连接的端口号                                             |
-| --revoke                   | 为每个 GRANT 语句添加 REVOKE 语句                            |
-| --separate                 | 分别列出每个 GRANT 或 REVOKE                                 |
+| --revoke                   | 为每个 `GRANT` 语句添加 `REVOKE` 语句                            |
+| --separate                 | 分别列出每个 `GRANT` 或 `REVOKE`                                 |
 | --set-vars                 | 在这个以逗号分隔的 `variable=value` 对列表中设置 MySQL/GreatSQL 变量 |
 | --[no]include-unused-roles | 转储 MySQL 8+ 角色时，包括未使用的角色                       |
 | --socket                   | 用于连接的套接字文件                                         |
@@ -442,7 +442,7 @@ pt-online-schema-change --host=localhost --user=root --ask-pass --alter "drop fo
 
 ### 最佳实践
 
-只显示GreatSQL用户的授权信息
+只显示 GreatSQL 用户的授权信息：
 
 ```bash
 pt-show-grants --host=localhost --user=root --ask-pass --only=GreatSQL
@@ -462,7 +462,7 @@ GRANT ALTER, ALTER ROUTINE, CREATE, CREATE ROLE, CREATE ROUTINE, CREATE TABLESPA
 ```
 :::
 
-该工具会展示 GreatSQL 用户的所有权限，用户可以直接复制输出的结果，方便粘贴到其他数据库上执行
+该工具会展示 GreatSQL 用户的所有权限，用户可以直接复制输出的结果，方便粘贴到其他数据库上执行。
 
 ## pt-upgrade
 
@@ -480,18 +480,18 @@ pt-upgrade [OPTIONS] LOGS|RESULTS DSN [DSN]
 
 查询差异的判断主要来源以下几点：
 
-1. Row count，返回的行数是否相同
-2. Row data，返回的行数据是否相同
-3. Warnings，返回的警告是否相同
-4. Query time，查询的相差时间
-5. Query errors，查询错误，在一个数据库出错，则会报告为“查询错误”
-6. SQL errors，SQL错误，在两个数据库都出错，则会报告为“SQL 错误”
+1. Row count，返回的行数是否相同。
+2. Row data，返回的行数据是否相同。
+3. Warnings，返回的警告是否相同。
+4. Query time，查询的相差时间。
+5. Query errors，查询错误，在一个数据库出错，则会报告为“查询错误”。
+6. SQL errors，SQL错误，在两个数据库都出错，则会报告为“SQL 错误”。
 
 ### 选项
 
 | 参数                       | 含义                                                         |
 | -------------------------- | ------------------------------------------------------------ |
-| --ask-pass                 | 连接MySQL/GreatSQL提示输入密码                               |
+| --ask-pass                 | 连接 MySQL/GreatSQL 提示输入密码                               |
 | --charset                  | 默认字符集                                                   |
 | --config                   | 读取这个逗号分隔的配置文件列表，如果指定，这必须是命令行上的第一个选项 |
 | --[no]continue-on-error    | 即使出现错误也继续解析                                       |
@@ -512,33 +512,31 @@ pt-upgrade [OPTIONS] LOGS|RESULTS DSN [DSN]
 | --pid                      | 创建给定的 PID 文件                                          |
 | --port                     | 用于连接的端口号                                             |
 | --progress                 | 将进度报告打印到 STDERR                                      |
-| --[no]read-only            | 默认情况下，只会执行 SELECT 和 SET 操作。如要执行其它操作，必须指定该参数 |
+| --[no]read-only            | 默认情况下，只会执行 `SELECT` 和 `SET` 操作。如要执行其它操作，必须指定该参数 |
 | --report                   | 打印“报告”的这些部分                                         |
 | --run-time                 | 运行时间                                                     |
 | --save-results             | 将结果保存到此目录                                           |
 | --set-vars                 | 以逗号分隔的 `variable=value` 对列表中设置 MySQL/GreatSQL 变量 |
 | --socket                   | 用于连接的套接字文件                                         |
 | --type                     | 日志文件的类型                                               |
-| --upgrade-table            | 使用此表清除警告，默认是`percona_schema.pt_upgrade`          |
+| --upgrade-table            | 使用此表清除警告，默认是 `percona_schema.pt_upgrade`          |
 | --user                     | 用于登录的用户                                               |
 | --version                  | 显示版本                                                     |
 | --[no]version-check        | 版本检查                                                     |
 
 ### 最佳实践
 
-只需提供两个实例的连接信息和文件名，直接比较一个文件中的 SQL 在两个实例中的执行效果
+只需提供两个实例的连接信息和文件名，直接比较一个文件中的 SQL 在两个实例中的执行效果。
 
 ```bash
 pt-upgrade h=host1 h=host2 slow.log
 ```
 
-使用`--type`参数轻松指定文件类型，支持慢日志、通用日志、二进制日志（经 mysqlbinlog 解析）、原始 SQL 语句和 tcpdump 。若未指定，则默认为慢日志。
+使用 `--type` 参数轻松指定文件类型，支持慢日志、通用日志、二进制日志（经 mysqlbinlog 解析）、原始 SQL 语句和 tcpdump 。若未指定，则默认为慢日志。
 
-接下来做个简单的示范，创建一个`pt_upgrade_test.sql`包含了若干条测试语句
+接下来做个简单的示范，创建一个 `pt_upgrade_test.sql` 文件包含了若干条测试语句：
 
 ```ini
-$ vim /tmp/pt_upgrade_test.sql
-
 SELECT NOW();
 SELECT DATEDIFF('2023-10-23', '2023-01-01') AS days_diff;
 SELECT 5 + 3 * 2 AS result;
@@ -546,7 +544,7 @@ SELECT DATABASE();
 SHOW GRANTS FOR CURRENT_USER();
 ```
 
-运行 pt-upgrade 工具进行比较
+运行 `pt-upgrade` 工具进行比较：
 
 ```bash
 pt-upgrade h=localhost,P=3306,u=root,--ask-pass h=localhost,P=3306,u=root,--ask-pass --type rawlog /tmp/pt_upgrade_test.sql --no-read-only
@@ -585,16 +583,16 @@ queries_with_errors   0
 ```
 :::
 
-- failed_queries：查询因为某种原因而失败的SQL个数
-- not_select：非SELECT类型的查询被处理的SQL个数
-- queries_filtered：查询因为某种过滤条件而被排除的SQL个数
-- queries_no_diffs：执行计划没有差异的SQL个数
-- queries_read：总共读取了几个查询进行比较
-- queries_with_diffs：在两个数据库上的执行计划存在差异的SQL个数
-- queries_with_errors：在执行过程中遇到错误的SQL个数
+- failed_queries：查询因为某种原因而失败的 SQL 个数。
+- not_select：非 SELECT 类型的查询被处理的 SQL 个数。
+- queries_filtered：查询因为某种过滤条件而被排除的 SQL 个数。
+- queries_no_diffs：执行计划没有差异的 SQL 个数。
+- queries_read：总共读取了几个查询进行比较。
+- queries_with_diffs：在两个数据库上的执行计划存在差异的 SQL 个数。
+- queries_with_errors：在执行过程中遇到错误的 SQL 个数。
 
 ::: tip 小贴士
-如果 `queries_with_diffs` 的值不为 0，就要着重检查下差异了
+如果 `queries_with_diffs` 的值不为 0，就要着重检查下差异了。
 :::
 
 

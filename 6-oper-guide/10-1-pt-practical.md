@@ -1,49 +1,53 @@
 # Percona Toolkit 实用类
 
 ::: tip 小贴士
-`$`为命令提示符、`greatsql>`为GreatSQL数据库提示符。
+`$`为 Linux 命令提示符、`greatsql>`为 GreatSQL 数据库提示符。
 :::
 
 ## 实用类
 
-在Percona Toolkit中实用类共有以下工具
+在 Percona Toolkit 中性能类共有以下工具：
 
-- `pt-align`：将其它工具输出内容与列对齐
-- `pt-archiver`：将表中的行存档到另一个表或文件中
-- `pt-find`：查找表并执行命令
-- `pt-fingerprint`：将查询转成密文
-- `pt-kill`：Kill掉符合条件的SQL
-- `pt-k8s-debug-collector`：从 k8s/OpenShift 集群收集调试数据（日志、资源状态等）
-- `pt-secure-collect`：收集、清理、打包和加密数据
+- `pt-align`：将其它工具输出内容与列对齐。
+- `pt-archiver`：将表中的行存档到另一个表或文件中。
+- `pt-find`：查找表并执行命令。
+- `pt-fingerprint`：将查询转成密文。
+- `pt-kill`：Kill 掉符合条件的 SQL。
+- `pt-k8s-debug-collector`：从 k8s/OpenShift 集群收集调试数据（日志、资源状态等）。
+- `pt-secure-collect`：收集、清理、打包和加密数据。
 
 ## pt-align
 
 ### 概要
 
-通过读取行并将其分成单词的方式来执行列对齐。该工具首先计算每行包含的单词数量，并尝试确定是否有一个占主导地位的数字，将其假设为每行的单词数量。接下来，`pt-align`会排除所有不符合该数量的行，并将下一行视为第一个非标题行。根据每个单词是否看起来像数字，它会决定列的对齐方式。最后，工具会遍历数据集，确定每列的宽度，并将它们格式化打印出来。
+通过读取行并将其分成单词的方式来执行列对齐。
+
+该工具首先计算每行包含的单词数量，并尝试确定是否有一个占主导地位的数字，将其假设为每行的单词数量。接下来，`pt-align`会排除所有不符合该数量的行，并将下一行视为第一个非标题行。根据每个单词是否看起来像数字，它会决定列的对齐方式。最后，工具会遍历数据集，确定每列的宽度，并将它们格式化打印出来。
 
 `pt-align`工具对于调整 `vmstat` 或 `iostat` 的输出非常有帮助，使其更易于阅读。
 
 **用法**
 
-将其它工具的输出与列对齐，如果未指定 FILES（文件）则读取 STDIN（输入）
+将其它工具的输出与列对齐，如果未指定 FILES（文件）则读取 STDIN（输入）。
 
-- pt-align [FILES]
+```bash
+pt-align [FILES]
+```
 
 ---
 
-如果打印以下输出（没有对齐）
+如果打印以下输出（没有对齐）：
 
-```bash
+```
 DATABASE TABLE   ROWS
 foo      bar      100
 long_db_name table  1
 another  long_name 500
 ```
 
-可以使用 `pt-align` 将输出重新打印（有对齐）
+可以使用 `pt-align` 将输出重新打印（有对齐）：
 
-```bash
+```
 DATABASE     TABLE     ROWS
 foo          bar        100
 long_db_name table        1
@@ -52,7 +56,7 @@ another      long_name  500
 
 ### 选项
 
-该工具的命令行参数如下
+该工具的命令行参数如下：
 
 | 参数      | 含义                 |
 | --------- | -------------------- |
@@ -61,29 +65,29 @@ another      long_name  500
 
 ### 最佳实践
 
-#### 对齐vmstat
+#### 对齐 vmstat
 
-当查看 vmstat 时，有时会遇到列对齐不整齐的情况。此时，可以使用 `pt-align` 工具来解决这个问题
+当查看 `vmstat` 时，有时会遇到列对齐不整齐的情况。此时，可以使用 `pt-align` 工具来解决这个问题。
 
 ```bash
--- 未使用pt-align工具
+# 未使用pt-align工具
 $ vmstat
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  1  0 205472 181304     60 948960    0    0     0     1    1    1  1  2 98  0  0
 
--- 使用pt-align工具
+# 使用pt-align工具
 $ vmstat | pt-align
 r b   swpd   free buff  cache si so bi bo in cs us sy id wa st
 2 0 205472 181260   60 948992  0  0  0  1  1  1  1  2 98  0  0
 ```
 
-#### 对齐iostat
+#### 对齐 iostat
 
-当查看 iostat 时，有时会遇到列对齐不整齐的情况。此时，可以使用 `pt-align` 工具来解决这个问题
+当查看 `iostat` 时，有时会遇到列对齐不整齐的情况。此时，可以使用 `pt-align` 工具来解决这个问题。
 
 ```bash
--- 未使用pt-align工具
+# 未使用pt-align工具
 $ iostat
 avg-cpu:  %user   %nice %system %iowait  %steal   %idle
            0.86    0.00    1.51    0.00    0.00   97.62
@@ -93,7 +97,7 @@ sda               0.11         0.33         1.31    6746368   27046909
 dm-0              0.09         0.30         1.23    6263958   25261569
 dm-1              0.03         0.02         0.09     452072    1782864
 
--- 使用pt-align工具
+# 使用pt-align工具
 $ iostat | pt-align
 0.86    0.00 1.51      0.00      0.00    97.62   
 Device: tps  kB_read/s kB_wrtn/s kB_read kB_wrtn 
@@ -104,7 +108,7 @@ dm-1    0.03 0.02      0.09      452072  1782864
 
 ## pt-archiver
 
-将 MySQL/GreatSQL 表中的行存档到另一个表或文件中
+将 MySQL/GreatSQL 表中的行存档到另一个表或文件中。
 
 ### 概要
 
@@ -118,17 +122,18 @@ pt-archiver 是一款在线归档工具，不会影响生产，但是用此命�
 
 **用法**
 
-- pt-archiver [OPTIONS] --source DSN --where WHERE
-
+```bash
+pt-archiver [OPTIONS] --source DSN --where WHERE
+```
 ---
 
-将表从oltp实例归档到olap的实例中
+将表从oltp实例归档到olap的实例中：
 
 ```bash
 pt-archiver --source h=oltp_server,D=test,t=tbl --dest h=olap_server --file '/var/log/archive/%Y-%m-%d-%D.%t' --where "1=1" --limit 1000 --commit-each
 ```
 
-从子表删除孤立行
+从子表删除孤立行：
 
 ```bash
 pt-archiver --source h=host,D=db,t=child --purge --where 'NOT EXISTS(SELECT * FROM parent WHERE col=child.col)'
@@ -155,79 +160,79 @@ pt-archiver --source h=host,D=db,t=child --purge --where 'NOT EXISTS(SELECT * FR
 
 | 参数                      | 含义                                                         |
 | ------------------------- | ------------------------------------------------------------ |
-| --analyze                 | 为d则在dest上使用analyze，为s则在source上使用analyze，ds则表示两者都执行 |
+| --analyze                 | 为 d 则在 dest 上使用`analyze`。为 s 则在 source 上使用`analyze`。ds 则表示两者都执行 |
 | --ascend-first            | 仅升序第一个索引列                                           |
 | --ask-pass                | 连接 MySQL/GreatSQL 时提示输入密码                           |
 | --buffer                  | 指定file时，仅在事务提交的时候刷新到磁盘                     |
 | --bulk-delete             | 批量删除                                                     |
-| --[no]bulk-delete-limit   | 是否开启批量删除限制，delete ... limit                       |
-| --bulk-insert             | 通过LOAD DATA批量插入                                        |
+| --[no]bulk-delete-limit   | 是否开启批量删除限制，`delete ... limit`                       |
+| --bulk-insert             | 通过 LOAD DATA 批量插入                                        |
 | --channel                 | 指定复制通道                                                 |
 | --charset                 | 字符集                                                       |
 | --[no]check-charset       | 是否检查字符集，默认检查                                     |
-| --[no]check-columns       | 检查列，确保 --source 和 --dest 具有相同的列                 |
-| \--check-interval         | 定义归档每次暂停多长时间                                     |
-| --check-slave-lag         | 暂停归档，直到此副本的滞后小于--max-lag                      |
+| --[no]check-columns       | 检查列，确保 `--source` 和 `--dest` 具有相同的列                 |
+| --check-interval         | 定义归档每次暂停多长时间                                     |
+| --check-slave-lag         | 暂停归档，直到此副本的滞后小于 `--max-lag`                      |
 | --columns                 | 归档指定的字段，逗号分隔                                     |
-| --commit-each             | 提交每组获取和归档的行,与--limit配合使用                     |
+| --commit-each             | 提交每组获取和归档的行,与 `--limit` 配合使用                     |
 | --config                  | 读取这个逗号分隔的配置文件列表，如果指定，这必须是命令行上的第一个选项 |
 | --database                | 连接到该数据库                                               |
-| --delayed-insert          | 将 DELAYED 修饰符添加到 INSERT 或 REPLACE 语句，低优先级插入。<br />不过此参数在5.6版本弃用，8.0版本不支持，服务器识别但忽略DELAYED关键字 |
-| --dest                    | 此项指定一个表。pt-archiver 将插入从 --source 归档的行。 它使用与 --source 相同的 key=val 参数格式。 大多数缺失值默认为与 --source 相同的值，因此您不必重复 --source 和 --dest 中相同的选项。 使用 --help 选项查看从 --source 复制了哪些值。 |
+| --delayed-insert          | 将 `DELAYED` 修饰符添加到 `INSERT` 或 `REPLACE` 语句，低优先级插入。<br />不过此参数在5.6版本弃用，8.0版本不支持，服务器识别但忽略 `DELAYED` 关键字 |
+| --dest                    | 此项指定一个表。pt-archiver 将插入从 `--source` 归档的行。 它使用与 `--source` 相同的 `key=val` 参数格式。<br />大多数缺失值默认为与 `--source` 相同的值，因此不必重复 `--source` 和 `--dest` 中相同的选项。<br />使用 `--help` 选项查看从 `--source` 复制了哪些值。 |
 | --dry-run                 | 打印查询并退出而不执行任何操作                               |
-| --file                    | 要存档到的文件，%D Database name；%t Table name，时间的格式化如例子中所描述，与--output-format结合使用可以指定输出的内容是dump(使用制表符作为分隔符)还是csv（使用逗号作为分隔符），与--header配合使用指定是否打印字段名字在第一行 |
-| --for-update              | 指定加读锁还是写锁。将 FOR UPDATE 修饰符添加到 SELECT 语句。与--share-lock互斥。 |
-| --header                  | 在--file顶部打印列标题                                       |
+| --file                    | 要存档到的文件 `%D Database name；%t Table name` 时间的格式化如例子中所描述，与 `--output-format` 结合使用可以指定输出的内容是 dump(使用制表符作为分隔符) 还是 csv（使用逗号作为分隔符），与 `--header` 配合使用指定是否打印字段名字在第一行 |
+| --for-update              | 指定加读锁还是写锁。将 `FOR UPDATE` 修饰符添加到 `SELECT` 语句。与 `--share-lock` 互斥。 |
+| --header                  | 在 `--file` 顶部打印列标题                                       |
 | --help                    | 显示帮助                                                     |
-| --high-priority-select    | 将 HIGH_PRIORITY 修饰符添加到 SELECT 语句。只适用表级别存储引擎（MyISAM、MEMORY等） |
+| --high-priority-select    | 将 `HIGH_PRIORITY` 修饰符添加到 `SELECT` 语句。<br />只适用表级别存储引擎（MyISAM、MEMORY等） |
 | --host                    | 连接到主机                                                   |
-| --ignore                  | 忽略在执行INSERT时出现的可忽略错误。与--replace互斥          |
+| --ignore                  | 忽略在执行INSERT时出现的可忽略错误。与 `--replace` 互斥          |
 | --limit                   | 每个语句要获取和归档的行数。默认为一行                       |
-| --local                   | 不要将 OPTIMIZE 或 ANALYZE 查询写入 binlog                   |
-| --low-priority-delete     | 将 LOW_PRIORITY 修饰符添加到 DELETE 语句。此时会延迟执行该 DELETE 直到没有其他客户端从表中读取数据为止。只适用表级别存储引擎（MyISAM、MEMORY等） |
+| --local                   | 不要将 `OPTIMIZE` 或 `ANALYZE` 查询写入 `binlog`                   |
+| --low-priority-delete     | 将 `LOW_PRIORITY` 修饰符添加到 `DELETE` 语句。此时会延迟执行该 `DELETE` 直到没有其他客户端从表中读取数据为止。<br />只适用表级别存储引擎（MyISAM、MEMORY等） |
 | --low-priority-insert     | 低优先级插入。只适用表级别存储引擎（MyISAM、MEMORY等）       |
-| --max-flow-ctl            | 用于pxc集群的类max-lag参数                                   |
+| --max-flow-ctl            | 用于 pxc 集群的类 `max-lag` 参数                                   |
 | --max-lag                 | 暂停校验和，直到所有副本的滞后小于此值                       |
-| --no-ascend               | 不使用升序索引优化。和no-delete互斥                          |
-| --no-delete               | 不删除数据。和no-ascend互斥                                  |
-| --optimize                | 表示执行optimize,使用方式与analyze一致。和analyze互斥        |
-| --output-format           | 与--file一起使用指定输出格式                                 |
+| --no-ascend               | 不使用升序索引优化。和 `no-delete` 互斥                          |
+| --no-delete               | 不删除数据。和 `no-ascend` 互斥                                  |
+| --optimize                | 表示执行 `optimize`，使用方式与 `analyze` 一致。和 `analyze` 互斥        |
+| --output-format           | 与 `--file` 一起使用指定输出格式                                 |
 | --password                | 连接时使用的密码                                             |
 | --pid                     | 创建给定的 PID 文件。如果 PID 文件已存在且其中包含的 PID 与当前 PID 不同，则该工具将不会启动。但是，如果 PID 文件存在并且其中包含的 PID 不再运行，则该工具将使用当前 PID 覆盖 PID 文件。工具退出时，PID 文件会自动删除 |
-| --plugin                  | 用作通用插件的 Perl 模块名称                                 |
+| --plugin                  | 用作通用插件的 `Perl` 模块名称                                 |
 | --port                    | 用于连接的端口号                                             |
-| --primary-key-only        | 仅主键列。使用主键列指定--columns的快捷方式                  |
+| --primary-key-only        | 仅主键列。使用主键列指定 `--columns` 的快捷方式                  |
 | --progress                | 指定多少行打印一次进度信息                                   |
-| --purge                   | 只清除，不归档。最好配合 --primary-key-only 指定表的主键列。这将防止无缘无故地从服务器获取所有列。 |
-| --quick-delete            | 给DELETE加quick修饰符。使用 QUICK 修饰符时，存储引擎不会合并索引叶子节点，从而提高删除操作的速度。只适用表级别存储引擎（MyISAM、MEMORY等） |
-| --quiet                   | 不输出任何信息，包括statistics信息                           |
-| --replace                 | 导致--dest中的 INSERT 被写入 REPLACE。与--ignore互斥         |
+| --purge                   | 只清除，不归档。最好配合 `--primary-key-only` 指定表的主键列。|
+| --quick-delete            | 给 `DELETE` 加 `quick` 修饰符。使用 `QUICK` 修饰符时，存储引擎不会合并索引叶子节点，从而提高删除操作的速度。<br />只适用表级别存储引擎（MyISAM、MEMORY等） |
+| --quiet                   | 不输出任何信息，包括 `statistics` 信息                           |
+| --replace                 | 导致 `--dest` 中的 `INSERT` 被写入 `REPLACE`。与 `--ignore` 互斥         |
 | --retries                 | 遇到超时或死锁的重试次数                                     |
-| --run-time                | 指定运行时间，s=seconds, m=minutes, h=hours, d=days; 如果不指定用的是s |
-| --[no]safe-auto-increment | 不要归档具有最大 AUTO_INCRMENT 的行                          |
-| --sentinel                | 默认文件是/tmp/pt-archiver-sentinel，该文件存在则退出归档    |
+| --run-time                | 指定运行时间(`s=seconds, m=minutes, h=hours, d=days`)默认为 s |
+| --[no]safe-auto-increment | 不要归档具有最大 `AUTO_INCRMENT` 的行                          |
+| --sentinel                | 默认文件是 /tmp/pt-archiver-sentinel，该文件存在则退出归档    |
 | --slave-user              | 从库用户                                                     |
 | --slave-password          | 从库密码                                                     |
-| --set-vars                | 设置执行时的MySQL/GreatSQL参数                               |
-| --share-lock              | 指定加读锁还是写锁。将 LOCK IN SHARE MODE 修饰符添加到 SELECT 语句。与--for-update互斥 |
-| --skip-foreign-key-checks | 使用 SET FOREIGN_KEY_CHECKS=0 禁用外键检查                   |
+| --set-vars                | 设置执行时的 MySQL/GreatSQL 参数                               |
+| --share-lock              | 指定加读锁还是写锁。将 `LOCK IN SHARE MODE` 修饰符添加到 `SELECT` 语句。与 `--for-update` 互斥 |
+| --skip-foreign-key-checks | 使用 `SET FOREIGN_KEY_CHECKS=0` 禁用外键检查                   |
 | --sleep                   | 两次提取中间的休眠时间，默认不休眠                           |
-| --sleep-coef              | 指定sleep时间为最后一次 SELECT 时间的多少倍                  |
+| --sleep-coef              | 指定 `sleep` 时间为最后一次 `SELECT` 时间的多少倍                  |
 | --socket                  | 用于连接的套接字文件                                         |
-| --source                  | 对于制动归档的表，选项“i”用于指定索引，默认情况下使用主键。选项“a”和“b”可用于调整语句通过二进制日志的流向。使用“b”选项会禁用指定连接上的二进制日志记录。若选择“a”选项，则连接将使用指定的数据库，可通过此方式防止二进制日志事件在服务器上执行时使用 --replicate-ignore-db 选项。这两个选项提供了实现相同目标的不同方法，即将数据从主服务器归档，同时在从服务器上保留它。可以在主服务器上运行清理作业，并通过所选方式防止其在从服务器上执行。 |
+| --source                  | 对于制动归档的表，选项“i”用于指定索引，默认情况下使用主键。<br />选项“a”和“b”可用于调整语句通过二进制日志的流向。使用“b”选项会禁用指定连接上的二进制日志记录。<br />若选择“a”选项，则连接将使用指定的数据库，可通过此方式防止二进制日志事件在服务器上执行时使用 `--replicate-ignore-db` 选项。<br />这两个选项提供了实现相同目标的不同方法，即将数据从主服务器归档，同时在从服务器上保留它。可以在主服务器上运行清理作业，并通过所选方式防止其在从服务器上执行。 |
 | --statistics              | 收集和打印时间统计数据                                       |
-| --stop                    | 通过创建sentine文件来停止归档                                |
-| --txn-size                | 指定每次事务提交的行数。与commit-each互斥                    |
-| --unstop                  | 删除sentine文件                                              |
+| --stop                    | 通过创建 `sentine` 文件来停止归档                                |
+| --txn-size                | 指定每次事务提交的行数。与 `commit-each` 互斥                    |
+| --unstop                  | 删除 `sentine` 文件                                              |
 | --user                    | 登录的用户                                                   |
 | --version                 | 显示版本号                                                   |
 | --[no]version-check       | 自动检查更新功能，默认是检查的                               |
-| --where                   | 指定 WHERE 子句限制归档哪些行。如果不需要 WHERE 条件,可使用 WHERE 1=1 |
+| --where                   | 指定 `WHERE` 子句限制归档哪些行。如果不需要 `WHERE` 条件，可使用 WHERE 1=1 |
 | --why-quit                | 打印退出原因                                                 |
 
 ### 最佳实践
 
-创建一张archiver_test表，并生成1000条数据
+创建一张 archiver_test 表，并生成 1000 条数据：
 
 ```sql
 greatsql> CREATE TABLE archiver_test (
@@ -248,22 +253,22 @@ greatsql> SELECT count(*) FROM archiver_test;
 ```
 ::: tip 小贴士
 
-在使用过程中可能会需要依赖例如：`Cannot connect to MySQL because the Perl DBD::mysql module is not installed or not found.`此时按提示安装相应依赖包即可
+在使用过程中可能会需要依赖例如：`Cannot connect to MySQL because the Perl DBD::mysql module is not installed or not found.`此时按提示安装相应依赖包即可。
 ::: 
 
 #### 归档到同一实例上的不同表
 
 ::: danger 特别提醒
 
-此操作会删除源表的数据，若不删除源表数据请加上使用`--no-delete`
+此操作会删除源表的数据，若不删除源表数据请加上使用 `--no-delete` 。
 :::
 
 ```bash
 pt-archiver --source h=localhost,P=3306,u=root,D=test_db,t=archiver_test --charset=utf8mb4  --ask-pass --dest h=localhost,P=3306,u=root,D=test_db,t=archiver_test2 --ask-pass --where "id<100" --limit 1000 --commit-each
--- 会让你输入密码（源端）和（目标端）密码
+# 会让你输入密码（源端）和（目标端）密码
 ```
 
-伪代码如下
+伪代码如下：
 
 ```bash
 pt-archiver --source h=源ip,P=源端口,u=用户,p=密码,D=库名,t=表名 --ask-pass --dest h=目标IP,P=端口,u=用户,p=密码,D=库名,t=表名 --ask-pass --where "id<100" --limit 1000 --commit-each
@@ -273,7 +278,7 @@ pt-archiver --source h=源ip,P=源端口,u=用户,p=密码,D=库名,t=表名 --a
 字段不一致报错：`”The following columns exist in --dest but not --source: name2“`
 :::
 
-检查是否已经归档成功
+检查是否已经归档成功。
 
 ```sql
 greatsql> SELECT count(*) FROM archiver_test2;
@@ -285,38 +290,41 @@ greatsql> SELECT count(*) FROM archiver_test2;
 1 row in set (0.00 sec)
 ```
 
-因为`--dest`会从`--source`继承相同的值，所以上面也可改写成以下方式
+因为`--dest`会从`--source`继承相同的值，所以上面也可改写成以下方式：
 
 ```bash
 pt-archiver --source h=localhost,P=3306,u=root,D=test_db,t=archiver_test --charset=utf8mb4  --ask-pass --dest t=archiver_test2 --where "id<100" --limit 1000 --commit-each
 ```
 
-也可用Socket来进行登录，如果使用单机多实例部署GreatSQL的时候采用这种方法要尤其注意选择对应Socket
+也可用 Socket 来进行登录，如果使用单机多实例部署 GreatSQL 的时候采用这种方法要尤其注意选择对应 Socket：
 
 ```bash
 pt-archiver --source u=root,D=test_db,t=archiver_test -S /data/MySQL/GreatSQL.sock  --charset=utf8mb4 --dest t=archiver_test2  --where "id<100" --limit 1000 --commit-each
 ```
 
-也可以通过 my.cnf 配置文件读取用户名和密码，但是在 my.cnf 文件中需要配置好用户名和密码
+也可以通过 my.cnf 配置文件读取用户名和密码，但是在 my.cnf 文件中需要配置好用户名和密码。
 
 ::: tip 小贴士
 该方法虽然方便，但可能会造成密码泄露，存在安全风险不推荐使用。
 ::: 
 
+修改 `/etc/my.cnf` 配置文件 `[client]` 区间，增加下面内容：
+
 ```ini
-$ vim /etc/my.cnf
 [client]
 user=your_user_name
 pass=sectet
 ```
-使用 -F 指定 my.cnf 文件
+
+使用 `-F` 指定 my.cnf 文件：
+
 ```bash
 pt-archiver --source F=/etc/my.cnf,u=root,D=test_db,t=archiver_test --charset=utf8mb4 --dest t=archiver_test2  --where "id<100" --limit 1000 --commit-each
 ```
 
-#### 归档时不写入Binlog
+#### 归档时不写入 Binlog
 
-添加`b=true`指定归档操作不写入Binlog中
+添加 `b=true` 指定归档操作不写入 Binlog 中：
 
 ```bash
 pt-archiver --source b=true,h=localhost,P=3306,u=root,D=test_db,t=archiver_test --charset=utf8mb4  --ask-pass --dest b=true,t=archiver_test3  --where "id<100" --limit 1000 --commit-each
@@ -324,14 +332,14 @@ pt-archiver --source b=true,h=localhost,P=3306,u=root,D=test_db,t=archiver_test 
 
 #### 归档到文件
 
-导出到外部文件，且不删除源端表的数据
+导出到外部文件，且不删除源端表的数据：
 
 ```bash
 pt-archiver --source h=localhost,D=test_db,t=archiver_test,u=root --where '1=1' --no-check-charset --no-delete --file="/data/bk/archiver_test.dat"
 ```
-因文件没有utf8mb4编码，所以设置了`no-check-charset`不检查字符集
+因文件没有 utf8mb4 编码，所以设置了 `no-check-charset` 不检查字符集。
 
-检查备份情况
+检查备份情况：
 
 ```bash
 $ tail -n 3 /data/bk/archiver_test.dat
@@ -344,11 +352,13 @@ $ tail -n 3 /data/bk/archiver_test.dat
 
 ### 概要
 
-此工具可以查找符合条件的表，并做一些相应的操作。默认操作是打印数据库和表名称
+此工具可以查找符合条件的表，并做一些相应的操作，默认操作是打印数据库和表名称。
 
 **用法**
 
-- pt-find [OPTIONS] [DATABASES]
+```bash
+pt-find [OPTIONS] [DATABASES]
+```
 
 ### 选项
 
@@ -379,7 +389,6 @@ $ tail -n 3 /data/bk/archiver_test.dat
 #### 查找大于1G的表
 
 ```bash
-
 $ pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --tablesize +1G
 `tpch`.`customer`
 `tpch`.`lineitem`
@@ -391,12 +400,12 @@ $ pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --tablesize
 #### 查找修改过的表
 
 ```bash
--- 30分钟之内
+# 30分钟之内
 $ pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --mmin -30
 `mysql`.`gtid_executed`
 `test_db`.`archiver_test`
 
--- 30分钟之前
+# 30分钟之前
 $ pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --mmin +30
 `aptest`.`sys_dept`
 `aptest`.`sys_user`
@@ -411,38 +420,40 @@ $ pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --mmin +30
 
 ```bash
 pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --empty
+```
+::: details 查看运行结果
+```bash
+pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --empty
 `db2`.`t1`
 `db2`.`t2`
 ```
+::: 
 
 #### 查找表并修改存储引擎
 
-查找1天内创建的 MyISAM 表
+查找1天内创建的 MyISAM 表：
+
 ```bash
 pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --ctime -1 --engine MyISAM
-`test_db`.`myisam`
 ```
 
-查找1天内的 MyISAM 表并修改为 InnoDB
+查找1天内的 MyISAM 表并修改为 InnoDB：
+
 ```bash
 pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --ctime -1 --engine MyISAM --exec "ALTER TABLE %D.%N ENGINE=InnoDB"
 ```
 
-验证下是否修改成功，此时可以用到上述的`pt-align`工具使输出更加美观
-```bash
-mysql -e "SHOW TABLE STATUS FROM test_db" | pt-align | grep your_table_name
-myisam InnoDB ......
-```
-查找1天前的InnoDB表
+查找1天前的InnoDB表：
+
 ```bash
 pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --ctime +1 --engine InnoDB
 ```
 ::: tip 小贴士
-`InnoDB`和`MyISAM`两个存储引擎名字必须按照标准输入，否则将无法进行正确的查找
+`InnoDB`和`MyISAM`两个存储引擎名字必须按照标准输入，否则将无法进行正确的查找。
 :::
 #### 查找空表并删除
 
-避免不必要的删除错误，先查找哪些是空表
+避免不必要的删除错误，先查找哪些是空表：
 ```bash
 pt-find --socket=/data/GreatSQL/mysql.sock --empty test_db
 ```
@@ -454,13 +465,13 @@ $ pt-find --socket=/data/GreatSQL/mysql.sock --empty test_db
 ```
 ::: 
 
-查找test_db库中空表并删除
+查找test_db库中空表并删除：
 
 ```bash
 pt-find --socket=/data/GreatSQL/mysql.sock --empty test_db --exec-plus "DROP TABLE %s"
 ```
 
-验证是否删除成功
+验证是否删除成功：
 
 ```sql
 greatsql> SHOW TABLES IN test_db LIKE 'archiver_test3';
@@ -483,7 +494,8 @@ $ pt-find --socket=/data/GreatSQL/mysql.sock --printf "%T\t%D.%N\n" | sort -rn
 :::
 
 ::: tip 小贴士
-输出有些没对齐，可以使用pt-align工具对齐
+输出有些没对齐，可以使用pt-align工具对齐。
+
 ```bash
 $ pt-find --socket=/data/GreatSQL/mysql.sock --printf "%T\t%D.%N\n" | sort -rn | pt-align
 7992197120 `tpch`.`orders`                                                            
@@ -493,15 +505,17 @@ $ pt-find --socket=/data/GreatSQL/mysql.sock --printf "%T\t%D.%N\n" | sort -rn |
 
 ## pt-fingerprint
 
-将查询转成密文
+将查询转成密文。
 
 ### 概要
 
-此工具可以将SQL语句重新格式转换成另一种抽象形式，既所有具体值都以`?`代替。可以适用于数据脱敏的场景。
+此工具可以将 SQL 语句重新格式转换成另一种抽象形式，既所有具体值都以`?`代替。可以适用于数据脱敏的场景。
 
 **用法**
 
-- pt-fingerprint [OPTIONS] [FILES]
+```bash
+pt-fingerprint [OPTIONS] [FILES]
+```
 
 ### 选项
 
@@ -518,7 +532,7 @@ $ pt-find --socket=/data/GreatSQL/mysql.sock --printf "%T\t%D.%N\n" | sort -rn |
 
 #### 替换单个语句
 
-替换 `SELECT` 语句中的值
+替换 `SELECT` 语句中的值：
 ```bash
 pt-fingerprint --query "select a, b, c from users where id = 5 and greatsql = 666"
 ```
@@ -530,7 +544,7 @@ select a, b, c from users where id = ? and greatsql = ?
 ```
 :::
 
-替换 `INSERT` 语句中的值
+替换 `INSERT` 语句中的值：
 ```bash
 pt-fingerprint --query "INSERT INTO product(ID,NAME,PRICE) VALUES(1,'greatsql',666)"
 ```
@@ -541,36 +555,35 @@ insert into product(id,name,price) values(?+)
 ```
 :::
 
-如果SQL语句中字段名或表名有数字，也会被替换
-
+如果SQL语句中字段名或表名有数字，也会被替换：
 ```bash
 $ pt-fingerprint --query "select a1, b2, c3 from users4 where id = 500 and greatsql = 8032"
 select a?, ?, c? from users? where id = ? and greatsql = ?
 ```
 
-若不想替换字段名或表名可加上`--match-embedded-numbers`
+若不想替换字段名或表名可加上 `--match-embedded-numbers`：
 
 ```bash
 $ pt-fingerprint --match-embedded-numbers --query "select a1, b2, c3 from users4 where id = 5 and greatsql = 666"
 select a1, b2, c3 from users4 where id = ? and greatsql = ?
 ```
 ::: tip 小贴士
-`--match-md5-checksums`参数使用也是同理，避免MD5值被替换
+`--match-md5-checksums` 参数使用也是同理，避免MD5值被替换。
 :::
 
 #### 替换文件中语句
 
-创建文件`pt_fingerprint_test_sql.txt`
+创建文件 `pt_fingerprint_test_sql.txt`，内容如下：
 
 ```ini
-$ vim pt_fingerprint_test_sql.txt
 select a from users where greatsql = 666;
 select b from users where greatsql = 777;
 select c from users where 
 greatsql = 888;
 ```
 
-替换文件中的所有SQL语句
+替换文件中的所有SQL语句：
+
 ```bash
 pt-fingerprint pt_fingerprint_test_sql.txt
 ```
@@ -584,13 +597,14 @@ select c from users where greatsql = ?
 :::
 
 ::: tip 小贴士
-不管文件内格式如何，pt-fingerprint工具都会规范化空格等
+不管文件内格式如何，pt-fingerprint工具都会规范化空格等。<br />
 
-当然也可以用作替换[Slow Query Log（慢查询日志）](../2-about-greatsql/4-2-greatsql-slow-log.md)的SQL内容
+当然也可以替换[Slow Query Log（慢查询日志）](../2-about-greatsql/4-2-greatsql-slow-log.md)的SQL内容。
 :::
+
 ## pt-kill
 
-Kill掉符合条件的SQL
+Kill掉符合条件的SQL。
 
 ### 概要
 
@@ -598,7 +612,9 @@ pt-kill 工具可以 Kill 掉任何语句，特别出现大量的阻塞，死锁
 
 **用法**
 
-- pt-kill [OPTIONS] [DSN]
+```bash
+pt-kill [OPTIONS] [DSN]
+```
 
 ### 选项
 
@@ -619,19 +635,19 @@ pt-kill 工具可以 Kill 掉任何语句，特别出现大量的阻塞，死锁
 | --ask-pass           | 连接 MySQL/GreatSQL 时提示输入密码                           |
 | --charset            | 默认字符集                                                   |
 | --config             | 读取这个逗号分隔的配置文件列表，如果指定，这必须是命令行上的第一个选项 |
-| --create-log-table   | 如果--log-dsn表不存在，则创建                                |
+| --create-log-table   | 如果 `--log-dsn` 表不存在，则创建                                |
 | --daemonize          | 放在后台以守护进程的形式运行                                 |
 | --database           | 用于连接的数据库                                             |
 | --defaults-file      | 只从给定文件中读取 MySQL/GreatSQL 选项                       |
 | --filter             | 丢弃此 Perl 代码不返回 true 的事件                           |
-| --group-by           | 将匹配应用于由此 SHOW PROCESSLIST 列分组的每一类查询         |
+| --group-by           | 将匹配应用于由此 `SHOW PROCESSLIST` 列分组的每一类查询         |
 | --help               | 显示帮助并退出                                               |
 | --host               | 连接到主机                                                   |
 | --interval           | 检查要终止的查询的频率                                       |
 | --log                | 守护进程时将所有输出打印到此文件                             |
 | --log-dsn            | 将终止的每个查询存储在此 DSN 中                              |
-| --json               | 将终止的查询打印为 JSON，必须与--print一起使用。             |
-| --json-fields        | 使用--json时指定要包含在 JSON 输出中的附加键                 |
+| --json               | 将终止的查询打印为 JSON，必须与 `--print` 一起使用。             |
+| --json-fields        | 使用 `--json` 时指定要包含在 JSON 输出中的附加键                 |
 | --password           | 连接时使用的密码                                             |
 | --pid                | 创建给定的 PID 文件                                          |
 | --port               | 用于连接的端口号                                             |
@@ -641,10 +657,10 @@ pt-kill 工具可以 Kill 掉任何语句，特别出现大量的阻塞，死锁
 | --sentinel           | 如果该文件存在则退出                                         |
 | --slave-user         | 设置用于连接从机的用户                                       |
 | --slave-password     | 设置用于连接从机的密码                                       |
-| --set-vars           | 在这个以逗号分隔的variable=value对列表中设置 MySQL/GreatSQL 变量 |
+| --set-vars           | 在这个以逗号分隔的 `variable=value` 对列表中设置 MySQL/GreatSQL 变量 |
 | --socket             | 用于连接的套接字文件                                         |
-| --stop               | 使 pt-kill 创建 --sentinel 指定的哨兵文件并退出              |
-| --[no]strip-comments | 从 PROCESSLIST 的 Info 列中的查询中删除 SQL 注释             |
+| --stop               | 使 pt-kill 创建 `--sentinel` 指定的哨兵文件并退出              |
+| --[no]strip-comments | 从 `PROCESSLIST` 的 `Info` 列中的查询中删除 SQL 注释             |
 | --user               | 登录的用户                                                   |
 | --version            | 显示版本并退出                                               |
 | --[no]version-check  | 版本检查                                                     |
@@ -656,7 +672,7 @@ pt-kill 工具可以 Kill 掉任何语句，特别出现大量的阻塞，死锁
 
 #### Kill查询指定时间的连接
 
-每十秒钟记录一下用时超过三十秒的查询语句，并且将这些语句输出到`/data/pt_slow.log`文件中
+每十秒钟记录一下用时超过三十秒的查询语句，并且将这些语句输出到`/data/pt_slow.log`文件中：
 
 ```bash
 pt-kill --user=root --ask-pass --match-info "select|SELECT" --match-command='Query' --busy-time 30 --victims all --interval 10 --daemonize --print --log=/data/pt_slow.log
@@ -668,7 +684,7 @@ pt-kill --user=root --ask-pass --match-info "select|SELECT" --match-command='Que
 
 - `--interval`：多久运行一次。默认单位秒。默认值30秒
 
-也可以加上`--kill`直接Kill掉符合条件的查询语句
+也可以加上 `--kill` 直接Kill掉符合条件的查询语句：
 
 ```bash
 pt-kill --user=root --ask-pass --match-info "select|SELECT" --match-command='Query' --busy-time 30 --victims all --interval 10 --daemonize --kill --log=/data/pt_slow.log
@@ -680,13 +696,13 @@ pt-kill --user=root --ask-pass --match-info "select|SELECT" --match-command='Que
 
 #### Kill指定IP的会话
 
-打印出指定IP的会话
+打印出指定IP的会话：
 
 ```bash
 pt-kill --user=root --ask-pass --match-db='test_db' --match-host "192.168.6.55" --busy-time 30 --victims all --interval 10 --daemonize --print --log=/data/pt_ip.log
 ```
 
-Kill指定IP的会话
+Kill指定IP的会话：
 
 ```bash
 pt-kill --user=root --ask-pass --match-db='test_db' --match-host "192.168.6.55" --busy-time 30 --victims all --interval 10 --daemonize --kill --log=/data/pt_ip.log
@@ -694,32 +710,32 @@ pt-kill --user=root --ask-pass --match-db='test_db' --match-host "192.168.6.55" 
 
 #### Kill指定用户的会话
 
-Kill指定用户的会话
+Kill指定用户的会话：
 
 ```bash
 pt-kill --user=root --ask-pass --match-db='test_db' --match-user "greatsql" --victims all --interval 10 --daemonize --kill --log=/data/pt_user.log
 ```
 
-Kill指定用户大于10秒的空闲链接
+Kill指定用户大于10秒的空闲链接：
 
 ```bash
 pt-kill --user=root --ask-pass --match-db='db_name' --match-user "greatsql" --victims all --interval 10 --daemonize --kill --match-command='Sleep' --idle-time 10 --log=/data/pt_user.log
 ```
 ::: danger 特别提醒
 pt-kill工具会挂在后台定时Kill符合条件的用户、语句。
-若需要停止请使用`kill -9 $(ps -ef| grep pt-kill |grep -v grep |awk '{print $2}')`
+若需要停止请使用`kill -9 $(ps -ef| grep pt-kill |grep -v grep |awk '{print $2}')`。
 :::
 
 ## pt-secure-collect
 
 ### 概要
 
-pt-secure-collect用于收集、清理、打包和加密数据
+pt-secure-collect用于收集、清理、打包和加密数据。
 
 **用法**
 
 ```bash
-- pt-secure-collect [<flags>] <command> [<args> ...]
+pt-secure-collect [<flags>] <command> [<args> ...]
 ```
 默认情况下，pt-secure-collect 将收集以下输出：
 
@@ -728,26 +744,26 @@ pt-secure-collect用于收集、清理、打包和加密数据
 - pt-mysql-summary
 
 **采集命令**
-
-- pt-secure-collect collect
-
+```
+pt-secure-collect collect
+```
 **解密命令**
-
-- pt-secure-collect decrypt
-
+```
+pt-secure-collect decrypt
+```
 **加密命令**
-
-- pt-secure-collect encrypt
-
+```
+pt-secure-collect encrypt
+```
 **清理命令**
-
-- pt-secure-collect sanitize
-
+```
+pt-secure-collect sanitize
+```
 ### 最佳实践
 
-#### 收集GreatSQL信息
+#### 收集 GreatSQL 信息
 
-以非加密方式收集GreatSQL信息并且不删除临时文件
+以非加密方式收集 GreatSQL 信息并且不删除临时文件：
 ```bash
 pt-secure-collect collect --mysql-user=root --mysql-password="" --mysql-port=3306 --mysql-host=localhost --bin-dir=/usr/bin --temp-dir=/data/data_collection --no-encrypt --no-remove-temp-files
 ```
@@ -770,12 +786,12 @@ INFO[2024-03-11 17:06:57] Creating tar file "/data/data_collection/data_collecti
 :::
 
 ::: tip 小贴士
-`--mysql-port`和`--mysql-host`虽有默认值但是还是需要指定，否则在调用运行其它工具时会报错
+`--mysql-port`和`--mysql-host`虽有默认值但是还是需要指定，否则在调用运行其它工具时会报错。
 :::
 
-可以从输出上看到，pt-secure-collect工具调用了`pt-stalk`、`pt-summary `、`pt-mysql-summary`这三款工具
+可以从输出上看到，pt-secure-collect工具调用了`pt-stalk`、`pt-summary `、`pt-mysql-summary`这三款工具。
 
-进入`data_collection`文件夹即可看到所有的临时文件，以及一个`data_collection.tar.gz`压缩文件
+进入`data_collection`文件夹即可看到所有的临时文件，以及一个`data_collection.tar.gz`压缩文件：
 
 ```bash
 $ ls /data/data_collection
@@ -796,7 +812,7 @@ INFO[2024-03-12 09:36:39] Encrypting file "/data/pt_secure_collect.txt" into "/d
 ```
 :::
 
-加密成功后此时会生成一个后缀为`aes`的文件，直接查看会乱码
+加密成功后此时会生成一个后缀为`aes`的文件，直接查看会乱码：
 
 ```bash
 $ ls
@@ -813,24 +829,24 @@ pt-secure-collect decrypt /data/pt_secure_collect.aes
 ::: details 查看运行结果
 ```bash
 $ pt-secure-collect decrypt /data/pt_secure_collect.aes
-Encryption password: -- 输入加密的密码
+Encryption password: # 输入加密的密码
 INFO[2024-03-12 09:41:35] Decrypting file "/data/pt_secure_collect.aes" into "pt_secure_collect" 
 ```
 :::
-查看解密后的文件
-```ini
-$ cat pt_secure_collect
 
+查看解密后的文件：
+```bash
+$ cat pt_secure_collect
 111
 aaa
 select * from test where id =2;
 ```
 
-假设输入错误密码，不会提示密码错误，而是输出乱码结果
+假设输入错误密码，不会提示密码错误，而是输出乱码结果：
 
 ```bash
 $ pt-secure-collect decrypt /data/pt_secure_collect.aes
-Encryption password:  -- 这里假设输入错误密码
+Encryption password:  # 这里假设输入错误密码
 INFO[2024-03-12 09:44:45] Decrypting file "/data/pt_secure_collect.aes" into "pt_secure_collect" 
 
 $ cat pt_secure_collect
@@ -839,21 +855,19 @@ $ cat pt_secure_collect
 
 #### 加密文件
 
-这个功能和上面介绍的`pt-fingerprint`工具有点类似，都是使用`?`替换关键信息
+这个功能和上面介绍的`pt-fingerprint`工具有点类似，都是使用`?`替换关键信息。
 
-先造一个文本
+先造一个 `pt_secure_collect.txt` 文本：
 
 ```ini
-$ cat pt_secure_collect.txt
-
 select * from test where id =2;
 ip = 192.168.6.66
 ```
 
-使用`sanitize`功能，会隐去关键信息和主机名
+使用`sanitize`功能，会隐去关键信息和主机名：
 
 ```bash
-$ pt-secure-collect sanitize --input-file=/data/pt_secure_collect.txt --no-sanitize-queries
+pt-secure-collect sanitize --input-file=/data/pt_secure_collect.txt --no-sanitize-queries
 ```
 ::: details 查看运行结果
 ```bash
@@ -864,8 +878,8 @@ ip = hostname
 :::
 
 ::: tip 小贴士
-如果不隐去主机可以使用`--no-sanitize-hostnames`
-如果不隐去查询可以使用`--no-sanitize-queries`
+如果不隐去主机可以使用`--no-sanitize-hostnames`，
+如果不隐去查询可以使用`--no-sanitize-queries`。
 :::
 
 

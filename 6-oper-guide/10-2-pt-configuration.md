@@ -1,38 +1,39 @@
 # Percona Toolkit 配置类
 
 ::: tip 小贴士
-`$`为命令提示符、`greatsql>`为GreatSQL数据库提示符。
+`$`为 Linux 命令提示符、`greatsql>`为 GreatSQL 数据库提示符。
 :::
 
 ## 配置类
 
-在Percona Toolkit中配置类共有以下工具
+在 Percona Toolkit 中性能类共有以下工具：
 
-- `pt-config-diff`：比较数据库配置文件和参数
-- `pt-mysql-summary`：对 MySQL/GreatSQL 配置和 status 进行汇总
-- `pt-variable-advisor`：分析参数，并提出建议
+- `pt-config-diff`：比较数据库配置文件和参数。
+- `pt-mysql-summary`：对 MySQL/GreatSQL 配置和 status 进行汇总。
+- `pt-variable-advisor`：分析参数，并提出建议。
 
 ## pt-config-diff
 
 ### 概要
 
-比较 GreatSQL/MySQL 配置文件和服务器变量
+比较 MySQL/GreatSQL 配置文件和服务器变量。
 
 **用法**
 
-- pt-config-diff [OPTIONS] CONFIG CONFIG [CONFIG...]
-
+```bash
+pt-config-diff [OPTIONS] CONFIG CONFIG [CONFIG...]
+```
 ### 选项
 
-该工具所有选项如下
+该工具所有选项如下：
 
 | 参数                | 含义                                                         |
 | ------------------- | ------------------------------------------------------------ |
-| --ask-pass          | 连接 GreatSQL/MySQL 时提示输入密码                           |
+| --ask-pass          | 连接 MySQL/GreatSQL 时提示输入密码                           |
 | --charset           | 字符集                                                       |
 | --config            | 读取这个逗号分隔的配置文件列表，如果指定，这必须是命令行上的第一个选项 |
 | --database          | 连接到该数据库                                               |
-| --defaults-file     | 只从给定文件中读取 GreatSQL/MySQL 选项                       |
+| --defaults-file     | 只从给定文件中读取 MySQL/GreatSQL 选项                       |
 | --help              | 显示帮助                                                     |
 | --host              | 连接到主机                                                   |
 | --[no]ignore-case   | 比较变量时不区分大小写                                       |
@@ -40,9 +41,9 @@
 | --password          | 用于连接的密码                                               |
 | --pid               | 创建给定的 PID 文件                                          |
 | --port              | 用于连接的端口号                                             |
-| --[no]report        | 将 GreatSQL/MySQL 配置差异报告打印到 STDOUT                  |
+| --[no]report        | 将 MySQL/GreatSQL 配置差异报告打印到 STDOUT                  |
 | --report-width      | 将报告行截断为设定的字符                                     |
-| --set-vars          | 在这个以逗号分隔的 `variable=value` 对列表中设置 GreatSQL/MySQL 变量 |
+| --set-vars          | 在这个以逗号分隔的 `variable=value` 对列表中设置 MySQL/GreatSQL 变量 |
 | --socket            | 用于连接的套接字文件                                         |
 | --user              | 登录的用户                                                   |
 | --version           | 显示版本                                                     |
@@ -50,11 +51,9 @@
 
 ### 最佳实践
 
-首先创建两个配置文件(这里为了示范方便配置文件内容较少)
-创建test_my_1.cnf配置文件
-```ini
-$ vim test_my_1.cnf
+首先创建两个配置文件(这里为了示范方便配置文件内容较少)，创建 `test_my_1.cnf`配置文件：
 
+```ini
 [client]
 socket    = /data/GreatSQL/mysql.sock
 [mysql]
@@ -68,11 +67,9 @@ innodb_buffer_pool_size = 16G
 loose-group_replication_group_seeds = '172.16.16.10:33061,172.16.16.12:33061,172.16.16.12:33061'
 loose-group_replication_group_name = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"
 ```
-创建test_my_2.cnf配置文件
+创建 `test_my_2.cnf` 配置文件：
 
 ```ini
-$ vim test_my_2.cnf
-
 [client]
 socket    = /data/greatsql/greatsql.sock
 [mysql]
@@ -87,12 +84,12 @@ loose-group_replication_group_seeds = '172.16.10:33081,172.16.10:33081,172.16.10
 loose-group_replication_group_name = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaab1"
 ```
 ::: tip 小贴士
-在配置MGR时，需要集群中节点的 my.cnf 部分配置一致，可使用该工具进行比较
+在配置MGR时，需要集群中节点的 my.cnf 部分配置一致，可使用该工具进行比较。
 ::: 
 
 #### 配置文件对比
 
-不一致才输出，如果完全一致则不输出
+不一致才输出，如果完全一致则不输出：
 
 ```bash
 pt-config-diff /data/test_my_1.cnf /data/test_my_2.cnf
@@ -114,7 +111,7 @@ user                      mysql                     greatsql
 ```
 :::
 
-加上`--report-width 200`，可完整输出差异项
+加上`--report-width 200`，可完整输出差异项：
 
 ```bash
 pt-config-diff /data/test_my_1.cnf /data/test_my_2.cnf --report-width 200
@@ -137,7 +134,7 @@ user                       mysql                                                
 :::
 #### 配置文件和系统变量对比
 
-配置文件与本机GreatSQL系统变量对比，如果完全一致，则不输出
+配置文件与本机 GreatSQL 系统变量对比，如果完全一致，则不输出：
 
 ```bash
 pt-config-diff --report-width=200 /etc/my.cnf u=root,p=
@@ -157,7 +154,7 @@ slow_query_log_file       slow.log    /data/GreatSQL/myarch.log.000001
 
 #### 系统变量之间的对比
 
-两台不同的数据库实例之间的系统变量对比
+两台不同的数据库实例之间的系统变量对比：
 
 ```bash
 pt-config-diff --report-width=200 h=192.168.6.55,P=3306,u=GreatSQL,p=  h=192.168.6.129,P=3306,u=test,p='test'
@@ -221,11 +218,11 @@ pt-mysql-summary [OPTIONS]
 pt-mysql-summary --user=root --password=greatsql --host=localhost --port=3306
 ```
 ::: tip 小贴士
-此时会输出所有关于 GreatSQL 的信息，但是要注意很多输出都是做了四舍五入，并不是精确的数据
-不建议此工具远程连接其它数据库，因为可能导致输出数据混乱
+此时会输出所有关于 GreatSQL 的信息，但是要注意很多输出都是做了四舍五入，并不是精确的数据。
+不建议此工具远程连接其它数据库，因为可能导致输出数据混乱。
 :::
 
-接下来将此工具输出结果分成各个模块介绍
+接下来将此工具输出结果分成各个模块介绍：
 
 ```bash
 # Percona Toolkit MySQL Summary Report #######################
@@ -257,7 +254,7 @@ No slaves found
                   Pidfile | mysql.pid (does not exist)
 ```
 
-以上是 GreatSQL 实例的快速摘要：版本、正常运行时间和其他非常基本的参数。时间输出是从 GreatSQL 服务器生成的，可能与之前打印的系统日期和时间不同，如果不同的话可以检查下数据库和操作系统的时间是否匹配
+以上是 GreatSQL 实例的快速摘要：版本、正常运行时间和其他非常基本的参数。时间输出是从 GreatSQL 服务器生成的，可能与之前打印的系统日期和时间不同，如果不同的话可以检查下数据库和操作系统的时间是否匹配。
 
 ```bash
 # Processlist ################################################
@@ -275,7 +272,7 @@ No slaves found
   Waiting on empty queue                1       1    500000    500000
 ```
 
-以上是 `SHOW PROCESSLIST` 输出的摘要，这里的数字会四舍五入，不是最精确的
+以上是 `SHOW PROCESSLIST` 输出的摘要，这里的数字会四舍五入，不是最精确的。
 
 ```bash
 # Status Counters (Wait 10 Seconds) ##########################
@@ -332,10 +329,10 @@ Uptime                                    90000           1           1
        InnoDB compression | ACTIVE
 ```
 
-以上显示特定插件以及它们是否已启用
+以上显示特定插件以及它们是否已启用。
 
 ::: tip 小贴士
-该工具只检测少数几个Plugin，并不是所有的插件都检测
+该工具只检测少数几个Plugin，并不是所有的插件都检测。
 :::
 
 ```bash
@@ -389,16 +386,16 @@ Specify --databases or --all-databases to dump and summarize schemas
   tpch       16          19          13                                               4   9
 ```
 
-如果您指定 `--databases` 或 `--all-databases` ，该工具将打印以上部分
+如果您指定 `--databases` 或 `--all-databases` ，该工具将打印以上部分。
 
-以上显示了数据库中对象的数量和类型，它是通过运行 `mysqldump --no-data` 生成的，而不是通过查询`INFORMATION_SCHEMA`生成
+以上显示了数据库中对象的数量和类型，它是通过运行 `mysqldump --no-data` 生成的，而不是通过查询`INFORMATION_SCHEMA`生成。
 
 本节中的第一个子报告是每个数据库中按类型划分的对象计数：表、视图等。第二个显示每个数据库中有多少表使用不同的存储引擎。第三个子报告显示每个数据库中每种类型索引的数量。
 
-最后一部分显示每个数据库中各种数据类型的列数。为了紧凑显示，列标题的格式是垂直的，因此您需要从顶部向下阅读。在此示例中，第一列是 `char` ，第二列是 `timestamp`
+最后一部分显示每个数据库中各种数据类型的列数。为了紧凑显示，列标题的格式是垂直的，因此您需要从顶部向下阅读。在此示例中，第一列是 `char` ，第二列是 `timestamp`。
 
 ::: tip 小贴士
-这部分输出的数字都是精确的，不是四舍五入的
+这部分输出的数字都是精确的，不是四舍五入的。
 :::
 
 ```bash
@@ -434,7 +431,7 @@ Specify --databases or --all-databases to dump and summarize schemas
                 Unflushed | 0%
 ```
 
-以上显示 MyISAM 键缓存的大小，后面是正在使用的缓存百分比和未刷新百分比（四舍五入）
+以上显示 MyISAM 键缓存的大小，后面是正在使用的缓存百分比和未刷新百分比（四舍五入）。
 
 ```bash
 # Security ###################################################
@@ -485,7 +482,7 @@ log_queries_not_using_indexes | ON
 
 ### 概要
 
-这是一款分析参数，并且给出参数设置建议的工具
+这是一款分析参数，并且给出参数设置建议的工具。
 
 **用法**
 
@@ -499,19 +496,19 @@ pt-variable-advisor [OPTIONS] [DSN]
 
 | 参数                  | 含义                                                         |
 | --------------------- | ------------------------------------------------------------ |
-| --ask-pass            | 连接 GreatSQL/MySQL 时提示输入密码                           |
+| --ask-pass            | 连接 MySQL/GreatSQL 时提示输入密码                           |
 | --charset             | 字符集                                                       |
 | --config              | 读取这个逗号分隔的配置文件列表，如果指定，这必须是命令行上的第一个选项 |
 | --daemonize           | 后台运行                                                     |
 | --database            | 连接到该数据库                                               |
-| --defaults-file       | 只从给定文件中读取 GreatSQL/MySQL 选项                       |
+| --defaults-file       | 只从给定文件中读取 MySQL/GreatSQL 选项                       |
 | --help                | 显示帮助                                                     |
 | --host                | 要连接的主机                                                 |
 | --ignore-rules        | 忽略这些规则 ID                                              |
 | --password            | 连接时使用的密码                                             |
 | --pid                 | 创建给定的 PID 文件                                          |
 | --port                | 连接时使用的端口号                                           |
-| --set-vars            | 在这个以逗号分隔的 `variable=value` 对列表中设置 GreatSQL/MySQL 变量 |
+| --set-vars            | 在这个以逗号分隔的 `variable=value` 对列表中设置 MySQL/GreatSQL 变量 |
 | --socket              | 用于连接的套接字文件                                         |
 | --source-of-variables | 从此源读取 `SHOW VARIABLES`                                  |
 | --user                | 登录的用户                                                   |
@@ -521,8 +518,13 @@ pt-variable-advisor [OPTIONS] [DSN]
 
 ### 最佳实践
 
-分析本地GreatSQL数据库参数的一些建议
+分析本地 GreatSQL 数据库参数的一些建议：
 
+```bash
+pt-variable-advisor localhost
+```
+
+::: details 查看运行结果
 ```bash
 $ pt-variable-advisor localhost
 
@@ -542,16 +544,17 @@ $ pt-variable-advisor localhost
 
 # WARN myisam_recover_options: myisam_recover_options should be set to some value such as BACKUP,FORCE to ensure that table corruption is noticed.
 ```
+:::
 
-当然也可以把`SHOW VARIABLES`输出的结果保存在`pt_va.txt`文件中，然后再用工具分析
+当然也可以把 `SHOW VARIABLES` 输出的结果保存在 `pt_va.txt` 文件中，然后再用工具分析：
 
 ```bash
-$ pt-variable-advisor localhost --source-of-variables pt_va.txt
+pt-variable-advisor localhost --source-of-variables pt_va.txt
 ```
 ::: tip 小贴士
 除了非常明显的错误，否则这个建议没有太多的意义。
 
-这里也推荐一个网页版的[MySQL/GreatSQL状态诊断工具](https://imysql.com/my-state-diag.html)
+这里也推荐一个网页版的[MySQL/GreatSQL状态诊断工具](https://imysql.com/my-state-diag.html)。
 :::
 
 **扫码关注微信公众号**
