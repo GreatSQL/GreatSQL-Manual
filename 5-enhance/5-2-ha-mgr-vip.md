@@ -18,6 +18,26 @@ GreatSQL支持在单主（Single-Primary）模式下，在读写节点（以下�
 4. 只支持MGR单主模式（single-primary mode），不支持多主模式（multi-primary mode），所以要确保这两个选项设置正确值 `group_replication_single_primary_mode = ON` 以及 `group_replication_enforce_update_everywhere_checks= FALSE`。
 :::
 
+如果想启用 IPv6 支持，有以下几点注意事项：
+
+1. 目前 IPv6 仅支持同网段下通信。
+
+2. 在设置 `report_host / group_replication_group_seeds / group_replication_local_address` 等几个参数时也需要使用 IPv6 地址。
+
+3. 不支持 IPv4 和 IPv6 混用。
+
+4. 需要关闭系统层的 **DAD** 检测，否则 VIP 漂移之后会无法绑定。新增或修改 `/etc/sysctl.d/local.conf` 文件，配置内容参考如下，编辑保存退出后重启服务器：
+
+```ini
+net.ipv6.conf.all.accept_dad = 0
+net.ipv6.conf.default.accept_dad = 0
+net.ipv6.conf.eth0.accept_dad = 0
+net.ipv6.conf.eth1.accept_dad = 0
+# IPv6 Privacy Extensions (RFC 4941)
+net.ipv6.conf.all.use_tempaddr = 0
+net.ipv6.conf.default.use_tempaddr = 0
+```
+
 ## 启用内置VIP插件
 - 开启新插件
 
@@ -121,7 +141,9 @@ loose-group_replication_single_primary_mode=1
 loose-group_replication_enforce_update_everywhere_checks=0
 ```
 
-当MGR Primary节点上绑定的VIP被手动删除或者出现异常配置导致VIP绑定行为不对时，可以通过在MGR Primary节点上执行 `SET GLOBAL greatdb_ha_force_change_mgr_vip = ON` 命令去重新获取MGR拓扑结构，从而重新绑定VIP，该命令执行之后，参数  `greatdb_ha_force_change_mgr_vip` 值仍然为OFF，这个是符合预期的行为。
+当 MGR Primary 节点上绑定的 VIP 被手动删除或者出现异常导致 VIP 绑定行为异常时，可以通过在 MGR Primary 节点上执行 SQL 命令 `SET GLOBAL greatdb_ha_force_change_mgr_vip = ON` 命令去重新获取 MGR 拓扑结构，从而重新绑定 VIP，该命令执行之后，参数  `greatdb_ha_force_change_mgr_vip` 值仍然为OFF，这个是符合预期的行为。
+
+如果物理网卡由于异常或人为原因关闭又再次启用后，可能会由于 MGR 成员间通信异常而导致 MGR 发生报错，比如发生网络分区等情况，这时候也会导致 VIP 绑定关系发生异常，需要手动修复这个异常错误。修复完毕后，如果 VIP 绑定还是不对的话，可以在 MGR Primary 节点上执行 SQL 命令 `SET GLOBAL greatdb_ha_force_change_mgr_vip = ON` 操作修复该问题。
 
 ## 启动说明
 配置VIP需要相关内核权限，获取相关权限有两种方式，以下三选一即可（推荐采用方法一）：
