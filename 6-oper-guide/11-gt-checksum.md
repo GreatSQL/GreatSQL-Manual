@@ -1,10 +1,10 @@
 # gt-checksum
 
-# 关于 gt-checksum
+## 关于 gt-checksum
 
 gt-checksum 是 GreatSQL 社区开源的一款静态数据库校验修复工具，支持 MySQL、Oracle 等主流数据库。
 
-# 特性
+## 特性
 ---
 MySQL DBA最常用的数据校验&修复工具应该是 Percona Toolkit 中的 [pt-table-checksum](./10-6-pt-replication.md#pt-table-checksum) 和 [pt-table-sync](./10-6-pt-replication.md#pt-table-sync) 这两个工具，不过这两个工具并不支持MySQL MGR架构，以及国内常见的上云下云业务场景，还有MySQL、Oracle间的异构数据库等多种场景。
 
@@ -19,13 +19,13 @@ gt-checksum工具支持以下几种常见业务需求场景：
 
 以上这些场景，都可以利用 gt-chcksum 工具来满足。
 
-# 下载
+## 下载
 ---
 可以 [这里](https://gitee.com/GreatSQL/gt-checksum/releases) 下载预编译好的二进制文件包，已经在Ubuntu、CentOS、RHEL等多个下测试通过。
 
 如果需要校验Oracle数据库，则还需要先下载Oracle数据库相应版本的驱动程序，并配置驱动程序使之生效。例如：待校验的数据库为Oracle 11-2，则要下载Oracle 11-2的驱动程序，并使之生效，否则连接Oracle会报错。详细方法请见下方内容：[**下载配置Oracle驱动程序**](#%E4%B8%8B%E8%BD%BD%E9%85%8D%E7%BD%AEoracle%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F)。
 
-# 快速运行
+## 快速运行
 ---
 ```bash
 # 不带任何参数
@@ -107,11 +107,11 @@ Schema  Table   IndexCol        checkMod        Rows    Differences     Datafix
 test    t2      id              rows            10,10   no              file
 ```
 
-# 下载配置Oracle驱动程序
+## 下载配置Oracle驱动程序
 ---
 如果需要校验Oracle数据库，则还需要先下载Oracle数据库相应版本的驱动程序。例如：待校验的数据库为Oracle 11-2，则要下载Oracle 11-2的驱动程序，并使之生效，否则连接Oracle会报错。
 
-## 下载Oracle Instant Client
+### 下载Oracle Instant Client
 从 [https://www.oracle.com/database/technologies/instant-client/downloads.html](https://www.oracle.com/database/technologies/instant-client/downloads.html) 下载免费的Basic或Basic Light软件包。
 
 - oracle basic client, instantclient-basic-linux.x64-11.2.0.4.0.zip
@@ -120,7 +120,7 @@ test    t2      id              rows            10,10   no              file
 
 - oracle sdk, instantclient-sdk-linux.x64-11.2.0.4.0.zip
 
-## 配置oracle client并生效
+### 配置oracle client并生效
 ```shell
 $ unzip instantclient-basic-linux.x64-11.2.0.4.0.zip
 $ unzip instantclient-sqlplus-linux.x64-11.2.0.4.0.zip
@@ -130,7 +130,7 @@ $ echo "export LD_LIBRARY_PATH=/usr/local/instantclient_11_2:$LD_LIBRARY_PATH" >
 $ source /etc/profile
 ```
 
-# 源码编译
+## 源码编译
 gt-checksum 工具采用 GO 语言开发，您可以自行编译生成二进制文件。
 
 编译环境要求使用 golang 1.17 及以上版本。
@@ -154,17 +154,17 @@ gt-checksum version 1.2.1
 ```
 这就编译完成并可以开始愉快地玩耍了。
 
-# 使用文档
+## 使用文档
 ---
 - [gt-checksum manual](https://gitee.com/GreatSQL/gt-checksum/blob/master/docs/gt-checksum-manual.md)
 
 
-# 版本历史
+## 版本历史
 ---
 - [版本历史](https://gitee.com/GreatSQL/gt-checksum/blob/master/relnotes/CHANGELOG.zh-CN.md)
 
 
-# 已知缺陷
+## 已知缺陷
 ---
 截止最新的1.2.1版本中，当表中有多行数据是完全重复的话，可能会导致校验结果不准确，详见 [已知缺陷](https://gitee.com/GreatSQL/gt-checksum/blob/master/docs/gt-checksum-manual.md#已知缺陷) 。
 
