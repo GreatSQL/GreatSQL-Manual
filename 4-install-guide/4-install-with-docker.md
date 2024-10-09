@@ -1,4 +1,4 @@
-# 容器化安装
+# Docker 容器化安装
 ---
 
 本文详细介绍如何在Docker中部署GreatSQL，并且构建一个MGR集群。
