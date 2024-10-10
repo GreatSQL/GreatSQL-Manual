@@ -1,4 +1,3 @@
-# MariaDB 版本对应参考
 # 从 MariaDB 迁移到 GreatSQL
 ---
 
