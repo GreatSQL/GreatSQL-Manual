@@ -54,7 +54,7 @@ MariaDB 是一个开源的关系型数据库管理系统（RDBMS），由 MySQL 
 | 5.2.x        | 5.1.x        | MariaDB 5.2 与 MySQL 5.1 相对应，包含了一些新特性和改进。   |
 | 5.1.x        | 5.1.x        | MariaDB 5.1 与 MySQL 5.1 相对应，包含了一些新特性和改进。   |
 
-## 详细说明
+### 版本对照详细说明
 
 1. **版本对应**：
    - MariaDB 的每个主要版本通常对应 MySQL/GreatSQL 的一个主要版本。例如，MariaDB 10.4.x 与 MySQL/GreatSQL 8.0.x 相对应。
