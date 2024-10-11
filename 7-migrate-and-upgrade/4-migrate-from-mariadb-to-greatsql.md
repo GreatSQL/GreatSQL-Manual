@@ -26,13 +26,26 @@ MariaDB 是一个开源的关系型数据库管理系统（RDBMS），由 MySQL 
 ### 差异之处
 1. **存储引擎**：
    - **GreatSQL**：默认存储引擎为 InnoDB，且从 8.0 开始，元数据也存储在 InnoDB 引擎中。
-   - **MariaDB**：默认存储引擎也是 InnoDB，但还引入了新的存储引擎，如 Aria、XtraDB（InnoDB 的增强版）、Spider（分布式存储引擎）等，在 MariaDB 中元数据仍然采用 MyISAM 存储引擎，这点和 GreatSQL 区别很大。
+   - **MariaDB**：默认存储引擎也是 InnoDB，但还引入了新的存储引擎，如 Aria、SphinxSE、XtraDB（InnoDB 的增强版）、Spider（分布式存储引擎）等，在 MariaDB 中元数据仍然采用 MyISAM 存储引擎，这点和 GreatSQL 区别很大。
 2. **新特性**：
    - **MariaDB**：引入了许多新特性，如窗口函数、序列、动态列等，部分 MariaDB 新特性无法兼容 GreatSQL。
    - **GreatSQL**：也在不断更新，引入了类似的新特性，但可能发布时间不同。
 3. **版本号**：
    - **MariaDB**：早期版本号基本上和 MySQL/GreatSQL 保持一致，但从 10.x 开始采用独立的版本号规则，无法直接和 MySQL/GreatSQL 对应。
    - **GreatSQL**：GreatSQL 大版本号和 MySQL/Percona 保持一致，小版本号略有区别，详情参考：[用户须知](../1-docs-intro/1-1-notes-to-users.md)。
+4. **GTID不兼容**：
+   - **MariaDB**：较复杂，它包含多个部分，包括 Domain ID（域标识）、Server ID（服务器标识）和 Sequence Number（序列号），格式为 **GTID=Domain_ID-Server_ID-Sequence_Number**。MariaDB 的 GTID 允许通过 Domain ID 来隔离和管理不同集群中的事务。
+   - **GreatSQL**：是单一值，由服务器 UUID 和事务编号组成，格式为 **GTID=UUID:TrxID**。一个服务器的每个事务都会有一个唯一的 GTID。
+   - 也就是说 GreatSQL 和 MariaDB 之间不能创建基于 GTID 的主从复制关系。
+5. **参数变量**：
+   - **MariaDB**：有些参数变量在 GreatSQL 中没有，例如和 Aria 引擎相关的 `aria_pagecache_buffer_size`。
+   - **GreatSQL**：从 8.0 开始引入 `innodb_dedicated_server` 等新参数，这些是 MariaDB 中没有的。
+6. **插件（Plugin）**：
+   - **MariaDB**：提供更多插件，像是 Cassandra、CONNECT 引擎，插件体系更为丰富。
+   - **GreatSQL**：部分企业级特性插件，像是 审计增强、脱敏增强、Clone 增量&加密备份、Rapid 引擎等，在 MariaDB 中没有。
+7. **具体功能**：
+   - **MariaDB**：增强了对 Galera Cluster（在 Percona 中叫做 PXC） 的支持，在多主集群和高可用性场景下表现更好。
+   - **GreatSQL**：在 GreatSQL 中采用基于 Paxos 的强同步复制方案，即组复制（也叫 MGR）。InnoDB 引擎在事务处理、崩溃恢复等方面较为优化，并在 MySQL 8.0 中进行了大量性能提升。Clone 插件在 MariaDB 中也没有。
 
 ## MariaDB 和 MySQL/GreatSQL 版本对应关系表
 
@@ -76,9 +89,6 @@ MariaDB 是一个开源的关系型数据库管理系统（RDBMS），由 MySQL 
    - **MariaDB 5.3.x**：与 MySQL 5.1 相对应，引入了一些新的存储引擎。
    - **MariaDB 5.2.x**：与 MySQL 5.1 相对应，引入了一些新的存储引擎。
    - **MariaDB 5.1.x**：与 MySQL 5.1 相对应，引入了一些新的存储引擎。
-
-3. **兼容性**：
-   - 尽管 MariaDB 和 MySQL/GreatSQL 在很多方面是兼容的，但在某些特定功能和语法上可能存在差异。在迁移或升级时，建议仔细阅读官方文档和迁移指南。
 
 ## 迁移前准备
 
