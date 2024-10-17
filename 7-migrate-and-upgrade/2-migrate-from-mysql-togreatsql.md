@@ -1,4 +1,4 @@
-# MySQL迁移/升级到GreatSQL
+# MySQL迁移/升级/降级到GreatSQL
 ---
 
 本文介绍如何从MySQL迁移/升级到GreatSQL数据库。
@@ -180,6 +180,52 @@ ERROR 1146 (42S02) at line 586: Table 'mysql.replication_group_member_actions' d
 ```
 如果数据量较大的话，逻辑备份+导入过程耗时较久，要有心理准备。
 
+## 降级到 GreatSQL 8.0.32-26
+
+如果是要从 MySQL 8.0.32 之后的版本降级到 GreatSQL 8.0.32-26 版本，则需要采取逻辑备份 + 逻辑导入方式完成降级操作（不支持直接在原来的 datadir 基础上原地启动 GreatSQL 8.0.32-26 完成降级替换），并且在逻辑备份导入完成后的首次重启时，务必设置 `upgrade = FORCE` 强制升级所有数据表，包括系统表。
+
+降级过程操作大致如下所示：
+
+1. 在高版本中逻辑备份全量数据
+```bash
+mysqldump -S/data/MySQL/mysql.sock -A --triggers --routines --events --single-transaction > /data/backup/fulldump.sql
+```
+
+2. 在GreatSQL 8.0.32-26版本环境中导入逻辑备份文件，完成逻辑恢复
+
+```bash
+mysql -S/data/GreatSQL/mysql.sock -f < /data/backup/fulldump.sql
+```
+
+3. 修改my.cnf，确保 upgrade = FORCE 设置
+```ini
+[mysqld]
+upgrade = FORCE
+```
+
+4. 重启GreatSQL，降级完成
+
+```bash
+systemctl restart greatsql
+```
+重启过程中，可以看到日志有类似下面的强制升级过程
+
+```log
+[Note] [MY-013387] [Server] Upgrading system table data.
+[Note] [MY-013385] [Server] Upgrading the sys schema.
+[Note] [MY-013400] [Server] Upgrade of help tables started.
+[Note] [MY-013400] [Server] Upgrade of help tables completed.
+[Note] [MY-013394] [Server] Checking 'mysql' schema.
+[Note] [MY-013394] [Server] Checking 'sys' schema.
+[System] [MY-013381] [Server] Server upgrade from '80032' to '80032' completed.
+```
+
+如果不设置 `upgrade = FORCE` 强制升级所有表，有可能发生系统表 `mysql.procs_priv` 损坏错误，在创建用户时可能会报告类似下面的错误：
+
+```sql
+greatsql> create user tpch identified by 'tpch';
+ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably corrupted
+```
 
 ## 注意事项
 

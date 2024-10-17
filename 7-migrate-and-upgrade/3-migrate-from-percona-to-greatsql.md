@@ -1,4 +1,4 @@
-# 从Percona迁移/升级到GreatSQL
+# 从Percona迁移/升级/降级到GreatSQL
 ---
 
 本文介绍如何从Percona Server for MySQL迁移/升级到GreatSQL数据库。
@@ -47,8 +47,6 @@ GreatSQL相对于Percona有着众多优秀特性，包括且不仅限以下：
 |审计日志入库| :heavy_check_mark: | ❌ |
 |最后登录记录| :heavy_check_mark: | ❌ |
 
-
-
 ## 迁移/升级前准备
 
 首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-25版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，至于选择RPM还是二进制包看具体情况及个人喜好。
@@ -75,6 +73,52 @@ GreatSQL相对于Percona有着众多优秀特性，包括且不仅限以下：
 
 从Percona迁移到GreatSQL是最快捷的，元数据库表几乎没有区别，而InnoDB表数据则是通用的，几乎可以做到平滑迁移。
 
+## 降级到 GreatSQL 8.0.32-26
+
+如果是要从 Percona 8.0.32 之后的版本降级到 GreatSQL 8.0.32-26 版本，则需要采取逻辑备份 + 逻辑导入方式完成降级操作（不支持直接在原来的 datadir 基础上原地启动 GreatSQL 8.0.32-26 完成降级替换），并且在逻辑备份导入完成后的首次重启时，务必设置 `upgrade = FORCE` 强制升级所有数据表，包括系统表。
+
+降级过程操作大致如下所示：
+
+1. 在高版本中逻辑备份全量数据
+```bash
+mysqldump -S/data/MySQL/mysql.sock -A --triggers --routines --events --single-transaction > /data/backup/fulldump.sql
+```
+
+2. 在GreatSQL 8.0.32-26版本环境中导入逻辑备份文件，完成逻辑恢复
+
+```bash
+mysql -S/data/GreatSQL/mysql.sock -f < /data/backup/fulldump.sql
+```
+
+3. 修改my.cnf，确保 upgrade = FORCE 设置
+```ini
+[mysqld]
+upgrade = FORCE
+```
+
+4. 重启GreatSQL，降级完成
+
+```bash
+systemctl restart greatsql
+```
+重启过程中，可以看到日志有类似下面的强制升级过程
+
+```log
+[Note] [MY-013387] [Server] Upgrading system table data.
+[Note] [MY-013385] [Server] Upgrading the sys schema.
+[Note] [MY-013400] [Server] Upgrade of help tables started.
+[Note] [MY-013400] [Server] Upgrade of help tables completed.
+[Note] [MY-013394] [Server] Checking 'mysql' schema.
+[Note] [MY-013394] [Server] Checking 'sys' schema.
+[System] [MY-013381] [Server] Server upgrade from '80032' to '80032' completed.
+```
+
+如果不设置 `upgrade = FORCE` 强制升级所有表，有可能发生系统表 `mysql.procs_priv` 损坏错误，在创建用户时可能会报告类似下面的错误：
+
+```sql
+greatsql> create user tpch identified by 'tpch';
+ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably corrupted
+```
 
 ## 注意事项
 
