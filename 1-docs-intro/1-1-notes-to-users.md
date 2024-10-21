@@ -1,9 +1,13 @@
 # 用户须知
 ---
 
+## 关于 GreatSQL
+
 GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上满足金融级应用场景，具有 **高可用**、**高性能**、**高兼容**、**高安全** 等特性，可作为 MySQL 或 Percona Server for MySQL 的理想可选替换。
 
 GreatSQL 致力于保持开源的开放性。GreatSQL 采用 [GPLv2 协议](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)。
+
+## 理解 GreatSQL 版本号
 
 GreatSQL 版本号采用点分位命名规则（X.Y.Z-R）模式，其中
 - X表示大版本号：MYSQL_VERSION_MAJOR，例如3.x、4.x、5.x、8.x等
@@ -36,7 +40,7 @@ Server version:        8.0.32-26 GreatSQL, Release 26, Revision a68b3034c3d
 
 正常情况下，GreatSQL每年会发布两次版本，一般是上半年、下半年各发布一个新版本。
 
-**约定**
+## 约定
 
 在本文档中，关于操作系统命令行以及 SQL 命令提示符约定如下：
 
