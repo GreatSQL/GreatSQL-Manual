@@ -1,4 +1,5 @@
 # 索引
+---
 
 - [Advantages features of GreatSQL/GreatSQL 优势特性](../1-docs-intro/1-3-greatsql-features.md)
 - [Asynchronous drop large table/异步删除大表](../5-enhance/5-1-highperf-async-purge-big-table.md)
@@ -95,3 +96,8 @@
 - [Upgrade GreatSQL 5.7 to 8.0/从 GreatSQL 5.7 升级到 8.0](../7-migrate-and-upgrade/1-upgrade-to-greatsql8.md)
 - [Using systemd to manage GreatSQL/利用 systemd 管理 GreatSQL](../4-install-guide/8-greatsql-with-systemd.md)
 - [Glossary/术语表](../2-about-greatsql/6-greatsql-glossary.md)
+
+
+**扫码关注微信公众号**
+
+![greatsql-wx](../greatsql-wx.jpg)
