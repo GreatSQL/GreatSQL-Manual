@@ -78,7 +78,11 @@ GreatSQL 8.0 相对 MySQL 5.7 在性能提升、安全、功能函数、SQL 语�
 | **GreatSQL 增强** | 其他 - Clone 压缩备份 | 不支持 | 支持 Clone 物理压缩备份 | 降低备份文件存储成本 |
 | **GreatSQL 增强** | 其他 - Clone 增量备份 | 不支持 | 支持 Clone 物理增量备份 | 提升备份可靠性和备份文件恢复效率 |
 
-### 总结
+## 升级到 GreatSQL 8.0
+
+想要从 MySQL / GreatSQL 5.7 升级到 GreatSQL 8.0，可以参考文档：[GreatSQL 5.7升级到8.0](../7-migrate-and-upgrade/1-upgrade-to-greatsql8.md)。
+
+## 总结
 
 GreatSQL 8.0 相对于 5.7 在多个方面进行了显著的改进和提升，包括性能、数据管理、安全性、复制、优化器（如不可见索引、函数索引、直方图）、SQL 语法支持（如窗口函数、CTE）等方面。这些改进使得 GreatSQL 8.0 成为一个更强大、更灵活、更安全的数据库管理系统，特别适合处理大规模和高并发的应用场景。
 
