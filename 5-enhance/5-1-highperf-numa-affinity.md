@@ -467,7 +467,7 @@ sched_affinity_purge_coordinator=29
 
 基于上述配置文件，运行这两个版本的 GreatSQL 二进制包，区别在于最后的 NUMA 优化部分内容。
 
-利用 benchmarksql5.0-for-mysql 进行 TPC-C 测试，结果表明 NUMA 亲和性调度优化可以使 TPC-C 综合性能提升约 10%：
+利用 BenchmarkSQL 5.0 进行 TPC-C 测试，结果表明 NUMA 亲和性调度优化可以使 TPC-C 综合性能提升约 10%：
 
 ![5-1-highperf-numa-affinity-5.png](./5-1-highperf-numa-affinity-5.png)
 
