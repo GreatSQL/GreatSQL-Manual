@@ -43,7 +43,7 @@ height: 400px;
 </head>
 <body>
 <div class="container">
-<iframe src='http://demo.greatsql.cn:7000/' title='GreatSQL MGR DEMO 环境' width='100%' height='520px' border=none></iframe>
+<iframe src='http://demo.greatsql.cn:7000/' title='GreatSQL MGR DEMO 环境' width='100%' height='700px' border=none></iframe>
 </div>
 </body>
 </html>
