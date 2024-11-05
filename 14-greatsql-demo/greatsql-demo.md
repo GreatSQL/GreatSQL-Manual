@@ -14,7 +14,7 @@ height: 100vh;
 }
 
 .container {
-            width: 90%;
+            width: 100%;
             max-width: 800px;
             margin: 20px 0;
             background-color: #fff;
@@ -43,7 +43,7 @@ height: 400px;
 </head>
 <body>
 <div class="container">
-<iframe src='http://demo.greatsql.cn:7000/' title='GreatSQL MGR DEMO 环境' width='100%' height='520px'></iframe>
+<iframe src='http://demo.greatsql.cn:7000/' title='GreatSQL MGR DEMO 环境' width='100%' height='520px' border=none></iframe>
 </div>
 </body>
 </html>
