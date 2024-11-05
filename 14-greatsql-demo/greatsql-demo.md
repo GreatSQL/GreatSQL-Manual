@@ -14,14 +14,13 @@ height: 100vh;
 }
 
 .container {
-width: 100%;
-max-width: 900px;
-height: 100%;
-max-height: 600px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-border-radius: 8px;
-overflow: hidden;
-background-color: #fff;
+            width: 90%;
+            max-width: 800px;
+            margin: 20px 0;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
 }
 
 iframe {
@@ -44,7 +43,7 @@ height: 400px;
 </head>
 <body>
 <div class="container">
-<iframe src='http://demo.greatsql.cn:7000/' title='GreatSQL MGR DEMO 环境' width='100%' height='500px'></iframe>
+<iframe src='http://demo.greatsql.cn:7000/' title='GreatSQL MGR DEMO 环境' width='100%' height='520px'></iframe>
 </div>
 </body>
 </html>
