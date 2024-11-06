@@ -7,5 +7,5 @@ GreatSQL Live SQL(Beta) 是单机模式下的 GreatSQL 在线测试体验环境�
 :::
 
 <div class="container">
-<iframe src='http://live.greatsql.cn' title='GreatSQL Live SQL' width='100%' height='700px' border=none></iframe>
+<iframe src='http://live.greatsql.cn' title='GreatSQL Live SQL' height='500px'></iframe>
 </div>
