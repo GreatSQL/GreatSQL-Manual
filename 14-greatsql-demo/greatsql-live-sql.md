@@ -9,5 +9,5 @@ GreatSQL Live SQL 是单机模式下的 GreatSQL 在线测试体验环境，在�
 :::
 
 <div class="container">
-<iframe src='http://live.greatsql.cn' title='GreatSQL Live SQL' height='500px'></iframe>
+<iframe src='https://demo.greatsql.cn:7681' title='GreatSQL Live SQL' height='500px'></iframe>
 </div>
