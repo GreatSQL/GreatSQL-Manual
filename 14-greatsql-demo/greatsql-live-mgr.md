@@ -27,5 +27,5 @@ transition: transform 0.3s ease-in-out;
 }
 </style>
 <div class="container">
-<iframe src='https://demo.greatsql.cn:7443/' title='GreatSQL Live MGR' width='100%' height='560px' border=none></iframe>
+<iframe src='https://demo.greatsql.cn/' title='GreatSQL Live MGR' width='100%' height='900px' border=none></iframe>
 </div>
