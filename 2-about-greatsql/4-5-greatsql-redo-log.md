@@ -156,7 +156,7 @@ Redo Log 相关的调整优化操作，主要参考以下几条原则：
 
 - `innodb_log_file_size` & `innodb_log_files_in_group`
   
-  在 8.0.30 版本以前，通过 `innodb_log_buffer_size` 和 `innodb_log_files_in_group` 组合来配置 Redo Log 总量。前者表示每个 Redo Log 文件大小，后者表示总共有几个文件。前者默认值：*48MB*，取值范围：[*4MB - 512GB / innodb_log_files_in_group*]。后者默认值：*2*，取值范围：[*2 - 100*]。二者相乘后即为 Redo Log 容量，但最大值不得超过 *512GB*。
+  在 8.0.30 版本以前，通过 `innodb_log_file_size` 和 `innodb_log_files_in_group` 组合来配置 Redo Log 总量。前者表示每个 Redo Log 文件大小，后者表示总共有几个文件。前者默认值：*48MB*，取值范围：[*4MB - 512GB / innodb_log_files_in_group*]。后者默认值：*2*，取值范围：[*2 - 100*]。二者相乘后即为 Redo Log 容量，但最大值不得超过 *512GB*。
   
 - `innodb_log_group_home_dir`
 
