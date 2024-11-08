@@ -116,7 +116,7 @@ binlog_transaction_dependency_tracking = WRITESET
 - `binlog_transaction_dependency_tracking`
 
   用于控制 GreatSQL 主服务器在生成 Binlog 时如何跟踪事务依赖关系。这对于提高从服务器的并行复制性能非常重要。可选值包括：
- 
+
   - **COMMIT_ORDER**，按事务提交的顺序跟踪依赖关系。这是默认值。适用于大多数工作负载，但并行度较低。
   - **WRITESET**：基于事务的写集合跟踪依赖关系。事务之间如果没有写集合冲突，则可以并行执行。适合有高并发写操作的工作负载。
   - **WRITESET_SESSION**，基于写集合并按会话跟踪依赖关系。这意味着即使写集合之间没有冲突，但如果同一会话的事务，它们还是会按顺序执行。适用于事务之间存在一定顺序但又需要高并行度的场景。
