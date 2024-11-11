@@ -353,7 +353,7 @@ Transaction check error:
 
 4. **恶意行为**：病毒或恶意软件可能修改或删除系统文件。
 
-5. **权限问题**：尝试访问或修改文件的用户可能没有足够的权限，尽管这种情况下通常会有不同的错误消息。或者 SELinux 也可能会引发这个问题，参考本页内容：[20. 为什么用 systemd 启动 GreatSQL 时，会报错提示 Failed to execute command: Permission denied](#_20-为什么用-systemd-启动-greatsql-时-会报错提示-failed-to-execute-command-permission-denied)。
+5. **权限问题**：尝试访问或修改文件的用户可能没有足够的权限，尽管这种情况下通常会有不同的错误消息。或者 SELinux 也可能会引发这个问题，参考本页内容：[用 systemd 启动 GreatSQL 时，报错提示 `Failed to execute command: Permission denied`](../6-oper-guide/8-troubleshooting.md#用-systemd-启动-greatsql-时-报错提示-failed-to-execute-command-permission-denied)。
 
 解决 "file is truncated" 错误的方法包括：
 
@@ -365,7 +365,7 @@ Transaction check error:
 
 4. **手动替换文件**：从相同版本的另一台健康机器上复制文件，然后替换本地的损坏文件。
 
-5. **检查权限**：确认你有足够的权限访问和修改文件，或者修复 SELinux 相关问题，参考本页内容：[20. 为什么用 systemd 启动 GreatSQL 时，会报错提示 Failed to execute command: Permission denied](#_20-为什么用-systemd-启动-greatsql-时-会报错提示-failed-to-execute-command-permission-denied)。
+5. **检查权限**：确认你有足够的权限访问和修改文件，或者修复 SELinux 相关问题，参考本页内容：[用 systemd 启动 GreatSQL 时，报错提示 `Failed to execute command: Permission denied`](../6-oper-guide/8-troubleshooting.md#用-systemd-启动-greatsql-时-报错提示-failed-to-execute-command-permission-denied)。
 
 6. **更新系统**：确保所有的系统包都是最新的，有时候问题可能是因为旧版本的库文件。
 
