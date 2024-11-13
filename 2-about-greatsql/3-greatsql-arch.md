@@ -81,7 +81,7 @@ GreatSQL 内部维持着 Query Cache 用来缓存 `SELECT` 的执行结果，如
 
 GreatSQL 支持多个存储引擎，每个引擎都具备独特的特性。GreatSQL 采用可插拔式存储引擎管理机制，这种管理方式的优势很明显，可以根据业务需要选择更合适的存储引擎，例如利用 InnoDB 和 [Rapid 引擎](../5-enhance/5-1-highperf-rapid-engine.md)就可以很方便地实现 HTAP 架构。
 
-执行 SQL 命令 `SHOW ENGINES` 查看 GreatSQL 支持的存储引擎。
+执行 SQL 命令 `SHOW ENGINES` 查看 GreatSQL 当前已安装的存储引擎。
 
 ```sql
 greatsql> SHOW ENGINES;
