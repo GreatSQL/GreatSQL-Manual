@@ -41,7 +41,7 @@ RECEIVED_TRANSACTION_SET: 6cfb873b-573f-11ec-814a-d08e7908bcb1:1-3078139
 2. 第一个启动的节点没先做初始引导操作（`group_replication_bootstrap_group=ON`）。
 3. 没有正确配置group_name，所有节点的 `group_replication_group_name` 值要一致才可以。
 4. 没正确配置 `group_replication_group_name`，常见于新手。要为MGR服务专门新开一个服务端口，常用33061端口，但新手可能会照样写成3306端口。
-5. 通常，我们会在各MGR节点的 hosts 文件里加上所有节点的hostname。这是为了防止本地节点使用的hostname和MGR收到的hostname不一致，这种情况下，可以在每个本地节点设置 `report-host`，主动上报hostname即可解决。
+5. 通常，我们会在各MGR节点的 hosts 文件里加上所有节点的hostname。这是为了防止本地节点使用的hostname和MGR收到的hostname不一致，这种情况下，可以在每个本地节点设置 `report_host`，主动上报hostname即可解决。
 7. 没设置正确的allowlist。有可能加入MGR各节点的IP不在默认的allowlist中，可参考这篇文章：[MySQL Group Replication集群对IP地址的限制导致的一些问题与解决办法](https://mp.weixin.qq.com/s/sbYufrlOx4cKiT8sV3hCaw)。
 8. 个别节点的本地事务更多，例如误操作写入数据，也会无法加入MGR，这种情况需要重建本地节点。
 9. 个别节点的本地事务缺失太多，且加入MGR时无法自动完成恢复，这种情况比较少见，需要手动执行clone复制数据，或者其他类似操作。

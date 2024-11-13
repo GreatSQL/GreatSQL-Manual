@@ -73,9 +73,9 @@ plugin_load_add='group_replication.so'
 group_replication_group_name="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"
 group_replication_local_address= "172.16.16.10:33061"
 group_replication_group_seeds= "172.16.16.10:33061,172.16.16.11:33061,172.16.16.12:33061"
-report-host=172.16.16.10
+report_host=172.16.16.10
 ```
-选项 `report-host` 的作用是向MGR其他节点报告本节点使用的地址，避免某个服务器上有多个主机名时，可能无法正确找到对应关系而使得MGR无法启动的问题。此外，设置了 `report-host` 后，修改 `/etc/hosts` 系统文件加入各节点的地址及主机名这个步骤就不是必须的了。
+选项 `report_host` 的作用是向MGR其他节点报告本节点使用的地址，避免某个服务器上有多个主机名时，可能无法正确找到对应关系而使得MGR无法启动的问题。此外，设置了 `report_host` 后，修改 `/etc/hosts` 系统文件加入各节点的地址及主机名这个步骤就不是必须的了。
 
 另外，注意上面配置的端口写的是 **33061** 而不是 **3306**，这是为MGR服务指定专用的通信端口，区别于GreatSQL正常的读写服务端口。这里的 33061 端口号可以自定义，例如写成 12345 也可以，注意该端口不能被防火墙拦截。
 
@@ -151,13 +151,13 @@ plugin_load_add='group_replication.so'
 group_replication_group_name="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"
 group_replication_local_address= "172.16.16.11:33061"
 group_replication_group_seeds= "172.16.16.10:33061,172.16.16.11:33061,172.16.16.12:33061"
-report-host=172.16.16.11
+report_host=172.16.16.11
 ```
 ::: tip 提醒
 上面的几个选项中，`server_id`、`group_replication_local_address` 和 `report_host` 这三个选项要修改为正确的值。在一个MGR集群中，各节点设置的 `server_id` 和 `server_uuid` 要是唯一的，但是 `group_replication_group_name` 的值要一样，这是该MGR集群的唯一标识。
 :::
 
-重启GreatSQL实例后（`report-host` 是只读选项，需要重启才能生效），创建MGR服务专用账号及配置MGR服务通道：
+重启GreatSQL实例后（`report_host` 是只读选项，需要重启才能生效），创建MGR服务专用账号及配置MGR服务通道：
 ```sql
 SET SESSION sql_log_bin=0;
 CREATE USER repl@'%' IDENTIFIED WITH mysql_native_password BY 'repl';
