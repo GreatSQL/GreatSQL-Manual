@@ -15,7 +15,7 @@ GreatSQL支持在单主（Single-Primary）模式下，在读写节点（以下�
 
 3. 动态绑定VIP需要新启动一个额外通信端口，请修改防火墙规则，确保该端口不会被屏蔽。
 
-4. 只支持MGR单主模式（single-primary mode），不支持多主模式（multi-primary mode），所以要确保这两个选项设置正确值 `group_replication_single_primary_mode = ON` 以及 `group_replication_enforce_update_everywhere_checks= FALSE`。
+4. 只支持MGR单主模式（single-primary mode），不支持多主模式（multi-primary mode），所以要确保这两个选项设置正确值 `group_replication_single_primary_mode = ON` 以及 `group_replication_enforce_update_everywhere_checks= OFF`。
 :::
 
 如果想启用 IPv6 支持，有以下几点注意事项：
@@ -39,15 +39,18 @@ net.ipv6.conf.default.use_tempaddr = 0
 ```
 
 ## 启用内置VIP插件
+
 - 开启新插件
 
 在 *my.cnf* 配置文件 *[mysqld]* 区间中，增加下面这行配置：
+
 ```ini
 [mysqld]
 plugin_load_add=greatdb_ha.so
 ```
 
 或者在启动数据库实例后，执行下面的 SQL 命令：
+
 ```sql
 INSTALL PLUGIN greatdb_ha SONAME 'greatdb_ha.so';
 ```
@@ -57,20 +60,25 @@ INSTALL PLUGIN greatdb_ha SONAME 'greatdb_ha.so';
 在 *my.cnf* 配置文件 *[mysqld]* 区间中，增加下面的配置项。
 
 - 配置开启内置支持绑定VIP功能
+
 ```ini
-loose-greatdb_ha_enable_mgr_vip = 1
+loose-greatdb_ha_enable_mgr_vip = ON
 ```
+
 - 配置Primary节点绑定的VIP
+
 ```ini
 loose-greatdb_ha_mgr_vip_ip = "172.17.140.250"
 ```
 
 - 配置ARP包广播重复次数。当节点绑定浮动IP以后，会广播ARP包来更新广播域内的ARP缓存，此参数是广播次数，默认是5次，合法取值范围为3-20
+
 ```ini
 loose-greatdb_ha_send_arp_packge_times = 5
 ```
 
 - 配置Secondary节点绑定的VIP，如果想绑定多个只读VIP，只需用逗号 `,` 隔开
+
 ```ini
 loose-greatdb_ha_mgr_read_vip_ips = "172.17.140.251"
 
@@ -79,11 +87,13 @@ loose-greatdb_ha_mgr_read_vip_ips = "172.17.140.251"
 ```
 
 - 当只读VIP所在节点意外不可用后的处理方式，可选值为 `["TO_PRIMARY", "TO_ANOTHER_SECONDARY"]`。设置为 `TO_PRIMARY` 表示重新将只读VIP绑定到Primary节点上；设置为 `TO_ANOTHER_SECONDARY` 表示重新将只读VIP绑定到另外的Secondary节点上；默认值是 `TO_PRIMARY`，即重新绑定到Primary节点上。
+
 ```ini
 loose-greatdb_ha_mgr_read_vip_floating_type = "TO_ANOTHER_SECONDARY"
 ```
 
 - 配置动态绑定VIP服务专用通信端口，通过该端口进行通信数据传输。当MGR节点发生状态变更时，Primary节点根据预设的VIP绑定关系，按照 **变更小、平均分配** 的原则重新分配VIP绑定关系，并将VIP绑定关系通过专用通信端口发送给Secondary节点，Secondary节点根据绑定关系解绑或绑定指定VIP。
+
 ```ini
 loose-greatdb_ha_port = 33062
 ```
@@ -94,24 +104,30 @@ loose-greatdb_ha_port = 33062
   - 3. 不能通过此命令修改写vip的绑定关系
   - 4. 不能通过此命令添加或移除vip(即拓扑关系里面的vip只能是读、写vip中的成员)
   - 5. 不能通过此命令添加或移除成员(即拓扑关系里面的uuid只能是先有mgr集群中的uuid，不能增加也不能删除)
+
 ```sql
 SET GLOABL greatdb_ha_vip_tope = "node1_uuid1::vip1; node2_uuid2::vip2,vip3; node3_uuid3::vip4";
 ```
 
 - 配置要绑定的网卡名，插件会将vip绑定到MGR主（Primary）节点所在机器的指定网卡上，比如配置为eth0，为了防止网卡原有的ip被覆盖，实际绑定后，会绑定在名为eth0:0的网卡上
+
 ```ini
 loose-greatdb_ha_mgr_vip_nic = 'eth0'
 ```
 
+如果在同一个服务器中运行多实例，则需要分别对每个实例设置不同的网卡名，而不能多个实例对同一个网卡绑定不同的 VIP。如第一个实例设置 `loose-greatdb_ha_mgr_vip_nic = 'eth0:0'`，第二个实例设置为 `loose-greatdb_ha_mgr_vip_nic = 'eth0:1'`，将二者区分开来。同样地，各个实例也要设置不同的 `greatdb_ha_port` 参数值。
+
 - 配置掩码
+
 ```ini
 loose-greatdb_ha_mgr_vip_mask = '255.255.255.0'
 ```
 
 - 目前只支持在单主模式下才能启用内置vip特性，所以还需要设置下面参数：
+
 ```ini
-loose-group_replication_single_primary_mode= TRUE
-loose-group_replication_enforce_update_everywhere_checks= FALSE
+loose-group_replication_single_primary_mode = ON
+loose-group_replication_enforce_update_everywhere_checks= OFF
 ```
 
 - 选项 `greatdb_ha_mgr_vip_broad` 已废弃不再使用。
@@ -120,6 +136,7 @@ loose-group_replication_enforce_update_everywhere_checks= FALSE
 - 上述参数支持在线动态修改。
 
 上述配置说明的完整示例如下（MGR组内每个实例都需要配置）：
+
 ```ini
 [mysqld]
 #GreatSQL MGR vip
@@ -133,12 +150,12 @@ loose-greatdb_ha_mgr_read_vip_ips = "172.17.140.251"
 #loose-greatdb_ha_mgr_read_vip_ips = "172.17.140.251,172.17.140.252"
 loose-greatdb_ha_mgr_read_vip_floating_type = "TO_ANOTHER_SECONDARY"
 loose-greatdb_ha_send_arp_packge_times = 5
-report_host = 172.17.140.10
+report_host = "172.17.140.10"
 report_port = 3306
 
 #single-primary mode
-loose-group_replication_single_primary_mode=1
-loose-group_replication_enforce_update_everywhere_checks=0
+loose-group_replication_single_primary_mode = ON
+loose-group_replication_enforce_update_everywhere_checks = OFF
 ```
 
 当 MGR Primary 节点上绑定的 VIP 被手动删除或者出现异常导致 VIP 绑定行为异常时，可以通过在 MGR Primary 节点上执行 SQL 命令 `SET GLOBAL greatdb_ha_force_change_mgr_vip = ON` 命令去重新获取 MGR 拓扑结构，从而重新绑定 VIP，该命令执行之后，参数  `greatdb_ha_force_change_mgr_vip` 值仍然为OFF，这个是符合预期的行为。

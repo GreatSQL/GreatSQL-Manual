@@ -11,55 +11,88 @@ GreatSQL支持在单主（Single-Primary）模式下，在读写节点绑定动�
 
 
 ## 启用内置vip插件
+
 - 开启新插件
+
 ```ini
 plugin_load_add=greatdb_ha.so
 ```
 
 或者在启动数据库实例后， 执行
+
 ```sql
 INSTALL PLUGIN greatdb_ha SONAME 'greatdb_ha.so';
 ```
 
 ## 新增配置参数
+
 - 配置开启内置vip功能
+
 ```ini
-loose-greatdb_ha_enable_mgr_vip = 1
+loose-greatdb_ha_enable_mgr_vip = ON
 ```
-- 配置vip
+
+- 配置Primary节点绑定的VIP
+
 ```ini
-loose-greatdb_ha_mgr_vip_ip = 172.17.140.1
+loose-greatdb_ha_mgr_vip_ip = "172.17.140.250"
 ```
-- 配置要绑定的网卡名，插件会将vip绑定到MGR主所在机器的指定网卡上，比如配置为eth0，为了防止网卡原有的ip被覆盖，实际绑定后，会绑定在名为eth0:0的网卡上
+
+- 配置ARP包广播重复次数。当节点绑定浮动IP以后，会广播ARP包来更新广播域内的ARP缓存，此参数是广播次数，默认是5次，合法取值范围为3-20
+
+```ini
+loose-greatdb_ha_send_arp_packge_times = 5
+```
+
+- 配置动态绑定VIP服务专用通信端口，通过该端口进行通信数据传输。当MGR节点发生状态变更时，Primary节点根据预设的VIP绑定关系，按照 **变更小、平均分配** 的原则重新分配VIP绑定关系，并将VIP绑定关系通过专用通信端口发送给Secondary节点，Secondary节点根据绑定关系解绑或绑定指定VIP。
+
+```ini
+loose-greatdb_ha_port = 33062
+```
+
+- 配置要绑定的网卡名，插件会将vip绑定到MGR主（Primary）节点所在机器的指定网卡上，比如配置为eth0，为了防止网卡原有的ip被覆盖，实际绑定后，会绑定在名为eth0:0的网卡上
+
 ```ini
 loose-greatdb_ha_mgr_vip_nic = 'eth0'
 ```
+
 - 配置掩码
+
 ```ini
 loose-greatdb_ha_mgr_vip_mask = '255.255.255.0'
 ```
+
 - 目前只支持在单主模式下才能启用内置vip特性，所以还需要设置下面参数：
+
 ```ini
-loose-group_replication_single_primary_mode= TRUE
-loose-group_replication_enforce_update_everywhere_checks= FALSE
+loose-group_replication_single_primary_mode = ON
+loose-group_replication_enforce_update_everywhere_checks = OFF
 ```
-- 上述参数如果没有配置，或者配置格式不对时，内置vip功能会失效（目前没有格式检查报错的功能）。
+
+- 选项 `greatdb_ha_mgr_vip_broad` 已废弃不再使用。
+- 上述参数如果没有配置，或者配置格式不对时，内置VIP功能会失效（目前没有格式检查报错的功能）。
 - 除了上述新增参数，其他MGR相关参数按照常规单主MGR配置要求即可。
 - 上述参数支持在线动态修改。
 
+
 上述配置说明的完整示例如下（MGR组内每个实例都需要配置）：
+
 ```ini
 [mysqld]
 #GreatSQL MGR vip
 plugin-load-add=greatdb_ha.so
-loose-greatdb_ha_enable_mgr_vip=1
-loose-greatdb_ha_mgr_vip_ip =172.17.140.1
-loose-greatdb_ha_mgr_vip_mask=255.255.240.0
-loose-greatdb_ha_mgr_vip_nic=eth0
+loose-greatdb_ha_enable_mgr_vip = ON
+loose-greatdb_ha_mgr_vip_ip = "172.17.140.250"
+loose-greatdb_ha_mgr_vip_mask = "255.255.255.0"
+loose-greatdb_ha_mgr_vip_nic = "eth0"
+loose-greatdb_ha_port = 33062
+loose-greatdb_ha_send_arp_packge_times = 5
+report_host = "172.17.140.10"
+report_port = 3306
 
 #single-primary mode
-loose-group_replication_single_primary_mode=1
-loose-group_replication_enforce_update_everywhere_checks=0
+loose-group_replication_single_primary_mode = ON
+loose-group_replication_enforce_update_everywhere_checks = OFF
 ```
 
 当MGR Primary节点上绑定的vip被手动删除或者出现异常配置导致vip绑定行为不对时，可以通过在MGR Primary节点上执行 `set global greatdb_ha_force_change_mgr_vip = on` 命令去重新获取MGR拓扑结构，从而重新绑定vip，该命令执行之后，参数  `greatdb_ha_force_change_mgr_vip` 值仍然为off，这个是符合预期的行为。
