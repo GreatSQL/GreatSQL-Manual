@@ -7,6 +7,8 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 GreatSQL 致力于保持开源的开放性。GreatSQL 采用 [GPLv2 协议](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)。
 
+GreatSQL 的代码托管在[gitee](https://gitee.com/GreatSQL/GreatSQL)，同时镜像到 [github](https://github.com/GreatSQL/GreatSQL)。
+
 ## 理解 GreatSQL 版本号
 
 GreatSQL 版本号采用点分位命名规则（X.Y.Z-R）模式，其中
