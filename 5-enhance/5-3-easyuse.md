@@ -1,7 +1,7 @@
 # GreatSQL 高兼容
 ---
 
-GreatSQL 实现 100% 完全兼容 MySQL 及 Percona Server For MySQL 用法，支持大多数常见 Oracle 用法，包括 [数据类型兼容](#数据类型兼容)、[函数兼容](#函数兼容)、[SQL 语法兼容](#sql语法兼容)、[存储程序兼容](#存储程序兼容) 等众多兼容扩展用法。
+GreatSQL 实现 100% 完全兼容 MySQL 及 Percona 用法，支持大多数常见 Oracle 用法，包括 [数据类型兼容](#数据类型兼容)、[函数兼容](#函数兼容)、[SQL 语法兼容](#sql语法兼容)、[存储程序兼容](#存储程序兼容) 等众多兼容扩展用法。
 
 ## Oracle兼容设计思路概述
 GreatSQL的Oracle的兼容处理的优先原则如下：

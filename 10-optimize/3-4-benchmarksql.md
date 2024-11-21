@@ -4,7 +4,7 @@ BenchmarkSQL 是一个开源的 Java 应用程序，用于评估数据库系统�
 
 TPC-C 模型是模拟一个商品批发公司的销售模型，这个模型涵盖了一个批发公司面向客户对一系列商品进行销售的过程，这包括管理订单，管理库存，管理账号收支等操作。这些操作涉及到仓库、商品、客户、订单等概念，围绕这些概念，构造了数据表格，以及相应的数据库操作。
 
-BenchmarkSQL 支持 MySQL（Percona Server for MySQL、GreatSQL）、PostgreSQL、Oracle、SQL Server 等。
+BenchmarkSQL 支持 MySQL（Percona、GreatSQL）、PostgreSQL、Oracle、SQL Server 等。
 
 ## 主要特性
 - **标准化的测试**：基于 TPC-C 和 TPC-E 的标准基准测试，提供了一套公平的测试方案。

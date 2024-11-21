@@ -1,11 +1,11 @@
 # 从Percona迁移/升级/降级到GreatSQL
 ---
 
-本文介绍如何从Percona Server for MySQL迁移/升级到GreatSQL数据库。
+本文介绍如何从Percona迁移/升级到GreatSQL数据库。
 
 ## 为什么要迁移/升级
 
-GreatSQL是在Percona Server for MySQL（简称Percona）的基础上Fork的开源分支，专注于提升MGR可靠性及性能，支持InnoDB并行查询等特性。
+GreatSQL是在Percona的基础上Fork的开源分支，专注于提升MGR可靠性及性能，支持InnoDB并行查询等特性。
 
 GreatSQL相对于Percona有着众多优秀特性，包括且不仅限以下：
 
