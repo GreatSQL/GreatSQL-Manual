@@ -5,8 +5,6 @@ GreatSQL支持在单主（Single-Primary）模式下，在读写节点（以下�
 
 还可以为只读节点（以下称呼：Secondary节点）绑定只读VIP，业务可以通过该VIP来访问Secondary节点，实现Secondary节点的动态VIP漂移。
 
-绑定动态VIP支持IPv4 和 IPv6。
-
 ::: danger 特别提醒
 
 1. 动态VIP解绑以后，通过读写VIP与MGR Primary节点建立的连接会被主动kill掉，前提是需要添加配置 `bind_address="0.0.0.0"`；如果绑定某个固定IP地址，则无法实现MGR Primary节点切换后主动kill连接。该特性可参考：[MGR切主后断开应用连接](./5-2-ha-mgr-kill-conn-after-switch.md)。
@@ -16,6 +14,23 @@ GreatSQL支持在单主（Single-Primary）模式下，在读写节点（以下�
 3. 动态绑定VIP需要新启动一个额外通信端口，请修改防火墙规则，确保该端口不会被屏蔽。
 
 4. 只支持MGR单主模式（single-primary mode），不支持多主模式（multi-primary mode），所以要确保这两个选项设置正确值 `group_replication_single_primary_mode = ON` 以及 `group_replication_enforce_update_everywhere_checks= OFF`。
+
+5. 当采用光口万兆网卡时，可能出现 VIP 漂移后无法主动广播 MAC 地址的情况，需要在服务器上定时主动执行 `arping` 对外广播 MAC 地址。例如：
+
+```bash
+/usr/sbin/arping -U -I bond0 -c 3 172.17.140.254
+```
+
+其中，172.17.140.250 是绑定的 VIP 地址。参数 `-U` 的作用是无理由的（强制的）ARP模式去更新别的主机上的ARP CACHE列表中的本机的信息，不需要响应。参数 `-c 3` 表示发送 3 次请求。
+
+也可以采用下面的方法：
+
+```bash
+/usr/sbin/arping -U -I bond0 -c 3 172.17.140.140 -s 172.117.140.250
+```
+
+其中，`-s 172.17.140.250` 是指定广播的 IP 为绑定的 VIP 地址，172.17.140.140 是其他节点的 IP 地址。
+
 :::
 
 如果想启用 IPv6 支持，有以下几点注意事项：
@@ -26,23 +41,7 @@ GreatSQL支持在单主（Single-Primary）模式下，在读写节点（以下�
 
 3. 不支持 IPv4 和 IPv6 混用。
 
-4. 当采用光口万兆网卡时，可能出现 VIP 漂移后无法主动广播 MAC 地址的情况，需要在服务器上定时主动执行 `arping` 对外广播 MAC 地址。例如：
-
-```bash
-/usr/sbin/arping -U -I bond0 -c 3 172.17.140.254
-```
-
-其中，172.17.140.250 是绑定的 VIP 地址。参数 `-U` 的作用是无理由的（强制的）ARP模式去更新别的主机上的ARP CACHE列表中的本机的信息，不需要响应。参数 `-c 3` 表示发送 3 次请求。
-
-也可以采用下面的方法：
-
-```
-/usr/sbin/arping -U -I bond0 -c 3 172.17.140.140 -s 172.117.140.250
-```
-
-其中，`-s 172.17.140.250` 是指定广播的 IP 为绑定的 VIP 地址，172.17.140.140 是其他节点的 IP 地址。
-
-5. 需要关闭系统层的 **DAD** 检测，否则 VIP 漂移之后会无法绑定。新增或修改 `/etc/sysctl.d/local.conf` 文件，配置内容参考如下，编辑保存退出后重启服务器：
+4. 需要关闭系统层的 **DAD** 检测，否则 VIP 漂移之后会无法绑定。新增或修改 `/etc/sysctl.d/local.conf` 文件，配置内容参考如下，编辑保存退出后重启服务器：
 
 ```ini
 net.ipv6.conf.all.accept_dad = 0
