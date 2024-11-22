@@ -792,26 +792,26 @@ COMMITTED_GTID_SET: 4fb86f5b-b028-11ee-92b8-d08e7908bcb1:1-339
 ## 性能表现参考
 
 ###  TPC-H测试表现
-GreatSQL Rapid引擎性能表现优异，在32C64G测试机环境下，TPC-H 100G测试中22条SQL总耗时仅需不到80秒。下面是和其他类似产品的对比数据，仅供参考（测试时间：2024.1.31）：
-![tpch100g-rapid-vs-stonedb-starrocks](./5-1-highperf-greatsql-tpch100g.png)
+GreatSQL Rapid 引擎性能表现优异，在 32C64G 测试机环境下，TPC-H SF100 测试结果中22条 SQL 总耗时仅需不到 40 秒（通常来说，SF100 总耗时在 100 秒内算是比较不错的 OLAP 产品）。下图展示了 GreatSQL 在 SF100、SF300、SF1000 三种数据量下的测试结果，仅供参考（测试截止时间：2024.11.22）：
+![GreatSQL TPC-H SF100-300-1000](./5-1-highperf-greatsql-tpch-sf100-300-1000.png)
 
 ###  数据压缩比
 
-下面是几个不同TPC-H数据量级的压缩比数据：
+下面是几个不同 TPC-H 数据量级的压缩比数据：
 
-| TPC-H仓库大小 | InnoDB引擎数据文件大小 | Rapid引擎数据文件大小 | 压缩比 | 
+| TPC-H仓库大小 | InnoDB引擎数据文件大小（字节） | Rapid引擎数据文件大小（字节） | 压缩比 |
 | --- | --- | --- | --- |
-| TPC-H 1GB | 2003026076 | 276574208 | 7.24 |
-| TPC-H 100GB | 184570593436 | 28728373248 | 6.42 | 
-| TPC-H 500GB | 1167795142848 | 146723045376 | 7.96 | 
+| TPC-H SF1 | 2003026076 | 276574208 | 7.24 |
+| TPC-H SF100 | 184570593436 | 28728373248 | 6.42 |
+| TPC-H SF500 | 1167795142848 | 146723045376 | 7.96 |
 
 更多关于 Rapid 引擎 TPC-H 测试报告详情请参考：[GreatSQL TPC-H 性能测试报告](../10-optimize/3-3-benchmark-greatsql-tpch-report.md)。
 
-## 构建专属AP查询服务器
+## 构建专属OLAP查询服务器
 
-可以利用主从复制或MGR组复制方式构建一个读写分离场景，主节点上仍采用InnoDB引擎，选择一个专属从节点响应AP查询请求，该从节点上的数据表加上Rapid辅助引擎，这样就可以在从节点利用Rapid引擎响应AP查询请求了。
+可以利用主从复制或MGR组复制方式构建一个读写分离场景，主节点上仍采用InnoDB引擎，选择一个专属从节点响应OLAP查询请求，该从节点上的数据表加上Rapid辅助引擎，这样就可以在从节点利用Rapid引擎响应OLAP查询请求了。
 
-但也要注意，此时如果主节点上执行了Rapid引擎不支持的SQL命令，例如`ADD COLUMN`、`TRUNCATE`等操作，会导致从节点复制报错。此时需要人为介入处理，先将该表移除Rapid辅助引擎，重启复制线程，使得复制线程正常工作。待到复制线程应用完事务后，再将该表加上Rapid引擎，继续响应AP查询请求。
+但也要注意，此时如果主节点上执行了Rapid引擎不支持的SQL命令，例如`ADD COLUMN`、`TRUNCATE`等操作，会导致从节点复制报错。此时需要人为介入处理，先将该表移除Rapid辅助引擎，重启复制线程，使得复制线程正常工作。待到复制线程应用完事务后，再将该表加上Rapid引擎，继续响应OLAP查询请求。
 
 我们还在持续优化Rapid引擎，以支持更多特性和应用场景。
 
@@ -836,7 +836,7 @@ greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_OPTIONS FROM information_schem
 | test         | t1         | SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1" |
 | test         | t3         | SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1" |
 +--------------+------------+---------------------------------------------+
-
+:
 greatsql> EXPLAIN SELECT /*+ SET_VAR(use_secondary_engine = ON) */ * FROM t1, t3 WHERE t1.b = t3.b;
 +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------------------+
 | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra                                      |
