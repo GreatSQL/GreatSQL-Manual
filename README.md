@@ -12,7 +12,7 @@
 
 GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上满足金融级应用场景，具有 **高可用**、**高性能**、**高兼容**、**高安全** 等特性，可作为 MySQL 或 Percona Server for MySQL 的理想可选替换。
 
-![GreatSQL LOGO](./GreatSQL-logo-01.png "GreatSQL LOGO")
+![GreatSQL LOGO](./greatsql-logo.png "GreatSQL LOGO")
 
 ## 下载GreatSQL
 
