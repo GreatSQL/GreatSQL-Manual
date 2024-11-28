@@ -20,6 +20,9 @@
 #### [loong_hy](https://github.com/loong-hy) [zhangwenlong01](https://gitee.com/zhangwenlong01)
  - 提供了loongarch64 support for GreatSQL patch。详见 [add loongarch64 support](https://github.com/GreatSQL/GreatSQL/pull/7)、[add loongarch64 support](https://gitee.com/src-openeuler/greatsql/pulls/54)。
 
+#### [开源之夏Sammmmy](https://gitee.com/sammmmy) [laokz](https://gitee.com/laokz)
+ - 提供了 riscv64 for GreatSQL 支持。详见 [给GreatSQL 8.0.32-25添加openEuler riscv64支持](https://gitee.com/GreatSQL/GreatSQL/pulls/10)、[更新RISC-V下的MTR测试文档](https://gitee.com/GreatSQL/GreatSQL/pulls/11)、[set riscv64 to KNOWN_64BIT_ARCHITECTURES](https://gitee.com/GreatSQL/GreatSQL/pulls/12)
+
 ## 文档贡献
  敬请期待~<br>
  [我要参与编写文档！](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
@@ -76,10 +79,9 @@
 - [梁熙民](https://gitee.com/daydreammirror)
 - [lingoYS](https://greatsql.cn/home.php?mod=space&uid=1753&do=profile)
 - [jillwx](https://gitee.com/jillwx)
-- [uest](https://gitee.com/uest)
+- [Uest](https://gitee.com/uest)
 - [sunli8523](https://greatsql.cn/home.php?mod=space&uid=234&do=profile&from=space)
 - [iwordz](https://github.com/iwordz)
-
 
 **扫码关注微信公众号**
 
