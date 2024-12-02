@@ -114,6 +114,8 @@ PrivateTmp=false
 
 务必确认文件中 `ExecStartPre` 和 `ExecStart` 两个参数指定的目录及文件名是否正确。
 
+**提示**：如果不是安装到默认的 `/usr/local/` 目录下，请编辑 `bin/mysqld_pre_systemd` 脚本，修改 `ExecStartPre` 和 `ExecStart` 的实际路径。
+
 执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
 
 ```bash
