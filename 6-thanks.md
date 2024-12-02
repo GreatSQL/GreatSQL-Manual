@@ -23,6 +23,9 @@
 #### [开源之夏Sammmmy](https://gitee.com/sammmmy) [laokz](https://gitee.com/laokz)
  - 提供了 riscv64 for GreatSQL 支持。详见 [给GreatSQL 8.0.32-25添加openEuler riscv64支持](https://gitee.com/GreatSQL/GreatSQL/pulls/10)、[更新RISC-V下的MTR测试文档](https://gitee.com/GreatSQL/GreatSQL/pulls/11)、[set riscv64 to KNOWN_64BIT_ARCHITECTURES](https://gitee.com/GreatSQL/GreatSQL/pulls/12)
 
+#### [胡润泽](https://gitee.com/hu-runze)
+ - 提交 gt-checksum 的bug fix PR：[update Oracle/or_query_table_date.go](https://gitee.com/GreatSQL/gt-checksum/pulls/3)。
+
 ## 文档贡献
  敬请期待~<br>
  [我要参与编写文档！](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
@@ -82,6 +85,8 @@
 - [Uest](https://gitee.com/uest)
 - [sunli8523](https://greatsql.cn/home.php?mod=space&uid=234&do=profile&from=space)
 - [iwordz](https://github.com/iwordz)
+- [熊猫与猫无关](https://gitee.com/panyx)
+- [wldba](https://gitee.com/wldba)
 
 **扫码关注微信公众号**
 
