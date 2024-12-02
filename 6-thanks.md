@@ -26,6 +26,9 @@
 #### [胡润泽](https://gitee.com/hu-runze)
  - 提交 gt-checksum 的bug fix PR：[update Oracle/or_query_table_date.go](https://gitee.com/GreatSQL/gt-checksum/pulls/3)。
 
+#### [月城](https://gitee.com/david058)
+ - 提交 gt-checksum 的bug fix PR：[update actions/schema_tab_struct.go](https://gitee.com/GreatSQL/gt-checksum/pulls/7)。
+
 ## 文档贡献
  敬请期待~<br>
  [我要参与编写文档！](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
@@ -42,7 +45,7 @@
 - entei
 - liufofu
 - 忆雨林枫
-- 月城
+- [月城](https://gitee.com/david058)
 - [Ethan_LY](https://gitee.com/ethan-ly)
 - 戴先森
 - Think
