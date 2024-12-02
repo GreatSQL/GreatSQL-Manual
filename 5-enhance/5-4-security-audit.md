@@ -131,14 +131,14 @@ greatsql> SHOW VARIABLES LIKE 'audit%';
 ```
 - audit_log_enabled
 
-| System Variable Name | audit_log_enabled                   |
-| -------------------- | ----------------------------------- |
-| Command-line         | Yes                                 |
-| Scope                | Global                              |
-| Dynamic              | Yes                                 |
-| Data type            | Boolean                             |
-| Default value        | 1                                   |
-| Allowed values       | 1(ON), 0(OFF)                       |
+| System Variable Name | audit_log_enabled |
+| -------------------- | ----------------- |
+| Command-line         | Yes               |
+| Scope                | Global            |
+| Dynamic              | Yes               |
+| Data type            | Boolean           |
+| Default value        | 1                 |
+| Allowed values       | 1(开), 0(关)      |
 
 审计日志功能总开关，设置是否启用该功能。
 
@@ -150,14 +150,14 @@ greatsql> SHOW VARIABLES LIKE 'audit%';
 
 - audit_log_to_table
 
-| System Variable Name | audit_log_to_table                  |
-| -------------------- | ----------------------------------- |
-| Command-line         | Yes                                 |
-| Scope                | Global                              |
-| Dynamic              | Yes                                 |
-| Data type            | Boolean                             |
-| Default value        | 0                                   |
-| Allowed values       | 1(ON), 0(OFF)                       |
+| System Variable Name | audit_log_to_table |
+| -------------------- | ------------------ |
+| Command-line         | Yes                |
+| Scope                | Global             |
+| Dynamic              | Yes                |
+| Data type            | Boolean            |
+| Default value        | 0                  |
+| Allowed values       | 1(开), 0(关)       |
 
 审计日志是否写入到数据表开关，设置是否启用该特性。
 
@@ -226,7 +226,7 @@ greatsql> SHOW VARIABLES LIKE 'audit%';
 | Dynamic              | Yes                                 |
 | Data type            | String                              |
 
-用于指定应用“按用户筛选”时的排除用户列表。该值可以是NULL，也可以是以逗号分隔的帐户列表，例如：`user1@host,'user2'@'host',user3@%`。如果设置了此变量，则不能同时设置 `audit_log_include_accounts`，反之亦然。
+用于指定应用“按用户筛选”时的排除用户列表。该值可以是NULL，也可以是以逗号分隔的帐户列表，例如：`user1@host,'user2'@'host',user3@%`。设置该参数后在新会话生效。如果设置了此变量，则不能同时设置 `audit_log_include_accounts`，反之亦然。
 
 - audit_log_exclude_commands
 
