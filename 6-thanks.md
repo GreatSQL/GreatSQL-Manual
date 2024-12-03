@@ -30,6 +30,8 @@
  - 提交 gt-checksum 的bug fix PR：[update actions/schema_tab_struct.go](https://gitee.com/GreatSQL/gt-checksum/pulls/7)。
 
 ## 文档贡献
+- [高文佳](https://gitee.com/gaogao67)
+  - [修复关于group_replication_unreachable_majority_timeout参数的解读](https://gitee.com/GreatSQL/GreatSQL-Doc/commit/0b12ce535fc4cb17c3dcdc3fb87066984c2b928a)
 - [wldba](https://gitee.com/wldba)
   - [update 9-ha/4-ha-multi-city-multi-idc.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/17)
 - [熊猫与猫无关](https://gitee.com/panyx)
