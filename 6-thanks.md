@@ -30,8 +30,24 @@
  - 提交 gt-checksum 的bug fix PR：[update actions/schema_tab_struct.go](https://gitee.com/GreatSQL/gt-checksum/pulls/7)。
 
 ## 文档贡献
- 敬请期待~<br>
- [我要参与编写文档！](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
+- [wldba](https://gitee.com/wldba)
+  - [update 9-ha/4-ha-multi-city-multi-idc.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/17)
+- [熊猫与猫无关](https://gitee.com/panyx)
+  - [update 3-quick-start/3-2-quick-start-with-tarball.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/16)
+- [Uest](https://gitee.com/uest)
+  - [update 10-optimize/3-4-benchmarksql.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/15)
+  - [update 6-oper-guide/8-troubleshooting.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/14)
+- [jillwx](https://gitee.com/jillwx)
+  - [update 12-dev-guide/12-4-4-functions.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/13)
+  - [update 12-dev-guide/12-2-3-dp-table.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/12)
+- [Dale](https://gitee.com/Dale_nn)
+  - [update 2-about-greatsql/4-3-greatsql-binary-log.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/11)
+  - [update 5-enhance/5-2-ha-mgr-fast-mode.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/10)
+  - [update 4-install-guide/4-install-with-docker.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/9)
+- [ShawnYan](https://gitee.com/shawnyan)
+  - [update 8-mgr/8-mgr-best-practices.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/8)
+
+[我要参与改进文档](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
 
 ## 感谢列表
 
@@ -75,21 +91,15 @@
 - Yan ᯤ
 - [iTransit](https://gitee.com/iTransit)
 - 沿河而下
-- [ShawnYan](https://gitee.com/shawnyan)
 - [lgclt](https://gitee.com/lgclt)
 - 许怀安
 - L.B
 - [王歡](https://greatsql.cn/home.php?mod=space&uid=1353&do=thread&view=me&from=space)
 - [reddey](https://greatsql.cn/home.php?mod=space&uid=1772&do=thread&view=me&from=space)
-- [Dale](https://gitee.com/Dale_nn)
 - [梁熙民](https://gitee.com/daydreammirror)
 - [lingoYS](https://greatsql.cn/home.php?mod=space&uid=1753&do=profile)
-- [jillwx](https://gitee.com/jillwx)
-- [Uest](https://gitee.com/uest)
 - [sunli8523](https://greatsql.cn/home.php?mod=space&uid=234&do=profile&from=space)
 - [iwordz](https://github.com/iwordz)
-- [熊猫与猫无关](https://gitee.com/panyx)
-- [wldba](https://gitee.com/wldba)
 
 **扫码关注微信公众号**
 
