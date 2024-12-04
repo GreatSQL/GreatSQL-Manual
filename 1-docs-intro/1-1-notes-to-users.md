@@ -9,6 +9,8 @@ GreatSQL 致力于保持开源的开放性。GreatSQL 采用 [GPLv2 协议](http
 
 GreatSQL 的代码托管在[gitee](https://gitee.com/GreatSQL/GreatSQL)，同时镜像到 [github](https://github.com/GreatSQL/GreatSQL)。
 
+如果您在使用 GreatSQL，[请戳此填写问卷](https://wj.qq.com/s2/11543483/9e09/)，**即可享受5*8在线免费技术支持服务**，只需1分钟即可完成，这对我们也很重要。
+
 ## 理解 GreatSQL 版本号
 
 GreatSQL 版本号采用点分位命名规则（X.Y.Z-R）模式，其中
@@ -18,15 +20,15 @@ GreatSQL 版本号采用点分位命名规则（X.Y.Z-R）模式，其中
 - R表示修订版本：MYSQL_VERSION_REVISION，例如5.7.36-39 Revision a2ce7ad3400、8.0.25-16 Revision 202302041847、8.0.32-26 Revision a68b3034c3d 等
 - GreatSQL 的大版本号与 Percona Server for MySQL/Oracle MySQL 版本号对应。
 
-以 GreatSQL 8.0.32-26 版本为例，登入到 GreatSQL 数据库后，执行 `\s` 或 `status` 命令就可以得到以下信息：
+以 GreatSQL 8.0.32-26 版本为例，登入到 GreatSQL 数据库后，执行 `\s` 或 `STATUS` 命令就可以得到以下信息：
 
 ```bash
 # 登入到 GreatSQL
 $ mysql -hlocalhost -S/data/GreatSQL/mysql.sock -uroot -p
 ...
 
-# 在GreatSQL 中执行 status 即可查看版本号
-greatsql> status;
+# 在GreatSQL 中执行 STATUS 即可查看版本号
+greatsql> STATUS;
 ...
 Server version:        8.0.32-26 GreatSQL, Release 26, Revision a68b3034c3d
 ...
