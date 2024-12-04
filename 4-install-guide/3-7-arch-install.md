@@ -345,6 +345,10 @@ Environment=MYSQLD_PARENT_PID=1
 PrivateTmp=false
 ```
 
+务必确认文件中 `ExecStartPre` 和 `ExecStart` 两个参数指定的目录及文件名是否正确。
+
+**提示**：如果不是安装到默认的 `/usr/local/` 目录下，请编辑 `bin/mysqld_pre_systemd` 脚本，修改脚本中几处涉及 GreatSQL 安装路径的地方。
+
 ### 启动GreatSQL
 
 把GreatSQL添加进环境变量

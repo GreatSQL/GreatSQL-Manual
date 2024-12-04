@@ -64,7 +64,9 @@ PrivateTmp=false
 
 其中，`ExecStartPre=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd` 用于GreatSQL首次启动时，进行初始化；`ExecStart=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS` 是GreatSQL服务主进程，在这里甚至还可以自行指定不同路径下的配置文件，例如：`ExecStart=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/greatsql.cnf $MYSQLD_OPTS`。
 
-务必确认文件中目录及文件名是否正确。
+务必确认文件中 `ExecStartPre` 和 `ExecStart` 两个参数指定的目录及文件名是否正确。
+
+**提示**：如果不是安装到默认的 `/usr/local/` 目录下，请编辑 `bin/mysqld_pre_systemd` 脚本，修改脚本中几处涉及 GreatSQL 安装路径的地方。
 
 执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
 ```bash
