@@ -15,7 +15,7 @@ GreatSQL支持在单主（Single-Primary）模式下，在读写节点（以下�
 
 4. 只支持MGR单主模式（single-primary mode），不支持多主模式（multi-primary mode），所以要确保这两个选项设置正确值 `group_replication_single_primary_mode = ON` 以及 `group_replication_enforce_update_everywhere_checks= OFF`。
 
-5. 当采用光口万兆网卡时，可能出现 VIP 漂移后无法主动广播 MAC 地址的情况，需要在服务器上定时主动执行 `arping` 对外广播 MAC 地址。例如：
+5. 当存在多张网卡时，可能出现 VIP 漂移后无法主动广播 MAC 地址的情况，需要在服务器上定时主动执行 `arping` 对外广播 MAC 地址。例如：
 
 ```bash
 /usr/sbin/arping -U -I bond0 -c 3 172.17.140.254
