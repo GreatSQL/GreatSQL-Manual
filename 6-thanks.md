@@ -53,8 +53,11 @@
 #### [开源之夏Sammmmy](https://gitee.com/sammmmy) [laokz](https://gitee.com/laokz)
  - 提供了 riscv64 for GreatSQL 支持。详见 [给GreatSQL 8.0.32-25添加openEuler riscv64支持](https://gitee.com/GreatSQL/GreatSQL/pulls/10)、[更新RISC-V下的MTR测试文档](https://gitee.com/GreatSQL/GreatSQL/pulls/11)、[set riscv64 to KNOWN_64BIT_ARCHITECTURES](https://gitee.com/GreatSQL/GreatSQL/pulls/12)
 
-#### [胡润泽](https://gitee.com/hu-runze)
- - 提交 gt-checksum 的bug fix PR：[update Oracle/or_query_table_date.go](https://gitee.com/GreatSQL/gt-checksum/pulls/3)。
+#### [earl86](https://gitee.com/earl86)
+ - 提供了MySQL Shell for GreatSQL编译时对V8库（JS语法）支持的解决方法，以及对CentOS 7（x86_64）编译环境的支持。详见 [GreatSQL-Shell-Build分支](https://gitee.com/earl86/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build)。
+
+#### [许怀安](https://github.com/gagraler)
+ - 发起 [greatsql-operator](https://github.com/greatsql-sigs/greatsql-operator) 项目。
 
 #### [月城](https://gitee.com/david058)
  - 提交 gt-checksum 的bug fix PR：[update actions/schema_tab_struct.go](https://gitee.com/GreatSQL/gt-checksum/pulls/7)。
@@ -124,7 +127,7 @@
 - [iTransit](https://gitee.com/iTransit)
 - 沿河而下
 - [lgclt](https://gitee.com/lgclt)
-- 许怀安
+- [许怀安](https://github.com/gagraler)
 - L.B
 - [王歡](https://greatsql.cn/home.php?mod=space&uid=1353&do=thread&view=me&from=space)
 - [reddey](https://greatsql.cn/home.php?mod=space&uid=1772&do=thread&view=me&from=space)
