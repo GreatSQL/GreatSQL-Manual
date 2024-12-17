@@ -288,7 +288,7 @@ trx_mysql_thread_id: 0
 
 ## 16. 为什么设置 `innodb_numa_interleave = ON` 时，启动就会比较慢，像卡住了似的
 
-设置 `innodb_numa_interleave = ON` 时，启动过程可能变慢并且看起来像卡（qiǎ）住了，这是因为 NUMA（非统一内存访问）系统的内存分配机制的复杂性。
+设置 `innodb_numa_interleave = ON` 时，启动过程可能变慢并且看起来像卡住了，这是因为 NUMA（非统一内存访问）系统的内存分配机制的复杂性。
 
 - NUMA（非统一内存访问）简介
 
@@ -313,6 +313,8 @@ NUMA 是一种用于多处理器系统的内存设计，旨在提高系统性能
 - 调低 `innodb_buffer_pool_size` 选项初始设置值，待到启动成功后再在线动态调大。
 
 通过以上方法，应该可以在一定程度上缓解 `innodb_numa_interleave = ON` 造成的启动变慢问题。
+
+此外，当设置 `innodb_numa_interleave=ON` 时，此时如果 `innodb_buffer_pool_size` 参数值设置较大的话，有可能导致 mysqld 进程在启动时会预分配（甚至是抢占）相应的内存配合，哪怕是全新实例也可能会看起来占用了很多内存。例如这个案例：[greatsql内存分配相对mysql差别](https://greatsql.cn/thread-951-1-1.html)。
 
 ## 17. 安装percona-toolkit工具时需要安装perl-DBD-MySQL依赖，但提示和GreatSQL冲突
 
