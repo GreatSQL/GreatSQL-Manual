@@ -137,14 +137,14 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 115  | [谷*丰](https://greatsql.cn/home.php?mod=space&uid=1802) | GCA-DBA-2024787250 | 165  | [宋*学](https://greatsql.cn/home.php?mod=space&uid=1974) | GCA-DBA-2024994869 |
 | 116  | [杨*国](https://greatsql.cn/home.php?mod=space&uid=1801) | GCA-DBA-2024130095 | 166  | [王*](https://greatsql.cn/home.php?mod=space&uid=1978)   | GCA-DBA-2024461464 |
 | 117  | [林*南](https://greatsql.cn/home.php?mod=space&uid=1823) | GCA-DBA-2024400086 | 167  | [王*](https://greatsql.cn/home.php?mod=space&uid=2017)   | GCA-DBA-2024944009 |
-| 118  | [陈*君](https://greatsql.cn/home.php?mod=space&uid=1824) | GCA-DBA-2024531804 |      |                                                          |                    |
-| 119  | [崔*](https://greatsql.cn/home.php?mod=space&uid=1791)   | GCA-DBA-2024539104 |      |                                                          |                    |
-| 120  | [陈*超](https://greatsql.cn/home.php?mod=space&uid=1799) | GCA-DBA-2024507265 |      |                                                          |                    |
-| 121  | [杨*](https://greatsql.cn/home.php?mod=space&uid=1368)   | GCA-DBA-2024251016 |      |                                                          |                    |
-| 122  | [苏*刚](https://greatsql.cn/home.php?mod=space&uid=1861) | GCA-DBA-2024833622 |      |                                                          |                    |
-| 123  | [邹*](https://greatsql.cn/home.php?mod=space&uid=1856)   | GCA-DBA-2024115821 |      |                                                          |                    |
-| 124  | [马*彦](https://greatsql.cn/home.php?mod=space&uid=1814) | GCA-DBA-2024445013 |      |                                                          |                    |
-| 125  | [纪*](https://greatsql.cn/home.php?mod=space&uid=1871)   | GCA-DBA-2024997623 |      |                                                          |                    |
+| 118  | [陈*君](https://greatsql.cn/home.php?mod=space&uid=1824) | GCA-DBA-2024531804 | 168  | [刘*汗](https://greatsql.cn/home.php?mod=space&uid=2020) | GCA-DBA-2024894200 |
+| 119  | [崔*](https://greatsql.cn/home.php?mod=space&uid=1791)   | GCA-DBA-2024539104 | 169  | [李*民](https://greatsql.cn/home.php?mod=space&uid=2009) | GCA-DBA-2024773491 |
+| 120  | [陈*超](https://greatsql.cn/home.php?mod=space&uid=1799) | GCA-DBA-2024507265 | 170  | [杨*成](https://greatsql.cn/home.php?mod=space&uid=2013) | GCA-DBA-2024695690 |
+| 121  | [杨*](https://greatsql.cn/home.php?mod=space&uid=1368)   | GCA-DBA-2024251016 | 171  | [杨*森](https://greatsql.cn/home.php?mod=space&uid=2031) | GCA-DBA-2024583505 |
+| 122  | [苏*刚](https://greatsql.cn/home.php?mod=space&uid=1861) | GCA-DBA-2024833622 | 172  | [张*](https://greatsql.cn/home.php?mod=space&uid=2012)   | GCA-DBA-2024404678 |
+| 123  | [邹*](https://greatsql.cn/home.php?mod=space&uid=1856)   | GCA-DBA-2024115821 | 173  | [何*均](https://greatsql.cn/home.php?mod=space&uid=2015) | GCA-DBA-2024188180 |
+| 124  | [马*彦](https://greatsql.cn/home.php?mod=space&uid=1814) | GCA-DBA-2024445013 | 174  | [崔*飞](https://greatsql.cn/home.php?mod=space&uid=2037) | GCA-DBA-2024280630 |
+| 125  | [纪*](https://greatsql.cn/home.php?mod=space&uid=1871)   | GCA-DBA-2024997623 | 175  | [武*军](https://greatsql.cn/home.php?mod=space&uid=2039) | GCA-DBA-2024928499 |
 | 126  | [杨*](https://greatsql.cn/home.php?mod=space&uid=1869)   | GCA-DBA-2024980040 |      |                                                          |                    |
 | 127  | [林*东](https://greatsql.cn/home.php?mod=space&uid=700)  | GCA-DBA-2024713864 |      |                                                          |                    |
 | 128  | [张*娜](https://greatsql.cn/home.php?mod=space&uid=1501) | GCA-DBA-2024372841 |      |                                                          |                    |
