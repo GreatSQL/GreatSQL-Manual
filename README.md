@@ -2,11 +2,11 @@
 [![](https://img.shields.io/badge/GreatSQL-论坛-brightgreen.svg)](https://greatsql.cn/forum.php)
 [![](https://img.shields.io/badge/GreatSQL-博客-brightgreen.svg)](https://greatsql.cn/home.php?mod=space&uid=10&do=blog&view=me&from=space)
 [![](https://img.shields.io/badge/License-GPL_v2.0-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)
-[![](https://img.shields.io/badge/release-8.0.32_26-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)
+[![](https://img.shields.io/badge/release-8.0.32_27-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)
 
 最后更新：2025-01-03。
 
-本文档适用版本：GreatSQL 8.0.32-26。
+本文档适用版本：GreatSQL 8.0.32-27。
 
 ## 关于 GreatSQL
 
@@ -16,7 +16,7 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 ## 下载GreatSQL
 
-- [下载 GreatSQL 最新版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-26)
+- [下载 GreatSQL 最新版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-27)
 - [下载 GreatSQL 历史版本](https://gitee.com/GreatSQL/GreatSQL/releases/)
 
 ## GreatSQL核心特性
@@ -123,7 +123,7 @@ $ ldconfig && ldconfig -p | grep libjemalloc
 
 推荐安装 GreatSQL RPM 包。
 
-[戳此链接下载 GreatSQL RPM 包](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-26)。
+[戳此链接下载 GreatSQL RPM 包](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-27)。
 
 以 CentOS 8 系统为例，采用类似下面的命令安装 GreatSQL：
 
@@ -134,7 +134,7 @@ yum search greatsql
 No matches found.
 
 # 然后安装
-rpm -ivh --nodeps greatsql-client-8.0.32-26.1.el8.x86_64.rpm greatsql-devel-8.0.32-26.1.el8.x86_64.rpm greatsql-icu-data-files-8.0.32-26.1.el8.x86_64.rpm greatsql-mysql-router-8.0.32-26.1.el8.x86_64.rpm greatsql-server-8.0.32-26.1.el8.x86_64.rpm greatsql-shared-8.0.32-26.1.el8.x86_64.rpm greatsql-test-8.0.32-26.1.el8.x86_64.rpm
+rpm -ivh --nodeps greatsql-client-8.0.32-27.1.el8.x86_64.rpm greatsql-devel-8.0.32-27.1.el8.x86_64.rpm greatsql-icu-data-files-8.0.32-27.1.el8.x86_64.rpm greatsql-mysql-router-8.0.32-27.1.el8.x86_64.rpm greatsql-server-8.0.32-27.1.el8.x86_64.rpm greatsql-shared-8.0.32-27.1.el8.x86_64.rpm greatsql-test-8.0.32-27.1.el8.x86_64.rpm
 ```
 
 ::: tip 小贴士
@@ -171,76 +171,15 @@ $ systemctl status mysqld
 
 就可以正常启动 GreatSQL 服务了。
 
-想要 GreatSQL 更高效运行，建议参考这份 my.cnf 配置模板：[my.cnf for GreatSQL 8.0.32-26](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)。
-
-### 编译 GreatSQL 二进制包
-
-推荐利用 Docker 环境快速编译 GreatSQL 二进制包，可参考方法：[编译源码安装GreatSQL](./4-install-guide/6-install-with-source-code.md)。
-
-### 编译 GreatSQL RPM 包
-
-还可以利用 *src.rpm* 源码包快速编译 GreatSQL RPM 包，可参考方法：[在CentOS环境下编译GreatSQL src.rpm包，并再编译RPM包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-srcrpm-under-centos.md)。
-
-安装 rmp-build、cmake、gcc 等编译环境必要的软件包
-
-```bash
-dnf install -y  bison cmake cyrus-sasl-devel gcc-c++ gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc krb5-devel libaio-devel libcurl-devel libssh libtirpc-devel m4 make ncurses-devel numactl-devel openldap-devel openssl openssl-devel pam-devel perl perl-Carp perl-Data-Dumper perl-Errno perl-Exporter perl-File-Temp perl-Getopt-Long perl-JSON perl-Memoize perl-Time-HiRes readline-devel rpm-build time vim-common zlib-devel
-```
-
-创建相应的目录
-
-```bash
-mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-```
-
-将下载后的 *src.rpm* 文件放在 */root/rpmbuild/SRPMS* 目录下
-
-编译 GreatSQL RPM 包
-
-```bash
-cd /root/rpmbuild/
-rpmbuild --define "_smp_mflags -j16" --define 'dist .el8' --define "_topdir /root/rpmbuild/" --rebuild ./SRPMS/greatsql-8.0.32-26.1.noarch.src.rpm > ./rpmbuild.log 2>&1
-```
-
-参数 *dist* 支持以下常见 OS 标签（如需支持更多标签请告诉我们）：
-- openEuler系统，例如：oe2003, oe2203, oe2403。
-- RHEL/CentOS 系统，例如：el7, el8, el9。
+想要 GreatSQL 更高效运行，建议参考这份 my.cnf 配置模板：[my.cnf for GreatSQL 8.0.32-27](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)。
 
 ## 版本历史
 
 戳此查看 [GreatSQL 版本历史](./1-docs-intro/1-2-release-history.md)。
 
-## GreatSQL 用户手册及学习资料
-
-### GreatSQL 用户手册
-- [GreatSQL 用户手册](https://greatsql.cn/docs/)
-- [GreatSQL FAQ](https://greatsql.cn/docs/11-faq/0-faq.html)
-
-### GreatSQL编译构建相关
-- [利用Docker环境快速编译GreatSQL相关资源](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/greatsql_docker_build)
-- [利用Docker环境快速编译MySQL Shell for GreatSQL相关资源](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/greatsql_shell_docker_build)
-- [用于编译GreatSQL RPM包的Spec文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/build-gs/greatsql.spec)
-- [在CentOS环境下源码编译安装GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source.md)
-- [在麒麟OS+龙芯环境下源码编译安装GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source-under-kylin-and-loongson.md)
-- [在openEuler、龙蜥Anolis、统信UOS系统下编译GreatSQL二进制包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-under-openeuler-anolis-uos.md)
-
-### GreatSQL管理运维使用相关
-- [GCA认证课程学习视频](https://greatsql.cn/smx_course-lesson.html?op=video&ids=10)，GreatSQL认证数据库专员培训视频课程
-- [GCP认证课程学习视频](https://greatsql.cn/smx_course-lesson.html?op=video&ids=11)，GreatSQL认证数据库专家培训视频课程
-- [实战MGR专栏视频](https://greatsql.cn/smx_course-lesson.html?op=video&ids=5)，适合新手入门的MGR学习实操视频内容
-- [GreatSQL运维实战系列视频](https://greatsql.cn/smx_course-lesson.html?op=video&ids=12)
-- [深入浅出MGR专栏文章](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr)，深入浅出MGR相关知识点、运维管理实操
-- [深入浅出MGR专栏视频](https://greatsql.cn/smx_course-lesson.html?op=video&ids=6)，深入浅出MGR相关知识点、运维管理实操视频内容
-- [一文掌握GreatSQL MGR集群的部署和运维](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/using-greatsql-to-build-mgr-and-node-manage.md)
-- [在Docker中部署GreatSQL并构建MGR集群](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/install-greatsql-with-docker.md)
-- [MySQL InnoDB Cluster+GreatSQL部署MGR集群](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/mysql-innodb-cluster-with-greatsql.md)
-
-## 其他 GreatSQL 相关资源仓库
-- [GreatSQL-Docker](https://gitee.com/GreatSQL/GreatSQL-Docker)，在Docker中运行和编译GreatSQL及GreatSQL Shell
-
 ## GreatSQL vs MySQL
 
-| **1.主要特性** | GreatSQL 8.0.32-26 | MySQL 8.0.32 |
+| **1.主要特性** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
 | :--- | :---: | :---: |
 | 开源 |  :heavy_check_mark: |  :heavy_check_mark: |
 |ACID 完整性| :heavy_check_mark: | :heavy_check_mark: |
@@ -260,7 +199,7 @@ rpmbuild --define "_smp_mflags -j16" --define 'dist .el8' --define "_topdir /roo
 |组复制（MGR）| :heavy_check_mark: | :heavy_check_mark: |
 |MyRocks 引擎| :heavy_check_mark: | ❌ |
 |支持龙芯架构| :heavy_check_mark: | ❌ |
-| **2. 性能提升扩展** | GreatSQL 8.0.32-26 | MySQL 8.0.32 |
+| **2. 性能提升扩展** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
 |AP 引擎| :heavy_check_mark: | 仅云上HeatWave |
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
 |非阻塞式 DDL| :heavy_check_mark: | ❌ |
@@ -279,7 +218,7 @@ rpmbuild --define "_smp_mflags -j16" --define 'dist .el8' --define "_topdir /roo
 |InnoDB 快速索引创建优化| :heavy_check_mark: | ❌ |
 |VARCHAR/BLOB/JSON 类型存储单列压缩| :heavy_check_mark: | ❌ |
 |数据字典中存储单列压缩信息| :heavy_check_mark: | ❌ |
-| **3. 面向开发者提升改进** | GreatSQL 8.0.32-26 | MySQL 8.0.32 |
+| **3. 面向开发者提升改进** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
 |X API| :heavy_check_mark: | :heavy_check_mark: |
 |JSON| :heavy_check_mark: | :heavy_check_mark: |
 |NoSQL Socket-Level接口| :heavy_check_mark: | :heavy_check_mark: |
@@ -289,7 +228,7 @@ rpmbuild --define "_smp_mflags -j16" --define 'dist .el8' --define "_topdir /roo
 |Oracle 兼容-函数| :heavy_check_mark: | ❌ |
 |Oracle 兼容-SQL语法| :heavy_check_mark: | ❌ |
 |Oracle 兼容-存储程序| :heavy_check_mark: | ❌ |
-| **4. 基础特性提升改进** | GreatSQL 8.0.32-26 | MySQL 8.0.32 |
+| **4. 基础特性提升改进** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
 |MGR 提升-地理标签| :heavy_check_mark: | ❌ |
 |MGR 提升-仲裁节点| :heavy_check_mark: | ❌ |
 |MGR 提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
@@ -317,7 +256,7 @@ rpmbuild --define "_smp_mflags -j16" --define 'dist .el8' --define "_topdir /roo
 |临时表信息增强| :heavy_check_mark: | ❌ |
 |用户统计信息增强| :heavy_check_mark: | ❌ |
 |Slow log 信息增强| :heavy_check_mark: | ❌ |
-| **5.安全性提升** | GreatSQL 8.0.32-26 | MySQL 8.0.32 |
+| **5.安全性提升** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
 |国密支持| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
 |审计| :heavy_check_mark: | 仅企业版 |
@@ -335,7 +274,7 @@ rpmbuild --define "_smp_mflags -j16" --define 'dist .el8' --define "_topdir /roo
 |二进制日志加密| :heavy_check_mark: | ❌ |
 |临时文件加密| :heavy_check_mark: | ❌ |
 |强制加密| :heavy_check_mark: | ❌ |
-| **6. 运维便利性提升** | GreatSQL 8.0.32-26 | MySQL 8.0.32 |
+| **6. 运维便利性提升** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
 |DDL 原子性| :heavy_check_mark: | :heavy_check_mark: |
 |数据字典存储 InnoDB 表| :heavy_check_mark: | :heavy_check_mark: |
 |快速 DDL| :heavy_check_mark: | :heavy_check_mark: |
@@ -348,7 +287,7 @@ rpmbuild --define "_smp_mflags -j16" --define 'dist .el8' --define "_topdir /roo
 |杀掉不活跃事务| :heavy_check_mark: | ❌ |
 |START TRANSACTION WITH CONSISTENT SNAPSHOT 扩展| :heavy_check_mark: | ❌ |
 
-GreatSQL 8.0.32-26 基于 Percona Server for MySQL 8.0.32 版本，它在 MySQL 8.0.32 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Log 增强等大量改进和提升，这里不一一重复列出。
+GreatSQL 8.0.32-27 基于 Percona Server for MySQL 8.0.32 版本，它在 MySQL 8.0.32 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Log 增强等大量改进和提升，这里不一一重复列出。
 
 GreatSQL同时也是gitee（码云）平台上的GVP项目，详见：[https://gitee.com/gvp/database-related](https://gitee.com/gvp/database-related) **数据库相关**类目。
 
