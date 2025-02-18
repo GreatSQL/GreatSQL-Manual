@@ -515,6 +515,8 @@ Rapid引擎整体架构如下图所示
 - Rapid引擎内部采用DataBlocks存储结构，这是一种兼顾OLTP和OLAP的压缩存储结构。其数据存储的基本格式：RowGroup based Storage。存储引擎将一个表的数据按行划分为多个RowGroup的组合，每个RowGroup最大存储122880行，内部数据按列进行存储。
 - Rapid内部是一个基于矢量化推送的模型（vectorized push-based model），在执行过程中，向量（vector）会在各个操作符之间流转，而不是一个个元组（tuple），采用了 Morsel驱动并行实现方式，将一个执行计划切分成多个管道（pipeline），每个管道采用 push-based的方式进行数据传递和调用。
 
+### Rapid数据文件
+
 启用Rapid引擎后，会在数据库主目录`datadir`中产生一些新文件/目录，主要有：
 
 - `duckdb.data`，Rapid引擎数据文件，存储所有Rapid引擎表用户数据，类似InnoDB系统表空间文件ibdata*，已分配的磁盘空间可以重复使用，但在用户数据删除后不能回收归还操作系统。如果想要让Rapid引擎数据文件释放占用的磁盘空间，需要先卸载Rapid，而后即可删除相关文件，再次启用Rapid引擎即可。请参考 **[2.1 启用Rapid引擎](./5-1-highperf-rapid-engine.md#21-启用rapid引擎)** 和 **[2.2 卸载Rapid引擎](./5-1-highperf-rapid-engine.md#22-卸载rapid引擎)**。
@@ -551,29 +553,192 @@ $ sysctl -a | grep vm.max_map_count
 vm.max_map_count = 6553000
 ```
 
+### 多执行引擎并存限制
+
+不能和其它SECONDARY ENGINE或者Turbo共存，同一时间只能有一个。
+
+如果已安装Turbo引擎，再安装Rapid引擎时会发出报错：
+
+```sql
+INSTALL PLUGIN rapid SONAME 'ha_rapid.so';
+ERROR 3877 (HY000): rapid or turbo Plugins can't be installed at the same time
+```
+
+//TODO，下面这部分内容待和Turbo做对比借鉴
+### 支持的语句范围
+
+Rapid引擎支持的语句范围如下：
+
+查询类型上，仅支持常规`SELECT`查询和`INSERT SELECT`，不支持`UPDATE/DELETE/ALTER`等。
+
+1.SELECT查询
+
+支持常规查询，不支持以下形式：
+
+SELECT ... INTO ...;
+
+SELECT locking语句（... INTO ...FOR UPDATE）;
+
+不支持 SELECT ... FETCH ... WITH TIES;
+
+2.INSERT SELECT
+
+不支持 INSERT ... SELECT ... ON DUPLICATE KEY UPDATE语句。
+
+### SELECT查询支持范围描述
+
+针对常规的SELECT查询，有以下限制：
+
+#### 表支持限制
+
+1.目前，为了保证查询效率，一条查询语句中使用表个数不能超过20个。
+
+2.语句中涉及到的表：
+
+  1）仅支持Innodb基本表。
+  2）不支持查询中包含系统表。
+  3) 不支持view、递归cte、table_function，以及用户创建的临时表。
+  3) Rapid引擎不支持表分区（partition）。
+  4）带有隐藏列的表不支持。
+
+#### 列支持限制
+
+1.不支持生成列；
+
+2.不支持的列类型有：bit、decimal类型(总长度超过38或者为unsigned)、udt、enum、set、spatial datatype、json、blob、text；
+
+#### 列字符集限制
+
+1.要求所有列字符集为utf8mb4，Accent sensitive(as)，ci/cs;
+
+2.不支持binary、koi8r、ucs2;
+
+3.不支持pad space类型的字符集;
+
+#### 函数及表达式支持范围
+
+1.支持的所有函数及操作符参考：[支持的函数及操作符](./5-1-highperf-ap-supported-functions.md)。
+
+2.不支持的函数类型为：item_sum_and、item_sum_xor、item_sum_or、wm_concat、listagg、group_concat;
+
+3.Window函数基础形式已经全面支持，但有以下几种形式目前尚不支持：
+
+* Window函数不支持DISTINCT，不支持Window函数嵌套；
+
+* 当 `windowing_use_high_precision=OFF` 的时候，聚集函数仅支持`MIN()`和`MAX()`；
+
+* Window函数不支持KEEP语句，例句如下：
+
+```sql
+SELECT deptno,
+      MAX(sal) KEEP(dense_rank FIRST ORDER BY sal) first_max,
+      MAX(sal) KEEP(dense_rank LAST ORDER BY sal) last_max
+FROM emp
+GROUP BY deptno;
+```
+
+4.聚集函数：不支持的类型有：Item_udf_sum(用户自定义函数)、ST_COLLECT、JSON_OBJECTAGG、JSON_ARRAYAGG、RATIO_TO_REPORT；
+
+5.不支持`ROW()`函数：`SELECT ROW(1, 'lilei', 25) AS person`。
+
+6.不支持`ORDER BY @var`，其中 @var 是临时变量。这种用法将无法走Rapid引擎，但不会报告语法错误。
+
+7.常量表达式中不支持`NAME_CONST()`函数，例如：`NAME_CONST('flag', 1)`。
+
+8.不支持两个时间类字段的加减乘除（允许与常量加减），例如：`SELECT TO_DATE(f1, 'YYYY-MM-DD') - TO_DATE(f2,'YYYY-MM-DD') FROM t1;`。
+
+9.不支持时间类函数`CAST(timestamp as bool)`，例如：`SELECT ...FROM ...WHERE DATE '1998-12-01' - INTERVAL '90' DAY;`。
+
+10.不支持Oracle函数兼容行为。
+
+11.不支持多列IN子查询，如下例所示
+
+```sql
+greatql> SELECT * FROM t1 WHERE (s1,s2) IN (SELECT s1,MAX(s1) FROM t2...);  
+```
+
+这种用法将无法走Rapid引擎，但不会报告语法错误。
+
+#### 其他使用限制说明
+
+1.时区不支持设置成含有夏令时的时区写法;
+
+2.客户端协议类型为Protocol::PROTOCOL_PLUGIN不支持;
+
+3.开启强制访问控制的情况不支持: `start_with_mandatory_access_control` 为on不支持；
+
+4.开启 `sql_auto_is_null` 时不支持。`sql_auto_is_null` 是GreatSQL中的一个用于开启或关闭空值检测的参数。当参数值为1时，空值检测被开启；当为OFF时，空值检测被关闭。此参数的设定值是全局的，可以控制SQL语句中对空值的检测是否被系统执行，设定值可在GreatSQL的配置文件中做出变更；
+
+5.设置了 `max_join_size` 不支持，`max_join_size` 参数是用来限制SELECT语句中join操作的最大返回数据量。当join操作返回的数据量超该参数设置的值时，GreatSQL会抛出错误，防止内存或者磁盘空间不足。如果设置了该参数，可能会出现语句不能正常报错的现象；
+
+6.结果集顺序差异，注意：对于不带ORDER BY的语句（尤其是LIMIT语句），其执行结果、执行结果的顺序可能和GreatSQL原生结果不同。这时候要根据实际SQL语句判定执行结果是否正确；
+
+### EXPLAIN语句使用限制
+
+支持EXPLAIN、EXPLAIN FORMAT=TREE、EXPLAIN analyze。
+
+EXPLAIN中的COST与原生的COST无关，不能作为不同查询方式COST值进行比较的依据。
+
+//TODO
+
 ###  支持的数据类型
 
 Rapid引擎支持以下数据类型
 
 | 大类 | 数据类型 | 备注 |
 | --- | --- | --- |
-|数字型|BOOL, BOOLEAN|布尔类型。存储为TINYINT(1)<br/>0为false，非0为true|
+|数字型|BOOL, BOOLEAN|布尔类型。存储为TINYINT(1)， 0为false，非0为true|
 ||TINYINT[(M)] [UNSIGNED] [ZEROFILL]|有符号，无符号，1字节|
 ||SMALLINT[(M)] [UNSIGNED] [ZEROFILL]|有符号，无符号，2字节|
 ||MEDIUMINT[(M)] [UNSIGNED] [ZEROFILL]|有符号，无符号，3字节|
-||INT[(M)] [UNSIGNED] [ZEROFILL]<br/>INTEGER[(M)] [UNSIGNED] [ZEROFILL]|有符号，无符号，4字节|
+||INT[(M)] [UNSIGNED] [ZEROFILL], INTEGER[(M)] [UNSIGNED] [ZEROFILL]|有符号，无符号，4字节|
 ||BIGINT[(M)] [UNSIGNED] [ZEROFILL]|有符号，无符号，8字节|
 ||FLOAT[(M,D)] [UNSIGNED] [ZEROFILL]|单精度浮点数|
-||FLOAT(p) [UNSIGNED] [ZEROFILL]|p在[0, 24]中，是FLOAT<br/>p在[25, 53]中，是DOUBLE|
-||DOUBLE[(M,D)] [UNSIGNED] [ZEROFILL]<br/>DOUBLE PRECISION[(M,D)] [UNSIGNED] [ZEROFILL]<br/>REAL[(M,D)] [UNSIGNED] [ZEROFILL]|双精度浮点数，若 `REAL_AS_FLOAT` 模式开启，REAL则变成FLOAT的别名|
-||DECIMAL[(M[,D])] [UNSIGNED] [ZEROFILL]<br/>DEC[(M[,D])] [UNSIGNED] [ZEROFILL]<br/>NUMERIC[(M[,D])] [UNSIGNED] [ZEROFILL]<br/>FIXED[(M[,D])] [UNSIGNED] [ZEROFILL]|固定宽度与精度的数<br/>+-*/的运算结果按精度65算|
+||FLOAT(p) [UNSIGNED] [ZEROFILL]|p在[0, 24]中，是FLOAT; p在[25, 53]中，是DOUBLE|
+||DOUBLE[(M,D)] [UNSIGNED] [ZEROFILL] DOUBLE PRECISION[(M,D)] [UNSIGNED] [ZEROFILL] REAL[(M,D)] [UNSIGNED] [ZEROFILL]|双精度浮点数，若 `REAL_AS_FLOAT` 模式开启，REAL则变成FLOAT的别名|
+||DECIMAL[(M[,D])] [UNSIGNED] [ZEROFILL] DEC[(M[,D])] [UNSIGNED] [ZEROFILL] NUMERIC[(M[,D])] [UNSIGNED] [ZEROFILL] FIXED[(M[,D])] [UNSIGNED] [ZEROFILL]|固定宽度与精度的数 +-*/的运算结果按精度65算|
 |日期时间型|DATE|日期|
 ||TIME[(fsp)]|时间；fsp可取[0, 6]|
 ||DATETIME[(fsp)]|日期+时间；fsp可取[0, 6]|
-||TIMESTAMP[(fsp)]|时间戳<br/>存：当前时区转成UTC时区去存储<br/>取：UTC转成当前时区取出并显示|
+||TIMESTAMP[(fsp)]|时间戳 存：当前时区转成UTC时区去存储 取：UTC转成当前时区取出并显示|
 ||YEAR[(4)]|年|
 |字符型|CHAR(n)|定长字符串|
 ||VARCHAR(n)|变长字符串|
+
+数据支持精度范围有限制：
+
+1.DATE：不支持不合法的日期，例如"0000-00-00"。month取值范围为[1, 12]，day取值范围为[1, 31]，day的取值范围上限视月份而定；
+
+2.TIME：不支持负数范围的时间，不支持大于24:00:00.000000的时间。仅支持[00:00:00.000000, 24:00:00.000000]范围内的合法时间。不支持四舍五入的比较方式，会默认比较全部的6位小数部分。不受限制于字段的定义；
+
+3.DATETIME/TIMESTAMP：其中的date部分，支持限制同上述的date类型；其中的time部分，支持限制同上述的time类型；
+
+4.数值常量也只能支持在数据的精度范围内，如：id < -9223372036854775808；
+
+### 类型隐式转换
+
+1.数据类型仅支持严格模式下的数据，非严格模式下的时间等类型均不支持；
+
+2.字符串转换成数值类型，原生模式下如果出现warning将都不支持，例如：
+
+```sql
+greatsql> SELECT d FROM t1 WHERE d > 'A'; -- d列为DOUBLE类型
+ERROR 3877 (HY000): Conversion Error: Could not convert string 'A' to DOUBLE
+```
+
+3.常量数值转换成时间类型均不支持，例如：
+
+```sql
+greatsql> SELECT * FROM t1 WHERE t <> 20380119061407; -- t列为DATETIME类型
+ERROR 3877 (HY000): Conversion Error: Unimplemented type for cast (BIGINT -> TIMESTAMP)
+```
+
+4.YEAR 类型，负数字符串转换失败，例如：
+
+```sql
+greatsql> SELECT * FROM t1 WHERE t > '-1'; -- t列为YEAR类型
+ERROR 3877 (HY000): Conversion Error: Could not convert string '-1' to UINT16
+```
 
 ## 运维管理
 Rapid引擎相关的选项设置主要包括系统选项和插件选项两类：
@@ -601,8 +766,7 @@ Rapid引擎相关的选项设置主要包括系统选项和插件选项两类：
 | System Variable Name | Variable Scope |  Dynamic Variable | Permitted Values | Type | Default | Description |
 | --- | --- | --- | --- | --- | --- | --- |
 |rapid_memory_limit|Global|YES|[2^26, 2^39]|LONGLONG|1GB(2^30)|Rapid引擎运行过程中可使用的内存，默认值1G|
-|rapid_worker_threads|Global|YES|[1, LONG_MAX]|LONG|4|Rapid引擎运行过程中可使用的线程数|
-|rapid_hash_table_memory_limit|Global|YES|[10, 80]|LONG|10|Rapid引擎运行过程中hash table最大可使用memory_limit的比例|
+|rapid_worker_threads|Global|YES|[1, 512]|LONG|4|Rapid引擎运行过程中可使用的线程数|
 |rapid_temp_directory|Global|NO||String|"duckdb.data.tmp"|Rapid引擎存放临时文件的目录。当启用Rapid引擎后，不支持修改；启用之前，可修改|
 |rapid_checkpoint_threshold|Global|YES|[0, 2^39]|LONGLONG|16MB(2^24)|触发自动checkpoint操作的WAL大小阈值。WAL文件是Rapid引擎的预写日志，在Rapid引擎运行过程中，对其的所有修改操作在提交之前，都会预先写入日志，以保证数据库系统的原子性和持久性|
 
@@ -664,11 +828,7 @@ greatsql> SHOW STATUS LIKE 'Secondary_engine_execution_count';
 
 - 增加 `rapid_memory_limit`，在任何时候，增加Rapid引擎可使用的内存都是首选方案。
 
-- 如果SQL查询的执行计划有多层hash join，可尝试适当调低 `rapid_hash_table_memory_limit`。
-
 - 如果SQL查询的执行计划比较复杂（如大数据量+多重hash join+多重agg），可尝试适当调低 `rapid_worker_threads`。
-
-选项 `rapid_hash_table_memory_limit` 是针对单个hash join算子的。因此如果SQL查询请求包含3重hash join，则保守估计这个选项最大只能设置为30，也就是hash join最大可消耗 `rapid_memory_limit * 30%` 内存资源。考虑到同时还有其他算子的对内存资源的占用，这个选项可能还要再适当调小一点。如果hash join的内存需求量超过了这个阈值，那么会改走磁盘完成查询，分批进行hash join，这时SQL查询效率就会降低很多。
 
 另外，对于 `rapid_memory_limit` 这部分内存是随着SQL查询请求的执行向操作系统申请的，但它不会在SQL查询请求结束后自动释放归还给操作系统。若有需要，可手动执行 `SET GLOBAL rapid_memory_limit = N` 重新设置（调低）Rapid引擎的内存资源分配。
 
@@ -705,11 +865,11 @@ $ ls -lh duckdb.data.tmp/
 
 针对不同TPC-H应用数据量级，可能较为合适的建议配置参考如下。**注意**：这个不是最优参考设置，而是一个适合对应数据量的推荐值，用户可以从这个列表入手，微调找到自己合适的值。当然，理论上这些值都是越大越好的。
 
-| TPC-H仓库大小 | rapid_memory_limit参考值 | rapid_hash_table_memory_limit参考值 | rapid_worker_threads参考值 |
-| --- | --- | --- | --- |
-| 10GB | 1GB | 30 | 8 |
-| 100GB | 30GB | 30 | 16 |
-| 1TB | 300GB | 30 | 64 |
+| TPC-H仓库大小 | rapid_memory_limit参考值 | rapid_worker_threads参考值 |
+| --- | --- | --- |
+| 10GB | 1GB | 8 |
+| 100GB | 30GB | 16 |
+| 1TB | 300GB | 64 |
 
 需要再补充的是，Rapid引擎内部还会额外使用一些小块内存，这部分内存不受 `rapid_memory_limit` 选项控制，这些小内存块的消耗与 `rapid_worker_threads` 以及并行执行SQL查询请求的数量正相关。因此Rapid引擎实际使用的内存通常会比 `rapid_memory_limit` 大一点。
 
