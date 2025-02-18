@@ -12,6 +12,8 @@ Turbo引擎采用插件（Plugin）方式嵌入GreatSQL中，可以在线动态�
 
 ![执行耗时](./5-1-highperf-turbo-engine-01.png)
 
+备注：上述测试使用的是没有Turbo并发线程数限制的内部测试版本。
+
 ## 启用Turbo引擎
 
 想要使用Turbo引擎，需要安装Turbo plugin：
@@ -208,7 +210,7 @@ EXPLAIN FORMAT=TREE SELECT * FROM t1 WHERE c1 is NULL;
 
 #### 列支持限制
 
-1.不支持生成列（Generated Columns）。
+1.不支持生成列/虚拟列（Generated Columns）。
 
 2.不支持的列类型有：BIT、DECIMAL类型(总长度超过38或者为UNSIGNED)、UDT、ENUM、SET、SPATIAL DATATYPE、JSON、BLOB、TEXT。
 
@@ -222,7 +224,7 @@ EXPLAIN FORMAT=TREE SELECT * FROM t1 WHERE c1 is NULL;
 
 #### 函数及表达式支持说明
 
-1.[支持的函数及操作符;](./005.supported.functions.md)。
+1.Turbo引擎支持的所有函数及操作符参考：[支持的函数及操作符](./5-1-highperf-ap-supported-functions.md)。
 
 2.不支持的函数类型为：item_sum_and、item_sum_xor、item_sum_or、wm_concat、listagg、group_concat； //TODO
 
@@ -246,15 +248,23 @@ GROUP BY deptno;
 
 5.不支持`ROW()`函数：`SELECT ROW(1, 'lilei', 25) AS person`。
 
-6.不支持`ORDER BY param_item`。
+6.不支持`ORDER BY @var`，其中 @var 是临时变量。这种用法将无法走Turbo引擎，但不会报告语法错误。
 
 7.常量表达式中不支持`NAME_CONST()`函数，例如：`NAME_CONST('flag', 1)`。
 
-8.不支持两个时间类字段的加减乘除（允许与常量加减），例如：`SELECT to_date(f1, 'yyyy-mm-dd') - to_date(f2,'yyyy-mm-dd') FROM t1;`。
+8.不支持两个时间类字段的加减乘除（允许与常量加减），例如：`SELECT TO_DATE(f1, 'YYYY-MM-DD') - TO_DATE(f2,'YYYY-MM-DD') FROM t1;`。
 
 9.不支持时间类函数`CAST(timestamp as bool)`，例如：`SELECT ...FROM ...WHERE DATE '1998-12-01' - INTERVAL '90' DAY;`。
 
 10.不支持Oracle函数兼容行为。
+
+11.不支持多列IN子查询，如下例所示
+
+```sql
+greatql> SELECT * FROM t1 WHERE (s1,s2) IN (SELECT s1,MAX(s1) FROM t2...);  
+```
+
+这种用法将无法走Turbo引擎，但不会报告语法错误。
 
 #### 其他使用限制说明
 
@@ -290,27 +300,30 @@ EXPLAIN结果中显示的COST与原生EXPLAIN结果中的COST无关，不能作�
 
 4.数值常量也只能支持在数据的精度范围内，例如：`id < -9223372036854775808`。
 
-### 隐式转换
+### 类型隐式转换
 
 1.数据类型仅支持严格模式下的数据，非严格模式下的时间等类型均不支持。
 
 2.字符串转换成数值类型，原生模式下如果出现Warnings将都不支持，例如：
 
 ```sql
-SELECT d FROM t WHERE d > 'A'; (d 为double 类型)
-
-execute turbo query failed: Conversion Error: Could not convert string 'A' to DOUBLE
+greatsql> SELECT d FROM t1 WHERE d > 'A'; -- d列为DOUBLE类型
+ERROR 1815 (HY000): Internal error: Conversion Error: Could not convert string 'A' to DOUBLE
 ```
 
 3.常量数值转换成时间类型均不支持，例如：
 
 ```sql
-SELECT * FROM tbl_ts WHERE t <> 20380119061407;
-
-execute turbo query failed: Conversion Error: Unimplemented type for cast (BIGINT -> TIMESTAMP)
+greatsql> SELECT * FROM t1 WHERE t <> 20380119061407; -- t列为DATETIME类型
+ERROR 8700 (HY000): execute turbo query failed: Conversion Error: Unimplemented type for cast (BIGINT -> TIMESTAMP)
 ```
 
-4.YEAR 类型，负数字符串转换失败，如：`YEAR > '-1'`。
+4.YEAR 类型，负数字符串转换失败，例如：
+
+```sql
+greatsql> SELECT * FROM t1 WHERE t > '-1'; -- t列为YEAR类型
+ERROR 8700 (HY000): execute turbo query failed: Conversion Error: Could not convert string '-1' to UINT16
+```
 
 ### 慢日志使用限制
 
@@ -354,9 +367,9 @@ SHOW GLOBAL STATUS LIKE 'turbo%';
 
 | Status Name | Values | Description |
 | --- | --- | --- |
-|turbo_memory_used|0|正在执行中duckdb 占用的内存|
-|turbo_statements|0|使用turbo 的会话，包括prepare|
-|turbo_runtime|0|使用turbo正在执行中的语句数量|
+|turbo_memory_used|0|正在执行中Turbo占用的内存|
+|turbo_statements|0|使用Turbo 的会话，包括prepare|
+|turbo_runtime|0|使用Turbo正在执行中的语句数量|
 |turbo_release|OFF|插件是否在卸载中|
 
 ### 部分内存参数的使用说明
@@ -373,8 +386,8 @@ SHOW GLOBAL STATUS LIKE 'turbo%';
 
 查看查询是否使用了Turbo引擎，可通过 `EXPLAIN FORMAT=TREE` 显示是否有Turbo关键字。
 
-```shell
-EXPLAIN format=tree SELECT * FROM t1;
+```sql
+greatsql> EXPLAIN FORMAT=TREE SELECT * FROM t1;
 +---------------------------------------------------------------------------+
 | EXPLAIN                                                                   |
 +---------------------------------------------------------------------------+
@@ -386,7 +399,7 @@ EXPLAIN format=tree SELECT * FROM t1;
 Turbo支持 `EXPLAIN ANALYZE` 用法。
 
 ```shell
-EXPLAIN ANALYZE SELECT * FROM t1;
+greatsql> EXPLAIN ANALYZE SELECT * FROM t1;
 +-----------------------------------------------------------------------------------------------------+
 | EXPLAIN                                                                                             |
 +-----------------------------------------------------------------------------------------------------+
@@ -402,3 +415,8 @@ EXPLAIN ANALYZE SELECT * FROM t1;
 * 由于并行计算、分组处理等操作的差异，在使用GreatSQL与Turbo计算时，如果不加相同的排序规则，则读取到的数据顺序可能不一致。
 
 * 同一台服务器，多个不同GreatSQL实例共存时，需要为对应的Turbo执行引擎设置不同的临时文件目录( `turbo_temp_directory` )，避免交叉使用问题。
+
+
+**扫码关注微信公众号**
+
+![greatsql-wx](../greatsql-wx.jpg)
