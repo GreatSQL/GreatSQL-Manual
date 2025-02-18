@@ -91,11 +91,6 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 
 设置Rapid引擎运行过程中可使用的线程数，默认值为4，如果OLAP类查询较多，可以适当提高。
 
-- loose-rapid_hash_table_memory_limit = 10
-
-设置Rapid引擎运行过程中hash table最大可使用memory_limit的比例，默认值为10。如果JOIN时的表数量较多，该选项不应设置太大，避免内存耗尽。
-
-
 
 **扫码关注微信公众号**
 

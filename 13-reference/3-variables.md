@@ -40,7 +40,6 @@
 |lock_ddl_polling_mode                                        | No     | No     | Session   | Yes   |
 |lock_ddl_polling_runtime                                     | No     | No     | Session   | Yes   |
 |rapid_checkpoint_threshold                                   | Yes    | Yes    | Global    | Yes   |
-|rapid_hash_table_memory_limit                                | Yes    | Yes    | Global    | Yes   |
 |rapid_memory_limit                                           | Yes    | Yes    | Global    | Yes   |
 |rapid_temp_directory                                         | Yes    | Yes    | Global    | No    |
 |rapid_worker_threads                                         | Yes    | Yes    | Global    | Yes   |
