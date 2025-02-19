@@ -24,13 +24,13 @@
 [GCS] Gcs_packet's payload is too big. Only packets smaller than 2113929216 bytes can be compressed. Payload size is 2197817290
 ```
 
-GreatSQL对此机制进行调整优化，实现以下两点目标：
+  GreatSQL对此机制进行调整优化，实现以下两点目标：
 
-1. 当事务大小超过`group_replication_compression_threshold`阈值则启动压缩。
+  1. 当事务大小超过`group_replication_compression_threshold`阈值则启动压缩。
 
-2. 但当事务大小超过LZ4压缩限制时不再报错，改成继续使用原始未压缩的事务数据进行传输，即类似设置`group_replication_compression_threshold=0`（不启用压缩）时的效果。
+  2. 但当事务大小超过LZ4压缩限制时不再报错，改成继续使用原始未压缩的事务数据进行传输，即类似设置`group_replication_compression_threshold=0`（不启用压缩）时的效果。
 
-- 新增状态变量`Rpl_data_speed`显示当前binlog限速的状态，可以通过执行`SHOW GLOBAL STATUS LIKE 'Rpl_data_speed'`查看，例如
+- 新增状态变量`Rpl_data_speed`显示当前Binlog限速的状态，可以通过执行`SHOW GLOBAL STATUS LIKE 'Rpl_data_speed'`查看，例如
 
 ```sql
 greatsql> SHOW GLOBAL STATUS LIKE 'Rpl%spee%';
@@ -40,13 +40,13 @@ greatsql> SHOW GLOBAL STATUS LIKE 'Rpl%spee%';
 | Rpl_data_speed | async_rpl=100.00 |
 +----------------+------------------+
 ```
-表示当前的binlog读取限速为100KB/s，更多详细用法请参考：[Binlog 读取限速](../../5-enhance/5-2-ha-binlog-speed-limit.md)。
+表示当前的Binlog读取限速为100KB/s，更多详细用法请参考：[Binlog 读取限速](../../5-enhance/5-2-ha-binlog-speed-limit.md)。
 
 - 在greatdb_ha plugin中，增加对greatdb_ha_port进行防御，避免用户端发送非法指令后可能导致crash的风险。
 - 修复了启用greatdb_ha plugin时，可能因为Linux系统函数FD_SET中当遇到文件描述符超过1024时导致未定义行为而引发crash的问题。
 - 修复了greatdb_ha plugin中启用VIP功能后，可能存在内存泄漏风险的问题。
-- 修复了在主备两套MGR集群间部署主从复制后，当备用集群主节点shutdown时，可能无法退出进程的问题。
-- 修复了在主备两套MGR集群间部署主从复制后，当备用集群主节点执行`kill -19`操作杀掉mysqld进程，在故障恢复后，slave线程可能长时间未能退出的问题。
+- 修复了在主备两套MGR集群间部署主从复制后，当备用集群主节点意外宕机时，可能无法退出进程的问题。
+- 修复了在主备两套MGR集群间部署主从复制后，当备用集群主节点执行`kill -19`操作杀掉mysqld进程，在故障恢复后，Slave节点上的sql_thread线程可能长时间未能退出的问题。
 
 ### 高性能
 - 新增高性能并行查询引擎**Turbo**，它通过内嵌DuckDB，使GreatSQL具备多线程并发的向量化查询功能，在实现指数级提升加速SQL查询速度的同时，保持对GreatSQL生态系统的兼容性。相较于Rapid引擎，Turbo引擎不需要将数据加载到引擎中，而是在查询过程中，直接并行抽取数据供Turbo引擎使用。
@@ -65,10 +65,10 @@ greatsql> SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_threshold=0)*/ 
 
 关于Turbo引擎更详细的使用方法请参考：[Turbo引擎](../../5-enhance/5-1-highperf-turbo-engine.md)。
 
-- 升级Rapid引擎内核到1.0.0版本，新版本在存储格式稳定性、查询语义一致性等方面的重大突破，为用户提供了强有力的稳定性保证。不过，该版本采用新的文件存储格式，和之前的版本**不兼容**，因此无法从GreatSQL 8.0.32-25或8.0.32-26版本直接平滑升级，需要先删除旧的数据文件，再全量导入数据，并重新设置增量导入任务。详细升级方式请见下方：[升级到 GreatSQL 8.0.32-27](#)。
-- 在新版本的Rapid引擎中，最大可使用并行逻辑CPU核数上限为4个，如果需要支持更高并发性能，可以联系我们提供解决方案。TODO，待确定具体限制方案
+- 升级Rapid引擎内核到1.0.0版本，新版本在存储格式稳定性、查询语义一致性等方面的重大突破，为用户提供了强有力的稳定性保证。注意，**在新版本中采用新的文件存储格式，和之前的版本不兼容**，因此无法从GreatSQL 8.0.32-25或8.0.32-26版本直接平滑升级，需要先删除旧的Rapid引擎数据文件，再次执行全量导入数据，重新设置增量导入任务。详细升级方式请见下方：[升级到 GreatSQL 8.0.32-27](#升级到-greatsql-8-0-32-27)。
+- 在新版本的Rapid引擎中，最大可使用并行逻辑CPU核数上限为4个，如果需要支持更高并发性能，可以联系我们提供解决方案。
 - 修复了Rapid引擎中一次性删除大批量数据后，查看增量导入任务进度时，DELAY字段显示不准确的问题。
-- 修复了在存储过程中使用EXPLAIN查看Rapid表执行计划时，显示无法使用Rapid引擎实际上却可以使用的错误问题。
+- 修复了在存储过程中使用`EXPLAIN`查看Rapid表执行计划时，显示无法使用Rapid引擎实际上却可以使用的错误问题。
 - 修复Rapid引擎中未先完成一次全量导入任务，而是直接启动增量导入任务发生失败报错后，重启实例后无法正常启动的问题。正常地，正确的做法是先完成一次全量导入后，再启动增量导入任务。
 - 修复Rapid引擎参数`rapid_worker_threads`设置问题。当将其设置超过最大值后，再重新设置除默认值之外的其他合法值都会报错，需要重新装载Rapid引擎或重启数据库后才恢复正常。
 - 移除Rapid引擎参数`rapid_hash_table_memory_limit`，不再使用。
@@ -113,23 +113,23 @@ greatsql> SELECT TO_DATE('20250212','YYYYMMDD') + (INTERVAL '-1' DAY) AS LASTDAY
 +---------------------+
 ```
 - 优化`TO_NUMBER`函数在大数据量时的执行效率，性能可提升数倍。
-- 修复了REF CURSOR在执行过程中表结构发生变化时可能导致报错的问题。
-- 优化动态游标内存管理机制，在动态游标END LOOP执行完后及时释放内存。
-- 修复了当源表为单行伪表时，MERGE INTO语句更新目标表失败，导致执行结果和在Oracle中不一致的问题。
+- 修复了`REF CURSOR`在执行过程中表结构发生变化时可能导致报错的问题。
+- 优化动态游标内存管理机制，在动态游标`END LOOP`执行完后及时释放内存。
+- 修复了当源表为单行伪表时，`MERGE INTO`语句更新目标表失败，导致执行结果和在Oracle中不一致的问题。
 
 ### 高安全
-- 修复最后登录信息功能中由于未处理binlog可能导致主从异常问题。
-- 修复审计日志入表功能中由于未处理binlog可能导致主从异常问题。
+- 修复最后登录信息功能中由于未处理Binlog可能导致主从异常问题。
+- 修复审计日志入表功能中由于未处理Binlog可能导致主从异常问题。
 - 修复了审计日志入表功能中，安装和卸载SQL脚本中前后函数名不一致问题。
-- 修复了在开启sql_log_bin的时候，本应该禁止修改审计日志表sys_audit.audit_log，却可以更新修改的问题。
+- 修复了在设置`sql_log_bin=ON`的时候，本应该禁止修改审计日志表`sys_audit.audit_log`，却可以更新修改的问题。
 
 ### 其他
-- InnoDB Page压缩算法支持zstd, 使得Page压缩率提高约5%。TODO，待提供更详细的说明内容
+- InnoDB Page压缩算法支持zstd, 使得Page压缩率提高约5%。
 
 ## 缺陷修复
 - 修复了特定情况下，执行`EXPLAIN FORMAT=TREE`可能导致crash的问题，详见：[Issue#IAL5KK](https://gitee.com/GreatSQL/GreatSQL/issues/IAL5KK)。
-- 合并了MySQL 8.0.38中的bug fix，对应bug id：#36204344、#36356279。
-- 合并了针对特定情况下执行ALTER TABLE可能导致丢失一行数据的问题，合并了Percona团队提交的bug fix，对应的bug id：#113812、#115511、#115608。
+- 合并了MySQL 8.0.38中的bug fix，对应bug id：[#36204344](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-38.html)、[#36356279](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-38.html)。
+- 合并了针对特定情况下执行`ALTER TABLE`可能导致丢失一行数据的问题，合并了Percona团队提交的bug fix，对应的bug id：[#113812](https://bugs.mysql.com/bug.php?id=113812)、[#115511](https://bugs.mysql.com/bug.php?id=115511)、[#115608](https://bugs.mysql.com/bug.php?id=115608)。
 
 ## 注意事项
 
@@ -220,6 +220,7 @@ greatsql> SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK('test', 't1');
 在以上几个原地升级场景中，务必保证`my.cnf`中参数`upgrade`不能设置为*NONE*，可以设置为默认的*AUTO*或*FORCE*。例如：
 
 ```ini
+#my.cnf
 [mysqld]
 upgrade = AUTO
 ```
@@ -243,8 +244,9 @@ mysqldump -S/data/MySQL/mysql.sock -A --triggers --routines --events --single-tr
 mysql -S/data/GreatSQL/mysql.sock -f < /data/backup/fulldump.sql
 ```
 
-3. 修改my.cnf，确保 upgrade = FORCE 设置
+3. 修改`my.cnf`，确保设置`upgrade=FORCE`
 ```ini
+#my.cnf
 [mysqld]
 upgrade = FORCE
 ```
@@ -297,7 +299,7 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |支持龙芯架构| :heavy_check_mark: | ❌ |
 | **2. 性能提升扩展** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
 |Rapid 引擎| :heavy_check_mark: | 仅云上HeatWave |
-|Turbo 引擎| :heavy_check_mark: | 仅云上HeatWave |
+|Turbo 引擎| :heavy_check_mark: | ❌ |
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
 |非阻塞式 DDL| :heavy_check_mark: | ❌ |
 |无主键表导入优化 | :heavy_check_mark: | ❌ |
@@ -337,6 +339,7 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |MGR 提升-节点异常退出处理 | :heavy_check_mark: | ❌ |
 |MGR 提升-节点磁盘满处理 | :heavy_check_mark: | ❌ |
 |MGR 提升-自动选择 donor 节点| :heavy_check_mark: | ❌ |
+|MGR 提升-大事务压缩优化| :heavy_check_mark: | ❌ |
 |Clone 增量备份| :heavy_check_mark: | ❌ |
 |Clone 备份压缩| :heavy_check_mark: | ❌ |
 |Binlog 读取限速| :heavy_check_mark: | ❌ |
