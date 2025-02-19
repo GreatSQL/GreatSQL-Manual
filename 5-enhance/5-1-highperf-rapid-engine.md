@@ -564,7 +564,6 @@ INSTALL PLUGIN rapid SONAME 'ha_rapid.so';
 ERROR 3877 (HY000): rapid or turbo Plugins can't be installed at the same time
 ```
 
-//TODO，下面这部分内容待和Turbo做对比借鉴
 ### 支持的语句范围
 
 Rapid引擎支持的语句范围如下：
@@ -619,7 +618,7 @@ SELECT locking语句（... INTO ...FOR UPDATE）;
 
 1.支持的所有函数及操作符参考：[支持的函数及操作符](./5-1-highperf-ap-supported-functions.md)。
 
-2.不支持的函数类型为：item_sum_and、item_sum_xor、item_sum_or、wm_concat、listagg、group_concat;
+2.不支持的函数类型有：`BIT_AND`, `BIT_XOR`, `BIT_OR`, `WM_CONCAT`, `LISTAGG`, `GROUP_CONCAT`。
 
 3.Window函数基础形式已经全面支持，但有以下几种形式目前尚不支持：
 
@@ -637,7 +636,7 @@ FROM emp
 GROUP BY deptno;
 ```
 
-4.聚集函数：不支持的类型有：Item_udf_sum(用户自定义函数)、ST_COLLECT、JSON_OBJECTAGG、JSON_ARRAYAGG、RATIO_TO_REPORT；
+4.聚集函数：不支持的类型有`JSON_OBJECTAGG`, `JSON_ARRAYAGG`, `RATIO_TO_REPORT`, `ST_COLLECT()`及用户自定义函数。
 
 5.不支持`ROW()`函数：`SELECT ROW(1, 'lilei', 25) AS person`。
 
@@ -675,11 +674,9 @@ greatql> SELECT * FROM t1 WHERE (s1,s2) IN (SELECT s1,MAX(s1) FROM t2...);
 
 ### EXPLAIN语句使用限制
 
-支持EXPLAIN、EXPLAIN FORMAT=TREE、EXPLAIN analyze。
+支持`EXPLAIN`, `EXPLAIN FORMAT=TREE`, `EXPLAIN ANALYZE`三种用法，并且在后两种执行计划结果中包含Rapid关键字。
 
 EXPLAIN中的COST与原生的COST无关，不能作为不同查询方式COST值进行比较的依据。
-
-//TODO
 
 ###  支持的数据类型
 
