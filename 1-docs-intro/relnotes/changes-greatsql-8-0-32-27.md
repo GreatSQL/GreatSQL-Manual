@@ -275,7 +275,7 @@ greatsql> create user tpch identified by 'tpch';
 ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably corrupted
 ```
 
-## GreatSQL VS MySQL
+## GreatSQL vs MySQL
 
 | **1.主要特性** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
 | :--- | :---: | :---: |

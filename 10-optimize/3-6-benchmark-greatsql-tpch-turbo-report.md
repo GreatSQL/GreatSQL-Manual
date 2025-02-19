@@ -262,7 +262,7 @@ Database: tpch100
 
 也可以参考 [pload.sh](https://gitee.com/GreatSQL/tpch/blob/greatsql-8.0.32-27/pload.sh) 脚本做法，并行导入数据。
 
-**提示**：运行LOAD DATA导入数据时，可能会在 `tmpdir` 产生临时文件，因此要保证 `tmpdir` 有足够的剩余可用磁盘空间。
+**提示**：运行`LOAD DATA`导入数据时，可能会在 `tmpdir` 产生临时文件，因此要保证 `tmpdir` 有足够的剩余可用磁盘空间。
 
 ### 确认Turbo引擎设置
 

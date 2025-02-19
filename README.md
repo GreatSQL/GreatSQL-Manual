@@ -23,7 +23,7 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 ### [高可用](./5-enhance/5-2-ha.md)
 
-针对 MGR 及主从复制进行了大量改进和提升工作，支持 地理标签、仲裁节点、读写动态 VIP、快速单主模式、智能选主 等特性，并针对 流控算法、事务认证队列清理算法、节点加入&退出机制、recovery机制 等多个 MGR 底层工作机制算法进行深度优化，进一步提升优化了 MGR 的高可用保障及性能稳定性。
+针对 MGR 及主从复制进行了大量改进和提升工作，支持 地理标签、仲裁节点、读写动态 VIP、快速单主模式、智能选主 等特性，并针对 流控算法、事务认证队列清理算法、节点加入&退出机制、recovery机制、大事务传输压缩等多个 MGR 底层工作机制算法进行深度优化，进一步提升优化了 MGR 的高可用保障及性能稳定性。
 
 - 支持 [地理标签](./5-enhance/5-2-ha-mgr-zoneid.md) 特性，提升多机房架构数据可靠性。
 - 支持 [仲裁节点](./5-enhance/5-2-ha-mgr-arbitrator.md) 特性，用更低的服务器成本实现更高可用。
@@ -41,13 +41,15 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 - 优化了 MGR 事务认证队列清理算法，高负载下不复存在每 60 秒性能抖动问题。
 - 解决了 MGR 中长事务造成无法选主的问题。
 - 修复了 MGR recovery 过程中长时间等待的问题。
+- 优化了MGR大事务传输时压缩超过限制的处理机制。
 
 更多信息详见文档：[高可用](./5-enhance/5-2-ha.md)。
 
 ### [高性能](./5-enhance/5-1-highperf.md)
-相对 MySQL 及 Percona Server For MySQL 的性能表现更稳定优异，支持 Rapid 引擎、事务无锁化、并行 LOAD DATA、异步删除大表、线程池、非阻塞式 DDL、NUMA 亲和调度优化 等特性，在 [TPC-C 测试中相对 MySQL 性能提升超过 30%](./10-optimize/3-5-benchmark-greatsql-vs-mysql-tpcc-report.md)，在 [TPC-H 测试中的性能表现是 MySQL 的十几倍甚至上百倍](./10-optimize/3-3-benchmark-greatsql-tpch-report.md)。
+相对 MySQL 及 Percona Server For MySQL 的性能表现更稳定优异，支持 Rapid 引擎、Turbo引擎、事务无锁化、并行 LOAD DATA、异步删除大表、线程池、非阻塞式 DDL、NUMA 亲和调度优化 等特性，在 [TPC-C 测试中相对 MySQL 性能提升超过 30%](./10-optimize/3-5-benchmark-greatsql-vs-mysql-tpcc-report.md)，在 [TPC-H 测试中的性能表现是 MySQL 的十几倍甚至上百倍](./10-optimize/3-3-benchmark-greatsql-tpch-report.md)。
 
 - 支持 [大规模并行、基于内存查询、高压缩比的高性能 Rapid 引擎](./5-enhance/5-1-highperf-rapid-engine.md)，可将数据分析性能提升几个数量级。
+- 支持 [高性能并行查询引擎Turbo](./5-enhance/5-1-highperf-turbo-engine.md)，使GreatSQL具备多线程并发的向量化实时查询功能。
 - 优化 InnoDB 事务系统，实现了大锁拆分及无锁化等多种优化方案，OLTP 场景整体性能提升约 20%。
 - 支持 [并行 LOAD DATA](./5-enhance/5-1-highperf-parallel-load.md)，适用于频繁导入大批量数据的应用场景，性能可提升约 20 多倍；对于无显式定义主键的场景亦有优化提升。
 - 支持 [异步删除大表](./5-enhance/5-1-highperf-async-purge-big-table.md)，提高 InnoDB 引擎运行时性能的稳定性。
@@ -200,7 +202,8 @@ $ systemctl status mysqld
 |MyRocks 引擎| :heavy_check_mark: | ❌ |
 |支持龙芯架构| :heavy_check_mark: | ❌ |
 | **2. 性能提升扩展** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
-|AP 引擎| :heavy_check_mark: | 仅云上HeatWave |
+|Rapid 引擎| :heavy_check_mark: | 仅云上HeatWave |
+|Turbo 引擎| :heavy_check_mark: | ❌ |
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
 |非阻塞式 DDL| :heavy_check_mark: | ❌ |
 |无主键表导入优化 | :heavy_check_mark: | ❌ |
@@ -208,6 +211,7 @@ $ systemctl status mysqld
 |并行 LOAD DATA| :heavy_check_mark: | ❌ |
 |InnoDB 事务 ReadView 无锁优化| :heavy_check_mark: | ❌ |
 |InnoDB 事务大锁拆分优化| :heavy_check_mark: | ❌ |
+|InnoDB page压缩支持zstd| :heavy_check_mark: | ❌ | 
 |InnoDB 资源组| :heavy_check_mark: | :heavy_check_mark: |
 |自定义 InnoDB 页大小| :heavy_check_mark: | :heavy_check_mark: |
 |Contention-Aware Transaction Scheduling| :heavy_check_mark: | :heavy_check_mark: |
@@ -239,6 +243,7 @@ $ systemctl status mysqld
 |MGR 提升-节点异常退出处理 | :heavy_check_mark: | ❌ |
 |MGR 提升-节点磁盘满处理 | :heavy_check_mark: | ❌ |
 |MGR 提升-自动选择 donor 节点| :heavy_check_mark: | ❌ |
+|MGR 提升-大事务压缩优化| :heavy_check_mark: | ❌ |
 |Clone 增量备份| :heavy_check_mark: | ❌ |
 |Clone 备份压缩| :heavy_check_mark: | ❌ |
 |Binlog 读取限速| :heavy_check_mark: | ❌ |
