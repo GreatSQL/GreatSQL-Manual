@@ -227,7 +227,7 @@ $ ls -l *tbl
 -rw-r--r-- 1 root root   142869803 Sep 26 09:20 supplier.tbl
 ```
 
-也可以参考 [`pdbgen.sh`](https://gitee.com/GreatSQL/tpch/blob/greatsql-8.0.32-27/pdbgen.sh) 脚本做法，并行生成测试数据。
+也可以参考 [pdbgen.sh](https://gitee.com/GreatSQL/tpch/blob/greatsql-8.0.32-27/pdbgen.sh) 脚本做法，并行生成测试数据。
 
 ### 创建 TPC-H 测试数据库表并导入数据
 
@@ -260,7 +260,7 @@ Database: tpch100
 
 参考GreatSQL社区提供的并发导入脚本：[load-data-parallel.sh](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/load-data-parallel.sh)，完成数据导入。
 
-也可以参考 [`pload.sh`](https://gitee.com/GreatSQL/tpch/blob/greatsql-8.0.32-27/pload.sh) 脚本做法，并行导入数据。
+也可以参考 [pload.sh](https://gitee.com/GreatSQL/tpch/blob/greatsql-8.0.32-27/pload.sh) 脚本做法，并行导入数据。
 
 **提示**：运行LOAD DATA导入数据时，可能会在 `tmpdir` 产生临时文件，因此要保证 `tmpdir` 有足够的剩余可用磁盘空间。
 
@@ -305,11 +305,11 @@ greatsql> SET GLOBAL turbo_worker_threads=32;
 
 该测试脚本大概工作模式如下：
 
-1. 先执行22个查询SQL，进行数据预热，每条SQL各执行2次。
+1. 总共有22个查询SQL，每个查询SQL分别执行。
 
-2. 再分别执行22个查询SQL，每个SQL各执行3次。
+2. 每个查询SQL先运行2次完成数据预热。
 
-3. 每次执行SQL都会记录其起止时间，及其耗时，如下面例所示：
+3. 每个SQL再执行3次，每次执行SQL都会记录其起止时间，及其耗时，如下面例所示：
 
 ```bash
 [2023-09-27 01:38:45] BEGIN RUN TPC-H Q1 1 times
@@ -321,6 +321,10 @@ greatsql> SET GLOBAL turbo_worker_threads=32;
 ```
 
 上述结果中的 COST: 1.301s ，即为本SQL的运行耗时：1.301秒。
+
+4. 继续执行下一个查询SQL，直至22个查询SQL全部执行完毕。
+
+可以参考自动化执行脚本 [run-tpch.sh](https://gitee.com/GreatSQL/tpch/blob/greatsql-8.0.32-27/run-tpch.sh) 的做法，修改几个参数后即可自动执行。
 
 **提示**：在运行`tpch_queries_11.sql`这个SQL脚本时，需要根据数据量大小调整第17-20行相关的参数。例如当测试数据量是SF100时，调整成如下
 
