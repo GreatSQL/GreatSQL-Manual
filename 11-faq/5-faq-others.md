@@ -219,6 +219,7 @@ GreatSQL相对于MySQL官方社区版本有非常大的性能提升，尤其是�
 
 我们推荐安装 jemalloc 包以提升GreatSQL内存分配管理效率，但这并不是必须的。
 
+如果是ARM环境下，可以不必安装配置 jemalloc 依赖。
 
 ## 13. GreatSQL支持数据脱敏吗
 

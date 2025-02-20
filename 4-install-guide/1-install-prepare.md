@@ -272,6 +272,8 @@ lrwxrwxrwx 1 root root     16 Oct  2  2019 /usr/lib64/libjemalloc.so -> libjemal
 
 建议采用Jemalloc代替glibc自带的malloc库，其优势在于减少内存碎片和提升高并发场景下内存的分配效率，提高内存管理效率的同时还能降低数据库运行时发生OOM的风险。
 
+如果是ARM环境下，可以不必安装配置上述 jemalloc 依赖。
+
 - **配置正确的NTP服务**
 
 构建MGR需要由多节点组成，各节点间要保证时间同步。

@@ -85,7 +85,11 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 
 ### 安装 jemalloc（推荐）
 
-运行 GreatSQL 时如果有 jemalloc 支持，则数据库进程的内存分配会更稳定、高效，因此建议安装 jemalloc（非必须）。以 CentOS 8 系统为例，采用类似下面的方法安装 jemalloc 软件包：
+运行 GreatSQL 时如果有 jemalloc 支持，则数据库进程的内存分配会更稳定、高效，因此建议安装 jemalloc（非必须）。
+
+如果是ARM环境下，可以不必安装配置 jemalloc 依赖。
+
+以 CentOS 8 x86_64 系统为例，采用类似下面的方法安装 jemalloc 软件包：
 
 ```bash
 # 先安装 epel 源
