@@ -202,6 +202,8 @@ GreatSQL TPC-H（Turbo）SF100 vs SF300（32C64G）对比示意图如下
 
 ![GreatSQL TPC-H（Turbo）SF100 vs SF300对比示意图](./greatsql-tpch-turbo-sf100-vs-sf300-20250305.png)
 
+备注：上述测试使用的是Turbo并发线程数不限的版本。
+
 ##  测试步骤
 ### 安装 GreatSQL
 请参考GreatSQL手册内容：[安装指南](../4-install-guide/0-install-guide.md)，完成GreatSQL安装。

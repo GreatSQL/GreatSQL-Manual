@@ -12,7 +12,7 @@ Turbo引擎采用插件（Plugin）方式嵌入GreatSQL中，可以在线动态�
 
 ![GreatSQL TPC-H（Turbo）SF100 vs SF300对比示意图](../10-optimize/greatsql-tpch-turbo-sf100-vs-sf300-20250305.png)
 
-备注：上述测试使用的是没有Turbo并发线程数限制的内部测试版本。
+备注：上述测试使用的是Turbo并发线程数不限的版本。
 
 ## 启用Turbo引擎
 
