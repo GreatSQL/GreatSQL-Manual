@@ -26,7 +26,20 @@ greatsql> SELECT * FROM information_schema.SECONDARY_ENGINE_INCREMENT_LOAD_TASK\
               INFO: {"exception_type":"Constraint","exception_message":"Duplicate key \"id: 1024\" violates primary key constraint. If this is an unexpected constraint violation please double check with the known index limitations section in our documentation (https://duckdb.org/docs/sql/indexes)."}
 ```
 
-预计在下个版本中会解决此问题。
+当出现这种问题时，可以通过重新执行全量导入数据后，再次启动增量导入任务，例如
+
+```sql
+-- 先从Rapid引擎中删除全量数据
+greatsql> ALTER TABLE t1 SECONDARY_UNLOAD;
+
+-- 执行全量导入
+greatsql> ALTER TABLE t1 SECONDARY_LOAD;
+
+-- 再次启动增量导入任务，函数的第三个参数可以指定相应的事务GTID值
+greatsql> SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK('test', 't1');
+```
+
+该问题预计在下个版本中会解决此问题。
 
 
 **扫码关注微信公众号**
