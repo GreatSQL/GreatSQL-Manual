@@ -8,9 +8,9 @@ Turbo是一个以插件形式存在的高性能的并行查询执行引擎，通
 
 Turbo引擎采用插件（Plugin）方式嵌入GreatSQL中，可以在线动态安装或卸载。
 
-在64C64G测试机环境下，TPC-H SF100测试中22条SQL总耗时220秒左右，下图展示了Turbo在SF100、SF300两种数据量下的测试结果，仅供参考：
+在32C64G测试机环境下，TPC-H SF100测试中22条SQL总耗时214秒左右，下图展示了Turbo在SF100、SF300两种数据量下的测试结果，仅供参考：
 
-![执行耗时](./5-1-highperf-turbo-engine-01.png)
+![GreatSQL TPC-H（Turbo）SF100 vs SF300对比示意图](../10-optimize/greatsql-tpch-turbo-sf100-vs-sf300-20250305.png)
 
 备注：上述测试使用的是没有Turbo并发线程数限制的内部测试版本。
 
