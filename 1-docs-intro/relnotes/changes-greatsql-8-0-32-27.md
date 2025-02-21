@@ -42,7 +42,7 @@ greatsql> SHOW GLOBAL STATUS LIKE 'Rpl%spee%';
 ```
 表示当前的Binlog读取限速为100KB/s，更多详细用法请参考：[Binlog 读取限速](../../5-enhance/5-2-ha-binlog-speed-limit.md)。
 
-- 在greatdb_ha plugin中，增加对greatdb_ha_port进行防御，避免用户端发送非法指令后可能导致crash的风险。
+- 在greatdb_ha plugin中，增加对参数`greatdb_ha_port`相应的TCP端口进行防御，避免用户端发送非法指令后可能导致crash的风险。
 - 修复了启用greatdb_ha plugin时，可能因为Linux系统函数FD_SET中当遇到文件描述符超过1024时导致未定义行为而引发crash的问题。
 - 修复了greatdb_ha plugin中启用VIP功能后，可能存在内存泄漏风险的问题。
 - 修复了在主备两套MGR集群间部署主从复制后，当备用集群主节点意外宕机时，可能无法退出进程的问题。
@@ -57,7 +57,7 @@ greatsql> SHOW GLOBAL STATUS LIKE 'Rpl%spee%';
 greatsql> INSTALL PLUGIN turbo SONAME 'turbo.so';
 ```
 
-之后就可以利用Turbo引擎提升SQL查询效率
+就可以直接利用Turbo引擎大幅提升SQL查询效率
 
 ```sql
 greatsql> SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_threshold=0)*/ * FROM t1;
@@ -65,8 +65,8 @@ greatsql> SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_threshold=0)*/ 
 
 关于Turbo引擎更详细的使用方法请参考：[Turbo引擎](../../5-enhance/5-1-highperf-turbo-engine.md)。
 
-- 升级Rapid引擎内核到1.0.0版本，新版本在存储格式稳定性、查询语义一致性等方面的重大突破，为用户提供了强有力的稳定性保证。注意，**在新版本中采用新的文件存储格式，和之前的版本不兼容**，因此无法从GreatSQL 8.0.32-25或8.0.32-26版本直接平滑升级，需要先删除旧的Rapid引擎数据文件，再次执行全量导入数据，重新设置增量导入任务。详细升级方式请见下方：[升级到 GreatSQL 8.0.32-27](#升级到-greatsql-8-0-32-27)。
-- 在新版本的Rapid引擎中，最大可使用并行逻辑CPU核数上限为4个，如果需要支持更高并发性能，可以联系我们提供解决方案。
+- 升级Rapid引擎内核到1.0.0版本，新版本在存储格式稳定性、查询语义一致性等方面的重大突破，为用户提供了强有力的稳定性保证。注意，**在新版本中采用新的文件存储格式，和之前的版本不兼容**，因此无法从GreatSQL 8.0.32-25或8.0.32-26版本直接平滑升级到GreatSQL 8.0.32-27，需要先删除旧的Rapid引擎数据文件，再次执行全量导入数据，重新启动增量导入任务。详细升级方式请见下方：[升级到 GreatSQL 8.0.32-27](#升级到-greatsql-8-0-32-27)。
+- 在新版本的Rapid引擎中，最大可使用并行逻辑CPU核数上限为4个，如果需要获得更高并发性能，可以联系我们提供解决方案。
 - 修复了Rapid引擎中一次性删除大批量数据后，查看增量导入任务进度时，DELAY字段显示不准确的问题。
 - 修复了在存储过程中使用`EXPLAIN`查看Rapid表执行计划时，显示无法使用Rapid引擎实际上却可以使用的错误问题。
 - 修复Rapid引擎中未先完成一次全量导入任务，而是直接启动增量导入任务发生失败报错后，重启实例后无法正常启动的问题。正常地，正确的做法是先完成一次全量导入后，再启动增量导入任务。
