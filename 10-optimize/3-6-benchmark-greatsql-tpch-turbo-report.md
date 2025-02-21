@@ -3,7 +3,7 @@
 
 **GreatSQL TPC-H（Turbo引擎）性能测试报告**
 
-**（2025年3月05日）**
+**（2025年3月5日）**
 
 **GreatSQL 社区**
 
@@ -25,7 +25,7 @@ GreatSQL社区官网：[https://greatsql.cn](https://greatsql.cn)。
 
 ##  概述
 
-本次测试针对GreatSQL数据库基于标准 TPC-H 场景的测试。
+本次测试针对GreatSQL数据库Turbo引擎基于标准 TPC-H 场景的测试。
 
 TPC-H（商业智能计算测试）是美国交易处理效能委员会（TPC，TransactionProcessing Performance Council）组织制定的用来模拟决策支持类应用的一个测试集。目前，学术界和工业界普遍采用 TPC-H 来评价决策支持技术方面应用的性能。这种商业测试可以全方位评测系统的整体商业计算综合能力，对厂商的要求更高，同时也具有普遍的商业实用意义，目前在银行信贷分析和信用卡分析、电信运营分析、税收分析、烟草行业决策分析中都有广泛的应用，TPC-H 查询包含八张数据表和 22 条复杂 SQL 查询，大多数查询包含多表联接（JOIN）、子查询和聚合查询等。
 
@@ -104,10 +104,10 @@ Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca 
 
 ```bash
 $ free -ht
-              total        used        free      shared  buff/cache   available
-Mem:           251G        167G         22G        7.2M         61G         82G
-Swap:          4.0G        1.1G        2.9G
-Total:         255G        168G         24G
+           total   used   free   shared  buff/cache   available
+Mem:        251G   167G    22G     7.2M         61G         82G
+Swap:       4.0G   1.1G   2.9G
+Total:      255G   168G    24G
 ```
 
 - 4. 磁盘
@@ -116,9 +116,9 @@ Total:         255G        168G         24G
 
 ```bash
 $ nvme list
-Node             SN                   Model                                    Namespace Usage                      Format           FW Rev
----------------- -------------------- ---------------------------------------- --------- -------------------------- ---------------- --------
-/dev/nvme0n1     PHLN018200FD3P2BGN   INTEL SSDPE2KE032T8                      1           3.20  TB /   3.20  TB    512   B +  0 B   VDV10152
+Node             SN                   Model                   Namespace Usage                      Format           FW Rev
+---------------- -------------------- ----------------------- --------- -------------------------- ---------------- --------
+/dev/nvme0n1     PHLN018200FD3P2BGN   INTEL SSDPE2KE032T8     1           3.20  TB /   3.20  TB    512   B +  0 B   VDV10152
 ```
 
 磁盘挂载参数、文件系统
