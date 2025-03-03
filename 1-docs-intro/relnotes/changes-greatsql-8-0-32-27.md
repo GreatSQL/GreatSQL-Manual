@@ -123,7 +123,27 @@ greatsql> SELECT TO_DATE('20250212','YYYYMMDD') + (INTERVAL '-1' DAY) AS LASTDAY
 - 修复了在设置`sql_log_bin=ON`的时候，本应该禁止修改审计日志表`sys_audit.audit_log`，却可以更新修改的问题。
 
 ### 其他
-- InnoDB Page压缩算法支持zstd, 使得Page压缩率提高约5%。
+- InnoDB Page压缩算法支持zstd, 使得Page压缩率提高约5%。可以在创建新表时指定Page压缩算法，例如
+
+```sql
+greatsql> CREATE TABLE `t1_zstd` (
+  `id` int NOT NULL,
+  `c1` varchar(20) NOT NULL,
+  `c2` varchar(30) NOT NULL,
+  `c3` datetime NOT NULL,
+  `c4` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_c3` (`c3`)
+) ENGINE=InnoDB COMPRESSION='zstd';
+```
+
+也可以执行`ALTER TABLE`修改表的Page压缩算法，例如
+
+```sql
+greatsql> ALTER TABLE t1 COMPRESSION='zstd';
+```
+
+更多关于InnoDB Page压缩的使用方法请参考：[InnoDB Page压缩]()。
 
 ## 缺陷修复
 - 修复了特定情况下，执行`EXPLAIN FORMAT=TREE`可能导致crash的问题，详见：[Issue#IAL5KK](https://gitee.com/GreatSQL/GreatSQL/issues/IAL5KK)。
