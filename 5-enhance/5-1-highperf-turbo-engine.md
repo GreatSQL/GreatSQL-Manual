@@ -346,7 +346,7 @@ ERROR 8700 (HY000): execute turbo query failed: Conversion Error: Could not conv
 |turbo_release_retries|Global|YES|[0, ULONG_MAX]|ULONG|600|卸载插件重试等待时间（ms)|
 |turbo_retry_pause|Global|YES|[100, 31536000]|ULONG|1000|卸载插件重试次数|
 |turbo_temp_directory|Global|NO|[100, 31536000]|String|duckdb_dp.data.tmp|临时目录名称，当启用Turbo引擎后，不支持修改；启用之前，可修改|
-|turbo_worker_threads|Global|YES|[1, 512]|UINT|8|Turbo执行计划可以使用的线程总数|
+|turbo_worker_threads|Global|YES|[1, 4]|UINT|4|Turbo执行计划可以使用的线程总数|
 |turbo_condition_pushdown|Session|YES|[ON/OFF]|Boolean|OFF|Turbo执行计划是否启用条件下推|
 |turbo_cost_threshold|Session|YES|[0, DBL_MAX]|Double|100000.000000|使用Turbo执行查询的代价阈值|
 
@@ -379,6 +379,10 @@ SHOW GLOBAL STATUS LIKE 'turbo%';
 * 增加 `turbo_memory_limit`，在任何时候，增加Turbo引擎可使用的内存都是首选方案。
 
 * 如果SQL查询的执行计划比较复杂（如大数据量 + 多重HASH JOIN + 多重agg），可尝试适当调低 `turbo_worker_threads`。
+
+::: tip 小贴士
+GreatSQL社区版的Turbo引擎中参数`turbo_worker_threads`最大上限为4，如果需要获得更高并发性能，可以联系我们提供解决方案。
+:::
 
 当数据量较大，但 `turbo_memory_limit` 设置较小时，可能导致SQL查询请求无法完成，并抛出Out of Memory Error.
 

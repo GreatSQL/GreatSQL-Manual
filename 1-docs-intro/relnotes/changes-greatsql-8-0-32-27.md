@@ -1,10 +1,10 @@
-# Changes in GreatSQL 8.0.32-27 (2025-x-x)
+# Changes in GreatSQL 8.0.32-27 (2025-3-10)
 
 ## 版本信息
 
-- 发布时间：2025年x月x日
+- 发布时间：2025年3月10日
 
-- 版本号：8.0.32-27, Revision xxxxxxxxxxx
+- 版本号：8.0.32-27, Revision aa66a385910
 
 - 下载链接：[RPM包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)、[TAR包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)、[源码包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)
 

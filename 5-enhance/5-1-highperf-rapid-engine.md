@@ -763,7 +763,7 @@ Rapid引擎相关的选项设置主要包括系统选项和插件选项两类：
 | System Variable Name | Variable Scope |  Dynamic Variable | Permitted Values | Type | Default | Description |
 | --- | --- | --- | --- | --- | --- | --- |
 |rapid_memory_limit|Global|YES|[2^26, 2^39]|LONGLONG|1GB(2^30)|Rapid引擎运行过程中可使用的内存，默认值1G|
-|rapid_worker_threads|Global|YES|[1, 512]|LONG|4|Rapid引擎运行过程中可使用的线程数|
+|rapid_worker_threads|Global|YES|[1, 4]|LONG|4|Rapid引擎运行过程中可使用的线程数|
 |rapid_temp_directory|Global|NO||String|"duckdb.data.tmp"|Rapid引擎存放临时文件的目录。当启用Rapid引擎后，不支持修改；启用之前，可修改|
 |rapid_checkpoint_threshold|Global|YES|[0, 2^39]|LONGLONG|16MB(2^24)|触发自动checkpoint操作的WAL大小阈值。WAL文件是Rapid引擎的预写日志，在Rapid引擎运行过程中，对其的所有修改操作在提交之前，都会预先写入日志，以保证数据库系统的原子性和持久性|
 
@@ -868,7 +868,11 @@ $ ls -lh duckdb.data.tmp/
 | 100GB | 30GB | 16 |
 | 1TB | 300GB | 64 |
 
-需要再补充的是，Rapid引擎内部还会额外使用一些小块内存，这部分内存不受 `rapid_memory_limit` 选项控制，这些小内存块的消耗与 `rapid_worker_threads` 以及并行执行SQL查询请求的数量正相关。因此Rapid引擎实际使用的内存通常会比 `rapid_memory_limit` 大一点。
+::: tip 小贴士
+GreatSQL社区版的Rapid引擎中参数`rapid_worker_threads`最大上限为4，如果需要获得更高并发性能，可以联系我们提供解决方案。
+:::
+
+Rapid引擎内部还会额外使用一些小块内存，这部分内存不受 `rapid_memory_limit` 选项控制，这些小内存块的消耗与 `rapid_worker_threads` 以及并行执行SQL查询请求的数量正相关。因此Rapid引擎实际使用的内存通常会比 `rapid_memory_limit` 大一点。
 
 ###  统计信息
 用户数据表的统计信息和索引统计信息，暂不支持Rapid引擎视图查看，只能查看主引擎相关视图：
