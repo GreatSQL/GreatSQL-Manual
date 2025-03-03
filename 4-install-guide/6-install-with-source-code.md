@@ -97,8 +97,8 @@ sh-4.4# sh ./greatsql_build_init.sh
  3.3 make dynamic link for GreatSQL
 
 4. greatsql build completed!
-drwxrwxr-x 13 mysql mysql       293 Aug 16 08:27 GreatSQL-8.0.32-26-ol-glibc2.28-x86_64
-/opt/GreatSQL-8.0.32-26-ol-glibc2.28-x86_64/bin/mysqld  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL, Release 26, Revision a68b3034c3d)
+drwxrwxr-x 13 mysql mysql       293 Aug 16 08:27 GreatSQL-8.0.32-27-ol-glibc2.28-x86_64
+/opt/GreatSQL-8.0.32-27-ol-glibc2.28-x86_64/bin/mysqld  Ver 8.0.32-27 for Linux on x86_64 (GreatSQL, Release 27, Revision aa66a385910)
 
 5. remove files and clean up 
 ```
@@ -107,7 +107,7 @@ drwxrwxr-x 13 mysql mysql       293 Aug 16 08:27 GreatSQL-8.0.32-26-ol-glibc2.28
 编译完成后，可以将容器中编译好的二进制包文件拷贝到宿主机上，例如：
 
 ```shell
-docker cp greatsql_build:/opt/GreatSQL-8.0.32-26-ol-glibc2.28-x86_64 /usr/local/
+docker cp greatsql_build:/opt/GreatSQL-8.0.32-27-ol-glibc2.28-x86_64 /usr/local/
 ```
 
 如果宿主机环境也是 CentOS x86_64 的话，这就可以在宿主机环境下直接使用该二进制文件包了。
