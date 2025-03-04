@@ -123,7 +123,7 @@ greatsql> SELECT TO_DATE('20250212','YYYYMMDD') + (INTERVAL '-1' DAY) AS LASTDAY
 - 修复了在设置`sql_log_bin=ON`的时候，本应该禁止修改审计日志表`sys_audit.audit_log`，却可以更新修改的问题。
 
 ### 其他
-- InnoDB Page压缩算法支持zstd, 使得Page压缩率提高约5%。可以在创建新表时指定Page压缩算法，例如
+- InnoDB Page压缩算法支持Zstd, 使得Page压缩率提高约5%。可以在创建新表时指定Page压缩算法，例如
 
 ```sql
 greatsql> CREATE TABLE `t1_zstd` (
@@ -326,7 +326,7 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |并行 LOAD DATA| :heavy_check_mark: | ❌ |
 |InnoDB 事务 ReadView 无锁优化| :heavy_check_mark: | ❌ |
 |InnoDB 事务大锁拆分优化| :heavy_check_mark: | ❌ |
-|InnoDB page压缩支持zstd| :heavy_check_mark: | ❌ | 
+|InnoDB Page压缩支持Zstd| :heavy_check_mark: | ❌ | 
 |InnoDB 资源组| :heavy_check_mark: | :heavy_check_mark: |
 |自定义 InnoDB 页大小| :heavy_check_mark: | :heavy_check_mark: |
 |Contention-Aware Transaction Scheduling| :heavy_check_mark: | :heavy_check_mark: |
