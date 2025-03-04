@@ -161,7 +161,7 @@ Create Table: CREATE TABLE `t2` (
 2. 样例数据
 
 ```sql
-greatsql> select * from t2 limit 5;
+greatsql> SELECT * FROM t2 LIMIT 5;
 +----+----+----+---------------------+--------------------------------+
 | id | c1 | c2 | c3                  | c4                             |
 +----+----+----+---------------------+--------------------------------+
@@ -176,7 +176,7 @@ greatsql> select * from t2 limit 5;
 3. 各个列数据重复率
 
 ```sql
-greatsql> select count(distinct(id)),  count(distinct(c1)), count(distinct(c2)), count(distinct(c3)), count(distinct(c4)) from t2;
+greatsql> SELECT COUNT(DISTINCT(id)),  COUNT(DISTINCT(c1)), COUNT(DISTINCT(c2)), COUNT(DISTINCT(c3)), COUNT(DISTINCT(c4)) FROM t2;
 +---------------------+---------------------+---------------------+---------------------+---------------------+
 | count(distinct(id)) | count(distinct(c1)) | count(distinct(c2)) | count(distinct(c3)) | count(distinct(c4)) |
 +---------------------+---------------------+---------------------+---------------------+---------------------+
