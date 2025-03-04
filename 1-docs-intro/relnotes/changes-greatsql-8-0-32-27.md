@@ -143,7 +143,7 @@ greatsql> CREATE TABLE `t1_zstd` (
 greatsql> ALTER TABLE t1 COMPRESSION='zstd';
 ```
 
-更多关于InnoDB Page压缩的使用方法请参考：[InnoDB Page压缩]()。
+更多关于InnoDB Page压缩的使用方法请参考：[InnoDB Page压缩](../../5-enhance/5-5-innodb-page-compression.md)。
 
 ## 缺陷修复
 - 修复了特定情况下，执行`EXPLAIN FORMAT=TREE`可能导致crash的问题，详见：[Issue#IAL5KK](https://gitee.com/GreatSQL/GreatSQL/issues/IAL5KK)。
