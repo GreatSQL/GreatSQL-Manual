@@ -12,7 +12,7 @@
 
 ##  改进提升
 
-在GreatSQL 8.0.32-27版本中新增高性能并行查询引擎**Turbo**，升级Rapid引擎内核版本，优化MGR大事务压缩传输机制，完善greatdb_ha plugin，InnoDB Page支持zstd压缩，完善Oracle兼容特性，完善安全性等，并修复了几个可能导致crash或丢数据的bug。
+在GreatSQL 8.0.32-27版本中新增高性能并行查询引擎**Turbo**，升级Rapid引擎内核版本，优化MGR大事务压缩传输机制，完善greatdb_ha plugin，InnoDB Page支持Zstd压缩，完善Oracle兼容特性，完善安全性等，并修复了几个可能导致crash或丢数据的bug。
 
 ### 高可用
 
@@ -123,7 +123,7 @@ greatsql> SELECT TO_DATE('20250212','YYYYMMDD') + (INTERVAL '-1' DAY) AS LASTDAY
 - 修复了在设置`sql_log_bin=ON`的时候，本应该禁止修改审计日志表`sys_audit.audit_log`，却可以更新修改的问题。
 
 ### 其他
-- InnoDB Page压缩算法支持Zstd, 使得Page压缩率提高约5%。可以在创建新表时指定Page压缩算法，例如
+- InnoDB Page压缩算法支持Zstd, 使得Page压缩率进一步得到提高，尤其是当表中有大量重复字符类型数据时。可以在创建新表时指定Page压缩算法，例如
 
 ```sql
 greatsql> CREATE TABLE `t1_zstd` (
