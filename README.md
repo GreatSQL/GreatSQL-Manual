@@ -80,6 +80,7 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 
 ### [其他](./5-enhance/5-5-others.md)
 - 支持 [Clone 在线全量热备、增备及恢复](./5-enhance/5-5-clone-compressed-and-incrment-backup.md)，结合 Binlog 可实现恢复到指定时间点。此外，Clone 备份还支持压缩功能。
+- 支持 [InnoDB Page透明压缩采用Zstd算法](./5-enhance/5-5-innodb-page-compression.md)，进一步提高数据压缩率，尤其是当有大量长文本重复数据时。
 
 ## 安装 GreatSQL
 
