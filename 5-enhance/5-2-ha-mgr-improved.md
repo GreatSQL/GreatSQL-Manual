@@ -36,6 +36,20 @@ GreatSQL 对此情况进行了优化，新增选项 `group_replication_communica
 | Permitted Values |    [1 ~ 9223372036854775807] |
 | Default       | 9223372036854775807 |
 
+- 优化了MGR大事务传输时压缩超过限制的处理机制。
+
+在MGR中有大事务超过`group_replication_compression_threshold`阈值时会进行LZ4压缩，但由于LZ4自身限制，可能导致压缩失败报错，事务执行失败，报告类似下面的错误
+
+```log
+[GCS] Gcs_packet's payload is too big. Only packets smaller than 2113929216 bytes can be compressed. Payload size is 2197817290
+```
+
+  GreatSQL对此机制进行调整优化，实现以下两点目标：
+
+  1. 当事务大小超过`group_replication_compression_threshold`阈值则启动压缩。
+
+  2. 但当事务大小超过LZ4压缩限制时不再报错，改成继续使用原始未压缩的事务数据进行传输，即类似设置`group_replication_compression_threshold=0`（不启用压缩）时的效果。
+
 - 支持AFTER模式下多数派写机制。
 - 解决磁盘空间爆满时导致MGR集群阻塞的问题。
 - 解决多主模式下或切主时可能导致丢数据的问题。
