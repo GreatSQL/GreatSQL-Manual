@@ -73,7 +73,7 @@ SET turbo_cost_threshold=0;
 ```
 
 ```sql
-EXPLAIN FORMAT=TREe SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_threshold=0) */ * FROM t1;
+EXPLAIN FORMAT=TREE SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_threshold=0) */ * FROM t1;
 ```
 
 查询计划显示中带有 *Turbo scan* 关键字，则说明语句使用了Turbo引擎，如下：
