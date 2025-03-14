@@ -4,7 +4,7 @@
 [![](https://img.shields.io/badge/License-GPL_v2.0-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)
 [![](https://img.shields.io/badge/release-8.0.32_27-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)
 
-最后更新：2025-03-10。
+最后更新：2025-03-14。
 
 本文档适用版本：GreatSQL 8.0.32-27。
 
@@ -179,6 +179,19 @@ $ systemctl status mysqld
 就可以正常启动 GreatSQL 服务了。
 
 想要 GreatSQL 更高效运行，建议参考这份 my.cnf 配置模板：[my.cnf for GreatSQL 8.0.32-27](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)。
+
+### 编译GreatSQL源码
+
+如果想要用GreatSQL源码编译二进制包，可以利用GreatSQL-Build这个Docker镜像来完成，该项目详见：[GreatSQL-Build Docker镜像](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Build)。
+
+如果想要自行手动编译GreatSQL源码，可以参考以下几篇文档：
+
+- [在CentOS环境下源码编译安装GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source.md)
+- [在CentOS环境下编译GreatSQL RPM包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-rpm-under-centos.md)
+- [openEuler、龙蜥Anolis、统信UOS系统下编译GreatSQL二进制包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-under-openeuler-anolis-uos.md)
+- [在麒麟OS+龙芯环境下源码编译安装GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source-under-kylin-and-loongson.md)
+
+**提醒**：需要用下载[GreatSQL源码包](https://gitee.com/GreatSQL/GreatSQL/releases)进行编译，而不是直接用`git clone`本项目得到的源码包编译，因为缺少部分子模块的代码。
 
 ## 版本历史
 
