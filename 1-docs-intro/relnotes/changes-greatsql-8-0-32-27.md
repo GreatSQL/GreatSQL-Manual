@@ -149,6 +149,7 @@ greatsql> ALTER TABLE t1 COMPRESSION='zstd';
 - 修复了特定情况下，执行`EXPLAIN FORMAT=TREE`可能导致crash的问题，详见：[Issue#IAL5KK](https://gitee.com/GreatSQL/GreatSQL/issues/IAL5KK)。
 - 合并了MySQL 8.0.38中的bug fix，对应bug id：[#36204344](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-38.html)、[#36356279](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-38.html)。
 - 合并了针对特定情况下执行`ALTER TABLE`可能导致丢失一行数据的问题，合并了Percona团队提交的bug fix，对应的bug id：[#113812](https://bugs.mysql.com/bug.php?id=113812)、[#115511](https://bugs.mysql.com/bug.php?id=115511)、[#115608](https://bugs.mysql.com/bug.php?id=115608)。
+- 修复了在关闭实例时个别表的统计信息并没有实际落盘问题，这可能会造成索引统计信息不准确导致原本正常的SQL执行非常慢。
 
 ## 注意事项
 
