@@ -71,7 +71,7 @@ greatsql> SHOW GLOBAL VARIABLES LIKE '%timeout%';
 greatsql> SET GLOBAL wait_timeout=600;
 Query OK, 0 rows affected (0.00 sec)
 ```
-将变量 *interactive_timeout* 的值设置为 600 既10分钟。
+将变量 *interactive_timeout* 的值设置为 600 即10分钟。
 ```sql
 greatsql> SET GLOBAL interactive_timeout=600;
 Query OK, 0 rows affected (0.00 sec)
