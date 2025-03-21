@@ -994,7 +994,7 @@ greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_OPTIONS FROM information_schem
 +--------------+------------+---------------------------------------------+
 | TABLE_SCHEMA | TABLE_NAME | CREATE_OPTIONS                              |
 +--------------+------------+---------------------------------------------+
-| test         | t1         | SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1" |
+| test         | t1         |                                             |
 | test         | t3         | SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1" |
 +--------------+------------+---------------------------------------------+
 :
