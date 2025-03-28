@@ -95,7 +95,7 @@ GreatSQL 8.0相对于GreatSQL 5.7有着众多优秀新特性，包括且不仅�
 
 在正式开始前，推荐使用 GreatSQL Shell 对旧的数据库实例进行一次全面的检查，确认是否存在升级后可能不兼容的地方。
 
-在这里下载 [GreatSQL Shell 最新版本](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)。
+在这里下载 [GreatSQL Shell 最新版本](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)。
 
 下载完后解压缩放在 */usr/local* 目录下。
 
@@ -163,7 +163,7 @@ docker exec -it greatsqlsh bash -c "mysqlsh -- util checkForServerUpgrade user:p
 
 ### 升级准备
 
-首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-26版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-26)，至于选择RPM还是二进制包看具体情况及个人喜好。
+首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-27版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-27)，至于选择RPM还是二进制包看具体情况及个人喜好。
 
 本文假定升级前后都是二进制包方式安装。
 
@@ -246,7 +246,7 @@ upgrade = FORCE
 [System] [MY-013381] [Server] Server upgrade from '50700' to '80032' started.
 [System] [MY-013381] [Server] Server upgrade from '50700' to '80032' completed.
 ...
-[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-26'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 26, Revision 444164cc78e.
+[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-27'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 27, Revision aa66a385910.
 ```
 
 是不是觉得有点惊喜，有点意外，怎么怎么简单，事实的确如此。
@@ -294,7 +294,7 @@ upgrade = FORCE
 [Note] [MY-013394] [Server] Checking 'sys' schema.
 [System] [MY-013381] [Server] Server upgrade from '50700' to '80032' completed.
 ...
-[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-26'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 26, Revision 444164cc78e.
+[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-27'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 27, Revision aa66a385910.
 ```
 这样就完成升级了，非常便捷省事。
 
@@ -313,11 +313,11 @@ GreatSQL 8.0.32相对于8.0.25版本，新增了Rapid引擎、更多SQL语法兼
 
 从GreatSQL 8.0.25升级到8.0.32版本过程较为简单：
 
-1. 下载最新[GreatSQL 8.0.32二进制包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)，并解压缩到相应目录下。
+1. 下载最新[GreatSQL 8.0.32二进制包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)，并解压缩到相应目录下。
 
 2. 在数据库维护期间关闭GreatSQL 8.0.25版本数据库。关闭前，先执行 `SET GLOBAL innodb_fast_shutdown = 0`，确保停机时得到一份完整、干净的数据文件。
 
-3. 修改my.cnf，调整basedir，指向新版本二进制包路径。可参考这份[my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)。
+3. 修改my.cnf，调整basedir，指向新版本二进制包路径。可参考这份[my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)。
 
 4. 重启新的GreatSQL 8.0.32版本数据库服务进程，即可实现原地升级（in-place upgrade），可以看到日志中有类似下面的内容：
 ```log

@@ -24,7 +24,7 @@
 
 这是`Xtrabackup`安装包[下载地址](https://www.percona.com/downloads/Percona-XtraBackup-LATEST/)，这是[文档地址](https://docs.percona.com/percona-xtrabackup)。
 
-本文环境选择的是 `Xtrabackup 8.0.32-26` 版本。
+本文环境选择的是 `Xtrabackup 8.0.32-27` 版本。
 
 可根据个人喜好选择RPM包或二进制包，安装步骤略过。
 

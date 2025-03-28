@@ -36,16 +36,16 @@ glibc 2.35
 ```
 如果您的glibc版本为2.28或更高版本，请选择带有"glibc2.28"标识的安装包；如果您的glibc版本为2.17，请选择带有"glibc2.17"标识的安装包。
 
-[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)下载最新的安装包，下载以下二进制包就可以：
+[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)下载最新的安装包，下载以下二进制包就可以：
 
-- GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+- GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64.tar.xz
 
 将下载的二进制包放到安装目录下，并解压缩：
 
 ```bash
 cd /usr/local
-curl -o GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz https://product.greatdb.com/GreatSQL-8.0.32-26/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
-tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+curl -o GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64.tar.xz https://product.greatdb.com/GreatSQL-8.0.32-27/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64.tar.xz
+tar xf GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
@@ -71,13 +71,13 @@ sudo apt-get install -y libaio-dev libnuma-dev libnuma1 net-tools openssl libssl
 - `perl-Data-Dumper`: 在 Ubuntu 中，对应的是 `perl` 包自带的，无需额外安装。
 - `perl-Digest-MD5`: 在 Ubuntu 中，对应的是 `libdigest-md5-perl`。
 
-进入到`GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin`目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其它信息则已经不缺必要软件包
+进入到`GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin`目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其它信息则已经不缺必要软件包
 
 ## 启动前准备
 
 ### 修改 my.cnf 配置文件
 
-请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
+请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
 ```ini
 [client]
@@ -90,7 +90,7 @@ no-auto-rehash
 user    = mysql
 port    = 3306
 server_id = 3306
-basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
+basedir = /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64
 datadir = /data/GreatSQL
 socket  = /data/GreatSQL/mysql.sock
 pid-file = mysql.pid
@@ -254,7 +254,7 @@ chmod -R 700 /data/GreatSQL
 把GreatSQL添加进环境变量
 
 ```bash
-echo 'export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
+echo 'export PATH=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
 source /etc/profile
 ```
 
@@ -295,7 +295,7 @@ A temporary password is generated for root@localhost: ji!pjndiw5sJ
 $ mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 11
-Server version: 8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
+Server version: 8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ...
@@ -311,7 +311,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 greatsql> status;
 ...
-Server version:         8.0.32-26
+Server version:         8.0.32-27
 ...
 ```
 

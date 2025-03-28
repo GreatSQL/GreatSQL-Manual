@@ -76,7 +76,7 @@ ldd (GNU libc) 2.38
 
 因为Arch Linux系统自带的ldd (GNU libc)版本是2.38，所以这里下载的GreatSQL二进制包选择
 
-- GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+- GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64.tar.xz
 
 Arch Linux系统缺少wget需要先安装wget
 
@@ -88,8 +88,8 @@ pacman -S wget
 
 ```bash
 cd /usr/local
-wget https://product.greatdb.com/GreatSQL-8.0.32-26/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
-tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
+wget https://product.greatdb.com/GreatSQL-8.0.32-27/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64.tar.xz
+tar xf GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 ### 运行环境配置
@@ -100,7 +100,7 @@ tar xf GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64.tar.xz
 
 Arch Linux用了一个工具 pacman 作为下载软件包
 
-进入到`GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin`目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其它信息则已经不缺必要软件包
+进入到`GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin`目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其它信息则已经不缺必要软件包
 
 这里缺失了两个依赖包
 
@@ -124,7 +124,7 @@ ldd mysqld mysql | grep "not found"
 
 ### 创建配置文件及新建用户与目录
 
-请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-26)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
+请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
 ```ini
 [client]
@@ -137,7 +137,7 @@ no-auto-rehash
 user    = mysql
 port    = 3306
 server_id = 3306
-basedir = /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64
+basedir = /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64
 datadir = /data/GreatSQL
 socket  = /data/GreatSQL/mysql.sock
 pid-file = mysql.pid
@@ -336,8 +336,8 @@ Group=mysql
 Type=notify
 TimeoutSec=0
 PermissionsStartOnly=true
-ExecStartPre=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
-ExecStart=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
+ExecStartPre=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
+ExecStart=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
 EnvironmentFile=-/etc/sysconfig/mysql
 Restart=on-failure
 RestartPreventExitStatus=1
@@ -354,7 +354,7 @@ PrivateTmp=false
 把GreatSQL添加进环境变量
 
 ```bash
-echo 'export PATH=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
+echo 'export PATH=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
 source ~/.bash_profile
 ```
 
@@ -373,16 +373,16 @@ $ systemctl status greatsql
 ...
 ● greatsql.service - GreatSQL Server
      Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; preset: disabled)
-     Active: active (running) since Fri 2024-07-08 10:30:29 CST; 4s ago
+     Active: active (running) since ...
        Docs: man:mysqld(8)
              http://dev.mysql.com/doc/refman/en/using-systemd.html
-    Process: 712571 ExecStartPre=/usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+    Process: 712571 ExecStartPre=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
    Main PID: 712708 (mysqld)
      Status: "Server is operational"
      Memory: 2.5G
         CPU: 4.549s
      CGroup: /system.slice/greatsql.service
-             └─712708 /usr/local/GreatSQL-8.0.32-26-Linux-glibc2.28-x86_64/bin/mysqld
+             └─712708 /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld
 
 systemd[1]: Starting GreatSQL Server...
 (mysqld)[712708]: greatsql.service: Referenced but unset environment variable evaluates to an empty string: MYSQLD_OPTS
@@ -406,7 +406,7 @@ $ mysql -uroot -p
 Enter password:
 
 # 进入数据库后可以看到版本
-Server version: 8.0.32-26
+Server version: 8.0.32-27
 ```
 
 首次登入立刻提醒该密码已过期，需要修改，执行 SQL 命令 `ALTER USER USER() IDENTIFIED BY` 修改即可：

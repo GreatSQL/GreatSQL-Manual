@@ -5,7 +5,7 @@
 
 ```bash
 $ systemctl status greatsql
-Active: active (running) since Wed 2024-07-08 16:17:45 CST; 4 days ago
+Active: active (running) since ...
 ```
 看到 `Active: active (running)` 关键字即可。
 
@@ -26,7 +26,7 @@ $ mysql -hlocalhost -P3306 -urepl -p'GreatSQL@2024'
 mysql: [Warning] Using a password on the command line interface can be insecure.
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 174
-Server version: 8.0.32-26 GreatSQL, Release 26, Revision 444164cc78e
+Server version: 8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
 
 Copyright (c) 2021-2023 GreatDB Software Co., Ltd
 Copyright (c) 2009-2023 Percona LLC and/or its affiliates
@@ -63,8 +63,8 @@ greatsql> SHOW VARIABLES LIKE '%version%';
 | replica_type_conversions                         |                                            |
 | slave_type_conversions                           |                                            |
 | tls_version                                      | TLSv1.2,TLSv1.3                            |
-| version                                          | 8.0.32-26                                  |
-| version_comment                                  | GreatSQL, Release 26, Revision 444164cc78e |
+| version                                          | 8.0.32-27                                  |
+| version_comment                                  | GreatSQL, Release 27, Revision aa66a385910 |
 | version_compile_machine                          | x86_64                                     |
 | version_compile_os                               | Linux                                      |
 | version_compile_zlib                             | 1.2.13                                     |

@@ -92,8 +92,8 @@ pt-heartbeat [OPTIONS] [DSN] --update|--monitor|--check|--stop
 
 | 数据库             | IP           | 端口号 | 角色   |
 | ------------------ | ------------ | ------ | ------ |
-| GreatSQL-8.0.32-26 | 192.168.6.55 | 3306   | Master |
-| GreatSQL-8.0.32-26 | 192.168.6.55 | 3307   | Slave  |
+| GreatSQL-8.0.32-27 | 192.168.6.55 | 3306   | Master |
+| GreatSQL-8.0.32-27 | 192.168.6.55 | 3307   | Slave  |
 
 首先需要在Master上添加表
 
@@ -280,7 +280,7 @@ $ pt-slave-find h=192.168.6.55,u=root --ask-pass
 ```bash
 $ pt-slave-find h=192.168.6.55,u=root --ask-pass
 192.168.6.55
-Version         8.0.32-26
+Version         8.0.32-27
 Server ID       103306
 Uptime          20:38:01 (started 2024-04-22T14:09:23)
 Replication     Is not a slave, has 1 slaves connected, is not read_only
@@ -291,7 +291,7 @@ Slave mode      STRICT
 Auto-increment  increment 1, offset 1
 InnoDB version  8.0.32-8.0.32
 +- 192.168.6.55:3307
-   Version         8.0.32-26
+   Version         8.0.32-27
    Server ID       103307
    Uptime          20:35:59 (started 2024-04-22T14:12:02)
    Replication     Is a slave, has 0 slaves connected, is not read_only
