@@ -134,7 +134,53 @@ EXPLAIN FORMAT=TREE SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_thres
 +------------------------------------------+
 ```
 
-对于上述查询，可通过打开配置参数 `turbo_enable_warning=ON`，然后执行`SHOW WARNINGS`查看详细的不支持的原因。
+对于上述查询，可通过打开配置参数 `turbo_enable_warning=ON`，然后执行`SHOW WARNINGS`查看详细的不支持的原因。例如：
+
+```sql
+greatsql> EXPLAIN FORMAT=TREE SELECT /*+ SET_VAR(turbo_enable=FORCED) SET_VAR(turbo_cost_threshold=0) */ * FROM t1 WHERE c1 LIKE 'abc'\G
+ERROR 8700 (HY000): turbo_enable is FORCED but query could not be executed in Turbo
+
+greatsql> SET turbo_enable_warning=ON;
+Query OK, 0 rows affected (0.00 sec)
+
+greatsql> SHOW WARNINGS;
++---------+------+-----------------------------------------------------------------------------------------------------+
+| Level   | Code | Message                                                                                             |
++---------+------+-----------------------------------------------------------------------------------------------------+
+| Warning | 8700 | : {"exception_type":"INTERNAL","exception_message":"unsupport collation with attribute: PAD_SPACE"} |
+| Error   | 8700 | turbo_enable is FORCED but query could not be executed in Turbo                                     |
++---------+------+-----------------------------------------------------------------------------------------------------+
+2 rows in set (0.00 sec)
+```
+
+可以看到这是因为使用了不支持的校验集，经过排查，最后发现是连接字符集设置错误：
+
+```sql
+greatsql> \s
+...
+Server characterset:    utf8mb4
+Db     characterset:    utf8mb4
+Client characterset:    latin1
+Conn.  characterset:    latin1
+...
+```
+
+执行 `SET NAMES utf8mb4` 修改连接字符集，再次查看执行计划就正常了：
+
+```sql
+greatsql> SET NAMES utf8mb4;
+Query OK, 0 rows affected (0.00 sec)
+
+greatsql> EXPLAIN FORMAT=TREE SELECT /*+ SET_VAR(turbo_enable=FORCED) SET_VAR(turbo_cost_threshold=0) */ * FROM t1 WHERE c1 LIKE 'abc'\G
+*************************** 1. row ***************************
+EXPLAIN: -> Turbo scan
+    -> projection: (t1.id, t1.c1, t1.c2)  (cost=13829.9, row=19757)
+        -> Filter: ilike_escape(t1.c1, 'abc', '\')  (cost=11854.2, row=19757)
+            -> Table scan on t1, column(c1,id,c2)  (cost=9878.5, row=98785)
+
+
+1 row in set (0.00 sec)
+```
 
 ## Turbo引擎使用说明
 
