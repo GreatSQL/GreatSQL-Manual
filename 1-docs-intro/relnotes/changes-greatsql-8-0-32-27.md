@@ -372,7 +372,7 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |Per-Client 性能指标| :heavy_check_mark: | ❌ |
 |Per-Thread 性能指标| :heavy_check_mark: | ❌ |
 |全局查询相应耗时统计| :heavy_check_mark: | ❌ |
-|SHOW INNODB ENGINE STATUS 增强| :heavy_check_mark: | ❌ |
+|SHOW ENGINE INNODB STATUS 增强| :heavy_check_mark: | ❌ |
 |回滚段信息增强| :heavy_check_mark: | ❌ |
 |临时表信息增强| :heavy_check_mark: | ❌ |
 |用户统计信息增强| :heavy_check_mark: | ❌ |

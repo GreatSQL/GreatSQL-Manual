@@ -109,7 +109,7 @@ GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引
 |Per-Client性能指标| :heavy_check_mark: | ❌ |
 |Per-Thread性能指标| :heavy_check_mark: | ❌ |
 |全局查询相应耗时统计| :heavy_check_mark: | ❌ |
-|SHOW INNODB ENGINE STATUS增强| :heavy_check_mark: | ❌ |
+|SHOW ENGINE INNODB STATUS 增强| :heavy_check_mark: | ❌ |
 |回滚段信息增强| :heavy_check_mark: | ❌ |
 |临时表信息增强| :heavy_check_mark: | ❌ |
 |用户统计信息增强| :heavy_check_mark: | ❌ |
