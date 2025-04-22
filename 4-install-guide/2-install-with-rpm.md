@@ -267,7 +267,7 @@ chmod -R 700 /data/GreatSQL
 
 ##  启动GreatSQL
 
-启动GreatSQL服务前，先修改systemd文件 `vim /lib/systemd/system/mysqld.service`，在 *[Server]* 区间增加下面几行内容，调高一些limit上限，避免出现文件数、线程数不够用的告警。
+启动GreatSQL服务前，先修改systemd文件 `vim /lib/systemd/system/mysqld.service`，在 *[Service]* 区间增加下面几行内容，调高一些limit上限，避免出现文件数、线程数不够用的告警。
 
 ```ini
 # some limits
