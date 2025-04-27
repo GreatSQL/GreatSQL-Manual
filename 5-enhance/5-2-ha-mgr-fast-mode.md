@@ -40,6 +40,8 @@ MGR的事务冲突检测机制需要在各个MGR节点保存一个认证库，�
 2. **所有节点都得设置必须相同**，否则无法启动。
 
 3. 从MySQL 8.0.27起新增**single leader**模式（对应 `group_replication_paxos_single_leader` 选项），建议不要启用该特性，因为启用该特性后可能会导致MGR集群整体崩溃风险。在GreatSQL针对MGR所做的优化工作已包含这方面的优化工作。 
+
+4. 在切换主节点时（不管是手动切换，还是故障时自动切换），如果新的主节点设置`group_replication_consistency=EVENTUAL`，但未开启快速单主模式的情况下，新的主节点可以立即提供读写服务，但部分写事务可能会因延时导致冲突回滚；在开启快速单主模式时，新的主节点需要等待事务回放完成之后，才能提供读写服务，这之前执行DML等请求会被阻塞，状态显示为`hook transaction begin`，在事务回放完成后，才能正常提供服务，这类似于设置`group_replication_consistency=BEFORE_ON_PRIMARY_FAILOVER`时的行为。
 :::
 
 
