@@ -19,6 +19,18 @@ GreatSQL中增加一个新的工作模式：**单主快速模式**，在这个�
 | Default    | 0 |
 | Description    | 设置是否启用快速单主模式，强烈建议启用（即设置为1）。|
 
+
+::: tip 优化逻辑解读
+
+MGR的事务冲突检测机制需要在各个MGR节点保存一个认证库，认证库的大小本身依赖于主从节点间的复制延迟，如果延迟较大，这个认证库就会变大，并占用大量内存。
+
+快速单主模式只能应用在单主模式下。
+
+由于单主模式下，理论上不存在事务冲突，因此可以不再需要进行冲突检测，也就不需要在内存中存储相应的事务认证库，可以降低内存资源的消耗。
+
+同时快速单主模式下，也能减少事务冲突检测本身的时间开销。
+:::
+
 在快速单主模式下，GreatSQL 还通过优化了生成 [Binary Log](../2-about-greatsql/4-3-greatsql-binary-log.md) 中的 [last_committed](https://dev.mysql.com/doc/refman/8.0/en/replication-options-binary-log.html#sysvar_binlog_transaction_dependency_tracking) 计算逻辑，可以帮助提升在从节点上的 [Relay Log](../2-about-greatsql/4-4-greatsql-relay-log.md) applier 线程整体处理流程，确保 applier 线程能将 Relay Log 及时刷新落盘，降低因 Relay Log 落盘不及时导致的内存增长的风险。
 
 ::: warning 提醒
