@@ -28,8 +28,9 @@ WantedBy=multi-user.target
 [Service]
 User=mysql
 Group=mysql
-Type=notify
-TimeoutSec=0
+Type=forking
+NotifyAccess=none
+TimeoutSec=10
 PermissionsStartOnly=true
 
 #for single instance

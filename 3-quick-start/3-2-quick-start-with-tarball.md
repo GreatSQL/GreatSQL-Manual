@@ -97,10 +97,11 @@ TasksAccounting=false
 User=mysql
 Group=mysql
 #如果是GreatSQL 5.7版本，此处需要改成simple模式，否则可能服务启用异常
-#如果是GreatSQL 8.0版本则可以使用notify模式
+#如果是GreatSQL 8.0版本则可以使用notify/forking模式
 #Type=simple
-Type=notify
-TimeoutSec=0
+Type=forking
+NotifyAccess=none
+TimeoutSec=10
 PermissionsStartOnly=true
 ExecStartPre=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd
 ExecStart=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64-minimal/bin/mysqld --defaults-file=/etc/my.cnf $MYSQLD_OPTS

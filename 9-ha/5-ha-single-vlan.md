@@ -113,8 +113,9 @@ WantedBy=multi-user.target
 [Service]
 User=mysql
 Group=mysql
-Type=notify
-TimeoutSec=0
+Type=forking
+NotifyAccess=none
+TimeoutSec=10
 PermissionsStartOnly=true
 ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
 ExecStart=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS

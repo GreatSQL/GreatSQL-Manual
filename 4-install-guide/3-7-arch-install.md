@@ -246,6 +246,7 @@ innodb_flush_log_at_trx_commit = 1
 innodb_log_buffer_size = 32M
 innodb_redo_log_capacity = 6G
 innodb_doublewrite_files = 2
+innodb_doublewrite_pages = 128
 innodb_max_undo_log_size = 4G
 innodb_io_capacity = 4000
 innodb_io_capacity_max = 8000
@@ -331,10 +332,11 @@ TasksAccounting=false
 User=mysql
 Group=mysql
 #如果是GreatSQL 5.7版本，此处需要改成simple模式，否则可能服务启用异常
-#如果是GreatSQL 8.0版本则可以使用notify模式
+#如果是GreatSQL 8.0版本则可以使用notify/forking模式
 #Type=simple
-Type=notify
-TimeoutSec=0
+Type=forking
+NotifyAccess=none
+TimeoutSec=10
 PermissionsStartOnly=true
 ExecStartPre=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
 ExecStart=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
