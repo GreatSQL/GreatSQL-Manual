@@ -436,6 +436,7 @@ innodb_use_native_aio=1
 innodb_spin_wait_delay=20
 #innodb_sync_spin_loops=25
 innodb_flush_method=O_DIRECT
+innodb_use_fdatasync = ON
 innodb_io_capacity=30000
 innodb_io_capacity_max=40000
 innodb_lru_scan_depth=9000
