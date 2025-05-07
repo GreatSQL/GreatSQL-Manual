@@ -14,7 +14,7 @@ GreatSQL Docker 镜像仓库主页：[https://hub.docker.com/repository/docker/g
 本文使用的 Docker 版本是 20.10.10
 
 ```bash
-$ docker --version
+docker --version
 
 ...
 Docker version 20.10.10, build b485636
@@ -31,13 +31,13 @@ systemctl start docker
 ### 2. 搜索、拉取GreatSQL镜像
 
 ```bash
-$ docker search greatsql
+docker search greatsql
 
 ...
 NAME                DESCRIPTION   STARS     OFFICIAL   AUTOMATED
 greatsql/greatsql                 4
 
-$ docker pull greatsql
+docker pull greatsql
 
 ...
 Using default tag: latest
@@ -61,7 +61,7 @@ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
 容器中会安装并启动GreatSQL数据库
 
 ```bash
-$ docker run -d --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EMPTY_PASSWORD=1 greatsql/greatsql
+docker run -d --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EMPTY_PASSWORD=1 greatsql/greatsql
 
 ...
 4f351e22cea990b177589970ac5374f4b3366d2c0f69e923475f82c51da4b934
@@ -71,7 +71,7 @@ $ docker run -d --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EMPTY_PASSWOR
 确认容器状态：
 
 ```bash
-$ docker ps -a | grep greatsql
+docker ps -a | grep greatsql
 
 ...
 4f351e22cea9   greatsql/greatsql     "/docker-entrypoint.…"   About a minute ago   Up About a minute          3306/tcp, 33060-33061/tcp   greatsql
@@ -79,10 +79,40 @@ $ docker ps -a | grep greatsql
 ```
 看到容器状态是Up的，表示已正常启动了。
 
+个别时候，可能会发生Docker容器创建异常，例如下面这样
+
+```bash
+docker log greatsql
+...
+Could not find OpenSSL on the system
+MySQL init process in progress...
+MySQL init process failed.
+...
+```
+
+这种情况下，请先检查是否关闭了 SELinux
+
+```bash
+sestatus
+
+...
+SELinux status:                 disabled
+```
+
+如果没有就先关闭 SELinux，参考：[关闭防火墙及selinux](../4-install-guide/1-install-prepare.html#关闭防火墙及selinux)。
+
+如果已经关闭 SELinux 还是会出现上述问题的话，可以在创建 Docker 容器时加上 `--privileged` 参数，例如下面这样
+
+```bash
+docker run -d --privileged --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EMPTY_PASSWORD=1 greatsql/greatsql
+```
+
+这样通常就可以解决上述问题。
+
 ### 4. 进入容器
 
 ```bash
-$ docker exec -it greatsql bash
+docker exec -it greatsql bash
 
 ...
 [root@greatsql /]# cd /data/GreatSQL/

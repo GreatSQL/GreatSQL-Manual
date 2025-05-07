@@ -6,14 +6,18 @@
 本文使用的 Docker 版本是 20.10.10
 
 ```bash
-$ docker --version
+docker --version
+
+...
 Docker version 20.10.10, build b485636
 ```
 
 docker-compose 版本是 2.15.0
 
 ```bash
-$ docker-compose --version
+docker-compose --version
+
+...
 Docker Compose version v2.15.0 
 ```
 
@@ -38,7 +42,7 @@ docker pull greatsql/greatsql
 
 ::: details 查看运行结果
 ```bash
-$ docker pull greatsql/greatsql
+docker pull greatsql/greatsql
 
 ...
 Using default tag: latest
@@ -66,7 +70,8 @@ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql
 检查是否成功拉取
 
 ```bash
-$ docker images
+docker images
+
 REPOSITORY                    TAG                 IMAGE ID            CREATED             SIZE
 docker.io/greatsql/greatsql   latest              a930afc72d88        8 weeks ago         923 MB
 ```
@@ -82,7 +87,7 @@ docker run -d --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EMPTY_PASSWORD=
 
 确认容器状态：
 ```bash
-$ docker ps -a | grep greatsql
+docker ps -a | grep greatsql
 
 ...
 4f351e22cea9   greatsql/greatsql     "/docker-entrypoint.…"   About a minute ago   Up About a minute          3306/tcp, 33060-33061/tcp   greatsql
@@ -90,11 +95,43 @@ $ docker ps -a | grep greatsql
 ```
 看到容器状态是Up的，表示已正常启动了。
 
+个别时候，可能会发生Docker容器创建异常，例如下面这样
+
+```bash
+docker log greatsql
+...
+Could not find OpenSSL on the system
+MySQL init process in progress...
+MySQL init process failed.
+...
+```
+
+这种情况下，请先检查是否关闭了 SELinux
+
+```bash
+sestatus
+
+...
+SELinux status:                 disabled
+```
+
+如果没有就先关闭 SELinux，参考：[关闭防火墙及selinux](../4-install-guide/1-install-prepare.html#关闭防火墙及selinux)。
+
+如果已经关闭 SELinux 还是会出现上述问题的话，可以在创建 Docker 容器时加上 `--privileged` 参数，例如下面这样
+
+```bash
+docker run -d --privileged --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EMPTY_PASSWORD=1 greatsql/greatsql
+```
+
+这样通常就可以解决上述问题。
+
 ###  容器管理
 
 进入容器查看
 ```bash
-$ docker exec -it greatsql /bin/bash
+docker exec -it greatsql /bin/bash
+
+...
 [root@greatsql /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 12
@@ -114,9 +151,11 @@ Threads: 2  Questions: 18  Slow queries: 0  Opens: 119  Flush tables: 3  Open ta
 
 先用yum安装docker-compose，并确认版本号
 ```bash
-$ yum install -y docker-compose
+yum install -y docker-compose
 
-$ docker-compose --version
+docker-compose --version
+
+...
 docker-compose version 1.29.2, build 5becea4c
 ```
 
@@ -235,7 +274,9 @@ mgr4   /docker-entrypoint.sh mysqld   Up      3306/tcp, 33060/tcp, 33061/tcp
 
 ::: details 查看运行结果
 ```
-$ docker exec -it mgr2 bash
+docker exec -it mgr2 bash
+
+...
 [root@mgr2 /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 30
@@ -351,8 +392,10 @@ docker-compse -f /data/docker/mgr-multi-primary.yml up -d
 进入第一个容器，确认实例启动并成为MGR的Primary节点：
 
 ```bash
-$ docker exec -it mgr2 bash
-$ mysql
+docker exec -it mgr2 bash
+
+...
+mysql
 
 ...
 [root@GreatSQL][(none)]> SELECT * FROM performance_schema.replication_group_members;
