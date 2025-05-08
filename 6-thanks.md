@@ -137,7 +137,7 @@
 1. [lingoYS](https://greatsql.cn/home.php?mod=space&uid=1753&do=profile)
 1. [sunli8523](https://greatsql.cn/home.php?mod=space&uid=234&do=profile&from=space)
 1. [iwordz](https://github.com/iwordz)
-1. [张琦琛](https://gitee.com/striver619)
+1. [striver619](https://gitee.com/striver619)
 
 **扫码关注微信公众号**
 
