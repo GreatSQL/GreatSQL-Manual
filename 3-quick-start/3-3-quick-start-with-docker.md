@@ -109,6 +109,8 @@ docker run -d --privileged --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EM
 
 这样通常就可以解决上述问题。
 
+这种问题通常是因为安装的Docker版本号较低或特殊版本存在问题导致的，升级版本一般也能解决问题。经测试，使用较早的Docker版本如<=17.12.1的版本就有该问题，个别在Kubernetes环境中安装的Docker可能也有问题，建议规避。
+
 ### 4. 进入容器
 
 ```bash
