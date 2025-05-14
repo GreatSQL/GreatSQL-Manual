@@ -113,7 +113,7 @@ WantedBy=multi-user.target
 [Service]
 User=mysql
 Group=mysql
-Type=forking
+Type=notify
 NotifyAccess=none
 TimeoutSec=10
 PermissionsStartOnly=true

@@ -264,9 +264,10 @@ TasksAccounting=false
 User=mysql
 Group=mysql
 #如果是GreatSQL 5.7版本，此处需要改成simple模式，否则可能服务启用异常
-#如果是GreatSQL 8.0版本则可以使用notify/forking模式
+#如果是GreatSQL 8.0版本则可以使用notify
+#如果启动时my.cnf中增加daemonize=1参数（以daemon方式启动GreatSQL），则可以采用forking模式
 #Type=simple
-Type=forking
+Type=notify
 NotifyAccess=none
 TimeoutSec=10
 PermissionsStartOnly=true
