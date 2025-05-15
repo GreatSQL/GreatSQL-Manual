@@ -29,7 +29,6 @@ WantedBy=multi-user.target
 User=mysql
 Group=mysql
 Type=notify
-NotifyAccess=none
 TimeoutSec=10
 PermissionsStartOnly=true
 
