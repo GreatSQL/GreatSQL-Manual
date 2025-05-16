@@ -53,7 +53,7 @@ greatsql> SHOW VARIABLES LIKE 'character%';
 对应的语句：
 
 ```sql
-CREATE/ALTER database_name 数据库名 [CHARACTER SET 字符集名称][COLLATE 比较规则名称] ;
+CREATE/ALTER database 数据库名 [CHARACTER SET 字符集名称][COLLATE 比较规则名称] ;
 ```
 
 例如：

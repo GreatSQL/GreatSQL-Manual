@@ -44,7 +44,7 @@ SET GLOBAL general_log_file = '/data/GreatSQL/general.log';
 可以使用以下命令查看通用日志的当前状态：
 
 ```sql
-greatsql> SHOW GLBOAL VARIABLES LIKE 'general_log%';
+greatsql> SHOW GLOBAL VARIABLES LIKE 'general_log%';
 +------------------+----------------------------+
 | Variable_name    | Value                      |
 +------------------+----------------------------+

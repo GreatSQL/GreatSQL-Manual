@@ -6,6 +6,7 @@
 ## REPLACE INTO 语句
 可以理解为是`INSTER`的增强版，如果存在则更新，如果不存在则插入。
 `REPLACE INTO` 语句语法格式如下：
+
 ```sql
 REPLACE INTO table_name VALUES(value_list);
 ```
@@ -23,7 +24,7 @@ Query OK, 0 rows affected (0.03 sec)
 ```
 插入一条数据
 ```sql
-greatsql> REPLACE INTO t1 VALUES (1, 'Old', '2024-05-8 13:58:00');
+greatsql> INSERT INTO t1 VALUES (1, 'Old', '2024-05-8 13:58:00');
 Query OK, 1 row affected (0.05 sec)
 ```
 此时插入以下数据，会更新id为1的数据
