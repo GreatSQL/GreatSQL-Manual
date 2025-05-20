@@ -10,7 +10,8 @@ GreatSQL 8.0相对于GreatSQL 5.7有着众多优秀新特性，包括且不仅�
 | 特性 |  GreatSQL 8.0 |GreatSQL/MySQL 5.7 |
 | --- | ---|---|
 |支持龙芯架构| :heavy_check_mark: | ❌ |
-|AP引擎| :heavy_check_mark: | 仅云上HeatWave |
+|Rapid 引擎| :heavy_check_mark: | 仅云上HeatWave |
+|Turbo 引擎| :heavy_check_mark: | ❌ |
 |并行LOAD DATA| :heavy_check_mark: | ❌ |
 |InnoDB事务ReadView无锁优化| :heavy_check_mark: | ❌ |
 |InnoDB事务大锁拆分优化| :heavy_check_mark: | ❌ |
@@ -67,7 +68,7 @@ GreatSQL 8.0相对于GreatSQL 5.7有着众多优秀新特性，包括且不仅�
 |数据脱敏| :heavy_check_mark: | ❌ |
 |最后登录记录| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
-|审计日志入库| :heavy_check_mark: | ❌ |
+|审计| :heavy_check_mark: | ❌ |
 
 ## 升级前准备
 

@@ -80,9 +80,11 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 |地理信息（GIS）| :heavy_check_mark: | :heavy_check_mark: |
 |基于 GTID 的复制| :heavy_check_mark: | :heavy_check_mark: |
 |组复制（MGR）| :heavy_check_mark: | :heavy_check_mark: |
-|MyRocks 引擎| :heavy_check_mark: | |
+|MyRocks 引擎| :heavy_check_mark: | ❌ |
+|支持龙芯架构| :heavy_check_mark: | ❌ |
 | **2. 性能提升扩展** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
-|AP 引擎| :heavy_check_mark: | 仅云上HeatWave |
+|Rapid 引擎| :heavy_check_mark: | 仅云上HeatWave |
+|Turbo 引擎| :heavy_check_mark: | ❌ |
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
 |非阻塞式 DDL| :heavy_check_mark: | ❌ |
 |无主键表导入提速 | :heavy_check_mark: | ❌ |
