@@ -65,9 +65,9 @@ yum install jemalloc jemalloc-devel -y
 
 ## 启动前准备
 
-### 修改 /etc/my.cnf 配置文件
+### 创建或修改 /etc/my.cnf 配置文件
 
-请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
+如果 `/etc/my.cnf` 配置文件不存在就新建一个，文件内容请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
 ```ini
 [client]
@@ -241,32 +241,150 @@ chown -R mysql:mysql /data/GreatSQL
 chmod -R 700 /data/GreatSQL
 ```
 
+### 增加GreatSQL系统服务
+
+推荐采用systemd来管理GreatSQL服务，执行 `vim /etc/systemd/system/greatsql.service` 命令，添加下面的内容：
+
+```ini
+[Unit]
+Description=GreatSQL Server
+Documentation=man:mysqld(8)
+Documentation=http://dev.mysql.com/doc/refman/en/using-systemd.html
+After=network.target
+After=syslog.target
+[Install]
+WantedBy=multi-user.target
+[Service]
+
+# some limits
+# file size
+LimitFSIZE=infinity
+# cpu time
+LimitCPU=infinity
+# virtual memory size
+LimitAS=infinity
+# open files
+LimitNOFILE=65535
+# processes/threads
+LimitNPROC=65535
+# locked memory
+LimitMEMLOCK=infinity
+# total threads (user+kernel)
+TasksMax=infinity
+TasksAccounting=false
+
+User=mysql
+Group=mysql
+#如果是GreatSQL 5.7版本，此处需要改成simple模式，否则可能服务启用异常
+#如果是GreatSQL 8.0版本则可以使用notify
+#如果启动时my.cnf中增加daemonize=1参数（以daemon方式启动GreatSQL），则可以采用forking模式
+#Type=simple
+Type=notify
+TimeoutSec=10
+PermissionsStartOnly=true
+ExecStartPre=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
+ExecStart=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
+EnvironmentFile=-/etc/sysconfig/mysql
+Restart=on-failure
+RestartPreventExitStatus=1
+Environment=MYSQLD_PARENT_PID=1
+PrivateTmp=false
+```
+
+务必确认文件中 `ExecStartPre` 和 `ExecStart` 两个参数指定的目录及文件名是否正确。
+
+**提示**：如果不是安装到默认的 `/usr/local/` 目录下，请编辑 `bin/mysqld_pre_systemd` 脚本，修改脚本中几处涉及 GreatSQL 安装路径的地方。
+
+执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
+```bash
+systemctl daemon-reload
+```
+
+这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
+
 ## 启动GreatSQL
 
-把GreatSQL添加进环境变量
-
+执行下面的命令启动GreatSQL服务
 ```bash
-echo 'export PATH=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
-source /etc/profile
+systemctl start greatsql
 ```
 
-初始化GreatSQL
+如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
 
+::: details 查看运行结果
 ```bash
-mysqld --defaults-file=/etc/my.cnf --initialize-insecure --user=mysql
+$ systemctl status greatsql
+
+...
+● greatsql.service - GreatSQL Server
+   Loaded: loaded (/etc/systemd/system/greatsql.service; disabled; vendor preset: disabled)
+   Active: failed (Result: exit-code) since ...
+     Docs: man:mysqld(8)
+           http://dev.mysql.com/doc/refman/en/using-systemd.html
+  Process: 1258165 ExecStart=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS (code=exited, status=1/FAILURE)
+  Process: 1257969 ExecStartPre=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+ Main PID: 1258165 (code=exited, status=1/FAILURE)
+   Status: "Server shutdown complete"
+
+systemd[1]: Starting GreatSQL Server...
+mysqld_pre_systemd[1257969]: mktemp: failed to create file via template ‘/var/lib/mysql-files/install-validate-password-plugin.XXXXXX.sql’: No such file or directory
+mysqld_pre_systemd[1257969]: chmod: cannot access '': No such file or directory
+mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 43: : No such file or directory
+mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 44: $initfile: ambiguous redirect
+systemd[1]: greatsql.service: Main process exited, code=exited, status=1/FAILURE
+systemd[1]: greatsql.service: Failed with result 'exit-code'.
+systemd[1]: Failed to start GreatSQL Server.
+```
+:::
+
+只需手动创建 `/var/lib/mysql-files` 目录，再次启动GreatSQL服务即可：
+```bash
+mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
+systemctl start greatsql
 ```
 
-启动GreatSQL
-
+检查服务是否已启动，以及进程状态：
 ```bash
-mysqld --defaults-file=/etc/my.cnf &
+$ systemctl status greatsql
+
+...
+● greatsql.service - GreatSQL Server
+   Loaded: loaded (/etc/systemd/system/greatsql.service; disabled; vendor preset: disabled)
+   Active: active (running) since Tue 2024-07-12 10:08:06 CST; 6min ago
+     Docs: man:mysqld(8)
+           http://dev.mysql.com/doc/refman/en/using-systemd.html
+  Process: 60129 ExecStartPre=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+ Main PID: 60231 (mysqld)
+   Status: "Server is operational"
+    Tasks: 49 (limit: 149064)
+   Memory: 5.6G
+   CGroup: /system.slice/greatsql.service
+           └─60231 /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld
+
+systemd[1]: Starting GreatSQL Server...
+systemd[1]: Started GreatSQL Server.
+
+$ ps -ef | grep mysqld
+
+...
+mysql      60231       1  2 10:08 ?        00:00:10 /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld
+
+$ ss -lntp | grep mysqld
+
+...
+LISTEN 0      70                 *:33060            *:*    users:(("mysqld",pid=60231,fd=38))
+LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=60231,fd=43))
+
+# 查看数据库文件
+$ ls /data/GreatSQL
+
+...
+ auto.cnf        ca-key.pem        error.log           '#ib_archive'    '#innodb_redo'       mysql.ibd         performance_schema   server-key.pem   undo_002
+ binlog.000001   ca.pem           '#file_purge'         ib_buffer_pool   innodb_status.258   mysql.pid         private_key.pem      slow.log
+ binlog.000002   client-cert.pem  '#ib_16384_0.dblwr'   ibdata1         '#innodb_temp'       mysql.sock        public_key.pem       sys
+ binlog.index    client-key.pem   '#ib_16384_1.dblwr'   ibtmp1           mysql               mysql.sock.lock   server-cert.pem      undo_001
 ```
-
-因为本文示例环境在Docker中，所以不采用systemd管理GreatSQL服务，但无论是RPM、二进制包还是Ansible等何种方式安装GreatSQL，都建议采用systemd来管理GreatSQL服务。在Docker容器环境中，无需利用systemd来管理GreatSQL，直接整个容器启停即可。
-
-参考文档：[二进制包安装](./3-install-with-tarball.md)。
-
-安装完成后加入systemd服务方法可以参考这篇文章：[利用systemd管理GreatSQL](./8-greatsql-with-systemd.md)。
+可以看到，GreatSQL服务已经正常启动了。
 
 ## 连接登入GreatSQL
 
@@ -315,7 +433,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 greatsql> status;
 ...
-Server version:         8.0.32-27
+Server version:         8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
 ...
 ```
 

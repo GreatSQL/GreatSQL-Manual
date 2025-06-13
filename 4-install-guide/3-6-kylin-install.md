@@ -72,9 +72,9 @@ source ~/.bash_profile
 
 ##  安装GreatSQL
 
-###  修改my.cnf
+### 创建或修改 /etc/my.cnf 配置文件
 
-请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
+如果 `/etc/my.cnf` 配置文件不存在就新建一个，文件内容请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
 ```ini
 [client]
@@ -247,8 +247,8 @@ chown -R mysql:mysql /data/GreatSQL
 chmod -R 700 /data/GreatSQL
 ```
 
-###  配置GreatSQL systemd服务
-推荐采用systemd来管理GreatSQL服务，执行 `vim /lib/systemd/system/greatsql.service` 命令，添加下面的内容：
+### 配置GreatSQL systemd服务
+推荐采用systemd来管理GreatSQL服务，执行 `vim /etc/systemd/system/greatsql.service` 命令，添加下面的内容：
 ```ini
 [Unit]
 Description=GreatSQL Server
@@ -306,7 +306,7 @@ systemctl daemon-reload
 
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
 
-##  启动GreatSQL
+## 启动GreatSQL
 执行下面的命令启动GreatSQL服务
 ```bash
 systemctl start greatsql
@@ -319,7 +319,7 @@ systemctl start greatsql
 $ systemctl status greatsql
 
 ● greatsql.service - GreatSQL Server
-   Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; vendor preset: disabled)
+   Loaded: loaded (/etc/systemd/system/greatsql.service; disabled; vendor preset: disabled)
    Active: failed (Result: exit-code) since ...
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
@@ -350,7 +350,7 @@ systemctl start greatsql
 ```bash
 $ systemctl status greatsql
 ● greatsql.service - GreatSQL Server
-   Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; vendor preset: disabled)
+   Loaded: loaded (/etc/systemd/system/greatsql.service; disabled; vendor preset: disabled)
    Active: active (running) since ...
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
@@ -375,8 +375,7 @@ LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=
 
 可以看到，GreatSQL服务已经正常启动了。
 
-
-##  连接登入GreatSQL
+## 连接登入GreatSQL
 在上面进行GreatSQL初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
 ```bash
 $ grep -i root /data/GreatSQL/error.log
@@ -408,28 +407,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 greatsql> status;
 ...
-mysql  Ver 8.0.32-27 for Linux on x86_64 (GreatSQL, Release 27, Revision aa66a385910)
-
-Connection id:          8
-Current database:
-Current user:           root@localhost
-SSL:                    Not in use
-Current pager:          stdout
-Using outfile:          ''
-Using delimiter:        ;
 Server version:         8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
-Protocol version:       10
-Connection:             Localhost via UNIX socket
-Server characterset:    utf8mb4
-Db     characterset:    utf8mb4
-Client characterset:    utf8mb4
-Conn.  characterset:    utf8mb4
-UNIX socket:            /data/GreatSQL/mysql.sock
-Binary data as:         Hexadecimal
-Uptime:                 20 min 8 sec
-
-Threads: 2  Questions: 19  Slow queries: 0  Opens: 137  Flush tables: 3  Open tables: 53  Queries per second avg: 0.020
---------------
 ```
 GreatSQL数据库安装并初始化完毕。
 

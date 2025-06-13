@@ -96,9 +96,9 @@ Updating / installing...
 
 ##  启动前准备
 
-### 修改 /etc/my.cnf 配置文件
+### 创建或修改 /etc/my.cnf 配置文件
 
-请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
+如果 `/etc/my.cnf` 配置文件不存在就新建一个，文件内容请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 ```ini
 #my.cnf
 [client]
@@ -269,7 +269,7 @@ chmod -R 700 /data/GreatSQL
 
 ##  启动GreatSQL
 
-启动GreatSQL服务前，先修改systemd文件 `vim /lib/systemd/system/mysqld.service`，在 *[Service]* 区间增加下面几行内容，调高一些limit上限，避免出现文件数、线程数不够用的告警。
+启动GreatSQL服务前，先创建或修改systemd文件 `vim /lib/systemd/system/mysqld.service`，在 *[Service]* 区间增加下面几行内容，调高一些limit上限，避免出现文件数、线程数不够用的告警。
 
 ```ini
 # some limits

@@ -55,9 +55,9 @@ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools
 
 ## 启动前准备
 
-###  修改 /etc/my.cnf 配置文件
+###  创建或修改 /etc/my.cnf 配置文件
 
-请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
+如果 `/etc/my.cnf` 配置文件不存在就新建一个，文件内容请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
 ```ini
 [client]
@@ -231,7 +231,7 @@ chmod -R 700 /data/GreatSQL
 
 ###  增加GreatSQL系统服务
 
-推荐采用systemd来管理GreatSQL服务，执行 `vim /lib/systemd/system/greatsql.service` 命令，添加下面的内容：
+推荐采用systemd来管理GreatSQL服务，执行 `vim /etc/systemd/system/greatsql.service` 命令，添加下面的内容：
 
 ```ini
 [Unit]
@@ -305,7 +305,7 @@ $ systemctl status greatsql
 
 ...
 ● greatsql.service - GreatSQL Server
-   Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; vendor preset: disabled)
+   Loaded: loaded (/etc/systemd/system/greatsql.service; disabled; vendor preset: disabled)
    Active: failed (Result: exit-code) since ...
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
@@ -337,7 +337,7 @@ $ systemctl status greatsql
 
 ...
 ● greatsql.service - GreatSQL Server
-   Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; vendor preset: disabled)
+   Loaded: loaded (/etc/systemd/system/greatsql.service; disabled; vendor preset: disabled)
    Active: active (running) since Tue 2024-07-12 10:08:06 CST; 6min ago
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
@@ -373,7 +373,6 @@ $ ls /data/GreatSQL
  binlog.index    client-key.pem   '#ib_16384_1.dblwr'   ibtmp1           mysql               mysql.sock.lock   server-cert.pem      undo_001
 ```
 可以看到，GreatSQL服务已经正常启动了。
-
 
 ## 连接登入GreatSQL
 
@@ -413,7 +412,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 greatsql> status;
 ...
-Server version:         8.0.32-27
+Server version:         8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
 ...
 ```
 

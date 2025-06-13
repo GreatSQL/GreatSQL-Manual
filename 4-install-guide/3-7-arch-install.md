@@ -122,9 +122,9 @@ pacman -S numactl
 ldd mysqld mysql | grep "not found"
 ```
 
-### 创建配置文件及新建用户与目录
+### 创建或修改 /etc/my.cnf 配置文件及新建用户与目录
 
-请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
+如果 `/etc/my.cnf` 配置文件不存在就新建一个，文件内容请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
 ```ini
 [client]
@@ -300,7 +300,7 @@ mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
 
 ### 增加GreatSQL系统服务
 
-推荐采用systemd来管理GreatSQL服务，执行 `vim /lib/systemd/system/greatsql.service` 命令，添加下面的内容：
+推荐采用systemd来管理GreatSQL服务，执行 `vim /etc/systemd/system/greatsql.service` 命令，添加下面的内容：
 
 ```ini
 [Unit]
@@ -352,46 +352,98 @@ PrivateTmp=false
 
 **提示**：如果不是安装到默认的 `/usr/local/` 目录下，请编辑 `bin/mysqld_pre_systemd` 脚本，修改脚本中几处涉及 GreatSQL 安装路径的地方。
 
-### 启动GreatSQL
-
-把GreatSQL添加进环境变量
-
+执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
 ```bash
-echo 'export PATH=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
-source ~/.bash_profile
+systemctl daemon-reload
 ```
+
+这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
+
+## 启动GreatSQL
 
 执行下面的命令启动GreatSQL服务
-
 ```bash
 systemctl start greatsql
-systemctl status greatsql
 ```
 
+如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
+
 ::: details 查看运行结果
-```
-$ systemctl start greatsql
+```bash
 $ systemctl status greatsql
 
 ...
 ● greatsql.service - GreatSQL Server
-     Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; preset: disabled)
-     Active: active (running) since ...
-       Docs: man:mysqld(8)
-             http://dev.mysql.com/doc/refman/en/using-systemd.html
-    Process: 712571 ExecStartPre=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
-   Main PID: 712708 (mysqld)
-     Status: "Server is operational"
-     Memory: 2.5G
-        CPU: 4.549s
-     CGroup: /system.slice/greatsql.service
-             └─712708 /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld
+   Loaded: loaded (/etc/systemd/system/greatsql.service; disabled; vendor preset: disabled)
+   Active: failed (Result: exit-code) since ...
+     Docs: man:mysqld(8)
+           http://dev.mysql.com/doc/refman/en/using-systemd.html
+  Process: 1258165 ExecStart=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS (code=exited, status=1/FAILURE)
+  Process: 1257969 ExecStartPre=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+ Main PID: 1258165 (code=exited, status=1/FAILURE)
+   Status: "Server shutdown complete"
 
 systemd[1]: Starting GreatSQL Server...
-(mysqld)[712708]: greatsql.service: Referenced but unset environment variable evaluates to an empty string: MYSQLD_OPTS
-systemd[1]: Started GreatSQL Server.
+mysqld_pre_systemd[1257969]: mktemp: failed to create file via template ‘/var/lib/mysql-files/install-validate-password-plugin.XXXXXX.sql’: No such file or directory
+mysqld_pre_systemd[1257969]: chmod: cannot access '': No such file or directory
+mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 43: : No such file or directory
+mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 44: $initfile: ambiguous redirect
+systemd[1]: greatsql.service: Main process exited, code=exited, status=1/FAILURE
+systemd[1]: greatsql.service: Failed with result 'exit-code'.
+systemd[1]: Failed to start GreatSQL Server.
 ```
 :::
+
+只需手动创建 `/var/lib/mysql-files` 目录，再次启动GreatSQL服务即可：
+```bash
+mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
+systemctl start greatsql
+```
+
+检查服务是否已启动，以及进程状态：
+```bash
+$ systemctl status greatsql
+
+...
+● greatsql.service - GreatSQL Server
+   Loaded: loaded (/etc/systemd/system/greatsql.service; disabled; vendor preset: disabled)
+   Active: active (running) since Tue 2024-07-12 10:08:06 CST; 6min ago
+     Docs: man:mysqld(8)
+           http://dev.mysql.com/doc/refman/en/using-systemd.html
+  Process: 60129 ExecStartPre=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+ Main PID: 60231 (mysqld)
+   Status: "Server is operational"
+    Tasks: 49 (limit: 149064)
+   Memory: 5.6G
+   CGroup: /system.slice/greatsql.service
+           └─60231 /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld
+
+systemd[1]: Starting GreatSQL Server...
+systemd[1]: Started GreatSQL Server.
+
+$ ps -ef | grep mysqld
+
+...
+mysql      60231       1  2 10:08 ?        00:00:10 /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld
+
+$ ss -lntp | grep mysqld
+
+...
+LISTEN 0      70                 *:33060            *:*    users:(("mysqld",pid=60231,fd=38))
+LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=60231,fd=43))
+
+# 查看数据库文件
+$ ls /data/GreatSQL
+
+...
+ auto.cnf        ca-key.pem        error.log           '#ib_archive'    '#innodb_redo'       mysql.ibd         performance_schema   server-key.pem   undo_002
+ binlog.000001   ca.pem           '#file_purge'         ib_buffer_pool   innodb_status.258   mysql.pid         private_key.pem      slow.log
+ binlog.000002   client-cert.pem  '#ib_16384_0.dblwr'   ibdata1         '#innodb_temp'       mysql.sock        public_key.pem       sys
+ binlog.index    client-key.pem   '#ib_16384_1.dblwr'   ibtmp1           mysql               mysql.sock.lock   server-cert.pem      undo_001
+```
+可以看到，GreatSQL服务已经正常启动了。
+
+## 连接登入GreatSQL
 
 在上面进行GreatSQL初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
 
@@ -404,12 +456,18 @@ A temporary password is generated for root@localhost: ji!pjndiw5sJ
 
 复制该密码，将用于首次登入GreatSQL所需。
 
-```sql
-$ mysql -uroot -p
-Enter password:
+部分GreatSQL二进制包方式安装后，有可能初始化的root密码是空的，这种情况下可以直接登入并修改成安全密码。
 
-# 进入数据库后可以看到版本
-Server version: 8.0.32-27
+```sql
+$ mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 11
+Server version: 8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
+...
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+...
+greatsql> status;
+ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 ```
 
 首次登入立刻提醒该密码已过期，需要修改，执行 SQL 命令 `ALTER USER USER() IDENTIFIED BY` 修改即可：
