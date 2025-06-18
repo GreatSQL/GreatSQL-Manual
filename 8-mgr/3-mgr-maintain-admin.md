@@ -47,11 +47,7 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 mysqlsh --uri GreatSQL@172.16.16.10:3306
 ```
 
-
 ## 切换主节点
-
-- [GreatSQL Shell方式切换主节点](#mysql-shell-for-greatsql方式切换主节点)
-- [手动方式切换](#手工方式切换)
 
 ### GreatSQL Shell方式切换主节点
 
@@ -156,9 +152,6 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 可以看到`PRIMARY` 角色切换到 *172.16.16.11:3306* 上了
 
 ## 切换单主/多主模式
-
-- [GreatSQL Shell方式切换模式](#mysql-shell-for-greatsql方式切换模式)
-- [手动方式切换](#手动方式切换)
 
 ### GreatSQL Shell方式切换模式
 
@@ -284,9 +277,6 @@ greatsql> SELECT group_replication_switch_to_single_primary_mode('af39db70-6850-
 
 ## 添加新节点
 
-- [GreatSQL Shell方式添加新节点](#mysql-shell-for-greatsql方式添加新节点)
-- [手动方式添加新节点](#手动方式添加新节点)
-
 ### GreatSQL Shell方式添加新节点
 
 首先，启动一个全新的空实例，确保可以用root账户连接登入。
@@ -360,9 +350,6 @@ CLONE INSTANCE FROM GreatSQL@172.16.16.11:3306 IDENTIFIED BY 'GreatSQL';
 全量复制完数据后，该节点会进行一次自动重启。重启完毕后，再次确认 `group_replication_group_name`、`group_replication_local_address`、`group_replication_group_seeds` 这些选项值是否正确，如果没问题，执行 `start group_replication` 后，该节点应该就可以正常加入集群了。
 
 ## 删除节点
-
-- [GreatSQL Shell方式删除新节点](#mysql-shell-for-greatsql方式删除节点)
-- [手动方式添加新节点](#手动方式删除节点)
 
 ### GreatSQL Shell方式删除节点
 

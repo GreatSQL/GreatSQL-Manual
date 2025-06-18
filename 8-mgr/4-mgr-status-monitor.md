@@ -54,17 +54,15 @@ greatsql> SELECT MEMBER_ID AS id, COUNT_TRANSACTIONS_IN_QUEUE AS trx_tobe_certif
 ##  其他监控
 另外，也可以查看接收到的事务和已执行完的事务之间的差距来判断：
 ```sql
-greatsql> SELECT RECEIVED_TRANSACTION_SET FROM performance_schema.replication_connection_status WHERE  channel_name = 'group_replication_applier' UNION ALL SELECT variable_value FROM performance_schema.global_variables WHERE  variable_name = 'gtid_executed'\G
+greatsql> SELECT variable_value FROM performance_schema.global_variables WHERE  variable_name = 'gtid_executed'\G
 *************************** 1. row ***************************
-RECEIVED_TRANSACTION_SET: 6cfb873b-573f-11ec-814a-d08e7908bcb1:1-3124520
-*************************** 2. row ***************************
-RECEIVED_TRANSACTION_SET: 6cfb873b-573f-11ec-814a-d08e7908bcb1:1-3078139
+variable_value: 6cfb873b-573f-11ec-814a-d08e7908bcb1:1-3078139
 ```
-可以看到，接收到的事务 GTID 已经到了 3124520，而本地只执行到 3078139，二者的差距是 46381。
+这表示当前已被执行的事务GTID值为3078139。
 
-可以顺便持续关注这个差值的变化情况，估算出本地节点是否能及时追平延迟，还是会加大延迟。
+可以关注这个数值在单位时间内的变化情况，推断本地节点事务应用的性能。
 
-另外，当原来的主节点发生故障，想要手动选择某个节点做为新的主节点时，也应该先判断哪个节点已执行的事务GTID值更大，应优先选择该节点。
+还可以同时关注各节点已被执行的事务GTID值差异，当原来的主节点发生故障，想要手动选择某个节点做为新的主节点时，也应该先判断哪个节点已执行的事务GTID值更大，应优先选择该节点。
 
 ## GreatSQL Shell 监控
 

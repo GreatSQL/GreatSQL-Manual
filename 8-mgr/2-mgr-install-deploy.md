@@ -42,6 +42,7 @@ datadir=/data/GreatSQL
 port=3306
 server_id=103306
 log-bin
+binlog_format=ROW
 log_replica_updates=1
 gtid_mode=ON
 enforce_gtid_consistency=ON
