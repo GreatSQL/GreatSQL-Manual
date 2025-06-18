@@ -14,7 +14,7 @@ loose-group_replication_single_primary_mode=ON
 loose-group_replication_bootstrap_group=OFF 
 
 #默认值150MB，但建议调低在20MB以内，不要使用大事务
-loose-group_replication_transaction_size_limit = 10M
+loose-group_replication_transaction_size_limit = 20M
 
 #大消息分片处理，每个分片10M，避免网络延迟太大
 loose-group_replication_communication_max_message_size = 10M
