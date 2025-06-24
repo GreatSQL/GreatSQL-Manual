@@ -293,7 +293,15 @@ TasksAccounting=false
 
 务必确认文件中 `ExecStartPre` 和 `ExecStart` 两个参数指定的目录及文件名是否正确。
 
-**提示**：如果不是安装到默认的 `/usr/local/` 目录下，请编辑 `bin/mysqld_pre_systemd` 脚本，修改脚本中几处涉及 GreatSQL 安装路径的地方。
+::: tip 小贴士
+
+RPM方式安装GreatSQL时 `mysqld_pre_systemd` 脚本文件默认位于 `/usr/bin/mysqld_pre_systemd`，如果其他方式安装，请先找到该文件，再修改其中涉及 GreatSQL 安装路径的地方。主要有以下两处：
+
+```
+ExecStartPre=/usr/bin/mysqld_pre_systemd
+ExecStart=/usr/sbin/mysqld $MYSQLD_OPTS
+```
+:::
 
 保存退出，然后再执行命令重载systemd，如果没问题就不会报错：
 ```bash
@@ -355,6 +363,18 @@ $ lsof -p 43653 | grep -i jema
 ...
 mysqld  52003 mysql  mem       REG              253,0     608096   68994440 /usr/lib64/libjemalloc.so.2
 ```
+
+::: tip 小贴士
+
+如果是在Docker环境中采用RPM方式安装GreatSQL，或其他特殊安装方式导致在安装完毕后无法直接用systemd方式启动GreatSQL，也就无法在systemd中调用 `mysqld_pre_systemd` 脚本完成初始化后并启动的过程，这时候需要手动初始化，即手动执行 `mysqld_pre_systemd` 脚本完成初始化：
+
+```bash
+$ chmod +x /usr/bin/mysqld_pre_systemd && /usr/bin/mysqld_pre_systemd
+```
+
+正常的话，就会完成GreatSQL的初始化工作并启动GreatSQL数据库服务进程。
+
+:::
 
 ##  连接登入GreatSQL
 
