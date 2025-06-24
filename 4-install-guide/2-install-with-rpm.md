@@ -295,7 +295,7 @@ TasksAccounting=false
 
 ::: tip 小贴士
 
-RPM方式安装GreatSQL时 `mysqld_pre_systemd` 脚本文件默认位于 `/usr/bin/mysqld_pre_systemd`，如果其他方式安装，请先找到该文件，再修改其中涉及 GreatSQL 安装路径的地方。主要有以下两处：
+RPM方式安装GreatSQL时，systemd服务管理文件 `mysqld.service` 脚本文件默认位于 `/lib/systemd/system/mysqld.service`。请先找到该文件，确认其中涉及 GreatSQL 可执行文件路径是否正确。主要有以下两处：
 
 ```
 ExecStartPre=/usr/bin/mysqld_pre_systemd
@@ -366,7 +366,7 @@ mysqld  52003 mysql  mem       REG              253,0     608096   68994440 /usr
 
 ::: tip 小贴士
 
-如果是在Docker环境中采用RPM方式安装GreatSQL，或其他特殊安装方式导致在安装完毕后无法直接用systemd方式启动GreatSQL，也就无法在systemd中调用 `mysqld_pre_systemd` 脚本完成初始化后并启动的过程，这时候需要手动初始化，即手动执行 `mysqld_pre_systemd` 脚本完成初始化：
+如果是在Docker环境中采用RPM方式安装GreatSQL，或其他特殊安装方式导致在安装完毕后无法直接用systemd方式启动GreatSQL，也就无法在systemd中调用 `mysqld_pre_systemd` 脚本完成初始化后并启动的过程，这时候需要手动初始化，即手动执行 `/usr/bin/mysqld_pre_systemd` 脚本（RPM方式安装后的默认路径）完成初始化：
 
 ```bash
 $ chmod +x /usr/bin/mysqld_pre_systemd && /usr/bin/mysqld_pre_systemd
