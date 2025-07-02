@@ -202,7 +202,7 @@ cd /usr/local/share/sysbench
 sysbench ./oltp_read_write.lua \
 ...
 --tables=64 \
---table_size= 10000000 \
+--table_size=10000000 \
 --rand-type=uniform \
 --report-interval=1 \
 --percentile=99 \

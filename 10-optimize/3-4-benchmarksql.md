@@ -17,9 +17,26 @@ BenchmarkSQL 支持 MySQL（Percona、GreatSQL）、PostgreSQL、Oracle、SQL Se
 下面以 CentOS 8.x x86_64 环境为例，介绍如何安装配置使用 BenchmarkSQL。
 
 ### 1. 准备环境
-- **下载 BenchmarkSQL**：在[这里下载 BenchmarkSQL 的最新版本](https://sourceforge.net/projects/benchmarksql/files/)。
+- **下载 BenchmarkSQL**：在[这里下载 BenchmarkSQL 官方最新版本](https://sourceforge.net/projects/benchmarksql/files/)。
 
-下载完 BenchmarkSQL 压缩包后，解压缩放在 /usr/local 目录下
+这里开个分支，可以选择下载[GreatSQL社区修改后的 BenchmarkSQL 分支版本](https://gitee.com/GreatSQL/benchmarksql)，其好处有几点：
+
+- 无需再做一次下面提到的修改调整；
+- 增加支持MySQL/GreatSQL数据库；
+- 增加MySQL连接驱动mysql-connector-j-8.0.33.jar；
+- 修复在RR模式下测试结束后可能因为逻辑不严谨产生死循环问题（读取不到已被删除的数据导致逻辑判断错误）；
+- 修改runDatabaseBuild.sh中的AFTER_LOAD的动作，无需再创建索引外键等操作。
+
+可以用 git 客户端将代码下载到本地：
+
+```bash
+$ cd /usr/local
+$ git clone https://gitee.com/GreatSQL/benchmarksql.git
+$ cd benchmarksql
+```
+之后就可以直接跳到下方修改 `run/props.greatsql` 配置文件这一步。
+
+回到原生 BenchmarkSQL 的路线上，下载完 BenchmarkSQL 压缩包后，解压缩放在 /usr/local 目录下
 
 ```bash
 $ cd /usr/local
