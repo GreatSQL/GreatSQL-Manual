@@ -34,7 +34,7 @@ $ cd /usr/local
 $ git clone https://gitee.com/GreatSQL/benchmarksql.git
 $ cd benchmarksql
 ```
-之后就可以直接跳到下方修改 `run/props.greatsql` 配置文件这一步。
+之后就可以跳过下方提到的修改 src 目录下几个 java 文件以及 `tableCreates.sql` 这个SQL脚本，直接从修改 `props.mysql` 配置文件开始。
 
 回到原生 BenchmarkSQL 的路线上，下载完 BenchmarkSQL 压缩包后，解压缩放在 /usr/local 目录下
 
@@ -450,6 +450,56 @@ Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class 
 ```
 
 测试数据加载完毕。
+
+::: tip 小贴士
+如果安装的Java运行时版本（JRE）太旧的话，可能会有类似下面的报错信息
+
+```log
+# ------------------------------------------------------------
+# Loading SQL file ./sql.mysql/tableCreates.sql
+# ------------------------------------------------------------
+Error: A JNI error has occurred, please check your installation and try again
+Exception in thread "main" java.lang.UnsupportedClassVersionError: ExecJDBC has been compiled by a more recent version of the Java Runtime (class file version 61.0), this version of the Java Runtime only recognizes class file versions up to 52.0
+    at java.lang.ClassLoader.defineClass1(Native Method)
+    at java.lang.ClassLoader.defineClass(ClassLoader.java:756)
+    at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+    at java.net.URLClassLoader.defineClass(URLClassLoader.java:473)
+    at java.net.URLClassLoader.access$100(URLClassLoader.java:74)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:369)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:363)
+    at java.security.AccessController.doPrivileged(Native Method)
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:362)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:418)
+    at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:352)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:351)
+    at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:621)
+```
+
+这种情况下，升级Java版本即可，可参考下面的操作：
+
+```bash
+# 先卸载旧版本
+$ yum remove -y java-1.8.0-openjdk
+
+# 搜索其他新版本
+$ yum search java*openjdk
+java-1.8.0-openjdk.x86_64 : OpenJDK 8 Runtime Environment
+java-11-openjdk.x86_64 : OpenJDK 11 Runtime Environment
+java-17-openjdk.x86_64 : OpenJDK 17 Runtime Environment
+
+# 安装新版本
+$ yum install -y java-17-openjdk.x86_64
+```
+
+再次编译java代码：
+
+```bash
+$ cd /usr/local/benchmarksql-5.0
+$ ant
+```
+
+这样应该就可以了。
+:::
 
 2. 运行测试
 
