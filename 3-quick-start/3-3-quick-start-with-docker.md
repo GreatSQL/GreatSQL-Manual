@@ -82,7 +82,7 @@ docker ps -a | grep greatsql
 个别时候，可能会发生Docker容器创建异常，例如下面这样
 
 ```bash
-docker log greatsql
+docker logs greatsql
 ...
 Could not find OpenSSL on the system
 MySQL init process in progress...
