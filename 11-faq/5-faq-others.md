@@ -374,8 +374,53 @@ Transaction check error:
 
 以上方法通常就能解决此问题。
 
+## 18. 为什么GreatSQL客户端无法使用Backspace和Delete键
 
+这种问题常见于GreatSQL在glibc2.28环境下编译发布的二进制包中，例如在Debian或Ubuntu环境中安装GreatSQL-8.0.32-27-Linux-glibc2.28二进制包后，用自带的Cli客户端工具连入GreatSQL后，可能会发现无法使用Backspace和Delete键及其他快捷键。
 
+出现这种问题是因为GreatSQL for glibc2.28二进制包中自带的ncurses 6.1动态库对终端键盘处理的重大改进，其中有一项是改变了Backspace和Delete键的键值映射关系，所以导致的结果看起来像是无法使用Backspace和Delete键。
+
+解决方案参考以下几种。
+
+**1. 最佳方案：重编译GreatSQL并链接系统ncurses**
+
+用源码重编译GreatSQL的方法参考：[源码编译安装GreatSQL](../4-install-guide/6-install-with-source-code.md)。
+
+**2. 用其他版本的mysql客户端替代**
+
+下载GreatSQL for glibc2.17版本二进制包，使用这个版本的mysql客户端二进制文件，例如
+
+```bash
+$ /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.17-x86_64/bin/mysql -uXX -pXX
+```
+
+**3. 降级 ncurses（不推荐）**
+
+可以提取GreatSQL for glibc2.17版本二进制包中的ncurses动态库文件，替换GreatSQL for glibc2.28版本中相应的ncurses动态库文件。也可以直接从操作系统已经安装的ncurses动态库文件拷贝过来替换。
+
+以第一种方案为例，操作方法如下所示：
+
+```bash
+# 先进入GreatSQL for glibc2.28版本目录
+$ cd /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/lib/private/
+
+# 拷贝ncurses动态库文件，共有两个文件
+$ cp /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.17-x86_64/lib/private/libncurses.so.5.9 .
+$ cp /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.17-x86_64/lib/private/libtinfo.so.5.9 .
+
+# 重新建立软链接
+$ unlink libncurses.so && ln -s libncurses.so.5.9 libncurses.so
+$ unlink libtinfo.so && ln -s libtinfo.so.5.9 libtinfo.so
+
+# 查看确认生效
+$ ldd ../../bin/mysql | grep -iE 'libncurses|libtinfo'
+    libncurses.so => /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/lib/private/../../bin/../lib/private/libncurses.so (0x00007f854bdbd000)
+    libtinfo.so => /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/lib/private/../../bin/../lib/private/libtinfo.so (0x00007f854bb90000)
+
+# 再次启动客户端，确认Backspace和Delete键功能正常
+$ cd /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysql -uXX -pXX
+```
+以上三种方法通常就能解决本问题。
 
 **扫码关注微信公众号**
 
