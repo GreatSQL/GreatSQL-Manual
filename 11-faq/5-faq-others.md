@@ -374,7 +374,7 @@ Transaction check error:
 
 以上方法通常就能解决此问题。
 
-## 18. 为什么GreatSQL客户端无法使用Backspace和Delete键
+## 19. 为什么GreatSQL客户端无法使用Backspace和Delete键
 
 这种问题常见于GreatSQL在glibc2.28环境下编译发布的二进制包中，例如在Debian或Ubuntu环境中安装GreatSQL-8.0.32-27-Linux-glibc2.28二进制包后，用自带的Cli客户端工具连入GreatSQL后，可能会发现无法使用Backspace和Delete键及其他快捷键。
 
