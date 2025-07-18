@@ -13,13 +13,13 @@
 | --- | --- |
 | Variable Scope        | global |
 | Dynamic Variable      | YES |
-| Permitted Values |    [0 ~ ULONG_MAX] |
-| Default       | 60 |
+| Permitted Values |    [0 ~ 86400] |
+| Default       | 600（单位：秒） |
 | Description   | 用于控制MGR主从节点复制延迟阈值，当MGR主从节点因为大事务等原因延迟超过阈值时，就会触发流控机制 |
 
-该选项默认为60秒，可在线动态修改，例如：
+该选项默认为600，可在线动态修改，例如：
 ```sql
-SET GLOBAL group_replication_flow_control_replay_lag_behind = 60;
+SET GLOBAL group_replication_flow_control_replay_lag_behind = 600;
 ```
 正常情况下，该参数无需调整。
 
