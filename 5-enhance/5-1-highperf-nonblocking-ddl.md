@@ -43,7 +43,7 @@ SET lock_ddl_polling_runtime = 1000;
 
 开启非阻塞式 DDL 功能会导致 DDL 请求申请 MDL-X 锁的时间有所延长，增加 DDL 操作超时失败的概率。
 
-非阻塞式 DDL 功能仅支持 `ALTER, OPTIMIZE, TRUNCATE TABLE` 这几个 DDL 操作。
+非阻塞式 DDL 功能仅支持在 `ALTER TABLE, OPTIMIZE TABLE, TRUNCATE TABLE` 这几个 DDL 操作模式下开启。
 
 6. 案例
 

@@ -25,9 +25,10 @@ GreatSQL中支持多种智能选主模式，使得高可用切换选主机制更
 | --- | --- |
 | Variable Scope    | Global |
 | Dynamic Variable    | NO |
+| Type | Enumeration |
 | Permitted Values |    WEIGHT_ONLY<br/>GTID_FIRST<br/>WEIGHT_FIRST |
 | Default    | WEIGHT_ONLY |
-| Description    | 当MGR集群需要投票选主时，采用何种投票策略。|
+| Description    | 设置智能选主策略，所有节点的设置必须相同，否则无法启动。|
 
 
 

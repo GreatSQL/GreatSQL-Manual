@@ -13,9 +13,10 @@
 | --- | --- |
 | Variable Scope        | global |
 | Dynamic Variable      | YES |
-| Permitted Values |    [0 ~ 86400] |
-| Default       | 600（单位：秒） |
-| Description   | 用于控制MGR主从节点复制延迟阈值，当MGR主从节点因为大事务等原因延迟超过阈值时，就会触发流控机制 |
+| Type | Integer |
+| Permitted Values |    [0, 86400] |
+| Default       | 600 |
+| Description   | 单位：秒。<br/>用于控制MGR主从节点复制延迟阈值，当MGR主从节点因为大事务等原因延迟超过阈值时，就会触发流控机制 |
 
 该选项默认为600，可在线动态修改，例如：
 ```sql
@@ -25,9 +26,9 @@ SET GLOBAL group_replication_flow_control_replay_lag_behind = 600;
 
 ::: tip 小贴士
 
-1. 在GreatSQL中，启用新的流控机制后（`group_replication_flow_control_mode=QUOTA`），只有 `group_replication_flow_control_replay_lag_behind` 参数有作用。原先关于流控的几个选项 `group_replication_flow_control*` 等都不再起作用，但仍然可以查看和修改。
+1. 在GreatSQL中，启用新的流控机制后（`group_replication_flow_control_mode=QUOTA`），只有 `group_replication_flow_control_replay_lag_behind` 参数有作用。原先关于流控的几个选项 `group_replication_flow_control*` 等都不再起作用，虽然仍可查看和修改。
 
-2. 在 Percona 8.0.30 中对选项 `group_replication_flow_control_mode` 新增可选值 `MAJORITY`，在GreatSQL中也不起作用。
+2. 在 Percona 8.0.30 中对选项 `group_replication_flow_control_mode` 新增可选值**MAJORITY**，但并不起实质作用，和设置为**DISABLED**效果一样。
 :::
 
 

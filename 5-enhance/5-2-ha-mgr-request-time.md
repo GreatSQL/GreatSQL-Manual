@@ -3,7 +3,7 @@
 
 新增相应选项 `group_replication_request_time_threshold`。
 
-在MGR结构中，一个事务的开销包含网络层以及本地资源（例如CPU、磁盘I/O等）开销。当事务响应较慢想要分析性能瓶颈时，可以先确定是网络层的开销还是本地性能瓶颈导致的。通过设置选项 `group_replication_request_time_threshold` 即可记录超过阈值的事件，便于进一步分析。输出的内容记录在error log中，例如：
+在MGR结构中，事务的开销包含网络层以及本地资源（例如CPU、磁盘I/O等）开销。当事务响应较慢想要分析性能瓶颈时，可以先确定是网络层的开销还是本地资源性能瓶颈导致的。通过设置选项 `group_replication_request_time_threshold` 即可记录超过阈值的事件，便于进一步分析。输出的内容记录在error log中，例如：
 ```log
 [Note] Plugin group_replication reported: 'MGR request time:30808us, server id:3306879, thread_id:17368'
 ```
@@ -15,9 +15,10 @@
 | --- | --- | 
 | Variable Scope    | Global |
 | Dynamic Variable    | YES |
-| Permitted Values |    [0 ~ 100000] |
+| Type    | Integer |
+| Permitted Values |    [0, 100000] |
 | Default    | 0 |
-| Description    |单位：毫秒。<br/>设置阈值，当一个事务的MGR层网络开销超过该阈值时，会在error log中输出一条记录。<br/>设置为0时，表示禁用。<br/>当怀疑可能因为MGR通信耗时过久成为事务性能瓶颈时，再开启，平时不建议开启。|
+| Description    |单位：毫秒。<br/>参数值设置>0，当事务的MGR层网络开销超过该阈值时，会在error log中记录一条日志。<br/>设置为0时，表示禁用。<br/>建议：当怀疑可能因为MGR通信耗时过久成为事务性能瓶颈时再在线动态开启，平时没必要开启。|
 
 
 

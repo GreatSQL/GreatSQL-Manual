@@ -15,6 +15,7 @@ GreatSQL中增加一个新的工作模式：**单主快速模式**，在这个�
 | --- | --- |
 | Variable Scope    | Global |
 | Dynamic Variable    | NO |
+| Type | Enumeration |
 | Permitted Values |    0<br/>1<br/>2 |
 | Default    | 0 |
 | Description    | 设置是否启用快速单主模式，强烈建议启用（即设置为1）。|
