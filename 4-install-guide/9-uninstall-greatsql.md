@@ -33,7 +33,9 @@ systemctl stop greatsql # 如果系统服务名是 mysqld，则改成 systemctl 
 mysqladmin -hlocalhost -uroot -p shutdown
 ```
 
+::: danger 特别提醒
 **严禁直接执行 `kill -9` 命令强制暴力关闭 GreatSQL 数据库，这很可能会造成事务数据丢失**。
+:::
 
 ## 步骤2：备份数据文件
 

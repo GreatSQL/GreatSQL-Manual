@@ -77,7 +77,11 @@ greatsql> SELECT FILE_ID, FILE_NAME, START_LSN, END_LSN, SIZE_IN_BYTES, IS_FULL,
 - 仅用于性能测试目的。
 - 停机维护期间，为了加快数据批量导入速度。
 
-其他时候，**严禁** 执行禁用 Redo Log 的操作，**否则有极大可能性会导致数据丢失、甚至实例损坏等重大风险**。当发生这种风险时，可能[错误日志](./4-1-greatsql-error-log.md)中会有类似下面的提示：
+::: danger 特别提醒
+其他时候，**严禁** 执行禁用 Redo Log 的操作，**否则有极大可能性会导致数据丢失、甚至实例损坏等重大风险**。
+:::
+
+当发生这种风险时，可能[错误日志](./4-1-greatsql-error-log.md)中会有类似下面的提示：
 
 ```
 [ERROR] [MY-013598] [InnoDB] Server was killed when Innodb Redo logging was disabled. Data files could be corrupt. You can try to restart the database with innodb_force_recovery=6

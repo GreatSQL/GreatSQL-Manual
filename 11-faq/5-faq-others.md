@@ -422,6 +422,30 @@ $ cd /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysql -uXX -pXX
 ```
 以上三种方法通常就能解决本问题。
 
+## 20. 为什么GreatSQL Docker容器启动失败
+
+个别情况下，启动GreatSQL Docker容器时，可能无法正常启动，相应的日志输出类似下面这样：
+
+```bash
+$ docker logs -f greatsql
+
+Initializing database
+Database initialized
+Initializing certificates
+[ERROR]   Could not find OpenSSL on the system
+Certificates initialized
+MySQL init process in progress...
+MySQL init process in progress...
+MySQL init process in progress...
+MySQL init process in progress...
+```
+
+Docker容器报告找不到OpenSSL库，并一直处于初始化进程中。
+
+出现这种情况，可能因为SELinux或AppArmor安全限制的原因，导致创建GreatSQL Docker容器时失败，提示"Could not find OpenSSL on the system"错误，这时候可以在创建容器时加上 `--privileged` 参数解决。
+
+此外，还可能因为安装的Docker版本号较低或特殊版本存在问题导致的，升级版本一般也能解决问题。经测试，使用较早的Docker版本如<=17.12.1的版本就有该问题，个别在Kubernetes环境中安装的Docker可能也有问题，建议规避。
+
 **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)

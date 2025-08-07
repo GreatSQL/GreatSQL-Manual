@@ -20,6 +20,10 @@ docker --version
 Docker version 20.10.10, build b485636
 ```
 
+::: tip 小贴士
+当使用特定版本的 Docker 或其版本过低（如<=17.12.1）时，可能存在问题，参考： [20. 为什么GreatSQL Docker容器启动失败](../11-faq/5-faq-others.md#_20-为什么greatsql-docker容器启动失败) 。
+:::
+
 ## 安装步骤
 
 ### 1. 启动Docker服务

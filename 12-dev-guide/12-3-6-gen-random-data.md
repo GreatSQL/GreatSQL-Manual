@@ -135,7 +135,7 @@ CREATE TABLE `test_shell` (
     `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `name` varchar(20) DEFAULT NULL,
     `age` int(10) DEFAULT NULL,
-    `sex` varchar(10) DEFAULT NULL,
+    `gender` varchar(10) DEFAULT NULL,
     `address` varchar(100) DEFAULT NULL,
     `phone` varchar(15) DEFAULT NULL,
     PRIMARY KEY (`id`)
@@ -184,7 +184,7 @@ function generate_random_age() {
 }  
   
 # 生成随机性别（男或女）  
-function generate_random_sex() {  
+function generate_random_gender() {  
     if [ $((RANDOM%2)) -eq 0 ]; then  
         echo "男"  
     else  
@@ -211,12 +211,12 @@ function generate_random_phone() {
 for i in {1..100}; do  
     name=$(generate_random_name)  
     age=$(generate_random_age)  
-    sex=$(generate_random_sex)  
+    gender=$(generate_random_gender)  
     address=$(generate_random_address)  
     phone=$(generate_random_phone)  
       
     # 由于ID是自增的，这里直接用循环变量$i代替，假设从1开始  
-    echo "INSERT INTO $table_name (id, name, age, sex, address, phone) VALUES ($i, '$name', $age, '$sex', '$address', '$phone');" >> "$output_file"  
+    echo "INSERT INTO $table_name (id, name, age, gender, address, phone) VALUES ($i, '$name', $age, '$gender', '$address', '$phone');" >> "$output_file"  
 done  
   
 echo "Insert语句已生成并保存到$output_file文件中"
@@ -237,11 +237,11 @@ Insert语句已生成并保存到insert_sql.sql文件中
 ```bash
 $ tail -n 5 insert_sql.sql
 
-INSERT INTO test_shell (id, name, age, sex, address, phone) VALUES (96, 'Ohky', 65, '男', '地址102105105979711110397105110', '10000016611');
-INSERT INTO test_shell (id, name, age, sex, address, phone) VALUES (97, 'Tydx', 50, '男', '地址10311712012111110110410910697', '10000010900');
-INSERT INTO test_shell (id, name, age, sex, address, phone) VALUES (98, 'Wsrs', 18, '女', '地址112119114106101122118116102104', '10000011526');
-INSERT INTO test_shell (id, name, age, sex, address, phone) VALUES (99, 'Knyh', 25, '男', '地址10010511811011610910612297104', '10000011057');
-INSERT INTO test_shell (id, name, age, sex, address, phone) VALUES (100, 'Mwsd', 51, '女', '地址103971031209811411197101113', '10000003984');
+INSERT INTO test_shell (id, name, age, gender, address, phone) VALUES (96, 'Ohky', 65, '男', '地址102105105979711110397105110', '10000016611');
+INSERT INTO test_shell (id, name, age, gender, address, phone) VALUES (97, 'Tydx', 50, '男', '地址10311712012111110110410910697', '10000010900');
+INSERT INTO test_shell (id, name, age, gender, address, phone) VALUES (98, 'Wsrs', 18, '女', '地址112119114106101122118116102104', '10000011526');
+INSERT INTO test_shell (id, name, age, gender, address, phone) VALUES (99, 'Knyh', 25, '男', '地址10010511811011610910612297104', '10000011057');
+INSERT INTO test_shell (id, name, age, gender, address, phone) VALUES (100, 'Mwsd', 51, '女', '地址103971031209811411197101113', '10000003984');
 ```
 ### 导入数据
 生成 `insert_sql.sql` 文件后需将此文件导入到GreatSQL中的 `test_db` 库中

@@ -21,6 +21,10 @@ docker-compose --version
 Docker Compose version v2.15.0 
 ```
 
+::: tip 小贴士
+当使用特定版本的 Docker 或其版本过低（如<=17.12.1）时，可能存在问题，参考：[20. 为什么GreatSQL Docker容器启动失败](../11-faq/5-faq-others.md#_20-为什么greatsql-docker容器启动失败)。
+:::
+
 ##  安装Docker
 直接用yum/dnf安装Docker，非常省事
 ```bash
@@ -125,7 +129,7 @@ docker run -d --privileged --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EM
 
 这样通常就可以解决上述问题。
 
-这种问题通常是因为安装的Docker版本号较低或特殊版本存在问题导致的，升级版本一般也能解决问题。经我个人测试，使用较早的Docker版本如<=18.06.3的版本（有部分用户在20.10.8版本也遇到过）就有该问题，个别在Kubernetes环境中安装的Docker可能也有问题。
+这种问题通常是因为安装的Docker版本号较低或特殊版本存在问题导致的，升级版本一般也能解决问题。经我个人测试，使用较早的Docker版本如<=17.12.1的版本（有少部分用户在其他版本也遇到过）就有该问题，个别在Kubernetes环境中安装的Docker可能也有问题。
 
 ###  容器管理
 

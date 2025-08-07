@@ -1,9 +1,9 @@
 # 编译源码安装
 ---
 
-本文介绍如何利用Docker来(自动)编译GreatSQL源码并生成对应GreatSQL二进制包
+本文介绍如何利用Docker来编译GreatSQL源码并生成对应GreatSQL二进制包。
 
-若需要生成RPM包，可以参考这个文档[在CentOS环境下编译GreatSQL RPM包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-rpm-under-centos.md)
+若需要生成RPM包，可以参考这个文档[在CentOS环境下编译GreatSQL RPM包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-rpm-under-centos.md)。
 
 本文介绍的运行环境是CentOS 8 x86_64，更多环境适配请自行修改Dockerfile及相关脚本中的参数。
 ```bash

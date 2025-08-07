@@ -16,16 +16,20 @@ CREATE TABLE [IF NOT EXISTS] tablename(
 	COLUMN_NAME_N COLUMN_TYPE_N CONSTRAINTS
 )
 ```
-其中，`tablename`为数据表名称，`COLUMN_NAME_1`为列名，`COLUMN_TYPE_1`为列的数据类型，`CONSTRAINTS`为约束条件，`DEFAULT`为默认值。
 
-举例：
-创建一个test_greatsql的表
-表里包括id(idb编号)、name(姓名)、sex(性别)、address(地址)四个字段
+其中，
+- `tablename`为数据表名称，
+- `COLUMN_NAME_1`为列名，
+- `COLUMN_TYPE_1`为列的数据类型，
+- `CONSTRAINTS`为约束条件，
+- `DEFAULT`为默认值。
+
+举例：创建一个 `test_greatsql` 的表，表里包括 `id`(编号)、`name`(姓名)、`gender`(性别)、`address`(地址)四个字段
 ```sql
 CREATE TABLE test_greatsql(
   id INT NOT NULL AUTO_INCREMENT,
   ename VARCHAR(10) NOT NULL,
-  sex CHAR(1) NOT NULL,
+  gender CHAR(1) NOT NULL,
   address VARCHAR(20) NOT NULL,
   PRIMARY KEY(id)
   );
@@ -39,7 +43,7 @@ greatsql> SHOW CREATE TABLE test_greatsql \G
 Create Table: CREATE TABLE `test_greatsql` (
   `id` int NOT NULL AUTO_INCREMENT,
   `ename` varchar(10) NOT NULL,
-  `sex` char(1) NOT NULL,
+  `gender` char(1) NOT NULL,
   `address` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
@@ -51,7 +55,7 @@ Create Table: CREATE TABLE `test_greatsql` (
 ```sql
 DROP TABLE [IF EXISTS] tablename;
 ```
-例如，删除test_greatsql表
+例如，删除`test_greatsql`表
 ```sql
 DROP TABLE test_greatsql;
 ```
@@ -60,7 +64,7 @@ DROP TABLE test_greatsql;
 ```sql
 TRUNCATE TABLE tablename;
 ```
-例如，清空test_greatsql表
+例如，清空`test_greatsql`表
 ```sql
 TRUNCATE TABLE test_greatsql;
 ```
@@ -69,7 +73,7 @@ TRUNCATE TABLE test_greatsql;
 ```sql
 ALTER TABLE tablename ADD COLUMN_NAME COLUMN_TYPE;
 ```
-例如，在test_greatsql表中添加age字段
+例如，在`test_greatsql`表中添加`age`字段
 ```sql
 ALTER TABLE test_greatsql ADD age INT;
 ```
@@ -77,7 +81,7 @@ ALTER TABLE test_greatsql ADD age INT;
 ```sql
 ALTER TABLE tablename MODIFY COLUMN_NAME COLUMN_TYPE;
 ```
-例如，将test_greatsql表的age字段修改为varchar类型
+例如，将`test_greatsql`表的`age`字段修改为`varchar`类型
 ```sql
 ALTER TABLE test_greatsql MODIFY age VARCHAR(10);
 ```
@@ -85,7 +89,7 @@ ALTER TABLE test_greatsql MODIFY age VARCHAR(10);
 ```sql
 ALTER TABLE tablename DROP COLUMN_NAME;
 ```
-例如，删除test_greatsql表的age字段
+例如，删除`test_greatsql`表的`age`字段
 ```sql
 ALTER TABLE test_greatsql DROP age;
 ```
@@ -96,7 +100,7 @@ RENAME TABLE old_tablename TO new_tablename;
 -- 或
 ALTER TABLE old_tablename RENAME TO new_tablename;
 ```
-例如，将test_greatsql表重命名为test_greatsql1
+例如，将`test_greatsql`表重命名为`test_greatsql1`
 ```sql
 RENAME TABLE test_greatsql TO test_greatsql1;
 ```
@@ -105,7 +109,7 @@ RENAME TABLE test_greatsql TO test_greatsql1;
 ```sql
 SHOW TABLES;
 ```
-例如，查看test数据库中的表
+例如，查看`test`数据库中的表
 ```sql
 greatsql> SHOW TABLES;
 +------------------+

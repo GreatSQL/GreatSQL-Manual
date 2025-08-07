@@ -24,7 +24,7 @@ CREATE SCHEMA [IF NOT EXISTS] db_name CHARACTER SET utf8mb4;
 DROP SCHEMA [IF EXISTS] db_name;
 ```
 
-::: warning 注意
+::: danger 警告
 删除库后，库下的所有表都会被全部删除，删除前一定要检查仔细。
 :::
 
