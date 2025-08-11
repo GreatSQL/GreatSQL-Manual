@@ -9,7 +9,7 @@ GreatSQL 致力于保持开源的开放性。GreatSQL 采用 [GPLv2 协议](http
 
 GreatSQL 的代码托管在[gitee](https://gitee.com/GreatSQL/GreatSQL)，同时镜像到 [github](https://github.com/GreatSQL/GreatSQL)。
 
-如果您在使用 GreatSQL，[请戳此填写问卷](https://wj.qq.com/s2/11543483/9e09/)，**即可享受5*8在线免费技术支持服务**，只需1分钟即可完成，这对我们也很重要。
+如果您在使用 GreatSQL，[请戳此填写问卷](https://wj.qq.com/s2/11543483/9e09/)，**即可享受免费技术支持服务**，只需1分钟即可完成，这对我们也很重要。
 
 ## 理解 GreatSQL 版本号
 

@@ -262,7 +262,7 @@ EXPLAIN FORMAT=TREE SELECT * FROM t1 WHERE c1 is NULL;
 
 #### 列字符集限制
 
-1.要求所有列字符集为utf8mb4、Accent sensitive(as)、ci/cs。
+1.要求所有列字符集为utf8mb4、Accent insensitive(ai)、ci/cs。
 
 2.不支持binary、koi8r、ucs2。
 

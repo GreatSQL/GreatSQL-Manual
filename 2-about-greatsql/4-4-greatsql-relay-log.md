@@ -21,7 +21,7 @@
 
 - `relay_log`
   
-  指定中继日志文件的名称和路径，可以只设置文件名，也可以设置全路径。例如：`relay_log = /data/GreatSQL/relay-log`，则会在 /data/GreatSQL 目录下生成以 relay-log 开头以数字编号为后缀的中继日志文件。例如：
+  指定中继日志文件的名称和路径，可以只设置文件名，也可以设置全路径。例如：`relay_log=/data/GreatSQL/relay-log`，则会在 /data/GreatSQL 目录下生成以 relay-log 开头以数字编号为后缀的中继日志文件。例如：
 
 ```bash
 $ ls -la relay-log*
@@ -42,7 +42,7 @@ $ ls -la relay-log*
 
 ```sql
 -- 配置主从复制时，指定复制通道名称
-CHANGE MASTER TO MASTER_AUTO_POSITION = 1 FOR CHANNEL 'repl-channel-01';
+CHANGE MASTER TO MASTER_AUTO_POSITION=1 FOR CHANNEL 'repl-channel-01';
 ```
 
 这时查看中继日志的结果是这样的：
@@ -95,19 +95,19 @@ $ ls -la relay-log*
 
 - `relay_log_index`
 
-  指定中继日志索引文件的名称和路径。该文件包含所有中继日志文件的列表。例如：`relay_log_index = /data/GreatSQL/relay-log.index`。
+  指定中继日志索引文件的名称和路径。该文件包含所有中继日志文件的列表。例如：`relay_log_index=/data/GreatSQL/relay-log.index`。
 
 - `relay_log_purge`
 
-  控制是否自动清理不再需要的中继日志文件。默认为 ON。例如：`relay_log_purge = ON`。
+  控制是否自动清理不再需要的中继日志文件。默认为 ON。例如：`relay_log_purge=ON`。
 
 - `relay_log_recovery`
 
-  启用或禁用崩溃后中继日志的自动恢复。默认为 OFF，但强烈建议开启以确保数据一致性。例如：`relay_log_recovery = ON`。
+  启用或禁用崩溃后中继日志的自动恢复。默认为 OFF，但强烈建议开启以确保数据一致性。例如：`relay_log_recovery=ON`。
 
 - `relay_log_space_limit`
 
-  限制所有中继日志文件使用的总空间大小。如果超过这个限制，将会停止复制。默认为 0，表示不限制空间使用。可以通过适当设置此参数，防止磁盘空间耗尽。例如：`relay_log_space_limit = 0` 表示不限制空间使用。
+  限制所有中继日志文件使用的总空间大小。如果超过这个限制，将会停止复制。默认为 0，表示不限制空间使用。可以通过适当设置此参数，防止磁盘空间耗尽。例如：`relay_log_space_limit=0` 表示不限制空间使用。
 
 - `max_relay_log_size`
 
@@ -128,7 +128,7 @@ $ ls -la relay-log*
 
 ### 清理中继日志
 
-设置 `relay_log_purge = ON` 后会自动清理不再需要的中继日志文件。
+设置 `relay_log_purge=ON` 后会自动清理不再需要的中继日志文件。
 
 ### 查看中继日志事件
 
@@ -162,7 +162,7 @@ greatsql> SHOW SLAVE STATUS\G
 
 ### 恢复中继日志
 
-当从服务器崩溃恢复时，设置 `relay_log_recovery = ON`，GreatSQL 将自动从崩溃点进行恢复，确保数据一致性。
+当从服务器崩溃恢复时，设置 `relay_log_recovery=ON`，GreatSQL 将自动从崩溃点进行恢复，确保数据一致性。
 
 ## 中继日志的作用
 

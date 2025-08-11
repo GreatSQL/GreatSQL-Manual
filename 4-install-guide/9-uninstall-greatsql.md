@@ -9,10 +9,10 @@
 
 在开始卸载前，请先正确关闭 GreatSQL 数据。
 
-首先，设置 `innodb_fast_shutdown = 0`，确保在关闭 GreatSQL 数据库时把内存缓冲区中的所有数据都刷新到物理磁盘上。
+首先，设置 `innodb_fast_shutdown=0`，确保在关闭 GreatSQL 数据库时把内存缓冲区中的所有数据都刷新到物理磁盘上。
 
 ```sql
-SET GLOBAL innodb_fast_shutdown = 0;
+SET GLOBAL innodb_fast_shutdown=0;
 ```
 
 接着，执行 `SHUTDOWN` 命令关闭 GreatSQL 数据库。
@@ -39,7 +39,7 @@ mysqladmin -hlocalhost -uroot -p shutdown
 
 ## 步骤2：备份数据文件
 
-简单起见，可以备份整个 `datadir` 目录下的所有数据文件。假定 `datadir = /data/GreatSQL`，则执行下面的命令完成备份：
+简单起见，可以备份整个 `datadir` 目录下的所有数据文件。假定 `datadir=/data/GreatSQL`，则执行下面的命令完成备份：
 ```bash
 cp -rfp /data/GreatSQL /data/GreatSQL-fullbackup-`date +"%Y%m%d"`
 ```

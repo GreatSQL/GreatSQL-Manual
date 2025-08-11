@@ -44,7 +44,7 @@ greatsql> SHOW VARIABLES LIKE '%log_bin%';
 ```
 
 - `log_bin` 开启 Binlog 的总开关，可选值为 ON/OFF。
-- `log_bin_basename` 是 Binlog 基本文件名前缀，实际的 Binlog 会在其后追加数字标识来表示每一个文件，例如：binlog.000001, binlog.003306。支持设定全路径，或仅设置基本文件名，例如 `log_bin_basename = binlog`。
+- `log_bin_basename` 是 Binlog 基本文件名前缀，实际的 Binlog 会在其后追加数字标识来表示每一个文件，例如：binlog.000001, binlog.003306。支持设定全路径，或仅设置基本文件名，例如 `log_bin_basename=binlog`。
 - `log_bin_index` 是 Binlog 的索引文件名，在这个文件中记录了所有 Binlog 文件列表。
 - `log_bin_trust_function_creators` 设置是否相信所有存储程序创建者，该参数值默认为 OFF，这是为了避免部分存储程序创建者可能无意或恶意破坏数据库。设置为 OFF 时会导致没有 SUPER 权限的账户无法创建或修改存储程序，即便这些账户已有 `CREATE ROUTINE` 或 `ALTER ROUTINE` 权限也不行。当设置为 OFF 时，普通账户想要创建存储程序时，需要指定 `DETERMINISTIC` 或 `READS SQL DATA` 或 `NO SQL` 标识符声明不会修改数据库，才能创建/修改存储程序。设置为 ON 虽然方便了开发者，但却可能存在数据库安全风险。
 - `log_bin_use_v1_row_events` 从 8.0.18 开始已弃用，不解读。
@@ -57,23 +57,23 @@ greatsql> SHOW VARIABLES LIKE '%log_bin%';
 ```ini
 [mysqld]
 # 必须参数
-log_bin = /data/GreatSQL/binlog
+log_bin=/data/GreatSQL/binlog
 
 # 可选参数
-binlog_expire_logs_seconds = 604800
-max_binlog_size = 1G
-binlog_format = ROW
-sync_binlog = 1
-max_binlog_size = 1G
-binlog_cache_size = 4M
-max_binlog_cache_size = 2G
-binlog_checksum = CRC32
-binlog_transaction_dependency_tracking = WRITESET
+binlog_expire_logs_seconds=604800
+max_binlog_size=1G
+binlog_format=ROW
+sync_binlog=1
+max_binlog_size=1G
+binlog_cache_size=4M
+max_binlog_cache_size=2G
+binlog_checksum=CRC32
+binlog_transaction_dependency_tracking=WRITESET
 ```
 
 - `log_bin`
 
-  开启 Binlog 与否的总开关。该参数的值只要不是设置为 OFF，就表示启用 Binlog。如果设置为 `log_bin = 1` 或 `log_bin = ON`，仅表示打开 Binlog 不设置 Binlog 文件基本名；如果设置为字符串，则表示除了打开 Binlog 外，还同时设定 Binlog 的基本文件名，支持设定为全路径或仅文件名，如 `log_bin = binlog` 或 `log_bin = /data/GreatSQL/binlog`。
+  开启 Binlog 与否的总开关。该参数的值只要不是设置为 OFF，就表示启用 Binlog。如果设置为 `log_bin=1` 或 `log_bin=ON`，仅表示打开 Binlog 不设置 Binlog 文件基本名；如果设置为字符串，则表示除了打开 Binlog 外，还同时设定 Binlog 的基本文件名，支持设定为全路径或仅文件名，如 `log_bin=binlog` 或 `log_bin=/data/GreatSQL/binlog`。
 
 - `binlog_expire_logs_seconds`
 
@@ -103,7 +103,7 @@ binlog_transaction_dependency_tracking = WRITESET
 
 - `sync_binlog`
 
-  用于控制 Binlog 的同步（刷盘）模式，默认值是 1。设置 `sync_binlog = N`，表示每写入 N 次 Binlog Events 后，再将 Binlog 同步刷新到磁盘，以确保数据的一致性和持久性。设置 `sync_binlog=1` 可以提供最强的数据安全性，但会很大程度影响性能；设置较大的值可以提高性能，但增加数据丢失的风险。在要求高一致性的业务场景中，务必设置 `sync_binlog = 1` 以确保数据安全。
+  用于控制 Binlog 的同步（刷盘）模式，默认值是 1。设置 `sync_binlog=N`，表示每写入 N 次 Binlog Events 后，再将 Binlog 同步刷新到磁盘，以确保数据的一致性和持久性。设置 `sync_binlog=1` 可以提供最强的数据安全性，但会很大程度影响性能；设置较大的值可以提高性能，但增加数据丢失的风险。在要求高一致性的业务场景中，务必设置 `sync_binlog=1` 以确保数据安全。
 
 - `binlog_cache_size` 和 `max_binlog_cache_size`
 
@@ -201,7 +201,7 @@ Kp+AEA==
 
 - 发生的时间点：**#240704 14:20:52**，对应的 Unix 时间戳：**TIMESTAMP=1720074052**。
 - 服务器对应的 `server_id` 和 `server_uuid` 分别是：**server id 3306** 和 **46dda72d-ceec-11ee-be3f-d08e7908bcb1**。
-- 从 **rbr_only=yes** 可以看出来设置了 `binlog_format = ROW`。
+- 从 **rbr_only=yes** 可以看出来设置了 `binlog_format=ROW`。
 - 从 **Table_map: \`greatsql\`.\`t_803225\`** 知道对应的库表，它在 Binlog 中映射的 **table id 400**。
 - 从 **Write_rows:** 可知这是一个写入操作（如果是更新操作，则对应 **Update_rows**）。
 
@@ -346,13 +346,13 @@ SHOW BINLOG EVENTS\G
 -- b、指定查询 binlog.088802 这个文件
 SHOW BINLOG EVENTS IN 'binlog.088802'\G
 
--- c、指定查询 binlog.080802 这个文件，从 pos = 391 开始查起:
+-- c、指定查询 binlog.080802 这个文件，从 pos=391 开始查起:
 SHOW BINLOG EVENTS IN 'binlog.080802' FROM 391\G
 
--- d、指定查询 binlog.000802 这个文件，从 pos = 391 开始查起，查询 5 个 Events
+-- d、指定查询 binlog.000802 这个文件，从 pos=391 开始查起，查询 5 个 Events
 SHOW BINLOG EVENTS IN 'binlog.000802' FROM 391 LIMIT 5\G
 
--- e、指定查询 binlog.880002 这个文件，从 pos = 391 开始查起，偏移量 2（即中间跳过 2 个 Events），查询 5 个 Events
+-- e、指定查询 binlog.880002 这个文件，从 pos=391 开始查起，偏移量 2（即中间跳过 2 个 Events），查询 5 个 Events
 SHOW BINLOG EVENTS IN 'binlog.880002' FROM 391 LIMIT 2,5\G
 ```
 
@@ -392,7 +392,7 @@ Binlog 文件可以设置为过期后自动删除，同时 GreatSQL 也提供了
 修改 my.cnf 配置文件，增加类似下面内容
 ```ini
 [mysqld]
-binlog_expire_logs_seconds = 604800
+binlog_expire_logs_seconds=604800
 ```
 上面提到过，这个设置表示 Binlog 会自动删除 7 天前的历史日志文件。
 
@@ -469,7 +469,7 @@ Binlog 刷盘流程如下：
 
 在要求数据高一致性的业务场景中，务必设置为 1，表示每次提交事务都会执行 fsync 立即同步刷新到磁盘。
 
-还可以设置为 `sync_binlog = N`（N > 1），表示每次提交事务都 Write 到操作系统的 Page cache，在累积 N 次提交后才批量 fsync，这是介于性能和数据可靠性中间的一个折中方案。
+还可以设置为 `sync_binlog=N`（N > 1），表示每次提交事务都 Write 到操作系统的 Page cache，在累积 N 次提交后才批量 fsync，这是介于性能和数据可靠性中间的一个折中方案。
 
 ### Binlog 与 Redo Log 的异同
 

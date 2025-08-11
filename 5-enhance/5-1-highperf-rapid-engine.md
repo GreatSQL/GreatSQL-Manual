@@ -608,7 +608,7 @@ SELECT locking语句（... INTO ...FOR UPDATE）;
 
 #### 列字符集限制
 
-1.要求所有列字符集为utf8mb4，Accent sensitive(as)，ci/cs;
+1.要求所有列字符集为utf8mb4，Accent insensitive(ai)，ci/cs;
 
 2.不支持binary、koi8r、ucs2;
 

@@ -23,15 +23,15 @@
 
 ```ini
 [mysqld]
-log-error = [path/[filename]] 
+log-error=[path/[filename]] 
 ```
 其中，*path* 为日志文件所在的目录路径，可以不配置，默认为 `datadir`；*filename* 为日志文件名，例如：
 
 ```ini
 [mysqld]
-log-error = /data/GreatSQL/error.log
+log-error=/data/GreatSQL/error.log
 # 或下面这样也可以
-# log-error = error.log
+# log-error=error.log
 ```
 
 修改完上述配置项后，需要重启 GreatSQL 服务以生效。
@@ -110,14 +110,14 @@ greatsql> SHOW GLOBAL VARIABLES LIKE 'log_timestamps';
 
 可以在线修改全局参数设定：
 ```sql
-SET GLOBAL log_timestamps = system;
+SET GLOBAL log_timestamps=system;
 ```
 
 也可以修改 my.cnf 配置文件使其持久化生效（下次数据库实例重启后生效）：
 
 ```ini
 [mysqld]
-log_timestamps = system
+log_timestamps=system
 ```
 
 ## 错误日志管理

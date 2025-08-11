@@ -590,7 +590,7 @@ No default schema selected; type \use <schema> to set one.
 
 # 选定GreatSQL-01节点作为PRIMARY，开始创建MGR集群
 # 集群命名为 GreatSQLMGR，后面mysqlrouter读取元数据时用得上
-MySQL  172.16.16.10:3306 ssl  JS > c = dba.createCluster('GreatSQLMGR');
+MySQL  172.16.16.10:3306 ssl  JS > c=dba.createCluster('GreatSQLMGR');
 A new InnoDB cluster will be created on instance '172.16.16.10:3306'.
 
 Validating instance configuration at 172.16.16.10:3306...
@@ -714,7 +714,7 @@ MySQL  172.16.16.10:3306 ssl  JS > c.status()
 
 编辑 GreatSQL-03 节点上的 `/etc/my.cnf` 配置文件，加入/修改下面这行内容：
 ```ini
-loose-group_replication_arbitrator = 1
+loose-group_replication_arbitrator=ON
 ```
 其作用就是指定该节点作为**仲裁节点**，保存退出，重启该节点GreatSQL数据库。
 

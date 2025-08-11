@@ -215,7 +215,7 @@ Checking if update is needed.
 1. 升级前的版本要求是GA版本，即5.7.9之后的版本。如果不是的话，要先在5.7大版本内升级小版本。
 2. 建议先把当前的5.7升级到最新的子版本，截止本文时间，最新版本是5.7.43。
 3. 升级到8.0版本后，主要区别是默认密码验证插件(`default_authentication_plugin`)从 `mysql_native_password` 变成了 `caching_sha2_password`，会影响一些版本比较低的API/驱动，在创建用户时仍旧指定为 `mysql_native_password` 即可，或者在 `my.cnf` 中设置 `default_authentication_plugin=mysql_native_password`。
-4. 在8.0中，不能直接利用 `GRANT` 创建新用户，需要手动先 `CREATE USER` 才能 `GRANT`，对应 `SQL_MODE = NO_AUTO_CREATE_USER`。
+4. 在8.0中，不能直接利用 `GRANT` 创建新用户，需要手动先 `CREATE USER` 才能 `GRANT`，对应 `SQL_MODE=NO_AUTO_CREATE_USER`。
 5. 在8.0中，除了InnoDB引擎，其他引擎表都不支持原生PARTITION特性。
 6. 默认字符集、校验集分别从 `latin1 & latin1_swedish_ci` 升级成 `utf8mb4 & utf8mb4_0900_ai_ci`。**注意** ，在5.7版本中，`utf8mb4` 默认的校验集是 `utf8mb4_general_ci`，而在8.0中，对应的默认校验集则变成 `utf8mb4_0900_ai_ci`。如果有数据库、表、存储函数等数据对象没有显式声明校验集的话，注意是否发生变化。
 
@@ -231,7 +231,7 @@ Checking if update is needed.
 
 首先修改 `my.cnf` 配置文件，在 `[mysqld]` 区间中增加一行内容
 ```ini
-upgrade = FORCE
+upgrade=FORCE
 ```
 
 然后修改正确的 `basedir` 指向新版本二进制文件路径，再次启动GreatSQL 8.0服务，即可实现自动升级，除了系统表，用户表也会全部升级。
@@ -252,7 +252,7 @@ upgrade = FORCE
 
 是不是觉得有点惊喜，有点意外，怎么怎么简单，事实的确如此。
 
-如果有强迫症的话，想要看到完整升级过程，还可以加上两个选项 `log_error_verbosity=3` 以及 `innodb_print_ddl_logs = ON`，输出的日志就会多很多：
+如果有强迫症的话，想要看到完整升级过程，还可以加上两个选项 `log_error_verbosity=3` 以及 `innodb_print_ddl_logs=ON`，输出的日志就会多很多：
 ```log
 ...
 [System] [MY-011012] [Server] Starting upgrade of data directory.
@@ -307,7 +307,7 @@ upgrade = FORCE
 
 最后要注意检查升级过程中输出的日志是否有报错信息，如果没有就说明升级过程很顺利。
 
-确定升级完成后，记得注释掉 `my.cnf` 文件中的 `upgrade = FORCE` 选项，或者将其修改成 `upgrade = AUTO`。
+确定升级完成后，记得注释掉 `my.cnf` 文件中的 `upgrade=FORCE` 选项，或者将其修改成 `upgrade=AUTO`。
 
 ## 升级GreatSQL 8.0.25到8.0.32 
 GreatSQL 8.0.32相对于8.0.25版本，新增了Rapid引擎、更多SQL语法兼容性、MGR层支持绑定VIP、支持并行LOAD DATA、在安全方面支持国密加密&备份加密等非常不错的特性，强烈建议升级到最新的GreatSQL 8.0.32版本。
@@ -316,7 +316,7 @@ GreatSQL 8.0.32相对于8.0.25版本，新增了Rapid引擎、更多SQL语法兼
 
 1. 下载最新[GreatSQL 8.0.32二进制包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)，并解压缩到相应目录下。
 
-2. 在数据库维护期间关闭GreatSQL 8.0.25版本数据库。关闭前，先执行 `SET GLOBAL innodb_fast_shutdown = 0`，确保停机时得到一份完整、干净的数据文件。
+2. 在数据库维护期间关闭GreatSQL 8.0.25版本数据库。关闭前，先执行 `SET GLOBAL innodb_fast_shutdown=0`，确保停机时得到一份完整、干净的数据文件。
 
 3. 修改my.cnf，调整basedir，指向新版本二进制包路径。可参考这份[my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)。
 
@@ -338,7 +338,7 @@ GreatSQL 8.0.32相对于8.0.25版本，新增了Rapid引擎、更多SQL语法兼
 [System] [MY-013381] [Server] Server upgrade from '80025' to '80032' completed.
 ```
 
-5. 如果设置选项 `innodb_print_ddl_logs=1`，则还能看到升级过程中有大量的DDL升级记录，例如：
+5. 如果设置选项 `innodb_print_ddl_logs=ON`，则还能看到升级过程中有大量的DDL升级记录，例如：
 ```log
 [System] [MY-013381] [Server] Server upgrade from '80025' to '80032' started.
 [Note] [MY-013386] [Server] Running queries to upgrade MySQL server.

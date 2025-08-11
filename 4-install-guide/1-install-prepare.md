@@ -107,7 +107,7 @@ sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
 
 运行 GreatSQL 建议配置足够的物理内存。如果内存不足，不建议使用 swap 作为缓冲，因为这会降低性能。建议永久关闭系统 swap。
 ```bash
-echo "vm.swappiness = 0">> /etc/sysctl.conf
+echo "vm.swappiness=0">> /etc/sysctl.conf
 swapoff -a && swapon -a
 sysctl -p
 ```
@@ -180,10 +180,10 @@ echo never > /sys/kernel/mm/transparent_hugepage/defrag
 4. **优化内核参数**
 建议调整优化下面几个内核参数：
 ```bash
-echo "fs.file-max = 1000000" >> /etc/sysctl.conf
-echo "net.core.somaxconn = 32768" >> /etc/sysctl.conf
-echo "net.ipv4.tcp_syncookies = 0" >> /etc/sysctl.conf
-echo "vm.overcommit_memory = 1" >> /etc/sysctl.conf
+echo "fs.file-max=1000000" >> /etc/sysctl.conf
+echo "net.core.somaxconn=32768" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_syncookies=0" >> /etc/sysctl.conf
+echo "vm.overcommit_memory=1" >> /etc/sysctl.conf
 sysctl -p
 ```
 
@@ -225,7 +225,7 @@ grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
 
 然后重启操作系统，使之生效。
 
-操作系统层开启NUMA后，还要记得修改GreatSQL配置选项 `innodb_numa_interleave = ON`，确保InnoDB在分配内存时使用正确的NUMA策略。
+操作系统层开启NUMA后，还要记得修改GreatSQL配置选项 `innodb_numa_interleave=ON`，确保InnoDB在分配内存时使用正确的NUMA策略。
 
 如果采用手动方式启动GreatSQL服务进程，还可以在启动时加上 `numactl --interleave=all`，例如：
 ```bash

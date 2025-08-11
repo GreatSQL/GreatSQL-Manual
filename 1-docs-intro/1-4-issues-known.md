@@ -17,7 +17,7 @@ INSERT INTO t1 VALUES(1024, 1024);
 
 这个事务在应用到Rapid引擎表时会出现报错，终止增量数据同步任务，报错信息类似下面这样
 
-```
+```sql
 greatsql> SELECT * FROM information_schema.SECONDARY_ENGINE_INCREMENT_LOAD_TASK\G
 ...
            DB_NAME: test

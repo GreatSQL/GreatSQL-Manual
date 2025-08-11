@@ -20,7 +20,7 @@ greatsql> CREATE TABLE `interval`(begin INT, end INT);
 Query OK, 0 rows affected (0.08 sec)
 ```
 
-另外，要注意的是，从 GreatSQL 8.0.32-24 开始，开启 Oracle 兼容模式（`SET sql_mode = ORACLE`）后，对象名都需要特殊处理才行，例如：
+另外，要注意的是，从 GreatSQL 8.0.32-24 开始，开启 Oracle 兼容模式（`SET sql_mode=ORACLE`）后，对象名都需要特殊处理才行，例如：
 ```sql
 greatsql> CREATE TABLE `interval`(`begin` INT, `end` INT);
 Query OK, 0 rows affected (0.02 sec)

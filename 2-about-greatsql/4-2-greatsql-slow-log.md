@@ -14,7 +14,7 @@ GreatSQL 数据库默认不会记录 Slow Log，需要手动设置相关参数�
 
 可以在线执行下面的命令启用 Slow Log：
 ```sql
-SET GLOBAL slow_query_log = ON;
+SET GLOBAL slow_query_log=ON;
 ```
 
 执行下面的命令查看 Slow Log 启用与否，以及其他相关配置：
@@ -49,12 +49,12 @@ greatsql> SHOW VARIABLES LIKE 'long_query_time';
 
 它支持在线动态修改全局设定，修改完后，会对再次创建的新连接会话生效（当前会话不能立即生效）：
 ```sql
-SET GLOBAL long_query_time = 0.01;
+SET GLOBAL long_query_time=0.01;
 ```
 
 也支持只修改会话级设定，会对当前连接会话立即生效：
 ```sql
-SET long_query_time = 0.01;
+SET long_query_time=0.01;
 ```
 
 - slow_query_log
@@ -86,9 +86,9 @@ SET long_query_time = 0.01;
 
 ```ini
 [mysqld]
-slow_query_log = ON 
+slow_query_log=ON 
 slow_query_log_file=/data/GreatSQL/slow.log 
-long_query_time = 0.01
+long_query_time=0.01
 ```
 
 如果不配置 Slow Log 的全路径名，它将默认存储到 GreatSQL 数据库的 `datadir` 目录下；如果不指定文件名，则默认文件名为 `hostname-slow.log`。
@@ -177,9 +177,9 @@ greatsql> SHOW VARIABLES LIKE 'min_examined_row_limit';
 把慢查询时长阈值设置为 1 秒：
 
 ```sql
-SET GLOBAL slow_query_log = ON;
-SET GLOBAL long_query_time = 1;
-SET long_query_time = 1;
+SET GLOBAL slow_query_log=ON;
+SET GLOBAL long_query_time=1;
+SET long_query_time=1;
 ```
 
 执行一次总耗时超过 1 秒的 SQL 请求：
@@ -251,13 +251,13 @@ SELECT * FROM `student` WHERE id>100000 AND `name`='Yunxi';
 可以执行下面的命令，在线动态关闭慢查询日志：
 
 ```sql
-SET GLOBAL slow_query_log = off;
+SET GLOBAL slow_query_log=off;
 ```
 
 也可以通过修改 my.cnf 配置文件，使之在下次重启后持久化生效（默认情况下是未开启慢查询日志的）：
 ```ini
 [mysqld]
-slow_query_log = OFF
+slow_query_log=OFF
 ```
 
 ## 慢查询日志管理

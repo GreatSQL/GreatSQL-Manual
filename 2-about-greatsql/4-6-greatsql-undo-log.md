@@ -101,10 +101,10 @@ InnoDB 支持采用自动和手动两种方法来清理（truncate）Undo 表空
 
 InnoDB 要求至少有两个活跃可用的 Undo 表空间才可以启用自动清理方式，因为当一个 Undo 表空间被清理的时候，至少得有一个活跃可用的。
 
-设置系统参数 `innodb_undo_log_truncate = ON` 即可启用自动清理模式：
+设置系统参数 `innodb_undo_log_truncate=ON` 即可启用自动清理模式：
 
 ```sql
-SET GLOBAL innodb_undo_log_truncate = ON;
+SET GLOBAL innodb_undo_log_truncate=ON;
 ```
 
 在自动清理模式下，一旦有个 Undo 表空间文件大小超过 `innodb_max_undo_log_size` 参数设定的阈值后，就会开始自动清理。参数 `innodb_max_undo_log_size` 可以在线动态调整，默认值 *1GB*。

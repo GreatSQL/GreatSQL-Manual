@@ -183,7 +183,7 @@ ERROR 1146 (42S02) at line 586: Table 'mysql.replication_group_member_actions' d
 
 ## 降级到 GreatSQL 8.0.32-27
 
-如果是要从 MySQL 8.0.32 之后的版本降级到 GreatSQL 8.0.32-27 版本，则需要采取逻辑备份 + 逻辑导入方式完成降级操作（不支持直接在原来的 datadir 基础上原地启动 GreatSQL 8.0.32-27 完成降级替换），并且在逻辑备份导入完成后的首次重启时，务必设置 `upgrade = FORCE` 强制升级所有数据表，包括系统表。
+如果是要从 MySQL 8.0.32 之后的版本降级到 GreatSQL 8.0.32-27 版本，则需要采取逻辑备份 + 逻辑导入方式完成降级操作（不支持直接在原来的 datadir 基础上原地启动 GreatSQL 8.0.32-27 完成降级替换），并且在逻辑备份导入完成后的首次重启时，务必设置 `upgrade=FORCE` 强制升级所有数据表，包括系统表。
 
 降级过程操作大致如下所示：
 
@@ -198,10 +198,10 @@ mysqldump -S/data/MySQL/mysql.sock -A --triggers --routines --events --single-tr
 mysql -S/data/GreatSQL/mysql.sock -f < /data/backup/fulldump.sql
 ```
 
-3. 修改my.cnf，确保 upgrade = FORCE 设置
+3. 修改my.cnf，确保 upgrade=FORCE 设置
 ```ini
 [mysqld]
-upgrade = FORCE
+upgrade=FORCE
 ```
 
 4. 重启GreatSQL，降级完成
@@ -221,7 +221,7 @@ systemctl restart greatsql
 [System] [MY-013381] [Server] Server upgrade from '80032' to '80032' completed.
 ```
 
-如果不设置 `upgrade = FORCE` 强制升级所有表，有可能发生系统表 `mysql.procs_priv` 损坏错误，在创建用户时可能会报告类似下面的错误：
+如果不设置 `upgrade=FORCE` 强制升级所有表，有可能发生系统表 `mysql.procs_priv` 损坏错误，在创建用户时可能会报告类似下面的错误：
 
 ```sql
 greatsql> create user tpch identified by 'tpch';

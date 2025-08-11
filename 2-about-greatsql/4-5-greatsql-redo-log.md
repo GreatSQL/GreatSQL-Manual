@@ -22,7 +22,7 @@ Redo Log 对 InnoDB 很重要，主要以下几点原因：
 
 ```sql
 -- 修改 Redo Log 总容量为 8GB
-SET GLOBAL innodb_redo_log_capacity = 8589934592;
+SET GLOBAL innodb_redo_log_capacity=8589934592;
 ```
 调整 Redo Log 总容量后，需要先把 buffer pool 中的脏页刷新到磁盘中，再完成收缩或扩展；如果是把调小，则需要尽快刷脏页；如果是调大，则刷脏页的动作会慢一些。
 
@@ -30,7 +30,7 @@ SET GLOBAL innodb_redo_log_capacity = 8589934592;
 
 ```ini
 [mysqld]
-innodb_redo_log_capacity = 8G
+innodb_redo_log_capacity=8G
 ```
 
 当 `innodb_redo_log_capacity` 设置了，则不管 `innodb_log_file_size` 或 `innodb_log_files_in_group` 是否也设置了都不生效，Redo Log 总量以 `innodb_redo_log_capacity` 为准。
@@ -69,7 +69,7 @@ greatsql> SELECT FILE_ID, FILE_NAME, START_LSN, END_LSN, SIZE_IN_BYTES, IS_FULL,
 
 ### 自动配置 Redo Log
 
-当参数 `innodb_dedicated_server = ON` 时，会假定 GreatSQL 数据库实例尽量最优地使用服务器资源，InnoDB 就会自动调整相关参数配置，也包括 Redo Log 总容量；该参数默认不启用，更多详情参考：[Enabling Automatic Configuration for a Dedicated MySQL Server](https://dev.mysql.com/doc/refman/8.0/en/innodb-dedicated-server.html)。
+当参数 `innodb_dedicated_server=ON` 时，会假定 GreatSQL 数据库实例尽量最优地使用服务器资源，InnoDB 就会自动调整相关参数配置，也包括 Redo Log 总容量；该参数默认不启用，更多详情参考：[Enabling Automatic Configuration for a Dedicated MySQL Server](https://dev.mysql.com/doc/refman/8.0/en/innodb-dedicated-server.html)。
 
 ### 禁用 Redo Log
 从 8.0.21 开始，支持执行 SQL 命令 `ALTER INSTANCE DISABLE INNODB REDO_LOG` 以禁用 Redo Log（其实也包括禁用 Doublewrite Buffer）。这是危险操作，一般不要这么做，只有在以下几种特殊场景下可以考虑：
@@ -231,7 +231,7 @@ Redo Log 相关的调整优化操作，主要参考以下几条原则：
   - **0**：事务提交时不刷新重做日志缓冲区到磁盘。每秒刷新一次。**性能最好，安全性最差**。
   - **1**：每个事务提交时都将重做日志缓冲区写入磁盘，并刷新文件系统缓冲区。**性能最差，安全性最好**。
   - **2**：事务提交时只将重做日志缓冲区写入文件系统缓冲区，每秒刷新一次。**性能和安全性的折中选择**。
-  - 为了保证数据安全可靠，请务必同时设置 `innodb_flush_log_at_trx_commit = 1` & `sync_binlog = 1`，即俗称设置为 **双1**。
+  - 为了保证数据安全可靠，请务必同时设置 `innodb_flush_log_at_trx_commit=1` & `sync_binlog=1`，即俗称设置为 **双1**。
 
 ![Redo log buffer不同刷盘模式](./4-5-greatsql-redo-Log-06.png)
 

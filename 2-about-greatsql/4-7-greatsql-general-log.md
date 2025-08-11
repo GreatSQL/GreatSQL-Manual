@@ -18,8 +18,8 @@
 
 ```ini
 [mysqld]
-general_log = ON
-general_log_file = /data/GreatSQL/general.log
+general_log=ON
+general_log_file=/data/GreatSQL/general.log
 ```
 
 ### 在运行时动态设置
@@ -28,13 +28,13 @@ general_log_file = /data/GreatSQL/general.log
 
 ```sql
 -- 启用通用日志
-SET GLOBAL general_log = ON;
+SET GLOBAL general_log=ON;
 
 -- 禁用通用日志
-SET GLOBAL general_log = OFF;
+SET GLOBAL general_log=OFF;
 
 -- 设置通用日志文件路径
-SET GLOBAL general_log_file = '/data/GreatSQL/general.log';
+SET GLOBAL general_log_file='/data/GreatSQL/general.log';
 ```
 
 通用日志支持在线动态启用或禁用，以及设置日志文件路径。
