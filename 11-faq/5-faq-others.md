@@ -446,15 +446,34 @@ Docker容器报告找不到OpenSSL库，并一直处于初始化进程中。
 
 此外，还可能因为安装的Docker版本号较低或特殊版本存在问题导致的，升级版本一般也能解决问题。经测试，使用较早的Docker版本如<=17.12.1的版本就有该问题，个别在Kubernetes环境中安装的Docker可能也有问题，建议规避。
 
-## 20. 为什么有些很快的SQL操作也被记录到Slow Query Log中
+## 21. 为什么有些很快的SQL操作也被记录到Slow Query Log中
 
 已经设置了`long_query_time=10`（超过10秒的SQL请求会被当做慢查询），为什么有些SQL请求只耗时毫秒级别也会被记录到Slow Query Log中？
 
-这有较大可能是因为设置了`log_queries_not_using_indexes=ON`，这表示当一个SQL请求无法使用索引时，哪怕它执行起来很快，也会被当做慢查询请求而记录下来。
+这有较大可能是因为设置了`log_queries_not_using_indexes=ON`，这表示当一个SQL请求无法使用索引时，哪怕它执行起来很快，也会被当做慢查询请求而记录下来。如下例所示：
+
+```log
+# Query_time: 0.006571  Lock_time: 0.000004 Rows_sent: 14  Rows_examined: 43 Thread_id: 21 Errno: 0 Killed: 0 Bytes_received: 58 Bytes_sent: 289 Read_first: 2 Read_last: 0 R
+ead_key: 13 Read_next: 9 Read_prev: 0 Read_rnd: 0 Read_rnd_next: 15 Sort_merge_passes: 0 Sort_range_count: 0 Sort_rows: 0 Sort_scan_count: 0 Created_tmp_disk_tables: 0 Creat
+ed_tmp_tables: 0 Start: 2025-07-17T14:47:42.308420+08:00 End: 2025-07-17T14:47:42.314991+08:00 Schema:  Rows_affected: 0
+# Tmp_tables: 0  Tmp_disk_tables: 0  Tmp_table_sizes: 0
+# InnoDB_trx_id: 0
+# Full_scan: Yes  Full_join: Yes  Tmp_table: No  Tmp_table_on_disk: No
+# Filesort: No  Filesort_on_disk: No  Merge_passes: 0
+#   InnoDB_IO_r_ops: 2  InnoDB_IO_r_bytes: 32768  InnoDB_IO_r_wait: 0.004966
+#   InnoDB_rec_lock_wait: 0.000000  InnoDB_queue_wait: 0.000000
+#   InnoDB_pages_distinct: 22
+SET timestamp=1752734862;
+SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA;
+```
+
+可以看到**Query_time: 0.006571**以及**Full_scan: Yes**，表示这是一个没有使用索引的全表扫描，其耗时仅0.006571秒，虽然没有超过`long_query_time=10`阈值，但也被当做慢查询记录下来了。
 
 这么做的好处是，在一个表还很小时，可以提前发现那些无法使用索引的SQL请求，避免当该表数据随着业务发展而快速增加时，仍然没有创建有效的索引以提升SQL查询效率，可以提前预防未来潜在的性能风险。
 
 在开发、测试环境中，通常强烈建议设置`log_queries_not_using_indexes=ON`，甚至是设置`long_query_time=0`，以记录所有SQL，再定期进行审视和优化。
+
+参考内容：[Slow Query Log（慢查询日志）](../2-about-greatsql/4-2-greatsql-slow-log.md)。
 
 **扫码关注微信公众号**
 
