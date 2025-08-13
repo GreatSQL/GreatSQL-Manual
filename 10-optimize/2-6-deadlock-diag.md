@@ -13,8 +13,8 @@
 | t1 | begin; | begin; |
 | t2 | select * from t1 where id=1 for update; | |
 | t3 | | select * from t1 where id=2 for update; |
-| t4 | select * from t1 where id=2 for update;<br/>被阻塞||
-| t5 | | select * from t1 where id=1 for update;<br/>触发死锁检测，报告死锁，失败回滚事务<br/>ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting transaction|
+| t4 | select * from t1 where id=2 for update;<br/>-- 被阻塞||
+| t5 | | select * from t1 where id=1 for update;<br/>-- 触发死锁检测，报告死锁，失败回滚事务<br/>-- ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting transaction|
 
 在InnoDB中，有个死锁检测的后台线程，当检测到死锁后，会马上抛出异常并回滚一个事务（另一个继续执行），InnoDB选择回滚代价较小（锁定或修改的行数较少）的事务，如果两个事务代价一样，则选择启动时间较晚的那个事务。
 
