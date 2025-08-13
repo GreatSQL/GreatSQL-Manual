@@ -268,7 +268,21 @@ $ ls -la /usr/lib64/libjemalloc.so*
 lrwxrwxrwx 1 root root     16 Oct  2  2019 /usr/lib64/libjemalloc.so -> libjemalloc.so.2
 -rwxr-xr-x 1 root root 608096 Oct  2  2019 /usr/lib64/libjemalloc.so.2
 ```
-这样在启动MySQL时就会加载 `jemalloc` 动态库了。
+这样在用systemd方式启动GreatSQL时就会加载 `jemalloc` 动态库了，可以用下面的方法查看确认：
+
+```bash
+$ lsof -p 43653 | grep -i jema
+
+...
+mysqld  52003 mysql  mem       REG              253,0     608096   68994440 /usr/lib64/libjemalloc.so.2
+
+```
+
+::: tip 提醒
+用systemd方式启动GreatSQL时，要确保服务文件中已配置 `EnvironmentFile=-/etc/sysconfig/mysql` 参数，详情参考：[利用systemd管理GreatSQL](./8-greatsql-with-systemd.md#编辑systemd服务配置脚本)。
+
+如果是用其他方式启动GreatSQL的话，可以在启动前在终端命令行模式下执行 `export LD_PRELOAD=/usr/lib64/libjemalloc.so`，使得GreatSQL启动时能加载jemalloc库。
+:::
 
 建议采用Jemalloc代替glibc自带的malloc库，其优势在于减少内存碎片和提升高并发场景下内存的分配效率，提高内存管理效率的同时还能降低数据库运行时发生OOM的风险。
 
