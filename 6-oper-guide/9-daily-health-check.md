@@ -167,6 +167,11 @@ Average:     all   13.99    0.00    2.63    0.13    0.00    0.69    0.00    0.00
 
 从上述结果来看，服务器当前的用户态 CPU 负载较高，不过由于服务器的核数较多，所以整体 CPU 资源还有较大余量。
 
+如果存在以下三种情况，应当尽早介入性能优化相关工作：
+- 当%usr列的数值持续较大（>=20）时，说明当前服务器的CPU负载较高，有较大的可能是当前GreatSQL数据库中运行的SQL请求效率较低。
+- 当%sys列的数值持续较大（>=10）时，则有较大可能是当前GreatSQL数据库中存在较多的行锁等待，或者当前因为物理内存不足引发Swap交换。
+- 当%iowait列的数值持续较大（>=10）时，则说明当前服务器上的磁盘I/O负载较高。
+
 ### 3. 检查内存状态
 
 `free` 是一个常用的 Linux 工具，用于报告系统中内存的使用情况。它可以帮助了解当前系统的内存使用状态，包括物理内存、交换空间（swap）以及缓存和缓冲区的使用情况。
@@ -215,6 +220,60 @@ $ top
 - 检查参数 `tmp_table_size / max_heap_table_size` 等设置是否过大，通常设置不超过 128MB 就够用；
 
 以上内存相关参数设置都可以在线动态调整，可以先分别适当调低。如果不确定怎么设置合适，可以利用 [my.cnf生成工具](https://imysql.com/my-cnf-wizard.html) 生成一份 my.cnf 参考模板。
+
+此外，还可以执行下面的SQL查看当前GreatSQL数据库的内存消耗占比较高的模块和线程是什么：
+
+```sql
+-- 查询GreatSQL数据库中内存消耗占比较高的模块
+SELECT EVENT_NAME, SUM_NUMBER_OF_BYTES_ALLOC FROM
+  PERFORMANCE_SCHEMA.MEMORY_SUMMARY_GLOBAL_BY_EVENT_NAME
+    ORDER BY SUM_NUMBER_OF_BYTES_ALLOC DESC LIMIT 10;
++----------------------------------------------+---------------------------+
+| EVENT_NAME                                   | SUM_NUMBER_OF_BYTES_ALLOC |
++----------------------------------------------+---------------------------+
+| memory/innodb/memory                         |               45879336944 |
+| memory/memory/HP_PTRS                        |               14473514832 |
+| memory/sql/Filesort_buffer::sort_keys        |                7746519943 |
+| memory/sql/THD::main_mem_root                |                3267545344 |
+| memory/innodb/buf_buf_pool                   |                2195783680 |
+| memory/sql/Sid_map::Node                     |                2169465576 |
+| memory/sql/String::value                     |                1206132352 |
+| memory/mysqld_openssl/openssl_malloc         |                 953197339 |
+| memory/sql/Prepared_statement::main_mem_root |                 447738240 |
+| memory/temptable/physical_ram                |                 428880672 |
++----------------------------------------------+---------------------------+
+
+-- 查询GreatSQL数据库中内存消耗占比较高的线程
+SELECT THREAD_ID, EVENT_NAME, SUM_NUMBER_OF_BYTES_ALLOC FROM
+  PERFORMANCE_SCHEMA.MEMORY_SUMMARY_BY_THREAD_BY_EVENT_NAME 
+    ORDER BY SUM_NUMBER_OF_BYTES_ALLOC DESC LIMIT 20;
++-----------+-------------------------------+---------------------------+
+| THREAD_ID | EVENT_NAME                    | SUM_NUMBER_OF_BYTES_ALLOC |
++-----------+-------------------------------+---------------------------+
+|       290 | memory/innodb/memory          |                5838369088 |
+|       291 | memory/innodb/memory          |                5057600600 |
+|       292 | memory/innodb/memory          |                3662593216 |
+|       338 | memory/innodb/memory          |                2862346672 |
+|       289 | memory/innodb/memory          |                2846131168 |
+|       342 | memory/innodb/memory          |                2791608696 |
+|       339 | memory/innodb/memory          |                2775410744 |
+|       344 | memory/innodb/memory          |                2772611072 |
+|       336 | memory/innodb/memory          |                2734888512 |
+|       337 | memory/innodb/memory          |                2719026704 |
+|       340 | memory/innodb/memory          |                2654364752 |
+|       343 | memory/innodb/memory          |                2580087392 |
+|       335 | memory/innodb/memory          |                2490996400 |
+|       341 | memory/innodb/memory          |                2463993728 |
+|       288 | memory/sql/Sid_map::Node      |                2169424028 |
+|       337 | memory/memory/HP_PTRS         |                1621687936 |
+|       334 | memory/sql/THD::main_mem_root |                1587371392 |
+|       339 | memory/memory/HP_PTRS         |                1584831392 |
+|       343 | memory/memory/HP_PTRS         |                1547974848 |
+|       341 | memory/memory/HP_PTRS         |                1547974848 |
++-----------+-------------------------------+---------------------------+
+```
+
+从上面的查询结果可大致推断出这样的结果：当前数据库中因为有些SQL请求可能没有索引需要扫描大量数据，或者需要对大量数据进行分组、排序而产生内存临时表等方面可能得原因消耗过多内存，可以结合分析数据库中的SQL查询状态以及慢查询SQL，尽快优化这些SQL请求。
 
 如果形势紧急，可以考虑执行下面的操作尝试回收部分内存碎片：
 
