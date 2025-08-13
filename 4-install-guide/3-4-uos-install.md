@@ -187,7 +187,7 @@ loose-group_replication_donor_threshold = 100
 report_host = "172.16.16.10"
 
 # InnoDB
-innodb_buffer_pool_size = 16G
+innodb_buffer_pool_size = 2G #如果是专用的数据库服务器，则可以设置为物理内存的50%-70%，视实际情况而定
 innodb_buffer_pool_instances = 8
 innodb_data_file_path = ibdata1:12M:autoextend
 innodb_flush_log_at_trx_commit = 1
