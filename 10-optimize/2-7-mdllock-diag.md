@@ -202,16 +202,16 @@ MDL锁是比较粗粒度的锁，一旦出现写锁等待，不但当前操作�
 
 | 会话1 | 会话2 | 会话3|
 | --- | --- | --- |
-| BEGIN;<br/>SELECT * FROM t1 WHERE id = 3 FOR UPDATE;<br/>发起事务，申请加行锁，以及MDL锁| | |
-| | ALTER TABLE t1 ADD c2 INT UNSIGNED NOT NULL;<br/>被会话1阻塞 | |
-| | | SELECT * FROM t1 WHERE id=5;<br/>被MDL阻塞，进入等待|
+| BEGIN;<br/>SELECT * FROM t1 WHERE id = 3 FOR UPDATE;<br/>-- 发起事务，申请加行锁，以及MDL锁| | |
+| | ALTER TABLE t1 ADD c2 INT UNSIGNED NOT NULL;<br/>-- 被会话1阻塞 | |
+| | | SELECT * FROM t1 WHERE id=5;<br/>-- 被MDL阻塞，进入等待|
 
 这时，如果执行 `SHOW PROCESSLIST` 就可以看到会话2 & 3的状态都是等待获得MDL锁：
 
 ```sql
-| 13365 | root                      | localhost           | greatsql | Sleep                                      |      41 |                                                          | NULL                                        |      41867 |         1 |             1 |
-| 13366 | root                      | localhost           | greatsql | Query                                      |      14 | Waiting for table metadata lock                          | ALTER TABLE t1 ADD c2 INT UNSIGNED NOT NULL |      13943 |         0 |             0 |
-| 13368 | root                      | localhost           | greatsql | Query                                      |       5 | Waiting for table metadata lock                          | SELECT * FROM t1 WHERE id=5                 |       5701 |         0 |             0 |
+| 13365 | root     | localhost    | greatsql | Sleep     |      41 |                                    | NULL                                        |      41867 |         1 |             1 |
+| 13366 | root     | localhost    | greatsql | Query     |      14 | Waiting for table metadata lock    | ALTER TABLE t1 ADD c2 INT UNSIGNED NOT NULL |      13943 |         0 |             0 |
+| 13368 | root     | localhost    | greatsql | Query     |       5 | Waiting for table metadata lock    | SELECT * FROM t1 WHERE id=5                 |       5701 |         0 |             0 |
 ```
 
 查看 `performance_schema.metadata_locks` 可以看到当前MDL锁的状态是这样的：
