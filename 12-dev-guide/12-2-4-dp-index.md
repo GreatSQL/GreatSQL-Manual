@@ -195,7 +195,7 @@ CREATE INDEX idx_b ON t1 (b) INVISIBLE;
 ALTER TABLE table_name ADD [UNIQUE | FULLTEXT | SPATIAL] INDEX
   index_name (col_name[length],...) INVISIBLE
 ```
-举例创建不可见索引idx_b：
+举例，创建不可见索引idx_b：
 ```sql
 ALTER TABLE t1 ADD INDEX idx_b (b) INVISIBLE;
 ```
@@ -205,11 +205,11 @@ ALTER TABLE t1 ADD INDEX idx_b (b) INVISIBLE;
 ```sql
 ALTER TABLE table_name ALTER INDEX index_name INVISIBLE|VISIBLE;
 ```
-举例,将t1表中的索引idx_b设置为不可见：
+举例，将t1表中的索引idx_b设置为不可见：
 ```sql
 ALTER TABLE t1 ALTER INDEX idx_b INVISIBLE;
 ```
-举例,将t1表中的索引idx_b设置为可见：
+举例，将t1表中的索引idx_b设置为可见：
 ```sql
 ALTER TABLE t1 ALTER INDEX idx_b VISIBLE;
 ```
@@ -226,7 +226,7 @@ GreatSQL在8.0版本之前创建的仍然是升序索引，使用时进行反向
 
 降序索引使用方法如下：
 
-举例创建 t1 表，并创建联合索引 idx_a_b，其中 a 升序，b 降序
+举例，创建 t1 表，并创建联合索引 idx_a_b，其中 a 升序，b 降序
 ```sql
 CREATE TABLE t1(a int, b int, index idx_a_b(a, b desc) ) ;
 ```
