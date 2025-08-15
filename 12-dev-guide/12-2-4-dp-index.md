@@ -203,15 +203,15 @@ ALTER TABLE t1 ADD INDEX idx_b (b) INVISIBLE;
 #### ALTER TABLE修改索引可见性
 已存在的索引可通过如下语句切换可见状态：
 ```sql
-ALTER TABLE table_name MODIFY INDEX index_name INVISIBLE|VISIBLE;
+ALTER TABLE table_name ALTER INDEX index_name INVISIBLE|VISIBLE;
 ```
 举例,将t1表中的索引idx_b设置为不可见：
 ```sql
-ALTER TABLE t1 MODIFY INDEX idx_b INVISIBLE;
+ALTER TABLE t1 ALTER INDEX idx_b INVISIBLE;
 ```
 举例,将t1表中的索引idx_b设置为可见：
 ```sql
-ALTER TABLE t1 MODIFY INDEX idx_b VISIBLE;
+ALTER TABLE t1 ALTER INDEX idx_b VISIBLE;
 ```
 
 ::: tip 小贴士
