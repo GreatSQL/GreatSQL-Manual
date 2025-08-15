@@ -1,6 +1,8 @@
 # MGR 切主后断开应用连接
 ---
 
+## 简介
+
 在单主模式的MGR集群中，当Primary节点发生切换时，旧Primary节点上的应用端连接并不会自动断开，需要应用端进行异常状态判断或设置响应超时控制机制，这可能会造成应用端短暂不可用。
 
 从GreatSQL 8.0.32-25版本开始，新增选项 `greatdb_ha_mgr_exit_primary_kill_connection_mode`，当参数值设置为 **ON**时，在MGR发生Primary节点切换时主动断开旧Primary节点上的**所有连接**。该选项默认值为 **OFF**，即在切换Primary节点时默认不会自动断开旧Primary节点上的所有应用连接。

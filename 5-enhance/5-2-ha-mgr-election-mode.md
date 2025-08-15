@@ -1,6 +1,7 @@
 # MGR 智能选主
 ---
 
+## 简介
 GreatSQL中支持多种智能选主模式，使得高可用切换选主机制更合理。
 
 完善自动选主机制，增加基于最新GTID判断来选主，避免自动选择没有最新GTID的节点作为新主。
@@ -14,6 +15,7 @@ GreatSQL中支持多种智能选主模式，使得高可用切换选主机制更
 在一些情况下，在MGR所有节点都发生意外要重新拉起时，不会检查各节点事务应用状态，而错误选择新的主节点，这时可能会导致丢失一些事务数据。或者当原来的主节点crash需要重
 新投票选择新的主节点时，可能也会选择一个权重值较高，但没有最新事务的节点，也会存在丢失一部分事务数据的风险。
 
+## 新增系统参数
 在GreatSQL中，新增选项 `group_replication_primary_election_mode` 用于自定义选主策略，可选值有以下几个：
 - WEIGHT_ONLY，还是按照上述传统模式自动选主，这是默认值。
 - GTID_FIRST，优先判断各节点事务应用状态，自动选择拥有最新事务的节点作为新的主节点。**推荐设置为该模式。**
@@ -26,11 +28,9 @@ GreatSQL中支持多种智能选主模式，使得高可用切换选主机制更
 | Variable Scope    | Global |
 | Dynamic Variable    | NO |
 | Type | Enumeration |
-| Permitted Values |    WEIGHT_ONLY<br/>GTID_FIRST<br/>WEIGHT_FIRST |
+| Permitted Values |  [WEIGHT_ONLY | GTID_FIRST | WEIGHT_FIRST] |
 | Default    | WEIGHT_ONLY |
 | Description    | 设置智能选主策略，所有节点的设置必须相同，否则无法启动。|
-
-
 
 
 **扫码关注微信公众号**

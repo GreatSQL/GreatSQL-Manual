@@ -1,7 +1,7 @@
 # MGR Arbitrator（仲裁节点）
 ---
 
-## 概要
+## 简介
 
 GreatSQL中新Arbitrator节点（仲裁节点/投票节点）角色，使得可以用更低的服务器成本实现高可用目标。
 
