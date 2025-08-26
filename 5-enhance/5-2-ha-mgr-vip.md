@@ -146,6 +146,23 @@ After=syslog.target
 [Install]
 WantedBy=multi-user.target
 [Service]
+# some limits
+# file size
+LimitFSIZE=infinity
+# cpu time
+LimitCPU=infinity
+# virtual memory size
+LimitAS=infinity
+# open files
+LimitNOFILE=65535
+# processes/threads
+LimitNPROC=65535
+# locked memory
+LimitMEMLOCK=infinity
+# total threads (user+kernel)
+TasksMax=infinity
+TasksAccounting=false
+
 User=mysql
 Group=mysql
 Type=notify
@@ -154,7 +171,6 @@ PermissionsStartOnly=true
 ExecStartPre=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
 ExecStart=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
 EnvironmentFile=-/etc/sysconfig/mysql
-LimitNOFILE = 10000
 Restart=on-failure
 RestartPreventExitStatus=1
 Environment=MYSQLD_PARENT_PID=1

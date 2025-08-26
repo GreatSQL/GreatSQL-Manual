@@ -411,17 +411,71 @@ port = 3306
 user = mysql
 pid-file = mysql.pid
 character-set-server = UTF8MB4
-skip_name_resolve = 1
+skip_name_resolve = ON
+default_time_zone = "+8:00"
+bind_address = "0.0.0.0"
+secure_file_priv = /data/GreatSQL
 
-max_connections=60000
+# Performance
+lock_wait_timeout = 3600
+open_files_limit    = 65535
 back_log=4000
+max_connections=60000
+max_connect_errors = 1000000
+table_open_cache = 4096
+table_definition_cache = 2048
+thread_stack = 512K
+sort_buffer_size = 4M
+join_buffer_size = 4M
+read_buffer_size = 8M
+read_rnd_buffer_size = 4M
+bulk_insert_buffer_size = 64M
+thread_cache_size = 768
+interactive_timeout = 600
+wait_timeout = 600
+tmp_table_size = 96M
+max_heap_table_size = 96M
+max_allowed_packet = 64M
+net_buffer_shrink_interval = 180
+sql_generate_invisible_primary_key = ON
+loose-lock_ddl_polling_mode = ON
+loose-lock_ddl_polling_runtime = 200
+
+# Logs
+log_timestamps = SYSTEM
+log_error = error.log
+log_error_verbosity = 3
+slow_query_log = ON
+log_slow_extra = ON
+slow_query_log_file = slow.log
+long_query_time = 0.01
+log_queries_not_using_indexes = ON
+log_throttle_queries_not_using_indexes = 60
+min_examined_row_limit = 100
+log_slow_admin_statements = ON
+log_slow_replica_statements = ON
+log_slow_verbosity = FULL
+log_bin = binlog
+binlog_format = ROW
+sync_binlog = 1
+binlog_cache_size = 4M
+max_binlog_cache_size = 6G
+max_binlog_size = 1G
+binlog_space_limit = 500G
+binlog_rows_query_log_events = ON
+binlog_expire_logs_seconds = 604800
+binlog_checksum = CRC32
+binlog_order_commits = OFF
+gtid_mode = ON
+enforce_gtid_consistency = ON
+
 performance_schema=OFF
 max_prepared_stmt_count=1280000
 
 innodb_file_per_table
 innodb_log_file_size=2048M
 innodb_log_files_in_group=32
-innodb_open_files=10000
+innodb_open_files=65535
 table_open_cache_instances=64
 
 innodb_buffer_pool_size=230G
