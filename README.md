@@ -2,11 +2,11 @@
 [![](https://img.shields.io/badge/GreatSQL-论坛-brightgreen.svg)](https://greatsql.cn/forum.php)
 [![](https://img.shields.io/badge/GreatSQL-博客-brightgreen.svg)](https://greatsql.cn/home.php?mod=space&uid=10&do=blog&view=me&from=space)
 [![](https://img.shields.io/badge/License-GPL_v2.0-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)
-[![](https://img.shields.io/badge/release-8.0.32_27-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)
+[![](https://img.shields.io/badge/release-8.4.4_4-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-4)
 
-最后更新：2025-08-26。
+最后更新：2025-09-15。
 
-本文档适用版本：GreatSQL 8.0.32-27。
+本文档适用版本：GreatSQL 8.4.4-4。
 
 ## 关于 GreatSQL
 
@@ -16,7 +16,7 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 ## 下载GreatSQL
 
-- [下载 GreatSQL 最新版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-27)
+- [下载 GreatSQL 最新版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.4.4-4)
 - [下载 GreatSQL 历史版本](https://gitee.com/GreatSQL/GreatSQL/releases/)
 
 ## GreatSQL核心特性
@@ -130,7 +130,7 @@ $ ldconfig && ldconfig -p | grep libjemalloc
 
 推荐安装 GreatSQL RPM 包。
 
-[戳此链接下载 GreatSQL RPM 包](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-27)。
+[戳此链接下载 GreatSQL RPM 包](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.4.4-4)。
 
 以 CentOS 8 系统为例，采用类似下面的命令安装 GreatSQL：
 
@@ -141,7 +141,7 @@ yum search greatsql
 No matches found.
 
 # 然后安装
-rpm -ivh --nodeps greatsql-client-8.0.32-27.1.el8.x86_64.rpm greatsql-devel-8.0.32-27.1.el8.x86_64.rpm greatsql-icu-data-files-8.0.32-27.1.el8.x86_64.rpm greatsql-mysql-router-8.0.32-27.1.el8.x86_64.rpm greatsql-server-8.0.32-27.1.el8.x86_64.rpm greatsql-shared-8.0.32-27.1.el8.x86_64.rpm greatsql-test-8.0.32-27.1.el8.x86_64.rpm
+rpm -ivh --nodeps greatsql-client-8.4.4-4.1.el8.x86_64.rpm greatsql-devel-8.4.4-4.1.el8.x86_64.rpm greatsql-icu-data-files-8.4.4-4.1.el8.x86_64.rpm reatsql-server-8.4.4-4.1.el8.x86_64.rpm greatsql-shared-8.4.4-4.1.el8.x86_64.rpm
 ```
 
 ::: tip 小贴士
@@ -178,7 +178,7 @@ $ systemctl status mysqld
 
 就可以正常启动 GreatSQL 服务了。
 
-想要 GreatSQL 更高效运行，建议参考这份 my.cnf 配置模板：[my.cnf for GreatSQL 8.0.32-27](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)。
+想要 GreatSQL 更高效运行，建议参考这份 my.cnf 配置模板：[my.cnf for GreatSQL 8.4.4-4](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.4.4-4)。
 
 ### 编译GreatSQL源码
 
@@ -199,7 +199,7 @@ $ systemctl status mysqld
 
 ## GreatSQL vs MySQL
 
-| **1.主要特性** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **1.主要特性** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 | :--- | :---: | :---: |
 | 开源 |  :heavy_check_mark: |  :heavy_check_mark: |
 |ACID 完整性| :heavy_check_mark: | :heavy_check_mark: |
@@ -219,7 +219,7 @@ $ systemctl status mysqld
 |组复制（MGR）| :heavy_check_mark: | :heavy_check_mark: |
 |MyRocks 引擎| :heavy_check_mark: | ❌ |
 |支持龙芯架构| :heavy_check_mark: | ❌ |
-| **2. 性能提升扩展** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **2. 性能提升扩展** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |Rapid 引擎| :heavy_check_mark: | 仅云上HeatWave |
 |Turbo 引擎| :heavy_check_mark: | ❌ |
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
@@ -240,7 +240,7 @@ $ systemctl status mysqld
 |InnoDB 快速索引创建优化| :heavy_check_mark: | ❌ |
 |VARCHAR/BLOB/JSON 类型存储单列压缩| :heavy_check_mark: | ❌ |
 |数据字典中存储单列压缩信息| :heavy_check_mark: | ❌ |
-| **3. 面向开发者提升改进** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **3. 面向开发者提升改进** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |X API| :heavy_check_mark: | :heavy_check_mark: |
 |JSON| :heavy_check_mark: | :heavy_check_mark: |
 |NoSQL Socket-Level接口| :heavy_check_mark: | :heavy_check_mark: |
@@ -250,7 +250,7 @@ $ systemctl status mysqld
 |Oracle 兼容-函数| :heavy_check_mark: | ❌ |
 |Oracle 兼容-SQL语法| :heavy_check_mark: | ❌ |
 |Oracle 兼容-存储程序| :heavy_check_mark: | ❌ |
-| **4. 基础特性提升改进** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **4. 基础特性提升改进** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |MGR 提升-地理标签| :heavy_check_mark: | ❌ |
 |MGR 提升-仲裁节点| :heavy_check_mark: | ❌ |
 |MGR 提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
@@ -279,7 +279,7 @@ $ systemctl status mysqld
 |临时表信息增强| :heavy_check_mark: | ❌ |
 |用户统计信息增强| :heavy_check_mark: | ❌ |
 |Slow log 信息增强| :heavy_check_mark: | ❌ |
-| **5.安全性提升** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **5.安全性提升** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |国密支持| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
 |审计| :heavy_check_mark: | 仅企业版 |
@@ -297,7 +297,7 @@ $ systemctl status mysqld
 |二进制日志加密| :heavy_check_mark: | ❌ |
 |临时文件加密| :heavy_check_mark: | ❌ |
 |强制加密| :heavy_check_mark: | ❌ |
-| **6. 运维便利性提升** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **6. 运维便利性提升** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |DDL 原子性| :heavy_check_mark: | :heavy_check_mark: |
 |数据字典存储 InnoDB 表| :heavy_check_mark: | :heavy_check_mark: |
 |快速 DDL| :heavy_check_mark: | :heavy_check_mark: |
@@ -310,7 +310,7 @@ $ systemctl status mysqld
 |杀掉不活跃事务| :heavy_check_mark: | ❌ |
 |START TRANSACTION WITH CONSISTENT SNAPSHOT 扩展| :heavy_check_mark: | ❌ |
 
-GreatSQL 8.0.32-27 基于 Percona Server for MySQL 8.0.32 版本，它在 MySQL 8.0.32 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Log 增强等大量改进和提升，这里不一一重复列出。
+GreatSQL 8.4.4-4 基于 Percona Server for MySQL 8.4.4-4 版本，它在 MySQL 8.4.4 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Log 增强等大量改进和提升，这里不一一重复列出。
 
 GreatSQL同时也是gitee（码云）平台上的GVP项目，详见：[https://gitee.com/gvp/database-related](https://gitee.com/gvp/database-related) **数据库相关**类目。
 
