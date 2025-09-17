@@ -11,9 +11,9 @@ greatsql> select * from performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST  | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
-| group_replication_applier | af39db70-6850-11ec-94c9-00155d064000 | 192.168.6.27 |        4306 | ONLINE       | PRIMARY     | 8.0.32         |
-| group_replication_applier | b05c0838-6850-11ec-a06b-00155d064000 | 192.168.6.27 |        4307 | ONLINE       | SECONDARY   | 8.0.32         |
-| group_replication_applier | b0f86046-6850-11ec-92fe-00155d064000 | 192.168.6.27 |        4308 | ONLINE       | SECONDARY   | 8.0.32         |
+| group_replication_applier | af39db70-6850-11ec-94c9-00155d064000 | 192.168.6.27 |        4306 | ONLINE       | PRIMARY     | 8.4.4          |
+| group_replication_applier | b05c0838-6850-11ec-a06b-00155d064000 | 192.168.6.27 |        4307 | ONLINE       | SECONDARY   | 8.4.4          |
+| group_replication_applier | b0f86046-6850-11ec-92fe-00155d064000 | 192.168.6.27 |        4308 | ONLINE       | SECONDARY   | 8.4.4          |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 ```
 输出结果中主要几个列的解读如下：
@@ -88,7 +88,7 @@ MySQL  172.16.16.10:3306 ssl  JS > c.status()
                 "replicationLag": null,
                 "role": "HA",
                 "status": "ONLINE",
-                "version": "8.0.32"
+                "version": "8.4.4"
             },
             "172.16.16.11:3306": {
                 "address": "172.16.16.11:3306",
@@ -98,7 +98,7 @@ MySQL  172.16.16.10:3306 ssl  JS > c.status()
                 "replicationLag": null,
                 "role": "HA",
                 "status": "ONLINE",
-                "version": "8.0.32"
+                "version": "8.4.4"
             },
             "172.16.16.12:3306": {
                 "address": "172.16.16.12:3306",
@@ -108,7 +108,7 @@ MySQL  172.16.16.10:3306 ssl  JS > c.status()
                 "replicationLag": null,
                 "role": "HA",
                 "status": "ONLINE",
-                "version": "8.0.32"
+                "version": "8.4.4"
             }
         },
         "topologyMode": "Single-Primary"

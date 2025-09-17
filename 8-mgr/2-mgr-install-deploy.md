@@ -2,7 +2,7 @@
 
 ---
 
-本文介绍如何利用手动方式和 MySQL Shell for GreatSQL（以下简称 GreatSQL Shell）方式基于 GreatSQL 8.0.32-25 构建一个三节点的MGR集群。
+本文介绍如何利用手动方式和 MySQL Shell for GreatSQL（以下简称 GreatSQL Shell）方式基于 GreatSQL 8.4.4-4 构建一个三节点的MGR集群。
 
 ## 利用手动方式构建MGR
 
@@ -20,11 +20,11 @@
 
 下载GreatSQL二进制文件包，下载地址：*https://gitee.com/GreatSQL/GreatSQL/releases* 。
 
-本文以 CentOS x86_64 环境为例，下载的二进制包名为： `GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz`，放在 `/usr/local` 目录下并解压缩：
+本文以 CentOS x86_64 环境为例，下载的二进制包名为： `GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz`，放在 `/usr/local` 目录下并解压缩：
 ```bash
 $ cd /usr/local
-$ tar xf GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
-$ cd GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64
+$ tar xf GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
+$ cd GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64
 $ ls
 
 bin    COPYING-jemalloc  include  LICENSE         LICENSE-test  mysqlrouter-log-rotate  README.router  run    support-files
@@ -37,7 +37,7 @@ cmake  docs              lib      LICENSE.router  man           README          
 #/etc/my.cnf
 [mysqld]
 user = mysql
-basedir=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64
+basedir=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64
 datadir=/data/GreatSQL
 port=3306
 server_id=103306
@@ -52,13 +52,13 @@ enforce_gtid_consistency=ON
 先初始化GreatSQL：
 ```bash
 mkdir -p /data/GreatSQL && chown -R mysql:mysql /data/GreatSQL
-/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf --initialize-insecure
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf --initialize-insecure
 ```
 **注意**：不要在生产环境中使用 `--initialize-insecure` 选项进行初始化安装，因为这么做的话，超级管理员root账号默认是空密码，任何人都可以使用该账号登录数据库，存在安全风险，本文中只是为了演示方便才这么做。
 
 启动GreatSQL：
 ```bash
-/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf &
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf &
 ```
 如果不出意外，则能正常启动GreatSQL。用同样的方法也完成对另外两个节点的初始化。
 
@@ -127,7 +127,7 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST  | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
-| group_replication_applier | 4ebd3504-11d9-11ec-8f92-70b5e873a570 | 172.16.16.10 |        3306 | ONLINE       | PRIMARY     | 8.0.32         |
+| group_replication_applier | 4ebd3504-11d9-11ec-8f92-70b5e873a570 | 172.16.16.10 |        3306 | ONLINE       | PRIMARY     | 8.4.4          |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 ```
 第一个节点初始化完成。
@@ -138,7 +138,7 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 #my.cnf
 [mysqld]
 user = mysql
-basedir=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64
+basedir=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64
 datadir=/data/GreatSQL
 port=3306
 server_id=113306
@@ -178,9 +178,9 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST  | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
-| group_replication_applier | 4ebd3504-11d9-11ec-8f92-70b5e873a570 | 172.16.16.10 |        3306 | ONLINE       | PRIMARY     | 8.0.32         |
-| group_replication_applier | 549b92bf-11d9-11ec-88e1-70b5e873a570 | 172.16.16.11 |        3306 | ONLINE       | SECONDARY   | 8.0.32         |
-| group_replication_applier | 5596116c-11d9-11ec-8624-70b5e873a570 | 172.16.16.12 |        3306 | ONLINE       | SECONDARY   | 8.0.32         |
+| group_replication_applier | 4ebd3504-11d9-11ec-8f92-70b5e873a570 | 172.16.16.10 |        3306 | ONLINE       | PRIMARY     | 8.4.4          |
+| group_replication_applier | 549b92bf-11d9-11ec-88e1-70b5e873a570 | 172.16.16.11 |        3306 | ONLINE       | SECONDARY   | 8.4.4          |
+| group_replication_applier | 5596116c-11d9-11ec-8624-70b5e873a570 | 172.16.16.12 |        3306 | ONLINE       | SECONDARY   | 8.4.4          |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 ```
 看到上面这个集群共有3个节点处于ONLINE状态，其中 *172.16.16.10* 是 **PRIMARY** 节点，其余两个都是 **SECONDARY** 节点，也就是说当前这个集群采用 **单主** 模式。如果采用多主模式，则所有节点的角色都是 **PRIMARY**。
@@ -220,7 +220,7 @@ greatsql> SELECT * FROM t1;
 
 ## 使用GreatSQL Shell构建MGR
 
-接下来介绍如何利用 GreatSQL Shell 基于 GreatSQL 8.0.32-32 构建一个三节点的MGR集群。
+接下来介绍如何利用 GreatSQL Shell 基于 GreatSQL 8.4.4-4 构建一个三节点的MGR集群。
 
 ::: tip 小贴士
 只有 GreatSQL Shell 支持仲裁节点（投票节点）特性，MySQL Shell 社区版不支持。

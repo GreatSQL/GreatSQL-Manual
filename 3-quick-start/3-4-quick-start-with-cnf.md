@@ -1,6 +1,6 @@
 # my.cnf参考模板
 ---
-以下是 GreatSQL 8.0.32-27 的 my.cnf 推荐参考模板。
+以下是 GreatSQL 8.4.4-4 的 my.cnf 推荐参考模板。
 
 ```ini
 #

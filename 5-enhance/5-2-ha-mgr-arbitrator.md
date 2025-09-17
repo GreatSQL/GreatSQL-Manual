@@ -23,9 +23,9 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+----------------------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST  | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION | MEMBER_COMMUNICATION_STACK |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+----------------------------+
-| group_replication_applier | 4b2b46e2-3b13-11ec-9800-525400fb993a | 172.16.16.16 |        3306 | ONLINE       | SECONDARY   | 8.0.32         | XCom                       |
-| group_replication_applier | 4b51849b-3b13-11ec-a180-525400e802e2 | 172.16.16.10 |        3306 | ONLINE       | ARBITRATOR  | 8.0.32         | XCom                       |
-| group_replication_applier | 4b7b3b88-3b13-11ec-86e9-525400e2078a | 172.16.16.53 |        3306 | ONLINE       | PRIMARY     | 8.0.32         | XCom                       |
+| group_replication_applier | 4b2b46e2-3b13-11ec-9800-525400fb993a | 172.16.16.16 |        3306 | ONLINE       | SECONDARY   | 8.4.4          | XCom                       |
+| group_replication_applier | 4b51849b-3b13-11ec-a180-525400e802e2 | 172.16.16.10 |        3306 | ONLINE       | ARBITRATOR  | 8.4.4          | XCom                       |
+| group_replication_applier | 4b7b3b88-3b13-11ec-86e9-525400e2078a | 172.16.16.53 |        3306 | ONLINE       | PRIMARY     | 8.4.4          | XCom                       |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+----------------------------+
 ```
 可以看到，`MEMBER_ROLE` 这列显示为 **ARBITRATOR**，表示该节点是一个仲裁节点。

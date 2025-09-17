@@ -5,7 +5,7 @@
 
 InnoDB Page Compression（透明页压缩）是一种基于文件系统的表空间压缩技术，通过Zlib/LZ4/Zstd等算法对数据页进行压缩，并利用稀疏文件特性（如Linux的hole punching或Windows的NTFS压缩单元）释放尾部空白块，从而减少物理存储占用。该特性仅适用于`file-per-table`表空间（独立表空间），且依赖操作系统内核及文件系统对空洞机制的支持，在不同平台有特定的版本和配置要求。
 
-从GreatSQL 8.0.32-27版本开始，Page压缩新增支持Zstd算法，它可以使得Page压缩率进一步得到提高，尤其是当表中有大量重复字符类型数据时。
+在GreatSQL中的InnoDB引擎Page压缩支持Zstd算法，它可以使得Page压缩率进一步得到提高，尤其是当表中有大量重复字符类型数据时。
 
 ## 使用方法
 ### 启用Page压缩

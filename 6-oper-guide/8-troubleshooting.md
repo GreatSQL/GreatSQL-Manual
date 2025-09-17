@@ -21,7 +21,7 @@
 这时也可以先用下面这份最简单的 *my.cnf* 进行测试。 
 ```ini
 [mysqld]
-basedir = /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64
+basedir = /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64
 datadir = /data/GreatSQL
 user = mysql
 log_error_verbosity = 3
@@ -32,7 +32,7 @@ log_error_verbosity = 3
 
 这时可以改成手动初始化，确认 GreatSQL 工作正常：
 ```bash
-/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld --no-defaults --user=mysql --log_error_verbosity=3 --datadir=/data/GreatSQL --initialize
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld --no-defaults --user=mysql --log_error_verbosity=3 --datadir=/data/GreatSQL --initialize
 ```
 如果手动初始化工作正常，再进一步排查 `mysqld_pre_systemd` 脚本哪里工作异常。
 

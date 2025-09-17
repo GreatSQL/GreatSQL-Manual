@@ -61,7 +61,7 @@ greatsql> SHOW GLOBAL VARIABLES LIKE 'general_log%';
 $ cd /data/GreatSQL && cat general.log
 
 ...
-/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld, Version: 8.0.32-27 (GreatSQL, Release 27, Revision aa66a385910), started with:
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld, Version: 8.4.4-4 (GreatSQL, Release 27, Revision aa66a385910), started with:
 Tcp port: 3306  Unix socket: /data/GreatSQL/mysql.sock
 Time                 Id Command    Argument
 16 Connect   root@localhost on  using Socket

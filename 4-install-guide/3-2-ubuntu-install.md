@@ -36,16 +36,16 @@ glibc 2.35
 ```
 如果您的glibc版本为2.28或更高版本，请选择带有"glibc2.28"标识的安装包；如果您的glibc版本为2.17，请选择带有"glibc2.17"标识的安装包。
 
-[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)下载最新的安装包，下载以下二进制包就可以：
+[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-4)下载最新的安装包，下载以下二进制包就可以：
 
-- GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64.tar.xz
+- GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
 
 将下载的二进制包放到安装目录下，并解压缩：
 
 ```bash
 cd /usr/local
-curl -o GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64.tar.xz https://product.greatdb.com/GreatSQL-8.0.32-27/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64.tar.xz
-tar xf GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64.tar.xz
+curl -o GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz https://product.greatdb.com/GreatSQL-8.4.4-4/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
+tar xf GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
@@ -71,13 +71,13 @@ sudo apt-get install -y libaio-dev libnuma-dev libnuma1 net-tools openssl libssl
 - `perl-Data-Dumper`: 在 Ubuntu 中，对应的是 `perl` 包自带的，无需额外安装。
 - `perl-Digest-MD5`: 在 Ubuntu 中，对应的是 `libdigest-md5-perl`。
 
-进入到`GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin`目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其它信息则已经不缺必要软件包
+进入到`GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin`目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其它信息则已经不缺必要软件包
 
 ## 启动前准备
 
 ### 创建或修改 /etc/my.cnf 配置文件
 
-如果 `/etc/my.cnf` 配置文件不存在就新建一个，文件内容请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
+如果 `/etc/my.cnf` 配置文件不存在就新建一个，文件内容请参考这份 [my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.4.4-4)，可根据实际情况修改，一般主要涉及数据库文件分区、目录，内存配置等少数几个选项。以下面这份为例：
 
 ```ini
 [client]
@@ -90,7 +90,7 @@ no-auto-rehash
 user    = mysql
 port    = 3306
 server_id = 3306
-basedir = /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64
+basedir = /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64
 datadir = /data/GreatSQL
 socket  = /data/GreatSQL/mysql.sock
 pid-file = mysql.pid
@@ -294,8 +294,8 @@ Group=mysql
 Type=notify
 TimeoutSec=10
 PermissionsStartOnly=true
-ExecStartPre=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
-ExecStart=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
+ExecStartPre=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
+ExecStart=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
 EnvironmentFile=-/etc/sysconfig/mysql
 Restart=on-failure
 RestartPreventExitStatus=1
@@ -333,16 +333,16 @@ $ systemctl status greatsql
    Active: failed (Result: exit-code) since ...
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
-  Process: 1258165 ExecStart=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS (code=exited, status=1/FAILURE)
-  Process: 1257969 ExecStartPre=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+  Process: 1258165 ExecStart=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS (code=exited, status=1/FAILURE)
+  Process: 1257969 ExecStartPre=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
  Main PID: 1258165 (code=exited, status=1/FAILURE)
    Status: "Server shutdown complete"
 
 systemd[1]: Starting GreatSQL Server...
 mysqld_pre_systemd[1257969]: mktemp: failed to create file via template ‘/var/lib/mysql-files/install-validate-password-plugin.XXXXXX.sql’: No such file or directory
 mysqld_pre_systemd[1257969]: chmod: cannot access '': No such file or directory
-mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 43: : No such file or directory
-mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 44: $initfile: ambiguous redirect
+mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 43: : No such file or directory
+mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 44: $initfile: ambiguous redirect
 systemd[1]: greatsql.service: Main process exited, code=exited, status=1/FAILURE
 systemd[1]: greatsql.service: Failed with result 'exit-code'.
 systemd[1]: Failed to start GreatSQL Server.
@@ -365,13 +365,13 @@ $ systemctl status greatsql
    Active: active (running) since Tue 2024-07-12 10:08:06 CST; 6min ago
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
-  Process: 60129 ExecStartPre=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+  Process: 60129 ExecStartPre=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
  Main PID: 60231 (mysqld)
    Status: "Server is operational"
     Tasks: 49 (limit: 149064)
    Memory: 5.6G
    CGroup: /system.slice/greatsql.service
-           └─60231 /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld
+           └─60231 /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld
 
 systemd[1]: Starting GreatSQL Server...
 systemd[1]: Started GreatSQL Server.
@@ -379,7 +379,7 @@ systemd[1]: Started GreatSQL Server.
 $ ps -ef | grep mysqld
 
 ...
-mysql      60231       1  2 10:08 ?        00:00:10 /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld
+mysql      60231       1  2 10:08 ?        00:00:10 /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld
 
 $ ss -lntp | grep mysqld
 
@@ -417,7 +417,7 @@ A temporary password is generated for root@localhost: ji!pjndiw5sJ
 $ mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 11
-Server version: 8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
+Server version: 8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ...
@@ -433,7 +433,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 greatsql> status;
 ...
-Server version:         8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
+Server version:         8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
 ...
 ```
 

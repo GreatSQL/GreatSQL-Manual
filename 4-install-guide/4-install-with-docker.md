@@ -141,9 +141,9 @@ docker exec -it greatsql /bin/bash
 [root@greatsql /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 12
-Server version: 8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
+Server version: 8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
 ...
-Server version:        8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
+Server version:        8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
 ...
 
 Threads: 2  Questions: 18  Slow queries: 0  Opens: 119  Flush tables: 3  Open tables: 36  Queries per second avg: 0.243
@@ -286,13 +286,13 @@ docker exec -it mgr2 bash
 [root@mgr2 /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 30
-Server version: 8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
+Server version: 8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 [root@GreatSQL][(none)]> \s
 --------------
-mysql  Ver 8.0.32-27 for Linux on x86_64 (GreatSQL, Release 27, Revision aa66a385910)
+mysql  Ver 8.4.4-4 for Linux on x86_64 (GreatSQL, Release 4, Revision aa66a385910)
 ...
 Uptime:            1 min 38 sec
 
@@ -303,9 +303,9 @@ Threads: 11  Questions: 52  Slow queries: 0  Opens: 145  Flush tables: 3  Open t
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
-| group_replication_applier | 396465ad-01ab-11ed-9c1a-0242ac120002 | 172.18.0.2  |        3306 | ONLINE       | PRIMARY     | 8.0.32         |
-| group_replication_applier | 3a4eabbd-01ab-11ed-a7ea-0242ac120003 | 172.18.0.3  |        3306 | ONLINE       | SECONDARY   | 8.0.32         |
-| group_replication_applier | 3c707b56-01ab-11ed-969b-0242ac120004 | 172.18.0.4  |        3306 | ONLINE       | ARBITRATOR  | 8.0.32         |
+| group_replication_applier | 396465ad-01ab-11ed-9c1a-0242ac120002 | 172.18.0.2  |        3306 | ONLINE       | PRIMARY     | 8.4.4          |
+| group_replication_applier | 3a4eabbd-01ab-11ed-a7ea-0242ac120003 | 172.18.0.3  |        3306 | ONLINE       | SECONDARY   | 8.4.4          |
+| group_replication_applier | 3c707b56-01ab-11ed-969b-0242ac120004 | 172.18.0.4  |        3306 | ONLINE       | ARBITRATOR  | 8.4.4          |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
 3 rows in set (0.01 sec)
 ```
@@ -408,9 +408,9 @@ mysql
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION | MEMBER_COMMUNICATION_STACK |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
-| group_replication_applier | 9831bac0-30d4-11ee-8b65-0242ac120002 | 172.18.0.2  |        3306 | ONLINE       | PRIMARY     | 8.0.32         | XCom                       |
-| group_replication_applier | 9907b1ae-30d4-11ee-8c66-0242ac120003 | 172.18.0.3  |        3306 | ONLINE       | PRIMARY     | 8.0.32         | XCom                       |
-| group_replication_applier | 9a1ee7ca-30d4-11ee-8b93-0242ac120004 | 172.18.0.4  |        3306 | ONLINE       | PRIMARY     | 8.0.32         | XCom                       |
+| group_replication_applier | 9831bac0-30d4-11ee-8b65-0242ac120002 | 172.18.0.2  |        3306 | ONLINE       | PRIMARY     | 8.4.4          | XCom                       |
+| group_replication_applier | 9907b1ae-30d4-11ee-8c66-0242ac120003 | 172.18.0.3  |        3306 | ONLINE       | PRIMARY     | 8.4.4          | XCom                       |
+| group_replication_applier | 9a1ee7ca-30d4-11ee-8b93-0242ac120004 | 172.18.0.4  |        3306 | ONLINE       | PRIMARY     | 8.4.4          | XCom                       |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
 ```
 可以看到，一个三节点的MGR集群已自动构建完毕，运行模式为多主模式。

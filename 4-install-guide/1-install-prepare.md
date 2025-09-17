@@ -204,7 +204,7 @@ mysql           hard    nproc          65535
 
 开启NUMA并正确设置后，在某次测试中，OLTP性能提升约10% ~ 20%。
 
-从 GreatSQL 8.0.32-27 开始支持 [NUMA 亲和性优化](../5-enhance/5-1-highperf-numa-affinity.md)，对高负载场景下的性能优化也有帮助。
+从 GreatSQL 8.4.4-4 开始支持 [NUMA 亲和性优化](../5-enhance/5-1-highperf-numa-affinity.md)，对高负载场景下的性能优化也有帮助。
 
 以CentOS为例，打开 `/etc/default/grub` 文件，确保文件内容中没有 `NUMA=OFF` 字样，如果有的话就删掉：
 ```ini
@@ -229,7 +229,7 @@ grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
 
 如果采用手动方式启动GreatSQL服务进程，还可以在启动时加上 `numactl --interleave=all`，例如：
 ```bash
-numactl --interleave=all /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld &
+numactl --interleave=all /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld &
 ```
 
 如果采用 `systemd` 来启动 GreatSQL服务进程，则可以修改 `/etc/systemd/system.conf` 配置文件，在 *[Manager]* 这个区间内增加一行：

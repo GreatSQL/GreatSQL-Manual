@@ -57,7 +57,7 @@ rpm -qa | grep -i greatsql | xargs rpm -e
 如果是采用二进制包方式安装 GreatSQL，则找到安装包所在位置，直接删除即可，例如：
 
 ```bash
-rm -fr /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.17-x86_64
+rm -fr /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.17-x86_64
 ```
 
 ## 步骤4：清除环境

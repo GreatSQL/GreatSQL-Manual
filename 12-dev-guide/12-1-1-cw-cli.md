@@ -26,7 +26,7 @@ $ mysql -hlocalhost -P3306 -urepl -p'GreatSQL@2024'
 mysql: [Warning] Using a password on the command line interface can be insecure.
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 174
-Server version: 8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
+Server version: 8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
 
 Copyright (c) 2021-2023 GreatDB Software Co., Ltd
 Copyright (c) 2009-2023 Percona LLC and/or its affiliates
@@ -53,18 +53,18 @@ greatsql> SHOW VARIABLES LIKE '%version%';
 | Variable_name                                    | Value                                      |
 +--------------------------------------------------+--------------------------------------------+
 | admin_tls_version                                | TLSv1.2,TLSv1.3                            |
-| gdb_sqld_version                                 | 8.0.32.5                                   |
+| gdb_sqld_version                                 | 8.4.4.5                                    |
 | group_replication_allow_local_lower_version_join | OFF                                        |
 | group_replication_recovery_tls_version           | TLSv1.2,TLSv1.3                            |
 | immediate_server_version                         | 999999                                     |
-| innodb_version                                   | 8.0.32-8.0.32                              |
+| innodb_version                                   | 8.4.4-8.4.4                                |
 | original_server_version                          | 999999                                     |
 | protocol_version                                 | 10                                         |
 | replica_type_conversions                         |                                            |
 | slave_type_conversions                           |                                            |
 | tls_version                                      | TLSv1.2,TLSv1.3                            |
-| version                                          | 8.0.32-27                                  |
-| version_comment                                  | GreatSQL, Release 27, Revision aa66a385910 |
+| version                                          | 8.4.4-4                                    |
+| version_comment                                  | GreatSQL, Release 4, Revision aa66a385910  |
 | version_compile_machine                          | x86_64                                     |
 | version_compile_os                               | Linux                                      |
 | version_compile_zlib                             | 1.2.13                                     |

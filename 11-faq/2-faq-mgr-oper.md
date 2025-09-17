@@ -61,10 +61,10 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+-----------...-+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID ... | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+-----------...-+-------------+--------------+-------------+----------------+
-| group_replication_applier | 4ebd3504-1... |        3306 | ONLINE       | SECONDARY   | 8.0.32         |
-| group_replication_applier | 549b92bf-1... |        3307 | ONLINE       | SECONDARY   | 8.0.32         |
-| group_replication_applier | 5596116c-1... |        3308 | ONLINE       | SECONDARY   | 8.0.32         |
-| group_replication_applier | ed5fe7ba-3... |        3309 | ONLINE       | PRIMARY     | 8.0.32         |
+| group_replication_applier | 4ebd3504-1... |        3306 | ONLINE       | SECONDARY   | 8.4.4          |
+| group_replication_applier | 549b92bf-1... |        3307 | ONLINE       | SECONDARY   | 8.4.4          |
+| group_replication_applier | 5596116c-1... |        3308 | ONLINE       | SECONDARY   | 8.4.4          |
+| group_replication_applier | ed5fe7ba-3... |        3309 | ONLINE       | PRIMARY     | 8.4.4          |
 +---------------------------+-----------...-+-------------+--------------+-------------+----------------+
 ```
 如果只看到一个节点的 `MEMBER_ROLE` 值为 **PRIMARY**，则表示这是单主模式。如果看到所有节点上该状态值均为 **PRIMARY**，则表示这是多主模式。
