@@ -225,7 +225,6 @@ $ systemctl status mysqld
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
 |非阻塞式 DDL| :heavy_check_mark: | ❌ |
 |无主键表导入优化 | :heavy_check_mark: | ❌ |
-|InnoDB 并行查询| :heavy_check_mark: | 仅主键扫描 |
 |并行 LOAD DATA| :heavy_check_mark: | ❌ |
 |InnoDB 事务 ReadView 无锁优化| :heavy_check_mark: | ❌ |
 |InnoDB 事务大锁拆分优化| :heavy_check_mark: | ❌ |
@@ -310,7 +309,7 @@ $ systemctl status mysqld
 |杀掉不活跃事务| :heavy_check_mark: | ❌ |
 |START TRANSACTION WITH CONSISTENT SNAPSHOT 扩展| :heavy_check_mark: | ❌ |
 
-GreatSQL 8.4.4-4 基于 Percona Server for MySQL 8.4.4-4 版本，它在 MySQL 8.4.4 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Log 增强等大量改进和提升，这里不一一重复列出。
+GreatSQL 8.4.4-4 基于 Percona Server for MySQL 8.4.4-4 版本，它在 MySQL 8.4.4 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.4/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Log 增强等大量改进和提升，这里不一一重复列出。
 
 GreatSQL同时也是gitee（码云）平台上的GVP项目，详见：[https://gitee.com/gvp/database-related](https://gitee.com/gvp/database-related) **数据库相关**类目。
 

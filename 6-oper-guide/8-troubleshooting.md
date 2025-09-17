@@ -94,7 +94,7 @@ mysql -h127.0.0.1 -uroot -P3306 -p'xx'
 
 ## GreatSQL 中运行一些查询 SQL 会 hang 住一直无响应
 
-这可能是因为触发了 [InnoDB 并行查询（InnoDB PQ）](../5-enhance/5-1-highperf-innodb-pq.md)的 bug，请尝试升级到 GreatSQL 最新版本，或者修改选项 `force_parallel_execute=OFF` 临时关闭InnoDB并行查询特性。
+这可能是因为触发了InnoDB 并行查询的bug，请尝试升级到 GreatSQL 最新版本，或者修改选项 `force_parallel_execute=OFF` 临时关闭InnoDB并行查询特性。
 
 可以参考下面的案例：
 

@@ -62,7 +62,7 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 
 ## GreatSQL VS MySQL
 
-| **1.主要特性** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **1.主要特性** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 | :--- | :---: | :---: |
 | 开源 |  :heavy_check_mark: |  :heavy_check_mark: |
 |ACID 完整性| :heavy_check_mark: | :heavy_check_mark: |
@@ -82,13 +82,12 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 |组复制（MGR）| :heavy_check_mark: | :heavy_check_mark: |
 |MyRocks 引擎| :heavy_check_mark: | ❌ |
 |支持龙芯架构| :heavy_check_mark: | ❌ |
-| **2. 性能提升扩展** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **2. 性能提升扩展** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |Rapid 引擎| :heavy_check_mark: | 仅云上HeatWave |
 |Turbo 引擎| :heavy_check_mark: | ❌ |
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
 |非阻塞式 DDL| :heavy_check_mark: | ❌ |
 |无主键表导入提速 | :heavy_check_mark: | ❌ |
-|InnoDB 并行查询| :heavy_check_mark: | 仅主键扫描 |
 |并行 LOAD DATA| :heavy_check_mark: | ❌ |
 |InnoDB 事务 ReadView 无锁优化| :heavy_check_mark: | ❌ |
 |InnoDB 事务大锁拆分优化| :heavy_check_mark: | ❌ |
@@ -102,7 +101,7 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 |InnoDB 快速索引创建优化| :heavy_check_mark: | ❌ |
 |VARCHAR/BLOB/JSON 类型存储单列压缩| :heavy_check_mark: | ❌ |
 |数据字典中存储单列压缩信息| :heavy_check_mark: | ❌ |
-| **3. 面向开发者提升改进** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **3. 面向开发者提升改进** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |X API| :heavy_check_mark: | :heavy_check_mark: |
 |JSON| :heavy_check_mark: | :heavy_check_mark: |
 |NoSQL Socket-Level接口| :heavy_check_mark: | :heavy_check_mark: |
@@ -112,7 +111,7 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 |Oracle 兼容-函数| :heavy_check_mark: | ❌ |
 |Oracle 兼容-SQL语法| :heavy_check_mark: | ❌ |
 |Oracle 兼容-存储程序| :heavy_check_mark: | ❌ |
-| **4. 基础特性提升改进** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **4. 基础特性提升改进** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |MGR 提升-地理标签| :heavy_check_mark: | ❌ |
 |MGR 提升-仲裁节点| :heavy_check_mark: | ❌ |
 |MGR 提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
@@ -136,7 +135,7 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 |临时表信息增强| :heavy_check_mark: | ❌ |
 |用户统计信息增强| :heavy_check_mark: | ❌ |
 |Slow log 信息增强| :heavy_check_mark: | ❌ |
-| **5.安全性提升** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **5.安全性提升** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |国密支持| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
 |审计| :heavy_check_mark: | 仅企业版 |
@@ -154,7 +153,7 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 |二进制日志加密| :heavy_check_mark: | ❌ |
 |临时文件加密| :heavy_check_mark: | ❌ |
 |强制加密| :heavy_check_mark: | ❌ |
-| **6. 运维便利性提升** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **6. 运维便利性提升** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |DDL 原子性| :heavy_check_mark: | :heavy_check_mark: |
 |数据字典存储 InnoDB 表| :heavy_check_mark: | :heavy_check_mark: |
 |快速 DDL| :heavy_check_mark: | :heavy_check_mark: |
@@ -167,7 +166,7 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 |杀掉不活跃事务| :heavy_check_mark: | ❌ |
 |START TRANSACTION WITH CONSISTENT SNAPSHOT 扩展| :heavy_check_mark: | ❌ |
 
-GreatSQL 8.0.32-27 基于 Percona Server for MySQL 8.0.32 版本，它在 MySQL 8.0.32 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Log 增强等大量改进和提升，这里不一一重复列出。
+GreatSQL 8.4.4-4 基于 Percona Server for MySQL 8.4.4-4 版本，它在 MySQL 8.4.4 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.4/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Log 增强等大量改进和提升，这里不一一重复列出。
 
 GreatSQL同时也是gitee（码云）平台上的GVP项目，详见：[https://gitee.com/gvp/database-related](https://gitee.com/gvp/database-related) **数据库相关**类目。
 

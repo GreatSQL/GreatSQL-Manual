@@ -33,7 +33,6 @@ GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以�
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
 |非阻塞式 DDL| :heavy_check_mark: | ❌ |
 |无主键表导入优化 | :heavy_check_mark: | ❌ |
-|InnoDB 并行查询| :heavy_check_mark: | 仅主键扫描 |
 |并行 LOAD DATA| :heavy_check_mark: | ❌ |
 |InnoDB 事务 ReadView 无锁优化| :heavy_check_mark: | ❌ |
 |InnoDB 事务大锁拆分优化| :heavy_check_mark: | ❌ |
