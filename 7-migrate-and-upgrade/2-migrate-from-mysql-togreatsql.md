@@ -7,7 +7,7 @@
 
 GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以下：
 
-| **1.主要特性** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **1.主要特性** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 | :--- | :---: | :---: |
 | 开源 |  :heavy_check_mark: |  :heavy_check_mark: |
 |ACID 完整性| :heavy_check_mark: | :heavy_check_mark: |
@@ -27,7 +27,7 @@ GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以�
 |组复制（MGR）| :heavy_check_mark: | :heavy_check_mark: |
 |MyRocks 引擎| :heavy_check_mark: | ❌ |
 |支持龙芯架构| :heavy_check_mark: | ❌ |
-| **2. 性能提升扩展** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **2. 性能提升扩展** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |Rapid 引擎| :heavy_check_mark: | 仅云上HeatWave |
 |Turbo 引擎| :heavy_check_mark: | ❌ |
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
@@ -46,7 +46,7 @@ GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以�
 |InnoDB 快速索引创建优化| :heavy_check_mark: | ❌ |
 |VARCHAR/BLOB/JSON 类型存储单列压缩| :heavy_check_mark: | ❌ |
 |数据字典中存储单列压缩信息| :heavy_check_mark: | ❌ |
-| **3. 面向开发者提升改进** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **3. 面向开发者提升改进** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |X API| :heavy_check_mark: | :heavy_check_mark: |
 |JSON| :heavy_check_mark: | :heavy_check_mark: |
 |NoSQL Socket-Level接口| :heavy_check_mark: | :heavy_check_mark: |
@@ -56,7 +56,7 @@ GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以�
 |Oracle 兼容-函数| :heavy_check_mark: | ❌ |
 |Oracle 兼容-SQL语法| :heavy_check_mark: | ❌ |
 |Oracle 兼容-存储程序| :heavy_check_mark: | ❌ |
-| **4. 基础特性提升改进** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **4. 基础特性提升改进** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |MGR 提升-地理标签| :heavy_check_mark: | ❌ |
 |MGR 提升-仲裁节点| :heavy_check_mark: | ❌ |
 |MGR 提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
@@ -84,12 +84,11 @@ GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以�
 |临时表信息增强| :heavy_check_mark: | ❌ |
 |用户统计信息增强| :heavy_check_mark: | ❌ |
 |Slow log 信息增强| :heavy_check_mark: | ❌ |
-| **5.安全性提升** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **5.安全性提升** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |国密支持| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
 |审计| :heavy_check_mark: | 仅企业版 |
 |数据脱敏| :heavy_check_mark: | ❌ |
-|最后登录记录| :heavy_check_mark: | ❌ |
 |SQL Roles| :heavy_check_mark: | :heavy_check_mark: |
 |SHA-2 密码Hashing| :heavy_check_mark: | :heavy_check_mark: |
 |密码轮换策略| :heavy_check_mark: | :heavy_check_mark: |
@@ -102,7 +101,7 @@ GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以�
 |二进制日志加密| :heavy_check_mark: | ❌ |
 |临时文件加密| :heavy_check_mark: | ❌ |
 |强制加密| :heavy_check_mark: | ❌ |
-| **6. 运维便利性提升** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
+| **6. 运维便利性提升** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |DDL 原子性| :heavy_check_mark: | :heavy_check_mark: |
 |数据字典存储 InnoDB 表| :heavy_check_mark: | :heavy_check_mark: |
 |快速 DDL| :heavy_check_mark: | :heavy_check_mark: |
@@ -117,9 +116,7 @@ GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以�
 
 ## 迁移/升级前准备
 
-首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-27版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-27)，至于选择RPM还是二进制包看具体情况及个人喜好。
-
-推荐使用 GreatSQL Shell 进行升级前的检查工作，并提前修复整改可能存在的问题，详情参考：[升级检查](./1-upgrade-to-greatsql8.md#升级检查)。
+首先下载GreatSQL 8.4版本安装包，推荐选择最新的[GreatSQL 8.4.4-4版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.4.4-4)，至于选择RPM还是二进制包看具体情况及个人喜好。
 
 本文选用二进制包方式安装。
 
@@ -131,79 +128,42 @@ GreatSQL相对于MySQL社区版有着众多优秀特性，包括且不仅限以�
 
 接下来，要区分本次迁移/升级属于以下哪种情况：
 
-1. 从MySQL 5.7直接一次性迁移+升级到GreatSQL 8.0.32。
-2. 从MySQL 8.0.32及以下版本迁移/升级到GreatSQL 8.0.32。
-3. 从MySQL 5.6及更低版本迁移+升级到GreatSQL 8.0.32，则应该先逐次升级大版本，例如5.5=>5.6，5.6=>5.7最新版本，而后再一次性升级到GreatSQL 8.0.32-27。
+1. 从 MySQL 8.0 直接一次性迁移+升级到GreatSQL 8.4.4-4。
+2. 从Percona 8.4.4-4及以下版本迁移/升级到GreatSQL 8.0.32。
+3. 从 MySQL 5.7 及更低版本迁移+升级到GreatSQL 8.4.4-4。
 
-如果是前两种，直接参考文档：[GreatSQL 5.7升级到8.0](./1-upgrade-to-greatsql8.md) 的方法进行迁移/升级即可，过程是完全一样的。
+针对前两种情况，可参考文档：[GreatSQL 8.0升级到8.4](./1-upgrade-to-greatsql8.md) 的方法进行迁移/升级即可，过程是完全一样的。
 
-本文重点说说第三种场景。
+针对第三种情况下，应该先逐次升级大版本，例如 5.6=>5.7，5.7=>8.0 最新版本，而后再升级到 GreatSQL 8.4.4-4。也可以利用 mysqldump 将低版本数据库中的数据全量备份出来，再导入到 GreatSQL 8.4.4-4 版本的数据库环境中，一次性完成升级。
 
-## 迁移过程
+## 降级到 GreatSQL 8.4.4-4
 
-GreatSQL数据库是不支持直接原地(in-place)降级的，因此需要采用 **逻辑备份+导入** 的方式完成迁移。
+在 GreatSQL 8.4 这个LTS版本中，不同小版本间支持原地升级/降级，其余版本中是不支持直接原地(in-place)降级的，因此建议采用 **逻辑备份+导入** 的方式完成迁移。
 
-如果是直接在MySQL 8.0.33及以上版本的datadir下，指定GreatSQL 8.0.32-27版本的mysqld二进制文件启动，则可能会报告类似下面的错误：
-```log
-[ERROR] [MY-012530] [InnoDB] Unknown redo log format (5). Please follow the instructions at http://dev.mysql.com/doc/refman/8.0/en/ upgrading-downgrading.html.
-[ERROR] [MY-012930] [InnoDB] Plugin initialization aborted with error Generic error.
-[ERROR] [MY-010334] [Server] Failed to initialize DD Storage Engine
-[ERROR] [MY-010020] [Server] Data Dictionary initialization failed.
-[ERROR] [MY-010119] [Server] Aborting
-```
-即便用xtrabackup工具物理备份的文件恢复后，也是无法启动的，也会报告类似上面的错误信息。
-
-因此，只有一种方法，那就是 **逻辑备份+导入**。
-
-首先，用 `mysqldump` 备份全部数据：
-```bash
-mysqldump -S/data/MySQL/mysql.sock -A --triggers --routines --events > /backup/MySQL/fullbackup-`date +'%Y%m%d'`.sql
-```
-
-将备份文件copy到GreatSQL版本环境中，并执行导入即可，导入过程中可能会报错，加上 `-f` 选项并忽略这些错误就好（高版本中有些表在低版本中不存在，略过）。
-```bash
-$ mysql -S/data/GreatSQL/mysql.sock -f < /backup/MySQL/fullbackup-`date +'%Y%m%d'`.sql
-
-#可能会报告类似下面的错误信息，忽略即可
-...
-ERROR 3723 (HY000) at line 543: The table 'replication_group_configuration_version' may not be created in the reserved tablespace 'mysql'.
-ERROR 1146 (42S02) at line 554: Table 'mysql.replication_group_configuration_version' doesn't exist
-ERROR 1146 (42S02) at line 555: Table 'mysql.replication_group_configuration_version' doesn't exist
-ERROR 1146 (42S02) at line 556: Table 'mysql.replication_group_configuration_version' doesn't exist
-ERROR 1146 (42S02) at line 557: Table 'mysql.replication_group_configuration_version' doesn't exist
-ERROR 3723 (HY000) at line 567: The table 'replication_group_member_actions' may not be created in the reserved tablespace 'mysql'.
-ERROR 1146 (42S02) at line 583: Table 'mysql.replication_group_member_actions' doesn't exist
-ERROR 1146 (42S02) at line 584: Table 'mysql.replication_group_member_actions' doesn't exist
-ERROR 1146 (42S02) at line 585: Table 'mysql.replication_group_member_actions' doesn't exist
-ERROR 1146 (42S02) at line 586: Table 'mysql.replication_group_member_actions' doesn't exist
-...
-```
-如果数据量较大的话，逻辑备份+导入过程耗时较久，要有心理准备。
-
-## 降级到 GreatSQL 8.0.32-27
-
-如果是要从 MySQL 8.0.32 之后的版本降级到 GreatSQL 8.0.32-27 版本，则需要采取逻辑备份 + 逻辑导入方式完成降级操作（不支持直接在原来的 datadir 基础上原地启动 GreatSQL 8.0.32-27 完成降级替换），并且在逻辑备份导入完成后的首次重启时，务必设置 `upgrade=FORCE` 强制升级所有数据表，包括系统表。
+如果要从 MySQL 9.0 及之后的版本降级到 GreatSQL 8.4.4-4，则需要采取逻辑备份 + 逻辑导入方式完成降级操作（不支持直接在原来的 datadir 基础上原地启动 GreatSQL 8.4.4-4 完成降级替换），并且在逻辑备份导入完成后的首次重启时，务必设置 `upgrade=FORCE` 强制升级所有数据表，包括系统表。
 
 降级过程操作大致如下所示：
 
-1. 在高版本中逻辑备份全量数据
+**1. 在高版本中逻辑备份全量数据**
+
 ```bash
 mysqldump -S/data/MySQL/mysql.sock -A --triggers --routines --events --single-transaction > /data/backup/fulldump.sql
 ```
 
-2. 在GreatSQL 8.0.32-27版本环境中导入逻辑备份文件，完成逻辑恢复
+**2. 在GreatSQL 8.4.4-4版本环境中导入逻辑备份文件，完成逻辑恢复**
 
 ```bash
 mysql -S/data/GreatSQL/mysql.sock -f < /data/backup/fulldump.sql
 ```
 
-3. 修改my.cnf，确保 upgrade=FORCE 设置
+**3. 修改my.cnf，确保 upgrade=FORCE 设置**
+
 ```ini
 [mysqld]
 upgrade=FORCE
 ```
 
-4. 重启GreatSQL，降级完成
+**4. 重启GreatSQL，降级完成**
 
 ```bash
 systemctl restart greatsql
@@ -211,13 +171,8 @@ systemctl restart greatsql
 重启过程中，可以看到日志有类似下面的强制升级过程
 
 ```log
-[Note] [MY-013387] [Server] Upgrading system table data.
-[Note] [MY-013385] [Server] Upgrading the sys schema.
-[Note] [MY-013400] [Server] Upgrade of help tables started.
-[Note] [MY-013400] [Server] Upgrade of help tables completed.
-[Note] [MY-013394] [Server] Checking 'mysql' schema.
-[Note] [MY-013394] [Server] Checking 'sys' schema.
-[System] [MY-013381] [Server] Server upgrade from '80032' to '80032' completed.
+[System] [MY-013381] [Server] Server upgrade from '80404' to '80404' started.
+[System] [MY-013381] [Server] Server upgrade from '80404' to '80404' completed.
 ```
 
 如果不设置 `upgrade=FORCE` 强制升级所有表，有可能发生系统表 `mysql.procs_priv` 损坏错误，在创建用户时可能会报告类似下面的错误：
@@ -227,21 +182,15 @@ greatsql> create user tpch identified by 'tpch';
 ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably corrupted
 ```
 
-## 注意事项
-
-在MySQL 8.0.26中引入MGR组视图UUID特性（[`group_replication_view_change_uuid`](https://dev.mysql.com/doc/refman/8.0/en/group-replication-system-variables.html#sysvar_group_replication_view_change_uuid)）。因此，如果当前有个MGR集群的版本是8.0.25及以下，则无法实现平滑升级迁移到8.0.26版本。需要申请一次停机维护时间，对MGR集群中的各个节点实施in-place升级，完成从8.0.25到8.0.26及更高版本的升级。
-
-详情请参考：[将MGR集群从GreatSQL-8.0.25平滑升级到GreatSQL-8.0.32](https://greatsql.cn/thread-530-1-1.html)。
+升级/降级完成后，记得注释掉 `my.cnf` 文件中的 `upgrade=FORCE` 选项，或者将其修改成 `upgrade=AUTO`。
 
 **参考文档**
 
-- [Percona Server for MySQL In-Place Upgrading Guide: From 5.7 to 8.0](https://docs.percona.com/percona-server/8.0/upgrade.html)
-- [Changes in MySQL 8.0](https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html)
-- [Before You Begin](https://dev.mysql.com/doc/refman/8.0/en/upgrade-before-you-begin.html)
-- [What the MySQL Upgrade Process Upgrades](https://dev.mysql.com/doc/refman/8.0/en/upgrading-what-is-upgraded.html)
+- [Upgrade from 8.0 to 8.4 overview](https://docs.percona.com/percona-server/8.4/upgrade.html)
+- [Changes in MySQL 8.4](https://dev.mysql.com/doc/refman/8.4/en/mysql-nutshell.html)
+- [Upgrade Before You Begin](https://dev.mysql.com/doc/refman/8.4/en/upgrade-before-you-begin.html)
+- [What the MySQL Upgrade Process Upgrades](https://dev.mysql.com/doc/refman/8.4/en/upgrading-what-is-upgraded.html)
 - [MySQL 5.7 MGR平滑升级到GreatSQL 5.7](https://mp.weixin.qq.com/s/u0UAijfM8jHH948ml1PREg)
-
-
 
 **扫码关注微信公众号**
 

@@ -37,7 +37,6 @@
 - [Install GreatSQL using RPM package/RPM 包方式安装 GreatSQL](../4-install-guide/2-install-with-rpm.md)
 - [Install GreatSQL using Docker/Docker 容器化方式安装 GreatSQL](../4-install-guide/4-install-with-docker.md)
 - [Kill idle transactions/终止空闲事务](../6-oper-guide/6-7-kill-idle-trx.md)
-- [Last login hisotry/最后登录信息](../5-enhance/5-4-security-last-login.md)
 - [MGR/组复制](../8-mgr/1-mgr-introduction.md)
 - [MGR: arbitrator/MGR 仲裁节点](../5-enhance/5-2-ha-mgr-arbitrator.md)
 - [MGR: election mode/MGR 智能选主](../5-enhance/5-2-ha-mgr-election-mode.md)

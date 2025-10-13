@@ -5,105 +5,309 @@
 
 ## 新增系统变量参数
 
-|**Name**                                                     |**Cmd-Line** |**Option File** |**Var Scope** |**Dynamic**|
-| ---                                                         | ---    | ---    | ---       | ---   |
-|audit_log_enabled                                            | Yes    | Yes    | Global    | No    |
-|audit_log_to_table                                           | Yes    | Yes    | Global    | No    |
-|clone_encrypt_key_path                                       | Yes    | Yes    | Global    | Yes   |
-|clone_file_compress                                          | Yes    | Yes    | Global    | Yes   |
-|clone_file_compress_chunk_size                               | Yes    | Yes    | Global    | Yes   |
-|clone_file_compress_threads                                  | Yes    | Yes    | Global    | Yes   |
-|clone_file_compress_zstd_level                               | Yes    | Yes    | Global    | Yes   |
-|enable_data_masking                                          | Yes    | Yes    | Global    | Yes   |
-|gdb_parallel_load_chunk_size                                 | No     | No     | Session   | Yes   |
-|gdb_parallel_load_workers                                    | No     | No     | Session   | Yes   |
-|group_replication_arbitrator                                 | Yes    | Yes    | Global    | No    |
-|group_replication_broadcast_gtid_executed_period             | Yes    | Yes    | Global    | Yes   |
-|group_replication_communication_flp_timeout                  | Yes    | Yes    | Global    | Yes   |
-|group_replication_donor_threshold                            | Yes    | Yes    | Global    | Yes   |
-|group_replication_flow_control_max_wait_time                 | Yes    | Yes    | Global    | Yes   |
-|group_replication_flow_control_replay_lag_behind             | Yes    | Yes    | Global    | Yes   |
-|group_replication_majority_after_mode                        | Yes    | Yes    | Global    | No    |
-|group_replication_primary_election_mode                      | Yes    | Yes    | Global    | No    |
-|group_replication_request_time_threshold                     | Yes    | Yes    | Global    | Yes   |
-|group_replication_single_primary_fast_mode                   | Yes    | Yes    | Global    | No    |
-|group_replication_xcom_cache_mode                            | Yes    | Yes    | Global    | No    |
-|group_replication_zone_id                                    | Yes    | Yes    | Global    | Yes   |
-|group_replication_zone_id_sync_mode                          | Yes    | Yes    | Global    | Yes   |
-|innodb_data_file_async_purge                                 | Yes    | Yes    | Both      | Yes   |
-|innodb_data_file_async_purge_all_at_shutdown                 | Yes    | Yes    | Global    | Yes   |
-|innodb_data_file_async_purge_error_retry_count               | Yes    | Yes    | Global    | Yes   |
-|innodb_data_file_async_purge_interval                        | Yes    | Yes    | Global    | Yes   |
-|innodb_data_file_async_purge_max_size                        | Yes    | Yes    | Global    | Yes   |
-|innodb_data_force_async_purge_file_size                      | Yes    | Yes    | Global    | Yes   |
-|innodb_optimize_no_pk_parallel_load                          | Yes    | Yes    | Global    | Yes   |
-|lock_ddl_polling_mode                                        | No     | No     | Session   | Yes   |
-|lock_ddl_polling_runtime                                     | No     | No     | Session   | Yes   |
-|rapid_checkpoint_threshold                                   | Yes    | Yes    | Global    | Yes   |
-|rapid_memory_limit                                           | Yes    | Yes    | Global    | Yes   |
-|rapid_temp_directory                                         | Yes    | Yes    | Global    | No    |
-|rapid_worker_threads                                         | Yes    | Yes    | Global    | Yes   |
-|replicate_server_mode                                        | Yes    | Yes    | Global    | No    |
-|rpl_read_binlog_speed_limit                                  | Yes    | Yes    | Global    | Yes   |
-|sched_affinity_foreground_thread                             | Yes    | Yes    | Global    | Yes   |
-|sched_affinity_log_checkpointer                              | Yes    | Yes    | Global    | Yes   |
-|sched_affinity_log_flush_notifier                            | Yes    | Yes    | Global    | Yes   |
-|sched_affinity_log_flusher                                   | Yes    | Yes    | Global    | Yes   |
-|sched_affinity_log_write_notifier                            | Yes    | Yes    | Global    | Yes   |
-|sched_affinity_log_writer                                    | Yes    | Yes    | Global    | Yes   |
-|sched_affinity_numa_aware                                    | Yes    | Yes    | Global    | Yes   |
-|sched_affinity_purge_coordinator                             | Yes    | Yes    | Global    | Yes   |
-|secondary_engine_parallel_load_workers                       | Yes    | Yes    | Session   | Yes   |
-|secondary_engine_read_delay_gtid_threshold                   | Yes    | Yes    | Both      | Yes   |
-|secondary_engine_read_delay_level                            | Yes    | Yes    | Both      | Yes   |
-|secondary_engine_read_delay_time_threshold                   | Yes    | Yes    | Both      | Yes   |
-|secondary_engine_read_delay_wait_mode                        | Yes    | Yes    | Both      | Yes   |
-|secondary_engine_read_delay_wait_timeout                     | Yes    | Yes    | Both      | Yes   |
-|select_bulk_into_batch                                       | Yes    | Yes    | Global    | Yes   |
-|shrink_sql_mode                                              | Yes    | Yes    | Both      | Yes   |
-|tf_udt_table_max_rows                                        | Yes    | Yes    | Both      | Yes   |
-|use_secondary_engine                                         | Yes    | Yes    | Session   | Yes   |
+|**Name**                                                     |
+| ---                                                         |
+| audit_log_filter.buffer_size |
+| audit_log_filter.compression |
+| audit_log_filter.database |
+| audit_log_filter.disable |
+| audit_log_filter.encryption |
+| audit_log_filter.file |
+| audit_log_filter.format |
+| audit_log_filter.format_unix_timestamp |
+| audit_log_filter.handler |
+| audit_log_filter.key_derivation_iterations_count_mean |
+| audit_log_filter.max_size |
+| audit_log_filter.password_history_keep_days |
+| audit_log_filter.prune_seconds |
+| audit_log_filter.read_buffer_size |
+| audit_log_filter.rotate_on_size |
+| audit_log_filter.strategy |
+| audit_log_filter.syslog_facility |
+| audit_log_filter.syslog_priority |
+| audit_log_filter.syslog_tag |
+| binlog_ddl_skip_rewrite |
+| binlog_skip_flush_commands |
+| binlog_space_limit |
+| buffered_error_log_filename |
+| buffered_error_log_size |
+| clone_compression_algorithm |
+| clone_encrypt_key_path |
+| clone_exclude_plugins_list |
+| clone_file_compress |
+| clone_file_compress_chunk_size |
+| clone_file_compress_threads |
+| clone_file_compress_zstd_level |
+| clone_zstd_compression_level |
+| dblink_maxreturn_rows |
+| dbms_profiler_max_data_size |
+| dbms_profiler_max_units_size |
+| enable_data_masking |
+| encrypt_tmp_files |
+| enforce_storage_engine |
+| errorlog_messages_language |
+| expand_fast_index_creation |
+| ft_query_extra_word_chars |
+| gdb_parallel_load_chunk_size |
+| gdb_parallel_load_workers |
+| gdb_sqld_version |
+| greatdb_ha_enable_mgr_vip |
+| greatdb_ha_force_change_mgr_vip |
+| greatdb_ha_gateway_address |
+| greatdb_ha_mgr_exit_primary_kill_connection_mode |
+| greatdb_ha_mgr_read_vip_floating_type |
+| greatdb_ha_mgr_read_vip_ips |
+| greatdb_ha_mgr_vip_ip |
+| greatdb_ha_mgr_vip_label |
+| greatdb_ha_mgr_vip_mask |
+| greatdb_ha_mgr_vip_nic |
+| greatdb_ha_port |
+| greatdb_ha_send_arp_packge_times |
+| greatdb_ha_vip_tope |
+| group_replication_applier_batch_size_threshold |
+| group_replication_arbitrator |
+| group_replication_auto_evict_timeout |
+| group_replication_autorejoin_interval |
+| group_replication_broadcast_gtid_executed_period |
+| group_replication_certification_loop_chunk_size |
+| group_replication_certification_loop_sleep_time |
+| group_replication_communication_flp_timeout |
+| group_replication_donor_threshold |
+| group_replication_flow_control_max_wait_time |
+| group_replication_flow_control_replay_lag_behind |
+| group_replication_majority_after_mode |
+| group_replication_primary_election_mode |
+| group_replication_request_time_threshold |
+| group_replication_single_primary_fast_mode |
+| group_replication_xcom_cache_mode |
+| group_replication_xcom_ssl_accept_retries |
+| group_replication_xcom_ssl_socket_timeout |
+| group_replication_zone_id |
+| group_replication_zone_id_sync_mode |
+| have_backup_locks |
+| have_backup_safe_binlog_info |
+| have_snapshot_cloning |
+| innodb_cleaner_lsn_age_factor |
+| innodb_compressed_columns_threshold |
+| innodb_compressed_columns_zip_level |
+| innodb_corrupt_table_action |
+| innodb_data_file_async_purge |
+| innodb_data_file_async_purge_all_at_shutdown |
+| innodb_data_file_async_purge_error_retry_count |
+| innodb_data_file_async_purge_interval |
+| innodb_data_file_async_purge_max_size |
+| innodb_data_force_async_purge_file_size |
+| innodb_empty_free_list_algorithm |
+| innodb_enable_fast_purge |
+| innodb_encrypt_online_alter_logs |
+| innodb_force_index_records_in_range |
+| innodb_ft_ignore_stopwords |
+| innodb_optimize_no_pk_parallel_load |
+| innodb_page_zstd_compression_level |
+| innodb_parallel_fetch_enable_test |
+| innodb_parallel_max_read_threads |
+| innodb_print_lock_wait_timeout_info |
+| innodb_records_in_range |
+| innodb_sched_priority_lru_flush |
+| innodb_sched_priority_pc |
+| innodb_show_locks_held |
+| innodb_sys_tablespace_encrypt |
+| innodb_temp_tablespace_encrypt |
+| jemalloc_detected |
+| jemalloc_profiling |
+| kill_idle_transaction |
+| lock_ddl_polling_mode |
+| lock_ddl_polling_runtime |
+| log_query_errors |
+| log_slow_filter |
+| log_slow_rate_limit |
+| log_slow_rate_type |
+| log_slow_sp_statements |
+| log_slow_verbosity |
+| max_dbmsotpt_count |
+| max_slowlog_files |
+| max_slowlog_size |
+| net_buffer_shrink_interval |
+| ora_warning_as_error |
+| private_temp_table_prefix |
+| proxy_protocol_networks |
+| query_prealloc_reuse_size |
+| rapid_checkpoint_threshold |
+| rapid_compat_options |
+| rapid_exec |
+| rapid_memory_limit |
+| rapid_skip_charset_check |
+| rapid_temp_directory |
+| rapid_worker_threads |
+| replica_enable_event |
+| replicate_server_mode |
+| rpl_read_binlog_speed_limit |
+| sched_affinity_enabled |
+| sched_affinity_foreground_thread |
+| sched_affinity_log_checkpointer |
+| sched_affinity_log_flush_notifier |
+| sched_affinity_log_flusher |
+| sched_affinity_log_write_notifier |
+| sched_affinity_log_writer |
+| sched_affinity_numa_aware |
+| sched_affinity_purge_coordinator |
+| secondary_engine_parallel_load_workers |
+| secondary_engine_read_delay_gtid_threshold |
+| secondary_engine_read_delay_level |
+| secondary_engine_read_delay_time_threshold |
+| secondary_engine_read_delay_wait_mode |
+| secondary_engine_read_delay_wait_timeout |
+| secure_log_path |
+| select_bulk_into_batch |
+| serveroutput |
+| shrink_sql_mode |
+| slow_query_log_always_write_time |
+| slow_query_log_use_global_control |
+| synonym_translation_enabled |
+| table_open_cache_triggers |
+| tf_sequence_table_max_upper_bound |
+| tf_udt_table_max_rows |
+| thread_pool_high_prio_mode |
+| thread_pool_high_prio_tickets |
+| thread_pool_idle_timeout |
+| thread_pool_max_threads |
+| thread_pool_oversubscribe |
+| thread_pool_size |
+| thread_pool_stall_limit |
+| thread_statistics |
+| turbo_enable |
+| turbo_compat_func |
+| turbo_enable_ps_and_sp |
+| turbo_enable_warning |
+| turbo_max_temp_directory_size |
+| turbo_memory_limit |
+| turbo_release_retries |
+| turbo_retry_pause |
+| turbo_temp_directory |
+| turbo_worker_threads |
+| turbo_condition_pushdown |
+| turbo_cost_threshold |
+| userstat |
+| version_suffix |
 
 除了上面列出的在 GreatSQL 中新增的系统变量参数外，其余基于 Percona 相对于 MySQL 新增的变量参数列表参考：[List of variables introduced in Percona Server for MySQL 8.0](https://docs.percona.com/percona-server/8.0/ps-variables.html)。
 
 ## 新增状态变量
 
-|**Name**                                      |**Var Type** |**Var Scope** |
-| ---                                          | ---        | ---       |
-|Com_alter_trigger                             | Numeric    | Both      |
-|Com_create_package                            | Numeric    | Both      |
-|Com_create_package_body                       | Numeric    | Both      |
-|Com_create_type                               | Numeric    | Both      |
-|Com_drop_package                              | Numeric    | Both      |
-|Com_drop_package_body                         | Numeric    | Both      |
-|Com_drop_type                                 | Numeric    | Both      |
-|Com_execute_immediate                         | Numeric    | Both      |
-|Com_compound_sql                              | Numeric    | Both      |
-|Com_insert_all_select                         | Numeric    | Both      |
-|Com_show_create_package                       | Numeric    | Both      |
-|Com_show_create_package_body                  | Numeric    | Both      |
-|Com_show_create_type                          | Numeric    | Both      |
-|Com_show_package_status                       | Numeric    | Both      |
-|Com_show_type_status                          | Numeric    | Both      |
-|Com_show_package_body_code                    | Numeric    | Both      |
-|Com_show_package_body_status                  | Numeric    | Both      |
-|Com_show_sequences                            | Numeric    | Both      |
-|Com_create_sequence                           | Numeric    | Both      |
-|Com_drop_sequence                             | Numeric    | Both      |
-|Com_alter_sequence                            | Numeric    | Both      |
-|Sched_affinity_group_capacity                 | Numeric    | Global    |
-|Sched_affinity_group_number                   | Numeric    | Global    |
-|Sched_affinity_status                         | String     | Global    |
-|group_replication_apply_queue_size            | Numeric    | Global    |
-|group_replication_applied_messages            | Numeric    | Global    |
-|group_replication_applied_data_messages       | Numeric    | Global    |
-|group_replication_applied_events              | Numeric    | Global    |
-|group_replication_io_buffered_events          | Numeric    | Global    |
-|group_replication_flow_control_count          | Numeric    | Global    |
-|group_replication_flow_control_time           | Numeric    | Global    |
-|group_replication_before_commit_request_time  | Numeric    | Global    |
+|**Name**                                      |
+| ---                                          |
+| Audit_log_filter_current_size |
+| Audit_log_filter_direct_writes |
+| Audit_log_filter_event_max_drop_size |
+| Audit_log_filter_events |
+| Audit_log_filter_events_filtered |
+| Audit_log_filter_events_lost |
+| Audit_log_filter_events_written |
+| Audit_log_filter_total_size |
+| Audit_log_filter_write_waits |
+| Binlog_snapshot_file |
+| Binlog_snapshot_position |
+| Binlog_snapshot_gtid_executed |
+| Com_alter_trigger |
+| Com_create_compression_dictionary |
+| Com_create_package |
+| Com_create_package_body |
+| Com_create_type |
+| Com_drop_compression_dictionary |
+| Com_drop_package |
+| Com_drop_package_body |
+| Com_drop_type |
+| Com_execute_immediate |
+| Com_compound_sql |
+| Com_insert_all_select |
+| Com_lock_tables_for_backup |
+| Com_show_client_statistics |
+| Com_show_create_package |
+| Com_show_create_package_body |
+| Com_show_create_type |
+| Com_show_index_statistics |
+| Com_show_package_status |
+| Com_show_type_status |
+| Com_show_package_body_code |
+| Com_show_package_body_status |
+| Com_show_table_statistics |
+| Com_show_sequences |
+| Com_show_thread_statistics |
+| Com_show_user_statistics |
+| Com_create_sequence |
+| Com_drop_sequence |
+| Com_alter_sequence |
+| Com_create_synonym |
+| Com_drop_synonym |
+| Com_alter_synonym |
+| Com_show_synonyms |
+| Innodb_background_log_sync |
+| Innodb_buffer_pool_pages_LRU_flushed |
+| Innodb_buffer_pool_pages_made_not_young |
+| Innodb_buffer_pool_pages_made_young |
+| Innodb_buffer_pool_pages_old |
+| Innodb_checkpoint_age |
+| Innodb_checkpoint_max_age |
+| Innodb_ibuf_free_list |
+| Innodb_ibuf_segment_size |
+| Innodb_lsn_current |
+| Innodb_lsn_flushed |
+| Innodb_lsn_last_checkpoint |
+| Innodb_master_thread_active_loops |
+| Innodb_master_thread_idle_loops |
+| Innodb_max_trx_id |
+| Innodb_oldest_view_low_limit_trx_id |
+| Innodb_pages0_read |
+| Innodb_purge_trx_id |
+| Innodb_purge_undo_no |
+| Innodb_secondary_index_triggered_cluster_reads |
+| Innodb_secondary_index_triggered_cluster_reads_avoided |
+| Innodb_buffered_aio_submitted |
+| Innodb_scan_pages_contiguous |
+| Innodb_scan_pages_disjointed |
+| Innodb_scan_pages_total_seek_distance |
+| Innodb_scan_data_size |
+| Innodb_scan_deleted_recs_size |
+| Innodb_encryption_n_merge_blocks_encrypted |
+| Innodb_encryption_n_merge_blocks_decrypted |
+| Innodb_encryption_n_rowlog_blocks_encrypted |
+| Innodb_encryption_n_rowlog_blocks_decrypted |
+| Innodb_parallel_fetch_buffer_server_used |
+| Innodb_parallel_fetch_buffer_engine_used |
+| Innodb_parallel_fetch_buffer_count |
+| Innodb_parallel_fetch_buffer_size |
+| Innodb_parallel_read_threads |
+| Innodb_parallel_max_read_threads |
+| Net_buffer_length |
+| Open_tables_with_triggers |
+| Rpl_data_speed |
+| Sched_affinity_group_capacity |
+| Sched_affinity_group_number |
+| Sched_affinity_status |
+| Table_open_cache_triggers_hits |
+| Table_open_cache_triggers_misses |
+| Table_open_cache_triggers_overflows |
+| Threadpool_idle_threads |
+| Threadpool_threads |
+| greatdb_ha_last_ping_time |
+| group_replication_apply_queue_size |
+| group_replication_applied_messages |
+| group_replication_applied_data_messages |
+| group_replication_applied_events |
+| group_replication_io_buffered_events |
+| group_replication_flow_control_count |
+| group_replication_flow_control_time |
+| group_replication_before_commit_request_time |
+| group_replication_flow_control_active |
+| group_replication_flow_control_threshold_nodes |
+| group_replication_flow_control_throttle_quota |
+| turbo_memory_used |
+| turbo_statements |
+| turbo_runtime |
+| turbo_release |
 
-除了上面列出的在 GreatSQL 中新增的状态变量外，其余基于 Percona 相对于 MySQL 新增的变量参数列表参考：[List of variables introduced in Percona Server for MySQL 8.0](https://docs.percona.com/percona-server/8.0/ps-variables.html)。
+
+除了上面列出的在 GreatSQL 中新增的状态变量外，其余基于 Percona 相对于 MySQL 新增的变量参数列表参考：[List of variables introduced in Percona Server for MySQL 8.4](https://docs.percona.com/percona-server/8.4/ps-variables.html)。
 
 
 **扫码关注微信公众号**

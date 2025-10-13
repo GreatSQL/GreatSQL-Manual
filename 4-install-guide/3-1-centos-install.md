@@ -287,9 +287,26 @@ PrivateTmp=false
 
 务必确认文件中 `ExecStartPre` 和 `ExecStart` 两个参数指定的目录及文件名是否正确。
 
-**提示**：如果不是安装到默认的 `/usr/local/` 目录下，请编辑 `bin/mysqld_pre_systemd` 脚本，修改脚本中几处涉及 GreatSQL 安装路径的地方。
+**提示**：如果不是安装到默认的 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64` 目录下（不同版本具体目录也有所变化），可能会影响 GreatSQL 的自动初始化操作。这种时候，可以先将GreatSQL二进制包解压缩到 `/usr/local` 目录下，再根据需要自行做软链接，例如：
 
-执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
+```bash
+tar xf GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz -C /usr/local
+ln -s /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64 /usr/local/GreatSQL
+```
+这样既不影响GreatSQL的自动初始化，又能满足自定义需要。
+
+也可以编辑二进制包中的 `mysqld_pre_systemd` 脚本，修改脚本中几处涉及 GreatSQL 安装路径的地方，例如：
+
+```bash
+# grep -n GreatSQL mysqld_pre_systemd
+33:    ret=$(/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/my_print_defaults  ${instance:+--defaults-group-suffix=@$instance} $section | \
+178:    /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld ${instance:+--defaults-group-suffix=@$instance} --initialize \
+183:    if [ -x /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysql_ssl_rsa_setup -a ! -e "${datadir}/server-key.pem" ] ; then
+184:        /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysql_ssl_rsa_setup --datadir="$datadir" --uid=mysql >/dev/null 2>&1
+```
+
+以上几处请自行修改，然后执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
+
 ```bash
 systemctl daemon-reload
 ```
@@ -401,7 +418,7 @@ $ mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
 ...
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 11
-Server version: 8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
+Server version: 8.4.4-4 GreatSQL, Release 4, Revision d73de75905d
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ...
@@ -418,7 +435,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 greatsql> status;
 ...
-Server version:         8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
+Server version:         8.4.4-4 GreatSQL, Release 4, Revision d73de75905d
 ...
 ```
 
@@ -468,11 +485,7 @@ $ mysqlsh
 
 ...
 MySQL Shell 8.0.32
-
-Copyright (c) 2016, 2021, Oracle and/or its affiliates.
-Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
-Other names may be trademarks of their respective owners.
-
+...
 Type '\help' or '\?' for help; '\quit' to exit.
  MySQL  JS >
 ```

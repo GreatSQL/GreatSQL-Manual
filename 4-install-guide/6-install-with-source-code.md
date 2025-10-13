@@ -98,7 +98,7 @@ sh-4.4# sh ./greatsql_build_init.sh
 
 4. greatsql build completed!
 drwxrwxr-x 13 mysql mysql       293 Aug 16 08:27 GreatSQL-8.4.4-4-ol-glibc2.28-x86_64
-/opt/GreatSQL-8.4.4-4-ol-glibc2.28-x86_64/bin/mysqld  Ver 8.4.4-4 for Linux on x86_64 (GreatSQL, Release 4, Revision aa66a385910)
+/opt/GreatSQL-8.4.4-4-ol-glibc2.28-x86_64/bin/mysqld  Ver 8.4.4-4 for Linux on x86_64 (GreatSQL, Release 4, Revision d73de75905d)
 
 5. remove files and clean up 
 ```

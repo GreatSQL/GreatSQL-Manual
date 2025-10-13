@@ -30,7 +30,7 @@ $ mysql -hlocalhost -S/data/GreatSQL/mysql.sock -uroot -p
 # 在GreatSQL 中执行 STATUS 即可查看版本号
 greatsql> STATUS;
 ...
-Server version:        8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
+Server version:         8.4.4-4 GreatSQL, Release 4, Revision d73de75905d
 ...
 ```
 

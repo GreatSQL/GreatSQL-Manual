@@ -142,7 +142,7 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 [root@GreatSQL][(none)]> status;
 --------------
 ...
-Server version:        8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
+Server version:        8.4.4-4 GreatSQL, Release 4, Revision d73de75905d
 ...
 Threads: 2  Questions: 6  Slow queries: 0  Opens: 119  Flush tables: 3  Open tables: 36  Queries per second avg: 0.017
 ```

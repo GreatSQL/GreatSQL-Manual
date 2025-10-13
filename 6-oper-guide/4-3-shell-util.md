@@ -13,7 +13,7 @@ $ mysqlsh -S/data/GreatSQL/mysql.sock -uroot -p
 
 MySQL Shell 8.0.32
 ...
-Server version: 8.4.4-4  GreatSQL, Release 4, Revision aa66a385910
+Server version: 8.4.4-4  GreatSQL, Release 4, Revision d73de75905d
 No default schema selected; type \use <schema> to set one.
 
  MySQL  localhost  JS >

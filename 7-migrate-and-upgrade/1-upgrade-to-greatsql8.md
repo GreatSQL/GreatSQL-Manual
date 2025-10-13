@@ -1,169 +1,121 @@
-# GreatSQL 5.7升级到8.0
+# GreatSQL 8.0升级到8.4
 ---
 
-本文介绍如何从GreatSQL 5.7/MySQL 5.7版本升级到GreatSQL 8.0版本。
+本文介绍如何从GreatSQL 8.0 版本升级到 GreatSQL 8.4 版本。
 
 ## 为什么要升级
 
-GreatSQL 8.0相对于GreatSQL 5.7有着众多优秀新特性，包括且不仅限以下：
+MySQL 8.4 是第一个长期支持版本（LTS），基于此的 GreatSQL 8.4 相对于 GreatSQL 8.0 有多项新特性以及变化，包括且不仅限以下：
 
-| 特性 |  GreatSQL 8.0 |GreatSQL/MySQL 5.7 |
-| --- | ---|---|
-|支持龙芯架构| :heavy_check_mark: | ❌ |
-|Rapid 引擎| :heavy_check_mark: | 仅云上HeatWave |
-|Turbo 引擎| :heavy_check_mark: | ❌ |
-|并行LOAD DATA| :heavy_check_mark: | ❌ |
-|InnoDB事务ReadView无锁优化| :heavy_check_mark: | ❌ |
-|InnoDB事务大锁拆分优化| :heavy_check_mark: | ❌ |
-|快速DDL| :heavy_check_mark: | :heavy_check_mark: |
-|NUMA 亲和性优化| :heavy_check_mark: | ❌ |
-|非阻塞式 DDL| :heavy_check_mark: | ❌ |
-|无主键表导入优化 | :heavy_check_mark: | ❌ |
-|并行 LOAD DATA| :heavy_check_mark: | ❌ |
-|DDL原子性| :heavy_check_mark: | :heavy_check_mark: |
-|InnoDB 资源组| :heavy_check_mark: | :heavy_check_mark: |
-|Contention-Aware Transaction Scheduling| :heavy_check_mark: | :heavy_check_mark: |
-|InnoDB Mutexes 拆分优化| :heavy_check_mark: | ❌ |
-|MEMORY 引擎优化| :heavy_check_mark: | ❌ |
-|InnoDB Flushing 优化| :heavy_check_mark: | ❌ |
-|InnoDB 快速索引创建优化| :heavy_check_mark: | ❌ |
-|并行 Doublewrite Buffer| :heavy_check_mark: | :heavy_check_mark: |
-|MGR 提升-地理标签| :heavy_check_mark: | ❌ |
-|MGR 提升-仲裁节点| :heavy_check_mark: | ❌ |
-|MGR 提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
-|MGR 提升-快速单主模式| :heavy_check_mark: | ❌ |
-|MGR 提升-智能选主机制| :heavy_check_mark: | ❌ |
-|MGR 提升-全新流控算法| :heavy_check_mark: | ❌ |
-|MGR 提升-网络分区异常处理 |  :heavy_check_mark: | ❌ |
-|MGR 提升-节点异常退出处理 | :heavy_check_mark: | ❌ |
-|MGR 提升-节点磁盘满处理 | :heavy_check_mark: | ❌ |
-|MGR 提升-自动选择 donor 节点| :heavy_check_mark: | ❌ |
-|Oracle兼容-数据类型| :heavy_check_mark: | ❌ |
-|Oracle兼容-函数| :heavy_check_mark: | ❌ |
-|Oracle兼容-SQL语法| :heavy_check_mark: | ❌ |
-|Oracle兼容-存储程序| :heavy_check_mark: | ❌ |
-|Clone 增量备份| :heavy_check_mark: | ❌ |
-|Clone 备份压缩| :heavy_check_mark: | ❌ |
-|Binlog 读取限速| :heavy_check_mark: | ❌ |
-|Hash Join|  :heavy_check_mark: | ❌ |
-|Anti Join优化 |  :heavy_check_mark: | ❌ |
-|优化器直方图（Histograms）| :heavy_check_mark: | :heavy_check_mark: |
-|倒序索引 |  :heavy_check_mark: | ❌ |
-|不可见索引 |  :heavy_check_mark: | ❌ |
-|函数索引/表达式索引 |  :heavy_check_mark: | ❌ |
-|多值索引 |  :heavy_check_mark: | ❌ |
-|CTE |  :heavy_check_mark: | ❌ |
-|窗口函数 |  :heavy_check_mark: | ❌ |
-|EXPLAIN ANALYZE | :heavy_check_mark: | ❌ | 
-|Clone Plugin | :heavy_check_mark: | ❌ | 
-|全新数据字典 | :heavy_check_mark: | ❌ | 
-|升级更灵活 | :heavy_check_mark: | ❌ |  
-|多个安全增强 | :heavy_check_mark: | ❌ | 
-|多个InnoDB增强 | :heavy_check_mark: | ❌ | 
-|多个优化器增强 |  :heavy_check_mark: | ❌ |
-|线程池（Threadpool）| :heavy_check_mark: | 仅企业版 |
-|备份锁| :heavy_check_mark: | ❌ |
-|国密支持| :heavy_check_mark: | ❌ |
-|数据脱敏| :heavy_check_mark: | ❌ |
-|最后登录记录| :heavy_check_mark: | ❌ |
-|备份加密| :heavy_check_mark: | ❌ |
-|审计| :heavy_check_mark: | ❌ |
+- **InnoDB引擎相关**
+
+多个 InnoDB 主要参数（没有全部列出）的默认值发生变化。
+
+| 参数名 | 8.4 默认值 | 8.0 默认值 |
+| :--- | :---: | :---: |
+| innodb_buffer_pool_in_core_file | 支持 MADV_DONTDUMP 时默认 OFF，其他情况下默认 ON | ON |
+| innodb_buffer_pool_instances | 当 IBP <= 1GB 时为 1，当 IBP > 1GB 时会根据公式自动计算 | 8，当 IBP <= 1GB 时为 1|
+| innodb_change_buffering | none | all |
+| innodb_adaptive_hash_index | OFF | ON |
+| innodb_doublewrite_files | 2 | innodb_buffer_pool_instances*2 |
+| innodb_flush_method（Linux系统中） | 系统支持时为 O_DIRECT，否则 fsync | fsync |
+| innodb_io_capacity | 1000 | 200 |
+| innodb_io_capacity_max | innodb_io_capacity*2 | innodb_io_capacity*2，且最小值为 2000 |
+| innodb_log_buffer_size | 64MB | 16MB |
+| innodb_numa_interleave | ON | OFF|
+| innodb_page_cleaners | innodb_buffer_pool_instances | 4 |
+| innodb_parallel_read_threads | CPU逻辑核数/8，默认最低为 4 | 4 |
+| innodb_purge_threads | CPU逻辑核数 <=16 时为 1，否则为 4 |  4 |
+| innodb_read_io_threads | CPU逻辑核数/8，默认最低为 4 | 4 |
+| innodb_use_fdatasync | ON | OFF |
+
+- **临时表相关**
+
+临时表相关几个参数的默认值也发生变化。
+
+| 参数名 | 8.4 默认值 | 8.0 默认值 |
+| :--- | :---: | :---: |
+| temptable_max_ram | 物理内存 * 3%，且默认值的范围在 1-4GB 间 | 1GB |
+| temptable_max_mmap | 0（禁用） | 1GB |
+| temptable_use_mmap | OFF | ON，从 8.0.26 开始提示即将弃用 |
+
+- **MGR 相关**
+
+  - 1. 有两个 MGR 参数默认值发生变化：事务一致性级别参数 `group_replication_consistency` 从 *EVENTUAL* 调整为 *BEFORE_ON_PRIMARY_FAILOVER*；节点退出后的默认行为参数 `group_replication_exit_state_action` 从 *READ_ONLY* 调整为 *OFFLINE_MODE*。
+  - 2. 在 MGR 中切换新的主节点时，需要等待当前的 DDL 操作（例如 `ALTER TABLE`）以及大部分 DCL 操作（例如 `ALTER DATABASE`）结束才能继续。
+  - 3. 对 MGR 的版本兼容约束也放宽了，支持相同大版本内的小版本原地降级（例如从 8.4.2 原地降级到 8.4.0）；另外，只要是大版本号相同，小版本号不同的多个节点也可以混跑（例如在 8.4.0、8.4.2、8.4.3 三个不同小版本号的节点可以在一起跑 MGR）。
+  - 4. 在 MGR 中新增参数 `group_replication_preemptive_garbage_collection`，设置为 *ON* 时，在单主模式下会启用了抢占式 GC（garbage collection），仅保留尚未提交的事务 writeset。这可以节省时间和内存消耗。同时新增 `group_replication_presemptive_garbage_collection_rows_threshold` 参数用于设置了触发抢占式 GC 所需的认证事务数最小值，默认为 100000。
+
+- **主从复制及 Clone 相关**
+  - 1. Clone 插件不再严格要求连小版本号也要一致才行，允许在同一个大版本内进行克隆。这个特性不错，希望未来能继续提升兼容性，支持在不同大版本间 Clone 数据。
+  - 2. 在主从复制中，参数 `SOURCE_RETRY_COUNT` 默认值从 86400 调整为 10。即默认行为是 重试 10 次，每次间隔 60 秒，总共 10 分钟。在 8.0 中默认行为是重试 86400 次，每次间隔 60 秒，总共 60 天（这也太过于疯狂了吧 ~~）。
+  - 3. 支持对 GTID 事务设置不同的 tag（标签），这对于运维很友好，比如针对一些特殊操作加上特别的标签便于后续区分。
+  - 4. 在从服务器上执行 `START REPLICA` 启动复制线程时，子句 `SQL_AFTER_GTIDS` 支持多线程并行回放工作模式。在以前，启用多线程并行回放时，如果加上 `SQL_AFTER_GTIDS` 会提示 *ER_MTA_FEATURE_IS_NOT_SUPPORTED* 告警，并自动切换到单线程回放模式。
+
+- **其他**
+  - 1. 无论是否执行了 `ANALYZE TABLE` 操作，都支持自动更新直方图统计信息，自动更新的规则和 InnoDB 表统计信息自动更新规则一样，详情参考 [`innodb_stats_auto_recalc` 参数](https://dev.mysql.com/doc/refman/8.4/en/innodb-persistent-stats.html#innodb-persistent-stats-auto-recalc) 以及 [MySQL 8.4新特性之直方图自动更新](https://mp.weixin.qq.com/s/IWSMjRwye7xozJ3iwIdYtg)。
+  - 2. 默认地，禁用 **mysql_native_password** 认证插件，如果需要兼容旧的应用程序，需要在配置文件中增加相应的参数：`mysql_native_password=ON`。
+  - 3. 在 **mysqldump** 中增加 `--output-as-version` 参数，支持设置对旧版本的兼容性模式。
+  - 4. 针对 `FLUSH PRIVILEGES` 新增相应的授权 *FLUSH_PRIVILEGES*。
+  - 5. 新增一些保留关键字：`AUTO, BERNOULLI, GTIDS, LOG, MANUAL, PARALLEL, PARSE_TREE, QUALIFY, S3, TABLESAMPLE`，这些保留关键字不可用于库、表、字段等数据库对象名称。
+
+- **弃用或不再建议使用的特性、参数**
+
+  下面是未来准备弃用的一些特性及参数
+
+  - 1. 参数 `binlog_transaction_dependency_tracking`，因为已经总是使用 *WRITESET* 机制。
+  - 2. 参数 `group_replication_allow_local_lower_version_join`。
+  - 3. 从 8.3.0 开始，MGR 组成员元数据信息会在各节点间共享，因此不再需要依赖组视图变化事件，相应地，参数 `group_replication_view_change_uuid` 也不再需要。
+  - 4. 废弃函数 `WAIT_UNTIL_SQL_THREAD_AFTER_GTIDS()`。
+  - 5. 在主从复制中如果已启用 GTID 模式，则已被应用的事务会自动被忽略，这意味着 `IGNORE_SERVER_IDS` 参数和 GTID 模式将不兼容。
+  - 6. 废弃参数 `expire_logs_days`，改用 `binlog_expire_logs_seconds` 参数。
+  - 7. 废弃参数 `group_replication_recovery_complete_at`。从 8.4.0 开始，分布式事务恢复过程中的策略始总是：只有在新成员接收、认证并应用了其加入组之前发生的所有事务后，才会标记在线；这相当于在早期版本中设置 `group_replication_recovery_complete_at = TRANSACTIONS_APPLIED` 同样的效果。
+  - 8. 主从复制中大量 **MASTER/SLAVE** 关键字都不再支持，而改为 **SOURCE/REPLICA** 关键字。
+
+总的来说，GreatSQL 8.4 看起来是作为 8.0 的延续并成为 LTS 版本。两个版本间的变化并不算太大，并且主要集中在 InnoDB 引擎方面。无论对开发者还是DBA来说都能很快适配和适应。有条件的话，建议都今早完成升级。
 
 ## 升级前准备
 
+未来几个主要版本之间的 **升级、降级** 兼容关系表，作为选择具体哪个版本之前的重要参考之一（本表格内容摘自徐轶韬老师主理的公众号：**MySQL解决方案工程师**）：
+
+- **升级**
+
+| | 原地 | 克隆 | 异步复制 | 转储/加载 |
+| :--- | :---: | :---: | :---: | :---: |
+| LTS 8.4 → LTS 9.7 | ✓ | ✗ |✓ |✓ |
+| LTS 8.4.11 → LTS 8.4.20 |✓ |✓ |✓ |✓ |
+| Innovation 8.1 → 8.2 | ✓ | ✗ |✓ |✓ |
+| Innovation 8.1 → 8.3 | ✓ | ✗ |✓ |✓ |
+| Innovation 9.1 → LTS 9.7 | ✓ | ✗ |✓ |✓ |
+| LTS 8.4 →  LTS 10.7 | ✗ | ✗ | ✗ | ✗ |
+
+- **降级**
+
+| | 原地 | 克隆 | 异步复制 | 转储/加载 |
+| :--- | :---: | :---: | :---: | :---: |
+| LTS 8.4.20 → 8.4.11 | ✓ | ✓ | ✓ | ✓ |
+| LTS 9.7 → LTS 8.4 | ✗ | ✗ | ✓✮ | ✓✮ |
+| LTS 9.7 → Innovation 9.6 | ✗ | ✗ | ✓✮ | ✓✮ |
+| LTS 9.7 → Innovation 9.5 | ✗ | ✗ | ✓✮ | ✓✮ |
+
+✮表示仅用于回滚目的。
+
 ### 注意事项
 
-从5.7版本升级到8.0，有以下相关注意事项，请认真核对是否产生冲突或不兼容：
+从GreatSQL 8.0版本升级到8.4，有以下相关注意事项，请认真核对是否产生冲突或不兼容：
 
-1. 最好是先升级到5.7.x的最新版本，再升级到8.0.x的最新版本，不要从5.7的小版本直接升级到8.0，尤其是非GA的版本。
-1. 在8.0中，除了 `general_log` 和 `slow_log` 之外，其他所有元数据的字典数据都存储在InnoDB引擎表中，不再采用MyISAM引擎表存储。
-1. 在8.0中，默认采用 `caching_sha2_password` 密码插件，这可能导致部分版本较早的连接驱动、连接客户端无法连接8.0的服务端，也需要同步升级。
-1. 在8.0中，默认采用 `utf8mb4` 字符集，而5.7版本默认字符集是 `utf8`（也是 `utf8mb3`），在做数据迁移时要注意前后对照校验。
-1. 在8.0中，启动时务必先设定好 `lower_case_table_names` 选项值，且实例启动后不可再更改，在个别不区分大小写的旧系统中迁移时要特别谨慎。
-1. 在8.0中，参数`explicit_defaults_for_timestamp`默认值为 `ON`，这可能会影响 `timestamp` 类型字段的默认行为。
-1. 在8.0中，默认启用`event_scheduler`，建议在主从复制或MGR中，在所有从节点中都关闭它。
-1. 在8.0中，分组查询`GROUP BY`的结果不再默认进行排序，需要显式加上`ORDER BY`才行。
+1. 最好是先升级到 GreatSQL 8.0 最新版本，再升级到 8.4 的最新版本，不要从 5.6, 5.7 等版本直接升级到 8.4。
+1. 默认采用 `caching_sha2_password` 密码插件，这可能导致部分版本较早的连接驱动、连接客户端无法连接服务端，也需要同步升级。
 1. 新增保留字、关键字，详情请见：[2.6 保留字、关键字](../2-about-greatsql/7-greatsql-keywords.md)。
-1. 除InnoDB、NDB外，其他引擎不再支持表分区。
-1. SQL Mode不再支持 `NO_AUTO_CREATE_USER`，也就是不能直接利用 `GRANT` 创建新用户并授权，需要先 `CREATE USER` 创建用户，再授权。
-1. 部分参数选项不再支持，例如：`innodb_locks_unsafe_for_binlog`, `old_passwords`, query cache相关参数等。
-1. 部分功能、函数不再支持，例如：`query cache`, `PASSWORD()`, `ENCODE()`, `DECODE()`, `ENCRYPT()`等。
+1. 部分参数选项不再支持，例如：`expire_logs_days`, `binlog_transaction_dependency_tracking`, `group_replication_allow_local_lower_version_join` 等。
+1. 部分功能、函数不再支持，例如：`WAIT_UNTIL_SQL_THREAD_AFTER_GTIDS` 等。
+1. 主从复制中大量 **MASTER/SLAVE** 关键字都不再支持，而改为 **SOURCE/REPLICA** 关键字。
 
-更多详情请见：[What Is New in MySQL 8.0](https://dev.mysql.com/doc/refman/8.0/en/mysql-nutshell.html)。
-
-### 升级检查
-
-在正式开始前，推荐使用 GreatSQL Shell 对旧的数据库实例进行一次全面的检查，确认是否存在升级后可能不兼容的地方。
-
-在这里下载 [GreatSQL Shell 最新版本](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)。
-
-下载完后解压缩放在 */usr/local* 目录下。
-
-```bash
-tar xf /tmp/greatsql-shell-8.0.32-25-glibc2.28-x86_64.tar.xz -C /usr/local
-```
-
-执行下面的命令运行 GreatSQL Shell 进行升级前检查：
-
-```bash
-/usr/local/greatsql-shell-8.0.32-25-glibc2.28-x86_64/bin/mysqlsh -- util checkForServerUpgrade \
-  --socket=/data/GreatSQL/mysql.sock --target-version=8.0.32 \
-  --output-format=JSON --config-path=/etc/my.cnf > /tmp/upgradecheck_57_to_8032.log
-```
-
-其中：
-- `-- util checkForServerUpgrade` 表示要进行升级前检查；
-- `--socket` 指定本地 SOCKET 文件，也可以改成账号密码格式，例如：`user:passwrod@127.0.0.1:3306`；
-- `--target-version` 指定升级后的版本号，如果不指定，则默认和 GreatSQL Shell 当前版本号一致；
-- `--output-format` 指定输出日志为格式，默认是 JSON；
-- `--config-path` 指定要检查的配置文件路径；
-
-检查完毕后，需要手动确认结果中是否有标记为 Errors 级别的事项，这些事项都必须先修复。
-
-```bash
-mysqlsh -- util checkForServerUpgrade \
-  --socket=./data/mysql.sock --target-version=8.0.32 \
-  --output-format=JSON --config-path=./my.cnf > /tmp/upgradecheck_57_to_8032.log
-...
-    "serverAddress": "%2Fdata%2FGreatSQL%2Fmysql.sock",
-    "serverVersion": "5.7.36-39 (GreatSQL, Release 39, Revision a2ce7ad3400)",
-    "targetVersion": "8.0.32",
-    "errorCount": 0,
-    "warningCount": 16,
-    "noticeCount": 1,
-    "summary": "No fatal errors were found that would prevent an upgrade, but some potential issues were detected. Please ensure that the reported issues are not significant before upgrading.",
-...
-```
-
-GreatSQL Shell 会执行多项详细检查，逐一报告检查结果并给出进一步建议，这些检查项主要有：
-- 是否存在不支持的数据或索引类型，或者某些数据类型定义不合理/超限等；
-- 是否存在数据表名大小写不兼容问题，注意设置正确的 `lower_case_table_names` 参数值；
-- 数据对象名是否包含保留字/关键字，需要将对象名用反引号括起来，详情参考：[保留字、关键字](../2-about-greatsql/7-greatsql-keywords.md)；
-- 是否存在使用 utf8mb3 字符集，建议转换为 utf8mb4；
-- 是否存在不支持的 SQL MODE 设置值；
-- 是否存在 '0000-00-00' 这种日期格式，在 8.0 版本中默认是不允许的；
-- 是否存在不兼容的函数用法；
-- 是否存在不支持的系统变量参数名；
-- 是否存在孤立的 frm 文件；
-
-以及其他等等，从检查结果日志文件中也能看到所有的检查项及其结果。
-
-GreatSQL Shell 支持利用 *greatsql/greatsql_shell* 这个 Docker 容器来完成升级检查：
-```bash
-docker pull greatsql/greatsql_shell
-docker run -itd --hostname greatsqlsh --name greatsqlsh greatsql/greatsql_shell bash
-docker cp /etc/my.cnf greatsqlsh:/tmp/
-docker exec -it greatsqlsh bash -c "mysqlsh -- util checkForServerUpgrade user:password@127.0.0.1:3306 \
-  --target-version=8.0.32 --output-format=JSON --config-path=/tmp/my.cnf" > /tmp/upgradecheck_57_to_8032.log
-```
-
-在上面的操作过程里，需要先把宿主环境中的 */etc/my.cnf* 配置参数文件拷贝到容器中。
-
-关于如何利用 GreatSQL Shell 执行升级前检查，更多信息请参考：[Upgrade Checker Utility](https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-utilities-upgrade.html)。
+更多详情请见：[What Is New in MySQL 8.4](https://dev.mysql.com/doc/refman/8.4/en/mysql-nutshell.html)。
 
 ### 升级准备
 
-首先下载GreatSQL 8.0版本安装包，推荐选择最新的[GreatSQL 8.0.32-27版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-27)，至于选择RPM还是二进制包看具体情况及个人喜好。
+首先下载 GreatSQL 8.4 版本安装包，推荐选择最新的[GreatSQL 8.4.4-4版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.4.4-4)，至于选择RPM还是二进制包看具体情况及个人喜好。
 
 本文假定升级前后都是二进制包方式安装。
 
@@ -173,56 +125,11 @@ docker exec -it greatsqlsh bash -c "mysqlsh -- util checkForServerUpgrade user:p
 2. 利用mysqldump/xtrabackup等备份工具，执行一个全量备份。
 3. 利用主从复制或MGR，在其中一个节点执行备份，或者令某个节点临时下线/退出，作为备用节点。
 
-需要特别注意的事，您原先运行中的GreatSQL/MySQL 5.7版本，可能也是从其他旧版本中升级而来的，此时有可能MySQL系统库下的部分元数据表还是旧格式。这种情况下，需要先在原来的环境下执行 `mysql_upgrade` 进行升级修复旧格式。例如：
-```bash
-# 切换到当前运行的数据库实例datadir下
-$ cd /data/GreatSQL
-
-# 执行mysql_upgrade程序
-# 参数 -s 表示只升级MySQL系统库表文件，不升级其他用户数据文件，一般建议去掉，对所有数据都进行升级
-# 参数 -f 表示强制升级，如果升级过程中遇到报错，也会继续升级后面的库表文件，而不会直接退出
-# 假定socket文件路径是 /data/GreatSQL/mysql.sock，用参数 -S 指向
-$ /usr/local/GreatSQL-5.7.36-39-Linux-glibc2.28-x86_64/bin/mysql_upgrade -s -f -S/data/GreatSQL/mysql.sock
-
-/usr/local/GreatSQL-5.7.36-39-Linux-glibc2.28-x86_64/bin/mysql_upgrade -s -S./mysql.sock
-The --upgrade-system-tables option was used, databases won't be touched.
-Checking if update is needed.
-Checking server version.
-Running queries to upgrade MySQL server.
-
-...
-
-mysql.time_zone_transition_type                    OK
-mysql.user                                         OK
-The sys schema is already up to date (version 1.5.2).
-Checking databases.
-sys.sys_config                                     OK
-test.sbtest1                                       OK
-Upgrade process completed successfully.
-Checking if update is needed.
-```
-
-另外，推荐采用MySQL Shell提供的 `util.checkForServerUpgrade()` 方法做升级前的检查，它主要是从实例的基础数据本身来判定实例是否满足升级条件，譬如是否使用了移除的函数、表名是否存在冲突等。该工具的详细介绍可参考社区用户 **芬达** 的几篇文章：
-- [5.7 升级 8.0 的升级检查利器 util.checkForServerUpgrade 原理(1)](https://mp.weixin.qq.com/s/EuR7MSaVMOTnQTMh0_RsZQ)
-- [5.7 升级 8.0 的升级检查利器 util.checkForServerUpgrade 原理(2)](https://mp.weixin.qq.com/s/i9w4-zqRh8DO2XByhUZrVA)
-- [5.7 升级 8.0 的升级检查利器 util.checkForServerUpgrade 原理(3)](https://mp.weixin.qq.com/s/0rMJpIS7zyP3Het5QOwYmw)
-
 ## 升级过程
-
-从GreatSQL/MySQL 5.7升级到8.0需要注意以下几点变化：
-
-1. 升级前的版本要求是GA版本，即5.7.9之后的版本。如果不是的话，要先在5.7大版本内升级小版本。
-2. 建议先把当前的5.7升级到最新的子版本，截止本文时间，最新版本是5.7.43。
-3. 升级到8.0版本后，主要区别是默认密码验证插件(`default_authentication_plugin`)从 `mysql_native_password` 变成了 `caching_sha2_password`，会影响一些版本比较低的API/驱动，在创建用户时仍旧指定为 `mysql_native_password` 即可，或者在 `my.cnf` 中设置 `default_authentication_plugin=mysql_native_password`。
-4. 在8.0中，不能直接利用 `GRANT` 创建新用户，需要手动先 `CREATE USER` 才能 `GRANT`，对应 `SQL_MODE=NO_AUTO_CREATE_USER`。
-5. 在8.0中，除了InnoDB引擎，其他引擎表都不支持原生PARTITION特性。
-6. 默认字符集、校验集分别从 `latin1 & latin1_swedish_ci` 升级成 `utf8mb4 & utf8mb4_0900_ai_ci`。**注意** ，在5.7版本中，`utf8mb4` 默认的校验集是 `utf8mb4_general_ci`，而在8.0中，对应的默认校验集则变成 `utf8mb4_0900_ai_ci`。如果有数据库、表、存储函数等数据对象没有显式声明校验集的话，注意是否发生变化。
-
-只要注意上述这几点区别，做到心中有数，升级到8.0就不慌了。
 
 升级的方法有以下几种可选。
 
-### 原地升级
+### 原地升级（推荐）
 
 如果数据库能停机维护，则采用原地升级（in-place upgrade）方法最为简单。
 
@@ -233,9 +140,9 @@ Checking if update is needed.
 upgrade=FORCE
 ```
 
-然后修改正确的 `basedir` 指向新版本二进制文件路径，再次启动GreatSQL 8.0服务，即可实现自动升级，除了系统表，用户表也会全部升级。
+然后修改正确的 `basedir` 指向新版本二进制文件路径，再次启动 GreatSQL 8.4 服务，即可实现自动升级，除了系统表，用户表也会全部升级。
 
-**注意：** 这种方法不支持从5.6版本直接升级到8.0。
+**注意：** 这种方法不支持从 5.6, 5.7 版本直接升级到 8.4。
 
 升级过程的日志输入类似下面这样：
 ```log
@@ -243,27 +150,26 @@ upgrade=FORCE
 [System] [MY-011012] [Server] Starting upgrade of data directory.
 ...
 [System] [MY-011003] [Server] Finished populating Data Dictionary tables with data.
-[System] [MY-013381] [Server] Server upgrade from '50700' to '80032' started.
-[System] [MY-013381] [Server] Server upgrade from '50700' to '80032' completed.
+[System] [MY-013381] [Server] Server upgrade from '80032' to '80404' started.
+[System] [MY-013381] [Server] Server upgrade from '80032' to '80404' completed.
 ...
-[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-27'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 27, Revision aa66a385910.
+[System] [MY-010931] [Server] /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.4.4-4'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 4, Revision d73de75905d.
 ```
 
-是不是觉得有点惊喜，有点意外，怎么怎么简单，事实的确如此。
+如果想要看到完整升级过程，还可以加上两个选项 `log_error_verbosity=3` 以及 `innodb_print_ddl_logs=ON`，输出的日志就会多很多：
 
-如果有强迫症的话，想要看到完整升级过程，还可以加上两个选项 `log_error_verbosity=3` 以及 `innodb_print_ddl_logs=ON`，输出的日志就会多很多：
 ```log
 ...
 [System] [MY-011012] [Server] Starting upgrade of data directory.
 ...
-[Note] [MY-011088] [Server] Data dictionary initializing version '80023'.
+[Note] [MY-011088] [Server] Data dictionary initializing version '80032'.
 [Note] [MY-010337] [Server] Created Data Dictionary for upgrade
 ...
 [System] [MY-011003] [Server] Finished populating Data Dictionary tables with data.
 [Note] [MY-011008] [Server] Finished migrating TABLE statistics data.
 [Note] [MY-011008] [Server] Finished migrating TABLE statistics data.
-[Note] [MY-010006] [Server] Using data dictionary with version '80023'.
-[System] [MY-013381] [Server] Server upgrade from '50700' to '80032' started.
+[Note] [MY-010006] [Server] Using data dictionary with version '80032'.
+[System] [MY-013381] [Server] Server upgrade from '80032' to '80404' started.
 [Note] [MY-013386] [Server] Running queries to upgrade MySQL server.
 ...
 [Note] [MY-012477] [InnoDB] DDL log insert : [DDL record: REMOVE CACHE, id=1, thread_id=5, table_id=1072, new_file_path=mysql/default_roles
@@ -292,79 +198,32 @@ upgrade=FORCE
 [Note] [MY-013394] [Server] Checking 'mysql' schema.
 [Note] [MY-013394] [Server] Checking 'greatsql' schema.
 [Note] [MY-013394] [Server] Checking 'sys' schema.
-[System] [MY-013381] [Server] Server upgrade from '50700' to '80032' completed.
+[System] [MY-013381] [Server] Server upgrade from '80032' to '80404' completed.
 ...
-[System] [MY-010931] [Server] /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.0.32-27'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 27, Revision aa66a385910.
+[System] [MY-010931] [Server] /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.4.4-4'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 4, Revision d73de75905d.
 ```
+
+**建议**：在 GreatSQL 8.4 服务第一次启动完成后，先关闭后再次启动，以确保升级成功。
+
 这样就完成升级了，非常便捷省事。
 
 ### 滚动升级
 
-可借助主从复制或MGR架构，利用滚动升级方法，先在从节点升级验证无误后，再升级主节点，最终实现所有节点都升级到GreatSQL 8.0版本。
+可借助主从复制或MGR架构，利用滚动升级方法，先在从节点升级验证无误后，再升级主节点，最终实现所有节点都升级到 GreatSQL 8.4 版本。
 
-具体可参考文章：[MySQL 5.7 MGR平滑升级到GreatSQL 5.7](https://mp.weixin.qq.com/s/u0UAijfM8jHH948ml1PREg)。根据该文章提供的思路，把MySQL 5.7平滑升级到GreatSQL 5.7之后，仍旧采用同样方法升级到GreatSQL 8.0版本。
+具体可参考文章：[MySQL 5.7 MGR平滑升级到GreatSQL 5.7](https://mp.weixin.qq.com/s/u0UAijfM8jHH948ml1PREg)。根据该文章提供的思路，把MySQL 5.7平滑升级到GreatSQL 5.7之后，仍旧采用同样方法升级到 GreatSQL 8.4 版本。
 
 最后要注意检查升级过程中输出的日志是否有报错信息，如果没有就说明升级过程很顺利。
 
-确定升级完成后，记得注释掉 `my.cnf` 文件中的 `upgrade=FORCE` 选项，或者将其修改成 `upgrade=AUTO`。
-
-## 升级GreatSQL 8.0.25到8.0.32 
-GreatSQL 8.0.32相对于8.0.25版本，新增了Rapid引擎、更多SQL语法兼容性、MGR层支持绑定VIP、支持并行LOAD DATA、在安全方面支持国密加密&备份加密等非常不错的特性，强烈建议升级到最新的GreatSQL 8.0.32版本。
-
-从GreatSQL 8.0.25升级到8.0.32版本过程较为简单：
-
-1. 下载最新[GreatSQL 8.0.32二进制包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)，并解压缩到相应目录下。
-
-2. 在数据库维护期间关闭GreatSQL 8.0.25版本数据库。关闭前，先执行 `SET GLOBAL innodb_fast_shutdown=0`，确保停机时得到一份完整、干净的数据文件。
-
-3. 修改my.cnf，调整basedir，指向新版本二进制包路径。可参考这份[my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-27)。
-
-4. 重启新的GreatSQL 8.0.32版本数据库服务进程，即可实现原地升级（in-place upgrade），可以看到日志中有类似下面的内容：
-```log
-[Note] [MY-013327] [Server] MySQL server upgrading from version '80025' to '80032'.
-[Note] [MY-012357] [InnoDB] Reading DD tablespace files
-[Note] [MY-012356] [InnoDB] Scanned 7 tablespaces. Validated 7.
-[Note] [MY-010006] [Server] Using data dictionary with version '80023'.
-[Note] [MY-011323] [Server] Plugin mysqlx reported: 'X Plugin ready for connections. socket: '/tmp/mysqlx.sock''
-[System] [MY-013381] [Server] Server upgrade from '80025' to '80032' started.
-[Note] [MY-013386] [Server] Running queries to upgrade MySQL server.
-[Note] [MY-013387] [Server] Upgrading system table data.
-[Note] [MY-013385] [Server] Upgrading the sys schema.
-[Note] [MY-013400] [Server] Upgrade of help tables started.
-[Note] [MY-013400] [Server] Upgrade of help tables completed.
-[Note] [MY-013394] [Server] Checking 'mysql' schema.
-[Note] [MY-013394] [Server] Checking 'sys' schema.
-[System] [MY-013381] [Server] Server upgrade from '80025' to '80032' completed.
-```
-
-5. 如果设置选项 `innodb_print_ddl_logs=ON`，则还能看到升级过程中有大量的DDL升级记录，例如：
-```log
-[System] [MY-013381] [Server] Server upgrade from '80025' to '80032' started.
-[Note] [MY-013386] [Server] Running queries to upgrade MySQL server.
-[Note] [MY-012477] [InnoDB] DDL log insert : [DDL record: REMOVE CACHE, id=6, thread_id=6, table_id=1062, new_file_path=mysql/replication_group_member_actions]
-[Note] [MY-012478] [InnoDB] DDL log delete : 6
-[Note] [MY-012472] [InnoDB] DDL log insert : [DDL record: FREE, id=7, thread_id=6, space_id=4294967294, index_id=156, page_no=1111]
-...
-[Note] [MY-012479] [InnoDB] DDL log replay : [DDL record: FREE, id=792, thread_id=6, space_id=4294967294, index_id=259, page_n
-[Note] [MY-012486] [InnoDB] DDL log post ddl : end for thread id : 6
-[Note] [MY-013400] [Server] Upgrade of help tables completed.
-[Note] [MY-013394] [Server] Checking 'mysql' schema.
-[Note] [MY-013394] [Server] Checking 'sys' schema.
-[System] [MY-013381] [Server] Server upgrade from '80025' to '80032' completed.
-```
-这样就可以很方便完成原地升级GreatSQL版本。
-
-**提醒：** 由于从MySQL 8.0.26开始新增选项 `group_replication_view_change_uuid`，因此不支持在一个MGR集群中，同时包含8.0.26以前及以后的版本。例如：在MGR集群中，不能并存8.0.25和8.0.26版本。这种情况下，版本号是8.0.25的MGR集群想要升级到8.0.32，就需要新建一个8.0.32版本的MGR集群，两个集群间再构建异步（或半同步）复制通道，采用这种方式才能实现平滑升级迁移，否则只能是安排离线停机维护时间，才能完成升级。
+升级完成后，记得注释掉 `my.cnf` 文件中的 `upgrade=FORCE` 选项，或者将其修改成 `upgrade=AUTO`。
 
 **参考文档**
 
-- [GreatSQL-8.0.25升级到GreatSQL-8.0.32](https://greatsql.cn/thread-825-1-2.html)
-- [Percona Server for MySQL In-Place Upgrading Guide: From 5.7 to 8.0](https://docs.percona.com/percona-server/8.0/upgrade.html)
-- [Changes in MySQL 8.0](https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html)
-- [Before You Begin](https://dev.mysql.com/doc/refman/8.0/en/upgrade-before-you-begin.html)
-- [What the MySQL Upgrade Process Upgrades](https://dev.mysql.com/doc/refman/8.0/en/upgrading-what-is-upgraded.html)
+- [Upgrade from 8.0 to 8.4 overview](https://docs.percona.com/percona-server/8.4/upgrade.html)
+- [Changes in MySQL 8.4](https://dev.mysql.com/doc/refman/8.4/en/mysql-nutshell.html)
+- [Upgrade Before You Begin](https://dev.mysql.com/doc/refman/8.4/en/upgrade-before-you-begin.html)
+- [What the MySQL Upgrade Process Upgrades](https://dev.mysql.com/doc/refman/8.4/en/upgrading-what-is-upgraded.html)
 - [MySQL 5.7 MGR平滑升级到GreatSQL 5.7](https://mp.weixin.qq.com/s/u0UAijfM8jHH948ml1PREg)
-
 
 **扫码关注微信公众号**
 

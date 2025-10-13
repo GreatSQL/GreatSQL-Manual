@@ -62,7 +62,9 @@ Updating / installing...
 1. 安装GreatSQL RPM包需要先安装其他依赖包，可执行下面命令完成：
 
 ```bash
-yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
+yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs \
+  net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper \
+  perl-Digest-MD5 python2 perl-JSON perl-Test-Simple libatomic
 ```
 
 如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](./1-install-prepare.md)。
@@ -399,11 +401,7 @@ $ mysql -uroot -p
 Enter password:     #<--这个地方粘贴上面复制的随机密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
-Server version: 8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
-
-Copyright (c) 2021-2023 GreatDB Software Co., Ltd
-Copyright (c) 2009-2021 Percona LLC and/or its affiliates
-Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+Server version: 8.4.4-4 GreatSQL, Release 4, Revision d73de75905d
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
@@ -415,7 +413,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 greatsql> status;   #<--就可以正常执行其他命令了
 --------------
-mysql  Ver 8.4.4-4 for Linux on x86_64 (GreatSQL, Release 4, Revision aa66a385910)
+mysql  Ver 8.4.4-4 for Linux on x86_64 (GreatSQL, Release 4, Revision d73de75905d)
 
 Connection id:          8
 Current database:
@@ -424,7 +422,7 @@ SSL:                    Not in use
 Current pager:          stdout
 Using outfile:          ''
 Using delimiter:        ;
-Server version:         8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
+Server version:         8.4.4-4 GreatSQL, Release 4, Revision d73de75905d
 Protocol version:       10
 Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4
@@ -504,11 +502,7 @@ pip3.8 install --user certifi pyclamd
 ```bash
 $ mysqlsh
 MySQL Shell 8.0.32
-
-Copyright (c) 2016, 2021, Oracle and/or its affiliates.
-Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
-Other names may be trademarks of their respective owners.
-
+...
 Type '\help' or '\?' for help; '\quit' to exit.
  MySQL  JS >
 ```
@@ -537,7 +531,7 @@ Please provide the password for 'root@.%2Fmysql.sock': ********  <-- 输入root�
 Save password for 'root@.%2Fmysql.sock'? [Y]es/[N]o/Ne[v]er (default No): yes  <-- 提示是否存储密码（视各公司安全规则而定，这里为了方便选择了存储密码）
 MySQL Shell 8.0.32
 ...
-Server version: 8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
+Server version: 8.4.4-4 GreatSQL, Release 4, Revision d73de75905d
 No default schema selected; type \use <schema> to set one.
 WARNING: Found errors loading plugins, for more details look at the log at: /root/.mysqlsh/mysqlsh.log
  MySQL  localhost  JS >
@@ -587,7 +581,7 @@ Please provide the password for 'GreatSQL@172.16.16.10:3306': *************
 Save password for 'GreatSQL@172.16.16.10:3306'? [Y]es/[N]o/Ne[v]er (default No): yes
 MySQL Shell 8.0.32
 ...
-Server version: 8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
+Server version: 8.4.4-4 GreatSQL, Release 4, Revision d73de75905d
 No default schema selected; type \use <schema> to set one.
 
 # 选定GreatSQL-01节点作为PRIMARY，开始创建MGR集群

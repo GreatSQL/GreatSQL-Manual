@@ -39,10 +39,8 @@ systemctl stop iptables
 安装GreatSQL RPM包时，要先安装这些相关依赖包。
 ```bash
 $ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools \
-
-...
   openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 \
-  python2 perl-JSON perl-Test-Simple
+  python2 perl-JSON perl-Test-Simple libatomic
 ```
 
 如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](../4-install-guide/1-install-prepare.md)。
@@ -191,11 +189,7 @@ $ mysql -uroot -p
 Enter password:     #<--这个地方粘贴上面复制的随机密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
-Server version: 8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
-
-Copyright (c) 2021-2023 GreatDB Software Co., Ltd
-Copyright (c) 2009-2021 Percona LLC and/or its affiliates
-Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+Server version: 8.4.4-4 GreatSQL, Release 4, Revision d73de75905d
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
@@ -207,7 +201,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 greatsql> status;   #<--就可以正常执行其他命令了
 --------------
-mysql  Ver 8.4.4-4 for Linux on x86_64 (GreatSQL, Release 4, Revision aa66a385910)
+mysql  Ver 8.4.4-4 for Linux on x86_64 (GreatSQL, Release 4, Revision d73de75905d)
 
 Connection id:          11
 Current database:
@@ -216,7 +210,7 @@ SSL:                    Not in use
 Current pager:          stdout
 Using outfile:          ''
 Using delimiter:        ;
-Server version:         8.4.4-4 GreatSQL, Release 4, Revision aa66a385910
+Server version:         8.4.4-4 GreatSQL, Release 4, Revision d73de75905d
 Protocol version:       10
 Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4
