@@ -58,7 +58,7 @@ greatsql> SHOW GLOBAL STATUS LIKE 'Rpl%spee%';
 | Rpl_data_speed | async_rpl=100.00 |
 +----------------+------------------+
 ```
-表示当前的Binlog读取限速为100KB/s，更多详细用法请参考：[Binlog 读取限速](../../5-enhance/5-2-ha-binlog-speed-limit.md)。
+表示当前的Binlog读取限速为100KB/s。
 
 ## 注意事项
 
