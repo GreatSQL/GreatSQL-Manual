@@ -83,10 +83,10 @@ docker exec -it greatsql_build bash
 echo '[main]' > /etc/dnf/dnf.conf && \
 microdnf install -y oracle-epel-release-el8 && \
 microdnf install -y util-linux autoconf automake binutils bison bzip2 cmake cyrus-sasl-devel cyrus-sasl-scram \
-gcc-c++ gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc gcc-toolset-11-libatomic-devel \
-jemalloc jemalloc-devel krb5-devel libaio-devel libatomic libcurl-devel libtirpc-devel \
-libudev-devel m4 make ncurses-devel numactl-devel openldap-devel openssl openssl-devel \
-pam-devel patchelf readline-devel zlib-devel findutils procps-ng xz && \
+gcc-c++ gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc gcc-toolset-11-libatomic-devel gzip jemalloc jemalloc-devel \
+krb5-devel libaio-devel libatomic libcurl-devel libedit libevent-devel libicu libicu-devel libtirpc-devel libudev-devel \
+lz4 lz4-devel libzstd-devel make mecab-devel m4 ncurses-devel numactl-devel openldap-devel openssl openssl-devel \
+pam-devel patchelf perl protobuf-lite readline-devel time systemd zlib-devel findutils procps-ng xz && \
 microdnf update -y && microdnf clean all
 ```
 
