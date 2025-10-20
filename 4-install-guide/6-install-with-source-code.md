@@ -84,9 +84,9 @@ echo '[main]' > /etc/dnf/dnf.conf && \
 microdnf install -y oracle-epel-release-el8 && \
 microdnf install -y util-linux autoconf automake binutils bison bzip2 cmake cyrus-sasl-devel cyrus-sasl-scram \
 gcc-c++ gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc gcc-toolset-11-libatomic-devel gzip jemalloc jemalloc-devel \
-krb5-devel libaio-devel libatomic libcurl-devel libedit libevent-devel libicu libicu-devel libtirpc-devel libudev-devel \
+krb5-devel libaio-devel libatomic libcurl-devel libedit* libevent-devel libicu libicu-devel libtirpc-devel libudev-devel \
 lz4 lz4-devel libzstd-devel make mecab-devel m4 ncurses-devel numactl-devel openldap-devel openssl openssl-devel \
-pam-devel patchelf perl protobuf-lite readline-devel time systemd zlib-devel findutils procps-ng xz && \
+pam-devel patchelf perl protobuf-lite* readline-devel rpcgen time systemd zlib-devel findutils procps-ng xz && \
 microdnf update -y && microdnf clean all
 ```
 
@@ -249,7 +249,7 @@ drwxr-xr-x  3 root root        28 Oct 16 04:51 rh
 
 ```bash
 microdnf install -y libssh rpm-build time vim-common perl perl-Carp perl-Data-Dumper perl-Errno \
-perl-Exporter perl-File-Temp perl-Getopt-Long perl-JSON perl-Memoize perl-Time-HiRes && \
+perl-Exporter perl-File-Temp perl-Getopt-Long perl-JSON perl-Memoize perl-Time-HiRes perl-generators perl*LWP* && \
 microdnf update -y && microdnf clean all
 ```
 
