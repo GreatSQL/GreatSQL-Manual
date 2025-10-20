@@ -248,8 +248,8 @@ drwxr-xr-x  3 root root        28 Oct 16 04:51 rh
 **1. 安装软件包**
 
 ```bash
-microdnf install -y libssh rpm-build time vim-common perl perl-Carp perl-Data-Dumper perl-Errno \
-perl-Exporter perl-File-Temp perl-Getopt-Long perl-JSON perl-Memoize perl-Time-HiRes perl-generators perl*LWP* && \
+microdnf install -y libssh rpm-build time vim-common perl perl-Carp perl-Data-Dumper perl-Errno perl-Exporter \
+perl-File-Temp perl-FindBin perl-Getopt-Long perl-JSON perl-Memoize perl-Time-HiRes perl-generators perl*LWP* && \
 microdnf update -y && microdnf clean all
 ```
 
