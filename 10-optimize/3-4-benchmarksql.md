@@ -58,7 +58,7 @@ yum install -y java-1.8.0-openjdk ant
 配置 Apache-Ant 的环境变量：
 
 ```bash
-echo 'export APACH_HOME=/usr/share/doc/ant-1.9.4' >> ~/.bash_profile
+echo 'export ANT_HOME=/usr/share/ant-1.9.4' >> ~/.bash_profile
 echo 'export PATH=${ANT_HOME}/bin:$PATH' >> ~/.bash_profile
 source ~/.bash_profile
 ```
