@@ -41,7 +41,6 @@ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools
 ```
 如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](../4-install-guide/1-install-prepare.md)。
 
-
 ## 下载二进制包并安装
 
 将下载的二进制包放在安装目录 `/usr/local/` 下，并解压缩：
@@ -56,6 +55,10 @@ cd /usr/local && curl -o GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal.tar.xz 
 #解压缩
 tar xf GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal.tar.xz
 ```
+
+::: tip 小贴士
+若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64-minimal.tar.xz`。
+:::
 
 修改 *PATH* 环境变量，添加 GreatSQL 安装目录，方便执行命令，无需每次都指定全路径：
 
@@ -154,6 +157,26 @@ chown mysql:mysql /var/run/mysqld/ /var/lib/mysql-files/ /var/lib/mysql/ /usr/lo
 ```
 
 编辑 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
+
+编辑 `/etc/ld.so.conf` 文件，增加以下几行内容：
+
+```ini
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/private
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/mysqlrouter/
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/mysqlrouter/private
+```
+
+保存退出，执行下面的命令，确认生效：
+
+```bash
+ldconfig && ldconfig -p | grep libprotobuf.so
+
+...
+	libprotobuf.so.24.4.0 (libc6,x86-64) => /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/private/libprotobuf.so.24.4.0
+```
+
+这个步骤的作用是加载 GreatSQL 自带的动态依赖库文件，这样在运行 mysql/mysqld 等二进制文件时可能需要用到，避免报错。
 
 ## 启动 GreatSQL
 

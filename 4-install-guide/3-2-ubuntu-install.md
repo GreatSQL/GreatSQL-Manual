@@ -40,6 +40,10 @@ glibc 2.35
 
 - GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
 
+::: tip 小贴士
+若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64.tar.xz`。
+:::
+
 将下载的二进制包放到安装目录下，并解压缩：
 
 ```bash
@@ -317,10 +321,10 @@ ln -s /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64 /usr/local/GreatSQL
 
 ```bash
 # grep -n GreatSQL mysqld_pre_systemd
-33:    ret=$(/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/my_print_defaults  ${instance:+--defaults-group-suffix=@$instance} $section | \
-178:    /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysqld ${instance:+--defaults-group-suffix=@$instance} --initialize \
-183:    if [ -x /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysql_ssl_rsa_setup -a ! -e "${datadir}/server-key.pem" ] ; then
-184:        /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64/bin/mysql_ssl_rsa_setup --datadir="$datadir" --uid=mysql >/dev/null 2>&1
+33:    ret=$(/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/my_print_defaults  ${instance:+--defaults-group-suffix=@$instance} $section | \
+178:    /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld ${instance:+--defaults-group-suffix=@$instance} --initialize \
+183:    if [ -x /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysql_ssl_rsa_setup -a ! -e "${datadir}/server-key.pem" ] ; then
+184:        /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysql_ssl_rsa_setup --datadir="$datadir" --uid=mysql >/dev/null 2>&1
 ```
 
 以上几处请自行修改，然后执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
@@ -330,6 +334,28 @@ systemctl daemon-reload
 ```
 
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
+
+编辑 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
+
+编辑 `/etc/ld.so.conf` 文件，增加以下几行内容：
+
+```ini
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/private
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/mysqlrouter/
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/mysqlrouter/private
+```
+
+保存退出，执行下面的命令，确认生效：
+
+```bash
+ldconfig && ldconfig -p | grep libprotobuf.so
+
+...
+	libprotobuf.so.24.4.0 (libc6,x86-64) => /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/private/libprotobuf.so.24.4.0
+```
+
+这个步骤的作用是加载 GreatSQL 自带的动态依赖库文件，这样在运行 mysql/mysqld 等二进制文件时可能需要用到，避免报错。
 
 ## 启动GreatSQL
 

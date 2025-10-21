@@ -46,25 +46,29 @@ $ cat /etc/system-release
 Kylin Linux Advanced Server release V10 (Tercel)
 
 $ uname -a
-Linux kylin 4.19.90-17.ky10.aarch64 #1 SMP Sun Jun 28 14:27:40 CST 2020 aarch64 aarch64 aarch64 GNU/Linux
+Linux kylin 4.19.90-17.ky10.x86_64 #1 SMP Sun Jun 28 14:27:40 CST 2020 x86_64 x86_64 x86_64 GNU/Linux
 
 $ ldd --version
 ldd (GNU libc) 2.28
 ```
 
-那么在这个环境下，可以选择 *GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64.tar.xz* 这个Linux Generic通用包。
+那么在这个环境下，可以选择 *GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz* 这个Linux Generic通用包。
+
+::: tip 小贴士
+若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64.tar.xz`。
+:::
 
 当然了，也可以选择相应的minimal包，minimal版本是对二进制文件进行strip后，所以文件尺寸较小，功能上没本质区别，但不支持gdb debug功能，可以放心使用。
 
 将下载的二进制包放到安装目录下，并解压缩：
 ```bash
 cd /usr/local
-tar xf GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64.tar.xz
+tar xf GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 同时修改设置，将GreatSQL加入 `PATH` 环境变量：
 ```bash
-echo 'export PATH=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64/bin:$PATH' >> ~/.bash_profile
+echo 'export PATH=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
 source ~/.bash_profile
 ```
 
@@ -87,7 +91,7 @@ no-auto-rehash
 user    = mysql
 port    = 3306
 server_id = 3306
-basedir = /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64
+basedir = /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64
 datadir    = /data/GreatSQL
 socket    = /data/GreatSQL/mysql.sock
 pid-file = mysql.pid
@@ -286,8 +290,8 @@ Group=mysql
 Type=notify
 TimeoutSec=10
 PermissionsStartOnly=true
-ExecStartPre=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64/bin/mysqld_pre_systemd
-ExecStart=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64/bin/mysqld $MYSQLD_OPTS
+ExecStartPre=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd
+ExecStart=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS
 EnvironmentFile=-/etc/sysconfig/mysql
 Restart=on-failure
 RestartPreventExitStatus=1
@@ -297,11 +301,11 @@ PrivateTmp=false
 
 务必确认文件中 `ExecStartPre` 和 `ExecStart` 两个参数指定的目录及文件名是否正确。
 
-**提示**：如果不是安装到默认的 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64` 目录下（不同版本具体目录也有所变化），可能会影响 GreatSQL 的自动初始化操作。这种时候，可以先将GreatSQL二进制包解压缩到 `/usr/local` 目录下，再根据需要自行做软链接，例如：
+**提示**：如果不是安装到默认的 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64` 目录下（不同版本具体目录也有所变化），可能会影响 GreatSQL 的自动初始化操作。这种时候，可以先将GreatSQL二进制包解压缩到 `/usr/local` 目录下，再根据需要自行做软链接，例如：
 
 ```bash
-tar xf GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64.tar.xz -C /usr/local
-ln -s /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64 /usr/local/GreatSQL
+tar xf GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz -C /usr/local
+ln -s /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64 /usr/local/GreatSQL
 ```
 这样既不影响GreatSQL的自动初始化，又能满足自定义需要。
 
@@ -309,10 +313,10 @@ ln -s /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64 /usr/local/GreatSQL
 
 ```bash
 # grep -n GreatSQL mysqld_pre_systemd
-33:    ret=$(/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-aarch64/bin/my_print_defaults  ${instance:+--defaults-group-suffix=@$instance} $section | \
-178:    /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-aarch64/bin/mysqld ${instance:+--defaults-group-suffix=@$instance} --initialize \
-183:    if [ -x /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-aarch64/bin/mysql_ssl_rsa_setup -a ! -e "${datadir}/server-key.pem" ] ; then
-184:        /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-aarch64/bin/mysql_ssl_rsa_setup --datadir="$datadir" --uid=mysql >/dev/null 2>&1
+33:    ret=$(/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/my_print_defaults  ${instance:+--defaults-group-suffix=@$instance} $section | \
+178:    /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld ${instance:+--defaults-group-suffix=@$instance} --initialize \
+183:    if [ -x /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysql_ssl_rsa_setup -a ! -e "${datadir}/server-key.pem" ] ; then
+184:        /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysql_ssl_rsa_setup --datadir="$datadir" --uid=mysql >/dev/null 2>&1
 ```
 
 以上几处请自行修改，然后执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
@@ -322,6 +326,28 @@ systemctl daemon-reload
 ```
 
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
+
+编辑 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
+
+编辑 `/etc/ld.so.conf` 文件，增加以下几行内容：
+
+```ini
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/private
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/mysqlrouter/
+/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/mysqlrouter/private
+```
+
+保存退出，执行下面的命令，确认生效：
+
+```bash
+ldconfig && ldconfig -p | grep libprotobuf.so
+
+...
+	libprotobuf.so.24.4.0 (libc6,x86-64) => /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/private/libprotobuf.so.24.4.0
+```
+
+这个步骤的作用是加载 GreatSQL 自带的动态依赖库文件，这样在运行 mysql/mysqld 等二进制文件时可能需要用到，避免报错。
 
 ## 启动GreatSQL
 执行下面的命令启动GreatSQL服务
@@ -340,16 +366,16 @@ $ systemctl status greatsql
    Active: failed (Result: exit-code) since ...
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
-  Process: 1258165 ExecStart=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64/bin/mysqld $MYSQLD_OPTS (code=exited, status=1/FAILURE)
-  Process: 1257969 ExecStartPre=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+  Process: 1258165 ExecStart=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS (code=exited, status=1/FAILURE)
+  Process: 1257969 ExecStartPre=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
  Main PID: 1258165 (code=exited, status=1/FAILURE)
    Status: "Server shutdown complete"
 
 systemd[1]: Starting GreatSQL Server...
 mysqld_pre_systemd[1257969]: mktemp: failed to create file via template ‘/var/lib/mysql-files/install-validate-password-plugin.XXXXXX.sql’: No such file or directory
 mysqld_pre_systemd[1257969]: chmod: cannot access '': No such file or directory
-mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64/bin/mysqld_pre_systemd: line 43: : No such file or directory
-mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64/bin/mysqld_pre_systemd: line 44: $initfile: ambiguous redirect
+mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 43: : No such file or directory
+mysqld_pre_systemd[1257969]: /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd: line 44: $initfile: ambiguous redirect
 systemd[1]: greatsql.service: Main process exited, code=exited, status=1/FAILURE
 systemd[1]: greatsql.service: Failed with result 'exit-code'.
 systemd[1]: Failed to start GreatSQL Server.
@@ -371,19 +397,19 @@ $ systemctl status greatsql
    Active: active (running) since ...
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
-  Process: 60129 ExecStartPre=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+  Process: 60129 ExecStartPre=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
  Main PID: 60231 (mysqld)
    Status: "Server is operational"
     Tasks: 49 (limit: 149064)
    Memory: 5.6G
    CGroup: /system.slice/greatsql.service
-           └─60231 /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64/bin/mysqld
+           └─60231 /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld
 
 systemd[1]: Starting GreatSQL Server...
 systemd[1]: Started GreatSQL Server.
 
 $ ps -ef | grep mysqld
-mysql      60231       1  2 10:08 ?        00:00:10 /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64/bin/mysqld
+mysql      60231       1  2 10:08 ?        00:00:10 /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld
 
 $ ss -lntp | grep mysqld
 LISTEN 0      70                 *:33060            *:*    users:(("mysqld",pid=60231,fd=38))
@@ -430,7 +456,7 @@ GreatSQL数据库安装并初始化完毕。
 
 ## 安装GreatSQL Shell
 
-下载GreatSQL Shell二进制包 *greatsql-shell-8.4.4-4-Linux-glibc2.28-aarch64.tar.xz*。
+下载GreatSQL Shell二进制包 *greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz*。
 
 接下来安装GreatSQL Shell，以及进行MGR初始化等操作和用RPM包方式安装一样，这里就不赘述了。
 
