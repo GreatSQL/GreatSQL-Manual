@@ -66,6 +66,9 @@
 #### 9. [月城](https://gitee.com/david058)
  - 提交 gt-checksum 的bug fix PR：[update actions/schema_tab_struct.go](https://gitee.com/GreatSQL/gt-checksum/pulls/7)。
 
+#### 10. [Annda](https://github.com/AnndaGH)
+ - 提交GreatSQL for龙芯（Loongson-3A6000）架构Docker镜像：*registry.cn-shanghai.aliyuncs.com/annda/greatsql:8.4.4-4*。
+
 ## 文档贡献
 - 1. [高文佳](https://gitee.com/gaogao67)
   - [修复关于group_replication_unreachable_majority_timeout参数的解读](https://gitee.com/GreatSQL/GreatSQL-Doc/commit/0b12ce535fc4cb17c3dcdc3fb87066984c2b928a)
