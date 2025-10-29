@@ -2,7 +2,7 @@
 
 **GreatSQL TPC-C 性能测试报告**
 
-**（2024 年 8 月 28 日）**
+**（2025 年 10 月 28 日）**
 
 **GreatSQL 社区**
 
@@ -34,260 +34,172 @@ BenchmarkSQL 支持 MySQL（Percona、GreatSQL）、PostgreSQL、Oracle、SQL Se
 
 GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上满足金融级应用场景，具有 **高可用**、**高性能**、**高兼容**、**高安全** 等特性，可作为 MySQL 或 Percona 的理想可选替换。
 
-##  测试环境
-
-| 配置 | 备注 | 
-|   ---    | --- |
-| 操作系统 | OS：CentOS Linux release 7.9.2009 (Core)<br/>内核：3.10.0-1160.el7.x86_64 |
-| CPU      | Intel(R) Xeon(R) Gold 6238 CPU @ 2.10GHz * 4                              |
-| 内存     | 377G                                                                      |
-| 磁盘     | Dell Express Flash CD5 3.84T SFF * 2                                      |
-| 数据库   | GreatSQL 8.0.32-26 GreatSQL, Release 26, Revision a68b3034c3d<br/>MySQL 8.0.32 MySQL Community Server        |
-| 测试工具 | BenchmakrSQL 5.0 |
-| 测试数据量 | warehouses = 2000 （测试数据库初始化后物理大小约 182 GB）|
-
-**服务器详细信息**
-
-- 1. 操作系统
-
-```bash
-$ cat /etc/os-release
-
-NAME="CentOS Linux"
-VERSION="7 (Core)"
-ID="centos"
-ID_LIKE="rhel fedora"
-VERSION_ID="7"
-PRETTY_NAME="CentOS Linux 7 (Core)"
-ANSI_COLOR="0;31"
-CPE_NAME="cpe:/o:centos:centos:7"
-HOME_URL="https://www.centos.org/"
-BUG_REPORT_URL="https://bugs.centos.org/"
-
-CENTOS_MANTISBT_PROJECT="CentOS-7"
-CENTOS_MANTISBT_PROJECT_VERSION="7"
-REDHAT_SUPPORT_PRODUCT="centos"
-REDHAT_SUPPORT_PRODUCT_VERSION="7"
-```
-
-- 2. CPU
-
-```bash
-$ lscpu
-
-Architecture:          x86_64
-CPU op-mode(s):        32-bit, 64-bit
-Byte Order:            Little Endian
-CPU(s):                176
-On-line CPU(s) list:   0-175
-Thread(s) per core:    2
-Core(s) per socket:    22
-Socket(s):             4
-NUMA node(s):          1
-Vendor ID:             GenuineIntel
-CPU family:            6
-Model:                 85
-Model name:            Intel(R) Xeon(R) Gold 6238 CPU @ 2.10GHz
-Stepping:              7
-CPU MHz:               2799.957
-CPU max MHz:           3700.0000
-CPU min MHz:           1000.0000
-BogoMIPS:              4200.00
-Virtualization:        VT-x
-L1d cache:             32K
-L1i cache:             32K
-L2 cache:              1024K
-L3 cache:              30976K
-NUMA node0 CPU(s):     0-175
-Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 cdp_l3 invpcid_single intel_ppin intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm mpx rdt_a avx512f avx512dq rdseed adx smap clflushopt clwb avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts pku ospke avx512_vnni md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
-```
-
-- 3. 内存
-
-```bash
-$ free -ht
-              total        used        free      shared  buff/cache   available
-Mem:           377G        159G        3.4G         67M        214G        215G
-Swap:          4.0G        230M        3.8G
-Total:         381G        159G        7.1G
-```
-
-- 4. 磁盘
-
-磁盘设备型号
-
-```bash
-$ nvme list
-
-Node             SN                   Model                                    Namespace Usage                      Format           FW Rev
----------------- -------------------- ---------------------------------------- --------- -------------------------- ---------------- --------
-/dev/nvme0n1     70L0A03YTAHR         Dell Express Flash CD5 3.84T SFF         1           3.24  TB /   3.84  TB    512   B +  0 B   1.1.1
-/dev/nvme1n1     11D0A0C3TAHR         Dell Express Flash CD5 3.84T SFF         1           3.24  TB /   3.84  TB    512   B +  0 B   1.2.0
-```
-
-磁盘挂载参数、文件系统、ioscheduler
-
-```bash
-$ df -hT | grep /ssd1
-/dev/md127              xfs       7.0T  2.5T  4.6T  35% /ssd1
-
-$ mount | grep ssd1
-/dev/md127 on /ssd1 type xfs (rw,noatime,nodiratime,seclabel,attr2,inode64,sunit=1024,swidth=2048,noquota)
-
-$ cat /sys/block/md127/queue/scheduler
-none
-```
-
-NVMe SSD设备简单测速
-
-```bash
-$ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
-
-20480+0 records in
-20480+0 records out
-21474836480 bytes (21 GB) copied, 12.0639 s, 1.8 GB/s
-```
-
-- 5. 服务器关闭 NUMA 设置
-
-```bash
-$ cat /etc/default/grub
-
-GRUB_TIMEOUT=5
-GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
-GRUB_DEFAULT=saved
-GRUB_DISABLE_SUBMENU=true
-GRUB_TERMINAL_OUTPUT="console"
-GRUB_CMDLINE_LINUX="crashkernel=auto spectre_v2=retpoline rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet numa=off"
-GRUB_DISABLE_RECOVERY="true"
-
-$ dmesg | grep -i numa
-[    0.000000] Command line: BOOT_IMAGE=/vmlinuz-3.10.0-1160.el7.x86_64 root=/dev/mapper/centos-root ro crashkernel=auto spectre_v2=retpoline rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet LANG=en_US.UTF-8 numa=off
-[    0.000000] NUMA turned off
-```
+下文中提到的 **ibp** 是指 *innodb_buffer_pool_size* 参数简写。
 
 ## 测试结果
 
 从本次测试的结果来看，可以得到以下几点结论：
 
-1. 无论innodb_buffer_pool_size（以下简称IBP）是否充足，GreatSQL 8.0.32-26 的 TPC-C 测试性能都高于 MySQL 8.0.32。
-2. **在并发 32 客户端测试中，GreatSQL 8.0.32-26 的 TPC-C 测试性能相对 MySQL 8.0.32 提升 30%+**。
-3. **在并发 64 客户端测试中，GreatSQL 8.0.32-26 的 TPC-C 测试性能相对 MySQL 8.0.32 提升约 20%**。
-4. GreatSQL 8.0.32-26 比 MySQL 8.0.32 在 TPC-C 测试中性能表现更好，也更稳定（测试过程中性能表现稳定，抖动小）。
-5. GreatSQL 8.0.32-26 vs MySQL 8.0.32 在 TPC-C 测试中性能数据对比如下表所示
-  - GreatSQL 8.0.32-26 vs MySQL 8.0.32 并发 32 客户端 BenchmarkSQL TPC-C 测试结果对比
+**本次测试结果表明：GreatSQL 8.4.4-4 比 MySQL 8.4.4 性能提升 13%~36% 不等，性能更稳定，且延迟也更小。**
 
-  | tpmC | IBP = 128G | IBP = 256G | 
-  | :--- | ---: | ---: |
-  | GreatSQL 8.0.32-26 | 456518.08 | 451563.90 |
-  | MySQL 8.0.32 | 346493.57 | 337568.95 |
-  | GreatSQL 性能提升 | 31.75% | 33.77% |
+以上结论，仅基于本次测试的几个场景的总结。
 
-  ![GreatSQL vs MySQL 并发 32 客户端 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-32-terminals-tpcc-benchmarksql-report.png)
-  
-  - GreatSQL 8.0.32-26 vs MySQL 8.0.32 并发 64 客户端 BenchmarkSQL TPC-C 测试结果对比
+MySQL 8.4.4 vs GreatSQL 8.4.4-4 性能数据对比（去掉最高和最低两个数据后求平均值）：
 
-  | tpmC | IBP = 128G | IBP = 256G | 
-  | :--- | ---: | ---: |
-  | GreatSQL 8.0.32-26 | 686652.31 | 677036.36 |
-  | MySQL 8.0.32 | 573634.69 | 554112.65 |
-  | GreatSQL 性能提升 | 19.70% | 22.18% |
-  
-  ![GreatSQL vs MySQL 并发 64 客户端 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-64-terminals-tpcc-benchmarksql-report.png)
+|  | ibp128g-32th	| ibp128g-64th	| ibp256g-32th	| ibp256g-64th |
+| :--- | :--- | :--- | :--- | :--- |
+|MySQL 8.4.4	 | 280041.12  | 498345.31 | 275587.43 | 465716.99 |
+|GreatSQL 8.4.4-4| 381572.51  | 563634.77 | 327745.89 | 565273.27 |
+|GreatSQL 8.4.4-4 性能提升| 36.26%	  | 13.10%	    | 18.93%  |	21.38%    |
 
-## 详细测试数据
+![GreatSQL84 vs MySQL84 TPC-C BenchmarkSQL 测试结果对比](./3-5-greatsql84-vs-mysql84-tpcc-benchmarksql-report.png)
 
-### 并发 32 客户端 TPC-C 测试数据
+测试环境：
 
-总共测试 8 轮，每轮测试持续 20 分钟。
+| 配置 | 备注 | 
+|   ---    | --- |
+| 操作系统 | OS：CentOS Linux release 8.5.2111<br/>内核：4.18.0-240.el8.x86_64 |
+| CPU      | Intel(R) Xeon(R) Gold 6238 CPU @ 2.10GHz * 4                              |
+| 内存     | 256G                                                                      |
+| 磁盘     | INTEL SSDPE2KE032T8                                      |
+| 数据库   | GreatSQL 8.4.4-4 Revision d73de75905d<br/>MySQL 8.4.4 Community Server       |
+| 测试工具 | BenchmakrSQL 5.0 |
+| 测试数据量 | warehouses = 2000 （测试数据库初始化后物理大小约 182 GB）|
 
-- IBP = 128G
 
-| IBP = 128G | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 | Round 7 | Round 8 |
-| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| GreatSQL 8.0.32-26 | 450620.65 | 456953.65 | 419828.7 | 459993.95 | 459402.05 | 455620.10 | 414715.60 | 418527.60 |
-| MySQL 8.0.32 | 343997.05 | 345936.55 | 324826.95 | 352615.80 | 352121.45 | 348762.30 | 335528.25 | 319743.10 |
+## 测试结果详细数据
 
-![GreatSQL vs MySQL 并发 32 客户端，IBP = 128G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-32-terminals-ibp-128g-tpcc-benchmarksql-data-detail.png)
+### ibp=128G，并发32线程
 
-- IBP = 256G
+|  | MySQL | GreatSQL |
+|:---| :--- | :--- |
+| 第1轮  | 286969.41  | 382516.68 |
+| 第2轮  | 279723.36  | 382302.13 |
+| 第3轮  | 280372.18  | 381040.98 |
+| 第4轮  | 274132.02  | 381374.43 |
+| 第5轮  | 280027.81  | 378869.58 |
+| 平均值 | 280244.956 | 381220.76 |
 
-| IBP = 256G | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 | Round 7 | Round 8 |
-| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| GreatSQL 8.0.32-26 | 452826.00 | 449903.40 | 451065.25 | 453021.50 | 451434.85 | 450367.00 | 450668.80 | 448747.20 |
-| MySQL 8.0.32 | 339873.70 | 311245.45 | 339739.45 | 344684.40 | 329512.20 | 332257.85 | 331289.35 | 306099.75 |
+- IBP=128G & 32并发模式下，GreatSQL vs MySQL 压测 tpmC 平均值对比
 
-![GreatSQL vs MySQL 并发 32 客户端，IBP = 256G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-32-terminals-ibp-256g-tpcc-benchmarksql-data-detail.png)
+**提示**：下图是将5次结果中最高及最低值去掉后求平均值的结果，下同。
 
-### 并发 32 客户端 TPC-C 测试数据曲线图
+![GreatSQL 8.4.4-4 vs MySQL 8.4.4 ibp128G 32th TPC-C BenchmarkSQL](./3-5-greatsql84-vs-mysql84-128g-32th-tpcc-benchmarksql-data-detail.png)
 
-- GreatSQL 8.0.32-26 with 32-terminals & IBP=128G
-![GreatSQL 8.0.32-26 并发 32 客户端 & 128G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-greatsql803226-32-terminals-ibp-128g-tpm_nopm.png)
+- GreatSQL vs MySQL 压测过程中tpmC曲线图（第一个图GreatSQL，第二个图MySQL，下同）
 
-- MySQL 8.0.32 with 32-terminals & IBP=128G
-![MySQL 8.0.32 并发 32 客户端 & 128G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-mysql8032-32-terminals-ibp-128g-tpm_nopm.png)
+![GreatSQL 8.4.4-4 ibp128G 32th TPC-C BenchmarkSQL tpmC 曲线](./3-5-greatsql84-128g-32th-tpm_nopm.png)
 
-- GreatSQL 8.0.32-26 with 32-terminals & IBP=256G
-![GreatSQL 8.0.32-26 并发 32 客户端 & 256G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-greatsql803226-32-terminals-ibp-256g-tpm_nopm.png)
+![MySQL 8.4.4 ibp128G 32th TPC-C BenchmarkSQL tpmC 曲线](./3-5-mysql84-128g-32th-tpm_nopm.png)
 
-- MySQL 8.0.32 with 32-terminals & IBP=256G
-![MySQL 8.0.32 并发 32 客户端 & 256G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-mysql8032-32-terminals-ibp-256g-tpm_nopm.png)
+- GreatSQL vs MySQL 压测过程中Latency曲线图
 
-### 并发 64 客户端 TPC-C 测试数据
+![GreatSQL 8.4.4-4 ibp128G 32th TPC-C BenchmarkSQL Latency 曲线](./3-5-greatsql84-128g-32th-latency.png)
 
-总共测试 8 轮，每轮测试持续 20 分钟。
+![MySQL 8.4.4 ibp128G 32th TPC-C BenchmarkSQL Latency 曲线](./3-5-mysql84-128g-32th-latency.png)
 
-- IBP = 128G
+### ibp=128G，并发64线程
 
-| IBP = 128G | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 | Round 7 | Round 8 |
-| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| GreatSQL 8.0.32-26 | 644678.45 | 661334.00 | 695643.15 | 695282.70 | 697940.00 | 678463.00 | 698050.35 | 679853.00 |
-| MySQL 8.0.32 | 588542.00 | 601269.00 | 551370.40 | 572702.75 | 573581.35 | 562770.30 | 542034.95 | 565207.05 |
+|  | MySQL | GreatSQL |
+|:---| :--- | :--- |
+| 第1轮  | 506900.77 | 566486.67  |
+| 第2轮  | 512427.77 | 579877.81  |
+| 第3轮  | 491107.14 | 555160.13  |
+| 第4轮  | 487895.74 | 569257.52  |
+| 第5轮  | 497028.03 | 546783.18  |
+| 平均值 | 499071.89 | 563513.062 |
 
-![GreatSQL vs MySQL 并发 64 客户端，IBP = 128G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-64-terminals-ibp-128g-tpcc-benchmarksql-data-detail.png)
+- IBP=128G & 64并发模式下，GreatSQL vs MySQL 压测 tpmC 平均值对比
 
-- IBP = 256G
+![GreatSQL 8.4.4-4 vs MySQL 8.4.4 ibp128G 64th TPC-C BenchmarkSQL](./3-5-greatsql84-vs-mysql84-128g-64th-tpcc-benchmarksql-data-detail.png)
 
-| IBP = 256G | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 | Round 7 | Round 8 |
-| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| GreatSQL 8.0.32-26 | 664553.00 | 693832.95 | 653430.00 | 653009.20 | 662021.00 | 681223.00 | 694121.40 | 690073.20 |
-| MySQL 8.0.32 | 530745.10 | 557727.85 | 495667.35 | 582648.00 | 540697.10 | 537221.80 | 568941.60 | 560807.10 |
+GreatSQL vs MySQL 压测过程中tpmC曲线图
 
-![GreatSQL vs MySQL 并发 64 客户端，IBP = 256G，8 轮 BenchmarkSQL TPC-C 测试结果对比](./3-5-greatsql803226-vs-mysql-64-terminals-ibp-256g-tpcc-benchmarksql-data-detail.png)
+![GreatSQL 8.4.4-4 ibp128G 64th TPC-C BenchmarkSQL tpmC 曲线](./3-5-greatsql84-128g-64th-tpm_nopm.png)
 
-### 并发 64 客户端 TPC-C 测试数据曲线图
+![MySQL 8.4.4 ibp128G 64th TPC-C BenchmarkSQL tpmC 曲线](./3-5-mysql84-128g-64th-tpm_nopm.png)
 
-- GreatSQL 8.0.32-26 with 64-terminals & IBP=128G
-![GreatSQL 8.0.32-26 并发 64 客户端 & 128G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-greatsql803226-64-terminals-ibp-128g-tpm_nopm.png)
+GreatSQL vs MySQL 压测过程中Latency曲线图
 
-- MySQL 8.0.32 with 64-terminals & IBP=128G
-![MySQL 8.0.32 并发 64 客户端 & 128G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-mysql8032-64-terminals-ibp-128g-tpm_nopm.png)
+![GreatSQL 8.4.4-4 ibp128G 64th TPC-C BenchmarkSQL Latency 曲线](./3-5-greatsql84-128g-64th-latency.png)
 
-- GreatSQL 8.0.32-26 with 64-terminals & IBP=256G
-![GreatSQL 8.0.32-26 并发 64 客户端 & 256G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-greatsql803226-64-terminals-ibp-256g-tpm_nopm.png)
+![MySQL 8.4.4 ibp128G 64th TPC-C BenchmarkSQL Latency 曲线](./3-5-mysql84-128g-64th-latency.png)
 
-- MySQL 8.0.32 with 64-terminals & IBP=256G
-![MySQL 8.0.32 并发 64 客户端 & 256G IBP，BenchmarkSQL TPC-C 测试数据曲线图](./3-5-mysql8032-64-terminals-ibp-256g-tpm_nopm.png)
+### ibp=256G，并发32线程
 
-### 小结
+|  | MySQL | GreatSQL |
+|:---| :--- | :--- |
+| 第1轮  | 276821.06  | 333481.77  |
+| 第2轮  | 283915.16  | 328236.77  |
+| 第3轮  | 276522.46  | 324354.07  |
+| 第4轮  | 270659.67  | 330646.82  |
+| 第5轮  | 273418.77  | 308513.04  |
+| 平均值 | 276267.424 | 325046.494 |
 
-从上面的测试数据以及多个曲线图中可以看出几点：
-1. 当 IBP 充足（IBP=256G）时，GreatSQL 8.0.32-26 在 TPC-C 测试中整体性能表现更平稳。
-2. 当 IBP不足（IBP=128G）时，可能个别时候测试结果表现甚至要比 IBP 充足时要更好，但整体性能表现不够平稳，波动较大。
-3. 无论 IBP 充足与否，MySQL 8.0.32 的性能表现波动幅度都比 GreatSQL 8.0.32-26 更大，随着压测持续时间越长，其性能下降越厉害。
+- IBP=256G & 32并发模式下，GreatSQL vs MySQL 压测 tpmC 平均值对比
 
-## 测试步骤
+![GreatSQL 8.4.4-4 vs MySQL 8.4.4 ibp256G 32th TPC-C BenchmarkSQL](./3-5-greatsql84-vs-mysql84-256g-32th-tpcc-benchmarksql-data-detail.png)
+
+GreatSQL vs MySQL 压测过程中tpmC曲线图
+
+![GreatSQL 8.4.4-4 ibp256G 32th TPC-C BenchmarkSQL tpmC 曲线](./3-5-greatsql84-256g-32th-tpm_nopm.png)
+
+![MySQL 8.4.4 ibp256G 32th TPC-C BenchmarkSQL tpmC 曲线](./3-5-mysql84-256g-32th-tpm_nopm.png)
+
+GreatSQL vs MySQL 压测过程中Latency曲线图
+
+![GreatSQL 8.4.4-4 ibp256G 32th TPC-C BenchmarkSQL Latency 曲线](./3-5-greatsql84-256g-32th-latency.png)
+
+![MySQL 8.4.4 ibp256G 32th TPC-C BenchmarkSQL Latency 曲线](./3-5-mysql84-256g-32th-latency.png)
+
+### ibp=256G，并发64线程
+
+|  | MySQL | GreatSQL |
+|:---| :--- | :--- |
+| 第1轮  | 475981.6	  | 568142.02  |
+| 第2轮  | 481056.84  | 573354.02  |
+| 第3轮  | 466132.71  | 558700.58  |
+| 第4轮  | 455036.67  | 560343.33  |
+| 第5轮  | 451479.67  | 567334.47  |
+| 平均值 | 465937.498 | 565574.884 |
+
+- IBP=256G & 64并发模式下，GreatSQL vs MySQL 压测 tpmC 平均值对比
+
+![GreatSQL 8.4.4-4 vs MySQL 8.4.4 ibp256G 64th TPC-C BenchmarkSQL](./3-5-greatsql84-vs-mysql84-256g-64th-tpcc-benchmarksql-data-detail.png)
+
+GreatSQL vs MySQL 压测过程中tpmC曲线图
+
+![GreatSQL 8.4.4-4 ibp256G 64th TPC-C BenchmarkSQL tpmC 曲线](./3-5-greatsql84-256g-64th-tpm_nopm.png)
+
+![MySQL 8.4.4 ibp256G 64th TPC-C BenchmarkSQL tpmC 曲线](./3-5-mysql84-256g-64th-tpm_nopm.png)
+
+GreatSQL vs MySQL 压测过程中Latency曲线图
+
+![GreatSQL 8.4.4-4 ibp256G 64th TPC-C BenchmarkSQL Latency 曲线](./3-5-greatsql84-256g-64th-latency.png)
+
+![MySQL 8.4.4 ibp256G 64th TPC-C BenchmarkSQL Latency 曲线](./3-5-mysql84-256g-64th-latency.png)
+
+## 附录
+
+### 测试步骤
 
 参考手册内容 [BenchmarkSQL 性能测试](./3-4-benchmarksql.md)，执行 TPC-C 压测，详细过程不赘述。
 
-## 附录
 ### 测试工具
 
-BenchmarkSQL 5.0，下载地址：[https://sourceforge.net/projects/benchmarksql/files/](https://sourceforge.net/projects/benchmarksql/files/)
+BenchmarkSQL 5.0。
 
-### 测试模式/参数
+相应代码仓库：[https://gitee.com/GreatSQL/benchmarksql](https://gitee.com/GreatSQL/benchmarksql)。
 
-- BenchmarkSQL相关参数如下
+### 测试模式
+
+- 利用BenchmarkSQL构造测试数据，设置参数 warehouses=2000。
+- 测试数据库初始大小约182G。
+- 因为没有额外测试机，BenchmarkSQL测试程序和MySQL/GreatSQL数据库服务运行在同一台服务器上。
+- 测试过程中只修改 innodb_buffer_pool_size 参数分别为：128G 和 256G。
+- 测试过程中开启Binlog及双1模式，其余主要参数详见后面描述。
+
+### BenchmarkSQL相关参数如下
 
 ```ini
 warehouses=2000
@@ -311,99 +223,248 @@ deliveryWeight=4
 stockLevelWeight=4
 ```
 
-- 数据库初始化后总大小约182G。
-
-```bash
-$ du -sch /data/GreatSQL/bmsql/
-182G	/data/GreatSQL/bmsql/
-182G	total
-```
-
-- 由于测试资源有限，BenchmarkSQL 和 mysqld 运行在同一台服务器上，因此 BenchmarkSQL 的并发连接数控制为 32 和 64，没有设置更大，并利用 taskset 限定CPU资源。
-
-```bash
-$ cat bmsql-taskset.sh
-
-ps -ef|grep -v grep|grep java
-bmsql_pid=`ps -ef|grep -v grep|grep java|awk '{print $2}'`
-taskset -pc 111-175 ${bmsql_pid} && taskset -pc ${bmsql_pid}
-
-ps -ef|grep -v grep|grep mysqld
-mysqld_pid=`ps -ef|grep -v grep|grep mysqld|awk '{print $2}'`
-taskset -pc 0-110 ${mysqld_pid} && taskset -pc ${mysqld_pid}
-```
-
-- 由于测试资源有限，本次只测试单机模式，没有测试主从复制及 MGR 等场景。
-
 ### 数据库主要相关参数配置
 
 ```ini
 [mysqld]
-skip_name_resolve = ON
-default_time_zone = "+8:00"
-lock_wait_timeout = 3600
-open_files_limit    = 65535
-back_log = 1024
-max_connections = 1024
-max_connect_errors = 1000000
-table_open_cache = 2048
-table_definition_cache = 2048
-sort_buffer_size = 4M
-join_buffer_size = 4M
-read_buffer_size = 8M
-read_rnd_buffer_size = 4M
-bulk_insert_buffer_size = 64M
-thread_cache_size = 768
-tmp_table_size = 96M
-max_heap_table_size = 96M
-max_allowed_packet = 64M
-sql_generate_invisible_primary_key = ON
+user=mysql
+port=3306
+server_id=3306
+basedir=/usr/local/GreatSQL
+#basedir=/usr/local/mysql
+datadir=/data/GreatSQL
+socket=/data/GreatSQL/mysql.sock
+pid-file=mysql.pid
+character-set-server=UTF8MB4
+skip_name_resolve=ON
+default_time_zone="+8:00"
+bind_address="0.0.0.0"
+secure_file_priv=/data/GreatSQL
+mysql_native_password=ON
 
-log_bin = binlog
-binlog_format = ROW
-sync_binlog = 1
-binlog_cache_size = 4M
-max_binlog_cache_size = 6G
-max_binlog_size = 1G
-binlog_checksum = CRC32
-gtid_mode = ON
-enforce_gtid_consistency = ON
+# Performance
+lock_wait_timeout=3600
+open_files_limit=65535
+back_log=1024
+max_connections=1024
+max_connect_errors=1000000
+table_open_cache=4096
+table_definition_cache=2048
+sort_buffer_size=4M
+join_buffer_size=4M
+read_buffer_size=8M
+read_rnd_buffer_size=4M
+bulk_insert_buffer_size=64M
+thread_cache_size=768
+interactive_timeout=600
+wait_timeout=600
+tmp_table_size=96M
+max_heap_table_size=96M
+max_allowed_packet=64M
+loose-net_buffer_shrink_interval=180
+sql_generate_invisible_primary_key=ON
+loose-lock_ddl_polling_mode=ON
+loose-lock_ddl_polling_runtime=200
 
-innodb_buffer_pool_size = 128G
-innodb_buffer_pool_instances = 24
-innodb_data_file_path = ibdata1:12M:autoextend
-innodb_flush_log_at_trx_commit = 1
-innodb_log_buffer_size = 32M
-innodb_redo_log_capacity = 16G
-innodb_doublewrite_files = 2
-innodb_max_undo_log_size = 4G
-innodb_io_capacity = 40000
-innodb_io_capacity_max = 80000
-innodb_open_files = 65534
-innodb_flush_method = O_DIRECT
-innodb_lru_scan_depth = 4000
-innodb_lock_wait_timeout = 120
-innodb_rollback_on_timeout = ON
-innodb_print_all_deadlocks = ON
-innodb_online_alter_log_max_size = 4G
-innodb_print_ddl_logs = ON
-innodb_status_file = ON
-innodb_status_output = OFF
-innodb_status_output_locks = ON
-innodb_sort_buffer_size = 64M
-innodb_adaptive_hash_index = OFF
-innodb_numa_interleave = OFF
-innodb_spin_wait_delay = 20
+# Logs
+log_timestamps=SYSTEM
+log_error=error.log
+log_error_verbosity=3
+slow_query_log=ON
+log_slow_extra=ON
+slow_query_log_file=slow.log
+long_query_time=0.01
+log_queries_not_using_indexes=ON
+log_throttle_queries_not_using_indexes=60
+min_examined_row_limit=100
+log_slow_admin_statements=ON
+log_slow_replica_statements=ON
+loose-log_slow_verbosity=FULL
+log_bin=binlog
+binlog_format=ROW
+sync_binlog=1
+binlog_cache_size=4M
+max_binlog_cache_size=6G
+max_binlog_size=1G
+loose-binlog_space_limit=500G
+binlog_rows_query_log_events=ON
+binlog_expire_logs_seconds=604800
+binlog_checksum=CRC32
+binlog_order_commits=OFF
+gtid_mode=ON
+enforce_gtid_consistency=ON
 
-performance_schema = OFF
+# Replication
+relay-log=relaylog
+relay_log_recovery=ON
+replica_parallel_type=LOGICAL_CLOCK
+replica_parallel_workers=16
+replica_preserve_commit_order=ON
+replica_checkpoint_period=2
+loose-rpl_read_binlog_speed_limit=100
+
+# InnoDB
+innodb_buffer_pool_size=128G
+innodb_buffer_pool_instances=24
+innodb_data_file_path=ibdata1:12M:autoextend
+innodb_flush_log_at_trx_commit=1
+innodb_log_buffer_size=64M
+innodb_redo_log_capacity=16G
+innodb_doublewrite_files=2
+innodb_doublewrite_pages=128
+innodb_max_undo_log_size=4G
+innodb_io_capacity=40000
+innodb_io_capacity_max=80000
+innodb_open_files=65534
+innodb_flush_method=O_DIRECT
+innodb_use_fdatasync=ON
+innodb_lru_scan_depth=4000
+innodb_lock_wait_timeout=10
+innodb_rollback_on_timeout=ON
+innodb_print_all_deadlocks=ON
+innodb_online_alter_log_max_size=4G
+innodb_print_ddl_logs=ON
+innodb_status_file=ON
+innodb_status_output=OFF
+innodb_status_output_locks=ON
+innodb_sort_buffer_size=64M
+innodb_adaptive_hash_index=OFF
+innodb_numa_interleave=OFF
+innodb_spin_wait_delay=20
+loose-innodb_print_lock_wait_timeout_info=ON
+innodb_change_buffering=none
+loose-kill_idle_transaction=300
+loose-innodb_data_file_async_purge=ON
+```
+###  测试环境
+
+**服务器详细信息**
+
+- 1. 操作系统
+
+```bash
+$ cat /etc/os-release
+
+NAME="CentOS Linux"
+VERSION="8"
+ID="centos"
+ID_LIKE="rhel fedora"
+VERSION_ID="8"
+PLATFORM_ID="platform:el8"
+PRETTY_NAME="CentOS Linux 8"
+ANSI_COLOR="0;31"
+CPE_NAME="cpe:/o:centos:centos:8"
+HOME_URL="https://centos.org/"
+BUG_REPORT_URL="https://bugs.centos.org/"
+CENTOS_MANTISBT_PROJECT="CentOS-8"
+CENTOS_MANTISBT_PROJECT_VERSION="8"
 ```
 
-### 参考资料
+- 2. CPU
+
+```bash
+$ lscpu
+
+Architecture:        x86_64
+CPU op-mode(s):      32-bit, 64-bit
+Byte Order:          Little Endian
+CPU(s):              176
+On-line CPU(s) list: 0-175
+Thread(s) per core:  2
+Core(s) per socket:  22
+Socket(s):           4
+NUMA node(s):        1
+Vendor ID:           GenuineIntel
+BIOS Vendor ID:      Intel
+CPU family:          6
+Model:               85
+Model name:          Intel(R) Xeon(R) Gold 6238 CPU @ 2.10GHz
+BIOS Model name:     Intel(R) Xeon(R) Gold 6238 CPU @ 2.10GHz
+Stepping:            7
+CPU MHz:             2799.999
+CPU max MHz:         3700.0000
+CPU min MHz:         1000.0000
+BogoMIPS:            4200.00
+Virtualization:      VT-x
+L1d cache:           32K
+L1i cache:           32K
+L2 cache:            1024K
+L3 cache:            30976K
+NUMA node0 CPU(s):   0-175
+Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 invpcid_single intel_ppin ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid cqm mpx rdt_a avx512f avx512dq rdseed adx smap clflushopt clwb intel_pt avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts pku ospke avx512_vnni md_clear flush_l1d arch_capabilities
+```
+
+- 3. 内存
+
+```bash
+$ free -ht
+              total        used        free      shared  buff/cache   available
+Mem:          251Gi       146Gi       1.7Gi        17Mi       102Gi       102Gi
+Swap:         4.0Gi       318Mi       3.7Gi
+Total:        255Gi       146Gi       5.4Gi
+```
+
+- 4. 磁盘
+
+磁盘设备型号
+
+```bash
+$ nvme list
+
+Node             SN                   Model                                    Namespace Usage                      Format           FW Rev
+---------------- -------------------- ---------------------------------------- --------- -------------------------- ---------------- --------
+/dev/nvme0n1          PHLN018200FD3P2BGN   INTEL SSDPE2KE032T8                      1           3.20  TB /   3.20  TB    512   B +  0 B   VDV10152
+```
+
+磁盘挂载参数、文件系统、ioscheduler
+
+```bash
+$ df -hT | grep /ssd1
+/dev/nvme0n1        xfs       3.0T  682G  2.3T  23% /ssd1
+
+$ mount | grep ssd1
+/dev/nvme0n1 on /ssd1 type xfs (rw,noatime,nodiratime,seclabel,attr2,inode64,logbufs=8,logbsize=32k,noquota)
+
+$ cat /sys/block/nvme0n1/queue/scheduler
+[mq-deadline] kyber bfq none
+```
+
+NVMe SSD设备简单测速
+
+```bash
+$ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
+
+20480+0 records in
+20480+0 records out
+21474836480 bytes (21 GB, 20 GiB) copied, 11.389 s, 1.9 GB/s
+```
+
+- 5. 服务器关闭 NUMA 设置
+
+```bash
+$ cat /etc/default/grub
+
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console"
+GRUB_CMDLINE_LINUX="crashkernel=auto resume=/dev/mapper/cl-swap rd.lvm.lv=cl/root rd.lvm.lv=cl/swap numa=off"
+GRUB_DISABLE_RECOVERY="true"
+GRUB_ENABLE_BLSCFG=true
+
+$ dmesg | grep -i numa
+
+[    0.000000] Command line: BOOT_IMAGE=(hd0,gpt2)/vmlinuz-4.18.0-240.el8.x86_64 root=/dev/mapper/cl-root ro crashkernel=auto resume=/dev/mapper/cl-swap rd.lvm.lv=cl/root rd.lvm.lv=cl/swap numa=off
+[    0.000000] NUMA turned off
+[    0.000000] Kernel command line: BOOT_IMAGE=(hd0,gpt2)/vmlinuz-4.18.0-240.el8.x86_64 root=/dev/mapper/cl-root ro crashkernel=auto resume=/dev/mapper/cl-swap rd.lvm.lv=cl/root rd.lvm.lv=cl/swap numa=off
+```
+
+## 参考资料
 
 - [TPC-C官网](https://www.tpc.org/tpcc/)
 - [GreatSQL安装指南](../4-install-guide/0-install-guide.md)
 - [BenchmarkSQL 性能测试](./3-4-benchmarksql.md)
-
 
 **扫码关注微信公众号**
 
