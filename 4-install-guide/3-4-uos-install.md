@@ -328,6 +328,8 @@ systemctl daemon-reload
 
 编辑 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
 
+### 添加动态依赖库
+
 编辑 `/etc/ld.so.conf` 文件，增加以下几行内容：
 
 ```ini

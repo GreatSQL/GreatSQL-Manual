@@ -239,14 +239,14 @@ performance_schema_instrument = '%lock%=on'
 
 一般修改 *basedir/datadir/innodb_buffer_pool_size* 等几个选项就可以，修改完后保存退出。
 
-###  新建mysql用户
+### 新建mysql用户
 
 ```bash
 /sbin/groupadd mysql
 /sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
 ```
 
-###  新建 datadir
+### 新建 datadir
 
 新建数据库主目录，并修改权限模式及属主：
 
@@ -257,7 +257,7 @@ chown -R mysql:mysql /data/GreatSQL
 chmod -R 700 /data/GreatSQL
 ```
 
-###  增加GreatSQL系统服务
+### 增加GreatSQL系统服务
 
 推荐采用systemd来管理GreatSQL服务，执行 `vim /etc/systemd/system/greatsql.service` 命令，添加下面的内容：
 
@@ -336,6 +336,8 @@ systemctl daemon-reload
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
 
 编辑 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
+
+### 添加动态依赖库
 
 编辑 `/etc/ld.so.conf` 文件，增加以下几行内容：
 
