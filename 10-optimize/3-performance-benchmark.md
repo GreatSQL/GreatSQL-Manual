@@ -15,7 +15,7 @@
 
 以下是GreatSQL基准性能测试报告：
 
-- GreatSQL TPC-H 性能测试报告：[在线报告](./3-3-benchmark-greatsql-tpch-report.md)、[PDF文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/Presentations/27%E3%80%81benchmark-greatsql-tpch-report-20240228.pdf)
+- GreatSQL TPC-H 性能测试报告：[在线报告](./3-3-benchmark-greatsql-tpch-report.md)、[PDF文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/Presentations/40、greatsql84-vs-greatsql80-tpch-report-20251102.pdf)
 - GreatSQL TPC-H（Turbo引擎）性能测试报告：[在线报告](./3-6-benchmark-greatsql-tpch-turbo-report.md)、[PDF文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/Presentations/32%E3%80%81benchmark-greatsql-tpch-turbo-report-20250305.pdf)
 - GreatSQL TPC-C 性能测试报告：[在线报告](./3-5-benchmark-greatsql-vs-mysql-tpcc-report.md)、[PDF文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/Presentations/39、benchmarksql-greatsql84-vs-mysql84-tpcc-report-20251028.pdf)
 

@@ -3,7 +3,7 @@
 
 **GreatSQL TPC-H 性能测试报告**
 
-**（2024 年 2 月28日）**
+**（2024年11月02日）**
 
 **GreatSQL 社区**
 
@@ -31,121 +31,96 @@ TPC-H（商业智能计算测试）是美国交易处理效能委员会（TPC，
 
 GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上满足金融级应用场景，具有 **高可用**、**高性能**、**高兼容**、**高安全** 等特性，可作为 MySQL 或 Percona 的理想可选替换。
 
-##  测试环境信息
+## 测试结果
+
+从本次测试的结果来看，可以得到以下结论：
+
+**本次测试结果表明：GreatSQL 8.4.4-4 相比 GreatSQL 8.0.32-27 在 TPC-H 测试场景中性能有明显提升，在 SF100 和 SF300 中分别提升 37.44% 和 42.55%，当数据量更大时性能表现更优异。**
+
+以上结论，仅基于本次测试的几个场景的总结。
+
+GreatSQL 8.4.4-4 vs 8.0.32-27 Rapid 引擎 TPC-H 基准测试对比示意图如下：
+
+![GreatSQL 8.4 vs 8.0 Rapid 引擎 TPC-H 测试对比示意图](./greatsql-84-vs-80-tpch-sf100-vs-sf300-report-20251102.png)
+
+GreatSQL 8.0.32-27 测试结果详见：[GreatSQL 8.0.32-27 TPC-H 性能测试报告](https://greatsql.cn/docs/8.0.32-27/10-optimize/3-3-benchmark-greatsql-tpch-report.html)。
+
+测试环境：
 
 | 配置 | 备注 | 
 |   ---    | --- |
-| 操作系统 | OS：CentOS Linux release 7.9.2009 (Core)<br/>内核：3.10.0-1160.el7.x86_64 |
+| 操作系统 | OS：CentOS Linux release 8.5.2111<br/>内核：4.18.0-240.el8.x86_64 |
 | CPU      | Intel(R) Xeon(R) Gold 6238 CPU @ 2.10GHz * 4                              |
-| 内存     | 251G                                                                      |
-| 磁盘     | INTEL SSDPE2KE032T8                                                       |
-| 数据库   | GreatSQL 8.0.32-25, Release 25, Revision 79f57097e3f                      |
+| 内存     | 256G                                                                      |
+| 磁盘     | INTEL SSDPE2KE032T8                                      |
+| 数据库   | GreatSQL 8.4.4-4 Revision d73de75905d      |
+| 测试工具 | tpch 3.0.1 |
+| 测试数据量 | SF100 & SF300 |
 
-**服务器详细信息**
+## 测试结果详细数据
 
-- 1. 操作系统
+每条SQL详细耗时如下表所示：
 
-```bash
-$ cat /etc/os-release
+| TPC-H Query | GreatSQL 8.4.4-4<br/>SF100耗时（秒）| GreatSQL 8.4.4-4<br/>SF300耗时（秒）| GreatSQL 8.0.32-27<br/>SF100耗时（秒）| GreatSQL 8.0.32-27<br/>SF300耗时（秒）|
+| :---  | :---    | :---     | :---    | :---     |
+| Q1	| 3.908 	| 11.530 	| 1.184 	| 3.537   |
+| Q2	| 0.424 	| 1.090 	| 0.924 	| 3.865   |
+| Q3	| 1.127 	| 3.289 	| 1.324 	| 4.167   |
+| Q4	| 0.982 	| 2.715 	| 3.678 	| 22.712  |
+| Q5	| 1.076 	| 3.325 	| 1.287 	| 4.119   |
+| Q6	| 0.264 	| 0.752 	| 0.344 	| 0.959   |
+| Q7	| 4.996 	| 42.786 	| 5.480 	| 50.217  |
+| Q8	| 1.351 	| 4.342 	| 1.130 	| 3.534   |
+| Q9	| 4.455 	| 14.318 	| 7.311 	| 31.872  |
+| Q10	| 3.068 	| 12.766 	| 2.885 	| 15.301  |
+| Q11	| 0.356 	| 0.657 	| 0.477 	| 0.921   |
+| Q12	| 0.662 	| 1.906 	| 0.799 	| 2.294   |
+| Q13	| 4.730 	| 18.237 	| 3.758 	| 10.997  |
+| Q14	| 0.814 	| 2.233 	| 0.966 	| 2.471   |
+| Q15	| 1.101 	| 3.316 	| 2.831 	| 11.898  |
+| Q16	| 0.744 	| 2.045 	| 1.194 	| 3.487   |
+| Q17	| 0.810 	| 2.443 	| 8.537 	| 27.523  |
+| Q18	| 10.614 	| 72.141 	| 13.007 	| 108.237 |
+| Q19	| 2.158 	| 6.257 	| 1.892 	| 4.046   |
+| Q20	| 0.775 	| 2.117 	| 4.210 	| 10.668  |
+| Q21	| 3.622 	| 11.846 	| 11.965 	| 60.084  |
+| Q22	| 0.568 	| 1.765 	| 2.513 	| 3.286   |
+| 总耗时| **48.605** 	| **221.876** 	| **77.696** 	| **386.195**|
 
-NAME="CentOS Linux"
-VERSION="7 (Core)"
-ID="centos"
-ID_LIKE="rhel fedora"
-VERSION_ID="7"
-PRETTY_NAME="CentOS Linux 7 (Core)"
-ANSI_COLOR="0;31"
-CPE_NAME="cpe:/o:centos:centos:7"
-HOME_URL="https://www.centos.org/"
-BUG_REPORT_URL="https://bugs.centos.org/"
+GreatSQL 8.4.4-4 vs 8.0.32-27 Rapid 引擎 TPC-H 基准测试每条SQL耗时对比示意图如下：
 
-CENTOS_MANTISBT_PROJECT="CentOS-7"
-CENTOS_MANTISBT_PROJECT_VERSION="7"
-REDHAT_SUPPORT_PRODUCT="centos"
-REDHAT_SUPPORT_PRODUCT_VERSION="7"
+![GreatSQL 8.4 vs 8.0 Rapid 引擎 TPC-H 测试对比示意图](./greatsql-84-vs-80-tpch-sf100-vs-sf300-detail-20251102.png)
+
+## 附录
+
+### 测试步骤
+
+参考手册内容 [TPC-H性能测试](./3-2-benchmark-tpch.md)，执行 TPC-H 测试，详细过程不赘述。
+
+### 测试工具
+
+[TPC-H 3.0.1](https://www.tpc.org/tpch/)。
+
+适用于 Rapid 引擎的相应 SQL 查询文件及辅助的批量生成数据、导入数据工具代码仓库：[https://gitee.com/GreatSQL/tpch](https://gitee.com/GreatSQL/tpch)。
+
+### 测试模式
+
+- 执行 [tpch-create-table.sql](https://gitee.com/GreatSQL/tpch/blob/master/tpch-create-table.sql) 脚本，创建相应的数据库。 
+- 调用 [pdbgen.sh](https://gitee.com/GreatSQL/tpch/blob/master/pdbgen.sh) 脚本构造测试数据集，分别为 SF100 和 SF300 规模。
+- 调用 [pload.sh](https://gitee.com/GreatSQL/tpch/blob/master/pload.sh) 脚本将测试数据集并行导入到 GreatSQL 数据库中。
+- 调整 Rapid 引擎两个参数：`rapid_memory_limit=64G` 和 `rapid_worker_threads=32`。
+- 分别对各个表执行 `ALTER TABLE x SECONDARY_LOAD;` 操作，将 InnoDB 引擎数据加载到 Rapid 引擎中。这个过程需要一定时间，请耐心等待。
+- 修改脚本 [run-tpch.sh](https://gitee.com/GreatSQL/tpch/blob/master/run-tpch.sh) 中的变量，执行测试。
+
+### GreatSQL 主要相关参数如下
+
+```ini
+innodb_buffer_pool_size=128G
+rapid_memory_limit=64G
+rapid_worker_threads=32
 ```
 
-- 2. CPU
-
-```bash
-$ lscpu
-
-Architecture:          x86_64
-CPU op-mode(s):        32-bit, 64-bit
-Byte Order:            Little Endian
-CPU(s):                176
-On-line CPU(s) list:   0-175
-Thread(s) per core:    2
-Core(s) per socket:    22
-Socket(s):             4
-NUMA node(s):          4
-Vendor ID:             GenuineIntel
-CPU family:            6
-Model:                 85
-Model name:            Intel(R) Xeon(R) Gold 6238 CPU @ 2.10GHz
-Stepping:              7
-CPU MHz:               1000.012
-CPU max MHz:           3700.0000
-CPU min MHz:           1000.0000
-BogoMIPS:              4200.00
-Virtualization:        VT-x
-L1d cache:             32K
-L1i cache:             32K
-L2 cache:              1024K
-L3 cache:              30976K
-NUMA node0 CPU(s):     0,4,8,12,16,20,24,28,32,36,40,44,48,52,56,60,64,68,72,76,80,84,88,92,96,100,104,108,112,116,120,124,128,132,136,140,144,148,152,156,160,164,168,172
-NUMA node1 CPU(s):     1,5,9,13,17,21,25,29,33,37,41,45,49,53,57,61,65,69,73,77,81,85,89,93,97,101,105,109,113,117,121,125,129,133,137,141,145,149,153,157,161,165,169,173
-NUMA node2 CPU(s):     2,6,10,14,18,22,26,30,34,38,42,46,50,54,58,62,66,70,74,78,82,86,90,94,98,102,106,110,114,118,122,126,130,134,138,142,146,150,154,158,162,166,170,174
-NUMA node3 CPU(s):     3,7,11,15,19,23,27,31,35,39,43,47,51,55,59,63,67,71,75,79,83,87,91,95,99,103,107,111,115,119,123,127,131,135,139,143,147,151,155,159,163,167,171,175
-Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 cdp_l3 invpcid_single intel_ppin intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm mpx rdt_a avx512f avx512dq rdseed adx smap clflushopt clwb avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts pku ospke avx512_vnni md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
-```
-
-- 3. 内存
-
-```bash
-$ free -ht
-              total        used        free      shared  buff/cache   available
-Mem:           251G        167G         22G        7.2M         61G         82G
-Swap:          4.0G        1.1G        2.9G
-Total:         255G        168G         24G
-```
-
-- 4. 磁盘
-
-磁盘设备型号
-
-```bash
-$ nvme list
-Node             SN                   Model                                    Namespace Usage                      Format           FW Rev
----------------- -------------------- ---------------------------------------- --------- -------------------------- ---------------- --------
-/dev/nvme0n1     PHLN018200FD3P2BGN   INTEL SSDPE2KE032T8                      1           3.20  TB /   3.20  TB    512   B +  0 B   VDV10152
-```
-
-磁盘挂载参数、文件系统
-
-```bash
-$ df -hT | grep ssd
-/dev/nvme0n1            xfs       3.0T  1.5T  1.5T  49% /ssd2
-```
-
-NVMe SSD设备简单测速
-
-```bash
-$ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
-
-20480+0 records in
-20480+0 records out
-21474836480 bytes (21 GB) copied, 8.69131 s, 2.5 GB/s
-```
-
-**提示**：在下面运行TPC-H测试时，设置了Rapid引擎最大可使用的内存及线程数。
-
-```sql
-SET GLOBAL rapid_memory_limit = 68719476736;
-SET GLOBAL rapid_worker_threads = 32;
-```
-
-##  测试表结构和数据量
+###  测试表结构和数据量
 
 各表数据量对比：
 
@@ -171,156 +146,131 @@ Rapid引擎表空间压缩比：
 
 ![TPC-H各表结构关系示意图](./tpch-tables.jpg)
 
-##  测试结果
+###  测试环境
 
-GreatSQL 8.0.32-25中，采用全新的Rapid存储引擎，使得其在TPC-H性能测试中表现大大优于此前的其他版本，也大大优于MySQL社区版、Percona Server MySQL、MariaDB等数据库。
+**服务器详细信息**
 
-在TPC-H SF100场景下，运行完全部22个TPC-H查询SQL总耗时为**79.28秒**。在TPC-H SF300场景下，运行完全部22个TPC-H查询SQL总耗时为**386.195秒**。
-
-每条SQL详细耗时如下：
-
-| TPC-H Query |GreatSQL TPC-H SF100（32C64G）耗时（秒）|GreatSQL TPC-H SF300（32C64G）耗时（秒）|
-| ---   | ---    | ---      |
-|Q1     |1.184   |  3.537   |
-|Q2     |0.924   |  3.865   |
-|Q3     |1.324   |  4.167   |
-|Q4     |3.678   |  22.712  |
-|Q5     |1.287   |  4.119   |
-|Q6     |0.344   |  0.959   |
-|Q7     |5.48    |  50.217  |
-|Q8     |1.13    |  3.534   |
-|Q9     |7.311   |  31.872  |
-|Q10    |2.885   |  15.301  |
-|Q11    |0.477   |  0.921   |
-|Q12    |0.799   |  2.294   |
-|Q13    |3.758   |  10.997  |
-|Q14    |0.966   |  2.471   |
-|Q15    |2.831   |  11.898  |
-|Q16    |1.194   |  3.487   |
-|Q17    |8.537   |  27.523  |
-|Q18    |13.007  |  108.237 |
-|Q19    |1.892   |  4.046   |
-|Q20    |4.21    |  10.668  |
-|Q21    |11.965  |  60.084  |
-|Q22    |2.513   |  3.286   |
-|总耗时 |**77.696**| **386.195** |
-
-GreatSQL SF100 vs SF300（32C64G）对比示意图如下
-
-![GreatSQL TPC-H SF100 vs SF300对比示意图](./greatsql-tpch-sf100-vs-sf300.jpg)
-
-##  测试步骤
-### 安装 GreatSQL
-请参考GreatSQL手册内容：[安装指南](../4-install-guide/0-install-guide.md)，完成GreatSQL安装。
-
-### 生成 TPC-H 测试数据
-请参考GreatSQL手册内容：[TPC-H性能测试](./3-2-benchmark-tpch.md)，完成TPC-H工具编译安装。
-
-运行 TPC-H `dbgen` 工具，生成数据文件，一共会生成 8 个表对应的 tbl 数据文件，例如：
+- 1. 操作系统
 
 ```bash
-$ ./dbgen -vf -s 100
-...
+$ cat /etc/os-release
 
-$ ls -l *tbl
-
--rw-r--r-- 1 root root  2463490271 Sep 26 09:20 customer.tbl
--rw-r--r-- 1 root root 79579694556 Sep 26 09:20 lineitem.tbl
--rw-r--r-- 1 root root        2224 Sep 26 09:20 nation.tbl
--rw-r--r-- 1 root root 17793116301 Sep 26 09:20 orders.tbl
--rw-r--r-- 1 root root 12209211160 Sep 26 09:20 partsupp.tbl
--rw-r--r-- 1 root root  2453234158 Sep 26 09:20 part.tbl
--rw-r--r-- 1 root root         389 Sep 26 09:20 region.tbl
--rw-r--r-- 1 root root   142869803 Sep 26 09:20 supplier.tbl
+NAME="CentOS Linux"
+VERSION="8"
+ID="centos"
+ID_LIKE="rhel fedora"
+VERSION_ID="8"
+PLATFORM_ID="platform:el8"
+PRETTY_NAME="CentOS Linux 8"
+ANSI_COLOR="0;31"
+CPE_NAME="cpe:/o:centos:centos:8"
+HOME_URL="https://centos.org/"
+BUG_REPORT_URL="https://bugs.centos.org/"
+CENTOS_MANTISBT_PROJECT="CentOS-8"
+CENTOS_MANTISBT_PROJECT_VERSION="8"
 ```
 
-也可以参考 [`duckdb_dbgen.py`](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/duckdb_dbgen.py) 脚本做法，利用duckdb并行生成测试数据。
-
-### 创建 TPC-H 测试数据库表并导入数据
-
-参考GreatSQL社区提供的TPC-H数据库表初始化脚本：[tpch-create-table.sql](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/tpch-create-table.sql)，完成TPC-H测试数据库表创建。
+- 2. CPU
 
 ```bash
-$ mysql -f < tpch-create-table.sql
+$ lscpu
 
-$ mysqlshow tpch100
-
-Database: tpch100
-+----------+
-|  Tables  |
-+----------+
-| customer |
-| lineitem |
-| nation   |
-| orders   |
-| part     |
-| partsupp |
-| region   |
-| revenue0 |
-| supplier |
-+----------+
+Architecture:        x86_64
+CPU op-mode(s):      32-bit, 64-bit
+Byte Order:          Little Endian
+CPU(s):              176
+On-line CPU(s) list: 0-175
+Thread(s) per core:  2
+Core(s) per socket:  22
+Socket(s):           4
+NUMA node(s):        1
+Vendor ID:           GenuineIntel
+BIOS Vendor ID:      Intel
+CPU family:          6
+Model:               85
+Model name:          Intel(R) Xeon(R) Gold 6238 CPU @ 2.10GHz
+BIOS Model name:     Intel(R) Xeon(R) Gold 6238 CPU @ 2.10GHz
+Stepping:            7
+CPU MHz:             2799.999
+CPU max MHz:         3700.0000
+CPU min MHz:         1000.0000
+BogoMIPS:            4200.00
+Virtualization:      VT-x
+L1d cache:           32K
+L1i cache:           32K
+L2 cache:            1024K
+L3 cache:            30976K
+NUMA node0 CPU(s):   0-175
+Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 invpcid_single intel_ppin ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid cqm mpx rdt_a avx512f avx512dq rdseed adx smap clflushopt clwb intel_pt avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts pku ospke avx512_vnni md_clear flush_l1d arch_capabilities
 ```
 
-利用GreatSQL的 **[parallel load data特性](../5-enhance/5-1-highperf-parallel-load.md)** 并行导入TPC-H测试数据。
-
-需要先修改GreatSQL选项`secure_file_priv`设置，指向上述 workdir 所在目录，重启GreatSQL使之生效。
-
-参考GreatSQL社区提供的并发导入脚本：[load-data-parallel.sh](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/load-data-parallel.sh)，完成数据导入。
-
-**提示**：运行LOAD DATA导入数据时，可能会在 `tmpdir` 产生临时文件，因此要保证 `tmpdir` 有足够的剩余可用磁盘空间。
-
-### 确认Rapid引擎设置，并加载数据到secondary engine
-
-数据导入完成后，在开始运行TPC-H测试前，需要先将测试数据加载到secondary engine引擎中。
-
-先执行下面命令，动态修改Rapid引擎最大可使用内存，其余相关选项均为默认值：
-
-```sql
-SET GLOBAL rapid_memory_limit = 68719476736;
-SET GLOBAL rapid_worker_threads = 32;
-```
-
-之后，执行以下命令加载测试数据到secondary engine：
-
-```sql
-ALTER TABLE customer secondary_load;
-ALTER TABLE lineitem secondary_load;
-ALTER TABLE nation secondary_load;
-ALTER TABLE orders secondary_load;
-ALTER TABLE part secondary_load;
-ALTER TABLE partsupp secondary_load;
-ALTER TABLE region secondary_load;
-ALTER TABLE supplier secondary_load;
-```
-
-这个过程需要一定时间，请耐心等待。
-
-### 执行 TPC-H 测试
-
-参考GreatSQL社区提供的TPC-H性能测试脚本，完成测试，并记录各个SQL的耗时。
-
-该测试脚本大概工作模式如下：
-
-1. 先执行22个查询SQL，进行数据预热，每条SQL各执行2次。
-
-2. 再分别执行22个查询SQL，每个SQL各执行3次。
-
-3. 每次执行SQL都会记录其起止时间，及其耗时，如下面例所示：
+- 3. 内存
 
 ```bash
-[2023-09-27 01:38:45] BEGIN RUN TPC-H Q1 1 times
-[2023-09-27 01:38:46] TPC-H Q1 END, COST: 1.301s
-
-
-[2023-09-27 01:38:46] BEGIN RUN TPC-H Q1 2 times
-[2023-09-27 01:38:47] TPC-H Q1 END, COST: 0.787s
+$ free -ht
+              total        used        free      shared  buff/cache   available
+Mem:          251Gi       146Gi       1.7Gi        17Mi       102Gi       102Gi
+Swap:         4.0Gi       318Mi       3.7Gi
+Total:        255Gi       146Gi       5.4Gi
 ```
 
-上述结果中的 COST: 1.301s ，即为本SQL的运行耗时：1.301秒。
+- 4. 磁盘
 
+磁盘设备型号
 
-##  附录
-### 创建测试表DDL
+```bash
+$ nvme list
+
+Node             SN                   Model                                    Namespace Usage                      Format           FW Rev
+---------------- -------------------- ---------------------------------------- --------- -------------------------- ---------------- --------
+/dev/nvme0n1          PHLN018200FD3P2BGN   INTEL SSDPE2KE032T8                      1           3.20  TB /   3.20  TB    512   B +  0 B   VDV10152
+```
+
+磁盘挂载参数、文件系统、ioscheduler
+
+```bash
+$ df -hT | grep /ssd1
+/dev/nvme0n1        xfs       3.0T  682G  2.3T  23% /ssd1
+
+$ mount | grep ssd1
+/dev/nvme0n1 on /ssd1 type xfs (rw,noatime,nodiratime,seclabel,attr2,inode64,logbufs=8,logbsize=32k,noquota)
+
+$ cat /sys/block/nvme0n1/queue/scheduler
+[mq-deadline] kyber bfq none
+```
+
+NVMe SSD设备简单测速
+
+```bash
+$ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
+
+20480+0 records in
+20480+0 records out
+21474836480 bytes (21 GB, 20 GiB) copied, 11.389 s, 1.9 GB/s
+```
+
+- 5. 服务器关闭 NUMA 设置
+
+```bash
+$ cat /etc/default/grub
+
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console"
+GRUB_CMDLINE_LINUX="crashkernel=auto resume=/dev/mapper/cl-swap rd.lvm.lv=cl/root rd.lvm.lv=cl/swap numa=off"
+GRUB_DISABLE_RECOVERY="true"
+GRUB_ENABLE_BLSCFG=true
+
+$ dmesg | grep -i numa
+
+[    0.000000] Command line: BOOT_IMAGE=(hd0,gpt2)/vmlinuz-4.18.0-240.el8.x86_64 root=/dev/mapper/cl-root ro crashkernel=auto resume=/dev/mapper/cl-swap rd.lvm.lv=cl/root rd.lvm.lv=cl/swap numa=off
+[    0.000000] NUMA turned off
+[    0.000000] Kernel command line: BOOT_IMAGE=(hd0,gpt2)/vmlinuz-4.18.0-240.el8.x86_64 root=/dev/mapper/cl-root ro crashkernel=auto resume=/dev/mapper/cl-swap rd.lvm.lv=cl/root rd.lvm.lv=cl/swap numa=off
+```
+
+### 测试表DDL
 
 ```sql
 -- DROP DATABASE IF EXISTS tpch;
@@ -771,7 +721,11 @@ GROUP BY
 HAVING
     sum(ps_supplycost * ps_availqty) > (
         SELECT
-            sum(ps_supplycost * ps_availqty) * 0.0001000000
+            sum(ps_supplycost * ps_availqty) * 0.0001000000 /* SF1 */
+            /* sum(ps_supplycost * ps_availqty) * 0.0000100000 /* SF10 */
+            /* sum(ps_supplycost * ps_availqty) * 0.0000010000 /* SF100 */
+            /* sum(ps_supplycost * ps_availqty) * 0.0000003333 /* SF300 */
+            /* sum(ps_supplycost * ps_availqty) * 0.0000001000 /* SF1000 */
         FROM
             partsupp,
             supplier,
