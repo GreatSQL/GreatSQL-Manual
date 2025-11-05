@@ -226,7 +226,7 @@ $ top
 ```sql
 -- 查询GreatSQL数据库中内存消耗占比较高的模块
 SELECT EVENT_NAME, SUM_NUMBER_OF_BYTES_ALLOC FROM
-  PERFORMANCE_SCHEMA.MEMORY_SUMMARY_GLOBAL_BY_EVENT_NAME
+  performance_schema.memory_summary_global_by_event_name
     ORDER BY SUM_NUMBER_OF_BYTES_ALLOC DESC LIMIT 10;
 +----------------------------------------------+---------------------------+
 | EVENT_NAME                                   | SUM_NUMBER_OF_BYTES_ALLOC |
@@ -245,7 +245,7 @@ SELECT EVENT_NAME, SUM_NUMBER_OF_BYTES_ALLOC FROM
 
 -- 查询GreatSQL数据库中内存消耗占比较高的线程
 SELECT THREAD_ID, EVENT_NAME, SUM_NUMBER_OF_BYTES_ALLOC FROM
-  PERFORMANCE_SCHEMA.MEMORY_SUMMARY_BY_THREAD_BY_EVENT_NAME 
+  performance_schema.memory_summary_by_thread_by_event_name 
     ORDER BY SUM_NUMBER_OF_BYTES_ALLOC DESC LIMIT 20;
 +-----------+-------------------------------+---------------------------+
 | THREAD_ID | EVENT_NAME                    | SUM_NUMBER_OF_BYTES_ALLOC |

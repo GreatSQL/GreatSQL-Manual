@@ -222,7 +222,7 @@ $ ldconfig && ldconfig -p | grep -i 'libprotobuf.so'
 
 1. 解绑VIP后，若想让通过VIP与Primary节点建立的连接会被主动KILL掉，其前提是设置`bind_address="0.0.0.0"`。如果`bind_address`参数指定固定IP地址，则无法实现连接被主动KILL功能。详情参考：[MGR切主后断开应用连接](./5-2-ha-mgr-kill-conn-after-switch.md)。
 
-2. 为了保证MGR节点间能正常通信，需要在各个MGR节点的系统 `/etc/hosts` 文件中配置各个节点的host和ip对应关系，**更推荐的做法是在每个MGR节点中都配置`report_host`**，以确保能够通过`PERFORMANCE_SCHEMA.REPLICATION_GROUP_MEMBERS`表中的`MEMBER_HOST`列连接到其他节点，否则有可能导致MGR节点角色切换时VIP漂移绑定失败。
+2. 为了保证MGR节点间能正常通信，需要在各个MGR节点的系统 `/etc/hosts` 文件中配置各个节点的host和ip对应关系，**更推荐的做法是在每个MGR节点中都配置`report_host`**，以确保能够通过`performance_schema.replication_group_members`表中的`MEMBER_HOST`列连接到其他节点，否则有可能导致MGR节点角色切换时VIP漂移绑定失败。
 
 3. 动态绑定VIP需要新启动一个额外通信端口（由参数`greatdb_ha_port`指定），请修改并检查防火墙规则，确保该端口不会被屏蔽。
 

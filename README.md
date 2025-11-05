@@ -4,7 +4,7 @@
 [![](https://img.shields.io/badge/License-GPL_v2.0-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)
 [![](https://img.shields.io/badge/release-8.4.4_4-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-4)
 
-最后更新：2025-11-03。
+最后更新：2025-11-05。
 
 本文档适用版本：GreatSQL 8.4.4-4。
 
