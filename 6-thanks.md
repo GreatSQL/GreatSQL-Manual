@@ -70,6 +70,14 @@
 #### 10. [Annda](https://github.com/AnndaGH)
  - 提交GreatSQL for龙芯（Loongson-3A6000）架构Docker镜像：*registry.cn-shanghai.aliyuncs.com/annda/greatsql:8.4.4-4*。
 
+#### 11. 工业和信息化部网络安全威胁和漏洞信息共享平台信创政务产品安全漏洞专业库
+
+- **报送漏洞**“验证 GreatSQL 命令注入漏洞“任务
+
+#### 12. 山石网科安全技术研究院团队
+
+- **报送漏洞**“验证 GreatSQL 命令注入漏洞“任务
+
 ## 文档贡献
 - 1. [高文佳](https://gitee.com/gaogao67)
   - [修复关于group_replication_unreachable_majority_timeout参数的解读](https://gitee.com/GreatSQL/GreatSQL-Doc/commit/0b12ce535fc4cb17c3dcdc3fb87066984c2b928a)
