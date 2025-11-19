@@ -56,9 +56,8 @@ greatsql> SHOW GLOBAL VARIABLES LIKE '%timeout%';
 | parallel_queue_timeout                         | 0        |
 | replica_net_timeout                            | 60       |
 | rpl_stop_replica_timeout                       | 31536000 |
-| rpl_stop_slave_timeout                         | 31536000 |
 | secondary_engine_read_delay_wait_timeout       | 60       |
-| slave_net_timeout                              | 60       |
+| replica_net_timeout                            | 60       |
 | ssl_session_cache_timeout                      | 300      |
 | thread_pool_idle_timeout                       | 60       |
 | wait_timeout                                   | 600      |

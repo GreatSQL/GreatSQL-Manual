@@ -18,7 +18,7 @@ log_queries_not_using_indexes = 1
 log_throttle_queries_not_using_indexes = 60
 min_examined_row_limit = 100
 log_slow_admin_statements = 1
-log_slow_slave_statements = 1
+log_slow_replica_statements = 1
 ```
 
 各个选项分别简介如下：
@@ -30,7 +30,7 @@ log_slow_slave_statements = 1
 | log_slow_extra | MySQL 8.0.14 起新增选项，支持在 slow query log 中记录更多信息，例如线程ID、读写字节数、是否有临时表、是否有排序等。只有当 `log_output=FILE` 时才有效，如果是设置为 *TABLE* 则无效。|
 | log_slow_verbosity | Percona/GreatSQL 数据库特有选项，和 `log_slow_extra` 类似，可以设置为 *FULL*，记录更详细的信息，便于分析慢查询 SQL 的性能瓶颈。|
 | log_slow_admin_statements | 是否记录 `ALTER TABLE/ANALYZE TABLE `等 DDL 管理指令的慢查询。
-| log_slow_slave_statements | 是否记录主从复制中，从节点上 **sql_thread** 线程应用 SQL 时产生的慢查询。只有当 `binlog_format=STATEMENT` 才生效，设置为 *ROW/MIXED* 时都不生效。|
+| log_slow_replica_statements | 是否记录主从复制中，从节点上 **sql_thread** 线程应用 SQL 时产生的慢查询。只有当 `binlog_format=STATEMENT` 才生效，设置为 *ROW/MIXED* 时都不生效。|
 | long_query_time | SQL 运行耗时超过该阈值时，就会被判定为慢查询。单位是：秒。当设置为 0 时，会记录所有的请求。|
 | log_queries_not_using_indexes | 当执行的 SQL 没有可用索引时，也被判定为慢查询。|
 | log_throttle_queries_not_using_indexes | 当选项 `log_queries_not_using_indexes=ON` 时，每分钟记录的慢查询可能会很多，本选项用于设置每分钟最多记录几次这样的慢查询。|

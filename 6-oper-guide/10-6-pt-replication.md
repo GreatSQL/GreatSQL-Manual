@@ -112,7 +112,7 @@ pt-heartbeat --user=root --ask-pass -S /data/GreatSQL/mysql.sock -D test_db --ma
 ```sql
 greatsql> SELECT * FROM test_db.heartbeat;
 +----------------------------+-----------+---------------+----------+-----------------------+---------------------+
-| ts                         | server_id | file          | position | relay_master_log_file | exec_master_log_pos |
+| ts                         | server_id | file          | position | relay_source_log_file | exec_source_log_pos |
 +----------------------------+-----------+---------------+----------+-----------------------+---------------------+
 | 2024-04-22T15:57:44.001900 |    103306 | binlog.000032 |    41464 | NULL                  |                NULL |
 +----------------------------+-----------+---------------+----------+-----------------------+---------------------+
@@ -219,11 +219,11 @@ pt-slave-delay --user=root --ask-pass -S /data/GreatSQL02/mysql.sock --delay=1m 
 ```
 ::: 
 
-如果在运行的过程中进入Slave节点查看 `SHOW SLAVE STATUS\G`：
+如果在运行的过程中进入Slave节点查看 `SHOW REPLICA STATUS\G`：
 
 ```bash
-Slave_IO_Running: Yes
-Slave_SQL_Running: No
+Replica_IO_Running: Yes
+Replica_SQL_Running: No
 ```
 
 可以看到SQL线程已关闭，证明此工具精准控制SQL线程的启停，有效实现主从延迟。
@@ -355,7 +355,7 @@ pt-slave-restart [OPTIONS] [DSN]
 | --sleep               | 检查从库之间的初始睡眠秒数                                   |
 | --socket              | 用于连接的套接字文件                                         |
 | --stop                | 停止运行实例                                                 |
-| --until-master        | 运行到指定的 master_log_pos,file 位置后停止                    |
+| --until-master        | 运行到指定的 source_log_pos,file 位置后停止                  |
 | --until-relay         | 运行到指定的中继日志文件和位置后停止                         |
 | --user                | 用于登录的用户                                               |
 | --verbose             | 向输出添加更多信息                                           |
@@ -416,7 +416,7 @@ pt-slave-restart h=192.168.6.55,P=3307,u=root --ask-pass
 ```
 
 ::: danger 特别提醒
-若使用该工具，参数`slave_parallel_workers`必须设置为0，否则会报错 ”Cannot skip transactions properly because GTID is enabled and slave_parallel_workers > 0.  See 'GLOBAL TRANSACTION IDS' in the tool's documentation.“ 如果不关闭多线程复制，工具会分不清到底哪个线程复制出了问题。
+若使用该工具，参数`replica_parallel_workers`必须设置为0，否则会报错 ”Cannot skip transactions properly because GTID is enabled and replica_parallel_workers > 0.  See 'GLOBAL TRANSACTION IDS' in the tool's documentation.“ 如果不关闭多线程复制，工具会分不清到底哪个线程复制出了问题。
 ::: 
 
 此时已经开启了从库监控，在主库上人为造成一个主从复制错误：
@@ -441,9 +441,9 @@ $ pt-slave-restart h=192.168.6.55,P=3307,u=root --ask-pass
 一直运行工具，检测到错误会直接修复。如果是已经有错误了需要手动处理，那么可以使用 `--error-numbers=` 指定错误码，然后工具会跳过该错误码：
 
 ```sql
-greatsql> SHOW SLAVE STATUS\G
-Slave_IO_Running: Yes
-Slave_SQL_Running: No
+greatsql> SHOW REPLICA STATUS\G
+Replica_IO_Running: Yes
+Replica_SQL_Running: No
 Last_SQL_Error: Could not execute Delete_rows event on table test_db.t1; Can't find record in 't1', Error_code: 1032; handler error HA_ERR_KEY_NOT_FOUND; the event's master log binlog.000032, end_log_pos 504208
 ```
 
@@ -467,9 +467,9 @@ $ pt-slave-restart h=192.168.6.55,P=3307,u=root --ask-pass --error-numbers=1032
 接着在从库上查看主从状态，可以看到主从复制已经是正常的了：
 
 ```sql
-greatsql> SHOW SLAVE STATUS\G
-Slave_IO_Running: Yes
-Slave_SQL_Running: Yes
+greatsql> SHOW REPLICA STATUS\G
+Replica_IO_Running: Yes
+Replica_SQL_Running: Yes
 Last_SQL_Error:
 ```
 

@@ -370,7 +370,7 @@ The instance '172.16.16.13:3306' was successfully removed from the cluster.
 
 ### 手动方式删除节点
 
-在命令行模式下，一个节点想退出MGR集群，直接执行 `stop group_replication` 即可，如果这个节点只是临时退出集群，后面还想加回集群，则执行 `start group_replication` 即可自动再加入。而如果是想彻底退出集群，则停止MGR服务后，执行 `reset master; reset slave all;` 重置所有复制（包含MGR）相关的信息就可以了。
+在命令行模式下，一个节点想退出MGR集群，直接执行 `stop group_replication` 即可，如果这个节点只是临时退出集群，后面还想加回集群，则执行 `start group_replication` 即可自动再加入。而如果是想彻底退出集群，则停止MGR服务后，执行 `RESET BINARY LOGS AND GTIDS ; RESET REPLICA ALL;` 重置所有复制（包含MGR）相关的信息就可以了。
 
 ## 异常退出的节点重新加回
 

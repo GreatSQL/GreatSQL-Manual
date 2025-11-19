@@ -432,7 +432,7 @@ mysql
 设置innodb_buffer_pool_size，默认值：128M。
 
 - **MYSQL_INIT_MGR**
-是否初始化MGR相关设置，默认值：0（否）。如果设置为1（是），则会创建MGR服务所需账号，并设定运行 CHANGE MASTER TO 设置好MGR复制通道。
+是否初始化MGR相关设置，默认值：0（否）。如果设置为1（是），则会创建MGR服务所需账号，并设定运行 CHANGE REPLICATION SOURCE TO 设置好MGR复制通道。
 非必选项。
 
 - **MYSQL_MGR_NAME**

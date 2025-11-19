@@ -20,7 +20,7 @@
 - 在单主模式时，主节点（Primary）可以同时作为M-S的从节点（Slave）
 - 在多主模式时，任何节点可以作为MS的从节点（Slave）。提醒：强烈建议不要使用多主模式
 - 要求都是InnoDB表，且没有数据冲突（例如数据重复、数据不存在等），没有使用外键
-- 节点重启时，注意要先启动MGR服务，再启动M-S服务。这时候可以设置 `group_replication_start_on_boot=ON` 和 `skip_slave_start=ON` 予以保证
+- 节点重启时，注意要先启动MGR服务，再启动M-S服务。这时候可以设置 `group_replication_start_on_boot=ON` 和 `skip_replica_start=ON` 予以保证
 
 在这两个MGR集群间的主从复制可以采用异步复制，也可以采用半同步复制，主要取决于两个集群间的网络延迟情况及架构设计方案。这时候，整体架构方案类似下面这样：
 

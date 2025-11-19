@@ -1216,7 +1216,7 @@ ER_WRONG_OUTER_JOIN_UNUSED 在8.0.1中添加。
 
 - 错误号：1200; 符号： ER_BAD_SLAVE; SQLSTATE： HY000
 
-报错信息格式：服务器未配置为从服务器；修复配置文件或使用CHANGE MASTER TO。
+报错信息格式：服务器未配置为从服务器；修复配置文件或使用CHANGE REPLICATION SOURCE TO。
 
 </br>
 
@@ -1654,7 +1654,7 @@ InnoDB当您尝试删除具有子项的父行且外键约束失败时，将报�
 
 - 错误号：1274; 符号： ER_SLAVE_IGNORED_SSL_PARAMS; SQLSTATE：HY000
 
-报错信息格式：CHANGE MASTER中的SSL参数将被忽略，因为该MySQL从站是在没有SSL支持的情况下编译的；如果启动具有SSL的MySQL从服务器，则可以在以后使用它们。
+报错信息格式：CHANGE REPLICATION SOURCE中的SSL参数将被忽略，因为该MySQL从站是在没有SSL支持的情况下编译的；如果启动具有SSL的MySQL从服务器，则可以在以后使用它们。
 
 </br>
 
@@ -1675,13 +1675,13 @@ ER_SERVER_IS_IN_SECURE_AUTH_MODE 在8.0.15之后被删除。
 
 - 错误号：1277; 符号： ER_BAD_SLAVE_UNTIL_COND; SQLSTATE： HY000
 
-报错信息格式：START SLAVE UNTIL的参数不正确或参数组合。
+报错信息格式：START REPLICA UNTIL的参数不正确或参数组合。
 
 </br>
 
 - 错误号：1278; 符号： ER_MISSING_SKIP_SLAVE; SQLSTATE： HY000
 
-报错信息格式：建议对START SLAVE UNTIL进行逐步复制时，建议使用--skip-slave-start；否则，如果意外从属的mysqld重新启动，将会遇到问题。
+报错信息格式：建议对START REPLICA UNTIL进行逐步复制时，建议使用--skip-slave-start；否则，如果意外从属的mysqld重新启动，将会遇到问题。
 
 </br>
 
@@ -4489,7 +4489,7 @@ ER_SLAVE_CONVERSION_FAILED 在8.0.4之后被删除。
 
 报错信息格式：在主信息存储库中存储MySQL用户名或密码信息是不安全的，因此不建议这样做。
 
-请考虑将USER和PASSWORD连接选项用于START SLAVE；有关更多信息，请参见MySQL手册中的“ START SLAVE语法”。
+请考虑将USER和PASSWORD连接选项用于START REPLICA；有关更多信息，请参见MySQL手册中的“ START REPLICA语法”。
 
 
 </br>
@@ -4579,14 +4579,14 @@ ER_SLAVE_CONVERSION_FAILED 在8.0.4之后被删除。
 
 - 错误号：1776; 符号： ER_BAD_SLAVE_AUTO_POSITION; SQLSTATE：HY000
 
-报错信息格式：当MASTER_AUTO_POSITION处于活动状态时，无法设置参数MASTER_LOG_FILE，MASTER_LOG_POS，RELAY_LOG_FILE和RELAY_LOG_POS。
+报错信息格式：当SOURCE_AUTO_POSITION处于活动状态时，无法设置参数SOURCE_LOG_FILE，SOURCE_LOG_POS，RELAY_LOG_FILE和RELAY_LOG_POS。
 
 
 </br>
 
 - 错误号：1777; 符号： ER_AUTO_POSITION_REQUIRES_GTID_MODE_NOT_OFF; SQLSTATE：HY000
 
-报错信息格式：由于@@ GLOBAL.GTID_MODE = OFF，无法执行CHANGE MASTER TO MASTER_AUTO_POSITION = 1。
+报错信息格式：由于@@ GLOBAL.GTID_MODE = OFF，无法执行CHANGE REPLICATION SOURCE TO SOURCE_AUTO_POSITION = 1。
 
 
 </br>
@@ -4762,9 +4762,9 @@ ER_GTID_UNSAFE_CREATE_DROP_TEMPORARY_TABLE_IN_TRANSACTION 在8.0.12之后被删�
 
 - 错误号：1802; 符号： ER_MTS_CHANGE_MASTER_CANT_RUN_WITH_GAPS; SQLSTATE：HY000
 
-报错信息格式：当从站由于错误而停止或在MTS模式下终止时，无法执行CHANGE MASTER。
+报错信息格式：当从站由于错误而停止或在MTS模式下终止时，无法执行CHANGE REPLICATION SOURCE。
 
-考虑使用RESET SLAVE或START SLAVE UNTIL。
+考虑使用RESET REPLICA或START REPLICA UNTIL。
 
 
 </br>
@@ -5264,14 +5264,14 @@ ER_GTID_NEXT_TYPE_UNDEFINED_GTID 已在8.0.11中添加。
 
 - 错误号：1875; 符号： ER_STOP_SLAVE_SQL_THREAD_TIMEOUT; SQLSTATE：HY000
 
-报错信息格式：STOP SLAVE命令执行未完成：从SQL线程收到停止信号，线程正忙，一旦当前任务完成，SQL线程将停止。
+报错信息格式：STOP REPLICA命令执行未完成：从SQL线程收到停止信号，线程正忙，一旦当前任务完成，SQL线程将停止。
 
 
 </br>
 
 - 错误号：1876; 符号： ER_STOP_SLAVE_IO_THREAD_TIMEOUT; SQLSTATE：HY000
 
-报错信息格式：STOP SLAVE命令执行未完成：从IO线程收到停止信号，线程正忙，一旦当前任务完成，IO线程将停止。
+报错信息格式：STOP REPLICA命令执行未完成：从IO线程收到停止信号，线程正忙，一旦当前任务完成，IO线程将停止。
 
 
 </br>
@@ -5518,7 +5518,7 @@ WARN_NAMED_PIPE_ACCESS_EVERYONE 已在8.0.17中添加。
 
 - 错误号：3017; 符号： ER_SLAVE_SQL_THREAD_MUST_STOP; SQLSTATE：HY000
 
-报错信息格式：无法通过正在运行的从属sql线程执行此操作；首先运行STOP SLAVE SQL_THREAD。
+报错信息格式：无法通过正在运行的从属sql线程执行此操作；首先运行STOP REPLICA SQL_THREAD。
 
 </br>
 
@@ -5542,7 +5542,7 @@ WARN_NAMED_PIPE_ACCESS_EVERYONE 已在8.0.17中添加。
 
 - 错误号：3021; 符号： ER_SLAVE_CHANNEL_IO_THREAD_MUST_STOP; SQLSTATE：HY000
 
-报错信息格式：无法通过正在运行的从属io线程执行此操作；首先运行STOP SLAVE IO_THREAD FOR CHANNEL'％s'。
+报错信息格式：无法通过正在运行的从属io线程执行此操作；首先运行STOP REPLICA IO_THREAD FOR CHANNEL'％s'。
 
 
 </br>
@@ -5560,7 +5560,7 @@ WARN_NAMED_PIPE_ACCESS_EVERYONE 已在8.0.17中添加。
 
 - 错误号：3023; 符号： ER_WARN_ONLY_MASTER_LOG_FILE_NO_POS; SQLSTATE：HY000
 
-报错信息格式：使用MASTER_LOG_FILE子句但没有MASTER_LOG_POS子句的CHANGE MASTER TO可能并不安全。
+报错信息格式：使用SOURCE_LOG_FILE子句但没有SOURCE_LOG_POS子句的CHANGE REPLICATION SOURCE TO可能并不安全。
 
 旧的位置值可能对新的二进制日志文件无效。
 
@@ -5936,13 +5936,13 @@ WARN_NAMED_PIPE_ACCESS_EVERYONE 已在8.0.17中添加。
 
 - 错误号：3081; 符号： ER_SLAVE_CHANNEL_MUST_STOP; SQLSTATE：HY000
 
-报错信息格式：无法通过正在运行的复制线程执行此操作；首先运行STOP SLAVE FOR CHANNEL'％s'。
+报错信息格式：无法通过正在运行的复制线程执行此操作；首先运行STOP REPLICA FOR CHANNEL'％s'。
 
 </br>
 
 - 错误号：3082; 符号： ER_SLAVE_CHANNEL_NOT_RUNNING; SQLSTATE：HY000
 
-报错信息格式：此操作需要运行复制线程；配置从站并运行START SLAVE FOR CHANNEL'％s'。
+报错信息格式：此操作需要运行复制线程；配置从站并运行START REPLICA FOR CHANNEL'％s'。
 
 </br>
 
@@ -5962,18 +5962,18 @@ WARN_NAMED_PIPE_ACCESS_EVERYONE 已在8.0.17中添加。
 
 - 错误号：3085; 符号： ER_SLAVE_CHANNEL_SQL_THREAD_MUST_STOP; SQLSTATE：HY000
 
-报错信息格式：无法通过正在运行的从属sql线程执行此操作；首先运行STOP SLAVE SQL_THREAD FOR CHANNEL'％s'。
+报错信息格式：无法通过正在运行的从属sql线程执行此操作；首先运行STOP REPLICA SQL_THREAD FOR CHANNEL'％s'。
 
 
 </br>
 
 - 错误号：3086; 符号： ER_SLAVE_CHANNEL_SQL_SKIP_COUNTER; SQLSTATE：HY000
 
-报错信息格式：当sql_slave_skip_counter> 0时，不允许使用'START SLAVE [SQL_THREAD]'启动多个SQL线程。
+报错信息格式：当sql_slave_skip_counter> 0时，不允许使用'START REPLICA [SQL_THREAD]'启动多个SQL线程。
 
 sql_slave_skip_counter的值一次只能由一个SQL线程使用。
 
-请使用“ START SLAVE [SQL_THREAD] FOR CHANNEL”启动将使用sql_slave_skip_counter值的SQL线程。
+请使用“ START REPLICA [SQL_THREAD] FOR CHANNEL”启动将使用sql_slave_skip_counter值的SQL线程。
 
 
 </br>
@@ -6748,7 +6748,7 @@ ER_SET_ENFORCE_GTID_CONSISTENCY_WARN_WITH_ONGOING_GTID_VIOLATING_TRANSACTIONS �
 
 - 错误号：3190; 符号： ER_CANT_RESET_MASTER; SQLSTATE： HY000
 
-报错信息格式：由于％s，不允许使用RESET MASTER。
+报错信息格式：由于％s，不允许使用RESET BINARY LOGS AND GTIDS。
 
 
 </br>
@@ -9111,7 +9111,7 @@ ER_TEMP_TABLE_PREVENTS_SWITCH_GLOBAL_BINLOG_FORMAT 已在8.0.13中添加。
 
 报错信息格式：任何复制通道应用程序线程正在运行时，不允许更改@@ global.binlog_format或@@ persist.binlog_format。
 
-您可以执行STOP SLAVE SQL_THREAD，然后重试。
+您可以执行STOP REPLICA SQL_THREAD，然后重试。
 
 ER_RUNNING_APPLIER_PREVENTS_SWITCH_GLOBAL_BINLOG_FORMAT 已在8.0.13中添加。
 
@@ -10727,7 +10727,7 @@ ER_GRP_RPL_MESSAGE_SERVICE_INIT_FAILURE 已在8.0.18中添加。
 
 - 错误号：3920; 符号： ER_CHANGE_MASTER_WRONG_COMPRESSION_ALGORITHM_CLIENT; SQLSTATE：HY000
 
-报错信息格式：通道'％s'的MASTER_COMPRESSION_ALGORITHMS'％s'无效。
+报错信息格式：通道'％s'的SOURCE_COMPRESSION_ALGORITHMS'％s'无效。
 
 ER_CHANGE_MASTER_WRONG_COMPRESSION_ALGORITHM_CLIENT 已在8.0.18中添加。
 
@@ -10736,7 +10736,7 @@ ER_CHANGE_MASTER_WRONG_COMPRESSION_ALGORITHM_CLIENT 已在8.0.18中添加。
 
 - 错误号：3921; 符号： ER_CHANGE_MASTER_WRONG_COMPRESSION_LEVEL_CLIENT; SQLSTATE：HY000
 
-报错信息格式：通道'％s'的MASTER_ZSTD_COMPRESSION_LEVEL％u无效。
+报错信息格式：通道'％s'的SOURCE_ZSTD_COMPRESSION_LEVEL％u无效。
 
 ER_CHANGE_MASTER_WRONG_COMPRESSION_LEVEL_CLIENT 已在8.0.18中添加。
 
@@ -10792,7 +10792,7 @@ ER_CLIENT_PRIVILEGE_CHECKS_USER_DOES_NOT_EXIST 已在8.0.18中添加。
 
 报错信息格式：在复制配置存储库中找到无效的PRIVILEGE_CHECKS_USER，用于通道'％s'。
 
-使用CHANGE MASTER TO PRIVILEGE_CHECKS_USER来更正配置。
+使用CHANGE REPLICATION SOURCE TO PRIVILEGE_CHECKS_USER来更正配置。
 
 ER_CLIENT_PRIVILEGE_CHECKS_USER_CORRUPT 已在8.0.18中添加。
 

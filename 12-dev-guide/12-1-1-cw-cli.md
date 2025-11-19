@@ -53,7 +53,6 @@ greatsql> SHOW VARIABLES LIKE '%version%';
 | original_server_version                          | 999999                                     |
 | protocol_version                                 | 10                                         |
 | replica_type_conversions                         |                                            |
-| slave_type_conversions                           |                                            |
 | tls_version                                      | TLSv1.2,TLSv1.3                            |
 | version                                          | 8.4.4-4                                    |
 | version_comment                                  | GreatSQL, Release 4, Revision d73de75905d  |

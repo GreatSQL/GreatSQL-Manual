@@ -109,7 +109,7 @@ greatsql> SET SESSION sql_log_bin=1;
 
 -- 配置MGR服务通道
 -- 通道名字 group_replication_recovery 是固定的，不能修改
-CHANGE MASTER TO MASTER_USER='repl', MASTER_PASSWORD='repl' FOR CHANNEL 'group_replication_recovery';
+CHANGE REPLICATION SOURCE TO SOURCE_USER='repl', SOURCE_PASSWORD='repl' FOR CHANNEL 'group_replication_recovery';
 ```
 
 接着执行下面的命令，将其设置为MGR的引导节点（只有第一个节点需要这么做）后即可直接启动MGR服务：
@@ -165,7 +165,7 @@ CREATE USER repl@'%' IDENTIFIED WITH mysql_native_password BY 'repl';
 GRANT BACKUP_ADMIN, REPLICATION SLAVE ON *.* TO `repl`@`%`;
 SET SESSION sql_log_bin=1;
 
-CHANGE MASTER TO MASTER_USER='repl', MASTER_PASSWORD='repl' FOR CHANNEL 'group_replication_recovery';
+CHANGE REPLICATION SOURCE TO SOURCE_USER='repl', SOURCE_PASSWORD='repl' FOR CHANNEL 'group_replication_recovery';
 ```
 
 接下来即可直接启动MGR服务（除了第一个节点外，其余节点都不需要再设置引导模式）：

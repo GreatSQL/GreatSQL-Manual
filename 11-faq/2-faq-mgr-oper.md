@@ -285,7 +285,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 这是由于8.0.4中新引入 `caching_sha2_password` 身份验证插件，它对密码安全性要求更高，要求用户认证过程中在网络传输的密码是加密的，所以导致的这个问题的出现。
 
-可以在手动搭建MGR执行 `CHANGE MASTER TO` 前先修改选项设置 `group_replication_recovery_get_public_key=ON`，这样就可以了。
+可以在手动搭建MGR执行 `CHANGE REPLICATION SOURCE TO` 前先修改选项设置 `group_replication_recovery_get_public_key=ON`，这样就可以了。
 
 详情参考：[MGR新节点RECOVERING状态的分析与解决：caching_sha2_password验证插件的影响](https://mp.weixin.qq.com/s/G9bpThAR-fYHHZsA8l4uuw)。
 

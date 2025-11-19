@@ -360,7 +360,7 @@ BINLOG_POSITION: 29832341
 **2. 连接原来的数据库实例，查询最新的事务 GTID 信息。**
 
 ```sql
-greatsql> SHOW MASTER STATUS\G
+greatsql> SHOW BINARY LOG STATUS\G
 *************************** 1. row ***************************
              File: binlog.000013
          Position: 29838644

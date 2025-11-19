@@ -201,9 +201,7 @@ log_queries_not_using_indexes = 1
 log_throttle_queries_not_using_indexes = 60
 min_examined_row_limit = 0
 log_slow_admin_statements = 1
-
-#MySQL 8.0.26后改成log_slow_replica_statements
-log_slow_slave_statements = 1
+log_slow_replica_statements = 1
 ```
 
 可以执行下面的命令清理slow query log，清理前也记得先做好备份：

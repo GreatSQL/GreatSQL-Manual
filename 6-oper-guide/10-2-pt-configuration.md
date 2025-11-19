@@ -466,7 +466,7 @@ Specify --databases or --all-databases to dump and summarize schemas
                  sql_mode | 
                 ......中间省略
 log_queries_not_using_indexes | ON
-        log_slave_updates | ON
+      log_replica_updates | ON
 ```
 
 以上显示几个值得注意的服务器配置变量，在使用该服务器时了解这些变量可能很重要。

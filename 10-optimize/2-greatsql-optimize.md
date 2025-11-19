@@ -29,7 +29,7 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 
 设置为3可以记录更多日志信息，便于问题分析排查。
 
-- slave_parallel_type=LOGICAL_CLOCK
+- replica_parallel_type=LOGICAL_CLOCK
 - replica_parallel_workers=16
 
 采用LOGICAL_CLOCK模式，并行复制线程数最高可以设置为逻辑CPU数量的2倍，提高SQL线程应用事务的并行效率。
@@ -38,7 +38,7 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 
 采用WRITESET模式提高从节点事务并行回放度。
 
-- slave_preserve_commit_order=ON
+- replica_preserve_commit_order=ON
 
 从节点回放事务时，要保证事务顺序，避免和主节点数据不一致。
 

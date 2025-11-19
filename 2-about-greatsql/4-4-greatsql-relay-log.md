@@ -42,7 +42,7 @@ $ ls -la relay-log*
 
 ```sql
 -- 配置主从复制时，指定复制通道名称
-CHANGE MASTER TO MASTER_AUTO_POSITION=1 FOR CHANNEL 'repl-channel-01';
+CHANGE REPLICATION SOURCE TO SOURCE_AUTO_POSITION=1 FOR CHANNEL 'repl-channel-01';
 ```
 
 这时查看中继日志的结果是这样的：
@@ -140,18 +140,18 @@ SHOW RELAYLOG EVENTS [IN 'log_name'] [FROM pos] [LIMIT [offset,] row_count]
 
 ### 检查中继日志
 
-可以使用 `SHOW SLAVE STATUS` 命令来查看中继日志的状态和当前处理的位置。
+可以使用 `SHOW REPLICA STATUS` 命令来查看中继日志的状态和当前处理的位置。
 
 ::: details 查看运行结果
 ```sql
-greatsql> SHOW SLAVE STATUS\G
+greatsql> SHOW REPLICA STATUS\G
 
 ...
                Relay_Log_File: relay-log.000001
                 Relay_Log_Pos: 4
-        Relay_Master_Log_File:
+        Relay_Source_Log_File:
               Relay_Log_Space: 157
-      Slave_SQL_Running_State: Replica has read all relay log; waiting for more updates
+    Replica_SQL_Running_State: Replica has read all relay log; waiting for more updates
 ...
 ```
 :::
@@ -175,7 +175,7 @@ greatsql> SHOW SLAVE STATUS\G
 ## 使用注意事项
 
 1. **磁盘空间管理**：确保有足够的磁盘空间来存储中继日志，特别是在复制负载较大时，避免因空间不足导致复制中断。
-2. **定期监控**：使用`SHOW SLAVE STATUS`命令定期监控复制状态，确保中继日志正常工作，及时发现和处理复制延迟或错误。
+2. **定期监控**：使用`SHOW REPLICA STATUS`命令定期监控复制状态，确保中继日志正常工作，及时发现和处理复制延迟或错误。
 3. **自动清理**：启用`relay_log_purge`参数，自动清理不再需要的中继日志文件，避免磁盘空间被耗尽。
 4. **安全性**：保护中继日志文件的访问权限，防止未经授权的访问和修改，确保数据安全。
 5. **一致性检查**：定期检查从服务器的数据一致性，确保复制过程没有遗漏或错误的事件应用。

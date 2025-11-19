@@ -63,7 +63,7 @@ MySQL 8.4.4 vs GreatSQL 8.4.4-4 性能数据对比（去掉最高和最低两个
 | 内存     | 256G                                                                      |
 | 磁盘     | INTEL SSDPE2KE032T8                                      |
 | 数据库   | GreatSQL 8.4.4-4 Revision d73de75905d<br/>MySQL 8.4.4 Community Server       |
-| 测试工具 | BenchmakrSQL 5.0 |
+| 测试工具 | BenchmarkSQL 5.0 |
 | 测试数据量 | warehouses = 2000 （测试数据库初始化后物理大小约 182 GB）|
 
 ## 测试结果详细数据
