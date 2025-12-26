@@ -25,6 +25,7 @@ BenchmarkSQL 支持 MySQL（Percona、GreatSQL）、PostgreSQL、Oracle、SQL Se
 - 增加支持MySQL/GreatSQL数据库；
 - 增加MySQL连接驱动mysql-connector-j-8.0.33.jar；
 - 修复在RR模式下测试结束后可能因为逻辑不严谨产生死循环问题（读取不到已被删除的数据导致逻辑判断错误）；
+- 优化bmsql_oorder表，增加o_c_id单列索引；
 - 修改runDatabaseBuild.sh中的AFTER_LOAD的动作，无需再创建索引外键等操作。
 
 可以用 git 客户端将代码下载到本地：
@@ -267,7 +268,7 @@ create table bmsql_stock (
 ) engine = innodb;
 ```
 
-4. 修改 `run/runDatabaseBuild.sh` 文件 17 行附近，定义数据加载结束时的后续工作。
+4. 修改 `run/runDatabaseBuild.sh` 文件 17 行附近，定义数据加载结束时的后续工作，去掉创建外键操作。
 
 ```bash
  17 #AFTER_LOAD="indexCreates foreignKeys extraHistID buildFinish"
@@ -337,7 +338,7 @@ Total time: 0 seconds
 ```ini
 db=mysql
 driver=com.mysql.jdbc.Driver
-conn=jdbc:mysql://localhost:3306/bmsql
+conn=jdbc:mysql://localhost:3306/bmsql?useServerPrepStmts=false&prepStmtCacheSize=250&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=GMT&useLocalSessionState=true&maintainTimeStats=false&useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&cacheResultSetMetadata=true&metadataCacheSize=1024&useConfigs=maxPerformance
 user=bmsql
 password=bmsql
 
@@ -423,7 +424,7 @@ Starting BenchmarkSQL LoadData
 
 driver=com.mysql.jdbc.Driver
 Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
-conn=jdbc:mysql://localhost:3306/bmsql
+conn=jdbc:mysql://localhost:3306/bmsql?useServerPrepStmts=false&prepStmtCacheSize=250&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=GMT&useLocalSessionState=true&maintainTimeStats=false&useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&cacheResultSetMetadata=true&metadataCacheSize=1024&useConfigs=maxPerformance
 user=bmsql
 password=***********
 warehouses=5
@@ -526,7 +527,7 @@ $ ./runBenchmark.sh ./props.greatsql
 [main] INFO   jTPCC : Term-00,
 [main] INFO   jTPCC : Term-00, db=mysql
 [main] INFO   jTPCC : Term-00, driver=com.mysql.jdbc.Driver
-[main] INFO   jTPCC : Term-00, conn=jdbc:mysql://localhost:3306/bmsql
+[main] INFO   jTPCC : Term-00, conn=jdbc:mysql://localhost:3306/bmsql?useServerPrepStmts=false&prepStmtCacheSize=250&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=GMT&useLocalSessionState=true&maintainTimeStats=false&useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&cacheResultSetMetadata=true&metadataCacheSize=1024&useConfigs=maxPerformance
 [main] INFO   jTPCC : Term-00, user=bmsql
 ...
 [main] INFO   jTPCC : Term-00, copied ./props.greatsql to my_result_2024-08-16_095115/run.properties
@@ -549,7 +550,7 @@ Term-00, Running Average tpmTOTAL: 421384.59    Current tpmTOTAL: 83449452    Me
 - `Measured tpmTOTAL`，表示每分钟平均执行事务数（所有事务）。
 - `Transaction Count`，表示总事务数。
 
-最终的性能测试结果是以 `Measured tpmTOTAL` 指标为准，也即通常所说的 **tpmC**（平均每分钟事务数）。
+最终的性能测试结果是以 `Measured tpmC (NewOrders)` 指标为准，也即通常所说的 **tpmC**（平均每分钟事务数）。
 
 3. 清理数据库
 
