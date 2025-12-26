@@ -160,7 +160,7 @@ The governor "powersave" 表示 cpufreq 的节能策略使用 powersave，需要
 如果是虚拟机或者云主机，则不需要调整，命令输出通常为 Unable to determine current policy。
 :::
 
-3. **关闭透明大页**
+3. **关闭大页**
 
 建议关闭透明大页（Transparent Huge Pages / THP）。OLTP型数据库内存访问模式通常是稀疏的而非连续的。当高阶内存碎片化比较严重时，分配 THP 页面会出现较高的延迟，反而影响性能。
 
@@ -175,6 +175,17 @@ always madvise [never]
 ```bash
 echo never > /sys/kernel/mm/transparent_hugepage/enabled
 echo never > /sys/kernel/mm/transparent_hugepage/defrag
+```
+
+同时也建议关闭传统大页，参考下面操作方法：
+```bash
+$ echo 'vm.nr_hugepages=0' >> /etc/sysctl.conf
+$ sysctl -p
+
+# 再次执行 sysctl -a 确认
+$ sysctl -a | grep vm.nr_hugepages
+vm.nr_hugepages = 0
+vm.nr_hugepages_mempolicy = 0
 ```
 
 4. **优化内核参数**
