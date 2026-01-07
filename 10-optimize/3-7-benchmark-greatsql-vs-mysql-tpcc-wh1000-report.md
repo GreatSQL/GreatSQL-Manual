@@ -220,7 +220,7 @@ TPC-C性能对比图如下所示：
 
 - 512并发
   - GreatSQL tpmC
-![](./3-7-greatsql84-mysql84-bmsql1000-tpmc-x86-greatsql84-512th.png
+![](./3-7-greatsql84-mysql84-bmsql1000-tpmc-x86-greatsql84-512th.png)
 
   - MySQL tpmC
 ![](./3-7-greatsql84-mysql84-bmsql1000-tpmc-x86-mysql84-512th.png)
