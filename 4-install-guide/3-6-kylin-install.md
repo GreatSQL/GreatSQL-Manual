@@ -35,7 +35,13 @@ $ ls -l /tmp/tmpfile
 ```ini
 umask 0022
 ```
-保存退出。
+安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
+
+```bash
+yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
+```
+
+如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](./1-install-prepare.md)。
 
 ###  选择下载GreatSQL二进制包
 一般而言，麒麟kylin系统环境下，也可以选择相应glibc版本的GreatSQL二进制安装包，基本上都能直接运行起来。

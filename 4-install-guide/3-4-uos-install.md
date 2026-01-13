@@ -66,6 +66,14 @@ echo 'export PATH=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin:$PATH' 
 source ~/.bash_profile
 ```
 
+安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
+
+```bash
+yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
+```
+
+如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](./1-install-prepare.md)。
+
 接下来准备开始安装GreatSQL二进制包。
 
 ##  安装GreatSQL
