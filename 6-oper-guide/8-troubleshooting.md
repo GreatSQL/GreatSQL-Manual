@@ -2,6 +2,25 @@
 
 本篇文档总结了使用 GreatSQL 时的常见错误。在遇到这些相关错误时，可以通过本文档的问题排查思路检查发生错误原因并进行处理。
 
+## 启动 GreatSQL 失败，提示`libaio.so.1: cannot open shared object file: No such file or directory`
+
+> 手动初始化：`/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64/bin/mysqld --no-defaults --user=mysql --log_error_verbosity=3 --datadir=/data/GreatSQL --initialize`  
+> 报异常信息：`/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64/bin/mysqld: error while loading shared libraries: libaio.so.1: cannot open shared object file: No such file or directory`
+### 解决方法：
+
+> libaio 是 Linux 异步 I/O 库，GreatSQL/MySQL 底层依赖它来提升磁盘 I/O 性能，必须安装。根据系统的包管理器选择对应命令：
+#### 1. CentOS/RHEL/AlmaLinux（yum 包管理器）
+```bash
+# 安装 libaio 及开发包（aarch64 架构适配）
+yum install -y libaio libaio-devel
+```
+#### 2. Debian/Ubuntu（apt 包管理器）
+```bash
+# 更新源后安装
+apt update && apt install -y libaio1 libaio-dev
+```
+
+
 ## 安装完 GreatSQL 后，启动失败，提示 `valid data directory`
 
 这个问题通常发生在一个全新的环境中手动安装 GreatSQL 二进制包的时候。
