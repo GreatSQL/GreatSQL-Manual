@@ -89,6 +89,7 @@
 - 4. [Uest](https://gitee.com/uest)
   - [update 10-optimize/3-4-benchmarksql.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/15)
   - [update 6-oper-guide/8-troubleshooting.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/14)
+  - [update 4-install-guide/3-1-centos-install.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/19)
 - 5. [jillwx](https://gitee.com/jillwx)
   - [update 12-dev-guide/12-4-4-functions.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/13)
   - [update 12-dev-guide/12-2-3-dp-table.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/12)
@@ -98,6 +99,10 @@
   - [update 4-install-guide/4-install-with-docker.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/9)
 - 7. [ShawnYan](https://gitee.com/shawnyan)
   - [update 8-mgr/8-mgr-best-practices.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/8)
+- 8. [合金来了](https://gitee.com/lvhejin)
+  - [update 6-oper-guide/8-troubleshooting.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/25)
+  - [update 4-install-guide/3-3-openeuler-install.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/23)
+  
 
 [我要参与改进文档](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)
 
