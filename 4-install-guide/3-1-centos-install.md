@@ -146,7 +146,6 @@ relay-log = relaylog
 relay_log_recovery = ON
 replica_parallel_type = LOGICAL_CLOCK
 replica_parallel_workers = 16
-binlog_transaction_dependency_tracking = WRITESET
 replica_preserve_commit_order = ON
 replica_checkpoint_period = 2
 loose-rpl_read_binlog_speed_limit = 100

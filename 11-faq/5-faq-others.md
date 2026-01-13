@@ -31,7 +31,6 @@
 - 建议启用writeset模式，即设置以下几个参数
     - `replica_parallel_type = LOGICAL_CLOCK`
     - `replica_parallel_workers = N`，N>0，可以设置为逻辑CPU数的2倍
-    - `binlog_transaction_dependency_tracking = WRITESET`
 - `replica_preserve_commit_order = 1`
     - `replica_checkpoint_period = 2`
 
