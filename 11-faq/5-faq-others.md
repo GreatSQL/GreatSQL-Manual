@@ -474,6 +474,50 @@ SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA;
 
 参考内容：[Slow Query Log（慢查询日志）](../2-about-greatsql/4-2-greatsql-slow-log.md)。
 
+## 22. Java应用连接失败，提示错误：Public Key Retrieval is not allowed
+
+这是因为GreatSQL 8.0中默认的身份验证插件为 `caching_sha2_password`，客户端需要从服务器检索公钥以进行身份验证。但出于安全考虑，默认不允许公钥检索，导致连接失败。
+
+解决方案有多种。
+
+1、在JDBC URL 中添加 `allowPublicKeyRetrieval=true`，使客户端能够从服务器检索公钥，如下例所示：
+
+```ini
+jdbc:mysql://localhost:3306/greatsql?allowPublicKeyRetrieval=true
+```
+
+2、修改连接用户的认证插件，将其从 **caching_sha2_password** 修改为 **mysql_native_password**，如下例所示：
+
+```sql
+ALTER USER app@'%' IDENTIFIED WITH mysql_native_password BY 'New-Password';
+```
+
+3、更新 MySQL JDBC 驱动
+
+确保 MySQL Connector/J 的版本是最新的（建议使用 8.x 版本）。旧版本的驱动程序可能不支持 **caching_sha2_password** 插件。
+
+可以从 [MySQL 官方下载页面](https://dev.mysql.com/downloads/connector/j/) 获取最新的驱动。
+
+4、启用 SSL 加密
+
+修改 JDBC 连接串，启用 SSL 参数以避免客户端直接检索公钥，如下例所示：
+
+```ini
+jdbc:mysql://localhost:3306/greatsql?useSSL=true&requireSSL=true
+```
+
+5、修改 GreatSQL 配置参数
+
+在配置文件 my.cnf 中添加以下配置：
+
+```ini
+[mysqld]
+default_authentication_plugin="mysql_native_password"
+```
+
+该参数的作用是强制使用 **mysql_native_password** 作为默认认证插件，然后重启 GreatSQL 服务使其生效。
+
+
 **扫码关注微信公众号**
 
 ![greatsql-wx](../greatsql-wx.jpg)
