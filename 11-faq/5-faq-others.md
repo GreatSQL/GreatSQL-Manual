@@ -498,6 +498,8 @@ ALTER USER app@'%' IDENTIFIED WITH mysql_native_password BY 'New-Password';
 
 可以从 [MySQL 官方下载页面](https://dev.mysql.com/downloads/connector/j/) 获取最新的驱动。
 
+推荐该方法。
+
 4、启用 SSL 加密
 
 修改 JDBC 连接串，启用 SSL 参数以避免客户端直接检索公钥，如下例所示：
@@ -505,6 +507,8 @@ ALTER USER app@'%' IDENTIFIED WITH mysql_native_password BY 'New-Password';
 ```ini
 jdbc:mysql://localhost:3306/greatsql?useSSL=true&requireSSL=true
 ```
+
+注意，开启 SSL 会有一定的性能开销。
 
 5、修改 GreatSQL 配置参数
 
@@ -516,6 +520,16 @@ default_authentication_plugin="mysql_native_password"
 ```
 
 该参数的作用是强制使用 **mysql_native_password** 作为默认认证插件，然后重启 GreatSQL 服务使其生效。
+
+几种方案的优缺点对比
+
+|方案|    安全等级|    适用场景|    备注|
+|---|---|---|---|
+|更新JDBC驱动    | ★★★★★ | 所有环境  | 安全方案，推荐
+|启用SSL加密连接 | ★★★★☆ | 所有环境  | 安全方案，推荐
+|自动获取公钥    | ★★★☆☆ | 可信内网环境  | 存在中间人攻击风险
+|更改账号认证插件| ★☆☆☆☆ | 开发/测试环境 | 不推荐，兼容性差，安全性低
+|更改全局参数    | ☆☆☆☆☆ | 开发/测试环境 | 不推荐，兼容性差，安全性低
 
 
 **扫码关注微信公众号**
