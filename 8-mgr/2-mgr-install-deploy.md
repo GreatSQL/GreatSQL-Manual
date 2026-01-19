@@ -223,7 +223,7 @@ greatsql> SELECT * FROM t1;
 接下来介绍如何利用 GreatSQL Shell 基于 GreatSQL 8.4.4-4 构建一个三节点的MGR集群。
 
 ::: tip 小贴士
-只有 GreatSQL Shell 支持仲裁节点（投票节点）特性，MySQL Shell 社区版不支持。
+仲裁节点（投票节点）为 GreatSQL 数据库原生支持的特性，**GreatSQL Shell 可正常识别并对该特性进行相关操作**，而 MySQL Shell 社区版暂不支持识别 GreatSQL 的仲裁节点（投票节点），无法开展对应操作。
 :::
 
 ###  安装准备
@@ -344,7 +344,7 @@ one server failure.
 这就完成了MGR集群的初始化并加入第一个节点（引导节点）。
 
 ::: tip 提示
-参数 `group_replication_communication_stack` 的默认值是 XCOM。但是在利用 GreatSQL Shell 的 `create_cluster()` 函数创建并初始化 MGR 集群时，参数 `communicationStack` 默认值则是 MYSQL，这里存在差异。因此，建议在这里显式指定 `communicationStack` 参数值为 XCOM。
+参数 `group_replication_communication_stack` 的默认值是 XCOM。但是在利用 GreatSQL Shell 的 `create_cluster()` 函数创建并初始化 MGR 集群时，参数 `communicationStack` 默认值则是 MySQL，这里存在差异。因此，建议在这里显式指定 `communicationStack` 参数值为 XCOM。
 :::
 
 例如，执行下面的命令修改设置：
@@ -359,9 +359,9 @@ dba.createCluster("MGR1", {"communicationStack": "xcom"})
 ```
 
 ::: warning 风险提醒
-因目前采用 MYSQL 协议可能存在风险，所以建议采用 XCOM 协议。
+因目前采用 MySQL 协议可能存在风险，所以建议采用 XCOM 协议。
 
-采用 MYSQL 协议的风险可参考文章：[新的MGR MySQL协议报错BUG](https://mp.weixin.qq.com/s/N-poOiG8zAAmLI0-S79zDg)。
+采用 MySQL 协议的风险可参考文章：[新的MGR MySQL协议报错BUG](https://mp.weixin.qq.com/s/N-poOiG8zAAmLI0-S79zDg)。
 :::
 
 接下来，用同样方法先用 root 账号分别登入到另外两个节点，完成节点的检查并创建最小权限级别用户（此过程略过。。。注意各节点上创建的用户名、密码都要一致），之后回到第一个节点，执行 `addInstance()` 添加另外两个节点。
