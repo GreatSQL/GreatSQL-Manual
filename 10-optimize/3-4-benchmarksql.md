@@ -24,7 +24,6 @@ BenchmarkSQL 支持 MySQL（Percona、GreatSQL）、PostgreSQL、Oracle、SQL Se
 - 无需再做一次下面提到的修改调整；
 - 增加支持MySQL/GreatSQL数据库；
 - 增加MySQL连接驱动mysql-connector-j-8.0.33.jar；
-- 修复在RR模式下测试结束后可能因为逻辑不严谨产生死循环问题（读取不到已被删除的数据导致逻辑判断错误）；
 - 优化bmsql_oorder表，增加o_c_id单列索引；
 - 修改runDatabaseBuild.sh中的AFTER_LOAD的动作，无需再创建索引外键等操作。
 
@@ -502,7 +501,38 @@ $ ant
 这样应该就可以了。
 :::
 
-2. 运行测试
+2. 修改GreatSQL事务隔离级别
+
+在开始压测之前，要确保先把GreatSQL数据库修改事务隔离级别为RC：
+
+```sql
+greatsql> SET GLOBAL transaction_isolation="READ-COMMITTED";
+```
+
+同时修改 *my.cnf* 中的参数：
+
+```ini
+[mysqld]
+transaction_isolation="READ-COMMITTED"
+```
+
+这是因为在默认的RR隔离级别中，对new_order表的事务读如果不显式加上`FOR SHARE`或`FOR UPDATE`锁，则可能会导致事务过程中数据被删除，造成事务失败。
+
+在Oracle和PostgreSQL的默认事务隔离级别为RC，为了参考对标，故要求修改GreatSQL的事务隔离级别也为RC。
+
+如果一定要在RR级别下测试的话，请手动修改`src/client/jTPCCConnection.java`文件第234行，在末尾加上`FOR SHARE`，例如：
+
+```ini
+229         // PreparedStatements for DELIVERY_BG
+230         stmtDeliveryBGSelectOldestNewOrder = dbConn.prepareStatement(
+231                 "SELECT no_o_id " +
+232                 "    FROM bmsql_new_order " +
+233                 "    WHERE no_w_id = ? AND no_d_id = ? " +
+234                 "    ORDER BY no_o_id ASC FOR SHARE");
+```
+之后回到benchmarksql根目录，重新执行`ant`进行编译代码即可。
+
+3. 运行测试
 
 运行 `bin/runBenchmark.sh` 来开始压力测试。
 
