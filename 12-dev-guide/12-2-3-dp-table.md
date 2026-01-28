@@ -28,9 +28,11 @@ CREATE TABLE [IF NOT EXISTS] tablename(
 ```sql
 CREATE TABLE test_greatsql(
   id INT NOT NULL AUTO_INCREMENT,
-  ename VARCHAR(10) NOT NULL,
+  name VARCHAR(10) NOT NULL,
   gender CHAR(1) NOT NULL,
   address VARCHAR(20) NOT NULL,
+  gmt_create DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  gmt_modified DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY(id)
   );
 ```
@@ -42,9 +44,11 @@ greatsql> SHOW CREATE TABLE test_greatsql \G
        Table: test_greatsql
 Create Table: CREATE TABLE `test_greatsql` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `ename` varchar(10) NOT NULL,
+  `name` varchar(10) NOT NULL,
   `gender` char(1) NOT NULL,
   `address` varchar(20) NOT NULL,
+  `gmt_create` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 1 row in set (0.00 sec)
@@ -61,6 +65,10 @@ DROP TABLE test_greatsql;
 ```
 ### 清空表
 不删除表结构，只删除内容
+补充风险提示：
+1. TRUNCATE会重置自增主键（AUTO_INCREMENT回归初始值），DELETE不会；
+2. 无法撤销，若表数据需保留备份，需提前导出；
+3. 若表存在外键关联，需先禁用外键约束才能执行，否则报错	
 ```sql
 TRUNCATE TABLE tablename;
 ```
