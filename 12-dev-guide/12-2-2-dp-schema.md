@@ -2,7 +2,7 @@
 ---
 
 ## 什么是库
-在GreatSQL中，库（schema）是逻辑上的概念，它对应着物理数据文件。它可以被视为一个电子化的文件柜，用于存储电子文件（即数据），并允许用户对这些数据进行各种操作，如新增、截取、更新和删除等
+在GreatSQL中，库（schema）是逻辑上的概念，对应物理层面的一个数据目录，目录中存放该库下所有表的相关物理文件（如 InnoDB 的 .ibd 数据文件、.frm 表结构文件）。它可以被视为一个电子化的文件柜，用于存储电子文件（即数据），并允许用户对这些数据进行各种操作，如新增、截取、更新和删除等
 
 在GreatSQL中，你可以创建多个数据库（库），并在每个数据库中创建多个表来存储不同类型的数据。这种结构使得数据的管理和查询变得更加高效和灵活。同时，GreatSQL还提供了丰富的工具和命令来管理数据库和表，如创建、删除、修改表和查询数据等。
 
@@ -30,12 +30,14 @@ DROP SCHEMA [IF EXISTS] db_name;
 
 ## 库的修改
 在GreatSQL中，库的修改使用`ALTER SCHEMA`语句。
+该语句主要用于修改库的默认字符集 / 校验集，无其他核心修改场景。
 ```sql
-ALTER SCHEMA [IF EXISTS] db_name;
+ALTER SCHEMA [IF EXISTS] db_name CHARACTER SET utf8mb4 COLLATE utf8mb4_generic_ci;
 ```
 ## 库的查询
 
 在GreatSQL中，库的查询使用`SHOW SCHEMA`语句。
+ “SHOW SCHEMAS” 与 “SHOW DATABASES” 功能完全等价（GreatSQL 支持两者通用）
 
 ```sql
 greatsql> SHOW DATABASES;
