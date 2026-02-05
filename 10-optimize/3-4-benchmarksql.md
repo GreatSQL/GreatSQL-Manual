@@ -128,7 +128,7 @@ cd /usr/local/benchmarksql-5.0/run
 cp -rf sql.common/ sql.mysql
 ```
 
-编辑 `sql.mysql/tableCreates.sql` 文件，对每个表都加上使用 InnoDB 引擎的声明，以及每个表都要有显式主键的定义。此外，还要对 `bmsql_oorder` 表额外增加一个索引，根据对测试过程中产生的慢查询日志进行分析，增加该索引可有效提升测试性能。
+编辑 `sql.mysql/tableCreates.sql` 文件，对每个表都加上使用 InnoDB 引擎的声明，以及每个表都要有显式主键的定义。
 
 ```sql
 create table bmsql_config (
@@ -218,8 +218,7 @@ create table bmsql_oorder (
   o_ol_cnt     integer,
   o_all_local  integer,
   o_entry_d    timestamp,
-  primary key (o_w_id, o_d_id, o_id),
-  k1 (o_c_id)
+  primary key (o_w_id, o_d_id, o_id)
 ) engine = innodb;
 
 create table bmsql_order_line (
