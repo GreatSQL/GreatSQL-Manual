@@ -89,12 +89,12 @@
 - [TPC-C测试报告](../10-optimize/3-5-benchmark-greatsql-vs-mysql-tpcc-report.md)
 - [TPC-H测试报告](../10-optimize/3-3-benchmark-greatsql-tpch-report.md)
 - [Troubleshooting/故障排查](../6-oper-guide/8-troubleshooting.md)
-- [Uninstall GreatSQL/卸载 GreatSQL](../4-install-guide/9-uninstall-greatsql.md)
+- [Uninstall GreatSQL/卸载 GreatSQL](../4-install-guide/10-uninstall-greatsql.md)
 - [Understand GreatSQL version numbers/理解 GreatSQL 版本号](../1-docs-intro/1-1-notes-to-users.md#理解-GreatSQL-版本号)
 - [Undo Log/撤销日志](../2-about-greatsql/4-6-greatsql-undo-log.md)
 - [Upgrade GreatSQL 5.7 to 8.0/从 GreatSQL 5.7 升级到 8.0](../7-migrate-and-upgrade/1-upgrade-to-greatsql8.md)
 - [Using systemd to manage GreatSQL/利用 systemd 管理 GreatSQL](../4-install-guide/8-greatsql-with-systemd.md)
-- [Glossary/术语表](../2-about-greatsql/6-greatsql-glossary.md)
+- [Glossary/术语表](../1-docs-intro/1-5-glossary.md)
 
 
 **扫码关注微信公众号**
