@@ -156,7 +156,7 @@ gt-checksum version 1.2.1
 
 ## 使用文档
 ---
-- [gt-checksum manual](https://gitee.com/GreatSQL/gt-checksum/blob/master/docs/gt-checksum-manual.md)
+- [gt-checksum manual](https://gitee.com/GreatSQL/gt-checksum/blob/v1.2.3/gt-checksum-manual.md)
 
 
 ## 版本历史
