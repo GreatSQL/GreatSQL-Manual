@@ -167,7 +167,7 @@ replica_parallel_type = LOGICAL_CLOCK
 replica_parallel_workers = 16
 replica_preserve_commit_order = ON
 replica_checkpoint_period = 2
-loose-rpl_read_binlog_speed_limit = 100
+loose-rpl_read_binlog_speed_limit=0
 
 # MGR
 loose-plugin_load_add = 'mysql_clone.so'

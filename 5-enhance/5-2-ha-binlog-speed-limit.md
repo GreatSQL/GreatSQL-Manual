@@ -46,6 +46,8 @@ SET GLOBAL rpl_read_binlog_speed_limit=100;
   ```
   然后重启服务使设置生效。
 
+**建议**：建议设置`rpl_read_binlog_speed_limit=0`，也即不限速，避免对主从复制产生影响，如果生产环境中确实有必要再进行限速。
+
 - 查看限速状态
 
 新增状态变量`Rpl_data_speed`显示当前binlog限速的状态，可以通过执行`SHOW GLOBAL STATUS LIKE 'Rpl_data_speed'`查看，例如
