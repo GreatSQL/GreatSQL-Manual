@@ -102,6 +102,8 @@
 - 8. [合金来了](https://gitee.com/lvhejin)
   - [update 6-oper-guide/8-troubleshooting.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/25)
   - [update 4-install-guide/3-3-openeuler-install.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/23)
+- 9. [yushao21](https://gitee.com/yushao21)
+  - [27 【轻量级 PR】：update 12-dev-guide/12-3-6-gen-random-data.md](https://gitee.com/GreatSQL/GreatSQL-Manual/pulls/27)
   
 
 [我要参与改进文档](https://gitee.com/GreatSQL/GreatSQL-Manual/issues)

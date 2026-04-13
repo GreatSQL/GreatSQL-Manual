@@ -308,6 +308,9 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 421  | [任*伟](https://greatsql.cn/home.php?mod=space&uid=2751) | GCA-DBA-20262404596 |      |      |          |
 | 422  | [黄*粟](https://greatsql.cn/home.php?mod=space&uid=2760) | GCA-DBA-2026380575  |      |      |          |
 | 423  | [李*文](https://greatsql.cn/home.php?mod=space&uid=2680) | GCA-DBA-2026786988  |      |      |          |
+| 424  | [熊*君](https://greatsql.cn/home.php?mod=space&uid=2762) | GCA-DBA-2026927293  |      |      |          |
+| 425  | [潘*](https://greatsql.cn/home.php?mod=space&uid=2776)   | GCA-DBA-2026292855  |      |      |          |
+| 426  | [黄*亮](https://greatsql.cn/home.php?mod=space&uid=270)  | GCA-DBA-2026493020  |      |      |          |
 
 ### 通过GCP等级考核人员名单
 
@@ -354,7 +357,7 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 37   | [高*涵](https://greatsql.cn/home.php?mod=space&uid=1931) | GCP-DBA-2024651942 | 137  | [文*](https://greatsql.cn/home.php?mod=space&uid=2233)   | GCP-DBA-2026357138 |
 | 38   | [户*坡](https://greatsql.cn/home.php?mod=space&uid=1928) | GCP-DBA-2024591684 | 138  | [任*伟](https://greatsql.cn/home.php?mod=space&uid=2751) | GCP-DBA-2026301670 |
 | 39   | [申*俊](https://greatsql.cn/home.php?mod=space&uid=237)  | GCP-DBA-2024516937 | 139  | [黄*粟](https://greatsql.cn/home.php?mod=space&uid=2760) | GCP-DBA-2026601119 |
-| 40   | [史*胜](https://greatsql.cn/home.php?mod=space&uid=376)  | GCP-DBA-2024199192 |      |                                                          |                    |
+| 40   | [史*胜](https://greatsql.cn/home.php?mod=space&uid=376)  | GCP-DBA-2024199192 | 140  | [潘*](https://greatsql.cn/home.php?mod=space&uid=2776)   | GCP-DBA-2026189999 |
 | 41   | [张*](https://greatsql.cn/home.php?mod=space&uid=1795)   | GCP-DBA-2024389699 |      |                                                          |                    |
 | 42   | [任*田](https://greatsql.cn/home.php?mod=space&uid=1788) | GCP-DBA-2024320323 |      |                                                          |                    |
 | 43   | [丁*兵](https://greatsql.cn/home.php?mod=space&uid=1790) | GCP-DBA-2024130178 |      |                                                          |                    |
