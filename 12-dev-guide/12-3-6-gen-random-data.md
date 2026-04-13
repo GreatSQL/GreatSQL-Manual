@@ -1,6 +1,6 @@
 # 生成随机测试数据
 
-本节介绍使用 **mysql_random_data_load**、Shell脚本、存储过程/函数向GreatSQL数据库生存随机测试数据。
+本节介绍使用 **mysql_random_data_load**、Shell脚本、存储过程/函数向GreatSQL数据库生成随机测试数据。
 
 在 [概述章节](./12-dev-guide.md) 已安装样例数据库，若有需要生成额外测试数据，可参考本节内容。
 
