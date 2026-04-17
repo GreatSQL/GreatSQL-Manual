@@ -311,6 +311,20 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 424  | [熊*君](https://greatsql.cn/home.php?mod=space&uid=2762) | GCA-DBA-2026927293  |      |      |          |
 | 425  | [潘*](https://greatsql.cn/home.php?mod=space&uid=2776)   | GCA-DBA-2026292855  |      |      |          |
 | 426  | [黄*亮](https://greatsql.cn/home.php?mod=space&uid=270)  | GCA-DBA-2026493020  |      |      |          |
+| 427  | [蔡*健](https://greatsql.cn/home.php?mod=space&uid=2782) | GCA-DBA-2026327390  |      |      |          |
+| 428  | [周*](https://greatsql.cn/home.php?mod=space&uid=2786)   | GCA-DBA-2026655600  |      |      |          |
+| 429  | [彭*杰](https://greatsql.cn/home.php?mod=space&uid=2789) | GCA-DBA-2026697017  |      |      |          |
+| 430  | [张*仙](https://greatsql.cn/home.php?mod=space&uid=2790) | GCA-DBA-2026104996  |      |      |          |
+| 431  | [王*](https://greatsql.cn/home.php?mod=space&uid=2791)   | GCA-DBA-2026745235  |      |      |          |
+| 432  | [潘*伟](https://greatsql.cn/home.php?mod=space&uid=2793) | GCA-DBA-2026644610  |      |      |          |
+| 433  | [夏*](https://greatsql.cn/home.php?mod=space&uid=2796)   | GCA-DBA-2026948289  |      |      |          |
+| 434  | [陈*文](https://greatsql.cn/home.php?mod=space&uid=2797) | GCA-DBA-2026107979  |      |      |          |
+| 435  | [于*](https://greatsql.cn/home.php?mod=space&uid=54)     | GCA-DBA-2026713074  |      |      |          |
+| 436  | [侯*乔](https://greatsql.cn/home.php?mod=space&uid=2798) | GCA-DBA-2026945626  |      |      |          |
+| 437  | [董*林](https://greatsql.cn/home.php?mod=space&uid=2805) | GCA-DBA-2026509978  |      |      |          |
+| 438  | [莫*强](https://greatsql.cn/home.php?mod=space&uid=2799) | GCA-DBA-2026529867  |      |      |          |
+| 439  | [吴*](https://greatsql.cn/home.php?mod=space&uid=2806)   | GCA-DBA-2026454835  |      |      |          |
+| 440  | [龙*华](https://greatsql.cn/home.php?mod=space&uid=2801) | GCA-DBA-2026187163  |      |      |          |
 
 ### 通过GCP等级考核人员名单
 
@@ -358,9 +372,9 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 38   | [户*坡](https://greatsql.cn/home.php?mod=space&uid=1928) | GCP-DBA-2024591684 | 138  | [任*伟](https://greatsql.cn/home.php?mod=space&uid=2751) | GCP-DBA-2026301670 |
 | 39   | [申*俊](https://greatsql.cn/home.php?mod=space&uid=237)  | GCP-DBA-2024516937 | 139  | [黄*粟](https://greatsql.cn/home.php?mod=space&uid=2760) | GCP-DBA-2026601119 |
 | 40   | [史*胜](https://greatsql.cn/home.php?mod=space&uid=376)  | GCP-DBA-2024199192 | 140  | [潘*](https://greatsql.cn/home.php?mod=space&uid=2776)   | GCP-DBA-2026189999 |
-| 41   | [张*](https://greatsql.cn/home.php?mod=space&uid=1795)   | GCP-DBA-2024389699 |      |                                                          |                    |
-| 42   | [任*田](https://greatsql.cn/home.php?mod=space&uid=1788) | GCP-DBA-2024320323 |      |                                                          |                    |
-| 43   | [丁*兵](https://greatsql.cn/home.php?mod=space&uid=1790) | GCP-DBA-2024130178 |      |                                                          |                    |
+| 41   | [张*](https://greatsql.cn/home.php?mod=space&uid=1795)   | GCP-DBA-2024389699 | 141  | [贾*平](https://greatsql.cn/home.php?mod=space&uid=2651) | GCP-DBA-2026963226 |
+| 42   | [任*田](https://greatsql.cn/home.php?mod=space&uid=1788) | GCP-DBA-2024320323 | 142  | [蔡*健](https://greatsql.cn/home.php?mod=space&uid=2782) | GCP-DBA-2026462408 |
+| 43   | [丁*兵](https://greatsql.cn/home.php?mod=space&uid=1790) | GCP-DBA-2024130178 | 143  | [穆*青](https://greatsql.cn/home.php?mod=space&uid=1774) | GCP-DBA-2026927089 |
 | 44   | [杨*](https://greatsql.cn/home.php?mod=space&uid=1869)   | GCP-DBA-2024411236 |      |                                                          |                    |
 | 45   | [赖*芳](https://greatsql.cn/home.php?mod=space&uid=1900) | GCP-DBA-2024733365 |      |                                                          |                    |
 | 46   | [石*](https://greatsql.cn/home.php?mod=space&uid=1868)   | GCP-DBA-2024845400 |      |                                                          |                    |
