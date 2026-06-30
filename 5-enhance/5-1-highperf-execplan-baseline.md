@@ -199,8 +199,8 @@ INSTALL PLUGIN plan_baseline SONAME 'libgreatdb_plan_baseline.so';
 | 参数 | 默认值 |
 |------|--------|
 | plan_baseline_refresh_interval | 1800s |
-| plan_baseline_max_row_count | 3000 |
-| plan_baseline_max_table_count | 24 |
+| plan_baseline_max_rows_count | 3000 |
+| plan_baseline_max_tables_count | 24 |
 
 ---
 
