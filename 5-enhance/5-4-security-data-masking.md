@@ -68,7 +68,7 @@ greatsql> DROP TABLE mysql.masking_dictionaries;
 - 生成具有定义特征的随机数据
 - 使用字典生成随机数据
 
-在 GreatSQL 8.4.4-4 中，数据脱敏字典相关函数不再以 **root** 用户身份在没有密码的情况下运行内部查询。基于最佳实践原则，很多管理功能禁用了 **root** 用户。现在使用内置的 **mysql.session** 用户来执行字典查询。
+数据脱敏字典相关函数不再以 **root** 用户身份在没有密码的情况下运行内部查询。基于最佳实践原则，很多管理功能禁用了 **root** 用户。现在使用内置的 **mysql.session** 用户来执行字典查询。
 
 因此，需要把 `masking_dictionaries` 字典表对用户 **mysql.session** 授予 `SELECT, INSERT, UPDATE, DELETE` 权限。
 

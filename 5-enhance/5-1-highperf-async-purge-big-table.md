@@ -125,7 +125,7 @@
 新增系统表 `information_schema.INNODB_ASYNC_PURGE_FILES`，展示临时文件清理进度。
 
 ```sql
-# 表结构
+-- 表结构
 CREATE TEMPORARY TABLE `INNODB_ASYNC_PURGE_FILES` (
   `log_id` bigint(21) unsigned NOT NULL DEFAULT '0',
   `start_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -146,7 +146,11 @@ CREATE TEMPORARY TABLE `INNODB_ASYNC_PURGE_FILES` (
 - `message`：文件清理详细信息，如果未出错，值为NULL；如果出错，展示第几次重试和上一次的错误码
 
 
+## 异常处理
 
+有可能数据库实例需要关闭或重启（例如人为重启、执行完Clone后重启等），但此时异步删除任务还没完成，如果参数 `innodb_data_file_async_purge_all_at_shutdown` 没有设置为 ON，则会直接重启而不会等待异步删除任务先完成。实例重启后，异步删除任务不会再次执行，此时未完成的待删除文件仍存在，手动自行删除即可。
+
+在上述情况中，如果想要让异步删除任务在实例关闭或重启前务必先完成的话，可以设置  `innodb_data_file_async_purge_all_at_shutdown=ON` 即可实现，这么做的风险是如果待删除文件很多，则实例关闭或重启的耗时较长。
 
 
 **扫码关注微信公众号**

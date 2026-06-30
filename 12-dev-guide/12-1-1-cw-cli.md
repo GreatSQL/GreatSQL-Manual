@@ -26,7 +26,7 @@ $ mysql -hlocalhost -P3306 -urepl -p'GreatSQL@2024'
 mysql: [Warning] Using a password on the command line interface can be insecure.
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 174
-Server version: 8.4.4-4 GreatSQL, Release 4, Revision d73de75905d
+Server version: 8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
@@ -54,8 +54,8 @@ greatsql> SHOW VARIABLES LIKE '%version%';
 | protocol_version                                 | 10                                         |
 | replica_type_conversions                         |                                            |
 | tls_version                                      | TLSv1.2,TLSv1.3                            |
-| version                                          | 8.4.4-4                                    |
-| version_comment                                  | GreatSQL, Release 4, Revision d73de75905d  |
+| version                                          | 8.4.4-5                                    |
+| version_comment                                  | GreatSQL, Release 5, Revision 39b389cdf3b  |
 | version_compile_machine                          | x86_64                                     |
 | version_compile_os                               | Linux                                      |
 | version_compile_zlib                             | 1.2.13                                     |

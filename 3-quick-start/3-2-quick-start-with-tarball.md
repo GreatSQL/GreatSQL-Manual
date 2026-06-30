@@ -5,9 +5,9 @@
 
 ## 下载安装包
 
-[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-4)下载最新的安装包，下载以下文件：
+[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5)下载最新的安装包，下载以下文件：
 
-- GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal.tar.xz
+- GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal.tar.xz
 
 ::: tip 小贴士
 minimal 版本是对二进制文件执行 `strip` 操作，所以文件尺寸较小，功能上与正常版本一样，一般 minimal 用于测试体验环境
@@ -47,24 +47,24 @@ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools
 
 ```bash
 # 下载
-cd /usr/local && wget https://product.greatdb.com/GreatSQL-8.4.4-4/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal.tar.xz
+cd /usr/local && wget https://product.greatdb.com/GreatSQL-8.4.4-5/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal.tar.xz
 #或者用curl
 
-cd /usr/local && curl -o GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal.tar.xz https://product.greatdb.com/GreatSQL-8.4.4-4/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal.tar.xz
+cd /usr/local && curl -o GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal.tar.xz https://product.greatdb.com/GreatSQL-8.4.4-5/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal.tar.xz
 
 #解压缩
-tar xf GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal.tar.xz
+tar xf GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal.tar.xz
 ```
 
 ::: tip 小贴士
-若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-4-Linux-glibc2.28-aarch64-minimal.tar.xz`。
+若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64-minimal.tar.xz`。
 :::
 
 修改 *PATH* 环境变量，添加 GreatSQL 安装目录，方便执行命令，无需每次都指定全路径：
 
 ```bash
-export PATH=$PATH:/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/bin
-echo 'export PATH=$PATH:/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/bin' >> ~/.bash_profile
+export PATH=$PATH:/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin
+echo 'export PATH=$PATH:/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin' >> ~/.bash_profile
 ```
 
 编辑/创建 systemd 系统服务文件，配置 GreatSQL 服务文件 `vim /lib/systemd/system/greatsql.service`，文件主要内容参考下面：
@@ -106,8 +106,8 @@ Group=mysql
 Type=notify
 TimeoutSec=10
 PermissionsStartOnly=true
-ExecStartPre=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd
-ExecStart=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/bin/mysqld --defaults-file=/etc/my.cnf $MYSQLD_OPTS
+ExecStartPre=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd
+ExecStart=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysqld --defaults-file=/etc/my.cnf $MYSQLD_OPTS
 EnvironmentFile=-/etc/sysconfig/mysql
 Restart=on-failure
 RestartPreventExitStatus=1
@@ -153,20 +153,20 @@ pid-file=/var/run/mysqld/mysqld.pid
 
 ```bash
 mkdir /var/run/mysqld/ /var/lib/mysql-files/ /var/lib/mysql/
-chown mysql:mysql /var/run/mysqld/ /var/lib/mysql-files/ /var/lib/mysql/ /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/
+chown mysql:mysql /var/run/mysqld/ /var/lib/mysql-files/ /var/lib/mysql/ /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/
 ```
 
-编辑 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
+编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
 
 ## 添加动态依赖库
 
 编辑 `/etc/ld.so.conf` 文件，增加以下几行内容：
 
 ```ini
-/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/
-/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/private
-/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/mysqlrouter/
-/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/mysqlrouter/private
+/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/lib/
+/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/lib/private
+/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/lib/mysqlrouter/
+/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/lib/mysqlrouter/private
 ```
 
 保存退出，执行下面的命令，确认生效：
@@ -175,7 +175,7 @@ chown mysql:mysql /var/run/mysqld/ /var/lib/mysql-files/ /var/lib/mysql/ /usr/lo
 ldconfig && ldconfig -p | grep libprotobuf.so
 
 ...
-	libprotobuf.so.24.4.0 (libc6,x86-64) => /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/lib/private/libprotobuf.so.24.4.0
+	libprotobuf.so.24.4.0 (libc6,x86-64) => /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/lib/private/libprotobuf.so.24.4.0
 ```
 
 这个步骤的作用是加载 GreatSQL 自带的动态依赖库文件，这样在运行 mysql/mysqld 等二进制文件时可能需要用到，避免报错。
@@ -197,13 +197,13 @@ $ systemctl status greatsql
    Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; vendor preset: disabled)
    Active: active (running) since ...
      Docs: https://greatsql.cn/docs
-  Process: 47924 ExecStartPre=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+  Process: 47924 ExecStartPre=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
  Main PID: 47994 (mysqld)
    Status: "Server is operational"
     Tasks: 38 (limit: 149064)
    Memory: 444.5M
    CGroup: /system.slice/greatsql.service
-           └─47994 /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/bin/mysqld
+           └─47994 /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysqld
 
 systemd[1]: Starting GreatSQL Server...
 systemd[1]: Started GreatSQL Server.
@@ -211,7 +211,7 @@ systemd[1]: Started GreatSQL Server.
 $ ps -ef | grep mysqld
 
 ...
-mysql      47994       1  2 13:42 ?        00:00:03 /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/bin/mysqld
+mysql      47994       1  2 13:42 ?        00:00:03 /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysqld
 
 $ ss -lntp | grep mysqld
 
@@ -255,18 +255,18 @@ A temporary password is generated for root@localhost: ji!pjndiw5sJ
 复制密码即可登入GreatSQL
 
 ```bash
-$ /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64-minimal/bin/mysql -uroot
+$ /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysql -uroot
 
 ...
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
-Server version: 8.4.4-4 GreatSQL, Release 4, Revision d73de75905d
+Server version: 8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 greatsql> status;
 --------------
-mysql  Ver 8.4.4-4 for Linux on x86_64 (GreatSQL, Release 4, Revision d73de75905d)
+mysql  Ver 8.4.4-5 for Linux on x86_64 (GreatSQL, Release 5, Revision 39b389cdf3b)
 
 Connection id:          8
 Current database:
@@ -275,7 +275,7 @@ SSL:                    Not in use
 Current pager:          stdout
 Using outfile:          ''
 Using delimiter:        ;
-Server version:         8.4.4-4 GreatSQL, Release 4, Revision d73de75905d
+Server version:         8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
 Protocol version:       10
 Connection:             Localhost via UNIX socket
 Server characterset:    utf8mb4

@@ -21,6 +21,66 @@ plugin_load_add=greatdb_ha.so
 INSTALL PLUGIN greatdb_ha SONAME 'greatdb_ha.so';
 ```
 
+## 安全加固说明
+
+### 漏洞概述
+
+在早期版本中，HA 插件存在以下安全漏洞：
+
+1. **缺少认证的敏感信息读取（信息泄露）**：`get_local_listen_sock()` 将 HA 管理端口绑定到 `0.0.0.0`，任意网络可达主机均可建立连接。认证仅比较 16 字节硬编码 `"Great01HaReserv!"`，该字符串在源码中明文可见。认证通过后，`GET_BIND_VIPS` 消息类型无需任何授权即可读取并返回所有已绑定的 VIP 及网卡信息。
+
+2. **缺少认证的 VIP 劫持**：`SET_ALL_NODE_BIND_VIPS` 消息类型允许主节点向从节点下发 VIP 分配指令。由于认证仅依赖硬编码魔术字，任意攻击者可伪造此消息，触发 `ioctl(SIOCSIFADDR)` 将任意 IP 地址绑定到目标网卡。
+
+3. **线程内未捕获异常导致远程拒绝服务漏洞**：`get_view_id()` 中使用 `std::stoi()` 将 `view_id` 中冒号后的字符串转换为整数版本号，但未捕获 `std::invalid_argument` 异常。当 `view_id` 版本字段为任意非数字字符串时，会触发 `abort()` 和 `SIGABRT`，终止整个 mysqld 进程。
+
+### 解决方案
+
+经综合评估，采用 **UDF（用户定义函数）方式** 实现 HA 插件通信，废弃原有 HA 端口通信方式。主要变化如下：
+
+1. **废弃 HA 端口**：删除原 HA 端口（`greatdb_ha_port`）的 listen/accept 逻辑，改为通过 UDF 函数调用方式实现通信。
+
+2. **利用 MySQL 原生认证**：Primary 节点通过 MGR 回调获取所有 Secondary 节点的 host 和 port 信息，通过 `group_replication_recovery` 通道获取 `rpl_user` 和 `rpl_password`，使用 `mysql_real_connect()` 连接到 Secondary 节点。
+
+3. **UDF 函数注册**：在 HA 插件 init/deinit 函数中进行 UDF 函数的注册和注销。
+
+4. **权限校验**：调用 UDF 函数时，通过 `thd->security_context()->master_access() & SUPER_ACL` 和 `has_global_grant(thd->security_context(), "GROUP_REPLICATION_STREAM")` 进行鉴权。
+
+### 新旧消息对应关系
+
+| 旧版 HA 通信消息 | 新版 UDF 函数 | 返回值类型 |
+|----------------|--------------|----------|
+| GET_BIND_VIPS | `SELECT HA_GET_BIND_VIPS('viewid')` | STRING_RESULT |
+| SET_ALL_NODE_BIND_VIPS | `SELECT HA_SET_ALL_NODE_BIND_VIPS('viewid;UUID1:vip1,vip2;UUID2:vip3;')` | 函数返回值 |
+| OK_REPLY | ok | 函数返回值 |
+| ERROR_REPLY | 抛出的 error 信息 | error 包 |
+| YOU_ARE_NOT_PRIMARY | you_are_not_primary | 函数返回值 |
+
+### 配置参数变化
+
+**废弃的参数**（不再需要配置）：
+- `greatdb_ha_port` - HA 通信端口已废弃，改为通过 MySQL 3306 端口进行 UDF 通信
+
+**保留的参数**：
+- `greatdb_ha_enable_mgr_vip` - 动态 VIP 总开关
+- `greatdb_ha_mgr_vip_ip` - Primary 节点绑定的 VIP 地址
+- `greatdb_ha_mgr_vip_mask` - VIP 地址相应的掩码
+- `greatdb_ha_mgr_vip_nic` - 要绑定的网卡名
+- `greatdb_ha_send_arp_packge_times` - ARP 包广播重复次数
+- `greatdb_ha_mgr_read_vip_ips` - Secondary 节点绑定的 VIP 地址
+- `greatdb_ha_mgr_read_vip_floating_type` - 只读 VIP 漂移策略
+- `greatdb_ha_vip_tope` - 只读 VIP 的拓扑关系（运行时动态修改）
+- `greatdb_ha_force_change_mgr_vip` - 强制重新绑定 VIP
+
+### 升级注意事项
+
+1. **版本兼容性**：新版 HA 插件采用 UDF 通信方式，与旧版 HA 端口通信方式不兼容。升级时需要所有 MGR 节点同时升级。
+
+2. **防火墙规则**：由于废弃了 HA 端口，可以移除相关防火墙规则。MySQL 3306 端口需要保持可访问。
+
+3. **进程列表**：通过 `SHOW PROCESSLIST` 可以查看 UDF 通信连接的使用情况。
+
+4. **连接占用**：UDF 通信方式会占用 `max_connections` 的连接数。Primary 节点会连接到每个 Secondary 节点，请确保连接数配置充足。
+
 ## 配置参数
 
 在 *my.cnf* 配置文件 *[mysqld]* 区间中，增加下面相关配置参数。
@@ -61,12 +121,6 @@ greatdb_ha_mgr_read_vip_ips="172.17.140.251"
 greatdb_ha_mgr_read_vip_floating_type="TO_ANOTHER_SECONDARY"
 ```
 
-- 配置动态绑定VIP服务专用通信端口`greatdb_ha_port`。各节点通过该端口进行通信数据传输，当Primary节点发生状态变更时，会根据预设的VIP绑定关系，按照 **变更小、平均分配** 的原则重新分配VIP绑定关系，并将VIP绑定关系通过专用通信端口发送给相应节点（该节点可能已被投票选为新的Primary节点，或被投票去掉Primary角色），该节点根据新的绑定关系解绑或绑定VIP。
-
-```ini
-greatdb_ha_port=33062
-```
-
 - 配置只读VIP的拓扑关系`greatdb_ha_vip_tope`，可以在运行状态下强行修改拓扑关系。当MGR只读节点发生状态变更时，可能需要重新配置其拓扑关系。关于该参数的使用注意事项有以下几点：
   - 该参数不能在配置文件中提前预设配置；
   - 变更操作只能在Primary节点上执行；
@@ -78,7 +132,7 @@ greatdb_ha_port=33062
 SET GLOABL greatdb_ha_vip_tope="node1_uuid1::vip1; node2_uuid2::vip2,vip3; node3_uuid3::vip4";
 ```
 
-- 配置要绑定的网卡名`greatdb_ha_mgr_vip_nic`。插件会将VIP绑定到Primary节点所在服务器指定的网卡上，为了防止该网卡上原有的IP被覆盖，实际上是绑定在 **指定网卡名:0** 的网卡上，例如 **eth0:0**。如果在同一个服务器中运行多实例，则需要分别对每个实例设置不同的网卡名，而不能多个实例对同一个网卡绑定不同的VIP。如第一个实例设置`greatdb_ha_mgr_vip_nic='eth0:0'`，第二个实例设置`greatdb_ha_mgr_vip_nic='eth0:1'`，将二者区分开。同样地，各个实例也要设置不同的`greatdb_ha_port`参数值。
+- 配置要绑定的网卡名`greatdb_ha_mgr_vip_nic`。插件会将VIP绑定到Primary节点所在服务器指定的网卡上，为了防止该网卡上原有的IP被覆盖，实际上是绑定在 **指定网卡名:0** 的网卡上，例如 **eth0:0**。如果在同一个服务器中运行多实例，则需要分别对每个实例设置不同的网卡名，而不能多个实例对同一个网卡绑定不同的VIP。如第一个实例设置`greatdb_ha_mgr_vip_nic='eth0:0'`，第二个实例设置`greatdb_ha_mgr_vip_nic='eth0:1'`，将二者区分开。
 
 ```ini
 greatdb_ha_mgr_vip_nic='eth0'
@@ -112,7 +166,6 @@ greatdb_ha_enable_mgr_vip=ON
 greatdb_ha_mgr_vip_ip="172.17.140.250"
 greatdb_ha_mgr_vip_mask="255.255.255.0"
 greatdb_ha_mgr_vip_nic="eth0"
-greatdb_ha_port=33062
 greatdb_ha_mgr_read_vip_ips="172.17.140.251"
 #greatdb_ha_mgr_read_vip_ips="172.17.140.251,172.17.140.252"
 greatdb_ha_mgr_read_vip_floating_type="TO_ANOTHER_SECONDARY"
@@ -124,6 +177,8 @@ report_port=3306
 group_replication_single_primary_mode=ON
 group_replication_enforce_update_everywhere_checks=OFF
 ```
+
+**注意**：新版配置中不再需要配置 `greatdb_ha_port` 参数。
 
 当Primary节点上绑定的 VIP 被手动删除或者出现异常导致 VIP 绑定行为异常时，可以通过在Primary节点上执行SQL命令`SET GLOBAL greatdb_ha_force_change_mgr_vip=ON`，其作用是重新获取MGR拓扑结构，并重新绑定VIP。该命令执行完后，参数`greatdb_ha_force_change_mgr_vip`的值仍为**OFF**，这个是符合预期的行为。
 
@@ -224,11 +279,9 @@ $ ldconfig && ldconfig -p | grep -i 'libprotobuf.so'
 
 2. 为了保证MGR节点间能正常通信，需要在各个MGR节点的系统 `/etc/hosts` 文件中配置各个节点的host和ip对应关系，**更推荐的做法是在每个MGR节点中都配置`report_host`**，以确保能够通过`performance_schema.replication_group_members`表中的`MEMBER_HOST`列连接到其他节点，否则有可能导致MGR节点角色切换时VIP漂移绑定失败。
 
-3. 动态绑定VIP需要新启动一个额外通信端口（由参数`greatdb_ha_port`指定），请修改并检查防火墙规则，确保该端口不会被屏蔽。
+3. 只支持MGR单主模式（Single-Primary），不支持多主模式（Multi-Primary），所以要确保参数设置正确`group_replication_single_primary_mode=ON`以及`group_replication_enforce_update_everywhere_checks=OFF`。
 
-4. 只支持MGR单主模式（Single-Primary），不支持多主模式（Multi-Primary），所以要确保参数设置正确`group_replication_single_primary_mode=ON`以及`group_replication_enforce_update_everywhere_checks=OFF`。
-
-5. 当存在多张网卡时，可能出现VIP漂移后无法主动广播MAC地址的情况，可以在服务器上定时主动执行`arping`对外广播MAC地址。例如：
+4. 当存在多张网卡时，可能出现VIP漂移后无法主动广播MAC地址的情况，可以在服务器上定时主动执行`arping`对外广播MAC地址。例如：
 
 ```bash
 /usr/sbin/arping -U -I bond0 -c 3 172.17.140.254
@@ -270,6 +323,8 @@ net.ipv6.conf.eth1.accept_dad = 0
 net.ipv6.conf.all.use_tempaddr = 0
 net.ipv6.conf.default.use_tempaddr = 0
 ```
+
+6. **rpl_user 配置要求**：UDF 通信方式依赖 `group_replication_recovery` 通道的 rpl_user 和 rpl_password。验证表明，不配置 change master 的 rpl_user 会导致 MGR 启动成功后一段时间报错退出，因此必须正确配置 rpl_user。
 
 ## 在Docker容器中使用内置VIP功能
 
@@ -334,7 +389,6 @@ greatdb_ha_enable_mgr_vip=ON
 greatdb_ha_mgr_vip_nic='eth0'
 greatdb_ha_mgr_vip_ip='172.17.0.40'
 greatdb_ha_mgr_vip_mask='255.255.0.0'
-greatdb_ha_port=33062
 #greatdb_ha_mgr_read_vip_ips="172.17.0.41,172.17.0.42"
 greatdb_ha_mgr_read_vip_floating_type="TO_ANOTHER_SECONDARY"
 greatdb_ha_send_arp_packge_times=5
@@ -343,6 +397,8 @@ report_host=172.17.0.4
 report_port=3306
 ...
 ```
+
+**注意**：新版配置中不再需要配置 `greatdb_ha_port` 参数。
 
 5. 在已经完成GreatSQL数据初始化操作之后，启动GreatSQL服务进程（确认是以root身份运行）。
 
@@ -370,11 +426,10 @@ root        1518       1  1 07:02 ?        00:00:23 /usr/sbin/mysqld
 | greatdb_ha_mgr_vip_ip                            | 172.17.0.40                                       |
 | greatdb_ha_mgr_vip_mask                          | 255.255.0.0                                       |
 | greatdb_ha_mgr_vip_nic                           | eth0                                              |
-| greatdb_ha_port                                  | 33062                                             |
 | greatdb_ha_send_arp_packge_times                 | 5                                                 |
 | greatdb_ha_vip_tope                              | bcd374fc-593c-11ef-a05e-0242ac110004::172.17.0.40 |
 +--------------------------------------------------+---------------------------------------------------+
-13 rows in set (0.00 sec)
+12 rows in set (0.00 sec)
 ```
 
 7. 在容器中系统层查看VIP绑定/运行状态。

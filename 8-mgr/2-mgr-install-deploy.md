@@ -2,7 +2,7 @@
 
 ---
 
-本文介绍如何利用手动方式和 MySQL Shell for GreatSQL（以下简称 GreatSQL Shell）方式基于 GreatSQL 8.4.4-4 构建一个三节点的MGR集群。
+本文介绍如何利用手动方式和 MySQL Shell for GreatSQL（以下简称 GreatSQL Shell）方式基于 GreatSQL 8.4.4-5 构建一个三节点的MGR集群。
 
 ## 利用手动方式构建MGR
 
@@ -20,11 +20,11 @@
 
 下载GreatSQL二进制文件包，下载地址：*https://gitee.com/GreatSQL/GreatSQL/releases* 。
 
-本文以 CentOS x86_64 环境为例，下载的二进制包名为： `GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz`，放在 `/usr/local` 目录下并解压缩：
+本文以 CentOS x86_64 环境为例，下载的二进制包名为： `GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz`，放在 `/usr/local` 目录下并解压缩：
 ```bash
 $ cd /usr/local
-$ tar xf GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
-$ cd GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64
+$ tar xf GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz
+$ cd GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64
 $ ls
 
 bin    COPYING-jemalloc  include  LICENSE         LICENSE-test  mysqlrouter-log-rotate  README.router  run    support-files
@@ -37,7 +37,7 @@ cmake  docs              lib      LICENSE.router  man           README          
 #/etc/my.cnf
 [mysqld]
 user = mysql
-basedir=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64
+basedir=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64
 datadir=/data/GreatSQL
 port=3306
 server_id=103306
@@ -52,13 +52,13 @@ enforce_gtid_consistency=ON
 先初始化GreatSQL：
 ```bash
 mkdir -p /data/GreatSQL && chown -R mysql:mysql /data/GreatSQL
-/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf --initialize-insecure
+/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf --initialize-insecure
 ```
 **注意**：不要在生产环境中使用 `--initialize-insecure` 选项进行初始化安装，因为这么做的话，超级管理员root账号默认是空密码，任何人都可以使用该账号登录数据库，存在安全风险，本文中只是为了演示方便才这么做。
 
 启动GreatSQL：
 ```bash
-/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf &
+/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf &
 ```
 如果不出意外，则能正常启动GreatSQL。用同样的方法也完成对另外两个节点的初始化。
 
@@ -138,7 +138,7 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 #my.cnf
 [mysqld]
 user = mysql
-basedir=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64
+basedir=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64
 datadir=/data/GreatSQL
 port=3306
 server_id=113306
@@ -220,7 +220,7 @@ greatsql> SELECT * FROM t1;
 
 ## 使用GreatSQL Shell构建MGR
 
-接下来介绍如何利用 GreatSQL Shell 基于 GreatSQL 8.4.4-4 构建一个三节点的MGR集群。
+接下来介绍如何利用 GreatSQL Shell 基于 GreatSQL 8.4.4-5 构建一个三节点的MGR集群。
 
 ::: tip 小贴士
 仲裁节点（投票节点）为 GreatSQL 数据库原生支持的特性，**GreatSQL Shell 可正常识别并对该特性进行相关操作**，而 MySQL Shell 社区版暂不支持识别 GreatSQL 的仲裁节点（投票节点），无法开展对应操作。

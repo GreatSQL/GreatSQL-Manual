@@ -18,7 +18,7 @@ GreatSQL 8.4 版本审计功能相较于8.0版本有较大变化，从之前的�
 ```sql
 -- 安装和启用审计日志过滤器组件
 -- %basedir% 是 GreatSQL 二进制包安装目录
--- 如用 TAR 包安装时放在 /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/share 目录下
+-- 如用 TAR 包安装时放在 /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/share 目录下
 -- 或用 RPM 包安装时放在 /usr/share/mysql 目录下
 
 -- 先切换到mysql系统库

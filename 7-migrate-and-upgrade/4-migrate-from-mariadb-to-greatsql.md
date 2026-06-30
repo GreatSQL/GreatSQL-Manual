@@ -92,7 +92,7 @@ MariaDB 是一个开源的关系型数据库管理系统（RDBMS），由 MySQL 
 
 ## 迁移前准备
 
-首先下载GreatSQL 8.4版本安装包，推荐选择最新的[GreatSQL 8.4.4-4版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.4.4-4)，至于选择RPM还是二进制包看具体情况及个人喜好。
+首先下载GreatSQL 8.4版本安装包，推荐选择最新的[GreatSQL 8.4.4-5版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.4.4-5)，至于选择RPM还是二进制包看具体情况及个人喜好。
 
 本文选用二进制包方式安装。
 

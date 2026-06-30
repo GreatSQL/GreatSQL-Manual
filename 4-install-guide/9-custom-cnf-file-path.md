@@ -59,7 +59,7 @@ cat /usr/lib/systemd/system/greatsql.service
 
 ```ini
 # 自定义配置文件路径为 /opt/my.cnf
-ExecStart=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/opt/my.cnf $MYSQLD_OPTS
+ExecStart=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/opt/my.cnf $MYSQLD_OPTS
 ```
 
 - 3. 保存并退出编辑器
@@ -84,14 +84,14 @@ systemctl restart greatsql
 
 ```bash
 # 自定义配置文件路径为 /opt/my.cnf
-/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/opt/my.cnf &
+/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/opt/my.cnf &
 ```
 
 也可以使用`mysqld_safe`命令：
 
 ```bash
 # 自定义配置文件路径为 /opt/my.cnf
-/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld_safe --defaults-file=/opt/my.cnf &
+/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_safe --defaults-file=/opt/my.cnf &
 ```
 
 查看GreatSQL日志文件，确认自定义配置文件生效并能正确启动。

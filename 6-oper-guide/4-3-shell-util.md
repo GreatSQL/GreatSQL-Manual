@@ -13,7 +13,7 @@ $ mysqlsh -S/data/GreatSQL/mysql.sock -uroot -p
 
 MySQL Shell 8.0.32
 ...
-Server version: 8.4.4-4  GreatSQL, Release 4, Revision d73de75905d
+Server version: 8.4.4-5  GreatSQL, Release 5, Revision 39b389cdf3b
 No default schema selected; type \use <schema> to set one.
 
  MySQL  localhost  JS >
@@ -93,7 +93,7 @@ Util.loadDump: local_infile disabled in server (MYSQLSH 53025)
 
 Loading DDL and Data from '/data/backup/20230830' using 4 threads.
 Opening dump...
-Target is GreatSQL 8.4.4-4. Dump was produced from GreatSQL 8.4.4-4
+Target is GreatSQL 8.4.4-5. Dump was produced from GreatSQL 8.4.4-5
 NOTE: Load progress file detected. Load will be resumed from where it was left, assuming no external updates were made.
 You may enable the 'resetProgress' option to discard progress for this MySQL instance and force it to be completely reloaded.
 Scanning metadata - done
@@ -115,7 +115,7 @@ Recreating indexes - done
 
 Loading DDL and Data from '/data/backup/20230830' using 4 threads.
 Opening dump...
-Target is GreatSQL 8.4.4-4 Dump was produced from GreatSQL 8.4.4-4
+Target is GreatSQL 8.4.4-5 Dump was produced from GreatSQL 8.4.4-5
 Scanning metadata - done
 Checking for pre-existing objects...
 ERROR: Schema `sys_audit` already contains a table named audit_log

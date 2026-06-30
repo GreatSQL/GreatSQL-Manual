@@ -101,11 +101,11 @@ microdnf update -y && microdnf clean all
 ```bash
 mkdir -p /opt && \
 cd /opt && \
-curl -kOL -o greatsql-8.4.4.tar.xz https://product.greatdb.com/GreatSQL-8.4.4-4/greatsql-8.4.4-4.tar.xz && \
+curl -kOL -o greatsql-8.4.4.tar.xz https://product.greatdb.com/GreatSQL-8.4.4-5/greatsql-8.4.4-5.tar.xz && \
 curl -kOL -o boost_1_77_0.tar.bz2 https://sourceforge.net/projects/boost/files/boost/1.77.0/boost_1_77_0.tar.bz2 && \
 curl -kOL -o patchelf-0.14.5.tar.gz https://gitee.com/GreatSQL/GreatSQL-Docker/raw/master/deppkgs/patchelf-0.14.5.tar.gz && 
 curl -kOL -o rpcgen-1.3.1-4.el8.x86_64.rpm https://gitee.com/GreatSQL/GreatSQL-Docker/raw/master/deppkgs/rpcgen-1.3.1-4.el8.x86_64.rpm && 
-tar xf greatsql-8.4.4-4.tar.xz && \
+tar xf greatsql-8.4.4-5.tar.xz && \
 tar xf patchelf-0.14.5.tar.gz && \
 tar xjf boost_1_77_0.tar.bz2
 ```
@@ -154,7 +154,7 @@ export MAJOR_VERSION=8 && \
 MINOR_VERSION=4 && \
 PATCH_VERSION=4 && \
 RELEASE=4 && \
-REVISION=d73de75905d && \
+REVISION=39b389cdf3b && \
 OPT_DIR=/opt && \
 GLIBC=`ldd --version | head -n 1 | awk '{print $NF}'` && \
 ARCH=`uname -p` && \
@@ -163,7 +163,7 @@ GREATSQL=GreatSQL-${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}-${RELEASE}-
 MAKELOG=/tmp/greatsql-make.log && \
 BOOST="boost_1_77_0" && \
 DEST_DIR=${OPT_DIR}/${GREATSQL} && \
-cd /opt/greatsql-8.4.4-4/ && \
+cd /opt/greatsql-8.4.4-5/ && \
 mkdir bld && \
 cd bld && \
 cmake .. \
@@ -223,20 +223,20 @@ make -j14 install >> ${MAKELOG} 2>&1
 ls -la /opt
 
 ...
-drwxrwxr-x 13 root root       293 Oct 16 06:45 GreatSQL-8.4.4-4-ol-glibc2.28-x86_64
+drwxrwxr-x 13 root root       293 Oct 16 06:45 GreatSQL-8.4.4-5-ol-glibc2.28-x86_64
 drwxr-xr-x  8 root root      4096 Aug  5  2021 boost_1_77_0
 -rw-r--r--  1 root root  92029112 Aug  5  2021 boost_1_77_0.tar.xz
-drwxr-xr-x 35 root root      4096 Oct 16 06:29 greatsql-8.4.4-4
--rw-r--r--  1 root root 404712372 Oct 13 02:24 greatsql-8.4.4-4.tar.xz
+drwxr-xr-x 35 root root      4096 Oct 16 06:29 greatsql-8.4.4-5
+-rw-r--r--  1 root root 404712372 Oct 13 02:24 greatsql-8.4.4-5.tar.xz
 -rw-r--r--  1 root root    124767 Oct 16 04:53 patchelf-0.14.5.tar.gz
 drwxr-xr-x  3 root root        28 Oct 16 04:51 rh
 -rw-r--r--  1 root root     53424 Oct 16 04:53 rpcgen-1.3.1-4.el8.x86_64.rpm
 
 
-/opt/GreatSQL-8.4.4-4-ol-glibc2.28-x86_64/bin/mysqld -V
+/opt/GreatSQL-8.4.4-5-ol-glibc2.28-x86_64/bin/mysqld -V
 
 ...
-/opt/GreatSQL-8.4.4-4-ol-glibc2.28-x86_64/bin/mysqld  Ver 8.4.4-4 for Linux on x86_64 (GreatSQL, Release 4, Revision d73de75905d)
+/opt/GreatSQL-8.4.4-5-ol-glibc2.28-x86_64/bin/mysqld  Ver 8.4.4-5 for Linux on x86_64 (GreatSQL, Release 5, Revision 39b389cdf3b)
 ```
 
 这就完成 GreatSQL 二进制包的编译工作了。
@@ -264,10 +264,10 @@ mkdir -p /opt/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 **3. 准备 RPM 编译相关文件**
 
 ```bash
-cd /opt/greatsql-8.4.4-4/build-gs/rpm/ && \
+cd /opt/greatsql-8.4.4-5/build-gs/rpm/ && \
 cp mysql-5.7-sharedlib-rename.patch mysql_config.sh mysqld.cnf /opt/rpmbuild/SOURCES && \
 cd /opt && \
-cp boost_1_77_0.tar.xz greatsql-8.4.4-4.tar.xz /opt/rpmbuild/SOURCES
+cp boost_1_77_0.tar.xz greatsql-8.4.4-5.tar.xz /opt/rpmbuild/SOURCES
 ```
 
 下载 *greatsql.spec* 文件到本地：
@@ -284,7 +284,7 @@ cd /opt/rpmbuild && \
 rpmbuild --nodebuginfo --define "_smp_mflags -j14" --define 'dist .ol8' --define "_topdir /opt/rpmbuild/" -bs ./SPECS/greatsql.spec
 
 ...
-Wrote: /opt/rpmbuild/SRPMS/greatsql-8.4.4-4.1.ol8.src.rpm
+Wrote: /opt/rpmbuild/SRPMS/greatsql-8.4.4-5.1.ol8.src.rpm
 ```
 
 如果顺利的话就会生成相应的 src.rpm 包，这个 src.rpm 包文件可以拷贝到其他相同服务器环境中编译 RPM 包。
@@ -295,7 +295,7 @@ Wrote: /opt/rpmbuild/SRPMS/greatsql-8.4.4-4.1.ol8.src.rpm
 
 ```bash
 cd /opt/rpmbuild && \
-rpmbuild --nodebuginfo --define "_smp_mflags -j14" --define 'dist .ol8' --define "_topdir /opt/rpmbuild/" --rebuild SRPMS/greatsql-8.4.4-4.1.ol8.src.rpm > ./rpmbuild.log 2>&1
+rpmbuild --nodebuginfo --define "_smp_mflags -j14" --define 'dist .ol8' --define "_topdir /opt/rpmbuild/" --rebuild SRPMS/greatsql-8.4.4-5.1.ol8.src.rpm > ./rpmbuild.log 2>&1
 ```
 
 编译成功后，生成的 RPM 包文件放在 RPMS 目录下：
@@ -314,20 +314,20 @@ drwxr-xr-x 2 root root 4096 Oct 16 10:14 x86_64
 total 977920
 drwxr-xr-x 2 root root      4096 Oct 16 10:14 .
 drwxr-xr-x 3 root root        20 Oct 16 10:11 ..
--rw-r--r-- 1 root root  70747972 Oct 16 10:12 greatsql-client-8.4.4-4.1.ol8.x86_64.rpm
--rw-r--r-- 1 root root   8707856 Oct 16 10:14 greatsql-devel-8.4.4-4.1.ol8.x86_64.rpm
--rw-r--r-- 1 root root   2273872 Oct 16 10:14 greatsql-icu-data-files-8.4.4-4.1.ol8.x86_64.rpm
--rw-r--r-- 1 root root  74873792 Oct 16 10:14 greatsql-mysql-router-8.4.4-4.1.ol8.x86_64.rpm
--rw-r--r-- 1 root root 406446944 Oct 16 10:12 greatsql-server-8.4.4-4.1.ol8.x86_64.rpm
--rw-r--r-- 1 root root   5403800 Oct 16 10:14 greatsql-shared-8.4.4-4.1.ol8.x86_64.rpm
--rw-r--r-- 1 root root 432917028 Oct 16 10:14 greatsql-test-8.4.4-4.1.ol8.x86_64.rpm
+-rw-r--r-- 1 root root  70747972 Oct 16 10:12 greatsql-client-8.4.4-5.1.ol8.x86_64.rpm
+-rw-r--r-- 1 root root   8707856 Oct 16 10:14 greatsql-devel-8.4.4-5.1.ol8.x86_64.rpm
+-rw-r--r-- 1 root root   2273872 Oct 16 10:14 greatsql-icu-data-files-8.4.4-5.1.ol8.x86_64.rpm
+-rw-r--r-- 1 root root  74873792 Oct 16 10:14 greatsql-mysql-router-8.4.4-5.1.ol8.x86_64.rpm
+-rw-r--r-- 1 root root 406446944 Oct 16 10:12 greatsql-server-8.4.4-5.1.ol8.x86_64.rpm
+-rw-r--r-- 1 root root   5403800 Oct 16 10:14 greatsql-shared-8.4.4-5.1.ol8.x86_64.rpm
+-rw-r--r-- 1 root root 432917028 Oct 16 10:14 greatsql-test-8.4.4-5.1.ol8.x86_64.rpm
 ```
 
 最后，将编译得到的二进制包及 RPM 包拷贝到宿主机中
 
 ```bash
 # 拷贝二进制包
-docker cp greatsql_build:/opt/GreatSQL-8.4.4-4-ol-glibc2.28-x86_64 /opt
+docker cp greatsql_build:/opt/GreatSQL-8.4.4-5-ol-glibc2.28-x86_64 /opt
 
 # 拷贝 RPM 包
 docker cp greatsql_build:/opt/rpmbuild/RPMS /opt

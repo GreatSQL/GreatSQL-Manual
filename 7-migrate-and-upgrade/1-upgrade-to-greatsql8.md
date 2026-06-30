@@ -115,7 +115,7 @@ MySQL 8.4 是第一个长期支持版本（LTS），基于此的 GreatSQL 8.4 �
 
 ### 升级准备
 
-首先下载 GreatSQL 8.4 版本安装包，推荐选择最新的[GreatSQL 8.4.4-4版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.4.4-4)，至于选择RPM还是二进制包看具体情况及个人喜好。
+首先下载 GreatSQL 8.4 版本安装包，推荐选择最新的[GreatSQL 8.4.4-5版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.4.4-5)，至于选择RPM还是二进制包看具体情况及个人喜好。
 
 本文假定升级前后都是二进制包方式安装。
 
@@ -153,7 +153,7 @@ upgrade=FORCE
 [System] [MY-013381] [Server] Server upgrade from '80032' to '80404' started.
 [System] [MY-013381] [Server] Server upgrade from '80032' to '80404' completed.
 ...
-[System] [MY-010931] [Server] /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.4.4-4'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 4, Revision d73de75905d.
+[System] [MY-010931] [Server] /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.4.4-5'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 5, Revision 39b389cdf3b.
 ```
 
 如果想要看到完整升级过程，还可以加上两个选项 `log_error_verbosity=3` 以及 `innodb_print_ddl_logs=ON`，输出的日志就会多很多：
@@ -200,7 +200,7 @@ upgrade=FORCE
 [Note] [MY-013394] [Server] Checking 'sys' schema.
 [System] [MY-013381] [Server] Server upgrade from '80032' to '80404' completed.
 ...
-[System] [MY-010931] [Server] /usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.4.4-4'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 4, Revision d73de75905d.
+[System] [MY-010931] [Server] /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld: ready for connections. Version: '8.4.4-5'  socket: 'mysql.sock'  port: 3306  GreatSQL, Release 5, Revision 39b389cdf3b.
 ```
 
 **建议**：在 GreatSQL 8.4 服务第一次启动完成后，先关闭后再次启动，以确保升级成功。
