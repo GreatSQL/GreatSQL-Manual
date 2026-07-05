@@ -333,8 +333,8 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 446  | [黄*涛](https://greatsql.cn/home.php?mod=space&uid=2830) | GCA-DBA-2026378541  | 496  |      |          |
 | 447  | [刘*杰](https://greatsql.cn/home.php?mod=space&uid=2832) | GCA-DBA-2026820980  | 497  |      |          |
 | 448  | [李*亭](https://greatsql.cn/home.php?mod=space&uid=2835) | GCA-DBA-2026110959  | 498  |      |          |
-| 449  |  |   | 499  |      |          |
-| 450  |  |   | 500  |      |          |
+| 449  | [吕*飞](https://greatsql.cn/home.php?mod=space&uid=1486) | GCA-DBA-2026236341  | 499  |      |          |
+| 450  | [刘*轩](https://greatsql.cn/home.php?mod=space&uid=2775) | GCA-DBA-2026215372  | 500  |      |          |
 
 ### 通过GCP等级考核人员名单
 
@@ -394,7 +394,7 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 50   | [陈*超](https://greatsql.cn/home.php?mod=space&uid=2052) | GCP-DBA-2025610872 | 150  | [吴*](https://greatsql.cn/home.php?mod=space&uid=2806)   | GCP-DBA-2026102899 |
 | 51   | [崔*](https://greatsql.cn/home.php?mod=space&uid=1833)   | GCP-DBA-2025644368 | 151  | [王*](https://greatsql.cn/home.php?mod=space&uid=2791)   | GCP-DBA-2026845123 |
 | 52   | [吴*明](https://greatsql.cn/home.php?mod=space&uid=301)  | GCP-DBA-2025607785 | 152  | [张*渭](https://greatsql.cn/home.php?mod=space&uid=1485) | GCP-DBA-2026450529 |
-| 53   | [宋*学](https://greatsql.cn/home.php?mod=space&uid=1974) | GCP-DBA-2025168189 | 153  |                                                          |                    |
+| 53   | [宋*学](https://greatsql.cn/home.php?mod=space&uid=1974) | GCP-DBA-2025168189 | 153  | [李*亭](https://greatsql.cn/home.php?mod=space&uid=2835) | GCP-DBA-2026835060 |
 | 54   | [杨*森](https://greatsql.cn/home.php?mod=space&uid=2031) | GCP-DBA-2025532543 | 154  |                                                          |                    |
 | 55   | [冯*](https://greatsql.cn/home.php?mod=space&uid=2051)   | GCP-DBA-2025408189 | 155  |                                                          |                    |
 | 56   | [武*军](https://greatsql.cn/home.php?mod=space&uid=2042) | GCP-DBA-2025162222 | 156  |                                                          |                    |
