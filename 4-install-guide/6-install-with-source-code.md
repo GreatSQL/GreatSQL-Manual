@@ -94,6 +94,8 @@ microdnf update -y && microdnf clean all
 1. 如果有遇到个别包不存在或报错，从列表中去掉即可。
 
 2. 如果是在 ARM 架构下，可以不用安装 jemalloc, jemalloc-devel 这两个包。
+
+3. 上述前置工具软件包安装完毕后，执行 `gcc -v` 查看gcc版本号，通常来说版本号不要低于gcc 10，否则可能导致编译失败。
 :::
 
 **2. 下载GreatSQL、boost源码包**
@@ -102,12 +104,12 @@ microdnf update -y && microdnf clean all
 mkdir -p /opt && \
 cd /opt && \
 curl -kOL -o greatsql-8.4.4.tar.xz https://product.greatdb.com/GreatSQL-8.4.4-5/greatsql-8.4.4-5.tar.xz && \
-curl -kOL -o boost_1_77_0.tar.bz2 https://sourceforge.net/projects/boost/files/boost/1.77.0/boost_1_77_0.tar.bz2 && \
+curl -kOL -o boost_1_84_0.tar.bz2 https://sourceforge.net/projects/boost/files/boost/1.84.0/boost_1_84_0.tar.bz2 && \
 curl -kOL -o patchelf-0.14.5.tar.gz https://gitee.com/GreatSQL/GreatSQL-Docker/raw/master/deppkgs/patchelf-0.14.5.tar.gz && 
 curl -kOL -o rpcgen-1.3.1-4.el8.x86_64.rpm https://gitee.com/GreatSQL/GreatSQL-Docker/raw/master/deppkgs/rpcgen-1.3.1-4.el8.x86_64.rpm && 
 tar xf greatsql-8.4.4-5.tar.xz && \
 tar xf patchelf-0.14.5.tar.gz && \
-tar xjf boost_1_77_0.tar.bz2
+tar xjf boost_1_84_0.tar.bz2
 ```
 
 **3. 编译安装patchelf**
@@ -153,7 +155,7 @@ apt install -y rpcgen
 export MAJOR_VERSION=8 && \
 MINOR_VERSION=4 && \
 PATCH_VERSION=4 && \
-RELEASE=4 && \
+RELEASE=5 && \
 REVISION=39b389cdf3b && \
 OPT_DIR=/opt && \
 GLIBC=`ldd --version | head -n 1 | awk '{print $NF}'` && \
@@ -161,7 +163,7 @@ ARCH=`uname -p` && \
 OS=`grep '^ID=' /etc/os-release | sed 's/.*"\(.*\)".*/\1/ig'` && \
 GREATSQL=GreatSQL-${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}-${RELEASE}-${OS}-glibc${GLIBC}-${ARCH} && \
 MAKELOG=/tmp/greatsql-make.log && \
-BOOST="boost_1_77_0" && \
+BOOST="boost_1_84_0" && \
 DEST_DIR=${OPT_DIR}/${GREATSQL} && \
 cd /opt/greatsql-8.4.4-5/ && \
 mkdir bld && \
@@ -224,8 +226,8 @@ ls -la /opt
 
 ...
 drwxrwxr-x 13 root root       293 Oct 16 06:45 GreatSQL-8.4.4-5-ol-glibc2.28-x86_64
-drwxr-xr-x  8 root root      4096 Aug  5  2021 boost_1_77_0
--rw-r--r--  1 root root  92029112 Aug  5  2021 boost_1_77_0.tar.xz
+drwxr-xr-x  8 root root      4096 Aug  5  2021 boost_1_84_0
+-rw-r--r--  1 root root 145151722 Aug  5  2021 boost_1_84_0.tar.xz
 drwxr-xr-x 35 root root      4096 Oct 16 06:29 greatsql-8.4.4-5
 -rw-r--r--  1 root root 404712372 Oct 13 02:24 greatsql-8.4.4-5.tar.xz
 -rw-r--r--  1 root root    124767 Oct 16 04:53 patchelf-0.14.5.tar.gz
@@ -267,7 +269,7 @@ mkdir -p /opt/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 cd /opt/greatsql-8.4.4-5/build-gs/rpm/ && \
 cp mysql-5.7-sharedlib-rename.patch mysql_config.sh mysqld.cnf /opt/rpmbuild/SOURCES && \
 cd /opt && \
-cp boost_1_77_0.tar.xz greatsql-8.4.4-5.tar.xz /opt/rpmbuild/SOURCES
+cp boost_1_84_0.tar.xz greatsql-8.4.4-5.tar.xz /opt/rpmbuild/SOURCES
 ```
 
 下载 *greatsql.spec* 文件到本地：
