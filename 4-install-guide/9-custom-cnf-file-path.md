@@ -4,7 +4,7 @@
 
 ## RPM包方式安装GreatSQL时自定义my.cnf文件路径
 
-使用RPM包方式成功安装GreatSQL之后，默认采用systemd管理GreatSQL数据库服务，默认的配置文件路径为`/etc/my.cnf`。如果需要使用自定义路径的配置文件，可以通过修改systemd服务配置文件来实现。
+使用RPM包方式成功安装GreatSQL之后，默认采用systemd管理 GreatSQL 数据库服务，默认的配置文件路径为`/etc/my.cnf`。如果需要使用自定义路径的配置文件，可以通过修改systemd服务配置文件来实现。
 
 下面以CentOS系统环境为例，说明如何自定义my.cnf文件路径。
 
@@ -35,7 +35,7 @@ ExecStart=/usr/sbin/mysqld --defaults-file=/opt/my.cnf $MYSQLD_OPTS
 systemctl daemon-reload
 ```
 
-6. 重启GreatSQL服务使配置生效
+- 6. 重启GreatSQL服务使配置生效
 
 ```bash
 systemctl restart mysqld
@@ -55,7 +55,7 @@ cat /usr/lib/systemd/system/greatsql.service
 
 如果文件不存在，可以创建一个新的配置文件。详情参考：[利用systemd管理GreatSQL](./8-greatsql-with-systemd.md)。
 
-2. 编辑该服务配置文件，在`ExecStart`参数中添加`--defaults-file`选项
+- 2. 编辑该服务配置文件，在`ExecStart`参数中添加`--defaults-file`选项
 
 ```ini
 # 自定义配置文件路径为 /opt/my.cnf

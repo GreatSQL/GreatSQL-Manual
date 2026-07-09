@@ -2,7 +2,7 @@
 
 ---
 
-本节介绍如何用二进制包方式安装GreatSQL数据库，假定本次安装是在Ubuntu 22.04.3 x86_64环境中安装，并且是以root用户身份执行安装操作。
+本节介绍如何用二进制包方式安装 GreatSQL 数据库，假定本次安装是在Ubuntu 22.04.3 x86_64环境中安装，并且是以root用户身份执行安装操作。
 
 环境介绍
 
@@ -41,7 +41,7 @@ glibc 2.35
 - GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz
 
 ::: tip 小贴士
-若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
+若您的 CPU 架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
 :::
 
 将下载的二进制包放到安装目录下，并解压缩：
@@ -59,7 +59,7 @@ sudo apt-get install -y libaio-dev libnuma-dev libnuma1 net-tools openssl libssl
 ```
 
 ::: tip 小贴士
-包名称在centos和Ubuntu上是不同的,若要安装其它依赖包请使用`apt search <包名>`查找。
+包名称在 CentOS 和 Ubuntu 上是不同的，若要安装其它依赖包请使用`apt search <包名>`查找。
 :::
 
 - `pkg-config`: 在 Ubuntu 中，pkg-config 工具已经预安装，无需额外安装。
@@ -75,7 +75,7 @@ sudo apt-get install -y libaio-dev libnuma-dev libnuma1 net-tools openssl libssl
 - `perl-Data-Dumper`: 在 Ubuntu 中，对应的是 `perl` 包自带的，无需额外安装。
 - `perl-Digest-MD5`: 在 Ubuntu 中，对应的是 `libdigest-md5-perl`。
 
-进入到`GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin`目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其它信息则已经不缺必要软件包
+进入到`GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin`目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其他信息则已经不缺必要软件包
 
 ## 启动前准备
 
@@ -334,7 +334,7 @@ systemctl daemon-reload
 
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
 
-编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
+编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
 
 ### 添加动态依赖库
 
@@ -365,7 +365,7 @@ ldconfig && ldconfig -p | grep libprotobuf.so
 systemctl start greatsql
 ```
 
-如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
+如果是在一个全新环境中首次启动 GreatSQL 数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
 
 ::: details 查看运行结果
 ```bash
@@ -481,31 +481,62 @@ Server version:         8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
 ...
 ```
 
-GreatSQL数据库安装并初始化完毕。
+GreatSQL 数据库安装并初始化完毕。
 
-## 安装MySQL Shell
+## 安装GreatSQL Shell
 
-接下来安装MySQL Shell，可以使用mysql-shell-8.0.32，但是要注意MGR中并不支持仲裁节点
+为了支持仲裁节点特性，需要安装GreatSQL Shell。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5)，找到 **GreatSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
 
-解压`mysql-shell-8.0.32-linux-glibc2.12-x86-64bit.tar.gz`
+P.S，如果暂时不想使用仲裁节点特性的话，则可以继续使用相同版本的官方MySQL Shell安装包，可以直接用yum方式安装，此处略过。
+
+本文场景中，选择下面的二进制包：
+
+- greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
+
+将二进制文件包放在 `/usr/local` 目录下，解压缩：
 
 ```bash
-tar zxf mysql-shell-8.0.32-linux-glibc2.12-x86-64bit.tar.gz
+cd /usr/local/
+tar xf greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
 ```
 
-直接运行即可
+修改家目录下的 *profile* 文件 `vim ~/.bash_profile`，加入PATH：
 
+```ini
+PATH=$PATH:$HOME/bin:/usr/local/greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64/bin
+export PATH
+```
+
+加载，使之生效
 ```bash
-$ mysql-shell-8.0.32-linux-glibc2.12-x86-64bit/bin/mysqlsh
+source ~/.bash_profile
+```
 
-MySQL Shell 8.0.32
+这样就可以直接执行 `mysqlsh`，而无需每次都加上全路径了。
+
+运行 GreatSQL Shell 8.4.4-5 需要安装 Python 3.8 依赖
+
+```shell
+dnf install -y libssh python38 python38-libs python38-pyyaml
+pip3.8 install --user certifi pyclamd
+```
+
+接下来就可以直接使用mysqlsh了
+```bash
+$ mysqlsh
+
+...
+MySQL Shell 8.4.4
 ...
 Type '\help' or '\?' for help; '\quit' to exit.
- MySQL  JS > 
+ MySQL  JS >
 ```
 
-MySQL Shell就可以正常使用，并继续构建MGR集群了。
+GreatSQL Shell就可以正常使用，并继续构建 MGR 集群了。
 
+::: tip 小贴士
+推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)。
+:::
 
 **扫码关注微信公众号**
 

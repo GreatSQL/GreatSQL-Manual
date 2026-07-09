@@ -1,13 +1,13 @@
-# Centos系统中安装GreatSQL
+# CentOS 系统中安装 GreatSQL
 ---
 
-本节介绍如何用二进制包方式安装GreatSQL数据库，假定本次安装是在CentOS 8.x x86_64环境中安装，并且是以root用户身份执行安装操作。
+本节介绍如何用二进制包方式安装 GreatSQL 数据库，假定本次安装是在 CentOS 8.x x86_64环境中安装，并且是以 root 用户身份执行安装操作。
 
 在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
 
-## MGR集群规划
+##  MGR 集群规划
 
-本次计划在3台服务器上安装GreatSQL数据库并部署MGR集群：
+本次计划在 3 台服务器上安装 GreatSQL 数据库并部署 MGR 集群：
 
 | node | ip | datadir | port |role|
 | --- | --- | --- | --- | --- |
@@ -18,7 +18,7 @@
 以下安装配置工作先在三个节点都同样操作一遍。
 
 ::: tip 小贴士
-如果只想部署单机运行模式，则只需在一台服务器上安装，并略过MGR相关配置即可，方法参考：[快速上手：RPM安装](../3-quick-start/3-2-quick-start-with-tarball.md)。
+如果只想部署单机运行模式，则只需在一台服务器上安装，并略过MGR相关配置即可，方法参考：[快速上手：RPM安装](../3-quick-start/3-1-quick-start-with-rpm.md)。
 :::
 
 ## 下载安装包
@@ -37,7 +37,7 @@ ldd (GNU libc) 2.28
 - GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz
 
 ::: tip 小贴士
-若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
+若您的 CPU 架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
 :::
 
 将下载的二进制包放到安装目录下，并解压缩：
@@ -316,7 +316,7 @@ systemctl daemon-reload
 
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
 
-编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
+编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
 
 ### 添加动态依赖库
 
@@ -347,7 +347,7 @@ ldconfig && ldconfig -p | grep libprotobuf.so
 systemctl start greatsql
 ```
 
-如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
+如果是在一个全新环境中首次启动 GreatSQL 数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
 
 ::: details 查看运行结果
 ```bash
@@ -388,7 +388,7 @@ $ systemctl status greatsql
 ...
 ● greatsql.service - GreatSQL Server
    Loaded: loaded (/etc/systemd/system/greatsql.service; disabled; vendor preset: disabled)
-   Active: active (running) since Tue 2024-07-12 10:08:06 CST; 6min ago
+   Active: active (running) since Tue 2026-07-12 10:08:06 CST; 6min ago
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
   Process: 60129 ExecStartPre=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
@@ -466,11 +466,11 @@ Server version:         8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
 ...
 ```
 
-GreatSQL数据库安装并初始化完毕。
+GreatSQL 数据库安装并初始化完毕。
 
 ## 安装GreatSQL Shell
 
-为了支持仲裁节点特性，需要安装GreatSQL Shell。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.4.4-5)，找到 **GreatSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
+为了支持仲裁节点特性，需要安装GreatSQL Shell。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5)，找到 **GreatSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
 
 P.S，如果暂时不想使用仲裁节点特性的话，则可以继续使用相同版本的官方MySQL Shell安装包，可以直接用yum方式安装，此处略过。
 
@@ -511,13 +511,13 @@ pip3.8 install --user certifi pyclamd
 $ mysqlsh
 
 ...
-MySQL Shell 8.0.32
+MySQL Shell 8.4.4
 ...
 Type '\help' or '\?' for help; '\quit' to exit.
  MySQL  JS >
 ```
 
-GreatSQL Shell就可以正常使用，并继续构建MGR集群了。
+GreatSQL Shell就可以正常使用，并继续构建 MGR 集群了。
 
 ::: tip 小贴士
 推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)。

@@ -1,7 +1,7 @@
 # 利用systemd管理GreatSQL
 ---
 
-无论是在CentOS、Ubuntu，还是openEuler、Anolis、UOS等系统环境下，都推荐采用systemd来管理GreatSQL数据库。
+无论是在CentOS、Ubuntu，还是openEuler、Anolis、UOS等系统环境下，都推荐采用systemd来管理 GreatSQL 数据库。
 
 ##  关于systemd
 
@@ -65,7 +65,7 @@ PrivateTmp=false
 
 其中，
 
-- `ExecStartPre=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd` 用于GreatSQL首次启动时，进行初始化；-
+- `ExecStartPre=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd` 用于GreatSQL首次启动时，进行初始化；
 - `ExecStart=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS` 是GreatSQL服务主进程，还可以自定义配置文件路径，例如：`ExecStart=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/greatsql.cnf $MYSQLD_OPTS`。
 
 务必确认文件中 `ExecStartPre` 和 `ExecStart` 两个参数指定的目录及文件名是否正确。
@@ -86,7 +86,7 @@ systemctl stop greatsql
 systemctl restart greatsql
 ```
 
-如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会发生错误，可执行 `journalctl -ex` 查看具体报错信息：
+如果是在一个全新环境中首次启动 GreatSQL 数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会发生错误，可执行 `journalctl -ex` 查看具体报错信息：
 ```bash
 journalctl -ex
 ```

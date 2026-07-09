@@ -6,13 +6,13 @@ Arch Linux是一个轻量、灵活、基于x86-64架构的Linux发行版，遵�
 
 ### 简洁
 
-Arch Linux将简洁定义为：避免任何不必要的添加、修改和复杂增加。简单来说，archlinux 是一个可以让用户自己动手打造的操作系统。从安装到管理，archlinux 放手让用户处理一切。
+Arch Linux将简洁定义为：避免任何不必要的添加、修改和复杂增加。简单来说，Arch Linux 是一个可以让用户自己动手打造的操作系统。从安装到管理，Arch Linux 放手让用户处理一切。
 
 用户可以自己决定使用哪种桌面环境、安装哪些组件和服务。这种精细化的控制能够赋予你一个精简的操作系统，可以让用户自由选择所需的组件来构建属于用户自己的系统。
 
 ### 滚动更新（现代）
 
-滚动更新（rolling update）是指软件开发中经常性将更新发送到软件的概念。相较于滚动发行，有标准版本和小数点版本的版本号开发模式，必需通过重新安装以取代先前的发行版。Arch Linux 是没有版本概念的，它始终保持最新的状态，通俗的理解就相当于把发行版比喻为一部车，ubuntu 更新就是换一部新的，而 Arch Linux就是把车里面旧的配件换成新的。
+滚动更新（rolling update）是指软件开发中经常性将更新发送到软件的概念。相较于滚动发行，有标准版本和小数点版本的版本号开发模式，必需通过重新安装以取代先前的发行版。Arch Linux 是没有版本概念的，它始终保持最新的状态，通俗的理解就相当于把发行版比喻为一部车，Ubuntu 更新就是换一部新的，而 Arch Linux就是把车里面旧的配件换成新的。
 
 Arch Linux是一个滚动发行版，这意味着：
 
@@ -79,7 +79,7 @@ ldd (GNU libc) 2.38
 - GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz
 
 ::: tip 小贴士
-若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
+若您的 CPU 架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
 :::
 
 Arch Linux系统缺少wget需要先安装wget
@@ -88,7 +88,7 @@ Arch Linux系统缺少wget需要先安装wget
 pacman -S wget
 ```
 
-将二进制安装包下载在`/usr/local`目录下,并解压
+将二进制安装包下载在`/usr/local`目录下，并解压
 
 ```bash
 cd /usr/local
@@ -295,7 +295,7 @@ chown -R mysql:mysql /data/GreatSQL
 chmod -R 700 /data/GreatSQL
 ```
 
-如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件
+如果是在一个全新环境中首次启动 GreatSQL 数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件
 
 所以手动创建`/var/lib/mysql-files` 目录
 
@@ -381,7 +381,7 @@ systemctl daemon-reload
 
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
 
-编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
+编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
 
 ### 添加动态依赖库
 
@@ -412,7 +412,7 @@ ldconfig && ldconfig -p | grep libprotobuf.so
 systemctl start greatsql
 ```
 
-如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
+如果是在一个全新环境中首次启动 GreatSQL 数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
 
 ::: details 查看运行结果
 ```bash
@@ -489,7 +489,7 @@ $ ls /data/GreatSQL
 ```
 可以看到，GreatSQL服务已经正常启动了。
 
-## 连接登入GreatSQL
+## 连接登录GreatSQL
 
 在上面进行GreatSQL初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
 
@@ -500,11 +500,11 @@ $ grep -i root /data/GreatSQL/error.log
 A temporary password is generated for root@localhost: ji!pjndiw5sJ
 ```
 
-复制该密码，将用于首次登入GreatSQL所需。
+复制该密码，将用于首次登录GreatSQL所需。
 
-部分GreatSQL二进制包方式安装后，有可能初始化的root密码是空的，这种情况下可以直接登入并修改成安全密码。
+部分GreatSQL二进制包方式安装后，有可能初始化的root密码是空的，这种情况下可以直接登录并修改成安全密码。
 
-```sql
+```bash
 $ mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 11
@@ -516,33 +516,46 @@ greatsql> status;
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 ```
 
-首次登入立刻提醒该密码已过期，需要修改，执行 SQL 命令 `ALTER USER USER() IDENTIFIED BY` 修改即可：
+首次登录立刻提醒该密码已过期，需要修改，执行 SQL 命令 `ALTER USER USER() IDENTIFIED BY` 修改即可：
 
 ```sql
 greatsql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'GreatSQL@2022';
 Query OK, 0 rows affected (0.02 sec)
 ```
 
-GreatSQL数据库安装并初始化完毕
+GreatSQL 数据库安装并初始化完毕
 
 ## 安装GreatSQL Shell
 
-为了支持仲裁节点特性，需要安装GreatSQL Shell。打开GreatSQL下载页面找到
+为了支持仲裁节点特性，需要安装GreatSQL Shell。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5)，找到 **GreatSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
 
-- greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
+- greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
 
 下载相应的MySQL Shell安装包（目前只提供二进制安装包）并解压
 
 ```bash
 cd /usr/local
-wget https://product.greatdb.com/GreatSQL-8.0.32-25/greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
-tar xf greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
+tar xf greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
 ```
+
+修改家目录下的 *profile* 文件 `vim ~/.bash_profile`，加入PATH：
+
+```ini
+PATH=$PATH:$HOME/bin:/usr/local/greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64/bin
+export PATH
+```
+
+加载，使之生效
+```bash
+source ~/.bash_profile
+```
+
+这样就可以直接执行 `mysqlsh`，而无需每次都加上全路径了。
 
 进入bin目录查看下缺少什么依赖
 
 ```bash
-$ cd /usr/local/greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64/bin
+$ cd /usr/local/greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64/bin
 $ ldd mysqlsh | grep "not found"
         libssl.so.1.1 => not found
         libcrypto.so.1.1 => not found
@@ -551,12 +564,12 @@ $ ldd mysqlsh | grep "not found"
 
 安装上缺失的依赖
 
-```sql
+```bash
 pacman -S core/openssl-1.1
 pacman -S archlinuxcn/python39
 ```
 
-因为下载的Python版本过高，所以采用软连接的方式
+因为下载的Python版本过高，所以采用软链接的方式
 
 ```
 ln -s /usr/lib/libpython3.9.so.1.0 /usr/lib64/libpython3.8.so.1.0
@@ -570,9 +583,9 @@ ldd mysqlsh | grep "not found"
 
 没有缺失依赖的话，接下来就可以体验MySQL Shell了
 
-```sql
-$ /usr/local/greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqlsh
-MySQL Shell 8.0.32
+```bash
+$ mysqlsh
+MySQL Shell 8.4.4
 ...
 Type '\help' or '\?' for help; '\quit' to exit.
 WARNING: Found errors loading plugins, for more details look at the log at: /root/.mysqlsh/mysqlsh.log

@@ -1,7 +1,7 @@
 # 导入测试数据
 ---
 
-安装完GreatSQL数据库后，如果是用于教学或测试场景，可以导入几个通用的测试数据集，主要有：
+安装完 GreatSQL 数据库后，如果是用于教学或测试场景，可以导入几个通用的测试数据集，主要有：
 - Employees sample database
 - world sample database
 - Sakila sample database

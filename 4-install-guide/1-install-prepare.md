@@ -12,7 +12,7 @@ GreatSQL 支持以下几种安装方式：
 - Ansible
 - 源码编译
 
-支持X86和ARM、鲲鹏、海光、龙芯等多种CPU架构平台。
+支持x86和ARM、鲲鹏、海光、龙芯等多种 CPU 架构平台。
 
 支持CentOS、Ubuntu、统信、openEuler、龙蜥、麒麟等多种常见操作系统。
 
@@ -84,9 +84,9 @@ $ mount | grep /data
 /dev/nvme0n1 on /data type xfs (rw,noatime,nodiratime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
 ```
 
-## 关闭防火墙及selinux
+## 关闭防火墙及 SELinux
 
-数据库服务器通常运行在内部网络，此外部署MGR时也需要对内网开放多个TCP端口，因此可以关闭防火墙及selinux设置。
+数据库服务器通常运行在内部网络，此外部署MGR时也需要对内网开放多个TCP端口，因此可以关闭防火墙及 SELinux 设置。
 
 ::: tip 小贴士
 虽然数据部署在内部网络，但也要时刻警惕数据泄漏的风险，做好必要的安全防护措施。
@@ -97,10 +97,10 @@ $ mount | grep /data
 systemctl stop firewalld ; systemctl disable firewalld
 ```
 
-2. **关闭selinux**
+2. **关闭 SELinux**
 ```bash
 setenforce 0
-sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
+sed -i 's/^SELINUX=.*/SELINUX=disabled/ig' /etc/selinux/config
 ```
 
 ## 关闭swap

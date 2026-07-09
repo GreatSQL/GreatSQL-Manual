@@ -7,7 +7,7 @@
 
 ## 步骤1：关闭 GreatSQL 数据库
 
-在开始卸载前，请先正确关闭 GreatSQL 数据。
+在开始卸载前，请先正确关闭 GreatSQL 数据库。
 
 首先，设置 `innodb_fast_shutdown=0`，确保在关闭 GreatSQL 数据库时把内存缓冲区中的所有数据都刷新到物理磁盘上。
 

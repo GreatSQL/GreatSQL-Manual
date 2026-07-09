@@ -44,7 +44,7 @@ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools
 如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](./1-install-prepare.md)。
 
 ###  选择下载GreatSQL二进制包
-一般而言，麒麟kylin系统环境下，也可以选择相应glibc版本的GreatSQL二进制安装包，基本上都能直接运行起来。
+一般而言，麒麟 kylin 系统环境下，也可以选择相应glibc版本的GreatSQL二进制安装包，基本上都能直接运行起来。
 
 例如，本文使用的Kylin系统如下：
 ```bash
@@ -61,7 +61,7 @@ ldd (GNU libc) 2.28
 那么在这个环境下，可以选择 *GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz* 这个Linux Generic通用包。
 
 ::: tip 小贴士
-若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
+若您的 CPU 架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
 :::
 
 当然了，也可以选择相应的minimal包，minimal版本是对二进制文件进行strip后，所以文件尺寸较小，功能上没本质区别，但不支持gdb debug功能，可以放心使用。
@@ -174,7 +174,7 @@ loose-plugin_load_add = 'mysql_clone.so'
 loose-plugin_load_add = 'group_replication.so'
 loose-group_replication_group_name = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"
 loose-group_replication_local_address = "172.16.16.10:33061"
-loose-group_replication_group_seeds = '172.16.16.10:33061,72.16.16.12:33061,72.16.16.12:33061'
+loose-group_replication_group_seeds = '172.16.16.10:33061,172.16.16.11:33061,172.16.16.12:33061'
 loose-group_replication_communication_stack = "XCOM"
 loose-group_replication_recovery_use_ssl = OFF
 loose-group_replication_ssl_mode = DISABLED
@@ -332,7 +332,7 @@ systemctl daemon-reload
 
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
 
-编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
+编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
 
 ### 添加动态依赖库
 
@@ -362,7 +362,7 @@ ldconfig && ldconfig -p | grep libprotobuf.so
 systemctl start greatsql
 ```
 
-如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
+如果是在一个全新环境中首次启动 GreatSQL 数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
 
 ::: details 查看运行结果
 ```
@@ -459,7 +459,7 @@ greatsql> status;
 ...
 Server version:         8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
 ```
-GreatSQL数据库安装并初始化完毕。
+GreatSQL 数据库安装并初始化完毕。
 
 ## 安装GreatSQL Shell
 
@@ -467,9 +467,9 @@ GreatSQL数据库安装并初始化完毕。
 
 接下来安装GreatSQL Shell，以及进行MGR初始化等操作和用RPM包方式安装一样，这里就不赘述了。
 
-参考文档[RPM安装并构建MGR集群](./2-install-with-rpm.md#安装greatsql-shell)，从“安装MySQL Shell”这节开始及往后内容即可。
+参考文档[RPM安装并构建 MGR 集群](./2-install-with-rpm.md#安装greatsql-shell)，从“安装MySQL Shell”这节开始及往后内容即可。
 
-GreatSQL Shell就可以正常使用，并继续构建MGR集群了。
+GreatSQL Shell就可以正常使用，并继续构建 MGR 集群了。
 
 ::: tip 小贴士
 推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)。

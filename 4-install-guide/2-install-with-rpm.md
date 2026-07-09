@@ -1,13 +1,13 @@
 # RPM安装
 ---
 
-本节介绍如何用RPM包方式安装GreatSQL数据库，假定本次安装是在CentOS 8.x x86_64环境中安装，并且是以root用户身份执行安装操作。
+本节介绍如何用RPM包方式安装 GreatSQL 数据库，假定本次安装是在CentOS 8.x x86_64环境中安装，并且是以root用户身份执行安装操作。
 
 在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
 
-##  MGR集群规划
+##   MGR 集群规划
 
-本次计划在3台服务器上安装GreatSQL数据库并部署MGR集群：
+本次计划在3台服务器上安装 GreatSQL 数据库并部署 MGR 集群：
 
 | node | ip | datadir | port |role|
 | --- | --- | --- | --- | --- |
@@ -42,7 +42,7 @@ ldd (GNU libc) 2.28
 
 ##  安装GreatSQL RPM包
 
-执行下面的命令安装PRM包，如果一切顺利的话，相应的过程如下所示：
+执行下面的命令安装 RPM 包，如果一切顺利的话，相应的过程如下所示：
 ```bash
 $ rpm -ivh greatsql*rpm
 
@@ -116,7 +116,7 @@ no-auto-rehash
 [mysqld]
 user	= mysql
 port	= 3306
-#主从复制或MGR集群中，server_id记得要不同
+#主从复制或 MGR 集群中，server_id记得要不同
 #另外，实例启动时会生成 auto.cnf，里面的 server_uuid 值也要不同
 #server_uuid的值还可以自己手动指定，只要符合uuid的格式标准就可以
 server_id = 3306
@@ -379,11 +379,11 @@ mysqld  52003 mysql  mem       REG              253,0     608096   68994440 /usr
 $ chmod +x /usr/bin/mysqld_pre_systemd && /usr/bin/mysqld_pre_systemd
 ```
 
-正常的话，就会完成GreatSQL的初始化工作并启动GreatSQL数据库服务进程。
+正常的话，就会完成GreatSQL的初始化工作并启动 GreatSQL 数据库服务进程。
 
 :::
 
-##  连接登入GreatSQL
+##  连接登录GreatSQL
 
 RPM方式安装GreatSQL后，会随机生成管理员root的密码，通过搜索日志文件获取：
 ```bash
@@ -392,9 +392,9 @@ $ grep -i root /data/GreatSQL/error.log
 ...
 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: ahaA(ACmw8wy
 ```
-可以看到，root账户的密码是："ahaA(ACmw8wy" (不包含双引号)，复制到粘贴板里。
+可以看到，root账户的密码是："ahaA(ACmw8wy" (不包含双引号)，复制到剪贴板里。
 
-首次登入GreatSQL后，要立即修改root密码，否则无法执行其他操作，并且新密码要符合一定安全规则：
+首次登录GreatSQL后，要立即修改root密码，否则无法执行其他操作，并且新密码要符合一定安全规则：
 ```bash
 $ mysql -uroot -p
 Enter password:     #<--这个地方粘贴上面复制的随机密码
@@ -449,37 +449,37 @@ greatsql> SHOW DATABASES;  #<--查看数据库列表
 
 ##  关闭/重启GreatSQL
 
-执行下面的命令关闭GreatSQL数据库。
+执行下面的命令关闭 GreatSQL 数据库。
 ```bash
 systemctl stop mysqld
 ```
 
-执行下面的命令重启GreatSQL数据库。
+执行下面的命令重启 GreatSQL 数据库。
 ```bash
 systemctl restart mysqld
 ```
 
-GreatSQL数据库安装并初始化完毕。
+GreatSQL 数据库安装并初始化完毕。
 
 ##  安装GreatSQL Shell
 
-为了支持仲裁节点特性，需要安装GreatSQL Shell。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，找到 **GreatSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
+为了支持仲裁节点特性，需要安装GreatSQL Shell。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5)，找到 **GreatSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
 
 P.S，如果暂时不想使用仲裁节点特性的话，则可以继续使用相同版本的官方MySQL Shell安装包，可以直接用yum方式安装，此处略过。
 
 本文场景中，选择下面的二进制包：
 
-- greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
+- greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
 
 将二进制文件包放在 `/usr/local` 目录下，解压缩：
 ```bash
 cd /usr/local/
-tar xf greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64.tar.xz
+tar xf greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
 ```
 
 修改家目录下的profile文件 `vim ~/.bash_profile`，加入PATH：
 ```ini
-PATH=$PATH:$HOME/bin:/usr/local/greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64/bin
+PATH=$PATH:$HOME/bin:/usr/local/greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64/bin
 export PATH
 ```
 
@@ -490,7 +490,7 @@ source ~/.bash_profile
 
 这样就可以直接执行 `mysqlsh`，而无需每次都加上全路径了。
 
-运行 GreatSQL Shell 8.0.32-25 需要安装 Python 3.8 依赖
+运行 GreatSQL Shell 8.4.4-25 需要安装 Python 3.8 依赖
 
 ```bash
 dnf install -y libssh python38 python38-libs python38-pyyaml
@@ -500,19 +500,19 @@ pip3.8 install --user certifi pyclamd
 接下来就可以直接使用mysqlsh了
 ```bash
 $ mysqlsh
-MySQL Shell 8.0.32
+MySQL Shell 8.4.4
 ...
 Type '\help' or '\?' for help; '\quit' to exit.
  MySQL  JS >
 ```
 
-GreatSQL Shell就可以正常使用，并继续构建MGR集群了。
+GreatSQL Shell就可以正常使用，并继续构建 MGR 集群了。
 
-##  准备构建MGR集群
+##  准备构建 MGR 集群
 
-在这里建议用MySQL Shell来构建MGR集群，相对于手工构建方便快捷很多，如果想要体验手工构建的同学可以参考这篇文档：[3. 安装部署MGR集群 | 深入浅出MGR](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/deep-dive-mgr-03.md)。
+在这里建议用MySQL Shell来构建 MGR 集群，相对于手工构建方便快捷很多，如果想要体验手工构建的同学可以参考这篇文档：[3. 安装部署 MGR 集群 | 深入浅出MGR](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/deep-dive-mgr-03.md)。
 
-利用MySQL Shell构建MGR集群比较简单，主要有几个步骤：
+利用MySQL Shell构建 MGR 集群比较简单，主要有几个步骤：
 
 1. 检查实例是否满足条件。
 2. 创建并初始化一个集群。
@@ -524,11 +524,11 @@ GreatSQL Shell就可以正常使用，并继续构建MGR集群了。
 
 用管理员账号 root 连接到第一个节点：
 ```js
-#在本地通过socket方式登入
+#在本地通过socket方式登录
 $ mysqlsh -S/data/GreatSQL/mysql.sock -u root
 Please provide the password for 'root@.%2Fmysql.sock': ********  <-- 输入root密码
 Save password for 'root@.%2Fmysql.sock'? [Y]es/[N]o/Ne[v]er (default No): yes  <-- 提示是否存储密码（视各公司安全规则而定，这里为了方便选择了存储密码）
-MySQL Shell 8.0.32
+MySQL Shell 8.4.4
 ...
 Server version: 8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
 No default schema selected; type \use <schema> to set one.
@@ -536,7 +536,7 @@ WARNING: Found errors loading plugins, for more details look at the log at: /roo
  MySQL  localhost  JS >
 ```
 
-接下来，执行 `dba.configureInstance()`命令开始检查当前实例是否准备好了，可以作为MGR集群的一个节点：
+接下来，执行 `dba.configureInstance()`命令开始检查当前实例是否准备好了，可以作为 MGR 集群的一个节点：
 ```js
 # 开始配置MGR节点
 MySQL  172.16.16.10:3306 ssl  JS > dba.configureInstance();
@@ -571,19 +571,19 @@ The instance 'GreatSQL-01:3306' is already ready to be used in an InnoDB cluster
 
 ### 创建并初始化一个集群
 
-在正式初始化MGR集群前，再次提醒要先再其他节点完成上述初始化工作。
+在正式初始化 MGR 集群前，再次提醒要先在其他节点完成上述初始化工作。
 
-上述另外两个节点也初始化完毕后，利用mysqlsh客户端，指定新建MGR的管理账号**GreatSQL**登入PRIMARY节点，准备创建MGR集群：
+上述另外两个节点也初始化完毕后，利用mysqlsh客户端，指定新建MGR的管理账号**GreatSQL**登入PRIMARY节点，准备创建 MGR 集群：
 ```js
 $ mysqlsh --uri GreatSQL@172.16.16.10:3306
 Please provide the password for 'GreatSQL@172.16.16.10:3306': *************
 Save password for 'GreatSQL@172.16.16.10:3306'? [Y]es/[N]o/Ne[v]er (default No): yes
-MySQL Shell 8.0.32
+MySQL Shell 8.4.4
 ...
 Server version: 8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
 No default schema selected; type \use <schema> to set one.
 
-# 选定GreatSQL-01节点作为PRIMARY，开始创建MGR集群
+# 选定GreatSQL-01节点作为PRIMARY，开始创建 MGR 集群
 # 集群命名为 GreatSQLMGR，后面mysqlrouter读取元数据时用得上
 MySQL  172.16.16.10:3306 ssl  JS > c=dba.createCluster('GreatSQLMGR');
 A new InnoDB cluster will be created on instance '172.16.16.10:3306'.
@@ -651,7 +651,7 @@ NOTE: GreatSQL-02:3306 is being cloned from GreatSQL-01:3306
     NOTE: GreatSQL-02:3306 is shutting down...
 
 * Waiting for server restart... \   <-- 重启中
-* Waiting for server restart... ready   <-- 重启完毕，如果没有加入systemed，则需要自己手工启动
+* Waiting for server restart... ready   <-- 重启完毕，如果没有加入 systemd，则需要自己手工启动
 * GreatSQL-02:3306 has restarted, waiting for clone to finish...
 ** Stage RESTART: Completed
 * Clone process has finished: 59.62 MB transferred in about 1 second (~59.62 MB/s)
@@ -662,7 +662,7 @@ State recovery already finished for 'GreatSQL-02:3306'
 The instance 'GreatSQL-02:3306' was successfully added to the cluster.
 ```
 
-这就将 GreatSQL-02 节点加入MGRT集群中了，此时可以先查看下集群状态。
+这就将 GreatSQL-02 节点加入 MGR 集群中了，此时可以先查看下集群状态。
 
 ```js
 MySQL  172.16.16.10:3306 ssl  JS > c.status()
@@ -701,9 +701,9 @@ MySQL  172.16.16.10:3306 ssl  JS > c.status()
     "groupInformationSourceMember": "172.16.16.10:3306"
 }
 ```
-可以看到，一个包含两节点的MGR集群已经构建好了，Primary节点是 *172.16.16.10:3306*，接下来还要加入另一个节点：**仲裁节点**。
+可以看到，一个包含两节点的 MGR 集群已经构建好了，Primary节点是 *172.16.16.10:3306*，接下来还要加入另一个节点：**仲裁节点**。
 
-如果不想体验仲裁节点特性的话，可以照着上面操作再次正常加入 GreatSQL-03 节点作为 Secondary 节点即可，到这里就可以结束MGR集群构建工作了。
+如果不想体验仲裁节点特性的话，可以照着上面操作再次正常加入 GreatSQL-03 节点作为 Secondary 节点即可，到这里就可以结束 MGR 集群构建工作了。
 
 ### 添加仲裁节点
 
@@ -711,9 +711,9 @@ MySQL  172.16.16.10:3306 ssl  JS > c.status()
 ```ini
 loose-group_replication_arbitrator=ON
 ```
-其作用就是指定该节点作为**仲裁节点**，保存退出，重启该节点GreatSQL数据库。
+其作用就是指定该节点作为**仲裁节点**，保存退出，重启该节点 GreatSQL 数据库。
 
-然后照着第三步的操作，调用 `dba.addInstance()` 添加新节点，就可以直接将仲裁节点加入MGR集群了，再次查看集群状态：
+然后照着第三步的操作，调用 `dba.addInstance()` 添加新节点，就可以直接将仲裁节点加入 MGR 集群了，再次查看集群状态：
 
 ```js
 MySQL  172.16.16.10:3306 ssl  JS > c.status()
@@ -762,9 +762,9 @@ MySQL  172.16.16.10:3306 ssl  JS > c.status()
     "groupInformationSourceMember": "172.16.16.10:3306"
 }
 ```
-可以看到一个包含仲裁节点的三节点MGR集群已经构建完毕。
+可以看到一个包含仲裁节点的三节点 MGR 集群已经构建完毕。
 
-在后面的内容中，我们再介绍如何手工方式部署MGR集群，以及利用MySQL Router实现读写分离及读可扩展，详见：[读写分离](../6-oper-guide/2-oper-rw-splitting.md)。
+在后面的内容中，我们再介绍如何手工方式部署 MGR 集群，以及利用MySQL Router实现读写分离及读可扩展，详见：[读写分离](../6-oper-guide/2-oper-rw-splitting.md)。
 
 
 **扫码关注微信公众号**

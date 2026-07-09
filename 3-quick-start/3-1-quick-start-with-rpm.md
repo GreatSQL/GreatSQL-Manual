@@ -21,7 +21,7 @@
 ```bash
 #关闭selinux
 setenforce 0
-sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
+sed -i 's/^SELINUX=.*/SELINUX=disabled/ig' /etc/selinux/config
 
 #关闭防火墙
 systemctl disable firewalld

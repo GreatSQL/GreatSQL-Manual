@@ -2,7 +2,7 @@
 
 ---
 
-本章文档主要介绍如何再各种环境安装GreatSQL数据库。
+本章文档主要介绍如何在各种环境安装 GreatSQL 数据库。
 
 ## [CentOS环境安装](./3-1-centos-install.md)
 ## [Ubuntu环境安装](./3-2-ubuntu-install.md)

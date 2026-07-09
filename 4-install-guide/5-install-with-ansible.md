@@ -1,20 +1,20 @@
 # Ansible安装
 ---
 
-本节介绍如何利用ansible快速安装GreatSQL并构建包含仲裁节点的MGR集群。
+本节介绍如何利用Ansible快速安装GreatSQL并构建包含仲裁节点的 MGR 集群。
 
 推荐采用更好用的 Ansible 项目 [dbops](https://gitee.com/fanderchan/dbops) 来安装 GreatSQL，本文截止 GreatSQL 8.0.32-25 版本已不再更新。
 
 ##  安装准备
 
-###  安装ansible
+###  安装Ansible
 
-首先利用dnf/yum安装ansible：
+首先利用dnf/yum安装Ansible：
 ```
 $ yum install -y ansible
 ```
 
-###  配置ansible
+###  配置Ansible
 
 修改 `/etc/ansible/hosts` 文件，把要安装GreatSQL的服务器IP加进去，例如：
 ```
@@ -34,12 +34,12 @@ greatsql_mgr_arbitrator
 上面这个主机列表，分为两个组，一个是选择作为MGR PRIMARY节点（或在多主模式中第一个需要初始化引导的节点）的组 **greatsql_mgr_primary**，只有一个主机。另一组选择作为SECONDARY节点 **greatsql_mgr_secondary**，有两个主机。两个组也可以合并一起，成为一个新的组 **greatsql_dbs**。
 
 **提醒**
-1. 请填内网IP地址，因为MGR初始化时，默认使用用内网IP地址。
+1. 请填内网IP地址，因为MGR初始化时，默认使用内网IP地址。
 2. 如果同时还要安装到本机，也请填写内网IP地址。
 3. 如果是要采用多主模式，在上面的配置中，把第一个需要初始化引导的节点放在 **greatsql_mgr_primary** 组里，其他节点照常放在 **greatsql_mgr_secondary** 组里。
 
-###  建立ssh信任
-为了简单起见，直接建立ssh信任，方便ansible一键安装。
+###  建立SSH信任
+为了简单起见，直接建立SSH信任，方便Ansible一键安装。
 
 首先生成ssh key
 ```
@@ -53,8 +53,8 @@ $ ssh-copy-id root@172.16.16.10
 ```
 按提示输入口令，完成后测试使用ssh登录不再提示输入口令。如果是在本机安装，那么ssh-copy-id也要对本机执行一遍。或者手动将ssh key复制到远程主机上，写到 ~/.ssh/authorized_keys 文件中（注意不要折行、断行）。
 
-###  测试ansible
-随意执行一个指令，测试ansibile可连接远程主机：
+###  测试Ansible
+随意执行一个指令，测试 ansible 可连接远程主机：
 ```
 $ ansible greatsql_dbs -a "uptime"
 172.16.16.10 | CHANGED | rc=0 >>
@@ -96,11 +96,11 @@ drwxr-xr-x 3 root root      103 Aug  8 11:07 mysql-support-files
 - check_mysql.yml，MySQL进程、端口预检查脚本。
 - vars.yml，定义一些变量的脚本，里面的变量名有些需要修改以适应各自不同的安装环境。
 
-##  安装GreatSQL并构建MGR集群
+##  安装GreatSQL并构建 MGR 集群
 
 ###  配置Ansible安装剧本
 
-在开始安装前，要先修改 `vars.yml` 这个Ansbile安装剧本中的几个配置选项：
+在开始安装前，要先修改 `vars.yml` 这个安装剧本中的几个配置选项：
 ```
 work_dir: /opt/greatsql/GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal-ansible
 extract_dir: /usr/local
@@ -129,8 +129,8 @@ wait_for_start: 60
 |my_cnf|/etc/my.cnf|my.cnf配置文件路径，【不建议调整】|
 |mysql_user|mysql|运行GreatSQL对应的user、group，【不建议调整】|
 |mysql_port|3306|GreatSQL运行时的监听端口，【不建议调整】|
-|mgr_user|repl|MGR账户|
-|mgr_user_pwd|repl4MGR|MGR账户密码|
+|mgr_user|GreatSQL|MGR账户|
+|mgr_user_pwd|GreatSQL@2023|MGR账户密码|
 |mgr_seeds|172.16.16.10:33061,172.16.16.11:33061,172.16.16.12:33061|定义MGR运行时各节点的IP+端口列表，【需要自行调整】|
 |mgr_single_mode|是否采用单主模式；0表示否，也就是采用多主模式；1表示是，也就是采用单主模式；默认值：1（即默认采用单主模式）|
 |wait_for_start|60|初次启动时，要先进行一系列数据文件初始化等工作，后面的MGR初始化工作要等待前面的先完成，如果第一安装失败，可以将这个时间加长|
@@ -139,7 +139,7 @@ wait_for_start: 60
 1. 除了修改work_dir和mgr_seeds参数外，其他的都请谨慎修改，否则可能会提示找不到文件目录等错误。
 2. 如果是要采用多主模式，在`/etc/ansible/hosts` 文件中，把第一个需要初始化引导的节点放在 **greatsql_mgr_primary** 组里，其他节点照常放在 **greatsql_mgr_secondary** 组里。
 
-###  开始ansible安装
+###  开始Ansible安装
 
 执行下面的命令一键完成GreatSQL的安装、初始化，加入systemd服务、以及MGR初始化等所有工作：
 ```

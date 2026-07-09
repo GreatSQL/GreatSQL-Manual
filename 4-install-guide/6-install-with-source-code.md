@@ -103,10 +103,10 @@ microdnf update -y && microdnf clean all
 ```bash
 mkdir -p /opt && \
 cd /opt && \
-curl -kOL -o greatsql-8.4.4.tar.xz https://product.greatdb.com/GreatSQL-8.4.4-5/greatsql-8.4.4-5.tar.xz && \
-curl -kOL -o boost_1_84_0.tar.bz2 https://sourceforge.net/projects/boost/files/boost/1.84.0/boost_1_84_0.tar.bz2 && \
-curl -kOL -o patchelf-0.14.5.tar.gz https://gitee.com/GreatSQL/GreatSQL-Docker/raw/master/deppkgs/patchelf-0.14.5.tar.gz && 
-curl -kOL -o rpcgen-1.3.1-4.el8.x86_64.rpm https://gitee.com/GreatSQL/GreatSQL-Docker/raw/master/deppkgs/rpcgen-1.3.1-4.el8.x86_64.rpm && 
+curl -kL -o greatsql-8.4.4-5.tar.xz https://product.greatdb.com/GreatSQL-8.4.4-5/greatsql-8.4.4-5.tar.xz && \
+curl -kL -o boost_1_84_0.tar.bz2 https://sourceforge.net/projects/boost/files/boost/1.84.0/boost_1_84_0.tar.bz2 && \
+curl -kL -o patchelf-0.14.5.tar.gz https://gitee.com/GreatSQL/GreatSQL-Docker/raw/master/deppkgs/patchelf-0.14.5.tar.gz && \
+curl -kL -o rpcgen-1.3.1-4.el8.x86_64.rpm https://gitee.com/GreatSQL/GreatSQL-Docker/raw/master/deppkgs/rpcgen-1.3.1-4.el8.x86_64.rpm && \
 tar xf greatsql-8.4.4-5.tar.xz && \
 tar xf patchelf-0.14.5.tar.gz && \
 tar xjf boost_1_84_0.tar.bz2
@@ -136,7 +136,7 @@ apt install -y patchelf
 rpm -ivh /opt/rpcgen-1.3.1-4.el8.x86_64.rpm
 ```
 
-如果你的编译环境中可以直接通过 yum/dnf/apt 方式直接安装 rpcgen 包的话，就无需额外下载rpm包和安装，可以通过 yum/dnf/apt 安装 patchelf：
+如果你的编译环境中可以直接通过 yum/dnf/apt 方式直接安装 rpcgen 包的话，就无需额外下载rpm包和安装，可以通过 yum/dnf/apt 安装 rpcgen：
 
 ```bash
 # yum/dnf 安装
@@ -227,7 +227,7 @@ ls -la /opt
 ...
 drwxrwxr-x 13 root root       293 Oct 16 06:45 GreatSQL-8.4.4-5-ol-glibc2.28-x86_64
 drwxr-xr-x  8 root root      4096 Aug  5  2021 boost_1_84_0
--rw-r--r--  1 root root 145151722 Aug  5  2021 boost_1_84_0.tar.xz
+-rw-r--r--  1 root root 145151722 Aug  5  2021 boost_1_84_0.tar.bz2
 drwxr-xr-x 35 root root      4096 Oct 16 06:29 greatsql-8.4.4-5
 -rw-r--r--  1 root root 404712372 Oct 13 02:24 greatsql-8.4.4-5.tar.xz
 -rw-r--r--  1 root root    124767 Oct 16 04:53 patchelf-0.14.5.tar.gz
@@ -269,7 +269,7 @@ mkdir -p /opt/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 cd /opt/greatsql-8.4.4-5/build-gs/rpm/ && \
 cp mysql-5.7-sharedlib-rename.patch mysql_config.sh mysqld.cnf /opt/rpmbuild/SOURCES && \
 cd /opt && \
-cp boost_1_84_0.tar.xz greatsql-8.4.4-5.tar.xz /opt/rpmbuild/SOURCES
+cp boost_1_84_0.tar.bz2 greatsql-8.4.4-5.tar.xz /opt/rpmbuild/SOURCES
 ```
 
 下载 *greatsql.spec* 文件到本地：
@@ -278,7 +278,7 @@ cp boost_1_84_0.tar.xz greatsql-8.4.4-5.tar.xz /opt/rpmbuild/SOURCES
 curl -kOL -o /opt/rpmbuild/SPECS/greatsql.spec https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/build-gs/greatsql.spec
 ```
 
-**4. 准备 src.rpm 包
+**4. 准备 src.rpm 包**
 
 执行下面的命令构建GreatSQL src.rpm包：
 ```bash

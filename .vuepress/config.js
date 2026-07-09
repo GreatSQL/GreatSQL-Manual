@@ -500,7 +500,7 @@ module.exports = {
 	    ],
 	  },
           '/4-install-guide/4-install-with-docker',
-          '/4-install-guide/5-install-with-ansible',
+	  '/4-install-guide/5-install-with-ansible',
           '/4-install-guide/6-install-with-source-code',
           '/4-install-guide/7-load-sampledb',
           '/4-install-guide/8-greatsql-with-systemd',

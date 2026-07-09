@@ -2,9 +2,9 @@
 
 ---
 
-##  准备工作
+## 准备工作
 
-###  配置yum源
+### 配置yum源
 
 开始编译之前，建议先配置好yum源，方便安装一些工具以及必要的依赖包。
 
@@ -16,7 +16,7 @@ yum clean all && yum makecache
 
 在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
 
-###  选择下载GreatSQL二进制包
+### 选择下载GreatSQL二进制包
 
 本文使用的统信UOS系统如下：
 
@@ -44,12 +44,12 @@ ldd (GNU libc) 2.28
 ```
 :::
 
-那么在这个环境下，既glibc2.28，可选 [GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5) 这个二进制包进行安装。若glibc为2.17，请选择带有"glibc2.17"标识的安装包。
+那么在这个环境下，即 glibc2.28，可选 [GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5) 这个二进制包进行安装。若glibc为2.17，请选择带有"glibc2.17"标识的安装包。
 
-当然了，也可以选择相应的minimal包，minimal版本是对二进制文件进行strip后，所以文件尺寸较小，功能上没本质区别，但不支持gdb debug功能，可以放心使用。
+当然了，也可以选择相应的minimal包，minimal版本二进制文件经过strip处理，因此文件尺寸较小，功能上没本质区别，但不支持gdb debug功能，可以放心使用。
 
 ::: tip 小贴士
-若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
+若您的 CPU 架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
 :::
 
 将下载的二进制包放到安装目录下，并解压缩：
@@ -76,7 +76,7 @@ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools
 
 接下来准备开始安装GreatSQL二进制包。
 
-##  安装GreatSQL
+## 安装GreatSQL
 
 ### 创建或修改 /etc/my.cnf 配置文件
 
@@ -170,7 +170,7 @@ loose-plugin_load_add = 'mysql_clone.so'
 loose-plugin_load_add = 'group_replication.so'
 loose-group_replication_group_name = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"
 loose-group_replication_local_address = "172.16.16.10:33061"
-loose-group_replication_group_seeds = '172.16.16.10:33061,72.16.16.12:33061,72.16.16.12:33061'
+loose-group_replication_group_seeds = '172.16.16.10:33061,172.16.16.11:33061,172.16.16.12:33061'
 loose-group_replication_communication_stack = "XCOM"
 loose-group_replication_recovery_use_ssl = OFF
 loose-group_replication_ssl_mode = DISABLED
@@ -237,7 +237,7 @@ performance_schema_instrument = '%lock%=on'
 
 一般修改 *basedir/datadir/innodb_buffer_pool_size* 等几个选项就可以，修改完后保存退出。
 
-###  新建mysql用户
+### 新建mysql用户
 
 ```bash
 /sbin/groupadd mysql
@@ -255,7 +255,7 @@ chown -R mysql:mysql /data/GreatSQL
 chmod -R 700 /data/GreatSQL
 ```
 
-###  配置GreatSQL systemd服务
+### 配置GreatSQL systemd服务
 
 推荐采用systemd来管理GreatSQL服务，执行 `vim /etc/systemd/system/greatsql.service` 命令，添加下面的内容：
 
@@ -333,7 +333,7 @@ systemctl daemon-reload
 
 这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
 
-编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
+编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
 
 ### 添加动态依赖库
 
@@ -365,7 +365,7 @@ ldconfig && ldconfig -p | grep libprotobuf.so
 systemctl start greatsql
 ```
 
-如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
+如果是在一个全新环境中首次启动 GreatSQL 数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
 
 ::: details 查看运行结果
 ```bash
@@ -512,17 +512,17 @@ Threads: 4  Questions: 11  Slow queries: 0  Opens: 130  Flush tables: 3  Open ta
 --------------
 ```
 
-GreatSQL数据库安装并初始化完毕。
+GreatSQL 数据库安装并初始化完毕。
 
-##  安装MySQL Shell
+## 安装MySQL Shell
 
 下载GreatSQL Shell二进制包*greatsql-shell-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz*。
 
 接下来安装GreatSQL Shell，以及进行MGR初始化等操作和用RPM包方式安装一样，这里就不赘述了。
 
-参考文档[RPM安装并构建MGR集群](./2-install-with-rpm.md#安装greatsql-shell)，从“安装MySQL Shell”这节开始及往后内容即可。
+参考文档[RPM安装并构建 MGR 集群](./2-install-with-rpm.md#安装greatsql-shell)，从“安装MySQL Shell”这节开始及往后内容即可。
 
-GreatSQL Shell就可以正常使用，并继续构建MGR集群了。
+GreatSQL Shell就可以正常使用，并继续构建 MGR 集群了。
 
 ::: tip 小贴士
 推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)。

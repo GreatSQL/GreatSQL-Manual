@@ -19,7 +19,7 @@ minimal 版本是对二进制文件执行 `strip` 操作，所以文件尺寸较
 ```bash
 #关闭selinux
 setenforce 0
-sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
+sed -i 's/^SELINUX=.*/SELINUX=disabled/ig' /etc/selinux/config
 
 #关闭防火墙
 systemctl disable firewalld
