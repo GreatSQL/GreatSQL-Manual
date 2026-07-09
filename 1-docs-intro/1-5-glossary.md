@@ -21,7 +21,7 @@
 | Primary | 称为主要节点，主节点，MGR 节点角色之一。响应读写事务请求。|
 | Secondary | 称为辅助节点，从节点，MGR 节点角色之一。只能响应只读事务请求。|
 | VIP | GreatSQL中支持读写节点绑定动态 VIP（虚拟 IP），高可用切换更便捷。详情参考文档：[MGR内置动态VIP](../5-enhance/5-2-ha-mgr-vip.md)。|
-| Xcom | Paxos 算法在 MGR 中的具体实现，称之为 XCom，由它充当 MGR 的通信引擎。|
+| XCom | Paxos 算法在 MGR 中的具体实现，称之为 XCom，由它充当 MGR 的通信引擎。|
 | zone id | 地理标签。可以对每个节点设置地理标签，主要用于解决多机房数据同步的问题。详情参考文档：[1.1 新增节点地理标签](../5-enhance/5-2-ha-mgr-zoneid.md)。|
 
 

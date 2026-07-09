@@ -1,6 +1,6 @@
 # 版本历史
 
-### GreatSQL 8.4
+## GreatSQL 8.4
 - [Changes in GreatSQL 8.4.4-5 (2026-06-30)](./relnotes/changes-greatsql-8445.md)
 - [Changes in GreatSQL 8.4.4-4 (2025-10-15)](./relnotes/changes-greatsql-8444.md)
 

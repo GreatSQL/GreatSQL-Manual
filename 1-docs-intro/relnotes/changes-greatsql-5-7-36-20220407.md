@@ -102,7 +102,7 @@ mysql> insert into t1 select * from sbtest1 limit 732000;
 Query OK, 732000 rows affected (16.07 sec)
 Records: 732000  Duplicates: 0  Warnings: 0
 
-mysql> insert into t1 select * from sbtest1limit 733000;
+mysql> insert into t1 select * from sbtest1 limit 733000;
 ERROR 3100 (HY000): Error on observer while running replication hook 'before_commit'.
 ```
 
@@ -124,14 +124,14 @@ ERROR 3100 (HY000): Error on observer while running replication hook 'before_com
 2. 提升数个大事务造成的长时间阻塞的问题。
 
 ## 性能提升
-1. 重新设计事务认证队列清理算法。MySQL社区版本中，对事务认证队列清理时采用了类似全表扫描的算法，清理效率较低，性能抖动较大。在GreatSQL版本中，对事务认证队列增加了类似索引机制，并控制每次清理的时间，可以有效解决清理效率低、性能抖动大的问题。
+1. 重新设计事务认证队列清理算法。MySQL社区版本中，对事务认证队列清理时采用了类似全表扫描的算法，清理效率较低，性能抖动较大。在 GreatSQL 版本中，对事务认证队列增加了类似索引机制，并控制每次清理的时间，可以有效解决清理效率低、性能抖动大的问题。
 2. 提升了Secondary节点上大事务并发应用回放的速度。
-3. 增加xcom cache条目，提升了在网络延迟较大或事务应用较慢场景下的性能。
+3. 增加 XCom cache 条目，提升了在网络延迟较大或事务应用较慢场景下的性能。
 
 ## bug修复
 01. 修复了在启用dns或hostname的情况下，bind意外失败问题。
 02. 修复了协程调度不合理的问题，该问题可能会造成在大事务时系统错误判断为网络错误。
-03. 修复了新加入节点在追paxos数据时，由于write超时导致连接提前关闭的问题。
+03. 修复了新加入节点在追Paxos数据时，由于write超时导致连接提前关闭的问题。
 04. 修复了recovering节点被中途停止导致的数据异常问题。
 05. 修复了多主多写模式中，个别情况下可能丢数据的问题。
 06. 修复了在某些特殊场景下，多个节点同时启动一直处于recovering的状态

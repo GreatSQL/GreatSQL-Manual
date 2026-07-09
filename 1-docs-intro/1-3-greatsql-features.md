@@ -6,7 +6,7 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 ### [高可用](../5-enhance/5-2-ha.md)
 
-针对 MGR 进行了大量改进和提升工作，支持 地理标签、仲裁节点、读写动态 VIP、快速单主模式、智能选主 等特性，并针对 流控算法、事务认证队列清理算法、节点加入&退出机制、recovery机制 等多个 MGR 底层工作机制算法进行深度优化，进一步提升优化了 MGR 的高可用保障及性能稳定性。
+针对 MGR 进行了大量改进和提升工作，支持 地理标签、仲裁节点、读写动态 VIP、快速单主模式、智能选主 等特性，并针对 流控算法、事务认证队列清理算法、节点加入&退出机制、recovery 机制 等多个 MGR 底层工作机制算法进行深度优化，进一步提升优化了 MGR 的高可用保障及性能稳定性。
 
 - 支持 [地理标签](../5-enhance/5-2-ha-mgr-zoneid.md) 特性，提升多机房架构数据可靠性。
 - 支持 [仲裁节点](../5-enhance/5-2-ha-mgr-arbitrator.md) 特性，用更低的服务器成本实现更高可用。
@@ -17,7 +17,7 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 - 支持 [记录 MGR 网络通信开销超过阈值的事件](../5-enhance/5-2-ha-mgr-request-time.md)，用于进一步分析和优化。
 - 支持在跨机房容灾场景中的 [主主双向复制防止回路](../5-enhance/5-2-ha-repl-server-mode.md) 机制。
 - 优化了节点加入、退出时可能导致性能剧烈抖动的问题。
-- 解决了个别节点上磁盘空间爆满时导致MGR集群整体被阻塞的问题。
+- 解决了个别节点上磁盘空间爆满时导致 MGR 集群整体被阻塞的问题。
 - 优化事务认证队列清理算法，高负载下不复存在每 60 秒性能抖动问题。
 - 解决了长事务造成无法选主的问题。
 - 修复了 recovery 过程中长时间等待的问题。
@@ -26,7 +26,7 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 ### [高性能](../5-enhance/5-1-highperf.md)
 
-相对 MySQL 及 Percona Server For MySQL 的性能表现更稳定优异，支持 Rapid 引擎、事务无锁化、并行 LOAD DATA、异步删除大表、线程池、非阻塞式 DDL、NUMA 亲和调度优化 等特性，在 TPC-C 测试中相对 MySQL 性能提升超过 30%，在 TPC-H 测试中的性能表现是 MySQL 的十几倍甚至上百倍。
+相对 MySQL 及 Percona Server for MySQL 的性能表现更稳定优异，支持 Rapid 引擎、事务无锁化、并行 LOAD DATA、异步删除大表、线程池、非阻塞式 DDL、NUMA 亲和调度优化 等特性，在 TPC-C 测试中相对 MySQL 性能提升超过 30%，在 TPC-H 测试中的性能表现是 MySQL 的十几倍甚至上百倍。
 
 - 支持 [大规模并行、基于内存查询、高压缩比的高性能 Rapid 引擎](../5-enhance/5-1-highperf-rapid-engine.md)，可将数据分析性能提升几个数量级。
 - 优化 InnoDB 事务系统，实现了大锁拆分及无锁化等多种优化方案，OLTP 场景整体性能提升约 20%。
@@ -40,7 +40,7 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 ### [高兼容](../5-enhance/5-3-easyuse.md)
 
-GreatSQL 实现 100% 完全兼容 MySQL 及 Percona Server For MySQL 用法，支持大多数常见 Oracle 用法，包括 [数据类型兼容](../5-enhance/5-3-easyuse.md#数据类型兼容)、[函数兼容](../5-enhance/5-3-easyuse.md#函数兼容)、[SQL 语法兼容](../5-enhance/5-3-easyuse.md#sql语法兼容)、[存储程序兼容](../5-enhance/5-3-easyuse.md#存储程序兼容) 等众多兼容扩展用法。
+GreatSQL 实现 100% 完全兼容 MySQL 及 Percona Server for MySQL 用法，支持大多数常见 Oracle 用法，包括 [数据类型兼容](../5-enhance/5-3-easyuse.md#数据类型兼容)、[函数兼容](../5-enhance/5-3-easyuse.md#函数兼容)、[SQL 语法兼容](../5-enhance/5-3-easyuse.md#sql语法兼容)、[存储程序兼容](../5-enhance/5-3-easyuse.md#存储程序兼容) 等众多兼容扩展用法。
 
 更多信息详见文档：[高兼容](../5-enhance/5-3-easyuse.md)。
 

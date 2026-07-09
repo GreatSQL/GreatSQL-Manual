@@ -50,7 +50,7 @@ GreatSQL 8.4.4-5版本中新增**大事务binlog独立落盘**优化，提升**�
 
 - 针对 GreatDB HA 插件改用 UDF 函数替代原来的端口通信逻辑，调用 UDF 时需要 SUPER 权限及相关 MGR 权限，同时可按需支持 SSL 加密，兼顾 HA 插件的功能及通信安全。详情参考：[MGR节点内置VIP](../../5-enhance/5-2-ha-mgr-vip.md#安全加固说明)。
 - 修改 `performance_schema.replication_group_member_stats` 系统表，新增 `SECOND_BEHIND_GROUP` 字段，用于记录 MGR 节点间复制延迟时间状态。
-- 主从复制中针对大批量 DML 操作时如果发生 `1032 / duplicate-key` 错误，在以前缺乏精确定位能力，调研目标是增强错误日志能力以输出不一致数据行，降低运维排查成本。
+- 主从复制中的大批量 DML 操作如果发生 `1032 / duplicate-key` 错误，在以前缺乏精确定位能力，通过增强错误日志能力，现在可输出不一致数据行，降低运维排查成本。
 - 在 MGR 节点重启自动加入失败的场景下，由于 `super_read_only` 未保持开启导致节点仍可写入数据，从而引发数据不一致与后续无法加入复制组的问题，因此需要在加入失败时也强制保持 `super_read_only=ON` 以避免异常写入。
 - 在 MGR 自动重加组及手动启动流程中，XCom 线程已退出后仍继续处于 `Wait for view modification` 超时等待已无实际意义，因此可优化为在确认 XCom 退出后提前结束 `START GROUP_REPLICATION` 或 `auto-rejoin` 流程，以减少无效等待并提升重入效率与错误返回及时性。
 
@@ -84,12 +84,12 @@ GreatSQL 8.4.4-5版本中新增**大事务binlog独立落盘**优化，提升**�
 
 ### 升级到 GreatSQL 8.4.4-5
 - 如果是 GreatSQL 5.7 系列版本，可以直接在原来的 `datadir` 基础上，修改 `basedir` 后，原地（in-place）启动 GreatSQL 8.0.32-27 版本后，先原地升级到 GreatSQL 8.0.32-27 版本。再继续在该 `datadir` 基础上升级，即修改 `basedir` 指向 GreatSQL 8.4.4-5 新版本，再次进行原地升级。需要注意的是，从 5.7 版本升级到 8.0 版本，再升级到 8.4 版本后，数据库中的账号仍采用 `mysql_native_password` 密码验证插件。当最终升级到 8.4 版本后，需要修改 *my.cnf* 配置文件，加上 `mysql_native_password=1`，以保证原有的账号能正常登录。
-- 如果是 GreatSQL 8.0/8.4 系列版本，并且没有使用 **Rapid** 引擎，则可以直接在原来的** `datadir`** 基础上，修改** `basedir`** 后，原地（in-place）启动 GreatSQL 8.4.4-5 后会完成自动升级。
+- 如果是 GreatSQL 8.0/8.4 系列版本，并且没有使用 **Rapid** 引擎，则可以直接在原来的 `datadir` 基础上，修改 `basedir` 后，原地（in-place）启动 GreatSQL 8.4.4-5 后会完成自动升级。
 - 如果是 GreatSQL 8.0/8.4 系列版本且已启用 **Rapid** 引擎，**这种情况下无法原地升级**，需要卸载所有 **Rapid** 引擎表，删除 **Rapid** 数据文件，才可以在原来的 `datadir` 基础上，修改 `basedir` 后，原地（in-place）启动 GreatSQL 8.4.4-5 后进行自动升级。新版本实例启动后，对所有 **Rapid** 引擎表执行 `ALTER TABLE SECONDARY_LOAD` 完成全量数据导入，再执行 `SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK()` 启动增量导入任务，完成 **Rapid** 引擎表升级工作。下面是一个升级参考过程：
 
-  **1. 查询并记录所有Rapid引擎表**
+  **1. 查询并记录所有 Rapid 引擎表**
   
-  可以执行下面的SQL，查询当前有哪些表使用了Rapid引擎：
+  可以执行下面的SQL，查询当前有哪些表使用了 Rapid 引擎：
   
   ```sql
   greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_ROWS FROM information_schema.TABLES WHERE CREATE_OPTIONS LIKE '%Rapid%';
@@ -124,7 +124,7 @@ GreatSQL 8.4.4-5版本中新增**大事务binlog独立落盘**优化，提升**�
   greatsql> SHUTDOWN;
   ```
   
-  **4. 删除旧的Rapid引擎数据文件**
+  **4. 删除旧的 Rapid 引擎数据文件**
   
   ```bash
   cd /data/GreatSQL && rm -f duckdb*
@@ -145,15 +145,15 @@ GreatSQL 8.4.4-5版本中新增**大事务binlog独立落盘**优化，提升**�
   systemctl start greatsql
   ```
   
-  **7. 重新安装Rapid引擎**
+  **7. 重新安装 Rapid 引擎**
   
   ```sql
   greatsql> INSTALL PLUGIN rapid SONAME 'ha_rapid.so';
   ```
   
-  此时有可能提示错误 `ERROR 1125 (HY000): Function 'rapid' already exists`，可以不用理会，这是以为在重启前没有卸载Rapid引擎。
+  此时有可能提示错误 `ERROR 1125 (HY000): Function 'rapid' already exists`，可以不用理会，这是因为在重启前没有卸载 Rapid 引擎。
   
-  **8. 对所有Rapid引擎表做一次全量数据导入**
+  **8. 对所有 Rapid 引擎表做一次全量数据导入**
   
   ```sql
   greatsql> ALTER TABLE tpch100g.customer SECONDARY_ENGINE = rapid;
@@ -163,7 +163,7 @@ GreatSQL 8.4.4-5版本中新增**大事务binlog独立落盘**优化，提升**�
   其他表重复执行上述操作，直到全部完成。
   
   ::: tip 小贴士
-  由于在升级前没有去掉该表的`SECONDARY_ENGINE=rapid`属性，所以无需重新设置。如果在升级前卸载所有Rapid引擎表，则需要重新设置。
+  由于在升级前没有去掉该表的`SECONDARY_ENGINE=rapid`属性，所以无需重新设置。如果在升级前卸载所有 Rapid 引擎表，则需要重新设置。
   :::
   
   **9. 再次启动增量导入任务**
@@ -171,7 +171,7 @@ GreatSQL 8.4.4-5版本中新增**大事务binlog独立落盘**优化，提升**�
   ```sql
   greatsql> SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK('tpch100g', 'customer');
   ```
-  这就完成Rapid引擎表的升级操作了。
+  这就完成 Rapid 引擎表的升级操作了。
 
 - 如果是 MySQL 5.7 或 Percona Server 5.7 等系列版本，可以直接在原来的 `datadir` 基础上，修改 `basedir` 后，原地（in-place）启动 GreatSQL 8.0.32-27 版本后，确认升级成功后，再次在原来 `datadir` 基础上继续升级，即修改 `basedir` 指向 GreatSQL 8.4.4-5 新版本，之后就能完成自动升级。需要注意的是，从 5.7 版本升级到 8.0 版本，再升级到 8.4 版本后，数据库中的账号仍采用 `mysql_native_password` 密码验证插件。当最终升级到 8.4 版本后，需要修改 *my.cnf* 配置文件，加上 `mysql_native_password=1`，以保证原有的账号能正常登录。
 - 如果是 MySQL 8.0 或 Percona Server 8.0 等系列版本，则可以直接在原来的 `datadir` 基础上，修改 `basedir` 后，原地（in-place）启动 GreatSQL 8.4.4-5 后会完成自动升级。
@@ -311,7 +311,7 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |MGR 提升-查看复制延迟秒数| :heavy_check_mark: | ❌ |
 |Clone 增量备份| :heavy_check_mark: | ❌ |
 |Clone 备份压缩| :heavy_check_mark: | ❌ |
-|Binlog 读取限速| :heavy_check_mark: | ❌ |
+|binlog 读取限速| :heavy_check_mark: | ❌ |
 |information_schema 表数量|95|65|
 |全局性能和状态指标|853|434|
 |优化器直方图（Histograms）| :heavy_check_mark: | :heavy_check_mark: |
@@ -320,12 +320,12 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |Per-User 性能指标| :heavy_check_mark: | ❌ |
 |Per-Client 性能指标| :heavy_check_mark: | ❌ |
 |Per-Thread 性能指标| :heavy_check_mark: | ❌ |
-|全局查询相应耗时统计| :heavy_check_mark: | ❌ |
+|全局查询响应耗时统计| :heavy_check_mark: | ❌ |
 |SHOW ENGINE INNODB STATUS 增强| :heavy_check_mark: | ❌ |
 |回滚段信息增强| :heavy_check_mark: | ❌ |
 |临时表信息增强| :heavy_check_mark: | ❌ |
 |用户统计信息增强| :heavy_check_mark: | ❌ |
-|Slow log 信息增强| :heavy_check_mark: | ❌ |
+|Slow Query Log 信息增强| :heavy_check_mark: | ❌ |
 | **5.安全性提升** | GreatSQL 8.4.4-5 | MySQL 8.4.4 |
 |国密支持| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
@@ -356,7 +356,7 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |杀掉不活跃事务| :heavy_check_mark: | ❌ |
 |START TRANSACTION WITH CONSISTENT SNAPSHOT 扩展| :heavy_check_mark: | ❌ |
 
-GreatSQL 8.4.4-5 基于 Percona Server for MySQL 8.4.4-4 版本，它在 MySQL 8.4.4 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.4/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Log 增强等大量改进和提升，这里不一一重复列出。
+GreatSQL 8.4.4-5 基于 Percona Server for MySQL 8.4.4-4 版本，它在 MySQL 8.4.4 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.4/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Query Log 增强等大量改进和提升，这里不一一重复列出。
 
 ## GreatSQL Release Notes
 ### GreatSQL 8.4

@@ -12,7 +12,7 @@
 
 ##  改进提升
 
-在GreatSQL 8.0.32-27版本中新增高性能并行查询引擎**Turbo**，升级Rapid引擎内核版本，优化MGR大事务压缩传输机制，完善greatdb_ha plugin，InnoDB Page支持Zstd压缩，完善Oracle兼容特性，完善安全性等，并修复了几个可能导致crash或丢数据的bug。
+在GreatSQL 8.0.32-27版本中新增高性能并行查询引擎**Turbo**，升级 Rapid 引擎内核版本，优化MGR大事务压缩传输机制，完善greatdb_ha plugin，InnoDB Page支持Zstd压缩，完善Oracle兼容特性，完善安全性等，并修复了几个可能导致crash或丢数据的bug。
 
 ### 高可用
 
@@ -45,11 +45,11 @@ greatsql> SHOW GLOBAL STATUS LIKE 'Rpl%spee%';
 - 在greatdb_ha plugin中，增加对参数`greatdb_ha_port`相应的TCP端口进行防御，避免用户端发送非法指令后可能导致crash的风险。
 - 修复了启用greatdb_ha plugin时，可能因为Linux系统函数FD_SET中当遇到文件描述符超过1024时导致未定义行为而引发crash的问题。
 - 修复了greatdb_ha plugin中启用VIP功能后，可能存在内存泄漏风险的问题。
-- 修复了在主备两套MGR集群间部署主从复制后，当备用集群主节点意外宕机时，可能无法退出进程的问题。
-- 修复了在主备两套MGR集群间部署主从复制后，当备用集群主节点执行`kill -19`操作杀掉mysqld进程，在故障恢复后，Slave节点上的sql_thread线程可能长时间未能退出的问题。
+- 修复了在主备两套 MGR 集群间部署主从复制后，当备用集群主节点意外宕机时，可能无法退出进程的问题。
+- 修复了在主备两套 MGR 集群间部署主从复制后，当备用集群主节点执行`kill -19`操作杀掉mysqld进程，在故障恢复后，Slave节点上的sql_thread线程可能长时间未能退出的问题。
 
 ### 高性能
-- 新增高性能并行查询引擎**Turbo**，它通过内嵌DuckDB，使GreatSQL具备多线程并发的向量化查询功能，在实现指数级提升加速SQL查询速度的同时，保持对GreatSQL生态系统的兼容性。相较于Rapid引擎，Turbo引擎不需要将数据加载到引擎中，而是在查询过程中，直接并行抽取数据供Turbo引擎使用。
+- 新增高性能并行查询引擎**Turbo**，它通过内嵌DuckDB，使GreatSQL具备多线程并发的向量化查询功能，在实现指数级提升加速SQL查询速度的同时，保持对GreatSQL生态系统的兼容性。相较于 Rapid 引擎，Turbo引擎不需要将数据加载到引擎中，而是在查询过程中，直接并行抽取数据供Turbo引擎使用。
 
 首先安装Turbo引擎
 
@@ -65,13 +65,13 @@ greatsql> SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_threshold=0)*/ 
 
 关于Turbo引擎更详细的使用方法请参考：[Turbo引擎](../../5-enhance/5-1-highperf-turbo-engine.md)。
 
-- 升级Rapid引擎内核到正式GA版本，新版本在存储格式稳定性、查询语义一致性等方面的重大突破，为用户提供了强有力的稳定性保证。注意，**在新版本中采用新的文件存储格式，和之前的版本不兼容**，因此无法从GreatSQL 8.0.32-25或8.0.32-26版本直接平滑升级到GreatSQL 8.0.32-27，需要先删除旧的Rapid引擎数据文件，再次执行全量导入数据，重新启动增量导入任务。详细升级方式请见下方：[升级到 GreatSQL 8.0.32-27](#升级到-greatsql-8-0-32-27)。
-- 在新版本的Rapid引擎中，最大可使用并行逻辑CPU核数上限为4个，如果需要获得更高并发性能，可以联系我们提供解决方案。
-- 修复了Rapid引擎中一次性删除大批量数据后，查看增量导入任务进度时，DELAY字段显示不准确的问题。
-- 修复了在存储过程中使用`EXPLAIN`查看Rapid表执行计划时，显示无法使用Rapid引擎实际上却可以使用的错误问题。
-- 修复Rapid引擎中未先完成一次全量导入任务，而是直接启动增量导入任务发生失败报错后，重启实例后无法正常启动的问题。正常地，正确的做法是先完成一次全量导入后，再启动增量导入任务。
-- 修复Rapid引擎参数`rapid_worker_threads`设置问题。当将其设置超过最大值后，再重新设置除默认值之外的其他合法值都会报错，需要重新装载Rapid引擎或重启数据库后才恢复正常。
-- 移除Rapid引擎参数`rapid_hash_table_memory_limit`，不再使用。
+- 升级 Rapid 引擎内核到正式GA版本，新版本在存储格式稳定性、查询语义一致性等方面实现了重大突破，为用户提供了强有力的稳定性保证。注意，**在新版本中采用新的文件存储格式，和之前的版本不兼容**，因此无法从GreatSQL 8.0.32-25或8.0.32-26版本直接平滑升级到GreatSQL 8.0.32-27，需要先删除旧的 Rapid 引擎数据文件，再次执行全量导入数据，重新启动增量导入任务。详细升级方式请见下方：[升级到 GreatSQL 8.0.32-27](#升级到-greatsql-8-0-32-27)。
+- 在新版本的 Rapid 引擎中，最大可使用并行逻辑CPU核数上限为4个，如果需要获得更高并发性能，可以联系我们提供解决方案。
+- 修复了 Rapid 引擎中一次性删除大批量数据后，查看增量导入任务进度时，DELAY字段显示不准确的问题。
+- 修复了在存储过程中使用`EXPLAIN`查看Rapid表执行计划时，显示无法使用 Rapid 引擎实际上却可以使用的错误问题。
+- 修复 Rapid 引擎中未先完成一次全量导入任务，而是直接启动增量导入任务发生失败报错后，重启实例后无法正常启动的问题。正常地，正确的做法是先完成一次全量导入后，再启动增量导入任务。
+- 修复 Rapid 引擎参数`rapid_worker_threads`设置问题。当将其设置超过最大值后，再重新设置除默认值之外的其他合法值都会报错，需要重新装载 Rapid 引擎或重启数据库后才恢复正常。
+- 移除 Rapid 引擎参数`rapid_hash_table_memory_limit`，不再使用。
 - 读取Rapid表数据时，error log中不再打印类似下方的冗余信息。
 
 ```log
@@ -79,13 +79,13 @@ greatsql> SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_threshold=0)*/ 
 [Note] [MY-011825] [InnoDB] thread 63 handle range count: 21 total rows: 1648443
 [Note] [MY-011825] [InnoDB] total fetch rows count: 150000000
 ``` 
-- 修复Rapid引擎对表中存在虚拟列时的处理方案。在以前，当表中存在虚拟列时，执行`ALTER TABLE ... SECONDARY_LOAD`不会报错，但在执行`SELECT ... /*+ SET_VAR(use_secondary_engine=FORCED) */ `时会报错不支持。在新版本中，当发现表中存在虚拟列时，执行`ALTER TABLE ... SECONDARY_LOAD`直接报告下面的错误表示不支持：
+- 修复 Rapid 引擎对表中存在虚拟列时的处理方案。在以前，当表中存在虚拟列时，执行`ALTER TABLE ... SECONDARY_LOAD`不会报错，但在执行`SELECT ... /*+ SET_VAR(use_secondary_engine=FORCED) */ `时会报错不支持。在新版本中，当发现表中存在虚拟列时，执行`ALTER TABLE ... SECONDARY_LOAD`直接报告下面的错误表示不支持：
 
 ```sql
 ERROR 3106 (HY000): 'Rapid engine' is not supported for generated columns.
 ```
 
-- 在使用Rapid引擎时，如果出现不支持的数据类型，返回的错误提示中增加更明确的错误，如下例所示
+- 在使用 Rapid 引擎时，如果出现不支持的数据类型，返回的错误提示中增加更明确的错误，如下例所示
 
 ```sql
 greatsql> CREATE TABLE t1 (
@@ -156,12 +156,12 @@ greatsql> ALTER TABLE t1 COMPRESSION='zstd';
 ## 升级/降级到 GreatSQL 8.0.32-27
 
 ### 升级到 GreatSQL 8.0.32-27
-- 如果旧版本是GreatSQL 8.0.32-25或8.0.32-26，并且没有使用Rapid引擎，则可以直接在原来的`datadir`基础上，修改`basedir`后，原地（in-place）启动 GreatSQL 8.0.32-27 后会完成自动升级。
-- 如果旧版本是 GreatSQL 8.0.32-25或8.0.32-26，并且已启用Rapid引擎，**这种情况下无法原地升级**，需要卸载所有Rapid引擎表，删除Rapid数据文件，之后才可以直接在原来的`datadir`基础上，修改`basedir`后，原地（in-place）启动GreatSQL 8.0.32-27后会完成自动升级。新版本实例启动后，对所有Rapid引擎表执行`ALTER TABLE SECONDARY_LOAD`完成全量数据导入，再执行`SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK()`启动增量导入任务，完成Rapid引擎表升级工作。下面是一个升级参考过程：
+- 如果旧版本是GreatSQL 8.0.32-25或8.0.32-26，并且没有使用 Rapid 引擎，则可以直接在原来的`datadir`基础上，修改`basedir`后，原地（in-place）启动 GreatSQL 8.0.32-27 后会完成自动升级。
+- 如果旧版本是 GreatSQL 8.0.32-25或8.0.32-26，并且已启用 Rapid 引擎，**这种情况下无法原地升级**，需要卸载所有 Rapid 引擎表，删除Rapid数据文件，之后才可以直接在原来的`datadir`基础上，修改`basedir`后，原地（in-place）启动GreatSQL 8.0.32-27后会完成自动升级。新版本实例启动后，对所有 Rapid 引擎表执行`ALTER TABLE SECONDARY_LOAD`完成全量数据导入，再执行`SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK()`启动增量导入任务，完成 Rapid 引擎表升级工作。下面是一个升级参考过程：
 
-1. 查询并记录所有Rapid引擎表
+1. 查询并记录所有 Rapid 引擎表
 
-可以执行下面的SQL，查询当前有哪些表使用了Rapid引擎：
+可以执行下面的SQL，查询当前有哪些表使用了 Rapid 引擎：
 
 ```sql
 greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_ROWS FROM information_schema.TABLES WHERE CREATE_OPTIONS LIKE '%Rapid%';
@@ -188,7 +188,7 @@ greatsql> SET GLOBAL innodb_fast_shutdown=0;
 greatsql> SHUTDOWN;
 ```
 
-3. 删除旧的Rapid引擎数据文件
+3. 删除旧的 Rapid 引擎数据文件
 
 ```bash
 cd /data/GreatSQL && rm -f duckdb*
@@ -209,20 +209,20 @@ basedir=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64
 systemctl start greatsql
 ```
 
-6. 重新安装Rapid引擎
+6. 重新安装 Rapid 引擎
 
 ```sql
 greatsql> INSTALL PLUGIN rapid SONAME 'ha_rapid.so';
 ```
 
-7. 对Rapid引擎表做一次全量数据导入
+7. 对 Rapid 引擎表做一次全量数据导入
 
 ```sql
 greatsql> ALTER TABLE test.t1 SECONDARY_LOAD;
 ```
 
 ::: tip 小贴士
-由于在升级前没有去掉该表的`SECONDARY_ENGINE=rapid`属性，所以无需重新设置。如果在升级前卸载所有Rapid引擎表，则需要重新设置。
+由于在升级前没有去掉该表的`SECONDARY_ENGINE=rapid`属性，所以无需重新设置。如果在升级前卸载所有 Rapid 引擎表，则需要重新设置。
 :::
 
 8. 再次启动增量导入任务
@@ -230,7 +230,7 @@ greatsql> ALTER TABLE test.t1 SECONDARY_LOAD;
 ```sql
 greatsql> SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK('test', 't1');
 ```
-这就完成Rapid引擎表的升级操作了。
+这就完成 Rapid 引擎表的升级操作了。
 
 - 如果旧版本是GreatSQL 8.0.32-24、8.0.25-*、5.7.36-39等系列版本，则可以直接在原来的`datadir`基础上，修改`basedir`后，原地（in-place）启动GreatSQL 8.0.32-27 后会完成自动升级。
 - 如果是MySQL 8.0.*（<= 8.0.32 版本）、Percona Server 8.0.*（<= 8.0.32 版本）等系列版本，则可以直接在原来的`datadir`基础上，修改`basedir`后，原地（in-place）启动 GreatSQL 8.0.32-27后会完成自动升级。
@@ -371,12 +371,12 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |Per-User 性能指标| :heavy_check_mark: | ❌ |
 |Per-Client 性能指标| :heavy_check_mark: | ❌ |
 |Per-Thread 性能指标| :heavy_check_mark: | ❌ |
-|全局查询相应耗时统计| :heavy_check_mark: | ❌ |
+|全局查询响应耗时统计| :heavy_check_mark: | ❌ |
 |SHOW ENGINE INNODB STATUS 增强| :heavy_check_mark: | ❌ |
 |回滚段信息增强| :heavy_check_mark: | ❌ |
 |临时表信息增强| :heavy_check_mark: | ❌ |
 |用户统计信息增强| :heavy_check_mark: | ❌ |
-|Slow log 信息增强| :heavy_check_mark: | ❌ |
+|Slow Query Log 信息增强| :heavy_check_mark: | ❌ |
 | **5.安全性提升** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
 |国密支持| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
@@ -408,7 +408,7 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |杀掉不活跃事务| :heavy_check_mark: | ❌ |
 |START TRANSACTION WITH CONSISTENT SNAPSHOT 扩展| :heavy_check_mark: | ❌ |
 
-GreatSQL 8.0.32-27 基于 Percona Server for MySQL 8.0.32 版本，它在 MySQL 8.0.32 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Log 增强等大量改进和提升，这里不一一重复列出。
+GreatSQL 8.0.32-27 基于 Percona Server for MySQL 8.0.32 版本，它在 MySQL 8.0.32 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Query Log 增强等大量改进和提升，这里不一一重复列出。
 
 ## GreatSQL Release Notes
 ### GreatSQL 8.0

@@ -1,6 +1,6 @@
 # 发行说明
 ---
-本章文档是GreatSQL的发行说明。
+本章文档是 GreatSQL 的发行说明。
 
 - ## [用户须知](./1-1-notes-to-users.md)
 - ## [版本历史](./1-2-release-history.md)

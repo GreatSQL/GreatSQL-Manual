@@ -30,7 +30,7 @@ $ mysql -hlocalhost -S/data/GreatSQL/mysql.sock -uroot -p
 # 在GreatSQL 中执行 STATUS 即可查看版本号
 greatsql> STATUS;
 ...
-Server version:         8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
+Server version:         8.0.32-27 GreatSQL, Release 27, Revision a68b3034c3d
 ...
 ```
 
@@ -38,9 +38,10 @@ Server version:         8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
 - 大版本号X对应：8
 - 小版本号Y对应：0
 - 补丁版本Z对应：32
-- 修订版本R对应：a68b3034c3d
+- 修订版本R对应：27
+- Revision(源码修订号)： a68b3034c3d
 
-其中的 *Release 27* 是 GreatSQL 新增的发行版本，GreatSQL 可能会基于同一个基础版本，发布多个版本，例如 GreatSQL 8.0.32-24、8.0.32-25、8.0.32-27 这三个版本都是基于 8.0.32 这个版本。
+GreatSQL 可能会基于同一个基础版本，发布多个版本，例如 GreatSQL 8.0.32-24、8.0.32-25、8.0.32-27 这三个版本都是基于 8.0.32 这个版本。
 
 正常情况下，GreatSQL每年会发布两次版本，一般是上半年、下半年各发布一个新版本。
 

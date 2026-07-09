@@ -28,7 +28,7 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 
 - 在主从复制中，由从节点向主节点发起 Binlog 读取请求，如果读取太快或并发太多线程就会加大主节点的压力。新增参数 `rpl_read_binlog_speed_limit` 用于控制从节点上向主节点发起 Binlog 读取请求的限速，这对于控制主从复制中的网络带宽使用率、降低主节点压力、或在数据恢复过程中降低消耗资源非常有用。该参数可在从节点端设置生效。详见：[Binlog 读取限速](../../5-enhance/5-2-ha-binlog-speed-limit.md)。
 - 优化了在 [快速单主模式](../../5-enhance/5-2-ha-mgr-fast-mode.md) 下 relay log 应用逻辑，提升 MGR 整体性能；并优化了当 relay log 存在堆积时的 applier 线程的内存消耗异常情况。
-- 优化了 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 中的故障检测效率，特别是发生网络故障时，备用集群能更快完成主从复制通道调整，降低主从复制链路断开的时间，提高整体可用性。以设置 `MASTER_RETRY_COUNT = 2` 为例（`slave_net_timeout` 和 `MASTER_CONNECT_RETRY` 默认值均为 60），在主从复制通道间发生网络故障时导致的复制中断持续约 3 分钟，优化后故障影响时长缩短到 10 - 20 秒以内。可以利用 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 实现两个 MGR 集群间的主从复制，实现跨机房间的高可用切换方案。
+- 优化了 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 中的故障检测效率，特别是发生网络故障时，备用集群能更快完成主从复制通道调整，降低主从复制链路断开的时间，提高整体可用性。以设置 `MASTER_RETRY_COUNT = 2` 为例（`slave_net_timeout` 和 `MASTER_CONNECT_RETRY` 默认值均为 60），在主从复制通道间发生网络故障时导致的复制中断持续约 3 分钟，优化后故障影响时长缩短到 10 - 20 秒以内。可以利用 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 实现两个  MGR 集群间的主从复制，实现跨机房间的高可用切换方案。
 - [地理标签](../../5-enhance/5-2-ha-mgr-zoneid.md) 功能中包含两个参数 `group_replication_zone_id`（默认值为 0）和 `group_replication_zone_id_sync_mode`（默认值为ON）。在旧版本中，要求各个节点的 `group_replication_zone_id_sync_mode` 保持一致，否则无法加入 MGR。新版本中，允许仲裁节点设置不同的 `group_replication_zone_id_sync_mode`。例如，节点 A1、A2 设置 `group_replication_zone_id = 0` & `zone_id_sync_mode = ON`；节点 B1、B2 设置 `group_replication_zone_id = 1`，它们也必须设置 `zone_id_sync_mode = ON`；仲裁投票节点C 设置 `group_replication_zone_id = 2`，但可以设置 `group_replication_zone_id_sync_mode = OFF`。
 - 当启用 greatdb_ha Plugin 时，新增支持 IPv6。
 
@@ -267,12 +267,12 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |Per-User 性能指标| :heavy_check_mark: | ❌ |
 |Per-Client 性能指标| :heavy_check_mark: | ❌ |
 |Per-Thread 性能指标| :heavy_check_mark: | ❌ |
-|全局查询相应耗时统计| :heavy_check_mark: | ❌ |
+|全局查询响应耗时统计| :heavy_check_mark: | ❌ |
 |SHOW ENGINE INNODB STATUS 增强| :heavy_check_mark: | ❌ |
 |回滚段信息增强| :heavy_check_mark: | ❌ |
 |临时表信息增强| :heavy_check_mark: | ❌ |
 |用户统计信息增强| :heavy_check_mark: | ❌ |
-|Slow log 信息增强| :heavy_check_mark: | ❌ |
+|Slow Query Log 信息增强| :heavy_check_mark: | ❌ |
 | **5.安全性提升** | GreatSQL 8.0.32-26 | MySQL 8.0.32 |
 |国密支持| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
@@ -304,7 +304,7 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |杀掉不活跃事务| :heavy_check_mark: | ❌ |
 |START TRANSACTION WITH CONSISTENT SNAPSHOT 扩展| :heavy_check_mark: | ❌ |
 
-GreatSQL 8.0.32-26 基于 Percona Server for MySQL 8.0.32 版本，它在 MySQL 8.0.32 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Log 增强等大量改进和提升，这里不一一重复列出。
+GreatSQL 8.0.32-26 基于 Percona Server for MySQL 8.0.32 版本，它在 MySQL 8.0.32 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Query Log 增强等大量改进和提升，这里不一一重复列出。
 
 ## GreatSQL Release Notes
 ### GreatSQL 8.0

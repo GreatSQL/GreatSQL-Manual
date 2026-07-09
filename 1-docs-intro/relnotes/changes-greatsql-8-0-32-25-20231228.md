@@ -12,7 +12,7 @@
 
 ##  特性增强
 
-GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级；大幅增加Oracle兼容特性，支持更多数据类型、SQL语法、函数及存储过程等；支持异步删除InnoDB大表；支持在MGR只读节点绑定动态VIP以及主节点切换时主动断开当前连接，缩短应用端不可用时长。
+GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引擎，可将 GreatSQL 的数据分析性能提升几个数量级；大幅增加Oracle兼容特性，支持更多数据类型、SQL语法、函数及存储过程等；支持异步删除InnoDB大表；支持在MGR只读节点绑定动态VIP以及主节点切换时主动断开当前连接，缩短应用端不可用时长。
 
 ### 高可用
 - 支持在MGR单主（Single Primary）模式下，对只读节点绑定VIP，业务可以通过该VIP来访问只读节点，实现只读节点的动态VIP漂移。更详细内容参考：[MGR绑定动态VIP](../../5-enhance/5-2-ha-mgr-vip.md)。
@@ -21,7 +21,7 @@ GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引
 - 更多信息详见文档：[高可用](../../5-enhance/5-2-ha.md)。
 
 ### 高性能
-- 支持大规模并行、高性能的内存查询加速AP引擎，可将GreatSQL的数据分析性能提升几个数量级。在32C64G测试机环境下，TPC-H 100G测试中22条SQL总耗时仅需不到80秒。更详细内容参考：[Rapid引擎](../../5-enhance/5-1-highperf-rapid-engine.md)。
+- 支持大规模并行、高性能的内存查询加速AP引擎，可将 GreatSQL 的数据分析性能提升几个数量级。在32C64G测试机环境下，TPC-H 100G测试中22条SQL总耗时仅需不到80秒。更详细内容参考：[ Rapid 引擎](../../5-enhance/5-1-highperf-rapid-engine.md)。
 
 - 支持异步删除InnoDB大表，删除10G以上大表时对系统负载几乎没影响，有效提高InnoDB引擎运行时性能的稳定性。更详细内容参考：[异步删除InnoDB大表](../../5-enhance/5-1-highperf-async-purge-big-table.md)。
 
@@ -108,12 +108,12 @@ GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引
 |Per-User性能指标| :heavy_check_mark: | ❌ |
 |Per-Client性能指标| :heavy_check_mark: | ❌ |
 |Per-Thread性能指标| :heavy_check_mark: | ❌ |
-|全局查询相应耗时统计| :heavy_check_mark: | ❌ |
+|全局查询响应耗时统计| :heavy_check_mark: | ❌ |
 |SHOW ENGINE INNODB STATUS 增强| :heavy_check_mark: | ❌ |
 |回滚段信息增强| :heavy_check_mark: | ❌ |
 |临时表信息增强| :heavy_check_mark: | ❌ |
 |用户统计信息增强| :heavy_check_mark: | ❌ |
-|Slow log信息增强| :heavy_check_mark: | ❌ |
+|Slow Query Log信息增强| :heavy_check_mark: | ❌ |
 | **5.安全性提升** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
 |国密支持| :heavy_check_mark: | ❌ |
 |备份加密| :heavy_check_mark: | ❌ |
@@ -133,7 +133,7 @@ GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引
 |强制加密| :heavy_check_mark: | ❌ |
 | **6. 运维便利性提升** | GreatSQL 8.0.32-25 | MySQL 8.0.32 |
 |DDL原子性| :heavy_check_mark: | :heavy_check_mark: |
-|数据字典存储InnoDB表| :heavy_check_mark: | :heavy_check_mark: |
+|数据字典存储InnoDB 表| :heavy_check_mark: | :heavy_check_mark: |
 |快速DDL| :heavy_check_mark: | :heavy_check_mark: |
 |SET PERSIST| :heavy_check_mark: | :heavy_check_mark: |
 |不可见索引| :heavy_check_mark: | :heavy_check_mark: |
@@ -144,7 +144,7 @@ GreatSQL 8.0.32-25版本中首次推出支持高性能的内存查询加速AP引
 |杀掉不活跃事务| :heavy_check_mark: | ❌ |
 |START TRANSACTION WITH CONSISTENT SNAPSHOT扩展| :heavy_check_mark: | ❌ |
 
-此外，GreatSQL 8.0.32-25基于Percona Server for MySQL 8.0.32版本，它在MySQL 8.0.32基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等MySQL企业版才有的特性，以及performance_schema提升、information_schema提升、性能和可扩展性提升、用户统计增强、PROCESSLIST增强、Slow log增强等大量改进和提升，这里不一一重复列出。
+此外，GreatSQL 8.0.32-25基于Percona Server for MySQL 8.0.32版本，它在MySQL 8.0.32基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.0/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等MySQL企业版才有的特性，以及performance_schema提升、information_schema提升、性能和可扩展性提升、用户统计增强、PROCESSLIST增强、Slow Query Log增强等大量改进和提升，这里不一一重复列出。
 
 ## GreatSQL Release Notes
 ### GreatSQL 8.0
