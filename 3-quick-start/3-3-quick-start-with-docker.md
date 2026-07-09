@@ -41,7 +41,7 @@ docker search greatsql
 NAME                DESCRIPTION   STARS     OFFICIAL   AUTOMATED
 greatsql/greatsql                 4
 
-docker pull greatsql
+docker pull greatsql/greatsql
 
 ...
 Using default tag: latest
@@ -153,7 +153,7 @@ Threads: 2  Questions: 6  Slow queries: 0  Opens: 119  Flush tables: 3  Open tab
 
 ```bash
 # 先从宿主拷贝文件到容器中
-docker cp /opt/greatsql-test.sql greatsql:/tmp/
+docker cp /tmp/greatsql-test.sql greatsql:/tmp/
 ```
 
 其中

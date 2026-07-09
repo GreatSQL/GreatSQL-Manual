@@ -89,7 +89,7 @@ replica_preserve_commit_order = ON
 replica_checkpoint_period = 2
 loose-rpl_read_binlog_speed_limit=0
 
-# Disalbe InnoDB PQ
+# Disable InnoDB PQ
 loose-force_parallel_execute = OFF
 
 # Parallel LOAD DATA
@@ -109,7 +109,7 @@ loose-plugin_load_add = 'mysql_clone.so'
 loose-plugin_load_add = 'group_replication.so'
 loose-group_replication_group_name = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"
 loose-group_replication_local_address = "172.16.16.10:33061"
-loose-group_replication_group_seeds = '172.16.16.10:33061,72.16.16.12:33061,72.16.16.12:33061'
+loose-group_replication_group_seeds = '172.16.16.10:33061,172.16.16.12:33061,172.16.16.12:33061'
 loose-group_replication_communication_stack = "XCOM"
 loose-group_replication_recovery_use_ssl = OFF
 loose-group_replication_ssl_mode = DISABLED

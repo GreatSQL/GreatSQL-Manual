@@ -18,7 +18,7 @@ minimal 版本是对二进制文件执行 `strip` 操作，所以文件尺寸较
 
 ```bash
 #关闭selinux
-setenforce=0
+setenforce 0
 sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
 
 #关闭防火墙
@@ -156,17 +156,17 @@ mkdir /var/run/mysqld/ /var/lib/mysql-files/ /var/lib/mysql/
 chown mysql:mysql /var/run/mysqld/ /var/lib/mysql-files/ /var/lib/mysql/ /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/
 ```
 
-编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
+编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/` 改为 GreatSQL 实际安装目录。
 
 ## 添加动态依赖库
 
 编辑 `/etc/ld.so.conf` 文件，增加以下几行内容：
 
 ```ini
-/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/lib/
-/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/lib/private
-/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/lib/mysqlrouter/
-/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/lib/mysqlrouter/private
+/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/lib/
+/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/lib/private
+/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/lib/mysqlrouter/
+/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/lib/mysqlrouter/private
 ```
 
 保存退出，执行下面的命令，确认生效：
@@ -175,7 +175,7 @@ chown mysql:mysql /var/run/mysqld/ /var/lib/mysql-files/ /var/lib/mysql/ /usr/lo
 ldconfig && ldconfig -p | grep libprotobuf.so
 
 ...
-	libprotobuf.so.24.4.0 (libc6,x86-64) => /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/lib/private/libprotobuf.so.24.4.0
+	libprotobuf.so.24.4.0 (libc6,x86-64) => /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/lib/private/libprotobuf.so.24.4.0
 ```
 
 这个步骤的作用是加载 GreatSQL 自带的动态依赖库文件，这样在运行 mysql/mysqld 等二进制文件时可能需要用到，避免报错。
@@ -304,7 +304,7 @@ greatsql> SHOW DATABASES;  #<--查看数据库列表
 登录后及时修改密码
 
 ```sql
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'PASSWORD'
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'PASSWORD';
 ```
 
 ## 关闭/重启GreatSQL

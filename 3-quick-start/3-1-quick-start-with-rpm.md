@@ -20,7 +20,7 @@
 
 ```bash
 #关闭selinux
-setenforce=0
+setenforce 0
 sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
 
 #关闭防火墙
@@ -45,9 +45,9 @@ $ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-too
 
 如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](../4-install-guide/1-install-prepare.md)。
 
-## 安装RPM包
+## 安装 RPM 包
 
-执行下面的命令安装PRM包，如果一切顺利的话，相应的过程如下所示：
+执行下面的命令安装 RPM 包，如果一切顺利的话，相应的过程如下所示：
 ```bash
 rpm -ivh --nodeps greatsql*rpm
 
