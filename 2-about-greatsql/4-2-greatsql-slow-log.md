@@ -2,9 +2,9 @@
 
 ## 什么是慢查询日志
 
-GreatSQL 的慢查询日志，用来记录在 GreatSQL 中响应时间超过阀值的语句，当一次请求响应时长超过 `long_query_time`，则会被记录到慢查询日志中。一般也简称为 *慢日志* 或 *Slow Log*。
+GreatSQL 的慢查询日志，用来记录在 GreatSQL 中响应时间超过阈值的语句，当一次请求响应时长超过 `long_query_time`，则会被记录到慢查询日志中。一般也简称为 *慢日志* 或 *Slow Log*。
 
-参数 `long_query_time` 默认值为 10，单位是 *秒*，可以设置为小数，例如 0.01 表示 0.01 秒，即 10 ms（毫秒）。一般建议 `long_query_time` 参数值不高于 0.05，即所有响应耗时超过 50 ms的请求都被当做时慢查询请求。
+参数 `long_query_time` 默认值为 10，单位是 *秒*，可以设置为小数，例如 0.01 表示 0.01 秒，即 10 ms（毫秒）。一般建议 `long_query_time` 参数值不高于 0.05，即所有响应耗时超过 50 ms的请求都被当做慢查询请求。
 
 Slow Log 可以有效帮助发现那些响应较慢的 SQL 请求，利用 [`mysqldumpslow`](https://dev.mysql.com/doc/refman/8.0/en/mysqldumpslow.html) 或  [`pt-query-digest`](../12-dev-guide/12-7-4-sql-optimize-slowsql.md#利用-pt-query-digest-分析慢查询-sql) 工具针对这些慢查询进行优化，可以显著提高 GreatSQL 的整体响应效率，避免严重的性能瓶颈风险。当 GreatSQL 数据库发生 SQL 请求被阻塞，或 SQL 请求明显变慢的时候，应当尽快检查 Slow Log，找到那些可能造成这些原因的慢查询。
 
@@ -95,7 +95,7 @@ long_query_time=0.01
 
 ### 关于 min_examined_row_limit
 
-这个参数用于设助判断 Slow Log 条件，当一个 SQL 请求响应耗时超过 `long_query_time` 阈值，但其扫描读取的行数如果没超过 `min_examined_row_limit`，则它仍然不会被判定为慢查询。
+这个参数用于设置判断 Slow Query Log 条件，当一个 SQL 请求响应耗时超过 `long_query_time` 阈值，但其扫描读取的行数如果没超过 `min_examined_row_limit`，则它仍然不会被判定为慢查询。
 
 也就是说，当 `min_examined_row_limit` 参数值大于 0 时，一个 SQL 请求需要同时满足响应耗时超过 `long_query_time` 并且它扫描读取的行数超过 `min_examined_row_limit` 才会最终被判定为慢查询。
 
@@ -217,7 +217,7 @@ greatsql> SHOW GLOBAL STATUS LIKE 'Slow_queries';
 #   InnoDB_pages_distinct: 8191
 use slow;
 SET timestamp=1671030090;
-SELECT * FROM `student` WHERE id>100000 AND `name`='Yunxi';
+SELECT * FROM `student` WHERE id > 1000 AND `name` = 'Yunxi';
 ```
 
 可以看到慢查询日志记录的非常详细，从上述日志中能看到几个信息：
@@ -237,7 +237,7 @@ SELECT * FROM `student` WHERE id>100000 AND `name`='Yunxi';
 
 在生产环境中，如果要手工分析日志，查找、分析SQL，显然是个体力活，GreatSQL 提供了日志分析工具 `mysqldumpslow` ，或者是可以使用另一个工具 `pt-query-digest`。
 
-利用 `pt-query-digest` 工具可以对 通用日志、慢查询日志、二进制日志，以及 `PROCESSLIST` 和 `tcpdump` 抓包结果进行分析 GreatSQL 的运行状况。分析结果可以输出到文件中，或则直接写回到数据库中。
+利用 `pt-query-digest` 工具可以对 通用日志、慢查询日志、二进制日志，以及 `PROCESSLIST` 和 `tcpdump` 抓包结果进行分析 GreatSQL 的运行状况。分析结果可以输出到文件中，或直接写回到数据库中。
 
 慢日志分析的详细方法参考：
 - [慢查询 SQL 分析优化](../12-dev-guide/12-7-4-sql-optimize-slowsql.md#利用-pt-query-digest-分析慢查询-sql) 
@@ -245,7 +245,7 @@ SELECT * FROM `student` WHERE id>100000 AND `name`='Yunxi';
 
 ## 关闭慢查询日志
 ::: tip 小贴士
-除非确实不需要关注 SQL 执行效率，否则不建议建议关闭慢查询日志。
+除非确实不需要关注 SQL 执行效率，否则不建议关闭慢查询日志。
 :::
 
 可以执行下面的命令，在线动态关闭慢查询日志：
@@ -280,7 +280,7 @@ FLUSH SLOW LOGS;
 ```
 
 ::: warning 警告
-不要在服务器上用 vi 等方式在线打开慢查询日志文件，这可能会文件句柄修改，使得该文件状态异常，并造成不可意料的磁盘满问题。
+不要在服务器上用 vi 等方式在线打开慢查询日志文件，这可能会造成文件句柄被修改，使得该文件状态异常，并造成不可意料的磁盘满问题。
 :::
 
 

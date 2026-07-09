@@ -81,7 +81,7 @@ binlog_transaction_dependency_tracking=WRITESET
 
 - `max_binlog_size`
 
-  设置每个 Binlog 文件大小，当最大和默认值都是 1GB，一般也建议设置为 1GB。当 Binlog 文件大小超过此阈值时，会自动执行 Binlog 轮转（log rotate）动作，生成新的 Binlog 文件。例外的情况是，当一个事务尚未提交时，即便此时 Binlog 文件大小已超过阈值，为了保证事务的完整性，并不会强行进行日志轮转，需要等到事务结束后，才会进行轮转，所以能看到有时候某个 Binlog 文件超过预设的阈值。
+  设置每个 Binlog 文件大小，最大和默认值都是 1GB，一般也建议设置为 1GB。当 Binlog 文件大小超过此阈值时，会自动执行 Binlog 轮转（log rotate）动作，生成新的 Binlog 文件。例外的情况是，当一个事务尚未提交时，即便此时 Binlog 文件大小已超过阈值，为了保证事务的完整性，并不会强行进行日志轮转，需要等到事务结束后，才会进行轮转，所以能看到有时候某个 Binlog 文件超过预设的阈值。
 
 - `binlog_format`
 
@@ -300,7 +300,7 @@ COMMIT/*!*/;
 mysqlbinlog --no-defaults --help
 
 # 查看最后 100 行
-mysqlbinlog --no-defaults --base64-output=decode-rows -vv binlog.000028 |tail - 100
+mysqlbinlog --no-defaults --base64-output=decode-rows -vv binlog.000028 |tail -100
 
 # 根据 position 查找
 mysqlbinlog --no-defaults --base64-output=decode-rows -vv binlog.000028 |grep -A 20 '619'
@@ -317,7 +317,7 @@ SHOW BINLOG EVENTS [IN 'log_name'] [FROM pos] [LIMIT [offset,] row_count];
 ```sql
 greatsql> SHOW BINLOG EVENTS IN 'binlog.000102' FROM 1142 LIMIT 1\G
 *************************** 1. row ***************************
-   Log_name: mgr01.002583
+   Log_name: binlog.000102
         Pos: 1142
  Event_type: Rows_query
   Server_id: 3306
@@ -463,7 +463,7 @@ Binlog 刷盘流程如下：
 
 参数 `sync_binlog` 用于设置 Write 和 fsync 的时机，它的默认值是 1。
 
-在上面已经解释了 `sync_binlog` 不同设置的区别。当设置为 0，表示每次提交事务都只 Write 到操作系统的 Page cache，再由操作系统自行判断什么时候执行 fsync。这时候的性能最好，但也最危险，以为当系统发生故障重启时，Page cache 里暂存的 Binglog Events 就会丢失。如下图所示：
+在上面已经解释了 `sync_binlog` 不同设置的区别。当设置为 0，表示每次提交事务都只 Write 到操作系统的 Page cache，再由操作系统自行判断什么时候执行 fsync。这时候的性能最好，但也最危险，因为当系统发生故障重启时，Page cache 里暂存的 Binlog Events 就会丢失。如下图所示：
 
 ![Binlog 刷盘机制](./4-3-greatsql-binary-log-03.png#pic_center)
 
@@ -473,7 +473,7 @@ Binlog 刷盘流程如下：
 
 ### Binlog 与 Redo Log 的异同
 
-- Redo Log 是逻辑物理日志，记录的内容是 **在某个数据页上做了什么修改**，它只工作在 InnoDB 引擎层。
+- Redo Log 是物理逻辑日志，记录的内容是 **在某个数据页上做了什么修改**，它只工作在 InnoDB 引擎层。
 - 而 Binlog 是 **纯粹的逻辑日志**，记录的内容是对数据库变更的事件（通常也可以理解为对数据库修改的 SQL 语句），它工作 Server 层，所有的引擎都会涉及到。
 - 二者都是为事务数据的持久化提供保障，但是侧重点略有不同：
   - Redo Log 为 InnoDB 引擎提供事务一致性保障和崩溃恢复支持。

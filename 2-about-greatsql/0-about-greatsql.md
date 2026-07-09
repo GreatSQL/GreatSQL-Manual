@@ -8,7 +8,6 @@
  - ## [系统架构](./3-greatsql-arch.md)
  - ## [GreatSQL日志](./4-greatsql-log.md)
  - ## [使用限制](./5-greatsql-limitations.md)
- - ## [术语表](./6-greatsql-glossary.md)
  - ## [保留字、关键字](./7-greatsql-keywords.md)
 
 

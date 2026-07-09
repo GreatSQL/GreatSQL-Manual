@@ -157,12 +157,12 @@ mysqladmin: refresh failed; error: 'Could not open file '/data/GreatSQL/error.lo
 cd /data/GreatSQL
 mv error.log error-`date +'%Y%m%d'`.log
 
-# 清空误日志文件
+# 清空错误日志文件
 echo '' > error.log
 ```
 
 ::: warning 警告
-不要在服务器上用 vi 等方式在线打开错误日志文件，这可能会文件句柄修改，使得该文件状态异常，并造成不可意料的磁盘满问题。
+不要在服务器上用 vi 等方式在线打开错误日志文件，这可能会造成文件句柄被修改，使得该文件状态异常，并造成不可意料的磁盘满问题。
 :::
 
 **扫码关注微信公众号**
