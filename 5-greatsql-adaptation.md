@@ -16,7 +16,7 @@ GreatSQL 社区面向数据库产业生态上下游厂商，包括如操作系�
 
 - 步骤 3：提交材料 
 
-将适配自测试报告/测试过程录屏视频（或完整过程关键截图），发邮件至：<greatsql@greatdb.com>。 
+将适配自测试报告/测试过程录屏视频（或完整过程关键截图），可参考模板文档：[《GreatSQL-产品兼容互认自测报告模板》](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/GreatSQL-产品兼容互认自测报告模板.doc)，整理测试详细过程文档，并填写：[《GreatSQL数据库兼容性互认申请表》](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/GreatSQL数据库兼容性互认申请表.doc)，发邮件至：<greatsql@greatdb.com>。 
 
 - 步骤 4：出具证书 
 
