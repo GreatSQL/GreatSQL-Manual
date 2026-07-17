@@ -2,9 +2,7 @@
 ---
 ## CLIENT_STATISTICS表介绍
 
-此表包含有关客户端连接的统计信息。可见性限制为具有 `SUPER` or `PROCESS` 权限的用户
-
-若没`SUPER` or `PROCESS` 权限报错如下：
+此表包含有关客户端连接的统计信息。可见性限制为具有 `SUPER` 或 `PROCESS` 权限的用户。若没有 `SUPER` 或 `PROCESS` 权限报错如下：
 
 ```bash
 greatsql> SELECT * FROM INFORMATION_SCHEMA.CLIENT_STATISTICS\G

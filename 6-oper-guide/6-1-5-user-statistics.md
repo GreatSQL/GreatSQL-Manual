@@ -45,7 +45,7 @@ CONCURRENT_CONNECTIONS: 0
 | CONCURRENT_CONNECTIONS | 该用户的并发连接数                                           |
 | CONNECTED_TIME         | 该用户建立连接时经过的累计秒数                               |
 | BUSY_TIME              | 该用户的连接活动的累计秒数                                   |
-| CPU_TIME               | 为该用户的连接提供服务时所用的累计 CPU 时间（以秒为单位）    |
+| CPU_TIME               | 为该用户的连接提供服务时所用的累计 CPU 时间（秒）    |
 | BYTES_RECEIVED         | 从该用户的连接接收到的字节数                                 |
 | BYTES_SENT             | 发送到该用户连接的字节数                                     |
 | BINLOG_BYTES_WRITTEN   | 从该用户的连接写入二进制日志的字节数                         |

@@ -9,11 +9,11 @@ MySQL InnoDB Cluster（简称MIC）是MySQL推出的整套解决方案，由几�
 - MySQL Shell，可编程的高级客户端，支持标准SQL语法、JavaScript语法、Python语法，以及API接口，可以更方便的管理和使用MySQL服务器。
 - MySQL Router，轻量级中间件，支持透明路由规则（读写分离及读负载均衡）。
 
-MySQL Router是一个轻量级的中间件，它采用多端口的方案实现读写分离以及读负载均衡，而且同时支持mysql和mysql x协议。
+MySQL Router 是一个轻量级的中间件，它采用多端口的方案实现读写分离以及读负载均衡，而且同时支持 MySQL 和 MySQL X 协议。
 
 整体系统架构如下图所示：
 
-![MySQL InnoDB Cluser架构](./2-oper-rw-splitting-01.png)
+![MySQL InnoDB Cluster架构](./2-oper-rw-splitting-01.png)
 
 ## MySQL Router安装&初始化
 
@@ -185,18 +185,18 @@ ERROR 1045 (28000): Access denied for user 'GreatSQL'@'172.16.16.14' (using pass
 bind_address=0.0.0.0
 bind_port=6447
 #destinations=metadata-cache://GreatSQLMGR/?role=SECONDARY
-destinations=172.16.16.11,172.16.11.13
+destinations=172.16.16.11,172.16.16.13
 #routing_strategy=round-robin-with-fallback
 routing_strategy=round-robin
 protocol=classic
 ```
-由于直接指定了只读节点列表，就无法再使用 *round-robin-with-fallback* 策略了，可以改成 *round-roubin* 策略。
+由于直接指定了只读节点列表，就无法再使用 *round-robin-with-fallback* 策略了，可以改成 *round-robin* 策略。
 
 ## 确认故障自动转移
 
 如果PRIMARY节点宕机或切换，mysqlrouter也能实现自动故障转移，应用端不需要做任何变更，只需最多尝试重连或重新发起请求。
 
-登入MGR集群任意节点：
+登录MGR集群任意节点：
 ```js
 -- 先用mysqlsh客户端连接
 -- mysqlsh --uri GreatSQL@172.16.16.10:3306

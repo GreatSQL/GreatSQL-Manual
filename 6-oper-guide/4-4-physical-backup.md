@@ -1,7 +1,7 @@
 # 物理备份恢复
 ---
 
-本文介绍GreatSQL数据库如何采进行物理备份恢复。
+本文介绍GreatSQL数据库如何进行物理备份恢复。
 
 ## 文件层物理备份恢复
 可以采用多种方式在文件系统层进行物理备份：
@@ -20,11 +20,11 @@
 需要恢复时，直接将物理备份文件copy到相应目录下，修改文件属主及权限模式，确认相应的my.cnf中的配置无误后，直接启动GreatSQL服务进程即可。
 
 ## xtrabackup备份恢复
-`Xtrabackup` 是由Percona公司出品的开源免费备份工具，它能很方便的对MySQL数据库进行在线热备，并且支持压缩、加密、流式备份等多种方式。
+`XtraBackup` 是由 Percona 公司出品的开源免费备份工具，它能很方便的对 MySQL 数据库进行在线热备，并且支持压缩、加密、流式备份等多种方式。
 
 这是`Xtrabackup`安装包[下载地址](https://www.percona.com/downloads/Percona-XtraBackup-LATEST/)，这是[文档地址](https://docs.percona.com/percona-xtrabackup)。
 
-本文环境选择的是 `Xtrabackup 8.0.32-27` 版本。
+本文环境选择的是 XtraBackup 8.0.32-27 版本。
 
 可根据个人喜好选择RPM包或二进制包，安装步骤略过。
 
@@ -44,7 +44,7 @@
 
 而在Xtrabackup 2.X及更早的版本中，第5步这里直接执行FTWRL，不管是否只有InnoDB表。
 
-在GreatSQL 8.0中（XtraBackup也相应升级到8.x版本），仅存在InnoDB表的话，不再执行FTWRL，而是直接读元数据。
+在 GreatSQL 8.0 中（XtraBackup 也相应升级到 8.x 版本），仅存在InnoDB表的话，不再执行FTWRL，而是直接读元数据。
 
 ### 常规全量备份
 
@@ -105,9 +105,9 @@ xtrabackup --backup --stream=xbstream --compress --compress-threads=4 --datadir=
 
 ### 增量备份
 
-Xtrabackup还支持增量备份，即在上一次备份的基础上，只备份发生新变化的数据。
+XtraBackup 还支持增量备份，即在上一次备份的基础上，只备份发生新变化的数据。
 
-发起增量备份前，得先有一份全量备份，才能有所谓的增量。
+发起增量备份前，需要先有一份全量备份，才能有所谓的增量。
 ```bash
 # 假定全备文件放在 /backup/GreatSQL/ 目录下
 # 发起增量备份
@@ -120,7 +120,7 @@ $ cat xtrabackup_info
 
 ...
 innodb_from_lsn = 91534393  <--全备的LSN
-innodb_to_lsn = 98570737  <--本次增背后的LSN
+innodb_to_lsn = 98570737  <--本次增备后的LSN
 partial = N
 incremental = Y  <--表示增备
 format = file
@@ -140,7 +140,7 @@ flushed_lsn = 98574369
 
 ### 全备还原
 
-Xtrabackup备份文件不能直接用来拉起数据库，需要先做预处理：
+XtraBackup 备份文件不能直接用来拉起数据库，需要先做预处理：
 ```bash
 $ cd /backup/GreatSQL/full/`date +'%Y%m%d'`/
 $ xtrabackup --prepare --target-dir=./

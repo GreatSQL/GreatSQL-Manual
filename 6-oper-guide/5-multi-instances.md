@@ -1,15 +1,15 @@
 # 单机多实例
 ---
 
-本文介绍如何在单机环境下部署多个GreatSQL数据库实例。
+本文介绍如何在单机环境下部署多个 GreatSQL 数据库实例。
 
 有时候，需要在同一个系统环境中运行多个数据库实例，以便节省服务器资源。
 
-从MySQL 5.7开始，官方默认采用 `systemd` 来管理mysqld服务，不建议再使用 `mysqld_safe` 这种守护进程方式了。
+从 MySQL 5.7 开始，官方默认采用 `systemd` 来管理 mysqld 服务，不建议再使用 `mysqld_safe` 这种守护进程方式了。
 
 单机单实例模式下，用 `systemd` 管理mysqld服务可参考这里：[增加GreatSQL系统服务](../4-install-guide/3-install-with-tarball.md#34-增加GreatSQL系统服务)。
 
-无论是RPM还是二进制包方式安装的GreatSQL，都可以利用 `systemd` 管理多实例。
+无论是 RPM 还是二进制包方式安装的 GreatSQL，都可以利用 `systemd` 管理多实例。
 
 假定现在已经实现了用 `systemd` 管理mysqld单实例，接下来要实现管理多实例。
 
@@ -63,7 +63,7 @@ RestartPreventExitStatus=1
 Environment=MYSQLD_PARENT_PID=1
 PrivateTmp=false
 ```
-注意到系统服务文件名相比单实例服务文件名多了 "@" 符，并且文件中 `ExecStartPre` 和 `ExecStart` 的内容也略有不同。
+注意到系统服务文件名相比单实例服务文件名多了 **@** 符号，并且文件中 `ExecStartPre` 和 `ExecStart` 的内容也略有不同。
 
 ##  编辑 /etc/my.cnf 配置文件
 

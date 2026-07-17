@@ -1,7 +1,7 @@
 # 用户统计 User statistics
 
 ---
-GreatSQL提供User statistics（用户统计）功能，此功能添加了几个`INFORMATION_SCHEMA`表，几个命令，以及`userstat`变量。这些表和命令可以用于更好地理解服务器活动，并识别负载的来源。此功能默认是关闭的，必须通过将`userstat`设置为`ON`来启用它。它的工作原理是在内存中保留几个哈希表。为了避免全局互斥锁的争用，每个连接都有自己的本地统计信息，这些本地统计信息会偶尔合并到全局统计信息中，之后本地统计信息会被重置为0。
+GreatSQL 提供 User statistics（用户统计）功能，此功能添加了几个 `INFORMATION_SCHEMA` 表，几个命令，以及 `userstat` 变量。这些表和命令可以用于更好地理解服务器活动，并识别负载的来源。此功能默认是关闭的，必须通过将 `userstat` 设置为 `ON` 来启用它。它的工作原理是在内存中保留几个哈希表。为了避免全局互斥锁的争用，每个连接都有自己的本地统计信息，这些本地统计信息会偶尔合并到全局统计信息中，之后本地统计信息会被重置为0。
 
 开启User statistics（用户统计）功能：
 
@@ -19,7 +19,7 @@ greatsql> SET GLOBAL userstat = ON;
 | Dynamic Variable     | YES                                                          |
 | Permitted Values     | ON/OFF                                                       |
 | Default              | OFF                                                          |
-| Description          | 启用或禁用统计信息的收集默认值为 `OFF` ，表示不收集任何统计信息。这是为了确保统计信息收集不会在服务器上造成任何额外的负载，除非需要。 |
+| Description          | 启用或禁用统计信息的收集。默认值为 `OFF`，表示不收集任何统计信息。这是为了确保统计信息收集不会在服务器上造成任何额外的负载，除非需要。 |
 
 | System Variable Name | thread_statistics                                            |
 | -------------------- | ------------------------------------------------------------ |
@@ -63,7 +63,7 @@ greatsql> SET GLOBAL userstat = ON;
 
 ## 新增状态变量
 
-使用`show status like`查看
+使用 `SHOW STATUS LIKE` 查看
 
 - Com_show_client_statistics
 

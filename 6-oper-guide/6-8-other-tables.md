@@ -1,7 +1,7 @@
 # 其它INFORMATION_SCHEMA表
 
 ---
-此页面列出了由GreatSQL新增的其它`INFORMATION_SCHEMA` 表，这些表在文档其它地方不存在。
+此页面列出了由 GreatSQL 新增的其它`INFORMATION_SCHEMA` 表，这些表在文档其它地方不存在。
 
 ## Temporary tables 临时表
 
@@ -58,7 +58,7 @@ AVG_ROW_LENGTH: 0
 
 该表保存有关正在运行的连接的现有临时表的信息。
 
-换一个连接GreatSQL，查询此表没有内容：
+换一个 GreatSQL 连接，查询此表没有内容：
 
 ```sql
 greatsql> SELECT connection_id();

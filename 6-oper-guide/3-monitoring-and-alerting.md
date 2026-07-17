@@ -53,7 +53,7 @@ user    0m0.001s
 sys     0m0.004s
 ```
 
-这就可以得到耗时是 0.024s，即可认为当前SQL平均响应耗时是及24ms，通过监控系统在不同时段获取该值，即可知道这个指标的变化波动幅度了。
+这就可以得到耗时是 0.024s，即可认为当前 SQL 平均响应耗时是 24ms，通过监控系统在不同时段获取该值，即可知道这个指标的变化波动幅度了。
 
 ## 锁、等待事件
 
@@ -158,7 +158,7 @@ greatsql> SELECT MEMBER_ID AS id, COUNT_TRANSACTIONS_IN_QUEUE AS trx_tobe_certif
 
 在GreatSQL中，针对MGR applier线程，新增以下几个状态变量：
 
-1. `group_replication_apply_queue_size`：applier线程中尚未处理的消息队列的大小。如果该值累计较大，说明当前节点可能存在较大的延迟，也即有较多事务数据尚未写入到Realy Log中。
+1. `group_replication_apply_queue_size`：applier线程中尚未处理的消息队列的大小。如果该值累计较大，说明当前节点可能存在较大的延迟，也即有较多事务数据尚未写入到Relay Log中。
 
 2. `group_replication_applied_messages`：applier线程累计应用的消息总量。包括用户数据的事务消息，和其它组复制运行过程中产生的各种消息。
 

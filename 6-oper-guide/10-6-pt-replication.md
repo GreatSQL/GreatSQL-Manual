@@ -11,7 +11,7 @@
 - `pt-heartbeat`：监控 MySQL/GreatSQL 复制延迟。
 - `pt-slave-delay`：设定从落后主的时间。
 - `pt-slave-find`：查找和打印所有 MySQL/GreatSQL 复制层级关系。
-- `pt-slave-restart`：监控 Salve 错误，并尝试重启 Salve。
+- `pt-slave-restart`：监控 Slave 错误，并尝试重启 Slave。
 - `pt-table-checksum`：校验主从复制一致性。
 - `pt-table-sync`：高效同步表数据。
 - `pt-galera-log-explainer`：对多个 Galera 日志进行过滤、聚合和汇总。
@@ -52,7 +52,7 @@ pt-heartbeat [OPTIONS] [DSN] --update|--monitor|--check|--stop
 | --daemonize                | 后台运行                                                     |
 | --database                 | 用于连接的数据库                                             |
 | --dbi-driver               | 指定连接的驱动程序                                           |
-| --defaults-file            | 只从给定文件中读取 GreatSQL 选项                             |
+| --defaults-file            | 只从给定文件中读取 MySQL/GreatSQL 选项                             |
 | --file                     | 将最新的 `--monitor` 输出打印到此文件                          |
 | --frames                   | 平均值的时间范围，默认为1m,5m,15m                            |
 | --help                     | 显示帮助                                                     |
@@ -337,7 +337,7 @@ pt-slave-restart [OPTIONS] [DSN]
 | --host                | 连接到主机                                                   |
 | --log                 | 后台运行时，将输出打印到此文件                               |
 | --max-sleep           | 再次轮询从库之前休眠的最长时间                               |
-| --min-sleep           | 再次轮询从库之前休眠眠的最短时间                             |
+| --min-sleep           | 再次轮询从库之前休眠的最短时间                               |
 | --monitor             | 是否监控从机（默认）                                         |
 | --password            | 连接时使用的密码                                             |
 | --pid                 | 创建给定的 PID 文件                                          |
@@ -692,7 +692,7 @@ pt-table-sync [OPTIONS] DSN [DSN]
 | --conflict-threshold     | 一个 `--conflict-column` 必须超过另一个的数量                  |
 | --conflict-value         | 将此值用于某些 `--conflict-comparison`                        |
 | --databases              | 仅同步的数据库列表，如有多个用逗号分隔                       |
-| --defaults-file          | 只从给定文件中读取 GreatSQL 选项                             |
+| --defaults-file          | 只从给定文件中读取 MySQL/GreatSQL 选项                             |
 | --dry-run                | 分析、决定要使用的同步算法、打印并退出                       |
 | --engines                | 仅同步的存储引擎列，如有多个用逗号分隔                       |
 | --execute                | 执行查询以使表具有相同的数据                                 |

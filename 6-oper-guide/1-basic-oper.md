@@ -1,11 +1,11 @@
 # 日常管理
 ---
 
-本文描述GreatSQL数据库的日常管理操作，主要包括服务管理、参数选项调整等。
+本文描述 GreatSQL 数据库的日常管理操作，主要包括服务管理、参数选项调整等。
 
 ##  服务管理
 
-无论是RPM、二进制包还是Ansible等何种方式安装GreatSQL，都建议采用systemd来管理GreatSQL服务。在Docker容器环境中，无需利用systemd来管理GreatSQL，直接整个容器启停即可。
+无论是RPM、二进制包还是Ansible等何种方式安装GreatSQL，都建议采用 systemd 来管理 GreatSQL 服务。在Docker容器环境中，无需利用systemd来管理GreatSQL，直接整个容器启停即可。
 
 如果是RPM包方式安装GreatSQL，则服务名为 `mysqld`，如果采用二进制包和Ansible方式安装，则服务名为 `greatsql`。为了方便，本文中统一约定为 `greatsql`。
 
@@ -34,7 +34,7 @@ systemctl status greatsql
 journalctl -ex
 ```
 
-更多关于利用systemd管理GreatSQL服务的内容请参考：[利用systemd管理GreatSQL](../4-install-guide/8-greatsql-with-systemd.md)。
+更多关于利用 systemd 管理 GreatSQL 服务的内容请参考：[利用systemd管理GreatSQL](../4-install-guide/8-greatsql-with-systemd.md)。
 
 ##  修改参数选项
 
@@ -133,7 +133,7 @@ $ grep innodb_buffer_pool_size /data/GreatSQL/mysqld-auto.cnf
 | 日志 | 简述 |
 | --- | --- |
 | binary log | 简称binlog，记录对数据库的各种变更操作，主要用于数据库复制和数据恢复 |
-| error log | 记录MySQL启动，运行过程，停止中产生的各种错误信息，便于排查故障 |
+| error log | 记录 MySQL 启动、运行及停止过程中产生的各种错误信息，便于排查故障 |
 | slow query log | 记录被认定为慢查询类型的SQL语句 |
 | relay log | 主从复制过程中，从节点上的转储日志，用于从节点应用数据库变更操作，以保持和主节点的数据一致 |
 | general log | 详细记录连接建立和执行的所有SQL语句，通常临时打开用于故障排查或SQL审计 |
@@ -438,9 +438,9 @@ no-auto-rehash
 [mysqld]
 ...
 ```
-其中，`no-auto-rehash`尤其重要，可以有效提高登入效率。
+其中，`no-auto-rehash`尤其重要，可以有效提高登录效率。
 
-因为GreatSQL客户端程序每次登入时，默认都会读取所有数据对象元数据信息，如果当前实例中，数据库对象特别多的话这个过程就会特别慢，甚至有时候还会导致发生MDL锁等待。
+因为GreatSQL客户端程序每次登录时，默认都会读取所有数据对象元数据信息，如果当前实例中，数据库对象特别多的话这个过程就会特别慢，甚至有时候还会导致发生MDL锁等待。
 
 更多关于客户端配置参数请参考：[客户端的进阶操作](https://mp.weixin.qq.com/s/dM_Kr23h-yXo61uSf8uPNQ)
 

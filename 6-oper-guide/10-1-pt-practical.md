@@ -6,7 +6,7 @@
 
 ## 实用类
 
-在 Percona Toolkit 中性能类共有以下工具：
+在 Percona Toolkit 中实用类共有以下工具：
 
 - `pt-align`：将其它工具输出内容与列对齐。
 - `pt-archiver`：将表中的行存档到另一个表或文件中。
@@ -313,7 +313,7 @@ pt-archiver --source u=root,D=test_db,t=archiver_test -S /data/MySQL/GreatSQL.so
 ```ini
 [client]
 user=your_user_name
-pass=sectet
+pass=secret
 ```
 
 使用 `-F` 指定 my.cnf 文件：
@@ -509,7 +509,7 @@ $ pt-find --socket=/data/GreatSQL/mysql.sock --printf "%T\t%D.%N\n" | sort -rn |
 
 ### 概要
 
-此工具可以将 SQL 语句重新格式转换成另一种抽象形式，既所有具体值都以`?`代替。可以适用于数据脱敏的场景。
+此工具可以将 SQL 语句重新格式转换成另一种抽象形式，即所有具体值都以 `?` 代替。可以适用于数据脱敏的场景。
 
 **用法**
 
@@ -691,7 +691,7 @@ pt-kill --user=root --ask-pass --match-info "select|SELECT" --match-command='Que
 ```
 
 ::: tip 小贴士
-`--victims`默认是`oldest`只Kill最先发起，存在时间最长的查询。`all Kill`掉所有满足的线程。`all-but-oldest`只保留最长的不Kill其它都Kill掉
+`--victims` 默认是 `oldest` 只 Kill 最先发起，存在时间最长的查询。`all` Kill 掉所有满足的线程。`all-but-oldest` 只保留最长的不 Kill 其它都 Kill 掉
 :::
 
 #### Kill指定IP的会话

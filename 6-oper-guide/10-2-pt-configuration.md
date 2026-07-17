@@ -6,7 +6,7 @@
 
 ## 配置类
 
-在 Percona Toolkit 中性能类共有以下工具：
+在 Percona Toolkit 中配置类共有以下工具：
 
 - `pt-config-diff`：比较数据库配置文件和参数。
 - `pt-mysql-summary`：对 MySQL/GreatSQL 配置和 status 进行汇总。
@@ -84,7 +84,7 @@ loose-group_replication_group_seeds = '172.16.10:33081,172.16.10:33081,172.16.10
 loose-group_replication_group_name = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaab1"
 ```
 ::: tip 小贴士
-在配置MGR时，需要集群中节点的 my.cnf 部分配置一致，可使用该工具进行比较。
+在配置 MGR 时，需要集群中节点的 my.cnf 部分配置一致，可使用该工具进行比较。
 ::: 
 
 #### 配置文件对比
@@ -181,7 +181,7 @@ binlog_rows_query_log_e... ON                                                   
 
 ### 概要
 
-打印出来 MySQL/GreatSQL 的描述信息，包括：版本信息，数据目录，命令的统计，用户，数据库以及复制等信息还包括各个变量（status、variables）信息和各个变量的比例信息，还有配置文件等信息。
+打印出来 MySQL/GreatSQL 的描述信息，包括：版本信息，数据目录，命令的统计，用户，数据库以及复制等信息，还包括各个变量（status、variables）信息和各个变量的比例信息，还有配置文件等信息。
 
 **用法**
 

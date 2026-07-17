@@ -1,13 +1,13 @@
-# MySQL Shell Utilities备份恢复
+# MySQL Shell Utilities 备份恢复
 ---
 
-本文介绍GreatSQL数据库如何采用MySQL Shell Utilities进行备份恢复。
+本文介绍 GreatSQL 数据库如何采用 MySQL Shell Utilities 进行备份恢复。
 
-MySQL Shell是一个客户端工具，可用于方便管理和操作MySQL，支持SQL、JavaScript、Python等多种语言，也包括完善的API。MySQL Shell支持文档型和关系型数据库模式，通过X DevAPI可以管理文档型数据，通过AdminAPI可以管理InnoDB Cluster、InnoDB ClusterSet及InnoDB ReplicaSet等。
+MySQL Shell 是一个客户端工具，可用于方便管理和操作 MySQL，支持 SQL、JavaScript、Python 等多种语言，也包括完善的 API。MySQL Shell 支持文档型和关系型数据库模式，通过 X DevAPI 可以管理文档型数据，通过 AdminAPI 可以管理 InnoDB Cluster、InnoDB ClusterSet 及 InnoDB ReplicaSet 等。
 
-MySQL Shell中提供了Utilities工具包，可用于对数据库进行备份和恢复，可支持实例级、Schema级、数据表级三个不同级别的数据备份和恢复功能。并且支持兼容性检查、并行导入导出、以及备份文件压缩特性，备份恢复效率比mysqldump更高。
+MySQL Shell 中提供了 Utilities 工具包，可用于对数据库进行备份和恢复，可支持实例级、Schema级、数据表级三个不同级别的数据备份和恢复功能。并且支持兼容性检查、并行导入导出、以及备份文件压缩特性，备份恢复效率比 mysqldump 更高。
 
-在开始进行备份和恢复前，要先连接登入数据库，这里采用通过本地socket方式连接：
+在开始进行备份和恢复前，要先连接登录数据库，这里采用通过本地socket方式连接：
 ```bash
 $ mysqlsh -S/data/GreatSQL/mysql.sock -uroot -p
 
@@ -56,7 +56,7 @@ Average uncompressed throughput: 164.78 MB/s
 Average compressed throughput: 22.42 MB/s
 ```
 
-**注意：** 备份的目标位置 */data/backup/20230832* 必须是个空目录才行，否则会报告类似下面的错误：
+**注意：** 备份的目标位置 */data/backup/20230830* 必须是个空目录才行，否则会报告类似下面的错误：
 ```log
 Util.dumpInstance: Cannot proceed with the dump, the specified directory '/data/backup/20230830' already exists at the target location /data/backup/20230830 and is not empty. (ArgumentError)
 ```
@@ -66,7 +66,7 @@ Util.dumpInstance: Cannot proceed with the dump, the specified directory '/data/
 util.dumpInstance("/data/backup/20230830", {threads: 8})
 ```
 
-还可以在备份时指定分片大小，由参数 `bytesPerChunk` 控制，默认每个分片是64M，例如下面的命令：
+还可以在备份时指定分片大小，由参数 `bytesPerChunk` 控制，默认每个分片是 64MB，例如下面的命令：
 ```js
 util.dumpInstance("/data/backup/20230830", {threads: 8, bytesPerChunk: "16M"})
 ```

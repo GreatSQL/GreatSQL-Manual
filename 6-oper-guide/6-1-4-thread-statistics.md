@@ -41,7 +41,7 @@ TOTAL_SSL_CONNECTIONS: 0
 
 | 列名称                | 描述                             |
 | --------------------- | -------------------------------- |
-| THREAD_ID             | 线程ID                           |
+| THREAD_ID             | 线程 ID                           |
 | TOTAL_CONNECTIONS     | 从此线程创建的连接数             |
 | CONNECTED_TIME        | 该线程建立连接时所经过的累计秒数 |
 | BUSY_TIME             | 该线程活动的累计秒数             |
@@ -51,7 +51,7 @@ TOTAL_SSL_CONNECTIONS: 0
 | BINLOG_BYTES_WRITTEN  | 从此线程写入二进制日志的字节数   |
 | ROWS_FETCHED          | 该线程获取的行数                 |
 | ROWS_UPDATED          | 该线程更新的行数                 |
-| TABLE_ROWS_READ       | 通过此步骤从表中读取的行数       |
+| TABLE_ROWS_READ       | 通过此线程从表中读取的行数       |
 | SELECT_COMMANDS       | 从此线程执行的 SELECT 命令的数量 |
 | UPDATE_COMMANDS       | 从此线程执行的 UPDATE 命令的数量 |
 | OTHER_COMMANDS        | 从此线程执行的其他命令的数量     |

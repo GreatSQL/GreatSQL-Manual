@@ -6,7 +6,7 @@
 
 ## 系统类
 
-在 Percona Toolkit 中性能类共有以下工具：
+在 Percona Toolkit 中系统类共有以下工具：
 
 - `pt-diskstats`：查看系统磁盘状态。
 - `pt-fifo-split`：模拟切割文件并输出。
@@ -53,7 +53,7 @@ pt-diskstats [OPTIONS] [FILES]
 ### 最佳实践
 
 ::: danger 特别提醒
-在较新的 Linux 内核版本中，为磁盘统计信息返回的字段量更改为 20 个，并导致 pt-diskstat 在这些系统上无法提供任何输出。
+在较新的 Linux 内核版本中，为磁盘统计信息返回的字段量更改为 20 个，并导致 pt-diskstats 在这些系统上无法提供任何输出。
 ※[该问题详见](https://perconadev.atlassian.net/jira/software/c/projects/PT/issues/PT-2313?jql=project%20%3D%20%22PT%22%20AND%20text%20~%20%22diskstats%22%20ORDER%20BY%20created%20DESC)
 ※[解决方法](https://github.com/percona/percona-toolkit/pull/526/files#diff-c3ecedaa384eecb55bd8fdb37456a89a3dc45a41588ef1ebe231120e965942d8R2247)
 ::: 
@@ -92,7 +92,7 @@ $ pt-diskstats --interval=1 --iterations=10 --devices-regex=sda --show-timestamp
 - `wr_mb_s`：每秒平均写入的平均大小。
 - `wr_mrg`：发送到物理设备之前，在队列调度程序中合并在一起的写入请求的百分比。
 - `wr_cnc`：写入操作的平均并发量。
-- `wr_rt`：写入操作的平均相应时间。
+- `wr_rt`：写入操作的平均响应时间。
 - `busy`：磁盘繁忙程度。
 - `in_prg`：正在进行的请求数。
 - `io_s`：物理设备的平均吞吐量，以每秒 I/O 操作数 (IOPS) 为单位。
@@ -101,7 +101,7 @@ $ pt-diskstats --interval=1 --iterations=10 --devices-regex=sda --show-timestamp
 
 #### 采集分析
 
-先收集 `/proc/diskstats` 的信息，存到一个文件里面，采集一段时候后再通过 `pt-diskstats` 来计算。这样的好处是，可以了解该段时间内的整体 I/O 性能，而不是瞬间的性能指标。
+先收集 `/proc/diskstats` 的信息，存到一个文件里面，采集一段时间后再通过 `pt-diskstats` 来计算。这样的好处是，可以了解该段时间内的整体 I/O 性能，而不是瞬间的性能指标。
 
 创建该 `collection.sh` 脚本：
 
@@ -364,7 +364,7 @@ Tracing process ID 657147
 :::
 
 
-可指定`--cell`为count既I/O操作的次数：
+可指定 `--cell` 为 count 即 I/O 操作的次数：
 
 ```bash
 pt-ioprofile --cell=count 

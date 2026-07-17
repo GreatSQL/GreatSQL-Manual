@@ -119,7 +119,7 @@ pt-deadlock-logger        pt-heartbeat             pt-mongodb-summary       pt-s
 pt-diskstats              pt-index-usage           pt-mysql-summary         pt-slave-delay     pt-upgrade
 pt-duplicate-key-checker  pt-ioprofile             pt-online-schema-change  pt-slave-find      pt-variable-advisor
 pt-fifo-split             pt-k8s-debug-collector   pt-pg-summary            pt-slave-restart   pt-visual-explain
-pt-find                   pt-kill                  pt-pmp                   pt-stalk`
+pt-find                   pt-kill                  pt-pmp                   pt-stalk
 ```
 
 ### [实用类](./10-1-pt-practical.md)
@@ -180,7 +180,7 @@ pt-find                   pt-kill                  pt-pmp                   pt-s
 | [pt-heartbeat](./10-6-pt-replication.md#pt-heartbeat)            | 监控 MySQL/GreatSQL 复制延迟               |
 | [pt-slave-delay](./10-6-pt-replication.md#pt-slave-delay)          | 设定从落后主的时间                       |
 | [pt-slave-find](./10-6-pt-replication.md#pt-slave-find)           | 查找和打印所有 MySQL/GreatSQL 复制层级关系 |
-| [pt-slave-restart](./10-6-pt-replication.md#pt-slave-restart)        | 监控 Salve 错误，并尝试重启Salve           |
+| [pt-slave-restart](./10-6-pt-replication.md#pt-slave-restart)        | 监控 Slave 错误，并尝试重启Slave           |
 | [pt-table-checksum](./10-6-pt-replication.md#pt-table-checksum)       | 校验主从复制一致性                       |
 | [pt-table-sync](./10-6-pt-replication.md#pt-table-sync)           | 高效同步表数据                           |
 | [pt-galera-log-explainer](./10-6-pt-replication.md#pt-galera-log-explainer) | 对多个 Galera 日志进行过滤、聚合和汇总     |

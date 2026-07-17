@@ -1,4 +1,4 @@
-# mysqldump备份恢复
+# mysqldump 备份恢复
 ---
 
 本文介绍GreatSQL数据库如何采用 `mysqldump` 进行备份恢复。

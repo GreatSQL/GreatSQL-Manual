@@ -6,7 +6,7 @@
 
 ## 监控类
 
-在 Percona Toolkit 中性能类共有以下工具：
+在 Percona Toolkit 中监控类共有以下工具：
 
 - `pt-deadlock-logger`：提取和记录MySQL/GreatSQL死锁。
 - `pt-fk-error-logger`：提取和记录外键信息。
@@ -104,7 +104,7 @@ CREATE TABLE deadlocks (
 - `lock_type`：导致死锁的锁上持有的事务的类型。
 - `lock_mode`：导致死锁的锁的锁定模式。
 - `wait_hold`：事务是在等待锁还是持有锁。
-- `victim`：事务是否被选为死可回滚的事务并进行回滚。
+- `victim`：事务是否被选为可回滚的事务（牺牲品）并进行回滚。
 - `query`：导致死锁的查询。
 
 首先创建上方提供的`deadlocks`表，也可在命令中加入`--create-dest-table`自动创建表：
@@ -213,7 +213,7 @@ CREATE TABLE foreign_key_errors (
 pt-fk-error-logger h=localhost,P=3306,u=root,p='',S=/data/GreatSQL01/mysql.sock --dest h=localhost,P=3307,u=root,p='',S=/data/GreatSQL02/mysql.sock,D=test_db,t=foreign_key_errors
 ```
 
-人为创建违反索引约束：
+人为创建违反外键约束：
 
 ```sql
 -- 建t_fk1表
@@ -322,7 +322,7 @@ Binlog_cache_use                            118                    0
 
 - `-i10`：采集间隔。
 
-- `-c5`：采集次数。
+- `-c3`：采集次数。
 
 - `-r`：相对的。
 
@@ -334,7 +334,7 @@ Binlog_cache_use                            118                    0
 
 ### 概要
 
-pt-query-digest 是用于分析 MySQL/GreatSQL 慢查询的一个工具，它可以分析Binlog、General log、Slowlog，也可以通过 `SHOWPROCESSLIST` 或者通过 `tcpdump` 抓取的 MySQL/GreatSQL 协议数据来进行分析。
+pt-query-digest 是用于分析 MySQL/GreatSQL 慢查询的一个工具，它可以分析Binlog、General log、Slowlog，也可以通过 `SHOW PROCESSLIST` 或者通过 `tcpdump` 抓取的 MySQL/GreatSQL 协议数据来进行分析。
 
 可以把分析结果输出到文件中，分析过程是先对查询语句的条件进行参数化，然后对参数化以后的查询进行分组统计，统计出各查询的执行时间、次数、占比等，可以借助分析结果找出问题进行优化。
 
@@ -405,7 +405,7 @@ pt-query-digest [OPTIONS] [FILES] [DSN]
 | --timeline                  | 显示事件的时间表                                             |
 | --type                      | 要解析的输入类型                                             |
 | --until                     | 截止时间，配合 since 可以分析一段时间内的慢查询                |
-| --user                      | 登陆的用户                                                   |
+| --user                      | 登录的用户                                                   |
 | --variations                | 报告这些属性值的变化数量                                     |
 | --version                   | 显示版本                                                     |
 | --[no]version-check         | 版本检查                                                     |
@@ -543,7 +543,7 @@ pt-query-digest --since=12h ./slow.log
 pt-query-digest slow.log --since '2024-03-19 00:00:00' --until '2024-03-21 23:59:59'
 ```
 
-#### 分析指含有查询语句的慢查询
+#### 分析含有查询语句的慢查询
 
 ```bash
 pt-query-digest --filter '$event->{fingerprint} =~ m/^select/i' slow.log
@@ -551,7 +551,7 @@ pt-query-digest --filter '$event->{fingerprint} =~ m/^select/i' slow.log
 
 #### 分析指定用户的查询
 
-修改 `m/^root/i'` 中的root换成对应用户即可：
+修改 `m/^root/i` 中的 root 换成对应用户即可：
 
 ```bash
 pt-query-digest --filter '($event->{user} || "") =~ m/^root/i' slow.log
@@ -598,7 +598,7 @@ CREATE TABLE IF NOT EXISTS query_review (
 把查询保存到 query_review表，使用`--create-review-table`会自动创建：
 
 ```bash
-pt-query-digest --user=root,-password='' --review h=localhost,D=test_db,t=query_review --create-review-table slow.log
+pt-query-digest --user=root --password='' --review h=localhost,D=test_db,t=query_review --create-review-table slow.log
 ```
 
 #### 分析tcpdump抓取的数据

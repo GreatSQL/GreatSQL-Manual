@@ -111,7 +111,7 @@ $ ls -la /data/GreatSQL-restore/greatsql
 -rw-r-----  1 mysql mysql         0 Aug 31 15:25 t4.MYD
 -rw-r-----  1 mysql mysql      1024 Aug 31 15:25 t4.MYI
 ```
-上面仅处于测试目的创建 MyISAM 表，实际生产环境中强烈建议大家只使用 InnoDB 表。
+上面仅出于测试目的创建 MyISAM 表，实际生产环境中强烈建议大家只使用 InnoDB 表。
 
 
 ### Clone 备份远程数据
@@ -152,7 +152,7 @@ greatsql> SHOW GRANTS FOR repl;
 ```
 在上面的测试案例中，donor 节点的只对repl账户授予 `BACKUP_ADMIN` 权限，所以 recipient 节点 Clone 完成后，该实例上的 repl 账户授权也被覆盖了，不再拥有 `CLONE_ADMIN` 权限。
 
-在 Clone 结束后，recipient 节点实例会被自动执行 `SHUTDOWN` 关闭，如果该实例无法实现自动重启的话，就需要自行手动再次启动。因此建议采将数据库加入 systemd 服务管理中。
+在 Clone 结束后，recipient 节点实例会被自动执行 `SHUTDOWN` 关闭，如果该实例无法实现自动重启的话，就需要自行手动再次启动。因此建议将数据库加入 systemd 服务管理中。
 
 ### 查看 Clone 备份进度
 在 Clone 过程中，还支持实时查看其状态和进度：

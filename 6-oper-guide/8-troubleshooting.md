@@ -113,14 +113,14 @@ mysql -h127.0.0.1 -uroot -P3306 -p'xx'
 
 ## GreatSQL 中运行一些查询 SQL 会 hang 住一直无响应
 
-这可能是因为触发了InnoDB 并行查询的bug，请尝试升级到 GreatSQL 最新版本，或者修改选项 `force_parallel_execute=OFF` 临时关闭InnoDB并行查询特性。
+这可能是因为触发了 InnoDB 并行查询的 bug，请尝试升级到 GreatSQL 最新版本，或者修改选项 `force_parallel_execute=OFF` 临时关闭InnoDB并行查询特性。
 
 可以参考下面的案例：
 
 - [mysqldump导出108353886字节的数据后，hang](https://greatsql.cn/thread-522-1-1.html)
 - [greatsql执行sql卡死](https://greatsql.cn/thread-422-1-1.html)
 
-## GreatSQL 中运行一些 SQL 后数据库crash了
+## GreatSQL 中运行一些 SQL 后数据库 crash 了
 
 可能是因为触发了某些 bug，请尝试升级到 GreatSQL 最新版本，或者参考文章 [MySQL报障之coredump收集处理流程](https://mp.weixin.qq.com/s/CrV9kgIUnUd4GEru93xjdA) 提到的方法，打包收集相应的coredump文件、my.cnf配置文件、错误日志文件以及能稳定复现的方法，然后联系我们报告bug。
 
@@ -134,7 +134,7 @@ mysql -h127.0.0.1 -uroot -P3306 -p'xx'
 
 - 发生了OOM Killer（out-of-memory killer）
 
-简单说，就是被系统判定为内存占用太多，触发OOM KIller机制，杀掉mysqld进程以释放内存。
+简单说，就是被系统判定为内存占用太多，触发 OOM Killer 机制，杀掉mysqld进程以释放内存。
 
 可以查看操作系统日志文件 `/var/log/messages`，通常会有类似下面的日志内容
 
@@ -196,7 +196,7 @@ $ ls -la /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
 -rwxr-xr-x 1 mysql mysql 383759416 Feb  2 23:36 /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
 ```
 
-出现这种情况，应该是 **SELinux* 导致的。
+出现这种情况，应该是 **SELinux** 导致的。
 
 在开启 **SELinux** 时，如果先把二进制可执行文件放在用户主目录，然后移动到其他目标目录的，就会由于文件的 **安全上下文** 不正确导致上述问题。
 

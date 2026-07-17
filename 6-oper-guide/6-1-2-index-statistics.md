@@ -19,7 +19,7 @@ greatsql> SELECT * FROM INFORMATION_SCHEMA.INDEX_STATISTICS WHERE TABLE_NAME='sy
 2 rows in set (0.00 sec)
 ```
 
-此时显示DeptLevel索引使用次数是1003006次，PRIMARY主键使用次数是1021000次，当每次使用索引后，ROWS_READ列计数就会增加。
+此时显示 DeptLevel 索引使用次数是 1003006 次，PRIMARY 主键使用次数是 1021000 次，当每次使用索引后，ROWS_READ 列计数就会增加。
 
 | 列名称       | 描述                                    |
 | ------------ | --------------------------------------- |

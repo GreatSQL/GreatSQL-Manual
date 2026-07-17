@@ -192,7 +192,7 @@ pt-online-schema-change [OPTIONS] DSN
 | --default-engine                | 用于指定新表的存储引擎                                       |
 | --data-dir                      | 指定一个目录，用于存放工具在操作过程中创建的一些临时文件     |
 | --remove-data-dir               | 用于在工具操作完成后自动删除在 `--data-dir` 中创建的临时目录和文件 |
-| --defaults-file                 | 只从给定文件中读取 GreatSQL 选项                               |
+| --defaults-file                 | 只从给定文件中读取 MySQL/GreatSQL 选项                               |
 | --[no]drop-new-table            | 如果复制原始表失败，则删除新表                               |
 | --[no]drop-old-table            | 重命名后删除原始表                                           |
 | --[no]drop-triggers             | 在旧表上删除触发器                                           |
@@ -404,7 +404,7 @@ pt-online-schema-change --host=localhost --user=root --ask-pass --alter "drop fo
 
 ### 概要
 
-显示当前数据库中所有用户的授权情况，并以 GRANT 语句现实，方便复制到其他数据库上执行。
+显示当前数据库中所有用户的授权情况，并以 GRANT 语句显示，方便复制到其他数据库上执行。
 
 **用法**
 
