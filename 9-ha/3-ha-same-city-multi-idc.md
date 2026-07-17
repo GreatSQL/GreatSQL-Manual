@@ -1,7 +1,7 @@
 # 同城跨IDC高可用
 ---
 
-本文档主要介绍在同城跨IDC场景中，如何基于GreatSQL+MySQL Router构建高可用架构。
+本文档主要介绍在同城跨 IDC 场景中，如何基于 GreatSQL + MySQL Router 构建高可用架构。
 
 同城多IDC的数据库架构，通常有以下几种方案可选：
 

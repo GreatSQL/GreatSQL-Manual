@@ -1,7 +1,7 @@
 # 单机多实例高可用
 ---
 
-本文档介绍如何在单机多实例环境下，构建GreatSQL数据库高可用架构方案。
+本文档介绍如何在单机多实例环境下，构建 GreatSQL 数据库高可用架构方案。
 
 注意，线上生产环境通常**不要采用单机多实例架构方案，本方案仅用于开发、测试环境**。
 
@@ -10,11 +10,11 @@
 单机多实例上的高可用方案比较简单，一般可以选用以下几种：
 
 1. lvs/haproxy。
-2. mysql router中间件。
+2. MySQL Router 中间件。
 
-本文重点讨论利用mysql router构建高可用的解决方案，lvs/haproxy方案请自行搜索。
+本文重点讨论利用 MySQL Router 构建高可用的解决方案，lvs/haproxy 方案请自行搜索。
 
-## 单机多实例部署MGR集群
+## 单机多实例部署 MGR 集群
 
 首先，参考文档：[单机多实例](../6-oper-guide/5-multi-instances.md) 完成单机多实例环境部署，并构建MGR集群。
 ```sql
@@ -28,7 +28,7 @@ greatsql> SELECT MEMBER_ID,MEMBER_HOST,MEMBER_PORT,MEMBER_ROLE FROM performance_
 | 6f367f17-07e6-11ed-825d-00155d064000 | 127.0.0.1   |        3308 | ARBITRATOR  |
 +--------------------------------------+-------------+-------------+-------------+
 ```
-这是一个单机4实例的MGR集群，其中包含1个ARBITRATOR节点。
+这是一个单机 4 实例的 MGR 集群，其中包含 1 个 ARBITRATOR 节点。
 
 ## 部署MySQL Router
 

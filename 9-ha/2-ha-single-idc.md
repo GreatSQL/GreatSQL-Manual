@@ -1,7 +1,7 @@
 # 单IDC高可用
 ---
 
-本文档主要介绍在单IDC场景中，如何基于GreatSQL+MySQL Router构建高可用架构。
+本文档主要介绍在单 IDC 场景中，如何基于 GreatSQL + MySQL Router 构建高可用架构。
 
 ## 单IDC高可用方案选择
 

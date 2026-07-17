@@ -1,13 +1,13 @@
 # 单VLAN高可用
 ---
 
-本文档主要介绍在单VLAN场景中，如何基于GreatSQL+VIP构建高可用架构。
+本文档主要介绍在单 VLAN 场景中，如何基于 GreatSQL + VIP 构建高可用架构。
 
 GreatSQL支持在单主（Single-Primary）模式下，在读写节点绑定动态VIP，使得高可用切换更便捷。
 
 整体架构图如下所示：
 
-![跨城多IDC高可用方案](./5-ha-single-vlan01.png)
+![单 VLAN 高可用方案](./5-ha-single-vlan01.png)
 
 
 ## 启用内置vip插件
@@ -172,7 +172,7 @@ $ ldconfig && ldconfig -p | grep -i 'libprotobuf.so'
 3. 【强烈不推荐】给mysqld进程的启动用户，例如是mysql用户，设置root权限。
 
 **注意**
-- 建议采用 `systemd` 方式管理GreatSQL服务，或者对启动用户用户（如 mysql）开启sudo权限，利用sudo调用 `systemd` 再启动GreatSQL服务，这样能确保mysqld进程可获得内核权限，成功绑定VIP。
+- 建议采用 `systemd` 方式管理 GreatSQL 服务，或者对启动用户（如 mysql）开启 sudo 权限，利用 sudo 调用 `systemd` 再启动 GreatSQL 服务，这样能确保 mysqld 进程可获得内核权限，成功绑定 VIP。
 - 当 `setcap` 命令为mysqld二进制文件添加capability以后，需要保证登录系统的用户和启动mysqld的用户保持一致，才能确保mysqld进程可获得内核权限。例如：用root用户登录系统，然后再以普通用户（mysql）启动mysqld进程，setcap无法生效，绑定vip时会失败报错。
 
 

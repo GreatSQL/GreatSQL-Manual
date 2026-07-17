@@ -1,7 +1,7 @@
 # 高可用架构
 ---
 
-本章文档主要介绍如何基于GreatSQL实现高可用架构。
+本章文档主要介绍如何基于 GreatSQL 实现高可用架构。
 
 ## [单机多实例高可用](./1-ha-single-machine-multi-instance.md)
 ## [单VLAN高可用](./5-ha-single-vlan.md)
