@@ -2,9 +2,9 @@
 
 ---
 
-本文介绍如何利用手动方式和 MySQL Shell for GreatSQL（以下简称 GreatSQL Shell）方式基于 GreatSQL 8.4.4-5 构建一个三节点的MGR集群。
+本文介绍如何利用手动方式和 MySQL Shell for GreatSQL（以下简称 GreatSQL Shell）方式基于 GreatSQL 8.4.4-5 构建一个三节点的 MGR 集群。
 
-## 利用手动方式构建MGR
+## 利用手动方式构建 MGR
 
 ###  安装准备
 
@@ -16,9 +16,9 @@
 | 172.16.16.11 | 3306 | mgr2 |
 | 172.16.16.12 | 3306 | mgr3 |
 
-确保三个节点间的网络是可以互通的，并且没有针对3306和33061端口的防火墙拦截规则。
+确保三个节点间的网络是可以互通的，并且没有针对 3306 和 33061 端口的防火墙拦截规则。
 
-下载GreatSQL二进制文件包，下载地址：*https://gitee.com/GreatSQL/GreatSQL/releases* 。
+下载 GreatSQL 二进制文件包，下载地址：*https://gitee.com/GreatSQL/GreatSQL/releases* 。
 
 本文以 CentOS x86_64 环境为例，下载的二进制包名为： `GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz`，放在 `/usr/local` 目录下并解压缩：
 ```bash
@@ -31,7 +31,7 @@ bin    COPYING-jemalloc  include  LICENSE         LICENSE-test  mysqlrouter-log-
 cmake  docs              lib      LICENSE.router  man           README                  README-test    share  var
 ```
 
-###  初始化GreatSQL
+###  初始化 GreatSQL
 首先准备好 */etc/my.cnf* 配置文件：
 ```ini
 #/etc/my.cnf
@@ -47,27 +47,27 @@ log_replica_updates=1
 gtid_mode=ON
 enforce_gtid_consistency=ON
 ```
-本文仅以能正常启动GreatSQL和部署MGR为目的，所以这份配置文件极为简单，如果想要在正式场合使用，可以参考[这份配置文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example)。
+本文仅以能正常启动 GreatSQL 和部署 MGR 为目的，所以这份配置文件极为简单，如果想要在正式场合使用，可以参考[这份配置文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example)。
 
-先初始化GreatSQL：
+先初始化 GreatSQL：
 ```bash
 mkdir -p /data/GreatSQL && chown -R mysql:mysql /data/GreatSQL
 /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf --initialize-insecure
 ```
-**注意**：不要在生产环境中使用 `--initialize-insecure` 选项进行初始化安装，因为这么做的话，超级管理员root账号默认是空密码，任何人都可以使用该账号登录数据库，存在安全风险，本文中只是为了演示方便才这么做。
+**注意**：不要在生产环境中使用 `--initialize-insecure` 选项进行初始化安装，因为这么做的话，超级管理员 root 账号默认是空密码，任何人都可以使用该账号登录数据库，存在安全风险，本文中只是为了演示方便才这么做。
 
-启动GreatSQL：
+启动 GreatSQL：
 ```bash
 /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/my.cnf &
 ```
-如果不出意外，则能正常启动GreatSQL。用同样的方法也完成对另外两个节点的初始化。
+如果不出意外，则能正常启动 GreatSQL。用同样的方法也完成对另外两个节点的初始化。
 
-此外，建议把GreatSQL加入系统systemd服务中，方便管理。具体方法可以参考这篇文章：[利用systemd管理GreatSQL](../4-install-guide/8-greatsql-with-systemd.md)。
+此外，建议把 GreatSQL 加入系统 systemd 服务中，方便管理。具体方法可以参考这篇文章：[利用 systemd 管理 GreatSQL](../4-install-guide/8-greatsql-with-systemd.md)。
 
-###  初始化MGR第一个节点
-接下来准备初始化MGR的第一个节点，也称之为 **引导节点**。
+###  初始化 MGR 第一个节点
+接下来准备初始化 MGR 的第一个节点，也称之为 **引导节点**。
 
-修改 */etc/my.cnf* ，增加以下几行和MGR相关的配置参数：
+修改 */etc/my.cnf* ，增加以下几行和 MGR 相关的配置参数：
 ```ini
 [mysqld]
 plugin_load_add='group_replication.so'
@@ -76,11 +76,11 @@ group_replication_local_address= "172.16.16.10:33061"
 group_replication_group_seeds= "172.16.16.10:33061,172.16.16.11:33061,172.16.16.12:33061"
 report_host=172.16.16.10
 ```
-选项 `report_host` 的作用是向MGR其他节点报告本节点使用的地址，避免某个服务器上有多个主机名时，可能无法正确找到对应关系而使得MGR无法启动的问题。此外，设置了 `report_host` 后，修改 `/etc/hosts` 系统文件加入各节点的地址及主机名这个步骤就不是必须的了。
+选项 `report_host` 的作用是向 MGR 其他节点报告本节点使用的地址，避免某个服务器上有多个主机名时，可能无法正确找到对应关系而使得 MGR 无法启动的问题。此外，设置了 `report_host` 后，修改 `/etc/hosts` 系统文件加入各节点的地址及主机名这个步骤就不是必须的了。
 
-另外，注意上面配置的端口写的是 **33061** 而不是 **3306**，这是为MGR服务指定专用的通信端口，区别于GreatSQL正常的读写服务端口。这里的 33061 端口号可以自定义，例如写成 12345 也可以，注意该端口不能被防火墙拦截。
+另外，注意上面配置的端口写的是 **33061** 而不是 **3306**，这是为 MGR 服务指定专用的通信端口，区别于 GreatSQL 正常的读写服务端口。这里的 33061 端口号可以自定义，例如写成 12345 也可以，注意该端口不能被防火墙拦截。
 
-利用这份配置文件，重启GreatSQL，之后就应该能看到已经成功加载 `group_replicaiton` 插件了：
+利用这份配置文件，重启 GreatSQL，之后就应该能看到已经成功加载 `group_replication` 插件了：
 ```sql
 greatsql> SHOW PLUGINS;
 ...
@@ -92,12 +92,12 @@ greatsql> SHOW PLUGINS;
 ...
 ```
 
-如果没正确加载，也可以登入GreatSQL自行手动加载这个plugin：
+如果没正确加载，也可以登入 GreatSQL 自行手动加载这个 plugin：
 ```sql
 INSTALL PLUGIN group_replication SONAME 'group_replication.so';
 ```
 
-接下来，创建MGR服务专用账户，并准备配置MGR服务通道：
+接下来，创建 MGR 服务专用账户，并准备配置 MGR 服务通道：
 ```sql
 -- 每个节点都要单独创建用户，因此这个操作没必要记录binlog并复制到其他节点
 SET SESSION sql_log_bin=0;
@@ -112,16 +112,16 @@ greatsql> SET SESSION sql_log_bin=1;
 CHANGE REPLICATION SOURCE TO SOURCE_USER='repl', SOURCE_PASSWORD='repl' FOR CHANNEL 'group_replication_recovery';
 ```
 
-接着执行下面的命令，将其设置为MGR的引导节点（只有第一个节点需要这么做）后即可直接启动MGR服务：
+接着执行下面的命令，将其设置为 MGR 的引导节点（只有第一个节点需要这么做）后即可直接启动 MGR 服务：
 ```sql
 SET GLOBAL group_replication_bootstrap_group=ON;
 START group_replication;
 ```
 ::: tip 提醒
-当整个MGR集群重启时，第一个启动的节点也要先设置为引导模式，然后再启动其他节点。除此外，请勿设置引导模式。
+当整个 MGR 集群重启时，第一个启动的节点也要先设置为引导模式，然后再启动其他节点。除此外，请勿设置引导模式。
 :::
 
-而后，查看MGR服务状态：
+而后，查看 MGR 服务状态：
 ```sql
 greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
@@ -155,10 +155,10 @@ group_replication_group_seeds= "172.16.16.10:33061,172.16.16.11:33061,172.16.16.
 report_host=172.16.16.11
 ```
 ::: tip 提醒
-上面的几个选项中，`server_id`、`group_replication_local_address` 和 `report_host` 这三个选项要修改为正确的值。在一个MGR集群中，各节点设置的 `server_id` 和 `server_uuid` 要是唯一的，但是 `group_replication_group_name` 的值要一样，这是该MGR集群的唯一标识。
+上面的几个选项中，`server_id`、`group_replication_local_address` 和 `report_host` 这三个选项要修改为正确的值。在一个 MGR 集群中，各节点设置的 `server_id` 和 `server_uuid` 要是唯一的，但是 `group_replication_group_name` 的值要一样，这是该 MGR 集群的唯一标识。
 :::
 
-重启GreatSQL实例后（`report_host` 是只读选项，需要重启才能生效），创建MGR服务专用账号及配置MGR服务通道：
+重启 GreatSQL 实例后（`report_host` 是只读选项，需要重启才能生效），创建 MGR 服务专用账号及配置 MGR 服务通道：
 ```sql
 SET SESSION sql_log_bin=0;
 CREATE USER repl@'%' IDENTIFIED WITH mysql_native_password BY 'repl';
@@ -168,11 +168,11 @@ SET SESSION sql_log_bin=1;
 CHANGE REPLICATION SOURCE TO SOURCE_USER='repl', SOURCE_PASSWORD='repl' FOR CHANNEL 'group_replication_recovery';
 ```
 
-接下来即可直接启动MGR服务（除了第一个节点外，其余节点都不需要再设置引导模式）：
+接下来即可直接启动 MGR 服务（除了第一个节点外，其余节点都不需要再设置引导模式）：
 ```sql
 START group_replication;
 ```
-再次查看MGR节点状态：
+再次查看 MGR 节点状态：
 ```sql
 greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
@@ -183,12 +183,12 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 | group_replication_applier | 5596116c-11d9-11ec-8624-70b5e873a570 | 172.16.16.12 |        3306 | ONLINE       | SECONDARY   | 8.4.4          |
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 ```
-看到上面这个集群共有3个节点处于ONLINE状态，其中 *172.16.16.10* 是 **PRIMARY** 节点，其余两个都是 **SECONDARY** 节点，也就是说当前这个集群采用 **单主** 模式。如果采用多主模式，则所有节点的角色都是 **PRIMARY**。
+看到上面这个集群共有 3 个节点处于 ONLINE 状态，其中 *172.16.16.10* 是 **PRIMARY** 节点，其余两个都是 **SECONDARY** 节点，也就是说当前这个集群采用 **单主** 模式。如果采用多主模式，则所有节点的角色都是 **PRIMARY**。
 
-###  向MGR集群中写入数据
+###  向 MGR 集群中写入数据
 接下来连接到 **PRIMARY** 节点，创建测试库表并写入数据：
 ```sql
--- 先连接进入GreatSQL
+-- 先连接进入 GreatSQL
 -- mysql -h172.16.16.10 -uroot -Spath/mysql.sock
 
 greatsql> CREATE DATABASE mgr;
@@ -204,7 +204,7 @@ greatsql> SELECT * FROM t1;
 ```
 再连接到其中一个 **SECONDARY** 节点，查看刚刚在 **PRIMARY** 写入的数据是否可以看到：
 ```sql
--- 先连接进入GreatSQL
+-- 先连接进入 GreatSQL
 -- mysql -h172.16.16.11 -uroot -Spath/mysql.sock
 greatsql> USE mgr;
 greatsql> SELECT * FROM t1;
@@ -216,11 +216,11 @@ greatsql> SELECT * FROM t1;
 ```
 确认可以读取到该数据。
 
-到这里，就完成了三节点MGR集群的安装部署。
+到这里，就完成了三节点 MGR 集群的安装部署。
 
-## 使用GreatSQL Shell构建MGR
+## 使用 GreatSQL Shell 构建 MGR
 
-接下来介绍如何利用 GreatSQL Shell 基于 GreatSQL 8.4.4-5 构建一个三节点的MGR集群。
+接下来介绍如何利用 GreatSQL Shell 基于 GreatSQL 8.4.4-5 构建一个三节点的 MGR 集群。
 
 ::: tip 小贴士
 仲裁节点（投票节点）为 GreatSQL 数据库原生支持的特性，**GreatSQL Shell 可正常识别并对该特性进行相关操作**，而 MySQL Shell 社区版暂不支持识别 GreatSQL 的仲裁节点（投票节点），无法开展对应操作。
@@ -235,7 +235,7 @@ greatsql> SELECT * FROM t1;
 | 172.16.16.11 | 3306 | mgr2 |
 | 172.16.16.12 | 3306 | mgr3 |
 
-确保三个节点间的网络是可以互通的，并且没有针对3306和33061端口的防火墙拦截规则。
+确保三个节点间的网络是可以互通的，并且没有针对 3306 和 33061 端口的防火墙拦截规则。
 
 打开 [GreatSQL Shell 二进制包文件](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-25) 并下载对应版本安装包，更推荐利用 [Docker 运行 GreatSQL Shell](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)，更便捷省事。
 
@@ -259,10 +259,10 @@ yum install -y libssh python38 python38-libs python38-pyyaml
 pip3.8 install --user certifi pyclamd
 ```
 
-接下来直接利用 GreatSQL Shell 部署MGR
+接下来直接利用 GreatSQL Shell 部署 MGR
 
-###  利用 GreatSQL Shell 构建MGR集群
-利用 GreatSQL Shell 构建MGR集群比较简单，主要有几个步骤：
+###  利用 GreatSQL Shell 构建 MGR 集群
+利用 GreatSQL Shell 构建 MGR 集群比较简单，主要有几个步骤：
 1. 检查实例是否满足条件。
 2. 创建并初始化一个集群。
 3. 逐个添加实例。
@@ -279,7 +279,7 @@ MySQL Shell 8.0.32
 ```
 执行命令 `\status` 查看当前节点的状态，确认连接正常可用。
 
-执行 `dba.configureInstance()` 命令开始检查当前实例是否满足安装MGR集群的条件，如果不满足可以直接配置成为MGR集群的一个节点：
+执行 `dba.configureInstance()` 命令开始检查当前实例是否满足安装 MGR 集群的条件，如果不满足可以直接配置成为 MGR 集群的一个节点：
 ```js
 MySQL  localhost  JS > dba.configureInstance()
 
@@ -312,9 +312,9 @@ The instance '172.16.16.10:3306' is already ready to be used in an InnoDB cluste
 
 Successfully enabled parallel appliers.
 ```
-完成检查并创建完新用户后，退出当前的管理员账户，并用新创建的MGR专用账户登入，准备初始化创建一个新集群：
+完成检查并创建完新用户后，退出当前的管理员账户，并用新创建的 MGR 专用账户登入，准备初始化创建一个新集群：
 ```js
--- 先连接进入GreatSQL
+-- 先连接进入 GreatSQL
 -- mysqlsh --uri GreatSQL@172.16.16.10:3306
 Please provide the password for 'GreatSQL@172.16.16.10:3306': ********
 Save password for 'GreatSQL@172.16.16.10:3306'? [Y]es/[N]o/Ne[v]er (default No): yes
@@ -341,7 +341,7 @@ Cluster successfully created. Use Cluster.addInstance() to add MySQL instances.
 At least 3 instances are needed for the cluster to be able to withstand up to
 one server failure.
 ```
-这就完成了MGR集群的初始化并加入第一个节点（引导节点）。
+这就完成了 MGR 集群的初始化并加入第一个节点（引导节点）。
 
 ::: tip 提示
 参数 `group_replication_communication_stack` 的默认值是 XCOM。但是在利用 GreatSQL Shell 的 `create_cluster()` 函数创建并初始化 MGR 集群时，参数 `communicationStack` 默认值则是 MySQL，这里存在差异。因此，建议在这里显式指定 `communicationStack` 参数值为 XCOM。
@@ -366,7 +366,7 @@ dba.createCluster("MGR1", {"communicationStack": "xcom"})
 
 接下来，用同样方法先用 root 账号分别登入到另外两个节点，完成节点的检查并创建最小权限级别用户（此过程略过。。。注意各节点上创建的用户名、密码都要一致），之后回到第一个节点，执行 `addInstance()` 添加另外两个节点。
 ```js
-MySQL  172.16.16.10:3306 ssl JS > c.addInstance('GreatSQL@172.16.16.11:3306');<--这里要指定MGR专用账号
+MySQL  172.16.16.10:3306 ssl JS > c.addInstance('GreatSQL@172.16.16.11:3306');<--这里要指定 MGR 专用账号
 
 WARNING: A GTID set check of the MySQL instance at '172.16.16.11:3306' determined that it contains transactions that do not originate from the cluster, which must be discarded before it can join the cluster.
 
@@ -419,7 +419,7 @@ The instance '172.16.16.11:3306' was successfully added to the cluster.  <-- 新
 ```
 用同样的方法，将 172.16.16.12:3306 实例也加入到集群中。
 
-现在，一个有这三节点的MGR集群已经部署完毕，来确认下：
+现在，一个有这三节点的 MGR 集群已经部署完毕，来确认下：
 ```js
 MySQL  172.16.16.10:3306 ssl  JS > c.describe()
 {
@@ -449,10 +449,10 @@ MySQL  172.16.16.10:3306 ssl  JS > c.describe()
 ```
 或者执行 `c.status()` 可以打印出集群更多的信息。
 
-至此，利用 GreatSQL Shell 构建一个三节点的MGR集群做好了，可以尝试向 Primary 节点写入数据观察测试。
+至此，利用 GreatSQL Shell 构建一个三节点的 MGR 集群做好了，可以尝试向 Primary 节点写入数据观察测试。
 
-###   GreatSQL Shell 接管现存的MGR集群
-对于已经在运行中的MGR集群，也是可以用 GreatSQL Shell 接管的。只需要在调用 `createCluster()` 函数时，加上 `"adoptFromGR":"true"` 选项即可。实际上不加这个选项的话，GreatSQL Shell 也会自动检测到该MGR集群已存在，并询问是否要接管。
+###   GreatSQL Shell 接管现存的 MGR 集群
+对于已经在运行中的 MGR 集群，也是可以用 GreatSQL Shell 接管的。只需要在调用 `createCluster()` 函数时，加上 `"adoptFromGR":"true"` 选项即可。实际上不加这个选项的话，GreatSQL Shell 也会自动检测到该 MGR 集群已存在，并询问是否要接管。
 
 在这里简单演示下：
 ```js
@@ -481,7 +481,7 @@ Adding Instance '172.16.16.12:3306'...
 ...
 ```
 
-如果是MGR集群的metadata发生变化，这时候无论调用 `dba.getCluster()` 还是 `dba.createCluster()` 都可能会报告类似下面的错误：
+如果是 MGR 集群的 metadata 发生变化，这时候无论调用 `dba.getCluster()` 还是 `dba.createCluster()` 都可能会报告类似下面的错误：
 ```
 Dba.getCluster: Unable to get an InnoDB cluster handle. The instance '192.168.6.27:3306' may belong to a different cluster from the one registered in the Metadata since the value of 'group_replication_group_name' does not match the one registered in the Metadata: possible split-brain scenario. Please retry while connected to another member of the cluster. (RuntimeError)
 ```
@@ -501,14 +501,14 @@ Metadata Schema successfully removed.
 这样就可以接管了
 
 ###  使用 GreatSQL Shell 的窍门
-在 GreatSQL Shell 中，也是可以启用pager（分页器）的，像下面这样设置即可：
+在 GreatSQL Shell 中，也是可以启用 pager（分页器）的，像下面这样设置即可：
 ```js
 mysqlsh> shell.enablePager()
 mysqlsh> shell.options["pager"]="less -i -n -S";
 Pager has been set to 'less -i -n -S'.
 ```
 
-在用 GreatSQL Shell 连接时，也可以加上 `--dba-log-sql=2 --log-level=debug3` 参数，以启用debug模式，并记录运行过程中实际调用的SQL命令，默认日志文件是 `~/.mysqlsh/mysqlsh.log`。
+在用 GreatSQL Shell 连接时，也可以加上 `--dba-log-sql=2 --log-level=debug3` 参数，以启用 debug 模式，并记录运行过程中实际调用的 SQL 命令，默认日志文件是 `~/.mysqlsh/mysqlsh.log`。
 
 
 **扫码关注微信公众号**

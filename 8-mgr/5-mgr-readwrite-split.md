@@ -2,22 +2,22 @@
 
 ---
 
-本文介绍如何在MGR集群前端部署MySQL Router以实现读写分离、读负载均衡，以及故障自动转移。
+本文介绍如何在 MGR 集群前端部署 MySQL Router 以实现读写分离、读负载均衡，以及故障自动转移。
 
-MySQL Router是一个轻量级的中间件，它采用多端口的方案实现读写分离以及读负载均衡，而且同时支持mysql和mysql x协议。
+MySQL Router 是一个轻量级的中间件，它采用多端口的方案实现读写分离以及读负载均衡，而且同时支持 MySQL 和 MySQL X 协议。
 
-建议把MySQL Router部署在应用服务器上，每个应用服务器都部署一套，这样应用程序可以直接连接本机IP，连接的效率更高，而且后端数据库发生变化时，程序端也无需修改IP配置。
+建议把 MySQL Router 部署在应用服务器上，每个应用服务器都部署一套，这样应用程序可以直接连接本机 IP，连接的效率更高，而且后端数据库发生变化时，程序端也无需修改 IP 配置。
 
-## 部署MySQL Router
-MySQL Router第一次启动时要先初始化
+## 部署 MySQL Router
+MySQL Router 第一次启动时要先初始化
 
 参数解释参数 ：
 
-`--bootstrap` 表示开始初始化参数 
+`--bootstrap` 表示开始初始化参数
 
-`GreatSQL@172.16.16.10:3306` 是MGR服务专用账号
+`GreatSQL@172.16.16.10:3306` 是 MGR 服务专用账号
 
-`--user=mysqlrouter` 是运行mysqlrouter进程的系统用户名
+`--user=mysqlrouter` 是运行 mysqlrouter 进程的系统用户名
 
 ```bash
 $ mysqlrouter --bootstrap GreatSQL@172.16.16.10:3306 --user=mysqlrouter
@@ -129,16 +129,16 @@ greatsql> SELECT @@server_uuid;
 ```
 
 ##  确认只读负载均衡效果
-MySQL Router连接读写节点（Primary节点）默认的策略是 **first-available**，即只连接第一个可用的节点。Router连接只读节点（Secondary节点）默认的策略是 **round-robin-with-fallback**，会在各个只读节点间轮询。
+MySQL Router 连接读写节点（Primary 节点）默认的策略是 **first-available**，即只连接第一个可用的节点。Router 连接只读节点（Secondary 节点）默认的策略是 **round-robin-with-fallback**，会在各个只读节点间轮询。
 
-保持6447端口原有的连接不退出，继续新建到6447端口的连接，查看 **server_uuid**，这时应该会发现读取到的是其他只读节点的值，因为 **mysqlrouter** 的读负载均衡机制是在几个只读节点间自动轮询。在默认的 **round-robin-with-fallback** 策略下，只有当所有只读节点都不可用时，只读请求才会打到PRIMARY节点上。
+保持 6447 端口原有的连接不退出，继续新建到 6447 端口的连接，查看 **server_uuid**，这时应该会发现读取到的是其他只读节点的值，因为 **mysqlrouter** 的读负载均衡机制是在几个只读节点间自动轮询。在默认的 **round-robin-with-fallback** 策略下，只有当所有只读节点都不可用时，只读请求才会打到 PRIMARY 节点上。
 
-关于Router的连接策略，可以参考 FAQ文档中的：[24. MySQL Router可以配置在MGR主从节点间轮询吗](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/GreatSQL-FAQ.md)，或者MySQL Router官方文档：[routing_strategy参数/选项](https://dev.mysql.com/doc/mysql-router/8.0/en/mysql-router-conf-options.html#option_mysqlrouter_routing_strategy)
+关于 Router 的连接策略，可以参考 FAQ 文档中的：[24. MySQL Router 可以配置在 MGR 主从节点间轮询吗](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/GreatSQL-FAQ.md)，或者 MySQL Router 官方文档：[routing_strategy 参数/选项](https://dev.mysql.com/doc/mysql-router/8.0/en/mysql-router-conf-options.html#option_mysqlrouter_routing_strategy)
 
 ##  确认故障自动转移功能
-接下来模拟PRIMARY节点宕机或切换时，**mysqlrouter** 也能实现自动故障转移。
+接下来模拟 PRIMARY 节点宕机或切换时，**mysqlrouter** 也能实现自动故障转移。
 
-登入MGR集群任意节点：
+登入 MGR 集群任意节点：
 ```js
 $ mysqlsh --uri GreatSQL@172.16.16.10:3306
 ...
@@ -177,7 +177,7 @@ Current database: *** NONE ***
 ```
 这就实现了自动故障转移。
 
-至此，利用MySQL Router配合GreatSQL构建一套支持读写分离、读负载均衡以及故障自动转移的MGR集群就部署完毕了。
+至此，利用 MySQL Router 配合 GreatSQL 构建一套支持读写分离、读负载均衡以及故障自动转移的 MGR 集群就部署完毕了。
 
 
 

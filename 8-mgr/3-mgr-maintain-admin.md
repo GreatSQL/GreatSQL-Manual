@@ -2,7 +2,7 @@
 
 ---
 
-本文描述MGR集群的日常管理维护操作，包括主节点切换，单主&多主模式切换等，文档中的操作以MySQL Shell for GreatSQL（以下简称 GreatSQL Shell）与手动方式均有讲解
+本文描述 MGR 集群的日常管理维护操作，包括主节点切换，单主&多主模式切换等，文档中的操作以 MySQL Shell for GreatSQL（以下简称 GreatSQL Shell）与手动方式均有讲解
 
 ## 安装 GreatSQL Shell
 
@@ -41,7 +41,7 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 ```
 
-首先用 `mysqlsh` 客户端连接MGR集群中的任意节点，通常选择连接主节点。若想使用手工操作则不需要这一步
+首先用 `mysqlsh` 客户端连接 MGR 集群中的任意节点，通常选择连接主节点。若想使用手工操作则不需要这一步
 
 ```bash
 mysqlsh --uri GreatSQL@172.16.16.10:3306
@@ -185,7 +185,7 @@ ERROR 3092 (HY000): The server is not configured properly to be an active member
 [ERROR] [MY-011529] [Repl] Plugin group_replication reported: 'The member configuration is not compatible with the group configuration. Variables such as group_replication_single_primary_mode or group_replication_enforce_update_everywhere_checks must have the same value on every server in the group. (member configuration option: [group_replication_single_primary_mode], group configuration option: [group_replication_enforce_update_everywhere_checks]).'
 ```
 
-这是因为，通过GreatSQL Shell管理MGR时，会跟随单主/多主模式的不同，动态修改选项 `group_replication_enforce_update_everywhere_checks` 的值。仲裁节点中，该选项值和其他节点不同，所以需要先手动修改： 
+这是因为，通过 GreatSQL Shell 管理 MGR 时，会跟随单主/多主模式的不同，动态修改选项 `group_replication_enforce_update_everywhere_checks` 的值。仲裁节点中，该选项值和其他节点不同，所以需要先手动修改：
 
 ```sql
 -- 先手动关闭单主模式
@@ -195,13 +195,13 @@ SET GLOBAL group_replication_single_primary_mode=OFF;
 SET GLOBAL group_replication_enforce_update_everywhere_checks=ON;
 ```
 
-而后再次启动MGR服务即可。
+而后再次启动 MGR 服务即可。
 
 ```sql
 START group_replication;
 ```
 
-再次查看MGR的状态：
+再次查看 MGR 的状态：
 
 ```js
  MySQL  172.16.16.10:3306 ssl  JS > c.status()
@@ -234,7 +234,7 @@ WARNING: Existing connections that expected a R/W connection must be disconnecte
 The cluster successfully switched to Single-Primary mode.
 ```
 
-可以看到切换成功了，而且仲裁节点没有报错退出，如果还是有报错的话，重置上述两个选项，再次启动MGR服务即可：
+可以看到切换成功了，而且仲裁节点没有报错退出，如果还是有报错的话，重置上述两个选项，再次启动 MGR 服务即可：
 
 ```sql
 SET GLOBAL group_replication_enforce_update_everywhere_checks=OFF;
@@ -279,11 +279,11 @@ greatsql> SELECT group_replication_switch_to_single_primary_mode('af39db70-6850-
 
 ### GreatSQL Shell方式添加新节点
 
-首先，启动一个全新的空实例，确保可以用root账户连接登入。
+首先，启动一个全新的空实例，确保可以用 root 账户连接登入。
 
-参考文档：[MGR节点预检查](../4-install-guide/2-install-with-rpm.md#91mgr节点预检查)，先利用 GreatSQL Shell 调用函数 `dba.configureInstance()` 完成初始化检查工作。
+参考文档：[MGR 节点预检查](../4-install-guide/2-install-with-rpm.md#91mgr节点预检查)，先利用 GreatSQL Shell 调用函数 `dba.configureInstance()` 完成初始化检查工作。
 
-后切换到连接主节点的GreatSQL Shell终端上，首先获取cluster对象，再进行添加新节点操作：
+后切换到连接主节点的 GreatSQL Shell 终端上，首先获取 cluster 对象，再进行添加新节点操作：
 
 ```js
 MySQL  172.16.16.10:3306 ssl  JS > c=dba.getCluster()
@@ -306,7 +306,7 @@ NOTE: '172.16.16.13:3306' is being recovered from '172.16.16.12:3306'
 # 新节点成功加入完毕
 The instance '172.16.16.13:3306' was successfully added to the cluster.
 
-# 确认添加成功，已在MGR集群列表中
+# 确认添加成功，已在 MGR 集群列表中
  MySQL  172.16.16.10:3306 ssl  JS > c.status()
 ...
                 "address": "172.16.16.10:3306",
@@ -327,23 +327,23 @@ The instance '172.16.16.13:3306' was successfully added to the cluster.
 
 ### 手动方式添加新节点
 
-首先，要先完成MySQL Server初始化，创建好MGR专用账户、设置好MGR服务通道等前置工作，这部分的操作可以参考前文 [**3. 安装部署MGR集群**](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/deep-dive-mgr-03.md)。
+首先，要先完成 MySQL Server 初始化，创建好 MGR 专用账户、设置好 MGR 服务通道等前置工作，这部分的操作可以参考前文 [**3. 安装部署 MGR 集群**](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/deep-dive-mgr-03.md)。
 
-接下来，直接执行命令 `start group_replication` 启动MGR服务即可，新增的节点会进入分布式恢复这个步骤，它会从已有节点中自动选择一个作为捐献者（donor），并自行决定是直接读取binlog进行恢复，还是利用Clone进行全量恢复。
+接下来，直接执行命令 `start group_replication` 启动 MGR 服务即可，新增的节点会进入分布式恢复这个步骤，它会从已有节点中自动选择一个作为捐献者（donor），并自行决定是直接读取 binlog 进行恢复，还是利用 Clone 进行全量恢复。
 
-如果是已经在线运行一段时间的MGR集群，有一定存量数据，这时候新节点加入可能会比较慢，建议手动利用Clone进行一次全量复制。还记得前面创建MGR专用账户时，给加上了 **BACKUP_ADMIN** 授权码，这时候就排上用场了，Clone需要用到这个权限。
+如果是已经在线运行一段时间的 MGR 集群，有一定存量数据，这时候新节点加入可能会比较慢，建议手动利用 Clone 进行一次全量复制。还记得前面创建 MGR 专用账户时，给加上了 **BACKUP_ADMIN** 授权码，这时候就排上用场了，Clone 需要用到这个权限。
 
-下面演示如何利用Clone进行一次全量数据恢复，假定要新增的节点是 *172.16.16.13* （给它命名为 mgr4）。
+下面演示如何利用 Clone 进行一次全量数据恢复，假定要新增的节点是 *172.16.16.13* （给它命名为 mgr4）。
 
 ```sql
--- 在mgr4上设置捐献者
--- 为了降低对Primary节点的影响，建议选择其他Secondary节点
+-- 在 mgr4 上设置捐献者
+-- 为了降低对 Primary 节点的影响，建议选择其他 Secondary 节点
 SET GLOBAL clone_valid_donor_list='172.16.16.11:3306';
 
--- 关闭 MGR 服务（如果有的话），关闭super_read_only模式，然后开始复制数据
--- 注意这里要填写的端口是3306（MySQL正常服务端口），而不是33061这个MGR服务专用端口
-STOP group_replication; 
-SET GLOBAL super_read_only=0; 
+-- 关闭 MGR 服务（如果有的话），关闭 super_read_only 模式，然后开始复制数据
+-- 注意这里要填写的端口是 3306（MySQL 正常服务端口），而不是 33061 这个 MGR 服务专用端口
+STOP group_replication;
+SET GLOBAL super_read_only=0;
 CLONE INSTANCE FROM GreatSQL@172.16.16.11:3306 IDENTIFIED BY 'GreatSQL';
 ```
 
@@ -370,7 +370,7 @@ The instance '172.16.16.13:3306' was successfully removed from the cluster.
 
 ### 手动方式删除节点
 
-在命令行模式下，一个节点想退出MGR集群，直接执行 `stop group_replication` 即可，如果这个节点只是临时退出集群，后面还想加回集群，则执行 `start group_replication` 即可自动再加入。而如果是想彻底退出集群，则停止MGR服务后，执行 `RESET BINARY LOGS AND GTIDS ; RESET REPLICA ALL;` 重置所有复制（包含MGR）相关的信息就可以了。
+在命令行模式下，一个节点想退出 MGR 集群，直接执行 `stop group_replication` 即可，如果这个节点只是临时退出集群，后面还想加回集群，则执行 `start group_replication` 即可自动再加入。而如果是想彻底退出集群，则停止 MGR 服务后，执行 `RESET BINARY LOGS AND GTIDS ; RESET REPLICA ALL;` 重置所有复制（包含 MGR）相关的信息就可以了。
 
 ## 异常退出的节点重新加回
 
@@ -387,17 +387,17 @@ The instance '172.16.16.13:3306' was successfully rejoined to the cluster.
 
 ### 手动方式重新加回
 
-当节点因为网络断开、实例crash等异常情况与MGR集群断开连接后，这个节点的状态会变成 **UNREACHABLE**，待到超过 `group_replication_member_expel_timeout` + 5 秒后，集群会踢掉该节点。
+当节点因为网络断开、实例 crash 等异常情况与 MGR 集群断开连接后，这个节点的状态会变成 **UNREACHABLE**，待到超过 `group_replication_member_expel_timeout` + 5 秒后，集群会踢掉该节点。
 
 等到这个节点再次启动并执行 `start group_replication`，正常情况下，该节点应能自动重新加回集群。如果设置了选项 `group_replication_start_on_boot = ON`，实例启动时也会尝试自动加回集群。
 
-## 重启MGR集群
+## 重启 MGR 集群
 
-正常情况下，MGR集群中的Primary节点退出时，剩下的节点会自动选出新的Primary节点。当最后一个节点也退出时，相当于整个MGR集群都关闭了。这时候任何一个节点启动MGR服务后，都不会自动成为Primary节点，需要在启动MGR服务前，先设置 `group_replication_bootstrap_group=ON`，使其成为引导节点，再启动MGR服务，它才会成为Primary节点，后续启动的其他节点也才能正常加入集群。可自行测试，这里不再做演示。
+正常情况下，MGR 集群中的 Primary 节点退出时，剩下的节点会自动选出新的 Primary 节点。当最后一个节点也退出时，相当于整个 MGR 集群都关闭了。这时候任何一个节点启动 MGR 服务后，都不会自动成为 Primary 节点，需要在启动 MGR 服务前，先设置 `group_replication_bootstrap_group=ON`，使其成为引导节点，再启动 MGR 服务，它才会成为 Primary 节点，后续启动的其他节点也才能正常加入集群。可自行测试，这里不再做演示。
 
-P.S，第一个节点启动完毕后，记得重置选项 `group_replication_bootstrap_group=OFF`，避免在后续的操作中导致MGR集群分裂。
+P.S，第一个节点启动完毕后，记得重置选项 `group_replication_bootstrap_group=OFF`，避免在后续的操作中导致 MGR 集群分裂。
 
-如果是用GreatSQL Shell重启MGR集群，调用 `rebootClusterFromCompleteOutage()` 函数即可，它会自动判断各节点的状态，选择其中一个作为Primary节点，然后拉起各节点上的MGR服务，完成MGR集群重启。可以参考这篇文章：[万答#12，MGR整个集群挂掉后，如何才能自动选主，不用手动干预](https://mp.weixin.qq.com/s/07o1poO44zwQIvaJNKEoPA)
+如果是用 GreatSQL Shell 重启 MGR 集群，调用 `rebootClusterFromCompleteOutage()` 函数即可，它会自动判断各节点的状态，选择其中一个作为 Primary 节点，然后拉起各节点上的 MGR 服务，完成 MGR 集群重启。可以参考这篇文章：[万答#12，MGR 整个集群挂掉后，如何才能自动选主，不用手动干预](https://mp.weixin.qq.com/s/07o1poO44zwQIvaJNKEoPA)
 
 
 **扫码关注微信公众号**
