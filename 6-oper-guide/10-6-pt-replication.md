@@ -477,7 +477,7 @@ Last_SQL_Error:
 
 这款数据校验与修复工具虽广受欢迎，却存在不容忽视的短板：不支持 MySQL/GreatSQL 的 MGR 场景、国内普遍的上云下云业务，以及 MySQL/GreatSQL 与 Oracle 间的异构数据库等多元化场景。为了攻克这些难题，GreatSQL 推出了名为 `gt-checksum` 的校验&修复工具，旨在全面满足各类业务需求！
 
-- [gt-checksum 文档](/6-oper-guide/11-gt-checksum.md)
+- [gt-checksum 文档](https://gitee.com/GreatSQL/gt-checksum/blob/master/gt-checksum-manual.md)
 - [Gitee仓库地址](https://gitee.com/GreatSQL/gt-checksum)
 
 ### 概要
