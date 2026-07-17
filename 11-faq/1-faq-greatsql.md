@@ -16,12 +16,12 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 ### 3.1 二进制包、RPM包
 二进制包下载地址：[https://gitee.com/GreatSQL/GreatSQL/releases](https://gitee.com/GreatSQL/GreatSQL/releases)
 
-GreatSQL至少提供CentOS 7、CentOS 8两种操作系统，以及X86和ARM两种不同架构下的二进制包、RPM包、SRC RPM包。
+GreatSQL 至少提供 CentOS 7、CentOS 8 两种操作系统，以及 X86 和 ARM 两种不同架构下的二进制包、RPM 包、SRC RPM 包。
 
 除此外，GreatSQL 还提供适用于部分国产化操作系统的二进制包或RPM包，以及支持国密加密算法的二进制包。
 
 ### 3.2 源码
-可以直接用git clone的方式下载GreatSQL源码，例如：
+可以直接用 git clone 的方式下载 GreatSQL 源码，例如：
 ```bash
 # 从gitee下载
 git clone https://gitee.com/GreatSQL/GreatSQL.git
@@ -31,7 +31,7 @@ git clone https://github.com/GreatSQL/GreatSQL.git
 ```
 
 ### 3.3 Docker镜像
-GreatSQL提供Docker镜像，可直接从docker hub拉取：
+GreatSQL 提供 Docker 镜像，可直接从 Docker Hub 拉取：
 ```bash
 # 直接下载最新版本
 docker pull docker.io/greatsql/greatsql
@@ -53,11 +53,11 @@ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql
 ```
 
 ### 3.4 Ansible安装包
-GreatSQL提供Ansible一键安装包，可在gitee或github下载：
+GreatSQL 提供 Ansible 一键安装包，可在 Gitee 或 GitHub 下载：
 - [https://gitee.com/GreatSQL/GreatSQL-Ansible/releases](https://gitee.com/GreatSQL/GreatSQL-Ansible/releases)
 - [https://github.com/GreatSQL/GreatSQL-Ansible/releases](https://github.com/GreatSQL/GreatSQL-Ansible/releases)
 
-从GreatSQL 8.0.32-25版本开始，GreatSQL Ansible暂停更新，如果您需要通过Ansible安装GreatSQL，可以采用芬达老师提供的**dbops**，详见：[dbops](https://gitee.com/fanderchan/dbops)。
+从 GreatSQL 8.0.32-25 版本开始，GreatSQL Ansible 暂停更新，如果您需要通过 Ansible 安装 GreatSQL，可以采用芬达老师提供的 **dbops**，详见：[dbops](https://gitee.com/fanderchan/dbops)。
 
 ## 4. 使用GreatSQL遇到问题时找谁
 
@@ -78,7 +78,7 @@ GreatSQL提供Ansible一键安装包，可在gitee或github下载：
 ## 5. GreatSQL相关资源有哪些
 
 一、文档
-目前GreatSQL相关文档全部发布在gitee上（[https://gitee.com/GreatSQL/GreatSQL-Doc/](https://gitee.com/GreatSQL/GreatSQL-Doc/)），主要有以下几部分
+目前 GreatSQL 相关文档全部发布在 Gitee 上（[https://gitee.com/GreatSQL/GreatSQL-Doc/](https://gitee.com/GreatSQL/GreatSQL-Doc/)），主要有以下几部分
 
 1. [GreatSQL历史版本](../1-docs-intro/1-2-release-history.md)
 

@@ -1,7 +1,7 @@
 # FAQ
 ---
 
-本章内容主要是GreatSQL及MGR等相关的FAQ。
+本章内容主要是 GreatSQL 及 MGR 等相关的 FAQ。
 ## [GreatSQL相关](./1-faq-greatsql.md)
 ## [MGR运维部署](./2-faq-mgr-oper.md)
 ## [基于MGR的架构方案](./3-faq-mgr-arch.md)
