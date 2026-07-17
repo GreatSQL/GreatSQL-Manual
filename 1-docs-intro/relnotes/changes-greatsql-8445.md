@@ -138,12 +138,16 @@ GreatSQL 8.4.4-5版本中新增**大事务binlog独立落盘**优化，提升**�
   basedir=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64
   ```
   并确保参数`upgrade`不是设置为*NONE*。
-  
+
   **6. 启动GreatSQL 8.4.4-5新版本实例**
   
+  需要先修改 systemd 相应的 GreatSQL 服务管理文件，详情参考：[利用systemd管理GreatSQL](../../4-install-guide/8-greatsql-with-systemd.md)。
+
   ```bash
   systemctl start greatsql
   ```
+
+  > 如果采用其他方式管理 GreatSQL 服务，则可以略过这个步骤的工作。
   
   **7. 重新安装 Rapid 引擎**
   
