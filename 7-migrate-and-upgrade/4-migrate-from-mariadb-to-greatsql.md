@@ -33,7 +33,7 @@ MariaDB 是一个开源的关系型数据库管理系统（RDBMS），由 MySQL 
 3. **版本号**：
    - **MariaDB**：早期版本号基本上和 MySQL/GreatSQL 保持一致，但从 10.x 开始采用独立的版本号规则，无法直接和 MySQL/GreatSQL 对应。
    - **GreatSQL**：GreatSQL 大版本号和 MySQL/Percona 保持一致，小版本号略有区别，详情参考：[用户须知](../1-docs-intro/1-1-notes-to-users.md)。
-4. **GTID不兼容**：
+4. **GTID 不兼容**：
    - **MariaDB**：较复杂，它包含多个部分，包括 Domain ID（域标识）、Server ID（服务器标识）和 Sequence Number（序列号），格式为 **GTID=Domain_ID-Server_ID-Sequence_Number**。MariaDB 的 GTID 允许通过 Domain ID 来隔离和管理不同集群中的事务。
    - **GreatSQL**：是单一值，由服务器 UUID 和事务编号组成，格式为 **GTID=UUID:TrxID**。一个服务器的每个事务都会有一个唯一的 GTID。
    - 也就是说 GreatSQL 和 MariaDB 之间不能创建基于 GTID 的主从复制关系。
@@ -92,13 +92,13 @@ MariaDB 是一个开源的关系型数据库管理系统（RDBMS），由 MySQL 
 
 ## 迁移前准备
 
-首先下载GreatSQL 8.4版本安装包，推荐选择最新的[GreatSQL 8.4.4-5版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.4.4-5)，至于选择RPM还是二进制包看具体情况及个人喜好。
+首先下载 GreatSQL 8.4 版本安装包，推荐选择最新的[GreatSQL 8.4.4-5 版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.4.4-5)，至于选择 RPM 还是二进制包看具体情况及个人喜好。
 
 本文选用二进制包方式安装。
 
 由于 MariaDB 和 GreatSQL 的差异较大，因此推荐采用 **mysqldump/mydumper 等逻辑全量备份导出** + **逻辑备份导入** 方式完成迁移工作。
 
-详细操作方法可以参考文档：[迁移过程](./2-migrate-from-mysql-togreatsql.md#迁移过程) 和 [mysqldump备份恢复](../6-oper-guide/4-1-mysqldump.md) 中介绍的 **逻辑备份+导入** 方法，完成迁移工作。
+详细操作方法可以参考文档：[迁移过程](./2-migrate-from-mysql-togreatsql.md#迁移过程) 和 [mysqldump 备份恢复](../6-oper-guide/4-1-mysqldump.md) 中介绍的 **逻辑备份+导入** 方法，完成迁移工作。
 
 如果是迁移单表，则可以考虑采用 [OUTFILE](../6-oper-guide/4-2-outfile.md) 方式完成逻辑备份，再利用 [并行 LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md) 方式导入数据。
 
@@ -112,7 +112,7 @@ MariaDB 是一个开源的关系型数据库管理系统（RDBMS），由 MySQL 
 - [Changes in MySQL 8.4](https://dev.mysql.com/doc/refman/8.4/en/mysql-nutshell.html)
 - [Upgrade Before You Begin](https://dev.mysql.com/doc/refman/8.4/en/upgrade-before-you-begin.html)
 - [What the MySQL Upgrade Process Upgrades](https://dev.mysql.com/doc/refman/8.4/en/upgrading-what-is-upgraded.html)
-- [MySQL 5.7 MGR平滑升级到GreatSQL 5.7](https://mp.weixin.qq.com/s/u0UAijfM8jHH948ml1PREg)
+- [MySQL 5.7 MGR 平滑升级到 GreatSQL 5.7](https://mp.weixin.qq.com/s/u0UAijfM8jHH948ml1PREg)
 
 **扫码关注微信公众号**
 
