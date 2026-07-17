@@ -395,7 +395,7 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 51   | [崔*](https://greatsql.cn/home.php?mod=space&uid=1833)   | GCP-DBA-2025644368 | 151  | [王*](https://greatsql.cn/home.php?mod=space&uid=2791)   | GCP-DBA-2026845123 |
 | 52   | [吴*明](https://greatsql.cn/home.php?mod=space&uid=301)  | GCP-DBA-2025607785 | 152  | [张*渭](https://greatsql.cn/home.php?mod=space&uid=1485) | GCP-DBA-2026450529 |
 | 53   | [宋*学](https://greatsql.cn/home.php?mod=space&uid=1974) | GCP-DBA-2025168189 | 153  | [李*亭](https://greatsql.cn/home.php?mod=space&uid=2835) | GCP-DBA-2026835060 |
-| 54   | [杨*森](https://greatsql.cn/home.php?mod=space&uid=2031) | GCP-DBA-2025532543 | 154  |                                                          |                    |
+| 54   | [杨*森](https://greatsql.cn/home.php?mod=space&uid=2031) | GCP-DBA-2025532543 | 154  | [刘*轩](https://greatsql.cn/home.php?mod=space&uid=2775) | GCP-DBA-2026550596 |
 | 55   | [冯*](https://greatsql.cn/home.php?mod=space&uid=2051)   | GCP-DBA-2025408189 | 155  |                                                          |                    |
 | 56   | [武*军](https://greatsql.cn/home.php?mod=space&uid=2042) | GCP-DBA-2025162222 | 156  |                                                          |                    |
 | 57   | [马*军](https://greatsql.cn/home.php?mod=space&uid=2038) | GCP-DBA-2025107612 | 157  |                                                          |                    |
