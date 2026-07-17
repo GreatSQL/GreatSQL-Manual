@@ -1,13 +1,13 @@
-# UPDATE执行慢排查分析
+# UPDATE 执行慢排查分析
 ---
 
-本文介绍在GreatSQL数据库中，如果UPDATE请求响应较慢如何进行排查分析。
+本文介绍在 GreatSQL 数据库中，如果 UPDATE 请求响应较慢如何进行排查分析。
 
 ## 写在前面
 
 在开始分析排查先简单了解 UPDATE 请求在 MySQL/GreatSQL 中的生命周期是什么，以及如何执行一个事务。
 
-理解UPDATE的工作过程后，更有利于排查分析慢的原因。
+理解 UPDATE 的工作过程后，更有利于排查分析慢的原因。
 
 ## Update 生命周期
 
@@ -15,11 +15,11 @@
 
 **1. 连接器**
 
-客户端发起一个 TCP 请求后，MySQL/GrreatSQL Server 端会负责通信协议处理、线程处理、账号认证、安全检查。
+客户端发起一个 TCP 请求后，MySQL/GreatSQL Server 端会负责通信协议处理、线程处理、账号认证、安全检查。
 
 **2. 分析器**
 
-MySQL/GrreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select、from），然后会对语法 进行分析判断语法是否正确。
+MySQL/GreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select、from），然后会对语法 进行分析判断语法是否正确。
 
 **3. 优化器**
 
@@ -98,17 +98,17 @@ MySQL/GrreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select
 - Sorting result、Sending data、Searching rows for update等状态。
 - Waiting for XX状态。
 
-如果有，抓紧分析并优化这些正在执行的SQL。
+如果有，抓紧分析并优化这些正在执行的 SQL。
 
-###  分析SQL语句
+###  分析 SQL 语句
 
-通过 `EXPLAIN` 分析SQL的执行情况，是否走索引，是否有额外分组、排序、临时表，以及多表关联查询时驱动表选错等情况。
+通过 `EXPLAIN` 分析 SQL 的执行情况，是否走索引，是否有额外分组、排序、临时表，以及多表关联查询时驱动表选错等情况。
 
-使用 `PROFILING` 分析SQL语句哪个执行阶段最慢。
+使用 `PROFILING` 分析 SQL 语句哪个执行阶段最慢。
 
 ###  分析应用程序执行 SQL 慢的时间
 
-观察是单个 SQL 执行慢，还是所有语句都慢，如果是所有SQL都慢，有可能是那个时段受到其他外部影响，导致数据库整体性能都很差，需要通过系统层的监控工具辅助排查分析。
+观察是单个 SQL 执行慢，还是所有语句都慢，如果是所有 SQL 都慢，有可能是那个时段受到其他外部影响，导致数据库整体性能都很差，需要通过系统层的监控工具辅助排查分析。
 
 ###  进行抓包和堆栈分析
 
@@ -116,14 +116,14 @@ MySQL/GrreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select
 
 使用 `strace` 分析 MySQL/GreatSQL 内部哪里慢，哪个函数导致的。
 
-UPDATE慢的问题还不止于上面列举的这些情况，本文主要是提供一个排查分析的思路，更多原因还需要进一步具体分析。
+UPDATE 慢的问题还不止于上面列举的这些情况，本文主要是提供一个排查分析的思路，更多原因还需要进一步具体分析。
 
-另外，本文以UPDATE请求为例，实际上INSERT和DELETE请求的情形也可以采用同样的排查分析思路进行。
+另外，本文以 UPDATE 请求为例，实际上 INSERT 和 DELETE 请求的情形也可以采用同样的排查分析思路进行。
 
 **参考资料：**
-- [技术分享 | Update更新慢、死锁等问题的排查思路分享](https://mp.weixin.qq.com/s/8EIWAWQD6BPS-j8gKt28Gw)
-- [EXPLAIN执行计划中要重点关注哪些要素](https://mp.weixin.qq.com/s/CDKN_nPcIjzA_U5-xwAE5w)
-- [PROCESSLIST中哪些状态要引起关注](https://mp.weixin.qq.com/s/vhUmB9JO-Zt2P02gVk4mwg)
+- [技术分享 | Update 更新慢、死锁等问题的排查思路分享](https://mp.weixin.qq.com/s/8EIWAWQD6BPS-j8gKt28Gw)
+- [EXPLAIN 执行计划中要重点关注哪些要素](https://mp.weixin.qq.com/s/CDKN_nPcIjzA_U5-xwAE5w)
+- [PROCESSLIST 中哪些状态要引起关注](https://mp.weixin.qq.com/s/vhUmB9JO-Zt2P02gVk4mwg)
 
 
 

@@ -3,7 +3,7 @@
 
 ## 性能测试方法
 
-本文主要介绍对GreatSQL进行性能测试的几种不同方法，主要包括：
+本文主要介绍对 GreatSQL 进行性能测试的几种不同方法，主要包括：
 
 1. [sysbench 测试](./3-1-benchmark-sysbench.md)
 2. [BenchmarkSQL 测试](./3-4-benchmarksql.md)
@@ -13,19 +13,19 @@
 
 ## 性能测试报告
 
-以下是GreatSQL基准性能测试报告：
+以下是 GreatSQL 基准性能测试报告：
 
-- GreatSQL TPC-H 性能测试报告：[在线报告](./3-3-benchmark-greatsql-tpch-report.md)、[PDF文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/Presentations/40、greatsql84-vs-greatsql80-tpch-report-20251102.pdf)
-- GreatSQL TPC-H（Turbo引擎）性能测试报告：[在线报告](./3-6-benchmark-greatsql-tpch-turbo-report.md)、[PDF文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/Presentations/32%E3%80%81benchmark-greatsql-tpch-turbo-report-20250305.pdf)
-- GreatSQL TPC-C 性能测试（2000仓）报告：[在线报告](./3-5-benchmark-greatsql-vs-mysql-tpcc-report.md)、[PDF文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/Presentations/39、benchmarksql-greatsql84-vs-mysql84-tpcc-report-20251028.pdf)
-- GreatSQL TPC-C 性能测试（1000仓）报告：[在线报告](./3-7-benchmark-greatsql-vs-mysql-tpcc-wh1000-report.md)、[PDF文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/Presentations/41、benchmarksql-greatsql84-vs-mysql84-tpcc-wh1000-report-20260206.pdf)
+- GreatSQL TPC-H 性能测试报告：[在线报告](./3-3-benchmark-greatsql-tpch-report.md)、[PDF 文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/Presentations/40、greatsql84-vs-greatsql80-tpch-report-20251102.pdf)
+- GreatSQL TPC-H（Turbo 引擎）性能测试报告：[在线报告](./3-6-benchmark-greatsql-tpch-turbo-report.md)、[PDF 文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/Presentations/32%E3%80%81benchmark-greatsql-tpch-turbo-report-20250305.pdf)
+- GreatSQL TPC-C 性能测试（2000 仓）报告：[在线报告](./3-5-benchmark-greatsql-vs-mysql-tpcc-report.md)、[PDF 文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/Presentations/39、benchmarksql-greatsql84-vs-mysql84-tpcc-report-20251028.pdf)
+- GreatSQL TPC-C 性能测试（1000 仓）报告：[在线报告](./3-7-benchmark-greatsql-vs-mysql-tpcc-wh1000-report.md)、[PDF 文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/Presentations/41、benchmarksql-greatsql84-vs-mysql84-tpcc-wh1000-report-20260206.pdf)
 
 
 **参考资料：**
-- [利用sysbench执行测试](https://mp.weixin.qq.com/s/QPzlrrt7z0ui1ShtA2_P2Q)
-- [GreatSQL vs MySQL性能测试](https://mp.weixin.qq.com/s/tjrz7tJYmfvaYzxruNWMzw)
-- [使用TPC-H 进行GreatSQL并行查询测试](https://mp.weixin.qq.com/s/9yyKxzMT4Udh-EbX_HAHsQ)
-- [GreatSQL重磅特性，InnoDB并行并行查询优化测试](https://mp.weixin.qq.com/s/_LeEtwJlfyvIlxzLoyNVdA)
+- [利用 sysbench 执行测试](https://mp.weixin.qq.com/s/QPzlrrt7z0ui1ShtA2_P2Q)
+- [GreatSQL vs MySQL 性能测试](https://mp.weixin.qq.com/s/tjrz7tJYmfvaYzxruNWMzw)
+- [使用 TPC-H 进行 GreatSQL 并行查询测试](https://mp.weixin.qq.com/s/9yyKxzMT4Udh-EbX_HAHsQ)
+- [GreatSQL 重磅特性，InnoDB 并行并行查询优化测试](https://mp.weixin.qq.com/s/_LeEtwJlfyvIlxzLoyNVdA)
 
 
 

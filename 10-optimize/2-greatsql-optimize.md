@@ -1,21 +1,21 @@
-# GreatSQL优化
+# GreatSQL 优化
 ---
 
-本文主要介绍从GreatSQL数据库的几个优化参考。
+本文主要介绍从 GreatSQL 数据库的几个优化参考。
 
-## GreatSQL优化配置参考
+## GreatSQL 优化配置参考
 
-通常情况下，运行GreatSQL数据库时，采用 [这份my.cnf](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example) 参考就足够了。
+通常情况下，运行 GreatSQL 数据库时，采用 [这份 my.cnf](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example) 参考就足够了。
 
 下面针对其中的几个关键参数选项稍作解读：
 
 - no-auto-rehash
 
-mysql客户端登入时，不读取全部metadata，避免影响性能以及产生MDL等待。
+MySQL 客户端登入时，不读取全部 metadata，避免影响性能以及产生 MDL 等待。
 
 - skip_name_resolve=ON
 
-不进行DNS反解析，提高用户端连接性能。
+不进行 DNS 反解析，提高用户端连接性能。
 
 - default_time_zone="+8:00"
 
@@ -23,7 +23,7 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 
 - lock_wait_timeout=3600
 
-限制表级锁、MDL锁、备份锁等最大等待时长。
+限制表级锁、MDL 锁、备份锁等最大等待时长。
 
 - log_error_verbosity=3
 
@@ -32,11 +32,11 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 - replica_parallel_type=LOGICAL_CLOCK
 - replica_parallel_workers=16
 
-采用LOGICAL_CLOCK模式，并行复制线程数最高可以设置为逻辑CPU数量的2倍，提高SQL线程应用事务的并行效率。
+采用 LOGICAL_CLOCK 模式，并行复制线程数最高可以设置为逻辑 CPU 数量的 2 倍，提高 SQL 线程应用事务的并行效率。
 
 - binlog_transaction_dependency_tracking=WRITESET
 
-采用WRITESET模式提高从节点事务并行回放度。
+采用 WRITESET 模式提高从节点事务并行回放度。
 
 - replica_preserve_commit_order=ON
 
@@ -44,15 +44,15 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 
 - loose-group_replication_flow_control_mode="DISABLED"
 
-关闭MySQL原生的MGR流控模式，因为其作用不大。
+关闭 MySQL 原生的 MGR 流控模式，因为其作用不大。
 
 - loose-group_replication_majority_after_mode=ON
 
-在AFTER模式下，当发生个别节点异常时，只要多数派达成一致即可，不会导致整个MGR都被hang住。
+在 AFTER 模式下，当发生个别节点异常时，只要多数派达成一致即可，不会导致整个 MGR 都被 hang 住。
 
 - loose-group_replication_communication_max_message_size=10M
 
-设置MGR通信消息分片，避免一次性发送消息太大，导致网络拥塞，影响MGR性能。
+设置 MGR 通信消息分片，避免一次性发送消息太大，导致网络拥塞，影响 MGR 性能。
 
 - loose-group_replication_single_primary_fast_mode=1
 
@@ -60,11 +60,11 @@ mysql客户端登入时，不读取全部metadata，避免影响性能以及产�
 
 - loose-group_replication_request_time_threshold=100
 
-记录因MGR通信超过阈值的事件，便于后续检查确认MGR通信性能是否存在瓶颈。
+记录因 MGR 通信超过阈值的事件，便于后续检查确认 MGR 通信性能是否存在瓶颈。
 
 - loose-group_replication_primary_election_mode=GTID_FIRST
 
-设置MGR选主模式为GTID_FIRST，在发生主节点切换时，会优先选择事务应用效率最高的那个节点。
+设置 MGR 选主模式为 GTID_FIRST，在发生主节点切换时，会优先选择事务应用效率最高的那个节点。
 
 - innodb_buffer_pool_size=96G
 

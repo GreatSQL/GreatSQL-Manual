@@ -1,27 +1,27 @@
-# MDL锁等待分析
+# MDL 锁等待分析
 ---
 
-本文介绍在GreatSQL数据库中，如何查看MDL锁以及发生MDL锁等待时如何排查分析。
+本文介绍在 GreatSQL 数据库中，如何查看 MDL 锁以及发生 MDL 锁等待时如何排查分析。
 
-## 关于MDL锁
-在[**UPDATE执行慢排查分析**](./2-4-slow-update-diag.md)一文中提到，当执行`SHOW PROCESSLIST`时，可能会看到一种状态是`Waiting for XX metadata lock`，这就意味着当前发生了MDL锁等待。
+## 关于 MDL 锁
+在[**UPDATE 执行慢排查分析**](./2-4-slow-update-diag.md)一文中提到，当执行 `SHOW PROCESSLIST` 时，可能会看到一种状态是 `Waiting for XX metadata lock`，这就意味着当前发生了 MDL 锁等待。
 
-MDL锁全称为Metadata Lock（元数据锁）。在MySQL/GreatSQL中，DDL是不支持事务特性的，当事务和DDL同时操作同一个表，可能会出现各种意想不到问题，如事务特性被破坏、binlog顺序错乱等。为了解决类似这些问题，MySQL在5.5开始引入了MDL锁(Metadata Locking)。也就是说，MDL锁的作用是保证表元数据的一致性，避免DDL和DML并行导致元数据不一致。
+MDL 锁全称为 Metadata Lock（元数据锁）。在 MySQL/GreatSQL 中，DDL 是不支持事务特性的，当事务和 DDL 同时操作同一个表，可能会出现各种意想不到问题，如事务特性被破坏、binlog 顺序错乱等。为了解决类似这些问题，MySQL 在 5.5 开始引入了 MDL 锁（Metadata Locking）。也就是说，MDL 锁的作用是保证表元数据的一致性，避免 DDL 和 DML 并行导致元数据不一致。
 
-MDL锁的范围主要包括以下几种：
-- **GLOBAL**，即全局读锁，例如执行`FLUSH TABLES WITH READ LOCK`。
+MDL 锁的范围主要包括以下几种：
+- **GLOBAL**，即全局读锁，例如执行 `FLUSH TABLES WITH READ LOCK`。
 - **TABLE/TABLESPACE/SCHEMA**，保护元数据。
 - **FUNCTION/PROCEDURE/TRIGGER/EVENT**，保护元数据。
-- **COMMIT**，用于阻塞事务提交，例如在事务提交前，MDL锁还没释放，此时提交会被阻塞。
-- **BACKUP**，全局备份锁以及单表备份锁，8.0以后新增备份锁。
-- **USER_LEVEL_LOCK**，用户级自定义锁。 
+- **COMMIT**，用于阻塞事务提交，例如在事务提交前，MDL 锁还没释放，此时提交会被阻塞。
+- **BACKUP**，全局备份锁以及单表备份锁，8.0 以后新增备份锁。
+- **USER_LEVEL_LOCK**，用户级自定义锁。
 - **FOREIGN_KEY/CHECK_CONSTRAINT**，约束校验锁。
 
-还有其他MDL锁范围，这里未能全部列出，MySQL仍在持续优化MDL锁。
+还有其他 MDL 锁范围，这里未能全部列出，MySQL 仍在持续优化 MDL 锁。
 
-## 查看MDL锁状态
+## 查看 MDL 锁状态
 
-MDL锁是Server层的锁，对象级锁。
+MDL 锁是 Server 层的锁，对象级锁。
 
 发起DML请求时，会对表同时申请MDL共享锁（只读锁）；发起DDL请求时，会对表同时申请MDL排他锁（写锁）。申请MDL加锁的操作会形成一个队列，队列中写锁获取优先级高于读锁。
 
