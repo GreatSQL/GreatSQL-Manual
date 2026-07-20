@@ -18,7 +18,7 @@
 
 2. 在 `city` 表找出人口比 *Shanghai* 多的城市
 
-**方式1**
+**方式 1**
 
 首先查询 *Shanghai* 这个城市（`city = 'Shanghai'`）的人口
 ```sql
@@ -45,7 +45,7 @@ greatsql> SELECT name FROM city WHERE population > 9696300;
 ```
 就得出了要的结果，但这样查询效率不高，因为需要先查询 *Shanghai* 人口，再查询人口比 *Shanghai* 多城市的城市。
 
-**方式2**
+**方式 2**
 
 使用上一章学习过的多表查询，将两个查询合并为一个。若对连接查询不理解，请参考[多表查询](./12-4-2-data-select-multi-table.md)。
 
@@ -63,9 +63,9 @@ greatsql> SELECT c2.name FROM city c1,city c2 WHERE
 3 rows in set (0.00 sec)
 ```
 
-**方式3**
+**方式 3**
 
-使用子查询，将Shanghai人口作为子查询，在city表中查询人口比该城市多城市的城市
+使用子查询，将 Shanghai 人口作为子查询，在 city 表中查询人口比该城市多城市的城市
 ```sql
 greatsql> SELECT name FROM city WHERE population >
   (SELECT population FROM city WHERE name = 'Shanghai');
@@ -103,7 +103,7 @@ greatsql> SELECT name FROM city WHERE population >
 SELECT ... FROM table WHERE column = (subquery)
 ```
 
-例如在city表中查询人口比该城市多城市的城市
+例如在 city 表中查询人口比该城市多城市的城市
 ```sql
 greatsql> SELECT name FROM city WHERE population >
   (SELECT population FROM city WHERE name = 'Shanghai');
@@ -121,9 +121,9 @@ greatsql> SELECT name FROM city WHERE population >
 
 多行子查询返回多行结果。这些结果通常用于与主查询中的行进行比较，以确定它们是否满足某个条件。由于返回的是多行结果，因此不能直接用于等于或比较操作，而需要使用如 `IN`、`ANY`、`ALL` 等操作符。
 
-例如，使用city表，和country表，找到country为China的所有城市，并只显示前5条记录
+例如，使用 city 表，和 country 表，找到 country 为 China 的所有城市，并只显示前 5 条记录
 ```sql
-greatesql> SELECT name FROM city WHERE countrycode IN
+greatsql> SELECT name FROM city WHERE countrycode IN
   (SELECT code FROM country WHERE name = 'China')LIMIT 5;
 +-----------+
 | name      |
@@ -143,14 +143,14 @@ greatesql> SELECT name FROM city WHERE countrycode IN
 | IN     | 等于列表中的**任意一个**                                     |
 | ANY    | 需要和单行比较操作符一起使用，和子查询返回的**某一个**值比较 |
 | ALL    | 需要和单行比较操作符一起使用，和子查询返回的**所有**值比较   |
-| SOME   | 实际上是ANY的别名，作用相同，一般常使用ANY                   |
+| SOME   | 实际上是 ANY 的别名，作用相同，一般常使用 ANY                   |
 
 ### 多行子查询语法格式
 多行子查询的语法格式如下：
 ```sql
 SELECT ... FROM table WHERE column IN (subquery)
 ```
-要查询那些有官方语言的国家的所有城市并只显示前5条记录，以下是一个 SQL 查询示例：
+要查询那些有官方语言的国家的所有城市并只显示前 5 条记录，以下是一个 SQL 查询示例：
 
 ```sql
 SELECT c.name AS city_name, co.name AS country_name  
@@ -180,7 +180,7 @@ WHERE co.code IN (
 
 解析
 
-1. 子查询 `SELECT countrycode FROM countrylanguage WHERE IsOfficial = TRUE` 首先从 countrylanguage 表中选取所有官方语言的国家ID。
+1. 子查询 `SELECT countrycode FROM countrylanguage WHERE IsOfficial = TRUE` 首先从 countrylanguage 表中选取所有官方语言的国家 ID。
 
 2. 主查询通过 `JOIN` 关联 city 和 country 表，并通过 `WHERE` 子句筛选出那些 ID 在子查询结果中的国家。
 

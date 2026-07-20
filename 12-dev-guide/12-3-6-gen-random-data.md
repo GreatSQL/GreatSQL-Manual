@@ -1,6 +1,6 @@
 # 生成随机测试数据
 
-本节介绍使用 **mysql_random_data_load**、Shell脚本、存储过程/函数向GreatSQL数据库生成随机测试数据。
+本节介绍使用 **mysql_random_data_load**、 Shell 脚本、存储过程/函数向 GreatSQL 数据库生成随机测试数据。
 
 在 [概述章节](./12-dev-guide.md) 已安装样例数据库，若有需要生成额外测试数据，可参考本节内容。
 
@@ -28,14 +28,14 @@ MySQL Random Data Loader
 ```
 `mysql_random_data_load` 将加载（插入）“n”条记录到源表，并根据数据类型用随机数据填充它。所以这个工具不会像 sysbench 那样确定预定义的表列或数据类型。它将根据列数据类型将数据插入表中。因此，可以根据自定义需求生成随机数据。表格可以有任意数量的不同数据类型的列，此工具将根据列的数据类型生成数据并插入数据。
 
-- 如果字段小于10，程序将生成一个随机的“名字”
-- 如果字段大于10且小于30，程序将生成一个随机的“全名”
-- 如果字段大于30，程序将生成一个“lorem ipsum”段落，最多包含100个字符。
+- 如果字段小于 10，程序将生成一个随机的“名字”
+- 如果字段大于 10 且小于 30，程序将生成一个随机的“全名”
+- 如果字段大于 30，程序将生成一个“lorem ipsum”段落，最多包含 100 个字符。
 - 该程序可以检测一个字段是否接受 NULL，如果接受，它将随机生成 NULL（约 10% 的值）。
 
 ### 生成随机数据
 
-进入数据库在test_db库下创建一张t3表
+进入数据库在 test_db 库下创建一张 t3 表
 ```sql
 CREATE TABLE `t3` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -85,7 +85,7 @@ INFO[2024-05-08T17:07:49+08:00] 100000 rows inserted
 - `--user=root`：用户名
 - `--password=root`：密码
 
-`mysql_random_data_load`不关心这个表有哪些列，它都能自动进行填充。
+`mysql_random_data_load` 不关心这个表有哪些列，它都能自动进行填充。
 
 生成的随机数据入下所示
 ```sql
@@ -125,10 +125,10 @@ tcol28: 0.42
 
 ## Shell脚本生成随机数据
 
-也可以自己写脚本生成随机数据，利用Shell脚本，生成多条Insert语句，然后导入到数据库中执行。
+也可以自己写脚本生成随机数据，利用 Shell 脚本，生成多条 Insert 语句，然后导入到数据库中执行。
 
 ### 创建测试表
-首先在数据库中创建一张表`test_shell`
+首先在数据库中创建一张表 `test_shell`
 
 ```sql
 CREATE TABLE `test_shell` (
@@ -149,7 +149,7 @@ CREATE TABLE `test_shell` (
 vim random_data.sh
 ```
 ### 编写Shell脚本
-进入文件后，按下`i`键，左下方出现 `--- INSERT ---` 表示进入编辑模式，然后输入/粘贴以下内容
+进入文件后，按下 `i` 键，左下方出现 `--- INSERT ---` 表示进入编辑模式，然后输入/粘贴以下内容
 ```ini
 #!/bin/bash  
   
@@ -226,14 +226,14 @@ echo "Insert语句已生成并保存到$output_file文件中"
 
 ### 执行Shell脚本
 
-使用`sh`命令运行该Shell脚本，生成Insert语句
+使用 `sh` 命令运行该 Shell 脚本，生成 Insert 语句
 ```bash
 $ sh random_data.sh 
 Insert语句已生成并保存到insert_sql.sql文件中
 ```
 ### 查看生成的Insert语句
 
-使用`tail`命令查看生成的Insert语句文件，截取部分内容如下：
+使用 `tail` 命令查看生成的 Insert 语句文件，截取部分内容如下：
 ```bash
 $ tail -n 5 insert_sql.sql
 
@@ -244,11 +244,11 @@ INSERT INTO test_shell (id, name, age, gender, address, phone) VALUES (99, 'Knyh
 INSERT INTO test_shell (id, name, age, gender, address, phone) VALUES (100, 'Mwsd', 51, '女', '地址103971031209811411197101113', '10000003984');
 ```
 ### 导入数据
-生成 `insert_sql.sql` 文件后需将此文件导入到GreatSQL中的 `test_db` 库中
+生成 `insert_sql.sql` 文件后需将此文件导入到 GreatSQL 中的 `test_db` 库中
 ```bash
 mysql -uroot -pGreatSQL@2024 test_db < /data/insert_sql.sql
 ```
-查看test_db库中test_shell表中的数据情况
+查看 test_db 库中 test_shell 表中的数据情况
 ```bash
 $ mysql -uroot -pGreatSQL@2024  -e 'SELECT COUNT(*) FROM test_db.test_shell;'
 +----------+
@@ -258,13 +258,13 @@ $ mysql -uroot -pGreatSQL@2024  -e 'SELECT COUNT(*) FROM test_db.test_shell;'
 +----------+
 ```
 ### 注意事项
-1. 生成Insert语句时，需注意表名、字段名和数据类型，否则生成的Insert语句将无法执行
-2. 运行Shell脚本时或向GreatSQL数据库插入数据时，请提前关注相关服务器的资源使用情况，避免由于资源使用情况而导致数据插入失败或性能下降的情况，若资源不足，可分批导入。
+1. 生成 Insert 语句时，需注意表名、字段名和数据类型，否则生成的 Insert 语句将无法执行
+2. 运行 Shell 脚本时或向 GreatSQL 数据库插入数据时，请提前关注相关服务器的资源使用情况，避免由于资源使用情况而导致数据插入失败或性能下降的情况，若资源不足，可分批导入。
 
 ## 存储过程生成随机数据
 ### 创建表
 
-创建一张test_book表
+创建一张 test_book 表
 ```sql
 CREATE TABLE IF NOT EXISTS `test_book`(
   `bookid` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -274,11 +274,11 @@ CREATE TABLE IF NOT EXISTS `test_book`(
 ```
 ### 定义存储过程
 
-现在，我们可以定义一个存储过程来插入数据。例如，可以定义一个存储过程INSERT_DATA，并将使用`CALL`调用存储过程插入随机数。
+现在，我们可以定义一个存储过程来插入数据。例如，可以定义一个存储过程 INSERT_DATA，并将使用 `CALL` 调用存储过程插入随机数。
 
 
 ```sql
-DROP PROCEDURE IF EXISTS INSERT_DATA;
+DROP PROCEDURE IF EXISTS INSERT_DATA ;
 DELIMITER //
 CREATE PROCEDURE INSERT_DATA()   
   BEGIN  
@@ -293,12 +293,12 @@ DELIMITER ;
 ```
 
 ### 调用存储过程
-可以通过调用INSERT_DATA存储过程来插入数据。
+可以通过调用 INSERT_DATA 存储过程来插入数据。
 ```sql
 CALL INSERT_DATA();
 ```
 ### 查看数据
-查看test_book表中的数据情况，可以看到生成了20条随机数。
+查看 test_book 表中的数据情况，可以看到生成了 20 条随机数。
 ```sql
 greatsql> SELECT COUNT(*) FROM test_book;
 +----------+
@@ -309,7 +309,7 @@ greatsql> SELECT COUNT(*) FROM test_book;
 1 row in set (0.00 sec)
 ```
 ### 删除存储过程
-如果不需要存储过程，可以使用`DROP PROCEDURE`删除它。
+如果不需要存储过程，可以使用 `DROP PROCEDURE` 删除它。
 ```sql
 DROP PROCEDURE INSERT_DATA;
 ```
@@ -318,7 +318,7 @@ DROP PROCEDURE INSERT_DATA;
 
 ### 创建表
 
-创建一张t1表，用于存储随机数据
+创建一张 t1 表，用于存储随机数据
 ```sql
 CREATE TABLE `t1` (
     `Id` INT ( 11 ) NOT NULL AUTO_INCREMENT,
@@ -339,7 +339,7 @@ SET GLOBAL log_bin_trust_function_creators = 1;
 随机字符串函数
 ```sql
 DELIMITER //
-DROP FUNCTION IF EXISTS rand_string;
+DROP FUNCTION IF EXISTS rand_string ;
 CREATE FUNCTION rand_string ( n INT ) RETURNS VARCHAR ( 255 ) BEGIN
     DECLARE
         chars_str VARCHAR ( 100 ) DEFAULT 'abcdefghijklmnopqrstuvwxyzABCDEFJHIJKLMNOPQRSTUVWXYZ';
@@ -385,7 +385,7 @@ DELIMITER ;
 随机时间
 ```sql
 DELIMITER //
-DROP FUNCTION IF EXISTS rand_date;
+DROP FUNCTION IF EXISTS rand_date ;
 CREATE  FUNCTION  rand_date ( n YEAR ) RETURNS varchar(255) CHARSET utf8mb4
 BEGIN
 declare Date VARCHAR(255) default '';
@@ -403,8 +403,8 @@ DELIMITER ;
 随机区间数字
 ```sql
 DELIMITER //
-DROP FUNCTION IF EXISTS rand_num;
-CREATE FUNCTION rand_num (from_num DECIMAL ( 10, 2 ) ,to_num DECIMAL ( 10, 2 )) RETURNS DECIMAL ( 10, 2 )
+DROP FUNCTION IF EXISTS rand_num ;
+CREATE FUNCTION rand_num (from_num DECIMAL ( 10, 2 ),to_num DECIMAL ( 10, 2 )) RETURNS DECIMAL ( 10, 2 )
 BEGIN
     DECLARE i DOUBLE DEFAULT 0;
         SET i = from_num +RAND()*(to_num - from_num+1);
@@ -455,14 +455,14 @@ BEGIN
         SET autocommit = 0; #设置手动提交事务
     REPEAT #循环
         SET i = i + 1; #赋值
-        INSERT INTO t1 (Name, Address ,Telephone,Date ,Money ) VALUES (rand_string(3),rand_address(1),rand_phone ( ) ,rand_date(2022),rand_num(2000.10,10000.99));
+        INSERT INTO t1 (Name, Address,Telephone,Date,Money ) VALUES (rand_string(3),rand_address(1),rand_phone ( ),rand_date(2022),rand_num(2000.10,10000.99));
         UNTIL i = max_num
     END REPEAT;
     COMMIT; #提交事务
 END //
 DELIMITER ;
 ```
-执行存储过程，插入1000条数据
+执行存储过程，插入 1000 条数据
 ```sql
 greatsql> CALL insert_t1(1000);
 Query OK, 0 rows affected (0.01 sec)

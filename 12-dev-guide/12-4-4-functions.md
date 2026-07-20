@@ -1,6 +1,6 @@
 # 支持的函数
 ---
-本节列举GreatSQL支持的函数，并给出样例。
+本节列举 GreatSQL 支持的函数，并给出样例。
 
 本节使用 [文档约定](./12-dev-guide.md) 中提到的样例数据库
 - employee data (large dataset, includes data and test/verification suite)
@@ -8,7 +8,7 @@
 - sakila database
 
 ## 函数分类
-GreatSQL支持的函数大致可以分为以下几类：
+GreatSQL 支持的函数大致可以分为以下几类：
 1. 字符函数
 2. 数学函数
 3. 时间日期函数
@@ -17,7 +17,7 @@ GreatSQL支持的函数大致可以分为以下几类：
 6. 窗口函数
 
 ## 字符函数
-GreatSQL提供了一系列字符函数，用于处理和操作字符串数据。这些函数的功能非常丰富，可以满足各种字符串处理需求。
+GreatSQL 提供了一系列字符函数，用于处理和操作字符串数据。这些函数的功能非常丰富，可以满足各种字符串处理需求。
 ### CONCAT()函数
 用于连接两个或多个字符串。
 
@@ -175,7 +175,7 @@ greatsql> SELECT LOCATE('World', 'Hello World');
 ```
 ### INSTR()函数
 
-与`LOCATE()`函数类似。
+与 `LOCATE()` 函数类似。
 
 例如，以下查询将查找字符串 "Hello World" 中 "world" 的第一次出现位置：
 ```sql
@@ -200,7 +200,7 @@ greatsql> SELECT LENGTH('Hello World');
 +-----------------------+
 1 row in set (0.00 sec)
 ```
-或者例如中文"你好"在UTF-8下占3个字节，使用`LENGTH()`函数将返回6
+或者例如中文"你好"在 UTF-8 下占 3 个字节，使用 `LENGTH()` 函数将返回 6
 ```sql
 greatsql> SELECT LENGTH('你好');
 +------------------+
@@ -214,7 +214,7 @@ greatsql> SELECT LENGTH('你好');
 ### ISNULL()函数
 用于检查表达式是否为 NULL。
 
-例如：ISNULL(NULL) 将返回 1（表示为NULL）
+例如：ISNULL(NULL) 将返回 1（表示为 NULL）
 ```sql
 greatsql> SELECT ISNULL(NULL);
 +--------------+
@@ -225,9 +225,9 @@ greatsql> SELECT ISNULL(NULL);
 1 row in set (0.00 sec)
 ```
 ### CHAR_LENGTH()函数
-`LENGTH()`函数返回的是字节数，返回字符串的字符数，而不考虑实际字节数。它计算的是字符串中的实际字符数，不受多字节字符编码的影响。
+`LENGTH()` 函数返回的是字节数，返回字符串的字符数，而不考虑实际字节数。它计算的是字符串中的实际字符数，不受多字节字符编码的影响。
 
-例如：CHAR_LENGTH('你好') 将返回 2，而不是 6（UTF-8编码下每个中文字符占3个字节）。
+例如：CHAR_LENGTH('你好') 将返回 2，而不是 6（ UTF-8 编码下每个中文字符占 3 个字节）。
 ```sql
 greatsql> SELECT CHAR_LENGTH('你好');
 +-----------------------+
@@ -238,9 +238,9 @@ greatsql> SELECT CHAR_LENGTH('你好');
 1 row in set (0.00 sec)
 ```
 ### ASCII()函数
-用于获取字符的ASCII码值。
+用于获取字符的 ASCII 码值。
 
-例如：ASCII('A') 将返回 65
+例如： ASCII('A') 将返回 65
 ```sql
 greatsql> SELECT ASCII('A');
 +------------+
@@ -254,11 +254,11 @@ greatsql> SELECT ASCII('A');
 用于将字符串转换为指定进制的数字。
 
 格式为：CONV(string, from_base, to_base)
-- 参数string表示字符串
-- 参数from_base表示字符串的进制，取值范围为2~36
-- 参数to_base表示转换后的进制，取值范围为2~36
+- 参数 string 表示字符串
+- 参数 from_base 表示字符串的进制，取值范围为 2~36
+- 参数 to_base 表示转换后的进制，取值范围为 2~36
 
-例如：CONV('123', 10, 16) 把123从10进制转换为16进制，将返回字符串 "7B"
+例如：CONV('123', 10, 16) 把 123 从 10 进制转换为 16 进制，将返回字符串 "7B"
 ```sql
 greatsql> SELECT CONV('123', 10, 16);
 +---------------------+
@@ -284,7 +284,7 @@ greatsql> SELECT REVERSE('Hello World');
 ```
 
 ## 数学函数
-GreatSQL中的数学函数是指用于执行数学运算的函数。这些函数可以用于各种目的，例如计算列的值、比较值或从结果集中提取数据。
+GreatSQL 中的数学函数是指用于执行数学运算的函数。这些函数可以用于各种目的，例如计算列的值、比较值或从结果集中提取数据。
 
 ### ROUND()函数
 四舍五入函数，用于将数字四舍五入到指定的小数位数。
@@ -298,7 +298,7 @@ ROUND(number, decimals)
 - number：表示要四舍五入的数字
 - decimals：表示要四舍五入的小数位数
 
-例如：ROUND(1.598588,3) 返回1.599;
+例如：ROUND(1.598588,3) 返回 1.599;
 ```sql
 greatsql> SELECT ROUND(1.598588,3);
 +-------------------+
@@ -321,7 +321,7 @@ greatsql> SELECT ROUND(-1.598588,3);
 ### CEIL()函数
 向上取整函数，用于将数字向上取整到下一个整数。
 
-例如：CEIL(1.598588) 返回2;
+例如：CEIL(1.598588) 返回 2;
 ```sql
 greatsql> SELECT CEIL(1.598588);
 +----------------+
@@ -334,9 +334,9 @@ greatsql> SELECT CEIL(1.598588);
 ### AVG()函数
 用于计算列的平均值。
 
-例如：AVG(column_name) 返回列的平均值，以city表中的Population列为例。
+例如：AVG(column_name) 返回列的平均值，以 city 表中的 Population 列为例。
 ```sql
-greateql> SELECT AVG(Population) FROM city;
+greatsql> SELECT AVG(Population) FROM city;
 +-----------------+
 | AVG(Population) |
 +-----------------+
@@ -347,7 +347,7 @@ greateql> SELECT AVG(Population) FROM city;
 ### SUM()函数
 用于计算列的总和。
 
-例如：SUM(column_name) 返回列的总和，以city表中的Population列为例。
+例如：SUM(column_name) 返回列的总和，以 city 表中的 Population 列为例。
 ```sql
 greatsql> SELECT SUM(Population) FROM city;
 +-----------------+
@@ -364,7 +364,7 @@ greatsql> SELECT SUM(Population) FROM city;
 - number：表示要截断的数字
 - decimals：表示要截断的小数位数
 
-例如：TRUNCATE(1.598588,3) 返回1.598;
+例如：TRUNCATE(1.598588,3) 返回 1.598;
 ```sql
 greatsql> SELECT TRUNCATE(1.598588,3);
 +----------------------+
@@ -382,7 +382,7 @@ greatsql> SELECT TRUNCATE(1.598588,3);
 - number1：表示被除数
 - number2：表示除数
 
-例如：MOD(10,3) 返回1;
+例如：MOD(10,3) 返回 1;
 ```sql
 greatsql> SELECT MOD(10,3);
 +-----------+
@@ -400,7 +400,7 @@ greatsql> SELECT MOD(10,3);
 - number：表示底数
 - power：表示幂
 
-例如：POW(2,3) 返回8;
+例如：POW(2,3) 返回 8;
 ```sql
 greatsql> SELECT POW(2,3);
 +----------+
@@ -411,14 +411,14 @@ greatsql> SELECT POW(2,3);
 1 row in set (0.01 sec)
 ```
 ## 时间日期函数
-GreatSQL中的时间日期函数是指用于处理和操作时间日期值 的函数。这些函数可以用于各种目的，例如获取当前日期和时间、格式化日期时间值、计算日期时间差值等。
+GreatSQL 中的时间日期函数是指用于处理和操作时间日期值 的函数。这些函数可以用于各种目的，例如获取当前日期和时间、格式化日期时间值、计算日期时间差值等。
 
 ### NOW()函数
 用于获取当前日期和时间。
 
 例如：NOW() 返回当前日期和时间。
 ```sql
-greateql> SELECT NOW();
+greatsql> SELECT NOW();
 +---------------------+
 | NOW()               |
 +---------------------+
@@ -456,7 +456,7 @@ greatsql> SELECT CURTIME();
 ### 日期获取
 **YEAR()函数获取年份**
 ```sql
-greateql> SELECT YEAR(NOW());
+greatsql> SELECT YEAR(NOW());
 +-------------+
 | YEAR(NOW()) |
 +-------------+
@@ -464,7 +464,7 @@ greateql> SELECT YEAR(NOW());
 +-------------+
 1 row in set (0.00 sec)
 ```
-**MONDAY()函数获取月份**
+**MONTH()函数获取月份**
 ```sql
 greatsql> SELECT MONTH(NOW());
 +--------------+
@@ -477,7 +477,7 @@ greatsql> SELECT MONTH(NOW());
 
 **DAY()函数获取日期**
 ```sql
-greateql> SELECT DAY(NOW());
+greatsql> SELECT DAY(NOW());
 greatsql> SELECT DAY(NOW());
 +------------+
 | DAY(NOW()) |
@@ -497,9 +497,9 @@ greatsql> SELECT HOUR(NOW());
 +-------------+
 1 row in set (0.00 sec)
 ```
-**MINTUE()函数获取分钟**
+**MINUTE()函数获取分钟**
 ```sql
-greateql> SELECT MINUTE(NOW());
+greatsql> SELECT MINUTE(NOW());
 +---------------+
 | MINUTE(NOW()) |
 +---------------+
@@ -509,7 +509,7 @@ greateql> SELECT MINUTE(NOW());
 ```
 **SECOND()函数获取秒**
 ```sql
-greateql> SELECT SECOND(NOW());
+greatsql> SELECT SECOND(NOW());
 +---------------+
 | SECOND(NOW()) |
 +---------------+
@@ -600,14 +600,14 @@ greatsql> SELECT DATEDIFF('2019-05-14','2024-05-14');
 ```
 
 ## 流程控制函数
-GreatSQL中的流程控制函数允许根据不同的条件执行不同的处理流程，从而实现在 SQL 语句中的条件选择
+GreatSQL 中的流程控制函数允许根据不同的条件执行不同的处理流程，从而实现在 SQL 语句中的条件选择
 
 ### IF()函数
 作用是如果条件成立，则返回结果为真，否则返回结果为假。
 
-格式为：IF(条件,结果1,结果2)，若条件成立返回结果1，否则返回结果2。
+格式为：IF(条件,结果 1,结果 2)，若条件成立返回结果 1，否则返回结果 2。
 
-例如：IF(1=2,100,200) 返回结果为200。
+例如：IF(1=2,100,200) 返回结果为 200。
 ```sql
 greatsql> SELECT IF(1=2,100,200);
 +-----------------+
@@ -621,9 +621,9 @@ greatsql> SELECT IF(1=2,100,200);
 ### IFNULL()函数
 作用是如果第一个参数为空，则返回第二个参数的值，否则返回第一个参数的值。
 
-格式为：IFNULL(参数1,参数2)，若第一个参数为空，则返回第二个参数的值，否则返回第一个参数的值。
+格式为：IFNULL(参数 1,参数 2)，若第一个参数为空，则返回第二个参数的值，否则返回第一个参数的值。
 
-例如：IFNULL(10,20) 返回结果为10。
+例如：IFNULL(10,20) 返回结果为 10。
 ```sql
 greatsql> SELECT IFNULL(10,20);
 +---------------+
@@ -633,7 +633,7 @@ greatsql> SELECT IFNULL(10,20);
 +---------------+
 1 row in set (0.00 sec)
 ```
-例如：IFNULL(NULL,20) 返回结果为20。
+例如：IFNULL(NULL,20) 返回结果为 20。
 ```sql
 greatsql> SELECT IFNULL(NULL,20);
 +-----------------+
@@ -646,7 +646,7 @@ greatsql> SELECT IFNULL(NULL,20);
 ### CASE函数
 作用是根据条件判断结果，返回不同的值。
 
-格式为：CASE WHEN 条件1 THEN 结果1 ELSEIF 条件2 THEN 结果2 ... ELSE 结果n END。
+格式为：CASE WHEN 条件 1 THEN 结果 1 ELSEIF 条件 2 THEN 结果 2 ... ELSE 结果 n END。
 
 例如：CASE WHEN 1=2 THEN '条件成立' ELSE '条件不成立' END。
 ```sql
@@ -658,23 +658,23 @@ greatsql> SELECT CASE WHEN 1=2 THEN '条件成立' ELSE '条件不成立' END;
 +------------------------------------------------------------+
 1 row in set (0.40 sec)
 ```
-例如：city表中，Population字段为城市人口，如果Population大于10000000，则返回'人口超过1亿'，如果Population大于50000000，则返回'人口超过5千万'，否则返回'人口超过5千万'。
+例如：city 表中，Population 字段为城市人口，如果 Population 大于 10000000，则返回'人口超过 1 千万'，如果 Population 大于 5000000，则返回'人口超过 5 百万'，否则返回'人口不足 5 百万'。
 ```sql
-greatsql> SELECT city.Name, Population, 
-CASE WHEN Population>10000000 THEN '人口超过1亿' 
-WHEN Population>50000000 THEN '人口超过5千万' 
-ELSE '人口超过5千万' END AS '城市人口' 
+greatsql> SELECT city.Name, Population,
+CASE WHEN Population>10000000 THEN '人口超过1千万'
+WHEN Population>5000000 THEN '人口超过5百万'
+ELSE '人口不足5百万' END AS '城市人口'
 FROM city
 LIMIT 5;
 
 +----------------+------------+---------------------+
 | Name           | Population | 城市人口            |
 +----------------+------------+---------------------+
-| Kabul          |    1780000 | 人口超过5千万       |
-| Qandahar       |     237500 | 人口超过5千万       |
-| Herat          |     186800 | 人口超过5千万       |
-| Mazar-e-Sharif |     127800 | 人口超过5千万       |
-| Amsterdam      |     731200 | 人口超过5千万       |
+| Kabul          |    1780000 | 人口不足5百万       |
+| Qandahar       |     237500 | 人口不足5百万       |
+| Herat          |     186800 | 人口不足5百万       |
+| Mazar-e-Sharif |     127800 | 人口不足5百万       |
+| Amsterdam      |     731200 | 人口不足5百万       |
 +----------------+------------+---------------------+
 5 rows in set (0.00 sec)
 ```

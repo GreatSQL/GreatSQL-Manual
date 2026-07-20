@@ -1,21 +1,21 @@
 # 使用sysbench生成测试数据
 
-**sysbench** 是一个轻量级且功能强大的基准测试工具，用于评估系统的性能。它支持CPU、内存、线程和I/O等性能测试，并且特别适用于数据库的性能测试，如MySQL、GreatSQL等。通过模拟真实的应用场景和工作负载，sysbench可以帮助用户快速了解系统的性能瓶颈，并据此进行系统优化和硬件选型。
+**sysbench** 是一个轻量级且功能强大的基准测试工具，用于评估系统的性能。它支持 CPU、内存、线程和 I/O 等性能测试，并且特别适用于数据库的性能测试，如 MySQL 、 GreatSQL 等。通过模拟真实的应用场景和工作负载， sysbench 可以帮助用户快速了解系统的性能瓶颈，并据此进行系统优化和硬件选型。
 
 ## 安装sysbench
 
-CentOS系统下安装sysbench
+CentOS 系统下安装 sysbench
 ```bash
 yum install sysbench -y
 ```
-unbuntu系统下安装sysbench
+unbuntu 系统下安装 sysbench
 ```bash
 apt-get install sysbench -y
 ```
 
-若使用 yum / apt-get 安装不上，可尝试使用源码编译安装，详见：[sysbench性能测试](../10-optimize/3-1-benchmark-sysbench.md)
+若使用 yum / apt-get 安装不上，可尝试使用源码编译安装，详见：[sysbench 性能测试](../10-optimize/3-1-benchmark-sysbench.md)
 
-查看sysbench版本
+查看 sysbench 版本
 ```bash
 $ sysbench --version
 sysbench 1.0.20 (using bundled LuaJIT 2.1.0-beta3)
@@ -24,7 +24,7 @@ sysbench 1.0.20 (using bundled LuaJIT 2.1.0-beta3)
 ## 生成测试数据
 先创建默认的测试库，例如 sysbench_test。
 
-登录GreateSQL
+登录 GreatSQL
 ```bash
 mysql -u root -p
 ```
@@ -33,7 +33,7 @@ mysql -u root -p
 greatsql> CREATE DATABASE sysbench_test;
 Query OK, 1 row affected (0.03 sec)
 ```
-执行以下命令，本节主要为了演示方法，因此把table_size设置的小一点
+执行以下命令，本节主要为了演示方法，因此把 table_size 设置的小一点
 ```bash
 $ sysbench /usr/share/sysbench/oltp_read_write.lua \
   --tables=5 --table_size=100 \
@@ -59,15 +59,15 @@ Inserting 100 records into 'sbtest5'
 Creating a secondary index on 'sbtest5'...
 ```
 参数说明：
-- `--tables`：指定表数量，默认为1
-- `--table_size`：指定表大小，默认为1000000
-- `--mysql-user`：指定连接数据库的用户名，默认为root
+- `--tables`：指定表数量，默认为 1
+- `--table_size`：指定表大小，默认为 1000000
+- `--mysql-user`：指定连接数据库的用户名，默认为 root
 - `--mysql-password`：指定连接数据库的密码，默认为空
-- `--mysql-socket`：指定连接数据库的socket文件，默认为空
+- `--mysql-socket`：指定连接数据库的 socket 文件，默认为空
 - `--mysql-db`：指定连接数据库的库名，默认为空
-- `prepare`：指定执行sysbench的prepare阶段，即生成测试数据
+- `prepare`：指定执行 sysbench 的 prepare 阶段，即生成测试数据
 
-执行完成后，会生成5张表，每张表大小为100行数据。
+执行完成后，会生成 5 张表，每张表大小为 100 行数据。
 ```sql
 greatsql> USE sysbench_test;
 

@@ -6,30 +6,30 @@
 前置条件
 
 - 已安装 GreatSQL 数据库。
-- 已安装 JDK 和 Maven。
-- 已安装 IntelliJ IDEA。
+- 已安装 JDK 和 Maven 。
+- 已安装 IntelliJ IDEA 。
 
 ### 示例
 
-前往Maven官网：[https://mvnrepository.com/](https://mvnrepository.com/)。
+前往 Maven 官网：[https://mvnrepository.com/](https://mvnrepository.com/)。
 
-搜索MySQL下载MySQL/GreatSQL对应的驱动包。
+搜索 MySQL 下载 MySQL/GreatSQL 对应的驱动包。
 
 ![maven](./12-1-3-cw-drive01.png)
 
-点击`MySQL Connector Java`进入后选择与GreatSQL版本对应的驱动即可。
+点击 `MySQL Connector Java` 进入后选择与 GreatSQL 版本对应的驱动即可。
 
-![meven02](./12-1-3-cw-drive02.png)
+![maven02](./12-1-3-cw-drive02.png)
 
 进入对应的驱动版本内
 
-1.可下载用于连接的jar包。
+1.可下载用于连接的 jar 包。
 
-2.或直接复制下方Meven代码到Meven仓库中。
+2.或直接复制下方 Maven 代码到 Maven 仓库中。
 
-![meven](./12-1-3-cw-drive03.png)
+![maven](./12-1-3-cw-drive03.png)
 
-如果使用的是 **Maven**，请将以下内容添加到你的 `<dependencies></dependencies>`中
+如果使用的是 **Maven**，请将以下内容添加到你的 `<dependencies></dependencies>` 中
 
 ```java
 <dependency>
@@ -48,11 +48,11 @@ jdbc:mysql://host:port/schema_name?useSSL=false&serverTimezone=Asia/Shanghai&use
 - `host`：提供 GreatSQL 数据库连接 IP
 - `port`：填写 GreatSQL 数据库连接端口
 - `schema_name`：访问的数据库名称
-- `useSSL=false`：不加密链接，在8.0版本以上都需要添加
+- `useSSL=false`：不加密链接，在 8.0 版本以上都需要添加
 - `&serverTimezone=Asia/Shanghai`：中国上海时区
 - `user_name`：连接的用户名
 - `password`：连接的密码
-- `characterEncoding`：字符编码，默认为UTF-8
+- `characterEncoding`：字符编码，默认为 UTF-8
 
 ## 使用Golang连接
 
@@ -63,7 +63,7 @@ jdbc:mysql://host:port/schema_name?useSSL=false&serverTimezone=Asia/Shanghai&use
 
 ### 示例
 
-在Go项目中`import`中导入包
+在 Go 项目中 `import` 中导入包
 
 ```go
 import (
@@ -92,14 +92,14 @@ const (
 
 - `dbname`：要连接的数据库名
 
-在`main`函数中添加如下代码
+在 `main` 函数中添加如下代码
 
 ```go
 func main() {
 	// 构建数据库连接字符串
-	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s)/%s", username, password, hostname, dbname)
+	dataSourceName:= fmt.Sprintf("%s:%s@tcp(%s)/%s", username, password, hostname, dbname)
 	// 连接数据库
-	db, err := sql.Open("GreatSQL", dataSourceName)
+	db, err:= sql.Open("GreatSQL", dataSourceName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -117,18 +117,18 @@ func main() {
 }
 ```
 
-输出`Connected to the database!`即为连接GreatSQL成功
+输出 `Connected to the database!` 即为连接 GreatSQL 成功
 
 ## 使用Python连接
 
 前置条件
 
 - 已安装 GreatSQL 数据库。
-- 已安装 Python。
+- 已安装 Python 。
 
 ### 示例
 
-执行下面的命令，使用`pip`命令安装驱动
+执行下面的命令，使用 `pip` 命令安装驱动
 
 ```python
 pip install mysql-connector-python

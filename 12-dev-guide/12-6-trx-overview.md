@@ -38,7 +38,7 @@ COMMIT;
 ROLLBACK;
 ```
 
-除了以上基本的事务控制语句外，GreatSQL 还支持 `SAVEPOINT` 语句用于设置保存点，可以在事务中进行部分回滚操作。例如：
+除了以上基本的事务控制语句外， GreatSQL 还支持 `SAVEPOINT` 语句用于设置保存点，可以在事务中进行部分回滚操作。例如：
 
 - 设置保存点：
 
@@ -52,7 +52,7 @@ SAVEPOINT savepoint_name;
 ROLLBACK TO SAVEPOINT savepoint_name;
 ```
 
-需要注意的是，GreatSQL 默认的事务隔离级别是 **可重复读（REPEATABLE READ）**，可以通过设置 `SET [GLOBAL | SESSION] TRANSACTION ISOLATION LEVEL` 语句来修改隔离级别，也可以在开始事务之前使用 `START TRANSACTION WITH ISOLATION LEVEL` 语句来设置。例如：
+需要注意的是， GreatSQL 默认的事务隔离级别是 **可重复读（REPEATABLE READ）**，可以通过设置 `SET [GLOBAL | SESSION] TRANSACTION ISOLATION LEVEL` 语句来修改隔离级别，也可以在开始事务之前使用 `START TRANSACTION WITH ISOLATION LEVEL` 语句来设置。例如：
 
 ```sql
 SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;

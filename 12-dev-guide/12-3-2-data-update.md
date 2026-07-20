@@ -1,24 +1,24 @@
 # UPDATE 更新数据
 ---
 
-本节介绍使用 UPDATE 命令向GreatSQL数据库更新数据。
+本节介绍使用 UPDATE 命令向 GreatSQL 数据库更新数据。
 
 ## 使用 UPDATE 语句
 使用 UPDATE 语句更新数据。语法如下
 ```sql
 UPDATE table_name
-  SET column1=value1, column2=value2, … , column=valuen
+  SET column1=value1, column2=value2, …, column=valuen
   [WHERE condition]
 ```
 
-举例将所有行中的age字段更新为10：
+举例将所有行中的 age 字段更新为 10：
 ```sql
 UPDATE test SET age=10;
 ```
 ::: danger 危险提醒
-此SQL不带WHERE条件，它会将所有行中的 `age` 字段更新为10。
+此 SQL 不带 WHERE 条件，它会将所有行中的 `age` 字段更新为 10。
 
-线上生产环境中，请务必使用包含 WHERE 条件的SQL语句来指定需要更新的数据。
+线上生产环境中，请务必使用包含 WHERE 条件的 SQL 语句来指定需要更新的数据。
 :::
 
 ### 指定需要更新的数据
@@ -30,7 +30,7 @@ UPDATE test SET age=10;
 ```sql
 UPDATE test SET age=10 WHERE id=2;
 ```
-此SQL只会更新 *id=2* 的行中的 `age` 字段。
+此 SQL 只会更新 *id=2* 的行中的 `age` 字段。
 
 ### 更新多个字段
 可以在 `SET` 语句后指定多个字段。
@@ -39,7 +39,7 @@ UPDATE test SET age=10 WHERE id=2;
 ```sql
 UPDATE test SET age=10, name='GreatSQL' WHERE id=2;
 ```
-此SQL会将 *id=2* 的行中的 `age` 字段更新为 *10*，`name` 字段更新为 *GreatSQL*。
+此 SQL 会将 *id=2* 的行中的 `age` 字段更新为 *10*，`name` 字段更新为 *GreatSQL*。
 
 ## 使用 ON DUPLICATE KEY UPDATE 子句
 

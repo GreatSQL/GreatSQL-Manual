@@ -1,7 +1,7 @@
 # 单表查询
 ---
 
-本节介绍如何使用 SELECT 命令来对GreatSQL数据库中的数据进行查询。
+本节介绍如何使用 SELECT 命令来对 GreatSQL 数据库中的数据进行查询。
 
 本节将使用 [文档约定](./12-dev-guide.md) 中提到的样例数据库
 - employee data (large dataset, includes data and test/verification suite)
@@ -9,7 +9,7 @@
 - sakila database
 
 ## 基本的SELECT语句
-最基本的SELECT语句如下：
+最基本的 SELECT 语句如下：
 ```sql
 greatsql> SELECT 1; 
 +---+
@@ -50,7 +50,7 @@ greatsql> SELECT * FROM world.city;
 ......下面结果省略
 4079 rows in set (0.00 sec)
 ```
-一般情况下，除非需要使用表中所有的字段数据，避免滥用通配符`*`。除非必要获取所有字段数据，否则使用通配符不仅会导致不必要的列数据检索，还可能拖慢查询速度和应用程序性能。
+一般情况下，除非需要使用表中所有的字段数据，避免滥用通配符 `*`。除非必要获取所有字段数据，否则使用通配符不仅会导致不必要的列数据检索，还可能拖慢查询速度和应用程序性能。
 
 - 选择指定的列
 
@@ -66,7 +66,7 @@ greatsql> SELECT ID, Name FROM world.city;
 ......下面结果省略
 4079 rows in set (0.01 sec)
 ```
-在GreatSQL中，列名和表名都可以使用反引号 "`" 包裹，避免与关键字冲突。
+在 GreatSQL 中，列名和表名都可以使用反引号 "`" 包裹，避免与关键字冲突。
 
 ## 条件查询
 语法如下：
@@ -102,7 +102,7 @@ greatsql> SELECT CountryCode FROM city;
 ......下面结果省略
 4079 rows in set (0.01 sec)
 ```
-查询出来了有4079行，但是 `CountryCode` 列有重复数据
+查询出来了有 4079 行，但是 `CountryCode` 列有重复数据
 
 使用 `DISTINCT` 去除重复行
 ```sql
@@ -116,10 +116,10 @@ greatsql> SELECT DISTINCT CountryCode FROM city;
 ......下面结果省略
 232 rows in set (0.00 sec)
 ```
-去重后查询出来只有232行
+去重后查询出来只有 232 行
 
 ## 别名查询
-可以使用关键字`AS`给查询结果设置别名
+可以使用关键字 `AS` 给查询结果设置别名
 
 例如，查询 `world` 库中 `city` 表的 `CountryCode` 列数据，设置别名 `c`
 ```sql
@@ -185,14 +185,14 @@ greatsql> SELECT * FROM city ORDER BY `CountryCode` ASC,`Population` DESC;
 ## 分页查询
 所谓分页显示，就是将数据库中的结果集，一段一段显示出来需要的条件。
 
-LIMIT格式：
+LIMIT 格式：
 ```sql
 SELECT * FROM 表名 LIMIT [offset,] rows;
 ```
-- offset: 起始行号，从0开始
+- offset: 起始行号，从 0 开始
 - rows: 显示的行数
 
-例如查询 `world` 库中 `city` 表的数据，从第1行开始显示5条数据
+例如查询 `world` 库中 `city` 表的数据，从第 1 行开始显示 5 条数据
 ```sql
 greatsql> SELECT * FROM city LIMIT 1,5;
 +----+----------------+-------------+---------------+------------+
@@ -206,7 +206,7 @@ greatsql> SELECT * FROM city LIMIT 1,5;
 +----+----------------+-------------+---------------+------------+
 5 rows in set (0.00 sec)
 ```
-例如查询 `world` 库中 `city` 表的数据，从第10行开始显示5条数据
+例如查询 `world` 库中 `city` 表的数据，从第 10 行开始显示 5 条数据
 ```sql
 greatsql> SELECT * FROM city LIMIT 10,5;
 +----+-----------+-------------+---------------+------------+

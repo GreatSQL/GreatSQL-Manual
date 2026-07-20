@@ -5,7 +5,7 @@
 
 ## 常见存储引擎
 
-在 GreatSQL 中，支持常见的 InnoDB、MyISAM、ARCHIVE 等存储引擎，可执行下面的命令查看所有支持的所有引擎：
+在 GreatSQL 中，支持常见的 InnoDB 、 MyISAM 、 ARCHIVE 等存储引擎，可执行下面的命令查看所有支持的所有引擎：
 
 ```sql
 greatsql> SHOW ENGINES;
@@ -28,13 +28,13 @@ greatsql> SHOW ENGINES;
 +--------------------+---------+----------------------------------------------------------------------------+--------------+------+------------+
 ```
 
-这其中，Rapid 引擎是在 GreatSQL 8.0.32-25 版本以后才支持。
+这其中， Rapid 引擎是在 GreatSQL 8.0.32-25 版本以后才支持。
 
-此外，由于在 GreatSQL 中进行了 MGR 优化，部分代码和 RocksDB 引擎有冲突，因此在默认启用 MGR 的时候就得关闭 RocksDB 引擎。在需要 RocksDB 引擎但不需要 MGR 的场景下，可以参考文档 [编译GreatSQL with RocksDB引擎](https://mp.weixin.qq.com/s/aOP9oRhlgFlnz5eEB9clsA) 自行编译以支持RocksDB引擎。
+此外，由于在 GreatSQL 中进行了 MGR 优化，部分代码和 RocksDB 引擎有冲突，因此在默认启用 MGR 的时候就得关闭 RocksDB 引擎。在需要 RocksDB 引擎但不需要 MGR 的场景下，可以参考文档 [编译 GreatSQL with RocksDB 引擎](https://mp.weixin.qq.com/s/aOP9oRhlgFlnz5eEB9clsA) 自行编译以支持 RocksDB 引擎。
 
 ## 存储引擎选择
 
-通常来说，InnoDB 存储引擎足以满足大多数业务场景。针对特殊的的业务场景或特点，就需要选择使用不同的存储引擎以更好地适配。
+通常来说， InnoDB 存储引擎足以满足大多数业务场景。针对特殊的的业务场景或特点，就需要选择使用不同的存储引擎以更好地适配。
 
 - OLTP 业务
 
@@ -50,7 +50,7 @@ Rapid 引擎适用于以读多写很少的业务场景，尤其适用于非实�
 
 如果业务系统中既有高并发 DML 请求，又需要进行实时业务分析，这种就是 HTAP 场景了，可以采用主从复制或 MGR 架构，在主节点响应读写请求，在从节点响应只读和分析请求。
 
-从 GreatSQL 8.0.32-27 版本开始，新增 **Turbo** 高性能并行查询执行引擎，特别适合用在 HTAP 场景，详见文档：[高性能Turbo引擎](../5-enhance/5-1-highperf-turbo-engine.md)。
+从 GreatSQL 8.0.32-27 版本开始，新增 **Turbo** 高性能并行查询执行引擎，特别适合用在 HTAP 场景，详见文档：[高性能 Turbo 引擎](../5-enhance/5-1-highperf-turbo-engine.md)。
 
 - 其他场景
 

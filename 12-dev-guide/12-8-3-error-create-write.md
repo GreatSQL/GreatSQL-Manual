@@ -20,7 +20,7 @@ ERROR 1050 (42S01): Table 'city' already exists
 ```
 错误码 1050 表示表已存在，无法创建。详见错误码列表 [GreatSQL 常见报错错误码对照表](./12-8-1-error-code-reference.md)
 
-以上错误解决方法需在创建库表时加上`IF NOT EXISTS`关键字，如果库表存在，则不创建，也不会报错。
+以上错误解决方法需在创建库表时加上 `IF NOT EXISTS` 关键字，如果库表存在，则不创建，也不会报错。
 
 例如在  GreatSQL  数据库中创建 world 库，只会报 warning 而不报错：
 
@@ -89,9 +89,9 @@ greatsql> SELECT * from world.city LIMIT 4075,5;
 +------+----------+-------------+------------+------------+
 5 rows in set (0.00 sec)
 ```
-插入两条数据，第一条数据ID和主键冲突，第二条数据没有冲突：
+插入两条数据，第一条数据 ID 和主键冲突，第二条数据没有冲突：
 ```sql
-greatsql> INSERT IGNORE INTO world.city VALUES (4079, 'Kabul', 'AFG', 'Nairobi',1) , (4081, 'greatsql', 'CHN', 'greatsql',1);
+greatsql> INSERT IGNORE INTO world.city VALUES (4079, 'Kabul', 'AFG', 'Nairobi',1), (4081, 'greatsql', 'CHN', 'greatsql',1);
 Query OK, 1 row affected, 1 warning (0.01 sec)
 Records: 2  Duplicates: 1  Warnings: 1
 ```

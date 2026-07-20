@@ -1,11 +1,11 @@
 # 模式开发设计概览
 ---
 
-本节介绍GreatSQL的模式开发设计。
+本节介绍 GreatSQL 的模式开发设计。
 
 ## 术语概述
 
-为避免和通用术语数据库 (Database)混淆，将逻辑对象称为数据库 (Database)，而使用的GreatSQL数据库则称为GreatSQL。
+为避免和通用术语数据库 (Database)混淆，将逻辑对象称为数据库 (Database)，而使用的 GreatSQL 数据库则称为 GreatSQL 。
 
 ### 常见术语
 
@@ -32,16 +32,16 @@
 
 ### SQL术语
 #### SQL 结构化查询语言
-SQL是结构化查询语言，是一种数据库查询语言。
+SQL 是结构化查询语言，是一种数据库查询语言。
 
 #### DDL 数据定义语言
-DDL是数据定义语言，用于创建、删除或修改数据库对象。关键字包括CREATE 、DROP 、ALTER 等
+DDL 是数据定义语言，用于创建、删除或修改数据库对象。关键字包括 CREATE 、DROP 、ALTER 等
 
 #### DML 数据操作语言
-DML是数据操作语言，用于对数据库中的数据进行增删改查。关键字包括INSERT 、UPDATE 、DELETE 等
+DML 是数据操作语言，用于对数据库中的数据进行增删改查。关键字包括 INSERT 、UPDATE 、DELETE 等
 
 #### DCL 数据控制语言
-DCL是数据控制语言，用于授予或回收权限。关键字包括GRANT 、REVOKE 等
+DCL 是数据控制语言，用于授予或回收权限。关键字包括 GRANT 、REVOKE 等
 
 
 **扫码关注微信公众号**

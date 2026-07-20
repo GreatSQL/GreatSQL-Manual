@@ -1,7 +1,7 @@
 # DELETE 删除数据
 ---
 
-本节介绍使用 DELETE 命令从GreatSQL数据库删除数据。
+本节介绍使用 DELETE 命令从 GreatSQL 数据库删除数据。
 
 ## 使用 DELETE 语句
 
@@ -9,10 +9,10 @@
 ```sql
 DELETE FROM table_name [WHERE <condition>];
 ```
-table_name指定要执行删除操作的表；`[WHERE ]`为可选参数，指定删除条件，如果没有WHERE子句，DELETE语句将删除表中的所有记录。
+table_name 指定要执行删除操作的表；`[WHERE ]` 为可选参数，指定删除条件，如果没有 WHERE 子句，DELETE 语句将删除表中的所有记录。
 
 ::: danger 危险警示
-删除时请谨慎，加上WHERE子句，否则将删除表中的所有数据。
+删除时请谨慎，加上 WHERE 子句，否则将删除表中的所有数据。
 :::
 
 举例，删除 *id=1* 的行：
@@ -20,7 +20,7 @@ table_name指定要执行删除操作的表；`[WHERE ]`为可选参数，指定
 DELETE FROM student WHERE id = 1;
 ```
 ## 删除全部数据
-使用DELETE语句删除表中的所有数据，但保留表结构
+使用 DELETE 语句删除表中的所有数据，但保留表结构
 ```sql
 DELETE FROM table_name;
 ```

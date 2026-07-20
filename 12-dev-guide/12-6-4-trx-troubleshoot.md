@@ -34,11 +34,11 @@ update t1 set c3 = 'row11' where id = 1
 ------- TRX HAS BEEN WAITING 7 SEC FOR THIS LOCK TO BE GRANTED:
 RECORD LOCKS space id 53 page no 4 n bits 80 index PRIMARY of table `trx`.`t1` trx id 2802 lock_mode X locks rec but not gap waiting
 Record lock, heap no 8 PHYSICAL RECORD: n_fields 6; compact format; info bits 0
- 0: len 4; hex 00000001; asc     ;;
- 1: len 6; hex 000000000af1; asc       ;;
+ 0: len 4; hex 00000001; asc    ;;
+ 1: len 6; hex 000000000af1; asc      ;;
  2: len 7; hex 01000000e70151; asc       Q;;
- 3: len 4; hex 00000001; asc     ;;
- 4: len 4; hex 00000001; asc     ;;
+ 3: len 4; hex 00000001; asc    ;;
+ 4: len 4; hex 00000001; asc    ;;
  5: len 5; hex 726f773131; asc row11;;
 
 ------------------
@@ -71,7 +71,7 @@ Trx read view will not see trx with id >= 2801, sees < 2800
 
 以下几种情况可能导致事务提交很慢，或无法提交：
 - 系统负载高，这种情况下所有事务响应都很慢；
-- 低效 SQL 太多，也就是所谓的慢 SQL，会导致系统负载升高，影响到其他事务；
+- 低效 SQL 太多，也就是所谓的慢 SQL ，会导致系统负载升高，影响到其他事务；
 - 选项 `innodb_thread_concurrency` 值设置为非 0，当前的事务并发又非常高，导致有些事务总是要进入排队等待状态；
 - 磁盘空间满了，这种情况下事务无法提交； 
 - 可能由于开启了半同步复制（**Semisynchronous Replication**），或者组提交（**group commit**），导致事务提交慢；

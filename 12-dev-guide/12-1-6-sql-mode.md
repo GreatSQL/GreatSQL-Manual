@@ -46,7 +46,7 @@
 
 - STRICT_TRANS_TABLES
 
-当启用这个模式时，GreatSQL 在插入或更新操作时采用严格的错误处理模式，对于不符合数据类型约束的数据插入会报错并拒绝执行，而不是静默地转换或存储为NULL。适用于事务性存储引擎，如 InnoDB。
+当启用这个模式时， GreatSQL 在插入或更新操作时采用严格的错误处理模式，对于不符合数据类型约束的数据插入会报错并拒绝执行，而不是静默地转换或存储为 NULL。适用于事务性存储引擎，如 InnoDB 。
 
 - STRICT_ALL_TABLES
 
@@ -54,7 +54,7 @@
 
 - NO_ZERO_IN_DATE
 
-禁止日期字段中的月份或日子为0，例如 '2024-00-22' 或 '2024-05-00'。
+禁止日期字段中的月份或日子为 0，例如 '2024-00-22' 或 '2024-05-00'。
 
 - NO_ZERO_DATE
 
@@ -70,7 +70,7 @@
 
 - NO_ENGINE_SUBSTITUTION
 
-如果指定的存储引擎不可用，GreatSQL 会抛出错误而不是使用默认存储引擎。
+如果指定的存储引擎不可用， GreatSQL 会抛出错误而不是使用默认存储引擎。
 
 - ANSI
 启用多种符合 SQL 标准的模式选项，如 REAL_AS_FLOAT、PIPES_AS_CONCAT、ANSI_QUOTES 和 IGNORE_SPACE。
@@ -94,7 +94,7 @@
 
 - 插入和更新操作
 
-在严格模式下（如 *STRICT_TRANS_TABLES* 或 *STRICT_ALL_TABLES*），GreatSQL 遇到数据错误时会阻止插入或更新操作。例如，如果你尝试在一个非空字段中插入 NULL 值，GreatSQL 会返回错误。
+在严格模式下（如 *STRICT_TRANS_TABLES* 或 *STRICT_ALL_TABLES*）， GreatSQL 遇到数据错误时会阻止插入或更新操作。例如，如果你尝试在一个非空字段中插入 NULL 值， GreatSQL 会返回错误。
 
 - 日期和时间值
 

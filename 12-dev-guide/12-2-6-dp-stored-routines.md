@@ -44,7 +44,7 @@ SELECT @s;  -- 输出 8
 使用 `DROP PROCEDURE` 语句删除存储过程：
 
 ```sql
-DROP PROCEDURE IF EXISTS myAdd;
+DROP PROCEDURE IF EXISTS myAdd ;
 ```
 
 ## 存储函数（Stored Functions）
@@ -84,7 +84,7 @@ SELECT myMult(5, 3);  -- 输出 15
 使用 `DROP FUNCTION` 语句删除存储函数：
 
 ```sql
-DROP FUNCTION IF EXISTS myMult;
+DROP FUNCTION IF EXISTS myMult ;
 ```
 
 ## 使用的注意事项
@@ -103,7 +103,7 @@ DROP FUNCTION IF EXISTS myMult;
 
 7. **版本兼容性**：不同版本的 GreatSQL 对存储程序的支持可能有所不同，尤其是在语法和特性上。
 
-8. **参数限制**：GreatSQL 对存储程序参数的数量和类型有一定限制，设计复杂存储程序时需注意这些限制。
+8. **参数限制**： GreatSQL 对存储程序参数的数量和类型有一定限制，设计复杂存储程序时需注意这些限制。
 
 ## 总结
 

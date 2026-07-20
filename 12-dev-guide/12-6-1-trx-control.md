@@ -1,7 +1,7 @@
 # 事务控制
 ---
 
-本节介绍事务控制语句、事务自动提交模式、XA 事务等相关内容。
+本节介绍事务控制语句、事务自动提交模式、 XA 事务等相关内容。
 
 在开始之前，先创建测试库表。
 ```sql
@@ -79,7 +79,7 @@ greatsql> SELECT * FROM t1;
 +----+----+-------+
 ```
 
-事务启动时，默认是只读模式，还不会分配正式的事务ID，直到数据修改发生时，才会自动切换成读写模式，并正式分配事务ID。
+事务启动时，默认是只读模式，还不会分配正式的事务 ID，直到数据修改发生时，才会自动切换成读写模式，并正式分配事务 ID。
 
 可以通过查询 `information_schema.INNODB_TRX` 查看事务状态。
 
@@ -118,7 +118,7 @@ greatsql>                                              │       trx_mysql_threa
                                                        │       trx_schedule_weight: NULL
 ```
 
-可以看到，在上面例子中，一开始的事务ID是一个很大的数值，接下来修改表数据，再观察事务状态：
+可以看到，在上面例子中，一开始的事务 ID 是一个很大的数值，接下来修改表数据，再观察事务状态：
 
 ```sql
                         会话1                          │                    会话2
@@ -151,9 +151,9 @@ greatsql>                                              │     trx_requested_loc
                                                        │trx_autocommit_non_locking: 0
                                                        │       trx_schedule_weight: NULL
 ```
-此时事务状态从 **只读（READ ONLY）** 转变成 **读写（READ WRITE）** 模式，也正式分配事务ID，`trx_id`列值从 421166643830136 变成了 2443，同时也能看到该事务占用的内存（`trx_lock_memory_bytes`）、持有的锁（`trx_tables_locked`、`trx_lock_structs`、`trx_rows_locked`）、修改了多少数据（`trx_rows_modified`）等详细信息。
+此时事务状态从 **只读（READ ONLY）** 转变成 **读写（READ WRITE）** 模式，也正式分配事务 ID，`trx_id` 列值从 421166643830136 变成了 2443，同时也能看到该事务占用的内存（`trx_lock_memory_bytes`）、持有的锁（`trx_tables_locked`、`trx_lock_structs`、`trx_rows_locked`）、修改了多少数据（`trx_rows_modified`）等详细信息。
 
-在上面的例子中，注意到 `information_schema.INNODB_TRX` 中 `trx_is_read_only` 列的值前后两次查询都为0，这是因为它是一个允许从只读状态转化到读写状态的可转化的事务。有当执行 `START TRANSACTION READ ONLY` 显式开启一个只读事务时，这种事务不可转化为读写状态，此时 `trx_is_read_only` 值为 1。
+在上面的例子中，注意到 `information_schema.INNODB_TRX` 中 `trx_is_read_only` 列的值前后两次查询都为 0，这是因为它是一个允许从只读状态转化到读写状态的可转化的事务。有当执行 `START TRANSACTION READ ONLY` 显式开启一个只读事务时，这种事务不可转化为读写状态，此时 `trx_is_read_only` 值为 1。
 ```sql
 greatsql> START TRANSACTION READ ONLY;
 greatsql> SELECT * FROM t1;
@@ -249,7 +249,7 @@ greatsql> EXIT
 Bye
 ```
 
-再次连接登入数据库，查询表，会发现刚才的 `DELETE` 请求成功了：
+再次连接登录数据库，查询表，会发现刚才的 `DELETE` 请求成功了：
 
 ```sql
 greatsql> SELECT * FROM t1;
@@ -288,7 +288,7 @@ greatsql> SELECT * FROM t1;
 +----+----+--------+
 ```
 
-- 发起 DDL、DCL 操作，因为 DDL、DCL 不支持事务，因此会要求把尚未结束的事务隐式提交。
+- 发起 DDL 、 DCL 操作，因为 DDL 、 DCL 不支持事务，因此会要求把尚未结束的事务隐式提交。
 
 ## 回滚事务
 
@@ -342,7 +342,7 @@ greatsql> INSERT INTO t1 VALUES(2,2,'row2');
 greatsql> exit /* 主动退出连接，触发隐式回滚 */
 Bye
 ```
-主动退出当前连接后，会触发隐式回滚，再次连接登入数据库，查询表，会发现刚才的 `INSERT` 请求并没有被提交和持久化。
+主动退出当前连接后，会触发隐式回滚，再次连接登录数据库，查询表，会发现刚才的 `INSERT` 请求并没有被提交和持久化。
 
 2. 连接一直不活跃，直到超时后被断开（超过 `wait_timeout` 设定的阈值）；
 
@@ -538,7 +538,7 @@ greatsql> SELECT * FROM t1; /* 可以看到id=(4,5,6)三条记录插入成功，
 ## XA 事务
 
 ### XA 事务概述
-InnoDB 存储引擎支持 XA 事务。XA 事务实现基于 X/Open CAE 文档分布式事务处理：XA 规范。本文档由 The Open Group 发布，可从 [http://www.opengroup.org/public/pubs/catalog/c193.htm](http://www.opengroup.org/public/pubs/catalog/c193.htm) 获得。
+InnoDB 存储引擎支持 XA 事务。 XA 事务实现基于 X/Open CAE 文档分布式事务处理： XA 规范。本文档由 The Open Group 发布，可从 [http://www.opengroup.org/public/pubs/catalog/c193.htm](http://www.opengroup.org/public/pubs/catalog/c193.htm) 获得。
 
 XA 事务是一种分布式事务处理协议，允许在多个资源管理器上执行全局事务。
 
@@ -548,7 +548,7 @@ XA 事务是一种分布式事务处理协议，允许在多个资源管理器�
 - **参与者**：执行事务操作的数据库实例，每个参与者必须支持 XA 事务协议。
 - **协调者**：负责协调全局事务的提交和回滚，以及处理参与者的准备请求和提交请求。
 
-为了保证事务一致性，MySQL 实现了经典的 XA 标准，通过 XA 事务来保证事务的特征。Binlog 作为 MySQL 生态的一个重要组件，它记录了数据库操作的逻辑更新，可以利用 Binlog 构建各种 MySQL 高可用架构。Binlog 还有一个重要角色就是作为 XA 事务的协调者，协调各个参与者（存储引擎）来实现 XA 事务的一致性。
+为了保证事务一致性， MySQL 实现了经典的 XA 标准，通过 XA 事务来保证事务的特征。Binlog 作为 MySQL 生态的一个重要组件，它记录了数据库操作的逻辑更新，可以利用 Binlog 构建各种 MySQL 高可用架构。Binlog 还有一个重要角色就是作为 XA 事务的协调者，协调各个参与者（存储引擎）来实现 XA 事务的一致性。
 
 执行全局事务的过程使用两阶段提交 (2PC)
 1. **在第一阶段**：所有参与者都准备好了。
@@ -558,7 +558,7 @@ MySQL XA 事务支持包括内部 XA 事务和外部 XA 事务。
 
 内部 XA 事务主要指本实例内部的事务，事务中如果跨多个存储引擎进行读写，那么就会产生内部 XA 事务。在内部 XA 事务中，每个事务都需要写 Binlog，并且要保证 Binlog 与引擎修改的一致性，因此 Binlog 是一个特殊的参与者。所以在打开 Binlog 的情况下，即使事务修改只涉及一个引擎，内部也会启动 XA 事务。
 
-外部 XA 事务与内部 XA 事务核心逻辑类似，由几个 XA 事务操作命令组成，包括 `XA START`、`XA END`、`XA PREPRE`、`XA COMMIT`、`XA ROLLBACK`、`XA RECOVER` 等，可以支持跨多个节点的XA事务。外部 XA 事务的协调者是用户的应用，参与者是 MySQL 实例，因此需要应用持久化协调信息，解决事务一致性问题。
+外部 XA 事务与内部 XA 事务核心逻辑类似，由几个 XA 事务操作命令组成，包括 `XA START`、`XA END`、`XA PREPRE`、`XA COMMIT`、`XA ROLLBACK`、`XA RECOVER` 等，可以支持跨多个节点的 XA 事务。外部 XA 事务的协调者是用户的应用，参与者是 MySQL 实例，因此需要应用持久化协调信息，解决事务一致性问题。
 
 **XA 事务使用方法**
 1. **准备阶段**：协调者向所有参与者发送准备请求 `XA PREPARE`，要求参与者准备提交事务。
@@ -689,7 +689,7 @@ Query OK, 0 rows affected (0.00 sec)                           │ /* 当前会�
                                                                │+----+-------+-------------+----------+------------+
 ```
 
-有些时候，XA 事务中的 xid 可能是由外部程序生成的，采用16进制或其他格式，这时看起来可能会像是不可打印的乱码，例如下面这样：
+有些时候， XA 事务中的 xid 可能是由外部程序生成的，采用 16 进制或其他格式，这时看起来可能会像是不可打印的乱码，例如下面这样：
 
 ```sql
 greatsql> XA RECOVER;
@@ -702,7 +702,7 @@ greatsql> XA RECOVER;
 +----------+--------------+--------------+----------------------------------+
 ```
 
-这时候，就需要加上 `CONVERT XID` 关键字，将 `data` 列值转成可打印的16进制，并且可以对其执行 `ROLLBACK` 操作：
+这时候，就需要加上 `CONVERT XID` 关键字，将 `data` 列值转成可打印的 16 进制，并且可以对其执行 `ROLLBACK` 操作：
 
 ```sql
 greatsql> XA RECOVER CONVERT XID;
@@ -715,9 +715,9 @@ greatsql> XA RECOVER CONVERT XID;
 
 在上面的结果中，`data` 列值内容由 `gtrid`、`bqual` 和 `xid` 构成，拆解过程如下：
 
-1. 以16进制表示的 `data` 中，`bqual` 长度为 `bqual_length` * 2 = 8（16进制模式下计算长度需要乘2，因为一个ASCII字符16进制表示时需要2个字符宽度，正常模式下不需要）。
-2. 所以 `bqual` 的16进制值为 `C2D3FF77`。
-3. 剩余部分即为 `xid` 的16进制值，即为 `AAAAAB3C6ABAE54B6928EBF6AAAB38EC68E58C13697184`。
+1. 以 16 进制表示的 `data` 中，`bqual` 长度为 `bqual_length` * 2 = 8（16 进制模式下计算长度需要乘 2，因为一个 ASCII 字符 16 进制表示时需要 2 个字符宽度，正常模式下不需要）。
+2. 所以 `bqual` 的 16 进制值为 `C2D3FF77`。
+3. 剩余部分即为 `xid` 的 16 进制值，即为 `AAAAAB3C6ABAE54B6928EBF6AAAB38EC68E58C13697184`。
 4. 除了 `data` 列，`formatID` 列值为 201，无需额外处理。
 
 因此，这个 XA 事务可以采用以下方式提交或回滚：

@@ -3,7 +3,7 @@
 
 ## 什么是表
 
-在GreatSQL中，表（Table）是数据库的基本组成部分，用于存储具有相同结构的数据集合。表由行（Row）和列（Column）组成，每一列代表一个属性或字段（Field），每一行代表一个数据记录（Record）。
+在 GreatSQL 中，表（Table）是数据库的基本组成部分，用于存储具有相同结构的数据集合。表由行（Row）和列（Column）组成，每一列代表一个属性或字段（Field），每一行代表一个数据记录（Record）。
 
 ## 表的创建
 在数据库中创建数据表基本语法如下：
@@ -18,11 +18,11 @@ CREATE TABLE [IF NOT EXISTS] tablename(
 ```
 
 其中，
-- `tablename`为数据表名称，
-- `COLUMN_NAME_1`为列名，
-- `COLUMN_TYPE_1`为列的数据类型，
-- `CONSTRAINTS`为约束条件，
-- `DEFAULT`为默认值。
+- `tablename` 为数据表名称，
+- `COLUMN_NAME_1` 为列名，
+- `COLUMN_TYPE_1` 为列的数据类型，
+- `CONSTRAINTS` 为约束条件，
+- `DEFAULT` 为默认值。
 
 举例：创建一个 `test_greatsql` 的表，表里包括 `id`(编号)、`name`(姓名)、`gender`(性别)、`address`(地址)四个字段
 ```sql
@@ -36,7 +36,7 @@ CREATE TABLE test_greatsql(
   PRIMARY KEY(id)
   );
 ```
-使用`SHOW CREATE TABLE test_greatsql \G`可得到更全面的建表信息
+使用 `SHOW CREATE TABLE test_greatsql \G` 可得到更全面的建表信息
 
 ```sql
 greatsql> SHOW CREATE TABLE test_greatsql \G
@@ -59,20 +59,20 @@ Create Table: CREATE TABLE `test_greatsql` (
 ```sql
 DROP TABLE [IF EXISTS] tablename;
 ```
-例如，删除`test_greatsql`表
+例如，删除 `test_greatsql` 表
 ```sql
 DROP TABLE test_greatsql;
 ```
 ### 清空表
 不删除表结构，只删除内容
 补充风险提示：
-1. TRUNCATE会重置自增主键（AUTO_INCREMENT回归初始值），DELETE不会；
+1. TRUNCATE 会重置自增主键（AUTO_INCREMENT 回归初始值），DELETE 不会；
 2. 无法撤销，若表数据需保留备份，需提前导出；
 3. 若表存在外键关联，需先禁用外键约束才能执行，否则报错	
 ```sql
 TRUNCATE TABLE tablename;
 ```
-例如，清空`test_greatsql`表
+例如，清空 `test_greatsql` 表
 ```sql
 TRUNCATE TABLE test_greatsql;
 ```
@@ -81,7 +81,7 @@ TRUNCATE TABLE test_greatsql;
 ```sql
 ALTER TABLE tablename ADD COLUMN_NAME COLUMN_TYPE;
 ```
-例如，在`test_greatsql`表中添加`age`字段
+例如，在 `test_greatsql` 表中添加 `age` 字段
 ```sql
 ALTER TABLE test_greatsql ADD age INT;
 ```
@@ -89,7 +89,7 @@ ALTER TABLE test_greatsql ADD age INT;
 ```sql
 ALTER TABLE tablename MODIFY COLUMN_NAME COLUMN_TYPE;
 ```
-例如，将`test_greatsql`表的`age`字段修改为`varchar`类型
+例如，将 `test_greatsql` 表的 `age` 字段修改为 `varchar` 类型
 ```sql
 ALTER TABLE test_greatsql MODIFY age VARCHAR(10);
 ```
@@ -97,7 +97,7 @@ ALTER TABLE test_greatsql MODIFY age VARCHAR(10);
 ```sql
 ALTER TABLE tablename DROP COLUMN_NAME;
 ```
-例如，删除`test_greatsql`表的`age`字段
+例如，删除 `test_greatsql` 表的 `age` 字段
 ```sql
 ALTER TABLE test_greatsql DROP age;
 ```
@@ -108,7 +108,7 @@ RENAME TABLE old_tablename TO new_tablename;
 -- 或
 ALTER TABLE old_tablename RENAME TO new_tablename;
 ```
-例如，将`test_greatsql`表重命名为`test_greatsql1`
+例如，将 `test_greatsql` 表重命名为 `test_greatsql1`
 ```sql
 RENAME TABLE test_greatsql TO test_greatsql1;
 ```
@@ -117,7 +117,7 @@ RENAME TABLE test_greatsql TO test_greatsql1;
 ```sql
 SHOW TABLES;
 ```
-例如，查看`test`数据库中的表
+例如，查看 `test` 数据库中的表
 ```sql
 greatsql> SHOW TABLES;
 +------------------+
@@ -129,16 +129,16 @@ greatsql> SHOW TABLES;
 ```
 ## 表的创建参考
 
-详情可见：[Schema设计规范参考](../10-optimize/2-1-schema-design-refer.md)
+详情可见：[Schema 设计规范参考](../10-optimize/2-1-schema-design-refer.md)
 
-举例几个《Java开发手册》之字段命名
+举例几个《 Java 开发手册》之字段命名
 
 1. 【强制】表名、字段名必须使用小写字母或数字，禁止出现数字开头，禁止两个下划线中间只出现数字。数据库字段名的修改代价很大，因为无法进行预发布，所以字段名称需要慎重考虑。
 正例：aliyun_admin，rdc_config，level3_name
 反例：AliyunAdmin，rdcConfig，level_3_name
 
 2. 【强制】表必备三字段：id, gmt_create, gmt_modified。
-说明：其中 id 必为主键，类型为BIGINT UNSIGNED、单表时自增、步长为 1。gmt_create, gmt_modified 的类型均为 DATETIME 类型，前者现在时表示主动式创建，后者过去分词表示被动式更新。
+说明：其中 id 必为主键，类型为 BIGINT UNSIGNED、单表时自增、步长为 1。gmt_create, gmt_modified 的类型均为 DATETIME 类型，前者现在时表示主动式创建，后者过去分词表示被动式更新。
 
 3. 【推荐】表的命名最好是遵循 “业务名称_表的作用”。
 正例：alipay_task 、 force_project、 trade_config

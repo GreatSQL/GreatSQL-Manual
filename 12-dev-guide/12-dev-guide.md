@@ -1,25 +1,25 @@
 # 应用开发
 ---
 
-本章文档主要介绍如何基于 GreatSQL 进行应用开发，以及开发过程中涉及到的模式设计、事务控制、SQL优化等多方面内容。
+本章文档主要介绍如何基于 GreatSQL 进行应用开发，以及开发过程中涉及到的模式设计、事务控制、 SQL 优化等多方面内容。
 
 ## 文档约定
 
-在开始本章内容之前，请你根据 [GreatSQL快速上手](../3-quick-start/3-quick-start.md) 中的内容先行完成 GreatSQL 数据库安装。
+在开始本章内容之前，请你根据 [GreatSQL 快速上手](../3-quick-start/3-quick-start.md) 中的内容先行完成 GreatSQL 数据库安装。
 
-在这里，我们选择了常见的 [RPM安装](../3-quick-start/3-1-quick-start-with-rpm.md) 方式完成GreatSQL数据库安装及初始化。
+在这里，我们选择了常见的 [RPM 安装](../3-quick-start/3-1-quick-start-with-rpm.md) 方式完成 GreatSQL 数据库安装及初始化。
 
-安装完成后，GreatSQL数据库运行环境如下：
+安装完成后， GreatSQL 数据库运行环境如下：
 
-- GreatSQL配置文件为：`/etc/my.cnf`
-- GreatSQL服务程序文件为：`/usr/sbin/mysqld`
-- 数据主目录datadir为： `/var/lib/mysql`
-- mysql.sock套接字文件为： `/var/lib/mysql/mysql.sock`
+- GreatSQL 配置文件为：`/etc/my.cnf`
+- GreatSQL 服务程序文件为：`/usr/sbin/mysqld`
+- 数据主目录 datadir 为： `/var/lib/mysql`
+- mysql.sock 套接字文件为： `/var/lib/mysql/mysql.sock`
 - 错误日志文件为： `/var/log/mysqld.log`
-- 监听TCP端口为：`3306`
-- CLI客户端为：`/usr/bin/mysql`
+- 监听 TCP 端口为：`3306`
+- CLI 客户端为：`/usr/bin/mysql`
 - 管理工具为：`/usr/bin/mysqladmin`
-- GreatSQL数据库中root账户的密码已修改为：`GreatSQL@202X`
+- GreatSQL 数据库中 root 账户的密码已修改为：`GreatSQL@202X`
 
 ## 安装样例数据库
 
@@ -29,7 +29,7 @@
 - world database
 - sakila database
 
-打开链接 [https://dev.mysql.com/doc/index-other.html](https://dev.mysql.com/doc/index-other.html) ，页面滚动到 "Example Databases" 这部分内容，分别下载相应的压缩包文件，放在 `/data/ExampleDBs` 目录下。
+打开链接 [https://dev.mysql.com/doc/index-other.html](https://dev.mysql.com/doc/index-other.html)，页面滚动到 "Example Databases" 这部分内容，分别下载相应的压缩包文件，放在 `/data/ExampleDBs` 目录下。
 
 分别解开压缩包文件：
 ```bash
@@ -45,7 +45,7 @@ drwxr-xr-x 2  500  500        23 Jul  1  2023 world-db
 -rw-r--r-- 1 root root     92917 Jul  1  2023 world-db.tar.gz
 ```
 
-连入GreatSQL，测试数据库可用
+连入 GreatSQL ，测试数据库可用
 ```bash
 $ mysql -S /var/lib/mysql/mysql.sock -uroot -p -e 'SELECT VERSION()'
 Enter password:   <-- 这里输入密码 GreatSQL@202X，支持复制粘贴方式
@@ -55,9 +55,9 @@ Enter password:   <-- 这里输入密码 GreatSQL@202X，支持复制粘贴方�
 | 8.0.32-25 |
 +-----------+
 ```
-由于mysql.sock套接字文件默认位于 `/var/lib/mysql/mysql.sock`，下面的例子中将不再显式指定 `-S /var/lib/mysql/mysql.sock` 参数，如果在你的环境中不是这样，请自行修改参数值。
+由于 mysql.sock 套接字文件默认位于 `/var/lib/mysql/mysql.sock`，下面的例子中将不再显式指定 `-S /var/lib/mysql/mysql.sock` 参数，如果在你的环境中不是这样，请自行修改参数值。
 
-在本章内容中，为了使用方便，把数据库中的root账户密码修改为空，**但这是一种不安全行为，不推荐，请不要在生产环境中也这么做**。
+在本章内容中，为了使用方便，把数据库中的 root 账户密码修改为空，**但这是一种不安全行为，不推荐，请不要在生产环境中也这么做**。
 ```bash
 # 修改root账户为空密码
 $ mysqladmin -uroot -p'GreatSQL@202X' password ''
@@ -151,7 +151,7 @@ $ cd /data/ExampleDBs/world-db
 $ mysql -uroot -f < ./world.sql
 ```
 
-这就完成了3个样例数据库导入工作，再次查看导入结果：
+这就完成了 3 个样例数据库导入工作，再次查看导入结果：
 ```bash
 $ mysql -uroot -e 'SHOW TABLE STATUS' employees
 +----------------------+--------+---------+------------+---------+----------------+-------------+-----------------+--------------+-----------+----------------+---------------------+---------------------+------------+--------------------+----------+----------------+---------+
@@ -210,7 +210,7 @@ $ mysql -uroot -e 'SHOW TABLE STATUS' world
 ```
 所有的测试样例数据都已成功导入。
 
-接下来，可以开始GreatSQL数据库应用开发之旅了。
+接下来，可以开始 GreatSQL 数据库应用开发之旅了。
 
 
 

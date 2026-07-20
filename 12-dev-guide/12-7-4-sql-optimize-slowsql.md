@@ -1,7 +1,7 @@
 # 慢查询 SQL 分析优化
 ---
 
-本节介绍如何定位数据库运行时那些性能较差的 SQL（即通常所说的慢查询 SQL），并分析慢查询 SQL，以及对这些 SQL 进行优化。
+本节介绍如何定位数据库运行时那些性能较差的 SQL （即通常所说的慢查询 SQL ），并分析慢查询 SQL ，以及对这些 SQL 进行优化。
 
 ## 慢查询 SQL 相关设置
 
@@ -26,10 +26,10 @@ log_slow_replica_statements = 1
 | 选项 | 简介 |
 | --- | --- |
 | slow_query_log | 总开关，是否启用 slow query log。|
-| slow_query_log_file | 设置 slow query log的文件名。|
-| log_slow_extra | MySQL 8.0.14 起新增选项，支持在 slow query log 中记录更多信息，例如线程ID、读写字节数、是否有临时表、是否有排序等。只有当 `log_output=FILE` 时才有效，如果是设置为 *TABLE* 则无效。|
+| slow_query_log_file | 设置 slow query log 的文件名。|
+| log_slow_extra | MySQL 8.0.14 起新增选项，支持在 slow query log 中记录更多信息，例如线程 ID、读写字节数、是否有临时表、是否有排序等。只有当 `log_output=FILE` 时才有效，如果是设置为 *TABLE* 则无效。|
 | log_slow_verbosity | Percona/GreatSQL 数据库特有选项，和 `log_slow_extra` 类似，可以设置为 *FULL*，记录更详细的信息，便于分析慢查询 SQL 的性能瓶颈。|
-| log_slow_admin_statements | 是否记录 `ALTER TABLE/ANALYZE TABLE `等 DDL 管理指令的慢查询。
+| log_slow_admin_statements | 是否记录 `ALTER TABLE/ANALYZE TABLE ` 等 DDL 管理指令的慢查询。
 | log_slow_replica_statements | 是否记录主从复制中，从节点上 **sql_thread** 线程应用 SQL 时产生的慢查询。只有当 `binlog_format=STATEMENT` 才生效，设置为 *ROW/MIXED* 时都不生效。|
 | long_query_time | SQL 运行耗时超过该阈值时，就会被判定为慢查询。单位是：秒。当设置为 0 时，会记录所有的请求。|
 | log_queries_not_using_indexes | 当执行的 SQL 没有可用索引时，也被判定为慢查询。|
@@ -56,7 +56,7 @@ select c, count(*) from t1 group by c;
 从上述日志中可以看到几个信息：
 
 1. 这条 SQL 的耗时 0.001096 秒，即 1 毫秒。
-2. 返回结果有 199 行，总共需要扫描 1600 行数据。如果扫描行数很多，但返回行数很少，说明该SQL效率很低，可能索引不当。
+2. 返回结果有 199 行，总共需要扫描 1600 行数据。如果扫描行数很多，但返回行数很少，说明该 SQL 效率很低，可能索引不当。
 3. **Read_\*** 等几个指标表示这个 SQL 读记录的方式，是否顺序读、随机读等。
 4. **Sort_\*** 等几个指标表示该 SQL 是否产生了排序，及其代价。如果有且代价较大，需要想办法优化。
 5. **\*Tmp\*** 等几个指标表示该 SQL 是否产生临时表，及其代价。如果有且代价较大，需要想办法优化。
@@ -90,7 +90,7 @@ select c, count(*) from t1 group by c;
 
 ## 利用 `pt-query-digest` 分析慢查询 SQL
 
-`pt-query-digest` 是 Percona 出品的 **pt-toolkit** 工具集中的一个工具，主要用于分析慢查询 SQL。除了慢查询外，它还可以分析 binlog、general log，也可以通过 `SHOW PROCESSLIST` 或者通过 `tcpdump` 抓取的通信数据包进行实时分析。
+`pt-query-digest` 是 Percona 出品的 **pt-toolkit** 工具集中的一个工具，主要用于分析慢查询 SQL 。除了慢查询外，它还可以分析 binlog、general log，也可以通过 `SHOW PROCESSLIST` 或者通过 `tcpdump` 抓取的通信数据包进行实时分析。
 
 安装过程略过，请参考文档：[Installing Percona Toolkit](https://www.percona.com/doc/percona-toolkit/LATEST/installation.html)。
 
@@ -152,7 +152,7 @@ pt-query-digest /data/GreatSQL/slow.log > /tmp/slow-digest.txt
 #   14 0x0D7200302E76DA57   449.4795  1.2%   125 3.5958 42.33 INSERT drupal_captcha_sessions
 ```
 
-接下来是具体某条SQL的分析情况，平均及最大耗时，平均及最大扫描行数，不同响应耗时区间占比情况等：
+接下来是具体某条 SQL 的分析情况，平均及最大耗时，平均及最大扫描行数，不同响应耗时区间占比情况等：
 
 ```log
 # Query 1: 0 QPS, 0x concurrency, ID 0xCBFFFDC5A18B5CD4 at byte 9260279 __
@@ -193,7 +193,7 @@ select  `visit` = `visit` + 1, `last_visit` = '2021-10-17 00:04:53' from wp_stat
 ```
 在最后，甚至还直接把 `UPDATE` 改写成 `SELECT`，方便直接查看该 SQL 的执行计划。
 
-`pt-query-digest` 分析结果中已经做好排序，按照这个顺序优先对排在前面的慢查询`SQL`进行优化，对数据库性能提升会有显著效果。
+`pt-query-digest` 分析结果中已经做好排序，按照这个顺序优先对排在前面的慢查询 `SQL` 进行优化，对数据库性能提升会有显著效果。
 
 P.S，还可以利用 `pt-query-digest` 工具将慢查询 SQL 分析后写入数据库，并结合 Anemometer 构建慢查询管理系统。
 
@@ -243,7 +243,7 @@ possible_keys: c
 ```
 可以看到，已经能走索引，并且没有临时表了。
 
-生产环境中的业务 SQL 一般比这种更复杂，SQL 优化需要根据实际情况灵活变化，通常不只是添加索引这么简单。
+生产环境中的业务 SQL 一般比这种更复杂， SQL 优化需要根据实际情况灵活变化，通常不只是添加索引这么简单。
 
 另外，在 GreatSQL 中还支持通过设置以下几个参数来实现自动轮转 slow query log 功能：
 
@@ -253,8 +253,8 @@ possible_keys: c
 启用 slow query log 自动轮转后，每个 slow query log 都会添加和 binlog 文件类似的序号后缀，例如：`slow_query_log_file.000001`。
 
 **参考资料：**
-- [EXPLAIN执行计划中要重点关注哪些要素](https://mp.weixin.qq.com/s/CDKN_nPcIjzA_U5-xwAE5w)
-- [PROCESSLIST中哪些状态要引起关注](https://mp.weixin.qq.com/s/vhUmB9JO-Zt2P02gVk4mwg)
+- [EXPLAIN 执行计划中要重点关注哪些要素](https://mp.weixin.qq.com/s/CDKN_nPcIjzA_U5-xwAE5w)
+- [PROCESSLIST 中哪些状态要引起关注](https://mp.weixin.qq.com/s/vhUmB9JO-Zt2P02gVk4mwg)
 - [Slow query log rotation and expiration](https://docs.percona.com/percona-server/8.0/slowlog-rotation.html)
 
 

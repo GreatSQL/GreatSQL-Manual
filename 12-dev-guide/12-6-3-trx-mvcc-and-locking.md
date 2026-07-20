@@ -5,30 +5,30 @@
 
 ## 简介
 
-MySQL/GreatSQL 事务支持 **MVCC（Multi-Version Concurrency Control，多版本并发控制）**，基于 MVCC 机制实现 **Consistent Nonlocking Reads（一致性非锁定读）**，利用 MVCC 和 row-level locking（行锁）实现事务并发控制。
+MySQL/GreatSQL 事务支持 **MVCC （Multi-Version Concurrency Control，多版本并发控制）**，基于 MVCC 机制实现 **Consistent Nonlocking Reads（一致性非锁定读）**，利用 MVCC 和 row-level locking（行锁）实现事务并发控制。
 
 MVCC 机制是数据库管理系统中一种用于实现事务并发控制的技术，它通过保存历史版本来支持多个事务同时进行读写操作，从而提高了数据库的并发性能和事务隔离性。
 
 事务一致性读是通过读版本和数据版本来保证的，通过读取版本号，返回小于读取版本号的所有已提交事务数据，这个过程无需加锁，从而实现一致性非锁定读。
 
-和其他数据库不同，InnoDB 是基于索引实现行锁机制，因此在锁控制行为上也会有所不同。
+和其他数据库不同， InnoDB 是基于索引实现行锁机制，因此在锁控制行为上也会有所不同。
 
 ## MVCC
 
-MySQL/GreatSQL InnoDB引擎的 MVCC 机制是通过在 [Undo Log（撤销日志）](../2-about-greatsql/4-6-greatsql-undo-log.md) 中保存历史版本来支持并发事务的读写操作，提高了数据库的性能和事务隔离性，使得读操作不会阻塞写操作。
+MySQL/GreatSQL InnoDB 引擎的 MVCC 机制是通过在 [Undo Log（撤销日志）](../2-about-greatsql/4-6-greatsql-undo-log.md) 中保存历史版本来支持并发事务的读写操作，提高了数据库的性能和事务隔离性，使得读操作不会阻塞写操作。
 
 对于不同的事务版本，需要为这种数据多版本来定义语义，保证用户看到一个一致的数据库状态，即数据的一致性快照。
 
-在InnoDB中，利用 `trx_id`（事务ID）来判读事务多版本可见性，如下图所示
+在 InnoDB 中，利用 `trx_id`（事务 ID）来判读事务多版本可见性，如下图所示
 
 ![InnoDB-TRX-MVCC](./12-6-3-trx-mvcc.png)
 
-如上图所示，前后共有5个事务，它们之间相互的可见性分别是
+如上图所示，前后共有 5 个事务，它们之间相互的可见性分别是
 
-- Trx5可看到Trx1、Trx2、Trx3修改的数据，看不到Trx4修改的数据。
-- Trx4可看到Trx1、Trx2修改的数据，看不到Trx3修改的数据。
-- Trx3可看到Trx1修改的数据，看不到Trx2修改的数据。
-- Trx2可看到自己事务中的数据，看不到Trx1修改的数据。
+- Trx5 可看到 Trx1、Trx2、Trx3 修改的数据，看不到 Trx4 修改的数据。
+- Trx4 可看到 Trx1、Trx2 修改的数据，看不到 Trx3 修改的数据。
+- Trx3 可看到 Trx1 修改的数据，看不到 Trx2 修改的数据。
+- Trx2 可看到自己事务中的数据，看不到 Trx1 修改的数据。
 
 ## 事务读
 
@@ -42,9 +42,9 @@ MySQL/GreatSQL InnoDB引擎的 MVCC 机制是通过在 [Undo Log（撤销日志�
 
 ### RR 级别事务读机制
 
-问题1：RR 隔离级别下，什么时候开始创建快照
+问题 1：RR 隔离级别下，什么时候开始创建快照
 
-- 实验1
+- 实验 1
 ```sql
 ---------------------------------------------------------------------------------------------------------------------------------------
                           trx1                                      │                      trx2
@@ -70,7 +70,7 @@ greatsql> UPDATE city SET Population=206800 WHERE ID = 3;           │
                                                                     │+----+-------+-------------+----------+------------+
 ```
 
-- 实验2
+- 实验 2
 ```sql
 ---------------------------------------------------------------------------------------------------------------------------------------
                           trx1                                      │                      trx2
@@ -96,7 +96,7 @@ greatsql> COMMIT;                                                   │
                                                                     │+----+-------+-------------+----------+------------+
 ```
 
-- 实验3
+- 实验 3
 
 ```sql
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -145,9 +145,9 @@ greatsql> COMMIT;                                                   │
 
 ### RC 级别事务读机制
 
-问题2：RC 隔离级别下，什么时候开始创建快照
+问题 2：RC 隔离级别下，什么时候开始创建快照
 
-- 实验1
+- 实验 1
 
 ```sql
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -189,7 +189,7 @@ greatsql> UPDATE city SET Population=216800 WHERE ID = 3;           │greatsql>
                                                                     │+----+-------+-------------+----------+------------+
 ```
 
-从上面的实验可以得到结论：**在 RC 隔离级别下，事务每次SELECT都能获取到最新已提交事务数据**。
+从上面的实验可以得到结论：**在 RC 隔离级别下，事务每次 SELECT 都能获取到最新已提交事务数据**。
 
 
 ### 半一致性读
@@ -199,12 +199,12 @@ greatsql> UPDATE city SET Population=216800 WHERE ID = 3;           │greatsql>
 `UPDATE` 语句如果读到一行已经加锁的记录，此时返回该记录（已提交的）最新版本，会再次判断此版本是否满足 `UPDATE` 请求的 `WHERE` 条件。若满足条件，则该记录需要被更新，则会重新发起一次读操作，此时会读取行的最新版本，并对其加锁。
 
 事务中半一致性读发生的条件有
-- 事务隔离级别小于等于 RC，即 RU、RC 两个隔离级别，或者 `innodb_locks_unsafe_for_binlog = 1` 时（8.0版本之后废弃该选项）；
+- 事务隔离级别小于等于 RC，即 RU、RC 两个隔离级别，或者 `innodb_locks_unsafe_for_binlog = 1` 时（8.0 版本之后废弃该选项）；
 - 并且只能是 `UPDATE` 请求（不支持 `INSERT` 和 `DELETE` 等请求）。
 
 下面用几个案例来演示半一致性读的特性，在本案例中，采用在文档 [事务控制](./12-6-1-trx-control.md) 中创建的 `trx.t1` 表
 
-- 实验1
+- 实验 1
 
 ```sql
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -227,7 +227,7 @@ greatsql> SELECT * FROM t1 WHERE c2 = 'row3' FOR UPDATE;            │
                                                                     │Rows matched: 1  Changed: 1  Warnings: 0
 ```
 
-- 实验2
+- 实验 2
 
 ```sql
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -254,11 +254,11 @@ greatsql> SELECT * FROM t1 WHERE c2 = 'row3' FOR UPDATE;            │
 
 ### 简介
 
-MySQL/GreatSQL 中常用的存储引擎是 InnoDB 和 MyISAM，前者支持表锁、行锁，而后者只支持表锁。
+MySQL/GreatSQL 中常用的存储引擎是 InnoDB 和 MyISAM ，前者支持表锁、行锁，而后者只支持表锁。
 
 除了表锁、行锁外，还有全局读锁（**FLUSH TABLES WITH READ LOCK**）、备份锁（**LOCK INSTANCE FOR BACKUP**）、元数据锁（**Metadata LOCK**）、自增锁（**AUTO_INCREMENT Lock**）等多种锁。
 
-在这里重点介绍 InnoDB 行锁，上述其他锁请参考以下几部分MySQL手册内容
+在这里重点介绍 InnoDB 行锁，上述其他锁请参考以下几部分 MySQL 手册内容
 - [FLUSH TABLES WITH READ LOCK](https://dev.mysql.com/doc/refman/8.0/en/flush.html#flush-tables-with-read-lock)
 - [LOCK INSTANCE FOR BACKUP](https://dev.mysql.com/doc/refman/8.0/en/lock-instance-for-backup.html)
 - [Metadata Locking](https://dev.mysql.com/doc/refman/8.0/en/metadata-locking.html)
@@ -274,7 +274,7 @@ InnoDB 行锁是基于索引实现的，这种实现方式和其他数据库系�
 基于索引加锁的另一个意思是，当申请加锁时，如果没有可利用的索引时，则无法利用索引过滤符合条件的记录，只能进行全表扫描，也意味着所有记录都会被被加上行锁，其结果几乎等同于加上表锁；当然了，二者还是有所不同的，加锁的代价也不一样。
 
 InnoDB 行锁模式有
-- **共享锁（S Lock）**，允许同时申请S锁，不冲突。
+- **共享锁（S Lock）**，允许同时申请 S 锁，不冲突。
 - **排他锁（X Lock）**，不允许和其他锁同时申请，和任何其他锁都会产生互斥。
 
 InnoDB 还支持多粒度锁，允许行锁和表锁并存，为此引入意向锁（**Intention Lock**）。意向锁页分为两种：
@@ -296,15 +296,15 @@ InnoDB 表的锁兼容模式如下表所示：
 
 综上，可以看到其兼容模式为：
 - 意向锁之间互相兼容；
-- 表 IX Lock与所有行级锁（无论 S 还是 X Lock）互斥；
-- 表 IS Lock与行级S Lock兼容，与行级 X Lock 互斥；
+- 表 IX Lock 与所有行级锁（无论 S 还是 X Lock）互斥；
+- 表 IS Lock 与行级 S Lock 兼容，与行级 X Lock 互斥；
 - X Lock 和所有锁都不兼容。
 
 表级意向锁可以用于表锁和行锁冲突时快速判断。试想下，如果没有表级意向锁，在申请表锁时需要遍历所有行，判断是否有行锁冲突；有了意向锁后就只需要判断是否存在冲突即可，极其高效。
 
 ### 不同索引的加锁区别
 
-InnoDB 中在不同事务隔离级别下，加锁行为也有所不同，InnoDB 行锁加锁范围有以下几种：
+InnoDB 中在不同事务隔离级别下，加锁行为也有所不同， InnoDB 行锁加锁范围有以下几种：
 - **Record Lock（`LOCK_REC_NOT_GAP`）**，记录锁，只锁定某条记录本身，不包含其前后的间隙（GAP）。
 - **Gap Lock（`LOCK_GAP`）**，间隙锁，锁定一个范围（通常是指两条记录中间的那个间隙，或者是某条记录前后的间隙）。
 - **Next-Key Lock（`LOCK_ORDINARY`）**，普通锁（通常也叫下一键锁），上述两种锁的结合，它会相关记录本身，以及符合条件的间隙范围。其目的是解决事务幻读问题。
@@ -351,7 +351,7 @@ greatsql> SELECT * FROM t1;
 +----+----+----+------+
 ```
 
-- 场景1：主键列 + 等值条件
+- 场景 1：主键列 + 等值条件
 
 ```sql
 greatsql> BEGIN;
@@ -375,15 +375,15 @@ greatsql> SELECT ENGINE_LOCK_ID,OBJECT_NAME,INDEX_NAME,LOCK_TYPE,LOCK_MODE,LOCK_
 
   - `ENGINE_LOCK_ID`，锁唯一标识符；
   - `OBJECT_NAME`，锁定对象，此处为表 `t1`；
-  - `INDEX_NAME`，加锁的索引，如果是表锁、MDL锁则为 **NULL**；所以这里分别是 **NULL** 和 **PRIMARY**；
+  - `INDEX_NAME`，加锁的索引，如果是表锁、MDL 锁则为 **NULL**；所以这里分别是 **NULL** 和 **PRIMARY**；
   - `LOCK_TYPE`，锁类型，分别为 **TABLE** 和 **RECORD**；
-  - `LOCK_MODE`，锁模式，分别为 表IX锁 和 行级 **LOCK_REC_NOT_GAP|X**；
+  - `LOCK_MODE`，锁模式，分别为 表 IX 锁 和 行级 **LOCK_REC_NOT_GAP|X**；
   - `LOCK_STATUS`，锁状态，**GRANTED** 表示已获得；如果是 **PENDING** 意为等待中，即该加锁请求被阻塞；
-  - `LOCK_DATA`，锁定的数据，如果是表锁、MDL锁则为 **NULL**；如果是行锁，则表示其锁定的那行记录值，此处为 3。
+  - `LOCK_DATA`，锁定的数据，如果是表锁、MDL 锁则为 **NULL**；如果是行锁，则表示其锁定的那行记录值，此处为 3。
 
-结论1：**"主键列 + 等值条件" 加 LOCK_REC_NOT_GAP 锁**。
+结论 1：**"主键列 + 等值条件" 加 LOCK_REC_NOT_GAP 锁**。
 
-- 场景2：唯一约束索引列 + 等值条件
+- 场景 2：唯一约束索引列 + 等值条件
 
 ```sql
 greatsql> BEGIN;
@@ -409,10 +409,10 @@ greatsql> SELECT ENGINE_LOCK_ID,OBJECT_NAME,INDEX_NAME,LOCK_TYPE,LOCK_MODE,LOCK_
   - 唯一约束辅助索引 k1 在 c1 = 3 这行记录上加 **LOCK_REC_NOT_GAP|X** 锁；锁定的记录是 (3,3)，这是因为所有辅助索引都要包含主键列值；
   - 主键索引 **PRIMARY** 在 id = 3 这行记录上加 **LOCK_REC_NOT_GAP|X** 锁。
 
-结论2：**"唯一约束辅助索引列 + 等值条件"，除了在符合条件的记录加上 LOCK_REC_NOT_GAP 锁之外，还要回溯到主键索引并加 LOCK_REC_NOT_GAP 锁**。
+结论 2：**"唯一约束辅助索引列 + 等值条件"，除了在符合条件的记录加上 LOCK_REC_NOT_GAP 锁之外，还要回溯到主键索引并加 LOCK_REC_NOT_GAP 锁**。
 
 
-- 场景3：普通辅助索引列 + 等值条件
+- 场景 3：普通辅助索引列 + 等值条件
 
 ```sql
 greatsql> BEGIN;
@@ -437,12 +437,12 @@ greatsql> SELECT ENGINE_LOCK_ID,OBJECT_NAME,INDEX_NAME,LOCK_TYPE,LOCK_MODE,LOCK_
 可以看到有以下几个锁：
   - 表 t1 加 **IX** 锁；
   - 主键索引 PRIMARY 在 id = 3 这行记录上加 **LOCK_REC_NOT_GAP|X** 锁；
-  - 辅助索引 k2 在 c2 = 3 这行记录上加 **LOCK_ORDINARY|X** 锁（除了 c2 = 3 这行记录之外，还包括 c2 = 3 前面的GAP）；
+  - 辅助索引 k2 在 c2 = 3 这行记录上加 **LOCK_ORDINARY|X** 锁（除了 c2 = 3 这行记录之外，还包括 c2 = 3 前面的 GAP）；
   - 辅助索引 k2 在 c2 = 4 前面的间隙加 **LOCK_GAP|X** 锁。
 
-结论3：**"普通辅助索引列 + 等值条件"，除了在符合条件的记录加上 LOCK_ORDINARY 锁之外，还要回溯到主键索引并加 LOCK_REC_NOT_GAP 锁**。
+结论 3：**"普通辅助索引列 + 等值条件"，除了在符合条件的记录加上 LOCK_ORDINARY 锁之外，还要回溯到主键索引并加 LOCK_REC_NOT_GAP 锁**。
 
-- 场景4：无索引列 + 等值条件
+- 场景 4：无索引列 + 等值条件
 
 ```sql
 greatsql> BEGIN;
@@ -474,7 +474,7 @@ greatsql> SELECT ENGINE_LOCK_ID,ENGINE_TRANSACTION_ID,OBJECT_NAME,INDEX_NAME,LOC
   - 所有行记录都加上 **LOCK_ORDINARY|X** 锁；
   - 包括虚拟最大记录（**supremum pseudo-record**）前面的那个间隙也加上 **LOCK_GAP|X** 锁。
 
-结论4：**"无索引列 + 等值条件"，所有记录都会被加锁**。
+结论 4：**"无索引列 + 等值条件"，所有记录都会被加锁**。
 
 更多场景的加锁方式请自行参考上面的方法进行实验和观测。
 
@@ -563,11 +563,11 @@ try restarting transaction                             │                wait_s
                                                        │sql_kill_blocking_connection: KILL 92         <- 解锁方式2
 ```
 
-在上例中，最后给出了两种解锁方式，但通常只有方式2才管用，因为 `KILL QUERY` 只会杀掉当前正在运行的 SQL 请求，而通常这个 SQL 请求并不是产生锁等待的原因。采用方式2解锁的话，会使得持有锁的那个连接被断开，相应的事务都会被回滚，参考：[回滚事务](./12-6-1-trx-control.md#回滚事务)。
+在上例中，最后给出了两种解锁方式，但通常只有方式 2 才管用，因为 `KILL QUERY` 只会杀掉当前正在运行的 SQL 请求，而通常这个 SQL 请求并不是产生锁等待的原因。采用方式 2 解锁的话，会使得持有锁的那个连接被断开，相应的事务都会被回滚，参考：[回滚事务](./12-6-1-trx-control.md#回滚事务)。
 
 ### 行锁观测监控
 
-当数据库中存在太多锁等待时，可能会造成业务系统响应非常慢，用户体验非常差。锁等待太多，更容易发生死锁。过多锁等待，也会导致服务器的CPU消耗过大等问题。
+当数据库中存在太多锁等待时，可能会造成业务系统响应非常慢，用户体验非常差。锁等待太多，更容易发生死锁。过多锁等待，也会导致服务器的 CPU 消耗过大等问题。
 
 因此，需要关注当前的行锁等待发生情况，如果有较严重的问题要及时介入干预。
 
@@ -610,7 +610,7 @@ greatsql> SELECT * FROM performance_schema.global_status WHERE
 ---------------------------------------------------------------------------------------------------------------------
 greatsql> BEGIN;                                       │greatsql> BEGIN;
                                                        │/* trx1 和 trx2 分别请求 id = 1 和 id = 3 两个行锁 */
-greatsql> SELECt * FROM t1 WHERE id = 1 FOR UPDATE;    │greatsql> SELECT * FROM t1 WHERE id = 3 FOR UPDATE;
+greatsql> SELECT * FROM t1 WHERE id = 1 FOR UPDATE;    │greatsql> SELECT * FROM t1 WHERE id = 3 FOR UPDATE;
 +----+----+----+------+                                │+----+----+----+------+
 | id | c1 | c2 | c3   |                                │| id | c1 | c2 | c3   |
 +----+----+----+------+                                │+----+----+----+------+
@@ -645,22 +645,22 @@ SELECT * FROM t1 WHERE id = 3 FOR UPDATE
 *** (1) HOLDS THE LOCK(S):
 RECORD LOCKS space id 53 page no 4 n bits 80 index PRIMARY of table `trx`.`t1` trx id 2796 lock_mode X locks rec but not gap
 Record lock, heap no 2 PHYSICAL RECORD: n_fields 6; compact format; info bits 0
- 0: len 4; hex 00000001; asc     ;;
- 1: len 6; hex 000000000ac9; asc       ;;
+ 0: len 4; hex 00000001; asc    ;;
+ 1: len 6; hex 000000000ac9; asc      ;;
  2: len 7; hex 02000000cb0151; asc       Q;;
- 3: len 4; hex 00000001; asc     ;;
- 4: len 4; hex 00000001; asc     ;;
+ 3: len 4; hex 00000001; asc    ;;
+ 4: len 4; hex 00000001; asc    ;;
  5: len 4; hex 726f7731; asc row1;;
 
 
 *** (1) WAITING FOR THIS LOCK TO BE GRANTED:
 RECORD LOCKS space id 53 page no 4 n bits 80 index PRIMARY of table `trx`.`t1` trx id 2796 lock_mode X locks rec but not gap waiting
 Record lock, heap no 4 PHYSICAL RECORD: n_fields 6; compact format; info bits 0
- 0: len 4; hex 00000003; asc     ;;
- 1: len 6; hex 000000000ac9; asc       ;;
- 2: len 7; hex 02000000cb0197; asc        ;;
- 3: len 4; hex 00000003; asc     ;;
- 4: len 4; hex 00000003; asc     ;;
+ 0: len 4; hex 00000003; asc    ;;
+ 1: len 6; hex 000000000ac9; asc      ;;
+ 2: len 7; hex 02000000cb0197; asc       ;;
+ 3: len 4; hex 00000003; asc    ;;
+ 4: len 4; hex 00000003; asc    ;;
  5: len 4; hex 726f7733; asc row3;;
 
 
@@ -674,29 +674,29 @@ SELECT * FROM t1 WHERE id = 1 FOR UPDATE
 *** (2) HOLDS THE LOCK(S):
 RECORD LOCKS space id 53 page no 4 n bits 80 index PRIMARY of table `trx`.`t1` trx id 2795 lock_mode X locks rec but not gap
 Record lock, heap no 4 PHYSICAL RECORD: n_fields 6; compact format; info bits 0
- 0: len 4; hex 00000003; asc     ;;
- 1: len 6; hex 000000000ac9; asc       ;;
- 2: len 7; hex 02000000cb0197; asc        ;;
- 3: len 4; hex 00000003; asc     ;;
- 4: len 4; hex 00000003; asc     ;;
+ 0: len 4; hex 00000003; asc    ;;
+ 1: len 6; hex 000000000ac9; asc      ;;
+ 2: len 7; hex 02000000cb0197; asc       ;;
+ 3: len 4; hex 00000003; asc    ;;
+ 4: len 4; hex 00000003; asc    ;;
  5: len 4; hex 726f7733; asc row3;;
 
 
 *** (2) WAITING FOR THIS LOCK TO BE GRANTED:
 RECORD LOCKS space id 53 page no 4 n bits 80 index PRIMARY of table `trx`.`t1` trx id 2795 lock_mode X locks rec but not gap waiting
 Record lock, heap no 2 PHYSICAL RECORD: n_fields 6; compact format; info bits 0
- 0: len 4; hex 00000001; asc     ;;
- 1: len 6; hex 000000000ac9; asc       ;;
+ 0: len 4; hex 00000001; asc    ;;
+ 1: len 6; hex 000000000ac9; asc      ;;
  2: len 7; hex 02000000cb0151; asc       Q;;
- 3: len 4; hex 00000001; asc     ;;
- 4: len 4; hex 00000001; asc     ;;
+ 3: len 4; hex 00000001; asc    ;;
+ 4: len 4; hex 00000001; asc    ;;
  5: len 4; hex 726f7731; asc row1;;
 
 *** WE ROLL BACK TRANSACTION (2)
 ```
 从上面的输出结果中并不能直接发现死锁发生的原因，因此通常需要先观察死锁发生的规律，在经常发生死锁的时间段内短时间设置 `general_log = ON` 启用 `general log`，记录那个时间段所有的请求，待到死锁发生后再关闭 `general log`。
 
-也可以通过分析应用程序代码来推测死锁发生时的用户请求 SQL，通过后期模拟来推断验证。
+也可以通过分析应用程序代码来推测死锁发生时的用户请求 SQL ，通过后期模拟来推断验证。
 
 通常来说，偶尔发生死锁很正常，并不用太担心，除非是频繁产生死锁才需要特别关注。
 

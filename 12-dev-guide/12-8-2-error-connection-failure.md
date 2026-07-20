@@ -2,7 +2,7 @@
 
 本节介绍 GreatSQL 连接失败的常见问题。
 
-在文档 [通过GreatSQL客户端连接](./12-1-1-cw-cli.md)中，我们介绍了 GreatSQL 客户端连接的方法。
+在文档 [通过 GreatSQL 客户端连接](./12-1-1-cw-cli.md)中，我们介绍了 GreatSQL 客户端连接的方法。
 
 在 GreatSQL 中，连接失败分为以下几种：
 - 连接中断
@@ -18,12 +18,12 @@ ERROR 2013 (HY000): Lost connection to MySQL server during query
 No connection. Trying to reconnect...
 Connection id:    25
 ```
-错误码为2013，表示连接中断。错误信息为`Lost connection to MySQL server during query`。
+错误码为 2013，表示连接中断。错误信息为 `Lost connection to MySQL server during query`。
 
 ### 原因分析
  GreatSQL 当会话空闲时间超过指定的阈值时，系统将主动关闭当前连接，并在执行下一次操作时报 ERROR 2013 的错误。
 
-此时进入 GreatSQL 数据库中，查看timeout相关参数
+此时进入 GreatSQL 数据库中，查看 timeout 相关参数
 
 ```sql
 greatsql> SHOW GLOBAL VARIABLES LIKE '%timeout%';
@@ -65,12 +65,12 @@ greatsql> SHOW GLOBAL VARIABLES LIKE '%timeout%';
 32 rows in set (0.01 sec)
 ```
 
-将变量 *wait_timeout* 的值设置为 600 即10分钟。
+将变量 *wait_timeout* 的值设置为 600 即 10 分钟。
 ```sql
 greatsql> SET GLOBAL wait_timeout=600;
 Query OK, 0 rows affected (0.00 sec)
 ```
-将变量 *interactive_timeout* 的值设置为 600 即10分钟。
+将变量 *interactive_timeout* 的值设置为 600 即 10 分钟。
 ```sql
 greatsql> SET GLOBAL interactive_timeout=600;
 Query OK, 0 rows affected (0.00 sec)
@@ -86,7 +86,7 @@ Query OK, 0 rows affected (0.00 sec)
 $ mysql -uroot -p GreatSQL  -P3306 -h127.0.0.1
 ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
 ```
-错误码为1045，表示拒绝访问用户，详见[ GreatSQL 常见报错错误码对照表](./12-8-1-error-code-reference.md)。错误信息为`Access denied for user 'root'@'localhost' (using password: YES)`。
+错误码为 1045，表示拒绝访问用户，详见[ GreatSQL 常见报错错误码对照表](./12-8-1-error-code-reference.md)。错误信息为 `Access denied for user 'root'@'localhost' (using password: YES)`。
 
 ### 原因分析
 
@@ -102,15 +102,15 @@ ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: Y
 
 请检查密码是否正确。
 
-若忘记密码可以在my.cnf文件中加入`skip-grant-tables`参数，然后重启 GreatSQL 服务器。此时会跳过密码验证，直接登录。
+若忘记密码可以在 my.cnf 文件中加入 `skip-grant-tables` 参数，然后重启 GreatSQL 服务器。此时会跳过密码验证，直接登录。
 
 > 注意！使用完成后要随用随关，并重启 GreatSQL 服务器，否则数据库有很大风险
 
 **用户名不存在**
 
-请检查用户名是否正确。root用户则跳过这个可能的错误。
+请检查用户名是否正确。root 用户则跳过这个可能的错误。
 
-若是自己创建用户，可以使用root用户登录后，使用`SELECT * FROM mysql.user;`查看用户是否存在。
+若是自己创建用户，可以使用 root 用户登录后，使用 `SELECT * FROM mysql.user;` 查看用户是否存在。
 
 ```sql
 greatsql> SELECT User,Host FROM mysql.user;
@@ -128,13 +128,13 @@ greatsql> SELECT User,Host FROM mysql.user;
 
 **用户的主机限制**
 
-这点错误在章节[通过GUI客户端连接](./12-1-2-cw-gui.md)中已经介绍过了，修改用户的当前主机配置信息即可
+这点错误在章节[通过 GUI 客户端连接](./12-1-2-cw-gui.md)中已经介绍过了，修改用户的当前主机配置信息即可
 
 **防火墙问题**
 
 防火墙问题，请检查防火墙是否开放了 GreatSQL 的端口。
 
-例如，在Linux系统中，可以使用`netstat -anp | grep 3306`查看端口是否开放。
+例如，在 Linux 系统中，可以使用 `netstat -anp | grep 3306` 查看端口是否开放。
 
 
 

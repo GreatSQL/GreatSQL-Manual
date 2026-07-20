@@ -25,7 +25,7 @@ No connection. Trying to reconnect...
 Connection id:    38
 Current database: world
 ```
-错误码为`2013`，表示连接断开。详见[GreatSQL常见报错错误码对照表](./12-8-1-error-code-reference.md)。
+错误码为 `2013`，表示连接断开。详见[GreatSQL 常见报错错误码对照表](./12-8-1-error-code-reference.md)。
 
 ### 原因分析
 
@@ -44,7 +44,7 @@ greatsql> SHOW GLOBAL VARIABLES LIKE 'kill_idle_transaction';
 +-----------------------+-------+
 1 row in set (0.01 sec)
 ```
-设置为0表示不限制事务空闲时间，设置为正整数则表示事务空闲时间。
+设置为 0 表示不限制事务空闲时间，设置为正整数则表示事务空闲时间。
 
 ```sql
 greatsql> SET GLOBAL kill_idle_transaction=300;

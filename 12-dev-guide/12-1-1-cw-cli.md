@@ -24,7 +24,7 @@ mysql -h主机名 -P端口号 -u用户名 -p密码
 ```bash
 $ mysql -hlocalhost -P3306 -urepl -p'GreatSQL@2024'
 mysql: [Warning] Using a password on the command line interface can be insecure.
-Welcome to the MySQL monitor.  Commands end with ; or \g.
+Welcome to the MySQL monitor.  Commands end with; or \g.
 Your MySQL connection id is 174
 Server version: 8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
 ...
@@ -34,10 +34,10 @@ greatsql>
 ```
 
 ::: tip 小贴士
-因为密码为明文填入，所以会触发警告`[Warning] Using a password on the command line interface can be insecure.`，若不想触发警告，在 `-p` 后面不要填入密码即可。
+因为密码为明文填入，所以会触发警告 `[Warning] Using a password on the command line interface can be insecure.`，若不想触发警告，在 `-p` 后面不要填入密码即可。
 :::
 
-连入数据库后，可以使用`SHOW VARIABLES LIKE '%version%';`或`\s`查看数据库基本信息
+连入数据库后，可以使用 `SHOW VARIABLES LIKE '%version%';` 或 `\s` 查看数据库基本信息
 
 ```sql
 greatsql> SHOW VARIABLES LIKE '%version%';
@@ -64,7 +64,7 @@ greatsql> SHOW VARIABLES LIKE '%version%';
 17 rows in set (0.01 sec)
 ```
 
-使用`EXIT`或`QUIT`命令即可退出GreatSQL客户端连接
+使用 `EXIT` 或 `QUIT` 命令即可退出 GreatSQL 客户端连接
 
 ```sql
 greatsql> EXIT

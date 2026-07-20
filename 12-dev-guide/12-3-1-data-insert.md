@@ -11,7 +11,7 @@
 INSERT INTO 表名(column1 [, column2, …, columnn]) 
   VALUES (value1 [,value2, …, valuen]);
 ```
-在 INSERT 子句中随意列出列名，但是一旦列出，VALUES中要插入的value1,…valuen需要与column1,…columnn列一一对应。如果类型不同，将无法插入，并且GreatSQL会产生错误。
+在 INSERT 子句中随意列出列名，但是一旦列出，VALUES 中要插入的 value1,…valuen 需要与 column1,…columnn 列一一对应。如果类型不同，将无法插入，并且 GreatSQL 会产生错误。
 
 举例插入一条数据：
 ```sql
@@ -29,7 +29,7 @@ Records: 2  Duplicates: 0  Warnings: 0
 INSERT INTO 表名 
   VALUES (value1 [,value2, …, valuen]);
 ```
-在INSERT子句中不指定列名，则默认使用表中所有列名。
+在 INSERT 子句中不指定列名，则默认使用表中所有列名。
 举例插入一条数据：
 ```sql
 greatsql> INSERT INTO student VALUES (1004,'赵六');
@@ -43,7 +43,7 @@ Records: 2  Duplicates: 0  Warnings: 0
 ```
 
 ## INSERT ... SELECT语句添加
-还可以将SELECT语句查询的结果插入到表中，此时不需要把每一条记录的值一个一个输入，只需要使用一条INSERT语句和一条SELECT语句组成的组合语句即可快速地从一个或多个表中向一个表中插入多行
+还可以将 SELECT 语句查询的结果插入到表中，此时不需要把每一条记录的值一个一个输入，只需要使用一条 INSERT 语句和一条 SELECT 语句组成的组合语句即可快速地从一个或多个表中向一个表中插入多行
 ```sql
 INSERT INTO 目标表名
   (tar_column1 [, tar_column2, …, tar_columnn])
@@ -57,7 +57,7 @@ INSERT INTO 目标表名
 - 子查询中的值列表应与 INSERT 子句中的列名对应。
 
 
-举例将student表中id大于1002的数据插入到teacher中：
+举例将 student 表中 id 大于 1002 的数据插入到 teacher 中：
 ```sql
 greatsql> INSERT INTO teacher(id, name) SELECT id, name FROM student WHERE id > 1002;
 Query OK, 2 rows affected (0.05 sec)
@@ -65,7 +65,7 @@ Records: 2  Duplicates: 0  Warnings: 0
 ```
 
 ## 插入数据建议
-1. 插入数据时，建议使用 VALUES 子句的方式，可以避免SQL注入问题，避免重复数据。还可以进一步，采用 `PREPARE` 方式格式化数据，也能避免SQL注入风险。详情参考：[PREPARE 预处理语句](./12-3-5-data-prepare.md)。
+1. 插入数据时，建议使用 VALUES 子句的方式，可以避免 SQL 注入问题，避免重复数据。还可以进一步，采用 `PREPARE` 方式格式化数据，也能避免 SQL 注入风险。详情参考：[PREPARE 预处理语句](./12-3-5-data-prepare.md)。
 2. 插入数据时，建议先了解表结构、各列信息、字段数据类型，避免插入错误的数据。
     表结构与字段数据类型可通过 `DESC` 命令（`DESCRIBE` 的缩写）查看
     ```sql

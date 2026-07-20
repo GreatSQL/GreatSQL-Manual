@@ -6,7 +6,7 @@
 - sakila database
 
 
-应用程序在查询时，常需整合多张表的数据。这时，利用JOIN语句能轻松将多表数据融合，实现高效的数据检索。
+应用程序在查询时，常需整合多张表的数据。这时，利用 JOIN 语句能轻松将多表数据融合，实现高效的数据检索。
 
 多表查询是关系型数据库中最重要的操作之一，也是最复杂的。先来一张图，看看多表查询的类型
 
@@ -15,9 +15,9 @@
 由上图可知，多表查询分为七种：
 - 内连接（INNER JOIN）【图中】
 - 左外连接（LEFT OUTER JOIN）【左上图】
-- 左外连接排除B部分（LEFT OUTER JOIN EXCLUDING B）【左中图】
+- 左外连接排除 B 部分（LEFT OUTER JOIN EXCLUDING B）【左中图】
 - 右外连接（RIGHT OUTER JOIN）【右上图】
-- 右外连接排除A部分（RIGHT OUTER JOIN EXCLUDING A）【右中图】
+- 右外连接排除 A 部分（RIGHT OUTER JOIN EXCLUDING A）【右中图】
 - 全连接（FULL JOIN）【左下图】
 - 全外连接（FULL OUTER JOIN）【右下图】
 
@@ -36,7 +36,7 @@ SELECT 字段列表
   ON 关联条件
   WHERE 其他子句;
 ```
-例如，简单的内连接（INNER JOIN）查询，用于连接 `city` 表和 `country` 表，并基于这两个表之间的共同字段（即city表的CountryCode字段和country表的Code字段）来获取数据。
+例如，简单的内连接（INNER JOIN）查询，用于连接 `city` 表和 `country` 表，并基于这两个表之间的共同字段（即 city 表的 CountryCode 字段和 country 表的 Code 字段）来获取数据。
 ```sql
 SELECT     
   city.Name AS CityName,  
@@ -64,8 +64,8 @@ FROM city
 
 再举一个较复杂的例子：
 
-三表连接，查询 `city` 表、`country` 表和 `countrylanguage` 表，并基于这三个表之间的共同字段（即city表的
-CountryCode字段和country表的Code字段，以及countrylanguage表的CountryCode字段）来获取数据。
+三表连接，查询 `city` 表、`country` 表和 `countrylanguage` 表，并基于这三个表之间的共同字段（即 city 表的
+CountryCode 字段和 country 表的 Code 字段，以及 countrylanguage 表的 CountryCode 字段）来获取数据。
 
 查询出来的就是城市对应的国家中，是否为官方语言。
 ```sql
@@ -114,7 +114,7 @@ SELECT 字段列表
 
 当使用左外连接时，你会从左边的表中选择所有的记录，并只选择与右边表匹配的记录。如果右边的表中没有匹配的记录，则结果集中对应的字段将包含 NULL 值。
 
-例如简单的一个左外连接查询，用于连接 `city` 表和 `country` 表，并基于这两个表之间的共同字段（即city表的CountryCode字段和country表的Code字段）来获取数据。
+例如简单的一个左外连接查询，用于连接 `city` 表和 `country` 表，并基于这两个表之间的共同字段（即 city 表的 CountryCode 字段和 country 表的 Code 字段）来获取数据。
 ```sql
 SELECT   
     city.Name AS CityName,
@@ -143,7 +143,7 @@ LEFT JOIN country
 
 再举一个较复杂的例子：
 
-在world数据库的city、country和countrylanguage三张表的情况下，做一个左外连接来获取所有城市及其对应的国家和官方语言
+在 world 数据库的 city、country 和 countrylanguage 三张表的情况下，做一个左外连接来获取所有城市及其对应的国家和官方语言
 ```sql
 SELECT city.name AS 城市名称,
        country.name AS 国家名称,
@@ -171,9 +171,9 @@ FROM country
 ```
 :::
 ### 左外连接排除B部分
-若要排除B部分，则在WHRER语句中添加`IS NULL`条件，如下：
+若要排除 B 部分，则在 WHERE 语句中添加 `IS NULL` 条件，如下：
 ```sql
-SELECT * FROM A LEFT JOIN B ON A.key = B.key WHRER IS NULL;
+SELECT * FROM A LEFT JOIN B ON A.key = B.key WHERE B.key IS NULL;
 ```
 例如查询没有对应国家的城市
 ```sql
@@ -194,7 +194,7 @@ Empty set (0.01 sec)
 ```
 表明每个城市都有对应的国家。
 
-插入一条数据，测试该语句是否可以查询到为NULL的数据
+插入一条数据，测试该语句是否可以查询到为 NULL 的数据
 ```sql
 -- 取消原表中NOT NULL约束
 greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3)
@@ -268,9 +268,9 @@ LIMIT 5;
 :::
 
 ### 右外连接排除A部分
-若要排除A部分，则在WHRER语句中添加`IS NULL`条件，如下：
+若要排除 A 部分，则在 WHERE 语句中添加 `IS NULL` 条件，如下：
 ```sql
-SELECT * FROM A RIGHT JOIN B ON A.key = B.key WHRER IS NULL;
+SELECT * FROM A RIGHT JOIN B ON A.key = B.key WHERE A.key IS NULL;
 ```
 例如查询没有对应城市的国家
 ```sql
@@ -291,7 +291,7 @@ Empty set (0.01 sec)
 ```
 表明每个国家都有对应的城市
 
-插入一条数据，测试该语句是否可以查询到为NULL的数据
+插入一条数据，测试该语句是否可以查询到为 NULL 的数据
 ```sql
 -- 取消原表中NOT NULL约束
 greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3)
@@ -324,7 +324,7 @@ greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3)
   CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL;
 ```
 ## 全连接
-在GreatSQL中，全连接是用左外的A `UNION` 右外的B 查询结果合并而成。
+在 GreatSQL 中，全连接是用左外的 A `UNION` 右外的 B 查询结果合并而成。
 
 格式如下：
 ```sql
@@ -341,7 +341,7 @@ SELECT 字段列表
   WHERE 等其他子句;
 ```
 
-例如使用GreatSQL来实现一个类似全连接的效果，查询city和country表，获取所有城市和它们对应的国家（如果有的话），以及没有对应城市的国家（如果有的话）：
+例如使用 GreatSQL 来实现一个类似全连接的效果，查询 city 和 country 表，获取所有城市和它们对应的国家（如果有的话），以及没有对应城市的国家（如果有的话）：
 ```sql
 -- 使用UNION组合左连接和右连接的结果来实现全连接的效果  
 SELECT   
@@ -422,7 +422,7 @@ Empty set (0.01 sec)
 ```
 表明没有国家没有对应城市。
 
-插入一条数据，测试该语句是否可以查询到为NULL的数据
+插入一条数据，测试该语句是否可以查询到为 NULL 的数据
 ```sql
 -- 取消原表中NOT NULL约束
 greatsql> ALTER TABLE city MODIFY COLUMN CountryCode CHAR(3)

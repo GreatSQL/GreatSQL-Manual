@@ -1,10 +1,10 @@
 # REPLACE 替换数据
 ---
 
-本节介绍使用 REPLACE 命令替换GreatSQL中的数据。
+本节介绍使用 REPLACE 命令替换 GreatSQL 中的数据。
 
 ## REPLACE INTO 语句
-可以理解为是`INSTER`的增强版，如果存在则更新，如果不存在则插入。
+可以理解为是 `INSTER` 的增强版，如果存在则更新，如果不存在则插入。
 `REPLACE INTO` 语句语法格式如下：
 
 ```sql
@@ -12,7 +12,7 @@ REPLACE INTO table_name VALUES(value_list);
 ```
 举例如下：
 
-创建一张`t1`表：
+创建一张 `t1` 表：
 ```sql
 CREATE TABLE t1 (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -27,7 +27,7 @@ Query OK, 0 rows affected (0.03 sec)
 greatsql> INSERT INTO t1 VALUES (1, 'Old', '2024-05-8 13:58:00');
 Query OK, 1 row affected (0.05 sec)
 ```
-此时插入以下数据，会更新id为1的数据
+此时插入以下数据，会更新 id 为 1 的数据
 ```sql
 greatsql> REPLACE INTO t1 VALUES (1, 'New', '2024-05-8 14:00:00');
 Query OK, 2 rows affected (0.05 sec)
@@ -58,9 +58,9 @@ greatsql> SELECT * FROM t1;
 ```
 ## RENAME TABLE 与外键
 
-当使用 `REPLACE INTO` 语句在GreatSQL中插入或替换记录时，如果涉及到外键约束，并且尝试替换的记录被其他表的外键引用，会造成数据被删除。
+当使用 `REPLACE INTO` 语句在 GreatSQL 中插入或替换记录时，如果涉及到外键约束，并且尝试替换的记录被其他表的外键引用，会造成数据被删除。
 
-假设有两个表：一个是`主表（main_table）`，另一个是`从表（sub_table）`，并且 `sub_table` 有一个外键字段指向 `main_table` 的主键。
+假设有两个表：一个是 `主表（main_table）`，另一个是 `从表（sub_table）`，并且 `sub_table` 有一个外键字段指向 `main_table` 的主键。
 ```sql
 CREATE TABLE main_table (  
     id INT AUTO_INCREMENT PRIMARY KEY,  
@@ -74,7 +74,7 @@ CREATE TABLE sub_table (
     FOREIGN KEY (main_id) REFERENCES main_table(id) ON DELETE CASCADE  
 );
 ```
-在这个例子中，`sub_table` 的 `main_id` 字段是一个外键，它引用了 `main_table` 的 id 字段。如果我们在 `main_table` 中有一条记录被 `sub_table` 中的一条或多条记录引用，并且我们尝试使用 `REPLACE INTO` 来替换 `main_table` 中的这条记录，会导致`sub_table`表中原先引用`main_table` id 字段的数据丢失。
+在这个例子中，`sub_table` 的 `main_id` 字段是一个外键，它引用了 `main_table` 的 id 字段。如果我们在 `main_table` 中有一条记录被 `sub_table` 中的一条或多条记录引用，并且我们尝试使用 `REPLACE INTO` 来替换 `main_table` 中的这条记录，会导致 `sub_table` 表中原先引用 `main_table` id 字段的数据丢失。
 
 ```sql
 -- 在 main_table 中插入一条记录  
@@ -123,7 +123,7 @@ Empty set (0.00 sec)
 
 ## REPLACE INTO 注意事项
 1. 插入数据的表必须有主键或者是唯一索引！否则的话，`REPLACE INTO` 会直接插入数据，这将导致表中出现重复的数据。
-2. 在有外键的情况下使用`REPLACE INTO`，如果被替换的记录被其他表的外键引用，会造成数据被删除。
+2. 在有外键的情况下使用 `REPLACE INTO`，如果被替换的记录被其他表的外键引用，会造成数据被删除。
 
 
 **扫码关注微信公众号**
