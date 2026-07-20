@@ -3,22 +3,23 @@
 
 GreatSQL 实现 100% 完全兼容 MySQL 及 Percona 用法，支持大多数常见 Oracle 用法，包括 [数据类型兼容](#数据类型兼容)、[函数兼容](#函数兼容)、[SQL 语法兼容](#sql语法兼容)、[存储程序兼容](#存储程序兼容) 等众多兼容扩展用法。
 
-## Oracle兼容设计思路概述
-GreatSQL的Oracle的兼容处理的优先原则如下：
-- GreatSQL风格的SQL和存储程序可以直接在默认SQL MODE模式下工作。
-- 与GreatSQL风格的SQL和存储程序**不冲突**的Oracle兼容功能也可以直接在默认SQL MODE模式下工作。
-- 与GreatSQL风格的SQL和存储程序**存在语法或语义冲突**的功能，需要用户显式切换到Oracle MODE模式下才能工作。
+## Oracle 兼容设计思路概述
 
-GreatSQL对Oracle的兼容主要通过以下三种不同方案来实现：
-- 原生模式：Oracle、GreatSQL都支持或部分支持通用的SQL标准，对于部分简单语句，无需调整即可兼容。
-- 兼容扩展：GreatSQL对于部分Oracle独有的函数和语法，在GreatSQL的Server层实现对其扩展，如：`MERGE INTO`、`CONNECT BY`，这写类型的兼容特性无需额外设定SQL MODE，直接使用即可。
-- 兼容模式：在GreatSQL中设置 `SET sql_mode = ORACLE;` 即可将当前会话切换到Oracle兼容模式。在该模式下，当Oracle语法与GreatSQL语法存在语法或语义上的冲突时，GreatSQL会自行选择Oracle兼容模式。
+GreatSQL 对 Oracle 兼容处理的优先原则如下：
+- GreatSQL 风格的 SQL 和存储程序可以直接在默认 SQL MODE 模式下工作。
+- 与 GreatSQL 风格的 SQL 和存储程序**不冲突**的 Oracle 兼容功能也可以直接在默认 SQL MODE 模式下工作。
+- 与 GreatSQL 风格的 SQL 和存储程序**存在语法或语义冲突**的功能，需要用户显式切换到 Oracle MODE 模式下才能工作。
 
-更多关于Oracle兼容模式的说明请查看文档：[Oracle mode](./sql-compat/5-3-easyuse-ora-syntax-oraclemode.md)。
+GreatSQL 对 Oracle 的兼容主要通过以下三种不同方案来实现：
+- 原生模式：Oracle、GreatSQL 都支持或部分支持通用的 SQL 标准，对于部分简单语句，无需调整即可兼容。
+- 兼容扩展：GreatSQL 对于部分 Oracle 独有的函数和语法，在 GreatSQL 的 Server 层实现对其扩展，如：`MERGE INTO`、`CONNECT BY`，这些类型的兼容特性无需额外设定 SQL MODE，直接使用即可。
+- 兼容模式：在 GreatSQL 中设置 `SET sql_mode = ORACLE;` 即可将当前会话切换到 Oracle 兼容模式。在该模式下，当 Oracle 语法与 GreatSQL 语法存在语法或语义上的冲突时，GreatSQL 会自行选择 Oracle 兼容模式。
+
+更多关于 Oracle 兼容模式的说明请查看文档：[Oracle mode](./sql-compat/5-3-easyuse-ora-syntax-oraclemode.md)。
 
 ## 数据类型兼容
 
-在GreatSQL中，采用映射方式实现数据类型兼容，这属于 **扩展兼容(无需设定 `sql_mode`)** 方案。具体实现方式为：简单别名，即：在解析阶段将关键词进行替换。例如：如果使用CLOB创建的表，在系统内会被转换成LONGTEXT。
+在 GreatSQL 中，采用映射方式实现数据类型兼容，这属于 **扩展兼容（无需设定 `sql_mode`）** 方案。具体实现方式为：简单别名，即：在解析阶段将关键词进行替换。例如：如果使用 CLOB 创建的表，在系统内会被转换成 LONGTEXT。
 
 具体实现的映射包括：
 
@@ -59,11 +60,11 @@ Create Table: CREATE TABLE `t1` (
 
 更详细信息请参考 [数据类型兼容](./sql-compat/5-3-easyuse-ora-datatypes.md)。
 
-## SQL语法兼容
+## SQL 语法兼容
 
 ### 扩展兼容支持的 SQL 语法
 
-下面是在 GreatSQL 中无需设定 `sql_mode = ORACLE` 就能支持的SQL语法：
+下面是在 GreatSQL 中无需设定 `sql_mode = ORACLE` 就能支持的 SQL 语法：
 - [ANY, ALL](./sql-compat/5-3-easyuse-ora-syntax-any-all.md)
 - [CREATE FORCE VIEW](./sql-compat/5-3-easyuse-ora-syntax-createforceview.md)
 - [Hierarchical Query(分层查询)](./sql-compat/5-3-easyuse-ora-syntax-hierarchical-query.md)
@@ -83,34 +84,34 @@ Create Table: CREATE TABLE `t1` (
 - [SEQUENCE](./sql-compat/5-3-easyuse-ora-syntax-sequence.md)
 - [(+) 外连接](./sql-compat/5-3-easyuse-ora-syntax-oracle-plus.md)
 - [子查询无别名](./sql-compat/5-3-easyuse-ora-syntax-subquery-without-alias.md)
-- [空串''与NULL等价开关](./sql-compat/5-3-easyuse-ora-syntax-empstr-equal-null.md)
-- [字符串列设置CURRENT_TIMESTAMP默认值](./sql-compat/5-3-easyuse-ora-syntax-default-val-curtime.md)
-- [移除指定sql_mode](./sql-compat/5-3-easyuse-ora-syntax-shrinkmode.md)
+- [空串''与 NULL 等价开关](./sql-compat/5-3-easyuse-ora-syntax-empstr-equal-null.md)
+- [字符串列设置 CURRENT_TIMESTAMP 默认值](./sql-compat/5-3-easyuse-ora-syntax-default-val-curtime.md)
+- [移除指定 sql_mode](./sql-compat/5-3-easyuse-ora-syntax-shrinkmode.md)
 - 更多 ...
 
 ### 兼容模式支持的 SQL 语法
 
-下面是在 GreatSQL 中需要先设定 `sql_mode = ORACLE` 才能支持的SQL语法：
+下面是在 GreatSQL 中需要先设定 `sql_mode = ORACLE` 才能支持的 SQL 语法：
 
 - [CREATE TYPE](./sql-compat/5-3-easyuse-ora-syntax-create-type.md)
 - [CREATE TABLE OF TYPE](./sql-compat/5-3-easyuse-ora-syntax-table-oftype.md)
-- [DATETIME加减运算](./sql-compat/5-3-easyuse-ora-syntax-datetime-arithmetic.md)
-- [DELETE语句支持不带FROM](./sql-compat/5-3-easyuse-ora-syntax-delete-without-from.md)
+- [DATETIME 加减运算](./sql-compat/5-3-easyuse-ora-syntax-datetime-arithmetic.md)
+- [DELETE 语句支持不带 FROM](./sql-compat/5-3-easyuse-ora-syntax-delete-without-from.md)
 - [EXEC](./sql-compat/5-3-easyuse-ora-syntax-oracle-exec.md)
-- [ORDER BY兼容](./sql-compat/5-3-easyuse-ora-syntax-order-by.md)
+- [ORDER BY 兼容](./sql-compat/5-3-easyuse-ora-syntax-order-by.md)
 - [PIVOT](./sql-compat/5-3-easyuse-ora-syntax-pivot.md)
 - [RATIO_TO_REPORT](./sql-compat/5-3-easyuse-ora-syntax-ratiotoreport.md)
 - [SELECT...FOR UPDATE WAIT N](./sql-compat/5-3-easyuse-ora-syntax-forupdate-waitn.md)
 - [SQLCODE_SQLERRM_FUNCTION](./sql-compat/5-3-easyuse-ora-func-sqlcode-sqlerrm.md)
-- [SYSDATE_IS_NOW模式](./sql-compat/5-3-easyuse-ora-syntax-sysdateisnow.md)
+- [SYSDATE_IS_NOW 模式](./sql-compat/5-3-easyuse-ora-syntax-sysdateisnow.md)
 - [TABLE FUNCTION](./sql-compat/5-3-easyuse-ora-syntax-table-func.md)
 - [TABLE UDT](./sql-compat/5-3-easyuse-ora-syntax-table-udt.md)
-- [UPDATE SET多字段更新](./sql-compat/5-3-easyuse-ora-syntax-update-set.md)
+- [UPDATE SET 多字段更新](./sql-compat/5-3-easyuse-ora-syntax-update-set.md)
 - [WITH FUNCTION](./sql-compat/5-3-easyuse-ora-syntax-with-func.md)
 - [全局临时表](./sql-compat/5-3-easyuse-ora-syntax-global-temptable.md)
 - [带双引号的存储过程创建](./sql-compat/5-3-easyuse-ora-syntax-psname-quotes.md)
-- [Oracle注释风格](./sql-compat/5-3-easyuse-ora-syntax-oracle-comment.md)
-- [索引中NULL视为相同值](./sql-compat/5-3-easyuse-ora-syntax-oraclemode-nullequal.md)
+- [Oracle 注释风格](./sql-compat/5-3-easyuse-ora-syntax-oracle-comment.md)
+- [索引中 NULL 视为相同值](./sql-compat/5-3-easyuse-ora-syntax-oraclemode-nullequal.md)
 - 更多 ...
 
 ## 函数兼容
@@ -163,16 +164,16 @@ Create Table: CREATE TABLE `t1` (
 - [TRIM/LTRIM/RTRIM](./sql-compat/5-3-easyuse-ora-func-trim.md)
 - 更多 ...
 
-**注意**：以上函数在设定 `sql_mode = ORACLE` 后，行为与Oracle会更加接近；反之则保持GreatSQL的原生行为。
+**注意**：以上函数在设定 `sql_mode = ORACLE` 后，行为与 Oracle 会更加接近；反之则保持 GreatSQL 的原生行为。
 
 
 ## 存储程序兼容
 
-GreatSQL支持Oracle风格的存储程序使用方式，部分存储程序部分在 `ORACLE` 模式下做了基础结构改造，详见：[存储程序基础结构改造说明](./sql-compat/5-3-easyuse-ora-sp-basic-constructs.md)。
+GreatSQL 支持 Oracle 风格的存储程序使用方式，部分存储程序在 `ORACLE` 模式下做了基础结构改造，详见：[存储程序基础结构改造说明](./sql-compat/5-3-easyuse-ora-sp-basic-constructs.md)。
 
 ### 扩展兼容支持的存储程序
 
-下面是在 GreatSQL 中，无论 `sql_mode` 采用 *DEFAULT* 还是 *ORACLE*，都能支持 [CREATE OR REPLACE扩展](./sql-compat/5-3-easyuse-ora-sp-create-or-replace.md)，但是在不同模式下的表现也有所区别。
+下面是在 GreatSQL 中，无论 `sql_mode` 采用 *DEFAULT* 还是 *ORACLE*，都能支持 [CREATE OR REPLACE 扩展](./sql-compat/5-3-easyuse-ora-sp-create-or-replace.md)，但是在不同模式下的表现也有所区别。
 
 ### 兼容模式支持的存储程序
 
@@ -193,15 +194,15 @@ GreatSQL支持Oracle风格的存储程序使用方式，部分存储程序部分
 - [WHILE...LOOP... END LOOP](./sql-compat/5-3-easyuse-ora-sp-while.md)
 - [匿名存储块](./sql-compat/5-3-easyuse-ora-sp-anony-block.md)
 - [命名标记法传递参数](./sql-compat/5-3-easyuse-ora-sp-named-parameters.md)
-- [存储程序支持默认参数(DEFAULT)](./sql-compat/5-3-easyuse-ora-sp-default-optval.md)
-- [存储过程支持使用RETURN](./sql-compat/5-3-easyuse-ora-sp-return.md)
+- [存储程序支持默认参数（DEFAULT）](./sql-compat/5-3-easyuse-ora-sp-default-optval.md)
+- [存储过程支持使用 RETURN](./sql-compat/5-3-easyuse-ora-sp-return.md)
 - [异常处理 EXCEPTION HANDLER](./sql-compat/5-3-easyuse-ora-sp-exception-handler.md)
 - 更多 ...
 
 
-示例:
+示例：
 
-- Oracle环境下的存储程序用法:
+- Oracle 环境下的存储程序用法：
 
 ```sql
 CREATE OR REPLACE EDITIONABLE FUNCTION f0(delta INT DEFAULT 0) RETURN TIMESTAMP AS
@@ -214,7 +215,7 @@ SELECT f0(2) FROM DUAL ;
 SELECT f0() FROM DUAL ;
 ```
 
-- GreatSQL **原生模式**下的存储程序用法:
+- GreatSQL **原生模式**下的存储程序用法：
 
 ```sql
 CREATE OR REPLACE FUNCTION f1(delta INT) RETURNS TIMESTAMP

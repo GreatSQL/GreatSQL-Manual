@@ -1,4 +1,4 @@
-# Oracle兼容-语法-MERGE INTO
+# Oracle 兼容 - 语法 - MERGE INTO
 ---
 
 
@@ -35,7 +35,7 @@ merge_insert_clause:
 `MERGE INTO` 相当于 `UPDATE target_tab_name RIGHT OUTER JOIN tab_name ON (condition)`，当 `target_tab_name` 有相应匹配的数据时，就执行 `merge_update_clause` 子句；若无匹配数据时，则执行 `merge_insert_clause` 子句。
 
 - `update_condition` 是根据更新前的内容来运算。当运算结果为真时，才会更新。
-- `delete_condition` 是根据更新后的内容来运算。当运算结果为真时，才会刪除。
+- `delete_condition` 是根据更新后的内容来运算。当运算结果为真时，才会删除。
 - `insert_condition` 是根据更新前的内容来运算。当运算结果为真时，才会插入新内容。
 
 ## 3. Oracle兼容说明
@@ -46,7 +46,7 @@ merge_insert_clause:
 
 - 不支持 `EXPLAIN`。
 
-- 在触发器（`trigger`） 内，无法禁止更新ON子句所引用的列。
+- 在触发器（`trigger`）内，无法禁止更新 ON 子句所引用的列。
 
 
 ## 4. 示例

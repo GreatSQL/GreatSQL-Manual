@@ -10,7 +10,7 @@
 
 ## 2. 定义和用法
 
-GreatSQL存储过程中支持用 `SELECT|FETCH .. BULK COLLECT INTO` 获取多行数据。该用法如下所述：
+GreatSQL 存储过程中支持用 `SELECT|FETCH .. BULK COLLECT INTO` 获取多行数据。该用法如下所述：
 
 - 1. 支持用 `SELECT .. BULK COLLECT INTO` 语法取表中多行数据，并赋值给 `TABLE` 类型变量。
 
@@ -22,7 +22,7 @@ GreatSQL存储过程中支持用 `SELECT|FETCH .. BULK COLLECT INTO` 获取多�
 
 1. 在 `[SELECT|FETCH] .. BULK COLLECT INTO var` 中的变量 `var` 只支持一层表类型，比如 `var`，不支持 `a.b.var` 这种变量类型。
 
-2. 在 `FETCH .. BULK COLLECT INTO var` 中如果不加 `LIMIT n` 子句，则默认一次性最多读取 `@@select_bulk_into_batch` 行数据，其可选范围 [1, 65535]，默认值为 10000。如果制定了 `LIMIT n` 子句，但 `n > @@select_bulk_into_batch` 时，会提示错误：`ER_WRONG_BATCH_FOR_BULK_INTO`，这是为了保证不发生内存溢出。
+2. 在 `FETCH .. BULK COLLECT INTO var` 中如果不加 `LIMIT n` 子句，则默认一次性最多读取 `@@select_bulk_into_batch` 行数据，其可选范围 [1, 65535]，默认值为 10000。如果指定了 `LIMIT n` 子句，但 `n > @@select_bulk_into_batch` 时，会提示错误：`ER_WRONG_BATCH_FOR_BULK_INTO`，这是为了保证不发生内存溢出。
 
 3. 新增系统选项 `select_bulk_into_batch` 使用说明：
 

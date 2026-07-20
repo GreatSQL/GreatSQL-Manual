@@ -45,9 +45,9 @@ sp_labeled_control:
 
 ## 2. 定义和用法
 
-GreatSQL的存储过程中支持用 `label` 标记位置，并用 `GOTO label` 跳到指定标记位置。
+GreatSQL 的存储过程中支持用 `label` 标记位置，并用 `GOTO label` 跳到指定标记位置。
 
-注意：谨慎使 `GOTO` 语法，容易造成死循环。
+注意：谨慎使用 `GOTO` 语法，容易造成死循环。
 
 ## 3. Oracle兼容说明
 

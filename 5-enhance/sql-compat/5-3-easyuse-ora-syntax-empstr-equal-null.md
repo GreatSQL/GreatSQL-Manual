@@ -10,7 +10,7 @@ SET GLOBAL|SESSION sql_mode = EMPTYSTRING_EQUAL_NULL;
 
 ## 2. 定义和用法
 
-在启用 `sql_mode = EMPTYSTRING_EQUAL_NULL` 模式后，空字符串 `''` 将会被当做 `NULL` 来处理，但并不等同与 `NULL` 可以等价于空串 `''` 来使用。
+在启用 `sql_mode = EMPTYSTRING_EQUAL_NULL` 模式后，空字符串 `''` 将会被当做 `NULL` 来处理，但并不等同于 `NULL` 可以等价于空串 `''` 来使用。
 
 开启 `EMPTYSTRING_EQUAL_NULL` 模式后不仅在做数据比较、统计、等使用的过程中有影响，原有数据空串在查询显示时也会转为 `NULL`，但不会修改原始存储数据（仅在查询展示时发生变化），如下例所示：
 ```sql
@@ -70,7 +70,7 @@ greatsql> UPDATE t1 SET c1 = '' WHERE id = 4;
 Query OK, 1 row affected, 1 warning (0.00 sec)
 Rows matched: 1  Changed: 1  Warnings: 1
 
--- 加上STRIC模式后更新失败
+-- 加上STRICT模式后更新失败
 greatsql> SET sql_mode = 'EMPTYSTRING_EQUAL_NULL,STRICT_TRANS_TABLES,STRICT_ALL_TABLES';
 greatsql> UPDATE t1 SET c1 = '' WHERE id = 3;
 ERROR 1048 (23000): Column 'c1' cannot be null

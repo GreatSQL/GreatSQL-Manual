@@ -17,7 +17,7 @@ FOR var IN [REVERSE] expr1..expr2 LOOP .. END LOOP
 
 ## 3. Oracle兼容说明
 
-在 `ORACLE` 模式下，GreatSQL存储过程支持 `FOR .. LOOP` 用法。该用法如下所述：
+在 `ORACLE` 模式下，GreatSQL 存储过程支持 `FOR .. LOOP` 用法。该用法如下所述：
 
 1. 不需要事先声明 `FOR LOOP` 中的变量 `var`，直接使用 `FOR var IN expr1 .. expr2 LOOP` 语法即可。
 

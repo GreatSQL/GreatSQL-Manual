@@ -57,7 +57,7 @@ BULK COLLECT INTO { collection | :host_array }
 ```sql
 > EXECUTE IMMEDIATE 'CALL p1(?)' USING OUT var;  <--允许
 > EXECUTE IMMEDIATE 'CALL p1(?)' USING OUT @var; <--允许
-> EXECUTE IMMEDIATE 'CALL p1(?)' USING OUT TO_CAHR(@var); <-- 被禁止
+> EXECUTE IMMEDIATE 'CALL p1(?)' USING OUT TO_CHAR(@var); <-- 被禁止
 ```
 
 - 语句 `USING OUT` 将被视为 `USING IN OUT`。

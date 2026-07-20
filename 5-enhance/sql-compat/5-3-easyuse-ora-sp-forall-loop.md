@@ -17,7 +17,7 @@ FORALL var IN expr1..expr2 INSERT INTO .. VALUES var(n)
 
 ## 3. Oracle兼容说明
 
-在 `ORACLE` 模式下，GreatSQL存储过程支持 `FORALL .. LOOP` 用法。该用法如下所述：
+在 `ORACLE` 模式下，GreatSQL 存储过程支持 `FORALL .. LOOP` 用法。该用法如下所述：
 
 1. 在 `FORALL .. LOOP` 后面语句目前只支持 `INSERT`，别的用法未来版本中会增加支持。
 

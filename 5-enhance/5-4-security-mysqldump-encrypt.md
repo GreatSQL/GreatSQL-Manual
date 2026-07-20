@@ -24,7 +24,7 @@ mysqldump --encrypt=aes-256-cbc --encrypt-key-file=/data/backup/dumpkey.enc --en
 
 **备注**：
 - `--encrypt` 为加解密算法。
-- `--encrypt-key-file` 为秘钥文件。
+- `--encrypt-key-file` 为密钥文件。
 - `--encrypt-iv` 为初始化向量，部分加密算法不需要会忽略该选项，该参数必须是16位长度。
 
 如果有需要，可以将导出文件进行解密以查看备份文件内容：
@@ -39,7 +39,7 @@ mysql -e "source_decrypt decrypt-mode aes-256-cbc decrypt-key-file /data/backup/
 ```
 
 **备注**：
-其中 `--decrypt` 为加解密算法，`--decrypt-key-file` 为秘钥文件，`--decrypt-iv` 为初始化向量，部分加密算法不需要会忽略该选项。
+其中 `--decrypt` 为加解密算法，`--decrypt-key-file` 为密钥文件，`--decrypt-iv` 为初始化向量，部分加密算法不需要会忽略该选项。
 
 **使用帮助**
 更多 `mysqldump` 加解密相关参数可以加上 `--help` 查看，有以下几个：

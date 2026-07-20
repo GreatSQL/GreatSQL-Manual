@@ -1,11 +1,11 @@
 # 审计
 ---
 
-GreatSQL 8.4 版本审计功能相较于8.0版本有较大变化，从之前的插件（Plugin）工作方式改为组件（Component）工作方式。
+GreatSQL 8.4 版本审计功能相较于 8.0 版本有较大变化，从之前的插件（Plugin）工作方式改为组件（Component）工作方式。
 
 利用审计日志过滤器组件可以实现监控、记录和阻止在所选服务器上主动执行的连接或查询。
 
-启用该组件会生成一个日志文件（默认文件名`audit_filter.log`），其中包含服务器活动记录。日志文件包含有关该连接访问的连接和数据库的信息。
+启用该组件会生成一个日志文件（默认文件名 `audit_filter.log`），其中包含服务器活动记录。日志文件包含有关该连接访问的连接和数据库的信息。
 
 该组件默认使用 **mysql** 系统数据库来存储过滤器和用户帐户数据。在服务器启动时设置 `audit_log_filter.database` 参数，可以选择不同的数据库，当该参数发生变化时，需要重新执行初始化安装脚本（下面有演示）。
 
@@ -257,7 +257,7 @@ greatsql> SET GLOBAL audit_log_filter.disable=OFF;
 
 | 函数 | 简介 |
 | :--- | :--- |
-| audit_log_encryption_password_get(keyring_id)   | 此函数返回加密密码，如果不包含参数 `eyring_id`，将返回当前加密密码 |
+| audit_log_encryption_password_get(keyring_id)   | 此函数返回加密密码，如果不包含参数 `keyring_id`，将返回当前加密密码 |
 | audit_log_encryption_password_set(new_password) | 加密密码，并将新密码存储在 keyring 中，参数 `password` 为字符串，最大长度为766字节 |
 | audit_log_filter_flush()                        | 直接用 `INSERT, UPDATE, DELETE` 修改审计日志过滤器表不会立即生效，调用该函数可更新审计日志过滤策略并使之生效 |
 | audit_log_read()                                | 读取审计日志，并返回 JSON 格式字符串。如果审计日志格式不是 JSON，则产生报错 |
@@ -354,7 +354,7 @@ greatsql> SELECT audit_log_filter_set_filter('greatsql_filter',
   }
 }');
 
--- 分配过滤器给用户 greastql@%
+-- 分配过滤器给用户 greatsql@%
 greatsql> SELECT audit_log_filter_set_user('greatsql@%', 'greatsql_filter');
 
 -- 刷新配置（非必须）
@@ -417,7 +417,7 @@ $ mysql -h127.0.0.1 -ugreatsql -pXX -P3306 db1 -e "SELECT * FROM t1 LIMIT 1"
 
 - 仅记录顶级语句，存储过程或触发器中的语句不记录。不记录 `LOAD DATA` 等语句的文件内容。
 
-- 如果与MGR一起使用，则要求将组件安装在用于在MGR各成员节点服务器上。
+- 如果与 MGR 一起使用，则要求将组件安装在用于在 MGR 各成员节点服务器上。
 
 **扫码关注微信公众号**
 

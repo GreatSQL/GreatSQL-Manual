@@ -1,4 +1,4 @@
-# Oracle兼容-语法-Oracle(+)语法
+# Oracle 兼容 - 语法 - Oracle(+) 语法
 ---
 
 
@@ -288,7 +288,7 @@ greatsql> SELECT c1(+) FROM t1;
 ERROR 7526 (HY000): OuterJoin: outer join operator (+) is not allowed here
 ```
 
-- 9.以下两种情况，`(+)`无意义会被可忽略
+- 9. 以下两种情况，`(+)` 无意义会被忽略
   - a. 如果两表有多个连接条件，则必须为每个关联条件指定 `(+)`，否则 `(+)` 没有意义，会被忽略，相当于`INNER JOIN`。
   - b. 当 `(+)` 关联的表一个在外查询，一个在内查询时，例如：`SELECT * FROM t1 WHERE t1.c1 = (SELECT a FROM t2 WHERE t2.c1(+) = t1.c1);`。
 

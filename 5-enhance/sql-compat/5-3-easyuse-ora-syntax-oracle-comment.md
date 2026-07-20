@@ -1,4 +1,4 @@
-# Oracle兼容-语法-Oracle COMMENT
+# Oracle 兼容 - 语法 - Oracle COMMENT
 ---
 
 
@@ -141,7 +141,7 @@ greatsql> SELECT * FROM v1;
 +----+----+----+
 ```
 
-- 示例3. 在存储过程(`STORE PROCEDURE`)中使用注释符
+- 示例3. 在存储过程(`STORED PROCEDURE`)中使用注释符
 
 ```
 -- 在示例1的基础上创建存储过程

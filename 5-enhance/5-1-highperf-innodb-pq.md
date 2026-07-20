@@ -11,7 +11,7 @@ GreatSQL中对执行计划进行多线程改造，每个子线程执行计划与
 
 优化后，GreatSQL在TPC-H测试中表现优异，最高可提升30倍，平均提升15倍。该特性适用于周期性数据汇总报表之类的SAP、财务统计等业务。
 
-下面是在华为鲲鹏Hi1616*2、256G内存、NVMeSSD存储上进行TPC-H 50G的测试结果：
+下面是在华为鲲鹏 Hi1616*2、256G 内存、NVMe SSD 存储上进行 TPC-H SF50 的测试结果：
 
 ![输入图片说明](./5-1-highperf-innodb-pq-01.jpg)
 
@@ -72,7 +72,7 @@ parallel_default_dop = 4;
 | Dynamic Variable	| YES |
 | Permitted Values |	[0, 1024] |
 | Default	| 4 |
-| Description	| 设置每个SQL语句的并行查询的最大并发度。<br/>SQL语句的查询并发度会根据表的大小来动态调整，如果表的二叉树太小（表的切片划分数小于并行度），则会根据表的切片划分数来设置该查询的并发度。每一个查询的最大并行度都不会超过parallel_default_dop参数设置的值。<br/>当设置为0时，表示并行度为0，也即不启用并行查询特性。|
+| Description	| 设置每个SQL语句的并行查询的最大并发度。<br/>SQL 语句的查询并发度会根据表的大小来动态调整，如果表的 B+ 树太小（表的切片划分数小于并行度），则会根据表的切片划分数来设置该查询的并发度。每一个查询的最大并行度都不会超过 `parallel_default_dop` 参数设置的值。<br/>当设置为0时，表示并行度为0，也即不启用并行查询特性。|
 
 <br/>
 
@@ -125,15 +125,15 @@ global级别，由于总内存限制，导致未能执行并行执行的查询�
 
 ## InnoDB PQ和MySQL并行读取有什么不同
 
-从MySQL 8.0.14开始，InnoDB支持并行读取聚集索引，这可以提高CHECK TABLE的性能。但该特性并不适用于辅助索引扫描。`innodb_parallel_read_threads` 选项必须设置为大于1的值才能启用聚集索引并行读取。默认值为4。用于执行并行聚集索引读取的实际线程数由 `innodb_parallel_read_threads` 选项值或要扫描的索引子树数（以较小者为准）决定。
+从 MySQL 8.0.14 开始，InnoDB 支持并行读取聚集索引，这可以提高 CHECK TABLE 的性能。但该特性并不适用于辅助索引扫描。`innodb_parallel_read_threads` 选项必须设置为大于 1 的值才能启用聚集索引并行读取。默认值为 4。用于执行并行聚集索引读取的实际线程数由 `innodb_parallel_read_threads` 选项值或要扫描的索引子树数（以较小者为准）决定。
 
-从MySQL 8.0.17开始，聚集索引并行读取支持表分区。
+从 MySQL 8.0.17 开始，聚集索引并行读取支持表分区。
 
-可以看到，MySQL中的并行读取只支持聚集索引，不支持辅助索引，通常只在执行 `CHECK TABLE` 或执行 `COUNT(*)` 基于聚集索引统计数据时才有优化作用。
+可以看到，MySQL 中的并行读取只支持聚集索引，不支持辅助索引，通常只在执行 `CHECK TABLE` 或执行 `COUNT(*)` 基于聚集索引统计数据时才有优化作用。
 
-而GreatSQL InnoDB PQ同时支持聚集索引和辅助索引，尤其是在大表并行查询时优势更明显，因为此时有多个B+树字数，可以支持更高并发度。
+而 GreatSQL InnoDB PQ 同时支持聚集索引和辅助索引，尤其是在大表并行查询时优势更明显，因为此时有多个 B+ 树子树，可以支持更高并发度。
 
-GreatSQL InnoDB PQ还支持在线动态启用/关闭，即便是在全局关闭的情况下也可以在某个会话中利用HINT语法单独启用。
+GreatSQL InnoDB PQ 还支持在线动态启用/关闭，即便是在全局关闭的情况下也可以在某个会话中利用 HINT 语法单独启用。
 
 例如以TPC-H Q1的查询场景：
 
@@ -369,7 +369,7 @@ Query OK, 150000000 rows affected (3 min 14.68 sec)
 greatsql> select * into outfile '/opt/tpch/o1.txt' from orders force index(PRIMARY);
 Query OK, 150000000 rows affected (3 min 14.04 sec)
 ```
-可以看到，在上述 `SELECT * FROM orders` 和 `SELECT COUNT(*) FROM orders` 这两种全表扫描的场景下，强行使用InnoDB PQ HINT并没有达到加速优化效果。
+可以看到，在上述 `SELECT * FROM orders` 和 `SELECT COUNT(*) FROM orders` 这两种全表扫描的场景下，强行使用 InnoDB PQ HINT 并没有达到加速优化效果。
 
 在上述两种场景下，仍旧采用原生默认的执行方式即可。
 

@@ -156,7 +156,7 @@ greatsql> SELECT * from t1;
 +---+-------------------------------------------------------+
 
 -- 而在 `DEFAULT` 模式下，相同触发事件按创建触发器的顺序逐个执行
-greatsql> SET sql_mode = ORACLE;
+greatsql> SET sql_mode = DEFAULT;
 
 greatsql> INSERT INTO t1 VALUES(-5, '-row5');
 Query OK, 1 row affected (0.00 sec)

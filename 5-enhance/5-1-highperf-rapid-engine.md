@@ -63,7 +63,7 @@ greatsql> SHOW WARNINGS;
 +---------+------+----------------------------------------------------+
 1 row in set (0.00 sec)
 ```
-意思是当前Rapid引擎被使用中，还不能被卸载，这是需要将相关数据表从Rapid引擎中移除：
+意思是当前Rapid引擎被使用中，还不能被卸载，这时需要将相关数据表从Rapid引擎中移除：
 ```sql
 ALTER TABLE t1 SECONDARY_ENGINE = NULL;
 ```
@@ -97,7 +97,7 @@ Create Table: CREATE TABLE `t1` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci SECONDARY_ENGINE=rapid
 ```
 
-从MySQL 8.0.18开始，为了支持`SECONDARY ENGINE`属性，新增选项 `show_create_table_skip_secondary_engine` 用于设置在执行 `SHOW CREATE TABLE` 显示表结构DDL时是否要同时显示`SECONDARY ENGINE`属性，其默认值是OFF，即默认要显示。此外，`mysqldump`中也新增相应选项 `show-create-table-skip-secondary-engine`，默认值是FALSE（和OFF一样），其作用相同。
+从 MySQL 8.0.18 开始，为了支持 `SECONDARY ENGINE` 属性，新增选项 `show_create_table_skip_secondary_engine` 用于设置在执行 `SHOW CREATE TABLE` 显示表结构 DDL 时是否要同时显示 `SECONDARY ENGINE` 属性，其默认值是 OFF，即默认要显示。此外，`mysqldump` 中也新增相应选项 `show-create-table-skip-secondary-engine`，默认值是 FALSE（和 OFF 一样），其作用相同。
 
 接下来，执行下面SQL命令，写入一些数据：
 ```sql
@@ -254,7 +254,7 @@ possible_keys: NULL
 ```
 选项 `use_secondary_engine` 的详细解释参见下方 **[5.1 新增系统选项](./5-1-highperf-rapid-engine.md#51-新增系统选项)**。
 
-看下面一个简单对比测试结果，对一个TPC-H 1G的表执行查询：
+看下面一个简单对比测试结果，对一个 TPC-H SF1 的表执行查询：
 ```sql
 greatsql> SELECT /*+ SET_VAR(use_secondary_engine=0) */ COUNT(*) FROM lineitem;
 +----------+
@@ -283,7 +283,7 @@ EXPLAIN: -> Aggregate: count(0)  (cost=1197779.30 rows=1)
     -> Table scan on lineitem in secondary engine RAPID  (cost=598889.90 rows=5988894)
 
 -- 将 secondary_engine_cost_threshold 阈值调大到1197779
-greatsql> SELECT /*+ SET_VAR(use_secondary_engine=1 SET_VAR(secondary_engine_cost_threshold=1197779) */ COUNT(*) FROM lineitem;
+greatsql> SELECT /*+ SET_VAR(use_secondary_engine=1) SET_VAR(secondary_engine_cost_threshold=1197779) */ COUNT(*) FROM lineitem;
 +----------+
 | count(*) |
 +----------+
@@ -294,17 +294,17 @@ greatsql> SELECT /*+ SET_VAR(use_secondary_engine=1 SET_VAR(secondary_engine_cos
 可以看到，虽然 `lineitem` 表已经加载到Rapid引擎中，但因为调大 `secondary_engine_cost_threshold` 阈值，实际上还是没用上。
 
 ###  Rapid引擎使用约束
-在GreatSQL 8.0.32-25版本中，Rapid引擎支持的语句范围如下：
+在 GreatSQL 8.0.32-25 版本中，Rapid 引擎支持的语句范围如下：
 
-- 表类型：InnoDB引擎的normal表。
+- 表类型：InnoDB 引擎的 normal 表。
 
-- SELECT stmt：不包含 `SELECT INTO, SELECT locking clause` 等语法。
+- SELECT 语句：不包含 `SELECT INTO`、`SELECT locking clause` 等语法。
 
-- PREPARE stmt：仅支持 `PREPARE SELECT`查询。
+- PREPARE 语句：仅支持 `PREPARE SELECT` 查询。
 
 其余类型的SQL语法暂时还不支持。
 
-Rapid引擎暂时不支持表分区（partition），不支持外键（foreign key）。
+Rapid 引擎暂时不支持表分区（partition），不支持外键（foreign key）。
 
 ## 数据导入
 
@@ -499,15 +499,15 @@ COMMITTED_GTID_SET: 4fb86f5b-b028-11ee-92b8-d08e7908bcb1:1-339
 
 几个选项分别解释如下：
 
-- `secondary_engine_read_delay_time_threshold`：指定辅助引擎查询时，数据的最大允许延时时间，时间单位为秒。默认值为 **60**，可选范围为 **[0 ~ ULONG_MAX]**。如果选项值为0，表示不允许延迟，即如果Rapid擎相对主引擎的数据有延迟，都不允许查询。如果设置不为0，则实际延迟小于选项值，可以查询；否则不允许查询。
-- `secondary_engine_read_delay_gtid_threshold`：执行辅助引擎查询时，允许延迟的最大事务数。默认值为 **100**，即允许100个事务内的延迟；可选范围为 **[0 ~ ULONG_MAX]**。如果选项值为0，表示不允许延迟，即如果辅助引擎相对主引擎的数据有延迟，都不允许查询。如果设置不为0，则实际延迟小于选项值，可以查询；否则不允许查询。
-- `secondary_engine_read_delay_wait_timeout`：指定辅助引擎查询时，如果数据出现延迟，不管是时间延迟，还是基于GTID的事务延迟，此时是不允许查询的。本选项用于设置允许当出现这种状况时，指定一个查询超时时间，在触发超时之前，可以持续等待并检测延迟情况，如果延迟降低到允许范围内，则可以继续查询；否则，如果触发超时，则最后报错。时间单位为秒，默认值为 **60**，可选范围为 **[0 ~ ULONG_MAX]**。如果设置为0，则如果延迟超限，直接报错。如果设置不为0，则以实际的超时时间为准。
+- `secondary_engine_read_delay_time_threshold`：指定辅助引擎查询时，数据的最大允许延时时间，时间单位为秒。默认值为 **60**，可选范围为 **[0 ~ ULONG_MAX]**。如果选项值为 0，表示不允许延迟，即如果 Rapid 引擎相对主引擎的数据有延迟，都不允许查询。如果设置不为 0，则实际延迟小于选项值，可以查询；否则不允许查询。
+- `secondary_engine_read_delay_gtid_threshold`：执行辅助引擎查询时，允许延迟的最大事务数。默认值为 **100**，即允许 100 个事务内的延迟；可选范围为 **[0 ~ ULONG_MAX]**。如果选项值为 0，表示不允许延迟，即如果辅助引擎相对主引擎的数据有延迟，都不允许查询。如果设置不为 0，则实际延迟小于选项值，可以查询；否则不允许查询。
+- `secondary_engine_read_delay_wait_timeout`：指定辅助引擎查询时，如果数据出现延迟，不管是时间延迟还是基于 GTID 的事务延迟，此时是不允许查询的。本选项用于设置允许当出现这种状况时，指定一个查询超时时间，在触发超时之前，可以持续等待并检测延迟情况，如果延迟降低到允许范围内，则可以继续查询；否则，如果触发超时，则最后报错。时间单位为秒，默认值为 **60**，可选范围为 **[0 ~ ULONG_MAX]**。如果设置为 0，则延迟超限时直接报错。如果设置不为 0，则以实际的超时时间为准。
 - `secondary_engine_read_delay_wait_mode`：本选项是对`secondary_engine_read_delay_wait_timeout`的补充，本选项指定了等待超时的模式，有两个可选值 **[WAIT_FOR_DB, WAIT_FOR_TRX]**，默认为 **WAIT_FOR_TRX**。如果设置为**WAIT_FOR_DB**，则在 `secondary_engine_read_delay_wait_timeout` 设定的超时范围内，每次都以主引擎最新状态进行对比；如果设置为 **WAIT_FOR_TRX**，则在`secondary_engine_read_delay_wait_timeout` 设定的超时范围内，每次都以查询语句/事务开启时的状态进行对比。所以，如果采用**WAIT_FOR_DB** 模式，并将 `secondary_engine_read_delay_wait_timeout` 设置为最大值，可能导致查询永远满足不了延迟条件的可能。
 - `secondary_engine_read_delay_level`：指定辅助引擎查询时，支持延迟查询的表的严格级别。支持两个可选值 **[ALL_TABLES, TABLE_START_INC_TASK]**，默认为**TABLE_START_INC_TASK**。当设置为 **ALL_TABLES** 时，不管该表是否开启了增量导入任务，都需要检查延迟。如果设置为 **TABLE_START_INC_TASK**，则如果表没有开启增量导入任务、或者增量导入任务因任何原因停止，对该表查询时，不检查和主引擎的延迟。
 
 ## 解读Rapid引擎
 ###  体系结构
-Rapid引擎整体架构如下图所示
+Rapid 引擎整体架构如下图所示：
 ![GreatSQL Rapid引擎体系结构图](./5-1-highperf-GreatSQL-Rapid-arch.png)
 
 - Rapid引擎的核心代码是采用C++11开发，该引擎没有任何其他的依赖。
@@ -537,7 +537,7 @@ Rapid引擎整体架构如下图所示
 
 1. 全部写入完成后，自动清理WAL日志文件和临时文件。
 
-当加载到Rapid引擎的数据量特别大时，需要用到大量内存块，这时有可能发生发生报错导致加载失败。这时可以尝试调大内核参数`vm.max_map_count`。它决定了一个进程可以拥有的最大内存映射区域数。内存映射区域是指内存映射文件、匿名内存映射等。这个参数对于一些可能要用到大量内存的应用程序（尤其是数据库服务进程）特别重要，因为它们在运行时会创建大量的内存映射区域。
+当加载到 Rapid 引擎的数据量特别大时，需要用到大量内存块，这时有可能发生报错导致加载失败。这时可以尝试调大内核参数`vm.max_map_count`。它决定了一个进程可以拥有的最大内存映射区域数。内存映射区域是指内存映射文件、匿名内存映射等。这个参数对于一些可能要用到大量内存的应用程序（尤其是数据库服务进程）特别重要，因为它们在运行时会创建大量的内存映射区域。
 
 内核参数 `vm.max_map_count` 的默认值通常是较小的数值，例如 65530。这个值对于要加载大量数据到Rapid引擎中的场景可能就不够用了，需要适当调大。编辑 `/etc/sysctl.conf` 系统文件，增加下面一行内容：
 ```ini
@@ -590,43 +590,43 @@ SELECT locking语句（... INTO ...FOR UPDATE）;
 
 #### 表支持限制
 
-1.目前，为了保证查询效率，一条查询语句中使用表个数不能超过20个。
+1. 目前，为了保证查询效率，一条查询语句中使用的表个数不能超过 20 个。
 
 2.语句中涉及到的表：
 
-  1）仅支持Innodb基本表。
+  1）仅支持 InnoDB 基本表。
   2）不支持查询中包含系统表。
-  3) 不支持view、递归cte、table_function，以及用户创建的临时表。
-  3) Rapid引擎不支持表分区（partition）。
-  4）带有隐藏列的表不支持。
+  3）不支持 view、递归 CTE、table_function，以及用户创建的临时表。
+  4）Rapid 引擎不支持表分区（partition）。
+  5）带有隐藏列的表不支持。
 
 #### 列支持限制
 
-1.不支持生成列；
+1. 不支持生成列；
 
-2.不支持的列类型有：bit、decimal类型(总长度超过38或者为unsigned)、udt、enum、set、spatial datatype、json、blob、text；
+2. 不支持的列类型有：BIT、DECIMAL 类型（总长度超过 38 或为 UNSIGNED）、UDT、ENUM、SET、SPATIAL DATATYPE、JSON、BLOB、TEXT；
 
 #### 列字符集限制
 
-1.要求所有列字符集为utf8mb4，Accent insensitive(ai)，ci/cs;
+1. 要求所有列字符集为 utf8mb4，Accent insensitive（ai），ci/cs；
 
-2.不支持binary、koi8r、ucs2;
+2. 不支持 binary、koi8r、ucs2；
 
-3.不支持pad space类型的字符集;
+3. 不支持 pad space 类型的字符集；
 
 #### 函数及表达式支持范围
 
-1.支持的所有函数及操作符参考：[支持的函数及操作符](./5-1-highperf-ap-supported-functions.md)。
+1. 支持的所有函数及操作符参考：[支持的函数及操作符](./5-1-highperf-ap-supported-functions.md)。
 
-2.不支持的函数类型有：`BIT_AND`, `BIT_XOR`, `BIT_OR`, `WM_CONCAT`, `LISTAGG`, `GROUP_CONCAT`。
+2. 不支持的函数类型有：`BIT_AND`、`BIT_XOR`、`BIT_OR`、`WM_CONCAT`、`LISTAGG`、`GROUP_CONCAT`。
 
-3.Window函数基础形式已经全面支持，但有以下几种形式目前尚不支持：
+3. Window 函数基础形式已经全面支持，但有以下几种形式目前尚不支持：
 
-* Window函数不支持DISTINCT，不支持Window函数嵌套；
+* Window 函数不支持 DISTINCT，不支持 Window 函数嵌套；
 
 * 当 `windowing_use_high_precision=OFF` 的时候，聚集函数仅支持`MIN()`和`MAX()`；
 
-* Window函数不支持KEEP语句，例句如下：
+* Window 函数不支持 KEEP 语句，例句如下：
 
 ```sql
 SELECT deptno,
@@ -636,41 +636,41 @@ FROM emp
 GROUP BY deptno;
 ```
 
-4.聚集函数：不支持的类型有`JSON_OBJECTAGG`, `JSON_ARRAYAGG`, `RATIO_TO_REPORT`, `ST_COLLECT()`及用户自定义函数。
+4. 聚集函数：不支持的类型有 `JSON_OBJECTAGG`、`JSON_ARRAYAGG`、`RATIO_TO_REPORT`、`ST_COLLECT()` 及用户自定义函数。
 
-5.不支持`ROW()`函数：`SELECT ROW(1, 'lilei', 25) AS person`。
+5. 不支持 `ROW()` 函数：`SELECT ROW(1, 'lilei', 25) AS person`。
 
-6.不支持`ORDER BY @var`，其中 @var 是临时变量。这种用法将无法走Rapid引擎，但不会报告语法错误。
+6. 不支持 `ORDER BY @var`，其中 @var 是临时变量。这种用法将无法走 Rapid 引擎，但不会报告语法错误。
 
-7.常量表达式中不支持`NAME_CONST()`函数，例如：`NAME_CONST('flag', 1)`。
+7. 常量表达式中不支持 `NAME_CONST()` 函数，例如：`NAME_CONST('flag', 1)`。
 
-8.不支持两个时间类字段的加减乘除（允许与常量加减），例如：`SELECT TO_DATE(f1, 'YYYY-MM-DD') - TO_DATE(f2,'YYYY-MM-DD') FROM t1;`。
+8. 不支持两个时间类字段的加减乘除（允许与常量加减），例如：`SELECT TO_DATE(f1, 'YYYY-MM-DD') - TO_DATE(f2, 'YYYY-MM-DD') FROM t1;`。
 
-9.不支持时间类函数`CAST(timestamp as bool)`，例如：`SELECT ...FROM ...WHERE DATE '1998-12-01' - INTERVAL '90' DAY;`。
+9. 不支持时间类函数 `CAST(timestamp as bool)`，例如：`SELECT ... FROM ... WHERE DATE '1998-12-01' - INTERVAL '90' DAY;`。
 
-10.不支持Oracle函数兼容行为。
+10. 不支持 Oracle 函数兼容行为。
 
-11.不支持多列IN子查询，如下例所示
+11. 不支持多列 IN 子查询，如下例所示：
 
 ```sql
-greatql> SELECT * FROM t1 WHERE (s1,s2) IN (SELECT s1,MAX(s1) FROM t2...);  
+greatsql> SELECT * FROM t1 WHERE (s1,s2) IN (SELECT s1,MAX(s1) FROM t2...);
 ```
 
 这种用法将无法走Rapid引擎，但不会报告语法错误。
 
 #### 其他使用限制说明
 
-1.时区不支持设置成含有夏令时的时区写法;
+1. 时区不支持设置成含有夏令时的时区写法；
 
-2.客户端协议类型为Protocol::PROTOCOL_PLUGIN不支持;
+2. 客户端协议类型为 Protocol::PROTOCOL_PLUGIN 时不支持；
 
-3.开启强制访问控制的情况不支持: `start_with_mandatory_access_control` 为on不支持；
+3. 开启强制访问控制的情况不支持：`start_with_mandatory_access_control` 为 ON 时不支持；
 
-4.开启 `sql_auto_is_null` 时不支持。`sql_auto_is_null` 是GreatSQL中的一个用于开启或关闭空值检测的参数。当参数值为1时，空值检测被开启；当为OFF时，空值检测被关闭。此参数的设定值是全局的，可以控制SQL语句中对空值的检测是否被系统执行，设定值可在GreatSQL的配置文件中做出变更；
+4. 开启 `sql_auto_is_null` 时不支持。`sql_auto_is_null` 是 GreatSQL 中用于开启或关闭空值检测的参数。当参数值为 ON 时，空值检测被开启；当为 OFF 时，空值检测被关闭。此参数的设定值是全局的，可以控制 SQL 语句中对空值的检测是否被系统执行，设定值可在 GreatSQL 的配置文件中做出变更；
 
-5.设置了 `max_join_size` 不支持，`max_join_size` 参数是用来限制SELECT语句中join操作的最大返回数据量。当join操作返回的数据量超该参数设置的值时，GreatSQL会抛出错误，防止内存或者磁盘空间不足。如果设置了该参数，可能会出现语句不能正常报错的现象；
+5. 设置了 `max_join_size` 不支持，`max_join_size` 参数用来限制 SELECT 语句中 JOIN 操作的最大返回数据量。当 JOIN 操作返回的数据量超过该参数设置的值时，GreatSQL 会抛出错误，防止内存或磁盘空间不足。如果设置了该参数，可能会出现语句不能正常报错的现象；
 
-6.结果集顺序差异，注意：对于不带ORDER BY的语句（尤其是LIMIT语句），其执行结果、执行结果的顺序可能和GreatSQL原生结果不同。这时候要根据实际SQL语句判定执行结果是否正确；
+6. 结果集顺序差异，注意：对于不带 ORDER BY 的语句（尤其是 LIMIT 语句），其执行结果、执行结果的顺序可能和 GreatSQL 原生结果不同。需要根据实际 SQL 语句判定执行结果是否正确；
 
 ### EXPLAIN语句使用限制
 
@@ -704,33 +704,33 @@ Rapid引擎支持以下数据类型
 
 数据支持精度范围有限制：
 
-1.DATE：不支持不合法的日期，例如"0000-00-00"。month取值范围为[1, 12]，day取值范围为[1, 31]，day的取值范围上限视月份而定；
+1. DATE：不支持不合法的日期，例如 "0000-00-00"。month 取值范围为 [1, 12]，day 取值范围为 [1, 31]，day 的取值范围上限视月份而定；
 
-2.TIME：不支持负数范围的时间，不支持大于24:00:00.000000的时间。仅支持[00:00:00.000000, 24:00:00.000000]范围内的合法时间。不支持四舍五入的比较方式，会默认比较全部的6位小数部分。不受限制于字段的定义；
+2. TIME：不支持负数范围的时间，不支持大于 24:00:00.000000 的时间。仅支持 [00:00:00.000000, 24:00:00.000000] 范围内的合法时间。不支持四舍五入的比较方式，会默认比较全部的 6 位小数部分。不受限制于字段的定义；
 
-3.DATETIME/TIMESTAMP：其中的date部分，支持限制同上述的date类型；其中的time部分，支持限制同上述的time类型；
+3. DATETIME/TIMESTAMP：其中的 date 部分，支持限制同上述的 date 类型；其中的 time 部分，支持限制同上述的 time 类型；
 
-4.数值常量也只能支持在数据的精度范围内，如：id < -9223372036854775808；
+4. 数值常量也只能支持在数据的精度范围内，如：`id < -9223372036854775808`；
 
 ### 类型隐式转换
 
-1.数据类型仅支持严格模式下的数据，非严格模式下的时间等类型均不支持；
+1. 数据类型仅支持严格模式下的数据，非严格模式下的时间等类型均不支持；
 
-2.字符串转换成数值类型，原生模式下如果出现warning将都不支持，例如：
+2. 字符串转换成数值类型，原生模式下如果出现 warning 将都不支持，例如：
 
 ```sql
 greatsql> SELECT d FROM t1 WHERE d > 'A'; -- d列为DOUBLE类型
 ERROR 3877 (HY000): Conversion Error: Could not convert string 'A' to DOUBLE
 ```
 
-3.常量数值转换成时间类型均不支持，例如：
+3. 常量数值转换成时间类型均不支持，例如：
 
 ```sql
-greatsql> SELECT * FROM t1 WHERE t <> 20380119061407; -- t列为DATETIME类型
+greatsql> SELECT * FROM t1 WHERE t <> 20380119061407; -- t 列为 DATETIME 类型
 ERROR 3877 (HY000): Conversion Error: Unimplemented type for cast (BIGINT -> TIMESTAMP)
 ```
 
-4.YEAR 类型，负数字符串转换失败，例如：
+4. YEAR 类型，负数字符串转换失败，例如：
 
 ```sql
 greatsql> SELECT * FROM t1 WHERE t > '-1'; -- t列为YEAR类型
@@ -869,7 +869,7 @@ $ ls -lh duckdb.data.tmp/
 | 1TB | 300GB | 64 |
 
 ::: tip 小贴士
-GreatSQL社区版的Rapid引擎中参数`rapid_worker_threads`最大上限为4，如果需要获得更高并发性能，可以联系我们提供解决方案。
+GreatSQL 社区版的 Rapid 引擎中参数 `rapid_worker_threads` 最大上限为 4，如果需要获得更高并发性能，可以联系我们提供解决方案。
 :::
 
 Rapid引擎内部还会额外使用一些小块内存，这部分内存不受 `rapid_memory_limit` 选项控制，这些小内存块的消耗与 `rapid_worker_threads` 以及并行执行SQL查询请求的数量正相关。因此Rapid引擎实际使用的内存通常会比 `rapid_memory_limit` 大一点。
@@ -978,9 +978,9 @@ GreatSQL Rapid 引擎性能表现优异，在 32C64G 测试机环境下，TPC-H 
 
 ## 注意事项
 
-- 当前Rapid引擎的动态库文件仅支持运行在X86/ARM架构下的CentOS 7/8系统，或对应glibc版本分别是2.17和2.28，其他环境暂不支持。
-- 用户数据表主引擎只能是InnoDB引擎，不支持MyISAM等其他引擎。
-- 当前Rapid引擎还处于Alpha版本阶段，尚未达到GA（General Availability）阶段，重要线上生产环境中使用需谨慎。
+- 当前 Rapid 引擎的动态库文件仅支持运行在 X86/ARM 架构下的 CentOS 7/8 系统，或对应 glibc 版本分别是 2.17 和 2.28，其他环境暂不支持。
+- 用户数据表主引擎只能是 InnoDB 引擎，不支持 MyISAM 等其他引擎。
+- 当前 Rapid 引擎还处于 Alpha 版本阶段，尚未达到 GA（General Availability）阶段，重要线上生产环境中使用需谨慎。
 - 数据库实例重启后，查询个别Rapid引擎表可能会提示无法使用Rapid引擎加速，这时可以尝试执行 `ALTER TABLE ... SECONDARY_LOAD` 将该表再次加载到Rapid引擎中，实际上无需重新加载一次，速度非常快，之后就可以使用Rapid引擎了。
 - 由于底层存储结构的差异，用户从InnoDB主引擎和Rapid辅助引擎分别读取数据时，如果不加相同的排序规则，则读取到的数据顺序可能不一致。
 - 运行 OLAP 类查询通常需要更多内存，运行结束后内存可能无法立即回收，导致再次执行 OLAP 查询时会报告类似下面的错误，这种情况下可以耐心再等一段时间后再执行查询，应该就可以了。如果还是会报错，可以尝试适当加大 `rapid_memory_limit` 选项值。

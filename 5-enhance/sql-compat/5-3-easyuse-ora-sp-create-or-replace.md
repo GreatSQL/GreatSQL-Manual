@@ -12,7 +12,7 @@ CREATE OR REPLACE FUNCTION func_name ...
 
 ## 2. 定义和用法
 
-GreatSQL支持 `CREATE OR REPLACE` 创建存储过程/存储函数，无论是在 `DEFAULT` 还是 `ORACLE` 模式均支持。
+GreatSQL 支持 `CREATE OR REPLACE` 创建存储过程/存储函数，无论是在 `DEFAULT` 还是 `ORACLE` 模式均支持。
 
 ## 3. 示例
 

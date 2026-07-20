@@ -19,7 +19,7 @@ SUBSTR(string, pos [, substring_length] )
 - 若`substring_length`未指定，表示取到`string`的最后一个字符为止。
 - 若`substring_length`小于等于0，会传回空字符。
 - 若`string`、`pos`、`substring_length`任意一个值为NULL，则返回NULL。
-- 当`string中包含转义字符（例如：`\0`、`\'`、`''`、`\"`、`\\`、`\b`、`\B`、`\n`、`\N`、`\r`、`\R`、`\t`、`\T`、`\z`、`\Z`）时，不会视为2个字符，而视为1个字符来处理。
+- 当`string`中包含转义字符（例如：`\0`、`\'`、`''`、`\"`、`\\`、`\b`、`\B`、`\n`、`\N`、`\r`、`\R`、`\t`、`\T`、`\z`、`\Z`）时，不会视为2个字符，而视为1个字符来处理。
 
 
 ## 3. Oracle兼容说明

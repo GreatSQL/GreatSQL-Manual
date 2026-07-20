@@ -3,7 +3,7 @@
 
 ```
 EXPLAIN PLAN FOR
-  [STATMENT]
+  [STATEMENT]
 ```
 
 该语法仅为了Oracle语法能够兼容，实际功能与原生的EXPLAIN一样。

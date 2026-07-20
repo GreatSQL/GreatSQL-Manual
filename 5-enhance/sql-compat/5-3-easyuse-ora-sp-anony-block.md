@@ -20,7 +20,7 @@ END;
 
 ## 2. 定义和用法
 
-在GreatSQL中支持类似Oracle风格的匿名块用法。
+在 GreatSQL 中支持类似 Oracle 风格的匿名块用法。
 
 ## 3. 示例
 

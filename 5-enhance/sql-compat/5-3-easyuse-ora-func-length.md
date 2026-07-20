@@ -15,7 +15,7 @@ LENGTH(data)
 
 因为GreatSQL已原生支持 `LENGTH()` 函数，因此想要在GreatSQL中使用扩展后的 `LENGTH()` 函数时，需要先执行 `SET sql_mode = ORACLE;` 激活Oracle兼容模式。
 
-对于个别转义字符如 ‘‘\n’’，因为GreatSQL会将其自动转为特殊字符，因此最后结果是算作1个字符而不是2个字符。
+对于个别转义字符如 ‘\n’，因为GreatSQL会将其自动转为特殊字符，因此最后结果是算作1个字符而不是2个字符。
 
 对于表达式比如 `LENGTH(''+1)` ，目前ORACLE mode下支持数字转字符串，最后结果变成数值字符串的长度，这个动作与Oracle的不一致。
 

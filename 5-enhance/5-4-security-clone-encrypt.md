@@ -3,7 +3,7 @@
 
 从 GreatSQL 8.0.32-25 起支持在执行 Clone 备份时加密备份文件，以及对加密后的备份文件解密。
 
-## CLONE备份加密
+## CLONE 备份加密
 在执行 Clone 前，执行下面的 SQL 命令先设置选项 `clone_encrypt_key_path` 以开启加密功能。
 
 ```sql
@@ -21,32 +21,32 @@ Jmfyvubtms66kIcHwHco8XeOYPA6GiQb86U
 ```
 
 该文件共有三行，分别为：
-- 第一行，加密模式：`aes-128-cbc`，表示使用128位密钥长度和cbc模式进行加密。
-- 第二行，密钥：`Jmfyvubtms66kIcHwHco8XeOYPA6GiQb86U`，允许的密钥长度为128、192和256，允许的模式值为ECB、CBC、CFB1、CFB8、CFB128和OFB。
-- 第三行，加密向量：`1234567890123456`，要求长度为16位。
+- 第一行，加密模式：`aes-128-cbc`，表示使用 128 位密钥长度和 CBC 模式进行加密。
+- 第二行，密钥：`Jmfyvubtms66kIcHwHco8XeOYPA6GiQb86U`，允许的密钥长度为 128、192 和 256，允许的模式值为 ECB、CBC、CFB1、CFB8、CFB128 和 OFB。
+- 第三行，加密向量：`1234567890123456`，要求长度为 16 位。
 
-接下来就可以进行CLONE加密备份了。CLONE支持几种不同的备份模式：备份（远程实例 or 本地实例）数据到本地存储中，将远程实例数据备份并覆盖本地实例。
+接下来就可以进行 CLONE 加密备份了。CLONE 支持几种不同的备份模式：备份（远程实例 or 本地实例）数据到本地存储中，将远程实例数据备份并覆盖本地实例。
 
-想要执行CLONE备份，需要先给运行的用户至少授予 `BACKUP_ADMIN` 权限，例如：
+想要执行 CLONE 备份，需要先给运行的用户至少授予 `BACKUP_ADMIN` 权限，例如：
 
 ```sql
 CREATE USER bkuser IDENTIFIED BY 'bkuser';
 GRANT SELECT, BACKUP_ADMIN ON *.* TO bkuser;
 ```
 
-如果要备份远程实例，还需要先设置好选项 `clone_valid_donor_list`（如果是将本地实例CLONE备份到本地存储中则不需要设置），例如：
+如果要备份远程实例，还需要先设置好选项 `clone_valid_donor_list`（如果是将本地实例 CLONE 备份到本地存储中则不需要设置），例如：
 
 ```sql
 SET GLOBAL clone_valid_donor_list = '172.17.140.10:3306';
 ```
 
-再设置密钥文件路径（要确保GreatSQL数据库进程有权限访问这个密钥文件）：
+再设置密钥文件路径（要确保 GreatSQL 数据库进程有权限访问这个密钥文件）：
 
 ```sql
 SET GLOBAL clone_encrypt_key_path = '/data/backup/mysql_encrypt_key';
 ```
 
-接下来就可以执行CLONE备份了，例如：
+接下来就可以执行 CLONE 备份了，例如：
 
 ```sql
 -- 将本地实例备份到本地存储中

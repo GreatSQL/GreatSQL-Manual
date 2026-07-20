@@ -1,4 +1,4 @@
-# Oracle兼容-语法-SYSDATE_IS_NOW模式
+# Oracle 兼容 - 语法 - SYSDATE_IS_NOW 模式
 ---
 
 
@@ -16,8 +16,8 @@ SET [GLOBAL|SESSION] sql_mode = SYSDATE_IS_NOW;
  
 *注意:*
  
-**在 oracle_mode 的情况下，无论sql_mode 中是否含有 SYSDATE_IS_NOW**   
-**SYSDATE 的行为都等价与 now(6)**
+**在 `oracle_mode` 的情况下，无论 `sql_mode` 中是否含有 SYSDATE_IS_NOW**
+**SYSDATE 的行为都等价于 now(6)**
 
 ## 3. 示例
 

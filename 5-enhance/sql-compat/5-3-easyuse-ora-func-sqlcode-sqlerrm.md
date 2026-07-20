@@ -85,7 +85,7 @@ END; //
 
 
 -- 在最开始自行制定SQLCODE不影响后续获取真正的SQLCODE
-greatsqal> BEGIN
+greatsql> BEGIN
 SELECT SQLERRM(105400) ;
 SELECT SQLCODE, SQLERRM;
 SELECT * FROM t1;

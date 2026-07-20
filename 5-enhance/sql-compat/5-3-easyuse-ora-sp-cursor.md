@@ -62,9 +62,9 @@ cursor_name TABLE%ROWTYPE
 
 ## 3. Oracle兼容说明
 
-GreatSQL在 `ORACLE` 模式下的游标在存储过程中读取数据的用法与Oracle基本一致，仅 `%ROWCOUNT` 还不支持。
+GreatSQL 在 `ORACLE` 模式下的游标在存储过程中读取数据的用法与 Oracle 基本一致，仅 `%ROWCOUNT` 还不支持。
 
-在Oracle中支持用 `FOR var_name IN cursor_name LOOP ... END LOOP` 和 `%ROWTYPE` 语法进行游标取值，但在GreatSQL中的用法是 `LOOP ... END LOOP`。
+在 Oracle 中支持用 `FOR var_name IN cursor_name LOOP ... END LOOP` 和 `%ROWTYPE` 语法进行游标取值，但在 GreatSQL 中的用法是 `LOOP ... END LOOP`。
 
 其他关于游标用法详细描述见下：
 

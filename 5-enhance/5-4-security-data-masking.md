@@ -23,7 +23,7 @@ GreatSQL 中支持两种数据脱敏工作方式
 从 8.4 版本开始，数据脱敏工作方式由插件（Plugin）调整为组件（Component）方式，执行以下命令安装 `masking` 组件以启用数据脱敏功能：
 
 ```sql
--- 创建 maksing 组件数据字典表
+-- 创建 masking 组件数据字典表
 greatsql> USE mysql;
 greatsql> CREATE TABLE IF NOT EXISTS
 mysql.masking_dictionaries(
@@ -141,7 +141,7 @@ greatsql> SELECT mask_outer('123456789', 2, 2);
 
 `mask_pan()` 的示例：
 
-- gen_rand_pan()是GreatSQL中内置的一个函数,用于生成随机的PAN(Primary Account Number,主账号)。
+- `gen_rnd_pan()` 是 GreatSQL 中内置的一个函数，用于生成随机的 PAN（Primary Account Number，主账号）。
 
 ```sql
 greatsql> SELECT mask_pan (gen_rnd_pan());
@@ -382,8 +382,8 @@ CALL sys_masking.policy_add_user('policy1', 'user2@%');
 ```
 
 ```sql
--- 切换到 user2@% 账户登入
--- 当前登入账户是 user2@127.0.0.1，也就是从 127.0.0.1 登入的 user2 账户
+-- 切换到 user2@% 账户登录
+-- 当前登录账户是 user2@127.0.0.1，也就是从 127.0.0.1 登录的 user2 账户
 greatsql> SELECT USER();
 +-----------------+
 | user()          |
@@ -391,7 +391,7 @@ greatsql> SELECT USER();
 | user2@127.0.0.1 |
 +-----------------+
 
--- 相应的授权账户是 user2@%，允许 user2 从任何地址以 TCP/IP 方式登入
+-- 相应的授权账户是 user2@%，允许 user2 从任何地址以 TCP/IP 方式登录
 greatsql> SELECT CURRENT_USER();
 +----------------+
 | current_user() |
@@ -456,7 +456,7 @@ greatsql> SELECT id, c3 FROM (SELECT * FROM t1) t WHERE id <= 3;
 
 - 5. 配置脱敏策略的管理员账户需要有对 `sys_masking` 库拥有 `EXECUTE, INSERT, DELETE, UPDATE, RELOAD` 等权限（最好只向管理员开放对该库的管理权限）。
 
-- 6. 默认地，脱敏策略对所有账户生效，除了 `sys_masking.maksing_policy_users` 中配置的账户以及拥有超级权限的账户之外。
+- 6. 默认地，脱敏策略对所有账户生效，除了 `sys_masking.masking_policy_users` 中配置的账户以及拥有超级权限的账户之外。
 
 执行下面的 SQL 命令可查看所有被排除脱敏策略的账户列表：
 
@@ -568,7 +568,7 @@ sys_masking.create_policy('policy_name', 'mask_function', 'args')
 
 功能：添加需要脱敏策略，指定使用哪个脱敏函数，以及相应的参数。参数如果配置错误，策略则不生效，日志中会记录相应报错信息。
 
-添加完脱敏策略后，再将策略应用到指定标签上，使其生效。默认地，脱敏策略对所有账户生效，除了 `sys_masking.maksing_policy_users` 中配置的账户以及拥有超级权限的账户之外。
+添加完脱敏策略后，再将策略应用到指定标签上，使其生效。默认地，脱敏策略对所有账户生效，除了 `sys_masking.masking_policy_users` 中配置的账户以及拥有超级权限的账户之外。
 
 参数：
 - policy_name，策略名，不区分大小写，不能为空，且必须大于等于3个字符长度。

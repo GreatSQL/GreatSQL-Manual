@@ -2,7 +2,7 @@
 ---
 
 ## 简介
-GreatSQL中新增地理标签特性，可以提升多机房架构数据可靠性。
+GreatSQL 中新增地理标签特性，可以提升多机房架构数据可靠性。
 
 可以对每个节点设置地理标签，主要用于解决多机房数据同步的问题。
 
@@ -20,10 +20,10 @@ GreatSQL中新增地理标签特性，可以提升多机房架构数据可靠性
 | --- | --- |
 | Variable Scope        | Global |
 | Dynamic Variable      | Yes |
-| Type                | Interger  |
+| Type                | Integer  |
 | Permitted Values |    [0 - 8] |
 | Default       | 0 |
-| Description   | 设置MGR各节点不同的地理标签，主要用于解决多机房数据同步的问题。<br/>修改完该选项值之后，要重启MGR线程才能生效。 |
+| Description   | 设置 MGR 各节点不同的地理标签，主要用于解决多机房数据同步的问题。<br/>修改完该选项值之后，要重启 MGR 线程才能生效。 |
 
 
 - group_replication_zone_id_sync_mode

@@ -10,7 +10,7 @@ ADD_MONTHS(date, n)
 
 ## 2. 定义和用法
 
-`ADD_MONTHS()` 函数的作用是对日期函数进行操作，在数据查询的过程中进行日期的按月增加,  `ADD_MONTH()`的返回类型为 `DATETIME`。
+`ADD_MONTHS()` 函数的作用是对日期函数进行操作，在数据查询的过程中进行日期的按月增加,  `ADD_MONTHS()`的返回类型为 `DATETIME`。
 
 ## 3. Oracle兼容说明
 

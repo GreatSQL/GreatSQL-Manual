@@ -1,4 +1,4 @@
-# Oracle兼容-语法-UPDATE ... SET
+# Oracle 兼容 - 语法 - UPDATE ... SET
 ---
 
 
@@ -24,7 +24,7 @@ UPDATE [LOW_PRIORITY] [IGNORE] table_reference
 
 ## 2. 定义和用法
 
-在GeratSQL中，支持执行 `UPDATE ... SET` 同时更新多表，类似Oracle用法。主要有以下两种形式：
+在 GreatSQL 中，支持执行 `UPDATE ... SET` 同时更新多表，类似 Oracle 用法。主要有以下两种形式：
 
 - 用法1，多表更新
 

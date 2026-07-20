@@ -1,4 +1,4 @@
-# Oracle兼容-语法-CREATE TABLE OF TYPE
+# Oracle 兼容 - 语法 - CREATE TABLE OF TYPE
 ---
 
 

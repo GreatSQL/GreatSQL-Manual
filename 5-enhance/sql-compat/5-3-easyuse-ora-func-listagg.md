@@ -28,7 +28,7 @@ ERROR 1111 (HY000): Invalid use of group function
 ```
 
 ## 3. Oracle兼容说明
-1. 在GreatSQL中的 `LISTAGG()` 函数语法参考 Oracle 19c 版本用法，与 Oracle 11r2 版本的 `WITHIN GROUP` 用法部分有差异。
+1. 在GreatSQL中的 `LISTAGG()` 函数语法参考 Oracle 19c 版本用法，与 Oracle 11g R2 版本的 `WITHIN GROUP` 用法部分有差异。
 2. 目前尚未支持 `LISTAGG OVERFLOW` 语法，仍沿用GreatSQL中的 `group_concat_max_len` 选项限制方式。
 3. 分隔符 `delimiter` 目前只支持字符常量，不支持使用 session/global 设定或运算式（**注意：** 会将数字常量转换为字符常量，转换时可能会因浮点精度或格式问题，不一定如预期呈现，因此建议直接使用字符常量）。
 

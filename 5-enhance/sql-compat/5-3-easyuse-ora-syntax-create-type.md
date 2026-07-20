@@ -99,6 +99,8 @@ collation_connection: utf8mb4_0900_ai_ci
 greatsql> DROP TYPE IF EXISTS udt1;
 Query OK, 0 rows affected (0.00 sec)
 ```
+
+```sql
 use db1;
 set sql_mode="Oracle";
 CREATE OR REPLACE TYPE udt1 AS OBJECT(id INT ,c1 VARCHAR(20));

@@ -39,7 +39,7 @@ GreatSQL中支持创建 `GLOBAL|PRIVATE` 两种不同的临时表。
   - 执行 `TRUNCATE` 语句也会删除该临时表实例。
   - 当系统内有任何该临时表的实例创建时，不可以对该临时表进行DDL操作，例如：`ALTER TABLE`, `CREATE INDEX`等操作。
   - 执行 `DROP TABLE` 可以立即删除当前会话该临时表实例（若存在的话）及临时表定义。若是由其他会话创建该临时表的实例时，则只会删除当前会话的临时表实例，并会在删除临时表定义时报错。
-  - 执行 `SHOW CREATE TABLE` 可以显示当前会话是否已经创建临时表实例。若当前会话存在该临时表实例时（例如：对该表有写入数据）, 此时会显示为 `CREATE TEMPORARY TABLE`，不带 ``GLOBAL` 标识。
+  - 执行 `SHOW CREATE TABLE` 可以显示当前会话是否已经创建临时表实例。若当前会话存在该临时表实例时（例如：对该表有写入数据）, 此时会显示为 `CREATE TEMPORARY TABLE`，不带 `GLOBAL` 标识。
 
 - 2. 创建`PRIVATE TEMPORARY TABLE`。
   - 会立即创建一个临时表。
@@ -58,7 +58,7 @@ GreatSQL中支持创建 `GLOBAL|PRIVATE` 两种不同的临时表。
 4. 如果同时使用GreatSQL原生的 `TEMPORARY TABLE` 创建同名的 `GLOBAL TEMPORARY TABLE`，会让后续SQL语句以原生的 `TEMPORARY TABLE` 为主。
 5. 与GreatSQL常规临时表支持的数据类型一致，当临时表中包含 `BLOB` 类型列时不会报错。
 6. 不支持对 `GLOBAL TEMPORARY TABLE` 创建触发器。但触发器及视图内可以引用 `GLOBAL TEMPORARY TABLE`。
-7. 执行 `RENAME TABLE` 与 `ALTER TABLE .. RENAME` 语句时，必须当时没有 `GLOBAL TEMPORARY TABLE` 临时表同名实例(Oracle 沒有這個限制)。
+7. 执行 `RENAME TABLE` 与 `ALTER TABLE .. RENAME` 语句时，必须当时没有 `GLOBAL TEMPORARY TABLE` 临时表同名实例(Oracle 没有这个限制)。
 8. 每个 `GLOBAL TEMPORARY TABLE` 实例的 `AUTO_INCREMENT` 字段都一律由1开始（Oracle没这个约束）。
 9. 当创建临时表实例后，在任何会话中删除 `GLOBAL TEMPORARY TABLE` 所在的数据库时，该临时表实例会继续存在。若之后继续创建同名的数据库及同名的 `GLOBAL TEMPORARY TABLE`，并不会对已经生成的临时表实例有影响。
 10. 由于在 `PRIVATE TEMPORARY TABLE` 中是不支持指定主键的，因此在创建 `PRIVATE TEMPORARY TABLE` 时不能显式指定主键，也必须设置 `sql_generate_invisible_primary_key=0`，避免隐式创建主键，否则会提示不支持该用法。
@@ -337,7 +337,7 @@ greatsql> SELECT * FROM ora$ptt_s1;
 2 rows in set (0.00 sec)
 
 -- 事务提交后，PRIVATE TEMPORARY TABLE会被删除
-greatql> SELECT * FROM ora$ptt_t0;
+greatsql> SELECT * FROM ora$ptt_t0;
 ERROR 1146 (42S02): Table 'greatsql.ora$ptt_t0' doesn't exist
 
 greatsql> SELECT * FROM ora$ptt_t1;

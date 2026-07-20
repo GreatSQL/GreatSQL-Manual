@@ -27,10 +27,10 @@ GreatSQL支持分层查询（Hierarchical Query）。
   - 2.) CONNECT BY条件被评估。
   - 3.) 任何剩余的WHERE子句谓语都被评估。
 
-- 3. 对于分成查询的处理顺序为：
+- 3. 对于分层查询的处理顺序为：
   - 1.) 选择层次结构的根行——那些满足 START WITH 条件的行。
   - 2.) 选择每个根行的子行。每个子行都必须满足与根行之一相关的 CONNECT BY 条件。
-  - 3.) 择连续几代的子行。 选择在步骤 2 中返回的行的子项，然后是这些子项的子项，依此类推。
+  - 3.) 选择连续几代的子行。选择在步骤 2 中返回的行的子项，然后是这些子项的子项，依此类推。
   - 4.) 如果查询包含没有连接的 WHERE 子句，那么会从层次结构中删除所有不满足 WHERE 子句条件的行。
   - 5.) 根据先序排列信息返回结果
 
@@ -159,7 +159,7 @@ SQL> SELECT id, name, grade, LEVEL FROM student CONNECT BY PRIOR id = grade;
     
 - 2、与 `LISTAGG` 结合使用输出组合顺序时，`LISTAGG` 的实现依赖 `ORDER BY`，因此在内部查询的时候会根据 `GROUP BY` 进行排序。
     
-- 3、在 `ORACLE` 模式下，`SYSDATE` 的行为与Oralce一致，在 `DEFAULT` 模式下，循环查询可能导致错误。
+- 3、在 `ORACLE` 模式下，`SYSDATE` 的行为与Oracle一致，在 `DEFAULT` 模式下，循环查询可能导致错误。
     
 - 4、与上一条类似，在自定义PACKAGE与FUNCTION中可能存在定义包含 `DETERMINISTIC` 的情况，也可能存在导致循环检查失效问题。
     

@@ -30,7 +30,7 @@ SELECT ... FOR UPDATE ... WAIT n
 
 2. 参数 `n` 只支持正整数，其他值会报错。
 
-3. 在Oracle中不支持类似 `SELECT * FROM (SELECT * FROM t1 FOR UPDATE WAIT 1000000) FOR UPDATE WAIT 1` 这种语句；在GreatSQL中，为了兼容原生功能，支持这种语句用法，等待时长以最后一个时间即为准（在本案例中即1秒）。但类似 `SELECT * FROM (SELECT * FROM t1 FOR UPDATE WAIT 10) FOR UPDATE NOWAIT` 这种只有一个 `WAIT n` 的语句，则以派生表的动作为准（在本案例中会等待10秒，而不是执行 `NOWAIT` 逻辑）。
+3. 在Oracle中不支持类似 `SELECT * FROM (SELECT * FROM t1 FOR UPDATE WAIT 1000000) FOR UPDATE WAIT 1` 这种语句；在GreatSQL中，为了兼容原生功能，支持这种语句用法，等待时长以最后一个时间为准（在本案例中即1秒）。但类似 `SELECT * FROM (SELECT * FROM t1 FOR UPDATE WAIT 10) FOR UPDATE NOWAIT` 这种只有一个 `WAIT n` 的语句，则以派生表的动作为准（在本案例中会等待10秒，而不是执行 `NOWAIT` 逻辑）。
 
 6. 在Oracle中不支持类似 `INSERT INTO t1 SELECT * FROM t1 FOR UPDATE WAIT 3` 这种用法；在GreatSQL中，为了兼容原生功能，也支持这种语句用法，该语句执行时如果遇到锁就等待3秒后再报错。
 

@@ -53,7 +53,7 @@ rowtype_attribute: db_table_or_view %ROWTYPE
 
 - 3. 用 `var.COUNT` 获取自定义 `TABLE` 表的行数。
 
-- 4. 用 `var(roW) := record_value` 给自定义 `TABLE` 某一行赋值。
+- 4. 用 `var(row) := record_value` 给自定义 `TABLE` 某一行赋值。
 
 - 5. 用 `record_value := var(row)` 从自定义 `TABLE` 某一行给 `RECORD` 类型参数赋值。
 

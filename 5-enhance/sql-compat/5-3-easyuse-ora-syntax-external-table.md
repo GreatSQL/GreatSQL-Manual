@@ -23,7 +23,7 @@ ORGANIZATION EXTERNAL
 
 1. `DEFAULT DIRECTORY`：外部文件所在操作系统上的存储路径。
 
-2. `LOACATION`：定义了外部表源文件位置，可由目录和文件名组成，数据文件命名后缀必须是 `*.csv` 或 `*.CSV`。当指定源文件位置包含目录信息时，则 `DEFAULT DIRECTORY` 参数不生效；否则会在 `DEFAULT DIRECTORY` 参数指向的目录下读取源文件。
+2. `LOCATION`：定义了外部表源文件位置，可由目录和文件名组成，数据文件命名后缀必须是 `*.csv` 或 `*.CSV`。当指定源文件位置包含目录信息时，则 `DEFAULT DIRECTORY` 参数不生效；否则会在 `DEFAULT DIRECTORY` 参数指向的目录下读取源文件。
 
 
 ## 2. 定义和用法
@@ -32,7 +32,7 @@ ORGANIZATION EXTERNAL
 
 外部表数据源位于文件系统之中，只有CSV格式文件可以作为外部表的数据源。
 
-可以通过SQL语句来访问外部表，无需事先装载表数据装。
+可以通过SQL语句来访问外部表，无需事先装载表数据。
 
 对外部表只能进行 `SELECT` 只读查询，不能执行有修改数据的 `DML` 操作（`INSERT`、`UPDATE`、`DELETE`），也不能创建索引。
 

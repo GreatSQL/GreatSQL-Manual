@@ -73,7 +73,7 @@ greatsql> SELECT REPLACE('GreatSQL', 'a', NULL);
 | GretSQL                        |
 +--------------------------------+
 
--- 最后一个案例，切换到DEFUALT模式下结果不同
+-- 最后一个案例，切换到DEFAULT模式下结果不同
 greatsql> SET sql_mode = DEFAULT;
 greatsql> SELECT REPLACE('GreatSQL', 'a', NULL);
 +--------------------------------+

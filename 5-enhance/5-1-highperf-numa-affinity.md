@@ -281,7 +281,7 @@ sched_affinity_purge_coordinator = 121-124
 | --------------- | ----------------------------- |
 | Status Variable | Sched_affinity_group_capacity |
 | Scope           | Global                        |
-| Type            | Interger                      |
+| Type            | Integer                       |
 
 表示每个 NUMA 节点中的逻辑 CPU 个数。
 
@@ -291,7 +291,7 @@ sched_affinity_purge_coordinator = 121-124
 | --------------- | ----------------------------- |
 | Status Variable | Sched_affinity_group_number   |
 | Scope           | Global                        |
-| Type            | Interger                      |
+| Type            | Integer                       |
 
 表示 NUMA 的节点个数。
 

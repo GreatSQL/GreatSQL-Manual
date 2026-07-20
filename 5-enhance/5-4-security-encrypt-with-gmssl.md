@@ -1,13 +1,13 @@
 # 国密算法加密支持
 ---
 
-GreatSQL 新增国密SM2非对称加密算法，SM3杂凑算法，SM4对称加密算法支持，通过国密算法创建加密连接，加密传输数据。为此 GreatSQL 特地发布国密版本二进制包，在 [下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5) 中搜索 *支持国密特性二进制包* 关键字并下载相应的二进制包。
+GreatSQL 新增国密 SM2 非对称加密算法，SM3 杂凑算法，SM4 对称加密算法支持，通过国密算法创建加密连接，加密传输数据。为此 GreatSQL 特地发布国密版本二进制包，在 [下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5) 中搜索 *支持国密特性二进制包* 关键字并下载相应的二进制包。
 
-本节介绍如何用二进制包方式安装国密版本的GreatSQL数据库，假定本次安装是在CentOS 8.x x86_64环境中安装，并且是以root用户身份执行安装操作。
+本节介绍如何用二进制包方式安装国密版本的 GreatSQL 数据库，假定本次安装是在 CentOS 8.x x86_64 环境中安装，并且是以 root 用户身份执行安装操作。
 
 ## 下载安装包
 
-查看服务器的glibc版本，以选择正确的安装包：
+查看服务器的 glibc 版本，以选择正确的安装包：
 
 ```bash
 $ ldd --version
@@ -15,7 +15,7 @@ $ ldd --version
 ...
 ldd (GNU libc) 2.28
 ```
-如果您的glibc版本为2.28或更高版本，请选择带有"glibc2.28"标识的安装包；如果您的glibc版本为2.17，请选择带有"glibc2.17"标识的安装包。
+如果您的 glibc 版本为 2.28 或更高版本，请选择带有 "glibc2.28" 标识的安装包；如果您的 glibc 版本为 2.17，请选择带有 "glibc2.17" 标识的安装包。
 
 [点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5)，页面滚动到"4. 支持国密特性二进制包"，下载支持国密的安装包，下载以下一个就可以：
 
@@ -40,7 +40,7 @@ echo 'export PATH=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin:$PATH' 
 source ~/.bash_profile
 ```
 
-安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
+安装 GreatSQL 需要先安装其他依赖包，可执行下面命令完成：
 
 ```bash
 yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
@@ -216,7 +216,7 @@ performance_schema_instrument = '%lock%=on'
 
 一般修改 *basedir/datadir/innodb_buffer_pool_size* 等几个选项就可以，修改完后保存退出。
 
-### 新建mysql用户
+### 新建 mysql 用户
 ```bash
 /sbin/groupadd mysql
 /sbin/useradd -g mysql mysql -d /dev/null -s /sbin/nologin
@@ -232,9 +232,9 @@ chown -R mysql:mysql /data/GreatSQL
 chmod -R 700 /data/GreatSQL
 ```
 
-### 增加GreatSQL系统服务
+### 增加 GreatSQL 系统服务
 
-推荐采用systemd来管理GreatSQL服务，执行 `vim /etc/systemd/system/greatsql.service` 命令，添加下面的内容：
+推荐采用 systemd 来管理 GreatSQL 服务，执行 `vim /etc/systemd/system/greatsql.service` 命令，添加下面的内容：
 
 ```ini
 [Unit]
@@ -266,8 +266,8 @@ TasksAccounting=false
 
 User=mysql
 Group=mysql
-#如果是GreatSQL 5.7版本，此处需要改成simple模式，否则可能服务启用异常
-#如果是GreatSQL 8.0版本则可以使用notify
+#如果是 GreatSQL 5.7 版本，此处需要改成 simple 模式，否则可能服务启用异常
+#如果是 GreatSQL 8.0 版本则可以使用 notify
 #如果启动时my.cnf中增加daemonize=1参数（以daemon方式启动GreatSQL），则可以采用forking模式
 #Type=simple
 Type=notify
@@ -308,7 +308,7 @@ ln -s /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64 /usr/local/GreatSQL
 systemctl daemon-reload
 ```
 
-这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
+这就安装成功并将 GreatSQL 添加到系统服务中，后面可以用 `systemctl` 来管理 GreatSQL 服务。
 
 编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
 
@@ -334,14 +334,14 @@ ldconfig && ldconfig -p | grep libprotobuf.so
 
 这个步骤的作用是加载 GreatSQL 自带的动态依赖库文件，这样在运行 mysql/mysqld 等二进制文件时可能需要用到，避免报错。
 
-## 启动GreatSQL
+## 启动 GreatSQL
 
-执行下面的命令启动GreatSQL服务
+执行下面的命令启动 GreatSQL 服务
 ```bash
 systemctl start greatsql
 ```
 
-如果是在一个全新环境中首次启动GreatSQL数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
+如果是在一个全新环境中首次启动 GreatSQL 数据库，可能会失败，因为在 `mysqld_pre_systemd` 的初始化处理逻辑中，需要依赖 `/var/lib/mysql-files` 目录保存一个临时文件。如果首次启动失败，可能会有类似下面的报错提示：
 
 ::: details 查看运行结果
 ```bash
@@ -369,7 +369,7 @@ systemd[1]: Failed to start GreatSQL Server.
 ```
 :::
 
-只需手动创建 `/var/lib/mysql-files` 目录，再次启动GreatSQL服务即可：
+只需手动创建 `/var/lib/mysql-files` 目录，再次启动 GreatSQL 服务即可：
 ```bash
 mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
 systemctl start greatsql
@@ -421,11 +421,11 @@ $ ls /data/GreatSQL
 ```
 :::
 
-可以看到，GreatSQL服务已经正常启动了。
+可以看到，GreatSQL 服务已经正常启动了。
 
-## 连接登入GreatSQL
+## 连接登录 GreatSQL
 
-在上面进行GreatSQL初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
+在上面进行 GreatSQL 初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
 
 ```bash
 $ grep -i root /data/GreatSQL/error.log
@@ -434,9 +434,9 @@ $ grep -i root /data/GreatSQL/error.log
 A temporary password is generated for root@localhost: ji!pjndiw5sJ
 ```
 
-复制该密码，将用于首次登入GreatSQL所需。
+复制该密码，将用于首次登录 GreatSQL 所需。
 
-部分GreatSQL二进制包方式安装后，有可能初始化的root密码是空的，这种情况下可以直接登入并修改成安全密码。
+部分 GreatSQL 二进制包方式安装后，有可能初始化的 root 密码是空的，这种情况下可以直接登录并修改成安全密码。
 
 ```sql
 $ mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
@@ -453,7 +453,7 @@ greatsql> status;
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 ```
 
-首次登入立刻提醒该密码已过期，需要修改，执行 SQL 命令 `ALTER USER USER() IDENTIFIED BY` 修改即可：
+首次登录立刻提醒该密码已过期，需要修改，执行 SQL 命令 `ALTER USER USER() IDENTIFIED BY` 修改即可：
 
 ```sql
 greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@2026';  #<--修改密码
@@ -465,14 +465,14 @@ Server version:         8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
 ...
 ```
 
-GreatSQL数据库安装并初始化完毕。
+GreatSQL 数据库安装并初始化完毕。
 
 ## 启用通信国密加密支持
 
-使用支持国密版本的 GreatSQL 客户端 **mysql** 登入，加上 `--gm_ssl` 参数，确认通信连接国密支持已生效：
+使用支持国密版本的 GreatSQL 客户端 **mysql** 登录，加上 `--gm_ssl` 参数，确认通信连接国密支持已生效：
 
 ```sql
--- 务必使用TCP协议登入，以确认国密算法生效
+-- 务必使用TCP协议登录，以确认国密算法生效
 -- 例如： mysql -hxx -uxx -pxx --protocol=tcp -P3306 --gm_ssl
 greatsql> status;
 ...
@@ -480,13 +480,13 @@ SSL:                    Cipher in use is ECC-SM2-SM4-GCM-SM3
 ```
 看到关键字 **SM2/SM3/SM4** 表示通信连接已经采用国密方式加密。
 
-如果不是用支持国密版本的其他mysql客户端登入，则可能提示下面的错误信息
+如果不是用支持国密版本的其他 MySQL 客户端登录，则可能提示下面的错误信息
 
 ```bash
 mysql: [ERROR] unknown option '--gm_ssl'
 ```
 
-当通过TCP方式连接到GreatSQL，但没有加上 `--gm_ssl` 参数时，则可能提示下面的错误信息
+当通过 TCP 方式连接到 GreatSQL，但没有加上 `--gm_ssl` 参数时，则可能提示下面的错误信息
 
 ```bash
 ERROR 2026 (HY000): SSL connection error: error:1408F10B:SSL routines:ssl3_get_record:wrong version number
@@ -500,7 +500,7 @@ ERROR 2026 (HY000): SSL connection error: error:1408F10B:SSL routines:ssl3_get_r
 
 ## 采用国密算法加密表空间
 
-GreatSQL 支持数据表空间、系统表空间、Redo Log、Undo Log的静态数据透明加密。
+GreatSQL 支持数据表空间、系统表空间、Redo Log、Undo Log 的静态数据透明加密。
 
 表空间加密keyring架构包含两层加密，master key 和 tablespace key。
 
@@ -512,7 +512,7 @@ tablespace key是不会被改变的，而master key可以通过轮换命令进�
 
 Master key采用keyring_file插件，key file直接存储在磁盘上。
 
-想要生成支持国密的master keyring file，需使用组件 **component_keyring_file**，
+想要生成支持国密的 master keyring file，需使用组件 **component_keyring_file**，
 
 1. 在 GreatSQL basedir 目录下的 **mysqld** 主程序所在目录下，创建配置文件 `mysqld.my`，添加如下内容：
 
@@ -538,7 +538,7 @@ Master key采用keyring_file插件，key file直接存储在磁盘上。
 1. 参数 `path` 指向 master keyring file 对应的路径。
 1. 文件 **master_keyring** 无需提前创建，GreatSQL 在启动时会自动创建。
 
-3. 新建一个专用于存储GreatSQL master keyring file 的目录
+3. 新建一个专用于存储 GreatSQL master keyring file 的目录
 
 该目录不能放在 datadir 目录下，并修改相应的属主及权限模式：
 
@@ -585,7 +585,7 @@ greatsql> SELECT * FROM performance_schema.keyring_component_status;
 +---------------------+------------------------------+
 ```
 
-刚初始化时的master key还是个空文件，需要重新生成一份：
+刚初始化时的 master key 还是个空文件，需要重新生成一份：
 ```sql
 greatsql> system ls -la /data/keyring/master_keyring
 -rw-r----- 1 mysql mysql 0 Jan 27 16:34 /data/keyring/master_keyring

@@ -18,7 +18,7 @@ SELECT SYSDATE - SYSDATE FROM DUAL;
 3. 会先将时间戳的值转换为日期值，并将 `NUMBER` 算术日期时间和间隔表达式中的常量解释为天数。
 4. 年份范围为：[0,9999]，不支持公元前的年份，溢出时将返回**NULL**，并产生warning。
 5. 当计算结果包含无限循环小数时，默认只保留**10位**，即：`div_precincrement` 选项默认值(4) + 6 = 10。
-6. 对YEAR类型加减运算时，默认转换将失败而无法运算时，会返回**NULL** , 并产生warning。
+6. 对YEAR类型加减运算时，默认转换将失败，会返回**NULL**，并产生warning。
 
 ```
 greatsql> SET sql_mode = ORACLE;

@@ -3,7 +3,7 @@
 
 
 
-GreatSQL支持Oracle风格的存储过程使用方式，部分存储过程/函数部分在 `ORACLE` 模式下做了基础结构改造，主要包括以下几点。
+GreatSQL 支持 Oracle 风格的存储过程使用方式，部分存储过程/函数在 `ORACLE` 模式下做了基础结构改造，主要包括以下几点。
 
 ## 1. 以 `AS/IS` 关键词来标记函数体的开始
 
@@ -262,7 +262,7 @@ greatsql> SELECT @a, @b, @c //
 
 ## 4. 变量赋值方式不同
 
-在 `ORACLE` 模式下，同时支持GreatSQL和Oracle两种不同风格的变量赋值方式，例如：
+在 `ORACLE` 模式下，同时支持 GreatSQL 和 Oracle 两种不同风格的变量赋值方式，例如：
 
 ```sql
 greatsql> SET sql_mode = ORACLE;

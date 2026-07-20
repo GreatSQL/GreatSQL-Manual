@@ -97,8 +97,8 @@ SYSDATE | NOW
 
 GreatSQL存储过程/存储函数参数默认值用法和Oracle区别主要有：
 
-- Oracle中支持对字符参数进行转码, GreatSQL不支持该动作。
-- Oralce支持常量表达式类型默认参数，GreatSQL不支持该用法。
+- Oracle 中支持对字符参数进行转码，GreatSQL 不支持该动作。
+- Oracle 支持常量表达式类型默认参数，GreatSQL 不支持该用法。
 
 
 ## 4. 示例

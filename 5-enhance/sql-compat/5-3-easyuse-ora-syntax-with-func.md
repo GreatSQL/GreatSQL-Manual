@@ -1,4 +1,4 @@
-# Oracle兼容-语法-WITH FUNCTION
+# Oracle 兼容 - 语法 - WITH FUNCTION
 ---
 
 
@@ -32,7 +32,7 @@ WITH FUNCTION
 
 8. 函数名不支持 `schema_name.func_name` 这种格式，只能在当前Schema中创建函数；
 
-9. 只支持SELECT子句，不支持其他子句，例如 `DELET/UPDATE/MERGE` 等。
+9. 只支持SELECT子句，不支持其他子句，例如 `DELETE/UPDATE/MERGE` 等。
 
 备注：9点的功能是存储过程中，需清楚地看到函数定义，避免ddl操作开销的需求，暂时未支持，需收集具体使用场景后再进行适配开发
    

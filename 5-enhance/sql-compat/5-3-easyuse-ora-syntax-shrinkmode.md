@@ -1,11 +1,11 @@
-# Oracle兼容-语法-shrink_sql_mode
+# Oracle 兼容 - 语法 - shrink_sql_mode
 ---
 
 
 ## 1. 语法
 
 ```sql
-SET GLBOAL shrink_sql_mode = 'modes';
+SET GLOBAL shrink_sql_mode = 'modes';
 SET SESSION shrink_sql_mode = 'modes';
 ```
 
@@ -16,7 +16,7 @@ SET SESSION shrink_sql_mode = 'modes';
 
 当 `shrink_sql_mode` 参数值为空的时候，则当前的 `sql_mode` 还原为完整展开的结果。
 
-如果不指定 `GLOBAL` 或 `SESSION`，则默认只修改 `SESSION` 级别的 `sql_mdoe`。
+如果不指定 `GLOBAL` 或 `SESSION`，则默认只修改 `SESSION` 级别的 `sql_mode`。
 
 想要修改 `GLOBAL` 级别的 `sql_mode` 时，需要具有 `SYSTEM_VARIABLES_ADMIN` 或 `SUPER` 权限才行。
 

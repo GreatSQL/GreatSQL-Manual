@@ -1,4 +1,4 @@
-# Oracle兼容-语法-PIVOT
+# Oracle 兼容 - 语法 - PIVOT
 ---
 
 
@@ -74,7 +74,7 @@ ERROR 1060 (42S21): Duplicate column name 'b'
 ```sql
 -- 初始化测试数据
 greatsql> CREATE TABLE t1(a INT, b INT, c INT);
-greatsql> INSERT INTO t1 VALUES (1, 1, 1) (2, 1, 2), (3, 2, 1), (4, 2, 2), (5, 3, 1), (6, 3, 2);
+greatsql> INSERT INTO t1 VALUES (1, 1, 1), (2, 1, 2), (3, 2, 1), (4, 2, 2), (5, 3, 1), (6, 3, 2);
 
 greatsql> SELECT * FROM t1 PIVOT(SUM(c) FOR(a) IN(1, 2, 3, 4, 5, 6)) ORDER BY b;
 +------+------+------+------+------+------+------+
@@ -127,7 +127,7 @@ greatsql> SELECT * FROM t1 PIVOT(SUM(c) AS TOTAL, count(c) AS NUM FOR(a) IN(1 AS
 3 rows in set (0.00 sec)
 
 greatsql> CREATE TABLE t2(a INT, b INT, c INT, d INT);
-greatsql> INSERT INTO t2 VALUES (1, 1, 1, 1); (2, 1, 2, 2); (3, 2, 1, 1); (4, 2, 2, 2); (5, 3, 1, 1); (6, 3, 2, 2);
+greatsql> INSERT INTO t2 VALUES (1, 1, 1, 1), (2, 1, 2, 2), (3, 2, 1, 1), (4, 2, 2, 2), (5, 3, 1, 1), (6, 3, 2, 2);
 
 greatsql> SELECT * FROM t2 PIVOT(SUM(c) FOR(a, d) IN((1,1), (2,2), (3,1), (4,2), (5,1), (6,2))) ORDER BY b;
 +------+------+------+------+------+------+------+

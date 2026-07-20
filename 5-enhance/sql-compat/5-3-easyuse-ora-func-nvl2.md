@@ -60,9 +60,9 @@ ORA-01722: invalid number
 
 
 -- 2. GreatSQL中其他函数的处理方式
-greatsql> SELECT NVL2(NULL, 1, 'GreatSQL'), if(NULL, 1, 'GreatSQL'), COALESCE(NULL, 1, 'GreatSQL'), NVL(3306, 'GreatQL') FROM DUAL;
+greatsql> SELECT NVL2(NULL, 1, 'GreatSQL'), if(NULL, 1, 'GreatSQL'), COALESCE(NULL, 1, 'GreatSQL'), NVL(3306, 'GreatSQL') FROM DUAL;
 +---------------------------+-------------------------+-------------------------------+----------------------+
-| NVL2(NULL, 1, 'GreatSQL') | if(NULL, 1, 'GreatSQL') | COALESCE(NULL, 1, 'GreatSQL') | NVL(3306, 'GreatQL') |
+| NVL2(NULL, 1, 'GreatSQL') | if(NULL, 1, 'GreatSQL') | COALESCE(NULL, 1, 'GreatSQL') | NVL(3306, 'GreatSQL') |
 +---------------------------+-------------------------+-------------------------------+----------------------+
 | GreatSQL                  | GreatSQL                | 1                             | 3306                 |
 +---------------------------+-------------------------+-------------------------------+----------------------+

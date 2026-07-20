@@ -1,4 +1,4 @@
-# Oracle兼容-语法-SEQUENCE（序列）
+# Oracle 兼容 - 语法 - SEQUENCE（序列）
 ---
 
 
@@ -33,7 +33,7 @@ CREATE SEQUENCE schema_name.sequence_name
 | START WITH   | 1       | 起始值                                 |
 | INCREMENT BY | 1       | 获取下个值的步长（可为负数）           |
 | MINVALUE     | 1       | 最小值                                 |
-| MAXALUE      | 10^29-1 | 28位十进制值                           |
+| MAXVALUE     | 10^29-1 | 28位十进制值                           |
 | CYCLE        | false   | 当为true时，使用完所有值后重新循环获取 |
 | CACHE        | 20      | 高速缓存中为当前序列储存的值的数量     |
 | ORDER        | false   | 当为true时，保证全局有序（会损失性能） |

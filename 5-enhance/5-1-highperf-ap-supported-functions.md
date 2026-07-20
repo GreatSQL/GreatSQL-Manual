@@ -24,7 +24,7 @@
 | --- | --- |
 |/|Division operator|
 |-|Minus operator|
-|%，MOD|Modulo operator|
+|%, MOD|Modulo operator|
 |+|Addition operator|
 |*|Multiplication operator|
 |-|Change the sign of the argument|
@@ -200,7 +200,7 @@ Cast类型支持如下：
 
 WINDOW和OVER子句与PARTITION BY、ORDER BY和WINDOW frame一起使用。
 
-{{ PRODUCT_NAME }}支持的非聚合窗口函数。
+GreatSQL 支持的非聚合窗口函数。
 
 用于窗口函数的聚合函数如下：
 

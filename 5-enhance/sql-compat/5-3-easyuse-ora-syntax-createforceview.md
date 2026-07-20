@@ -16,7 +16,7 @@ CREATE [ OR REPLACE ] FORCE VIEW name [ ( column_name [, ...] ) ]
 
 ## 3. Oracle兼容说明
 
-1. 不支持 `PREPARE stmt FROM` 和 `EXCUTE IMMEDIATE` 两种场景。
+1. 不支持 `PREPARE stmt FROM` 和 `EXECUTE IMMEDIATE` 两种场景。
 
 2. 强制创建视图后，不支持 `ALTER VIEW new_view compile` 的语法，这点与Oracle不同。
 

@@ -11,7 +11,7 @@ TO_CLOB( expression )
 ## 2. 定义和用法
 `TO_CLOB()` 函数的作用是把 `expression` 转换成 `CLOB` 类型的同时，其编码格式也会转换成当前所在数据库（Schema）的字符集 `character_set_database`，最后输出转换结果。
 
-在GreatSQL中 `CLOB` 兼容类型有：`CLOB`、`TINYTEXT`、`TEXT`、`MEDIUMTEXT`、`LONGTEXT` 等。
+在 GreatSQL 中 `CLOB` 兼容类型有：`CLOB`、`TINYTEXT`、`TEXT`、`MEDIUMTEXT`、`LONGTEXT` 等。
 
 ## 3. Oracle兼容说明
 
@@ -140,7 +140,7 @@ greatsql> SELECT id,TO_CLOB(a),TO_CLOB(b) FROM t_clob;
 
 如下例所示，执行 `SELECT TO_CLOB('\\') FROM DUAL;`，得到结果分别不同：
 
-- 在oracle上输出为：
+- 在 Oracle 上输出为：
 
 ```
 SQL> SELECT TO_CLOB('\\') FROM DUAL;

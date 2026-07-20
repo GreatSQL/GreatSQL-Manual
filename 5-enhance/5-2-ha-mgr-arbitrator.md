@@ -3,9 +3,9 @@
 
 ## 简介
 
-GreatSQL中新Arbitrator节点（仲裁节点/投票节点）角色，使得可以用更低的服务器成本实现高可用目标。
+GreatSQL 中新增 Arbitrator 节点（仲裁节点/投票节点）角色，使得可以用更低的服务器成本实现高可用目标。
 
-该节点仅参与MGR投票仲裁，不参与MGR事务认证，不存放实际数据（不需要存储所有用户表数据，只存储必要的系统表），也无需执行DML操作（不需要存储Binlog，也不需要转储和应用 Relay Log），因此可以用一般配置级别的服务器，在保证MGR可靠性的同时还能降低服务器成本。
+该节点仅参与 MGR 投票仲裁，不参与 MGR 事务认证，不存放实际数据（不需要存储所有用户表数据，只存储必要的系统表），也无需执行 DML 操作（不需要存储 Binlog，也不需要转储和应用 Relay Log），因此可以用一般配置级别的服务器，在保证 MGR 可靠性的同时还能降低服务器成本。
 
 新增参数`group_replication_arbitrator`用于设置仲裁节点。
 
@@ -16,7 +16,7 @@ GreatSQL中新Arbitrator节点（仲裁节点/投票节点）角色，使得可�
 group_replication_arbitrator=ON
 ```
 
-然后启动MGR服务，即可自动加入MGR集群。查看MGR成员节点状态：
+然后启动 MGR 服务，即可自动加入 MGR 集群。查看 MGR 成员节点状态：
 
 ```sql
 greatsql> SELECT * FROM performance_schema.replication_group_members;
@@ -31,14 +31,14 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 可以看到，`MEMBER_ROLE` 这列显示为 **ARBITRATOR**，表示该节点是一个仲裁节点。
 
 ::: tip 提示
-当MGR集群中只剩下Arbitrator节点时，则它会自动退出，需要手动处理以再次启动MGR集群。
+当 MGR 集群中只剩下 Arbitrator 节点时，则它会自动退出，需要手动处理以再次启动 MGR 集群。
 :::
 
 ## 仲裁节点负载更低
 
 对一个包含仲裁节点的 MGR 集群执行 [sysbench 性能压测](../10-optimize/3-1-benchmark-sysbench.md)，观察压测期间各节点负载数据。
 
-先看Primary节点：
+先看 Primary 节点：
 
 ```bash
 $ top
@@ -61,7 +61,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  4  0      0   5613    152   6408    0    0     0 49738 52848 53361 37 17 43  3  0
 ```
 
-观察其中的Secondary节点：
+观察其中的 Secondary 节点：
 
 ```bash
 $ top
@@ -85,7 +85,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  3  0      0   2034    128  10811    0    0     0 51355 31483 45582 32 12 53  3  0
 ```
 
-继续观察对比Arbitrator节点：
+继续观察对比 Arbitrator 节点：
 ```bash
 $ top
 
@@ -104,13 +104,13 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  0  0      0   6145    141   7095    0    0     0     0 15942 14969  3  3 93  0  0
  1  0      0   6146    141   7095    0    0     0     0 17698 16320  4  4 92  0  0
 ```
-可以看到Arbitrator节点的系统负载明显小了很多，这就可以考虑在一个服务器上跑多个仲裁节点角色，以更低的成本实现高可用目标。
+可以看到 Arbitrator 节点的系统负载明显小了很多，这就可以考虑在一个服务器上跑多个仲裁节点角色，以更低的成本实现高可用目标。
 
 ## 注意事项
 
-1. 当MGR集群包含仲裁节点时，若想将单主切换成多主模式，需要先把投票节点先关闭再进行切换，否则可能会导致切换失败，并且仲裁节点报错退出MGR集群。
+1. 当 MGR 集群包含仲裁节点时，若想将单主切换成多主模式，需要先把投票节点先关闭再进行切换，否则可能会导致切换失败，并且仲裁节点报错退出 MGR 集群。
 
-2. 仲裁节点只在GreatSQL中才支持，原生MySQL不支持，因此也无法采用MySQL Shell工具管理包含仲裁节点的MGR集群，需要改用 [GreatSQL Shell](../8-mgr/3-mgr-maintain-admin.md) 进行管理。
+2. 仲裁节点只在 GreatSQL 中才支持，原生 MySQL 不支持，因此也无法采用 MySQL Shell 工具管理包含仲裁节点的 MGR 集群，需要改用 [GreatSQL Shell](../8-mgr/3-mgr-maintain-admin.md) 进行管理。
 
 
 **扫码关注微信公众号**

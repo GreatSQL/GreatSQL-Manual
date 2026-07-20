@@ -1,11 +1,11 @@
-# Oracle兼容-语法-ROWNUM
+# Oracle 兼容 - 语法 - ROWNUM
 ---
 
 
 
-## 1.语法
+## 1. 语法
 
-`ROWNUM`是一个伪列，主要用来实现分布功能，类似于`LIMIT` 用法。使用方式如下：
+`ROWNUM` 是一个伪列，主要用来实现分页功能，类似于 `LIMIT` 用法。使用方式如下：
 
 ```sql
 greatsql> SELECT * FROM employees WHERE ROWNUM < 11;
@@ -13,7 +13,7 @@ greatsql> SELECT * FROM employees WHERE ROWNUM < 11;
 greatsql> SELECT * FROM (SELECT ROWNUM rn, x FROM t1) t1 WHERE t1.rn BETWEEN 3 AND 5;
 ```
 
-## 2.语义描述
+## 2. 语义描述
 
 ```sql
 greatsql> SELECT * FROM employees WHERE ROWNUM > 1;

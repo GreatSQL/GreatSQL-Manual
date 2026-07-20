@@ -1,4 +1,4 @@
-# Oracle兼容-语法-TABLE UDT
+# Oracle 兼容 - 语法 - TABLE UDT
 ---
 
 
@@ -7,10 +7,10 @@
 ```sql
 
 1. CREATE TABLE table_name(column_name type, column_name type ...) 
-  type：nomally type/udt type:[db.]type(不支持varray/table类型udt).
+  type：normally type/udt type:[db.]type(不支持varray/table类型udt).
 
 2. INSERT INTO table_name VALUES(values) 
-   values:nomally value/udt value
+   values:normally value/udt value
    udt value:[db.]udt_name(values)
 
 3.  ALTER TABLE table_name DROP/ADD [column] column_name udt_type

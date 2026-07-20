@@ -5,9 +5,9 @@
 
 在主从复制中，由从节点向主节点发起 Binlog 读取请求，如果读取太快或并发太多线程就会加大主节点的网络负载压力。
 
-在MGR集群中，当有新节点加入时，主节点可能需要瞬间传输大量Binlog数据到从节点，如果读取太快或同时有多个新节点加入就会加大主节点的网络负载压力。
+在 MGR 集群中，当有新节点加入时，主节点可能需要瞬间传输大量 Binlog 数据到从节点，如果读取太快或同时有多个新节点加入就会加大主节点的网络负载压力。
 
-在以上两种场景中，都应该考虑对Binlog读取进行限速。
+在以上两种场景中，都应该考虑对 Binlog 读取进行限速。
 
 ## 新增系统参数
 
@@ -46,11 +46,11 @@ SET GLOBAL rpl_read_binlog_speed_limit=100;
   ```
   然后重启服务使设置生效。
 
-**建议**：建议设置`rpl_read_binlog_speed_limit=0`，也即不限速，避免对主从复制产生影响，如果生产环境中确实有必要再进行限速。
+**建议**：建议设置 `rpl_read_binlog_speed_limit=0`，也即不限速，避免对主从复制产生影响，如果生产环境中确实有必要再进行限速。
 
 - 查看限速状态
 
-新增状态变量`Rpl_data_speed`显示当前binlog限速的状态，可以通过执行`SHOW GLOBAL STATUS LIKE 'Rpl_data_speed'`查看，例如
+新增状态变量 `Rpl_data_speed` 显示当前 binlog 限速的状态，可以通过执行 `SHOW GLOBAL STATUS LIKE 'Rpl_data_speed'` 查看，例如
 
 ```sql
 greatsql> SHOW GLOBAL STATUS LIKE 'Rpl%spee%';
@@ -60,13 +60,13 @@ greatsql> SHOW GLOBAL STATUS LIKE 'Rpl%spee%';
 | Rpl_data_speed | async_rpl=100.00 |
 +----------------+------------------+
 ```
-表示当前的Binlog读取限速为100KB/s。
+表示当前的 Binlog 读取限速为 100KB/s。
 
 ## 注意事项
 
 1. 启用限速模式后，固然可以降低主节点服务器和网络传输的负载压力，但如果设置过低限速值可能会降低主从复制数据同步效率，影响从库上的数据复制时效性。需要根据实际情况和业务需要适当平衡和调整。
 
-2. 在MGR运行过程中的Binlog传输不受该功能限制，只有在新节点加入期间传输Binlog才受限制。
+2. 在 MGR 运行过程中的 Binlog 传输不受该功能限制，只有在新节点加入期间传输 Binlog 才受限制。
 
 
 **扫码关注微信公众号**

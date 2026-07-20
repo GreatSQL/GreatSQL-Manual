@@ -97,7 +97,7 @@ CLONE INSTANCE FROM repl@172.16.16.10:3306
   ENABLE PAGE TRACK
   INCREMENT BASED DIRECTORY = '/data/backup/clone-full/20240610';
 ```
-上述命令指定本次增备任务是在已有的别分目录 */data/backup/clone-full/20240610* 基础上，自动识别起始 LSN 后执行增备，这个方法的好处是避免手误写错 *START_LSN* 值。
+上述命令指定本次增备任务是在已有的备份目录 */data/backup/clone-full/20240610* 基础上，自动识别起始 LSN 后执行增备，这个方法的好处是避免手误写错 *START_LSN* 值。
 
 #### 对本地实例执行增量备份
 
@@ -216,7 +216,7 @@ BINLOG_POSITION: 0
 mkdir -p /data/restore && chown -R mysql:mysql /data/restore/
 ```
 
-**2. 将全量备份文件及复制到工作目录下**
+**2. 将全量备份文件复制到工作目录下**
 
 ```bash
 # 复制备份文件到目标工作目录下（不要直接在备份结果目录上进行恢复，至少留一份原始备份副本）
@@ -955,7 +955,7 @@ Create Table: CREATE TABLE `clone_history` (
 - `CLONE_TYPE`:  Clone 操作的类型，包括：full clone（全量），increment clone（增量）。
 - `STATE`：Clone 操作的状态，包括：Not Started（尚未开始），In Progress（进行中），Completed（成功），Failed（失败）。
 - `BEGIN_TIME`，`END_TIME`：Clone 操作开始、结束时间。
-- `ERROR_MESSAGE`：出具体的报错信息。
+- `ERROR_MESSAGE`：具体的报错信息。
 - `SOURCE`：donor 实例的地址。如果是 *LOCAL INSTANCE*，代表是本地 Clone 操作。
 - `DESTINATION`：Clone 备份文件存储的本地目录。
 - `START_LSN`：Clone 开始时的 LSN。
@@ -1062,8 +1062,8 @@ greatsql> SELECT * FROM performance_schema.clone_progress;
 - `DROP DATA`，先清除备份文件存储的目标目录。
 - `FILE COPY`，拷贝文件。
 - `PAGE COPY`，拷贝有变化的 data page。
-- `REDO COPY`，拷贝有变化的 Rodo Log。
-- `FILE SYNC`，Clone到本地的文件被刷新写入到磁盘中。
+- `REDO COPY`，拷贝有变化的 Redo Log。
+- `FILE SYNC`，Clone 到本地的文件被刷新写入到磁盘中。
 - `RESTART`，这份备份文件集是否经历过重启。
 - `RECOVERY`，这份备份文件集是否已用于恢复。
 
