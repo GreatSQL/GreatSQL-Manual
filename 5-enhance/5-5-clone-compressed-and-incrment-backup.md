@@ -709,7 +709,7 @@ cd /data/restore/20240618
 
 利用 `sysbench` 工具填充 5 个测试表，每个表 2000 万行数据。经对比测试，数据压缩比如下：
 
-| 压缩算法	| 原数据大小 | Clone | Xtrabackup| Clone 压缩比| Xtrabackup压缩比|
+| 压缩算法	| 原数据大小 | Clone | Xtrabackup| Clone 压缩比| Xtrabackup 压缩比|
 | --- | --- |--- | --- | --- | --- |
 | zstd| 23Gb |9.6Gb |9.6Gb |2.40 | 2.40 |
 | lz4 |	23Gb |16.1Gb |17Gb |1.43 | 1.35 |

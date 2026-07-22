@@ -1,4 +1,4 @@
-# Oracle兼容-函数-SQLCODE()/SQLERRM()函数
+# Oracle 兼容-函数-SQLCODE()/SQLERRM()函数
 ---
 
 
@@ -21,15 +21,15 @@ SQLERRM( errcode )
 2. 运行 `SQLERRM(sqlcode)` 获取错误信息，如果指定的错误号与当前错误一致，则返回完整的错误信息。
 3. 运行 `SQLERRM(sqlcode)` 获取错误信息，如果指定的错误号与当前错误不一致，则返回指定错误号对应的错误信息（可能存在占位符）。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-`SQLCODE()` 返回的是GreatSQL中原生定义的错误号，不是Oracle的错误号。
+`SQLCODE()` 返回的是 GreatSQL 中原生定义的错误号，不是 Oracle 的错误号。
 
-当运行的SQL或函数没有报错时，没有异常被触发，则返回值为 0。
+当运行的 SQL 或函数没有报错时，没有异常被触发，则返回值为 0。
 
 `SQLCODE()` 必须在存储过程中或函数中使用，不能单独使用。
 
-`SQLERRM()` 返回的是GreatSQL中原生定义的错误信息，如果指定了不存在的错误信息，则返回 `errcode: Unknown error`。
+`SQLERRM()` 返回的是 GreatSQL 中原生定义的错误信息，如果指定了不存在的错误信息，则返回 `errcode: Unknown error`。
 
 
 ## 4. 示例

@@ -1,4 +1,4 @@
-# mysqldump备份加密
+# mysqldump 备份加密
 ---
 
 从 [GreatSQL 8.0.32-25 版本](../1-docs-intro/relnotes/changes-greatsql-8-0-32-25-20231228.md) 开始支持在 `mysqldump` 进行逻辑备份时产生加密备份文件，并且也支持对加密后的备份文件解密导入。
@@ -25,7 +25,7 @@ mysqldump --encrypt=aes-256-cbc --encrypt-key-file=/data/backup/dumpkey.enc --en
 **备注**：
 - `--encrypt` 为加解密算法。
 - `--encrypt-key-file` 为密钥文件。
-- `--encrypt-iv` 为初始化向量，部分加密算法不需要会忽略该选项，该参数必须是16位长度。
+- `--encrypt-iv` 为初始化向量，部分加密算法不需要会忽略该选项，该参数必须是 16 位长度。
 
 如果有需要，可以将导出文件进行解密以查看备份文件内容：
 ```
@@ -33,7 +33,7 @@ mysqldump --encrypt=aes-256-cbc --encrypt-key-file=/data/backup/dumpkey.enc --en
 mysqldump --decrypt=aes-256-cbc --decrypt-key-file=/data/backup/dumpkey.enc --decrypt-iv=2132180222132180 --decrypt-file=/data/backup/test-enc.sql > /data/backup/test.sql
 ```
 
-也可以在mysql客户端中，直接将加密文件导入（导入的过程中同时解密）：
+也可以在 mysql 客户端中，直接将加密文件导入（导入的过程中同时解密）：
 ```bash
 mysql -e "source_decrypt decrypt-mode aes-256-cbc decrypt-key-file /data/backup/dumpkey.enc decrypt-iv 2132180222132180 decrypt-file /data/backup/test-enc.sql"
 ```

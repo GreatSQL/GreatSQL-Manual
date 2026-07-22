@@ -2,7 +2,7 @@
 
 ---
 
-## TABLE_STATISTICS表介绍
+## TABLE_STATISTICS 表介绍
 
 此表在功能上与 `INDEX_STATISTICS` 表类似
 

@@ -1,51 +1,51 @@
-# Arch Linux系统中安装GreatSQL
+# Arch Linux 系统中安装 GreatSQL
 ---
-## 了解Arch Linux
+## 了解 Arch Linux
 
-Arch Linux是一个轻量、灵活、基于x86-64架构的Linux发行版，遵循K.I.S.S.原则。注重代码正确、优雅和极简主义，期待用户能够愿意去理解系统的操作。
+Arch Linux 是一个轻量、灵活、基于 x86-64 架构的 Linux 发行版，遵循 K.I.S.S.原则。注重代码正确、优雅和极简主义，期待用户能够愿意去理解系统的操作。
 
 ### 简洁
 
-Arch Linux将简洁定义为：避免任何不必要的添加、修改和复杂增加。简单来说，Arch Linux 是一个可以让用户自己动手打造的操作系统。从安装到管理，Arch Linux 放手让用户处理一切。
+Arch Linux 将简洁定义为：避免任何不必要的添加、修改和复杂增加。简单来说，Arch Linux 是一个可以让用户自己动手打造的操作系统。从安装到管理，Arch Linux 放手让用户处理一切。
 
 用户可以自己决定使用哪种桌面环境、安装哪些组件和服务。这种精细化的控制能够赋予你一个精简的操作系统，可以让用户自由选择所需的组件来构建属于用户自己的系统。
 
 ### 滚动更新（现代）
 
-滚动更新（rolling update）是指软件开发中经常性将更新发送到软件的概念。相较于滚动发行，有标准版本和小数点版本的版本号开发模式，必需通过重新安装以取代先前的发行版。Arch Linux 是没有版本概念的，它始终保持最新的状态，通俗的理解就相当于把发行版比喻为一部车，Ubuntu 更新就是换一部新的，而 Arch Linux就是把车里面旧的配件换成新的。
+滚动更新（rolling update）是指软件开发中经常性将更新发送到软件的概念。相较于滚动发行，有标准版本和小数点版本的版本号开发模式，必需通过重新安装以取代先前的发行版。Arch Linux 是没有版本概念的，它始终保持最新的状态，通俗的理解就相当于把发行版比喻为一部车，Ubuntu 更新就是换一部新的，而 Arch Linux 就是把车里面旧的配件换成新的。
 
-Arch Linux是一个滚动发行版，这意味着：
+Arch Linux 是一个滚动发行版，这意味着：
 
 1. 新的内核和应用程序版本一经发布，就会立即向用户推送
-2. 当大多数其它 Linux 发行版还在提供旧的 Linux 内核版本时，Arch Linux会迅速向用户提供最新的内核
-3. 而软件也是如此。如果 Arch Linux仓库中的软件发布了新版本，Arch Linux用户通常会比其他用户先获得新版本
+2. 当大多数其它 Linux 发行版还在提供旧的 Linux 内核版本时，Arch Linux 会迅速向用户提供最新的内核
+3. 而软件也是如此。如果 Arch Linux 仓库中的软件发布了新版本，Arch Linux 用户通常会比其他用户先获得新版本
 4. 在滚动发行模式下，一切都是新鲜和前沿的。用户不必把操作系统从一个版本升级到另一个版本，只要使用 `pacman` 的升级命令，便会始终保持最新的版本
 
 ### 实用
 
-Arch Linux注重实用性，避免意识形态之争。最终的设计决策都是由开发者的共识决定。开发者依赖基于事实的技术分析和讨论，避免政治因素，不会被流行观点左右。
+Arch Linux 注重实用性，避免意识形态之争。最终的设计决策都是由开发者的共识决定。开发者依赖基于事实的技术分析和讨论，避免政治因素，不会被流行观点左右。
 
-Arch Linux的仓库中包含大量的软件包和编译脚本。用户可以按照需要自由选择。仓库中既提供了开源、自由的软件，**也提供了闭源软件**（大部分闭源软件在 `AUR` 仓库中）。**实用性大于意识形态**。
+Arch Linux 的仓库中包含大量的软件包和编译脚本。用户可以按照需要自由选择。仓库中既提供了开源、自由的软件，**也提供了闭源软件**（大部分闭源软件在 `AUR` 仓库中）。**实用性大于意识形态**。
 
 ### 激进的内核更新机制
 
-Arch Linux在更新内核的时候会立即删除旧内核（因为内核也是一个软件包 `linux` / `linux-zen`...，由 `pacman` 更新）
+Arch Linux 在更新内核的时候会立即删除旧内核（因为内核也是一个软件包 `linux` / `linux-zen`...，由 `pacman` 更新）
 
-立即删除旧的内核要求 Arch Linux必须重启来加载新的内核，否则容易发生诡异的问题。这是因为 Linux 所谓的“内核”包含有大量的动态加载模块，如果在某次启动后，某个模块没有被加载过，然后系统内核更新了并且删除了旧的内核，那么这些模块将永远不能被加载了——因为它们随着旧内核被删掉了。除非用户重启系统以完整切换到新的内核以使用新版的动态加载模块。
+立即删除旧的内核要求 Arch Linux 必须重启来加载新的内核，否则容易发生诡异的问题。这是因为 Linux 所谓的“内核”包含有大量的动态加载模块，如果在某次启动后，某个模块没有被加载过，然后系统内核更新了并且删除了旧的内核，那么这些模块将永远不能被加载了——因为它们随着旧内核被删掉了。除非用户重启系统以完整切换到新的内核以使用新版的动态加载模块。
 
 ### 软件包管理体系
 
-不同于 Debian 系列的 `apt / dpkg` 和 Red Hat 系列的 `dnf（yum）/ rpm` 包管理体系，Arch Linux只用了一个工具 pacman 就解决了获取和安装两个功能。这降低了为 Arch Linux 制作软件包的门槛，这也是 AUR 几乎能涵盖整个 Linux 软件生态的主要原因。但是这也导致 pacman 不支持虚包（virtual package）。
+不同于 Debian 系列的 `apt / dpkg` 和 Red Hat 系列的 `dnf（yum）/ rpm` 包管理体系，Arch Linux 只用了一个工具 pacman 就解决了获取和安装两个功能。这降低了为 Arch Linux 制作软件包的门槛，这也是 AUR 几乎能涵盖整个 Linux 软件生态的主要原因。但是这也导致 pacman 不支持虚包（virtual package）。
 
 ::: tip 小贴士
-更多介绍前往Arch Linux社区网站：[https://www.archlinuxcn.org](https://www.archlinuxcn.org)。
+更多介绍前往 Arch Linux 社区网站：[https://www.archlinuxcn.org](https://www.archlinuxcn.org)。
 :::
 
-## 安装Arch Linux
+## 安装 Arch Linux
 
-安装Arch Linux的过程这里就不再详细介绍了，可以前往Arch Linux的官方文档查看详细的安装流程：[https://arch-linux.osrc.com/rookie/pre-install.html](https://arch-linux.osrc.com/rookie/pre-install.html)。
+安装 Arch Linux 的过程这里就不再详细介绍了，可以前往 Arch Linux 的官方文档查看详细的安装流程：[https://arch-linux.osrc.com/rookie/pre-install.html](https://arch-linux.osrc.com/rookie/pre-install.html)。
 
-下面，将展示成功安装完成的Arch Linux环境
+下面，将展示成功安装完成的 Arch Linux 环境
 
 ```bash
 $ uname -a
@@ -70,19 +70,19 @@ $ ldd --version
 ldd (GNU libc) 2.38
 ```
 
-## 安装GreatSQL
+## 安装 GreatSQL
 
-### 选择GreatSQL安装包
+### 选择 GreatSQL 安装包
 
-因为Arch Linux系统自带的ldd (GNU libc)版本是2.38，所以这里下载的GreatSQL二进制包选择
+因为 Arch Linux 系统自带的 ldd (GNU libc)版本是 2.38，所以这里下载的 GreatSQL 二进制包选择
 
 - GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz
 
 ::: tip 小贴士
-若您的 CPU 架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
+若您的 CPU 架构为 ARM 版本请采用 ARM 版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
 :::
 
-Arch Linux系统缺少wget需要先安装wget
+Arch Linux 系统缺少 wget 需要先安装 wget
 
 ```bash
 pacman -S wget
@@ -98,11 +98,11 @@ tar xf GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz
 
 ### 运行环境配置
 
-因为Arch Linux系统主打极简风，所以selinux和防火墙都没有，都不需要手动关闭了
+因为 Arch Linux 系统主打极简风，所以 selinux 和防火墙都没有，都不需要手动关闭了
 
 ### 安装依赖包
 
-Arch Linux用了一个工具 pacman 作为下载软件包
+Arch Linux 用了一个工具 pacman 作为下载软件包
 
 进入到`GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin`目录，输入命令`ldd mysqld mysql | grep "not found"`若不显示其它信息则已经不缺必要软件包
 
@@ -114,7 +114,7 @@ libaio.so.1 => not found
 libnuma.so.1 => not found
 ```
 
-使用pacman安装libaio和numactl
+使用 pacman 安装 libaio 和 numactl
 
 ```bash
 pacman -S libaio
@@ -285,7 +285,7 @@ performance_schema_instrument = '%lock%=on'
 
 一般修改 *basedir/datadir/innodb_buffer_pool_size* 等几个选项就可以，修改完后保存退出。
 
-接下来新建mysql用户和新建数据库主目录，并修改权限模式及属主
+接下来新建 mysql 用户和新建数据库主目录，并修改权限模式及属主
 
 ```bash
 /sbin/groupadd mysql
@@ -303,9 +303,9 @@ chmod -R 700 /data/GreatSQL
 mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
 ```
 
-### 增加GreatSQL系统服务
+### 增加 GreatSQL 系统服务
 
-推荐采用systemd来管理GreatSQL服务，执行 `vim /etc/systemd/system/greatsql.service` 命令，添加下面的内容：
+推荐采用 systemd 来管理 GreatSQL 服务，执行 `vim /etc/systemd/system/greatsql.service` 命令，添加下面的内容：
 
 ```ini
 [Unit]
@@ -355,13 +355,13 @@ PrivateTmp=false
 
 务必确认文件中 `ExecStartPre` 和 `ExecStart` 两个参数指定的目录及文件名是否正确。
 
-**提示**：如果不是安装到默认的 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64` 目录下（不同版本具体目录也有所变化），可能会影响 GreatSQL 的自动初始化操作。这种时候，可以先将GreatSQL二进制包解压缩到 `/usr/local` 目录下，再根据需要自行做软链接，例如：
+**提示**：如果不是安装到默认的 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64` 目录下（不同版本具体目录也有所变化），可能会影响 GreatSQL 的自动初始化操作。这种时候，可以先将 GreatSQL 二进制包解压缩到 `/usr/local` 目录下，再根据需要自行做软链接，例如：
 
 ```bash
 tar xf GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz -C /usr/local
 ln -s /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64 /usr/local/GreatSQL
 ```
-这样既不影响GreatSQL的自动初始化，又能满足自定义需要。
+这样既不影响 GreatSQL 的自动初始化，又能满足自定义需要。
 
 也可以编辑二进制包中的 `mysqld_pre_systemd` 脚本，修改脚本中几处涉及 GreatSQL 安装路径的地方，例如：
 
@@ -373,13 +373,13 @@ ln -s /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64 /usr/local/GreatSQL
 184:        /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysql_ssl_rsa_setup --datadir="$datadir" --uid=mysql >/dev/null 2>&1
 ```
 
-以上几处请自行修改，然后执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
+以上几处请自行修改，然后执行命令重载 systemd，加入 `greatsql` 服务，如果没问题就不会报错：
 
 ```bash
 systemctl daemon-reload
 ```
 
-这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
+这就安装成功并将 GreatSQL 添加到系统服务中，后面可以用 `systemctl` 来管理 GreatSQL 服务。
 
 编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
 
@@ -405,9 +405,9 @@ ldconfig && ldconfig -p | grep libprotobuf.so
 
 这个步骤的作用是加载 GreatSQL 自带的动态依赖库文件，这样在运行 mysql/mysqld 等二进制文件时可能需要用到，避免报错。
 
-## 启动GreatSQL
+## 启动 GreatSQL
 
-执行下面的命令启动GreatSQL服务
+执行下面的命令启动 GreatSQL 服务
 ```bash
 systemctl start greatsql
 ```
@@ -440,7 +440,7 @@ systemd[1]: Failed to start GreatSQL Server.
 ```
 :::
 
-只需手动创建 `/var/lib/mysql-files` 目录，再次启动GreatSQL服务即可：
+只需手动创建 `/var/lib/mysql-files` 目录，再次启动 GreatSQL 服务即可：
 ```bash
 mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
 systemctl start greatsql
@@ -487,11 +487,11 @@ $ ls /data/GreatSQL
  binlog.000002   client-cert.pem  '#ib_16384_0.dblwr'   ibdata1         '#innodb_temp'       mysql.sock        public_key.pem       sys
  binlog.index    client-key.pem   '#ib_16384_1.dblwr'   ibtmp1           mysql               mysql.sock.lock   server-cert.pem      undo_001
 ```
-可以看到，GreatSQL服务已经正常启动了。
+可以看到，GreatSQL 服务已经正常启动了。
 
-## 连接登录GreatSQL
+## 连接登录 GreatSQL
 
-在上面进行GreatSQL初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
+在上面进行 GreatSQL 初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
 
 ```bash
 $ grep -i root /data/GreatSQL/error.log
@@ -500,9 +500,9 @@ $ grep -i root /data/GreatSQL/error.log
 A temporary password is generated for root@localhost: ji!pjndiw5sJ
 ```
 
-复制该密码，将用于首次登录GreatSQL所需。
+复制该密码，将用于首次登录 GreatSQL 所需。
 
-部分GreatSQL二进制包方式安装后，有可能初始化的root密码是空的，这种情况下可以直接登录并修改成安全密码。
+部分 GreatSQL 二进制包方式安装后，有可能初始化的 root 密码是空的，这种情况下可以直接登录并修改成安全密码。
 
 ```bash
 $ mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
@@ -525,20 +525,20 @@ Query OK, 0 rows affected (0.02 sec)
 
 GreatSQL 数据库安装并初始化完毕
 
-## 安装GreatSQL Shell
+## 安装 GreatSQL Shell
 
-为了支持仲裁节点特性，需要安装GreatSQL Shell。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5)，找到 **GreatSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
+为了支持仲裁节点特性，需要安装 GreatSQL Shell。打开[GreatSQL 下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5)，找到 **GreatSQL MySQL Shell**，下载相应的 MySQL Shell 安装包（目前只提供二进制安装包）。
 
 - greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
 
-下载相应的MySQL Shell安装包（目前只提供二进制安装包）并解压
+下载相应的 MySQL Shell 安装包（目前只提供二进制安装包）并解压
 
 ```bash
 cd /usr/local
 tar xf greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
 ```
 
-修改家目录下的 *profile* 文件 `vim ~/.bash_profile`，加入PATH：
+修改家目录下的 *profile* 文件 `vim ~/.bash_profile`，加入 PATH：
 
 ```ini
 PATH=$PATH:$HOME/bin:/usr/local/greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64/bin
@@ -552,7 +552,7 @@ source ~/.bash_profile
 
 这样就可以直接执行 `mysqlsh`，而无需每次都加上全路径了。
 
-进入bin目录查看下缺少什么依赖
+进入 bin 目录查看下缺少什么依赖
 
 ```bash
 $ cd /usr/local/greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64/bin
@@ -569,7 +569,7 @@ pacman -S core/openssl-1.1
 pacman -S archlinuxcn/python39
 ```
 
-因为下载的Python版本过高，所以采用软链接的方式
+因为下载的 Python 版本过高，所以采用软链接的方式
 
 ```
 ln -s /usr/lib/libpython3.9.so.1.0 /usr/lib64/libpython3.8.so.1.0
@@ -581,7 +581,7 @@ ln -s /usr/lib/libpython3.9.so.1.0 /usr/lib64/libpython3.8.so.1.0
 ldd mysqlsh | grep "not found"
 ```
 
-没有缺失依赖的话，接下来就可以体验MySQL Shell了
+没有缺失依赖的话，接下来就可以体验 MySQL Shell 了
 
 ```bash
 $ mysqlsh

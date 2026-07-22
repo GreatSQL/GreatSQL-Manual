@@ -33,7 +33,7 @@
 ### 大事务造成延迟
 当 Primary 上有大事务产生时，很容易造成 Secondary 在应用大事务过程中存在延迟。
 
-因此，要尽量避免执行大事务。可以将大事务拆分成多个小事务，例如当执行load data导入大批数据时，就可以将导入文件切分成多个小文件。
+因此，要尽量避免执行大事务。可以将大事务拆分成多个小事务，例如当执行 `LOAD DATA` 导入大批数据时，就可以将导入文件切分成多个小文件。
 
 此外，还可以适当调低 `group_replication_transaction_size_limit` 阈值，限制事务大小。
 
@@ -47,12 +47,12 @@ SELECT * FROM sys.innodb_lock_waits ORDER BY wait_age_secs DESC LIMIT N;
 
 -- 要特别关注的大事务
 SELECT * FROM information_schema.innodb_trx WHERE
-  trx_lock_structs >= 5 OR    -- 超过5把锁
-  trx_rows_locked >= 100 OR   -- 超过100行被锁
-  trx_rows_modified >= 100 OR -- 超过100行被修改
-  TIME_TO_SEC(TIMEDIFF(NOW(),trx_started)) > 100;    -- 事务活跃超过100秒
+  trx_lock_structs >= 5 OR    -- 超过 5 把锁
+  trx_rows_locked >= 100 OR   -- 超过 100 行被锁
+  trx_rows_modified >= 100 OR -- 超过 100 行被修改
+  TIME_TO_SEC(TIMEDIFF(NOW(),trx_started)) > 100;    -- 事务活跃超过 100 秒
 ```
-当然了，上述这些监控SQL的阈值可根据实际情况自行适当调整。
+当然了，上述这些监控 SQL 的阈值可根据实际情况自行适当调整。
 
 ### 网络存在瓶颈
 一般来说，最好是在局域网内运行 MGR，甚至在同一个 VLAN 里运行，使得网络质量尽量有保证。

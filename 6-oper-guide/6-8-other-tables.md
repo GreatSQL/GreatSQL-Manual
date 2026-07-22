@@ -1,13 +1,13 @@
-# 其它INFORMATION_SCHEMA表
+# 其它 INFORMATION_SCHEMA 表
 
 ---
-此页面列出了由 GreatSQL 新增的其它`INFORMATION_SCHEMA` 表，这些表在文档其它地方不存在。
+此页面列出了由 GreatSQL 新增的其它 `INFORMATION_SCHEMA` 表，这些表在文档其它地方不存在。
 
 ## Temporary tables 临时表
 
 ### INFORMATION_SCHEMA.GLOBAL_TEMPORARY_TABLES
 
-只显示使用`CREATE TEMPORARY TABLE`或`ALTER TABLE`明确创建的临时表，不显示为处理复杂查询而创建的临时表。
+只显示使用 `CREATE TEMPORARY TABLE` 或 `ALTER TABLE` 明确创建的临时表，不显示为处理复杂查询而创建的临时表。
 
 创建一张临时表：
 

@@ -14,12 +14,12 @@ CREATE TABLE [IF NOT EXISTS] table_name OF type_name [table options]
 
 ## 2. 定义和用法
 
-GreatSQL支持用户通过 `CREATE TABLE OF TYPE` 创建自定义数据类型。
+GreatSQL 支持用户通过 `CREATE TABLE OF TYPE` 创建自定义数据类型。
 
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-GreatSQL中的`CREATE TABLE OF TYPE`与Oracle兼容情况说明如下：
+GreatSQL 中的`CREATE TABLE OF TYPE`与 Oracle 兼容情况说明如下：
 
 1. 不支持 `CREATE TEMPORARY TABLE OF TYPE` 用法。
 
@@ -29,7 +29,7 @@ GreatSQL中的`CREATE TABLE OF TYPE`与Oracle兼容情况说明如下：
 
 4. 若有其他表存在依赖/继承关系，在删除这些表之前不允许 `DROP TABLE TYPE`。
 
-5. 支持跨库引用创建新表，但必须和引用的 `TABLE TYPE` 在同一个Schema里。
+5. 支持跨库引用创建新表，但必须和引用的 `TABLE TYPE` 在同一个 Schema 里。
 
 6. 支持 `INSERT ... VALUES` 和 `INSERT ... SELECT` 两种方式写入数据。
 
@@ -40,7 +40,7 @@ GreatSQL中的`CREATE TABLE OF TYPE`与Oracle兼容情况说明如下：
 ## 4. 示例
 
 
-- 1. 示例1：建表及写数据
+- 1. 示例 1：建表及写数据
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -115,9 +115,9 @@ Create Table: CREATE TABLE "tf_t2" (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 ```
 
-- 2. 示例2：修改表
+- 2. 示例 2：修改表
 
-本示例基于示例1中的表和数据，不再重复执行。
+本示例基于示例 1 中的表和数据，不再重复执行。
 
 ```sql
 -- 不能修改表结构
@@ -161,7 +161,7 @@ Create Table: CREATE TABLE "tf_t2" (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 ```
 
-## 5. TABLE TYPE数据字典
+## 5. TABLE TYPE 数据字典
 
 ```sql
 -- 1. 查询 information_schema.TABLES 查看所有 TABLE
@@ -191,7 +191,7 @@ greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, ORDINAL_POSITION, DATA_T
 
 ## 6. 导出备份
 
-由于 `CREATE TABLE OF TYPE` 需要从 `UDT` 中继承用户自定义的数据类型，因此在使用 `mysqldump` 导出数据时，还需要再指定 `--routines` 选项（默认为关闭），把UDT也一并导出，否则会导致在恢复数据时失败。
+由于 `CREATE TABLE OF TYPE` 需要从 `UDT` 中继承用户自定义的数据类型，因此在使用 `mysqldump` 导出数据时，还需要再指定 `--routines` 选项（默认为关闭），把 UDT 也一并导出，否则会导致在恢复数据时失败。
 
 示例：
 ```

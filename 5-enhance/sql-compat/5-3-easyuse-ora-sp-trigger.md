@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-触发器（`TRIGGER`）
+# Oracle 兼容-存储过程-触发器（`TRIGGER`）
 ---
 
 
@@ -23,11 +23,11 @@ trigger_event: { INSERT | UPDATE | DELETE | INSERT OR UPDATE | INSERT OR DELETE 
 
 ## 2. 定义和用法
 
-在 `ORACLE` 模式下，GreatSQL存储过程支持Oracle风格的触发器大部分语法。
+在 `ORACLE` 模式下，GreatSQL 存储过程支持 Oracle 风格的触发器大部分语法。
 
 同时也支持在任何模式下启用和禁用触发器。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
 1. 不支持在视图中使用触发器，不支持 `INSTEAD OF`语法
 
@@ -45,7 +45,7 @@ greatsql> CREATE TABLE t1 (a INT NOT NULL, b VARCHAR(300) NOT NULL);
 greatsql> INSERT INTO t1 VALUES(1, 'row1'), (2, 'row2'), (3,'row3') ;
 ```
 
-- 1 示例1：`INSERT`
+- 1 示例 1：`INSERT`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -61,7 +61,7 @@ BEGIN
 END; //
 ```
 
-- 2. 示例2：`INSERT OR UPDATE`
+- 2. 示例 2：`INSERT OR UPDATE`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -77,7 +77,7 @@ BEGIN
 END; //
 ```
 
-- 3. 示例3：`UPDATE OR DELETE`
+- 3. 示例 3：`UPDATE OR DELETE`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -93,7 +93,7 @@ BEGIN
 END; //
 ```
 
-- 4. 示例4：支持 `WHEN`
+- 4. 示例 4：支持 `WHEN`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -112,9 +112,9 @@ BEGIN
 END; //
 ```
 
-- 5. 示例5
+- 5. 示例 5
 
-创建完上述4个触发器之后，再执行下面的测试：
+创建完上述 4 个触发器之后，再执行下面的测试：
 ```sql
 -- 在 `ORACLE` 模式下，相同触发事件只执行最后创建的触发器
 greatsql> SET sql_mode = ORACLE;
@@ -188,7 +188,7 @@ greatsql> SELECT * FROM t1;
 +---+-------------------------------------------------------------------------------------------------------------------------------------------------------+
 ```
 
-- 6. 示例6：启用/禁用触发器
+- 6. 示例 6：启用/禁用触发器
 
 ```sql
 greatsql> SET sql_mode = ORACLE;

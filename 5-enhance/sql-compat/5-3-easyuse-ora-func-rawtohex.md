@@ -1,4 +1,4 @@
-# Oracle兼容-函数-RAWTOHEX()函数
+# Oracle 兼容-函数-RAWTOHEX()函数
 ---
 
 
@@ -15,9 +15,9 @@ RAWTOHEX(expr)
 
 函数返回一个字符串，由构成原始值字节的十六进制表示，即每个字节由两个十六进制数字表示。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-在Oracle中，`expr`参数支持的类型为除 `LONG,LONG RAW,CLOB,NCLOB,BLOB,BFILE` 之外的任何标量数据类型，而GreatSQL中仅支持上面提到的几个数据类型。
+在 Oracle 中，`expr`参数支持的类型为除 `LONG,LONG RAW,CLOB,NCLOB,BLOB,BFILE` 之外的任何标量数据类型，而 GreatSQL 中仅支持上面提到的几个数据类型。
 
 | RAWTOHEX 输入     | ORACLE           | GreatSQL                                                                     |
 | ----------------- | ---------------- | ---------------------------------------------------------------------------- |
@@ -25,7 +25,7 @@ RAWTOHEX(expr)
 | RAWTOHEX(sysdate) | E7070B06081C2300 | ERROR 3064 (HY000): Incorrect type for argument args 0 in function rawtohex. |
 
 
-本函数在只允许用于存储程序的语句中时与在可以独立执行的SQL语句中时的工作方式不同。前者在函数转换为十六进制值之前执行隐式转换，这可能会导致本函数在不同场景返回不同的值。例如：
+本函数在只允许用于存储程序的语句中时与在可以独立执行的 SQL 语句中时的工作方式不同。前者在函数转换为十六进制值之前执行隐式转换，这可能会导致本函数在不同场景返回不同的值。例如：
 ```sql
 DECLARE
   a varchar2(8);

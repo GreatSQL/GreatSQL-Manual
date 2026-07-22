@@ -170,7 +170,7 @@ FROM country
 5 rows in set (0.00 sec)
 ```
 :::
-### 左外连接排除B部分
+### 左外连接排除 B 部分
 若要排除 B 部分，则在 WHERE 语句中添加 `IS NULL` 条件，如下：
 ```sql
 SELECT * FROM A LEFT JOIN B ON A.key = B.key WHERE B.key IS NULL;
@@ -267,7 +267,7 @@ LIMIT 5;
 ```
 :::
 
-### 右外连接排除A部分
+### 右外连接排除 A 部分
 若要排除 A 部分，则在 WHERE 语句中添加 `IS NULL` 条件，如下：
 ```sql
 SELECT * FROM A RIGHT JOIN B ON A.key = B.key WHERE A.key IS NULL;

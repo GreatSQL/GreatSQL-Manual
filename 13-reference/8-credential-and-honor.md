@@ -7,7 +7,7 @@ GreatSQL 数据库是开放原子开源基金会旗下捐赠项目，拥有中�
 
 ![可信开源社区/可信开源项目](./8-credential-and-honor-03.png)
 
-GreatSQL 数据库同时也是 gitee（码云）平台上的 GVP 项目，详见：[https://gitee.com/gvp/database-related](https://gitee.com/gvp/database-related) **数据库相关**类目。
+GreatSQL 数据库同时也是 Gitee（码云）平台上的 GVP 项目，详见：[https://gitee.com/gvp/database-related](https://gitee.com/gvp/database-related) **数据库相关**类目。
 
 ![GVP 项目](./8-credential-and-honor-04.png)
 

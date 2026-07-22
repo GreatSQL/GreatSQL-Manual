@@ -98,9 +98,9 @@ $ ls -l /nvme/backup/clone/20230831/greatsql/
 -rw-r----- 1 mysql mysql    114688 Aug 31 15:18 t2.ibd
 -rw-r----- 1 mysql mysql    114688 Aug 31 15:18 t3.ibd
 ```
-看到只备份了数据（包含redo和undo log，但没有double write buffer和ibtmp1文件），不备份系统配置文件，以及binlog、MyISAM表（没有t4.MYD等文件）。
+看到只备份了数据（包含 Redo 和 Undo Log，但没有 double write buffer 和 ibtmp1 文件），不备份系统配置文件，以及 binlog、MyISAM 表（没有 t4.MYD 等文件）。
 
-如果把这个备份数据恢复到一个空实例并启动，就会发现存在表t4，但是个空表：
+如果把这个备份数据恢复到一个空实例并启动，就会发现存在表 t4，但是个空表：
 ```bash
 $ ls -la /data/GreatSQL-restore/greatsql
 
@@ -150,7 +150,7 @@ greatsql> SHOW GRANTS FOR repl;
 | GRANT BACKUP_ADMIN ON *.* TO `repl`@`%` |
 +-----------------------------------------+
 ```
-在上面的测试案例中，donor 节点的只对repl账户授予 `BACKUP_ADMIN` 权限，所以 recipient 节点 Clone 完成后，该实例上的 repl 账户授权也被覆盖了，不再拥有 `CLONE_ADMIN` 权限。
+在上面的测试案例中，donor 节点的只对 repl 账户授予 `BACKUP_ADMIN` 权限，所以 recipient 节点 Clone 完成后，该实例上的 repl 账户授权也被覆盖了，不再拥有 `CLONE_ADMIN` 权限。
 
 在 Clone 结束后，recipient 节点实例会被自动执行 `SHUTDOWN` 关闭，如果该实例无法实现自动重启的话，就需要自行手动再次启动。因此建议将数据库加入 systemd 服务管理中。
 
@@ -235,7 +235,7 @@ greatsql> SELECT STAGE, STATE, CAST(BEGIN_TIME AS TIME) AS "START TIME",
 2. 从 GreatSQL 8.0.32-27 版本开始，Clone 支持加增量备份和压缩备份，详情请见文档：[Clone 压缩及增量备份](../5-enhance/5-5-clone-compressed-and-incrment-backup.md)。
 :::
 
-在 recipient 节点上完成 Clone 备份后，就等同于在 recipient 也做了一次数据恢复，这个节点还可以作为主从复制的从节点，也可以作为MGR组复制的新节点，一举多得。
+在 recipient 节点上完成 Clone 备份后，就等同于在 recipient 也做了一次数据恢复，这个节点还可以作为主从复制的从节点，也可以作为 MGR 组复制的新节点，一举多得。
 
 **参考资料：**
 

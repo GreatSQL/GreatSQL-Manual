@@ -5,7 +5,7 @@
 
 MySQL Shell 是一个客户端工具，可用于方便管理和操作 MySQL，支持 SQL、JavaScript、Python 等多种语言，也包括完善的 API。MySQL Shell 支持文档型和关系型数据库模式，通过 X DevAPI 可以管理文档型数据，通过 AdminAPI 可以管理 InnoDB Cluster、InnoDB ClusterSet 及 InnoDB ReplicaSet 等。
 
-MySQL Shell 中提供了 Utilities 工具包，可用于对数据库进行备份和恢复，可支持实例级、Schema级、数据表级三个不同级别的数据备份和恢复功能。并且支持兼容性检查、并行导入导出、以及备份文件压缩特性，备份恢复效率比 mysqldump 更高。
+MySQL Shell 中提供了 Utilities 工具包，可用于对数据库进行备份和恢复，可支持实例级、Schema 级、数据表级三个不同级别的数据备份和恢复功能。并且支持兼容性检查、并行导入导出、以及备份文件压缩特性，备份恢复效率比 mysqldump 更高。
 
 在开始进行备份和恢复前，要先连接登录数据库，这里采用通过本地socket方式连接：
 ```bash
@@ -61,7 +61,7 @@ Average compressed throughput: 22.42 MB/s
 Util.dumpInstance: Cannot proceed with the dump, the specified directory '/data/backup/20230830' already exists at the target location /data/backup/20230830 and is not empty. (ArgumentError)
 ```
 
-执行备份时，默认并发4个线程，可以通过设置参数 `threads` 调整并发线程数，例如下面的命令：
+执行备份时，默认并发 4 个线程，可以通过设置参数 `threads` 调整并发线程数，例如下面的命令：
 ```js
 util.dumpInstance("/data/backup/20230830", {threads: 8})
 ```
@@ -107,7 +107,7 @@ Recreating indexes - done
 6 chunks (666.32K rows, 170.71 MB) for 5 tables in 1 schemas were loaded in 4 sec (avg throughput 37.92 MB/s)
 0 warnings were reported during the load.
 ```
-因为GreatSQL默认会初始化 `sys_audit` 这个用于审计功能的Schema，导入时要设置忽略这个Schema，而 `mysql`/`sys`/`information_schema`/`performance_schema` 等几个系统级Schema会被MySQL Shell识别并忽略，无需额外设置策略。也就是说，利用`util.loadDump()`进行恢复时，并不会覆盖当前实例中的几个系统Schema。
+因为 GreatSQL 默认会初始化 `sys_audit` 这个用于审计功能的 Schema，导入时要设置忽略这个 Schema，而 `mysql`/`sys`/`information_schema`/`performance_schema` 等几个系统级 Schema 会被 MySQL Shell 识别并忽略，无需额外设置策略。也就是说，利用 `util.loadDump()` 进行恢复时，并不会覆盖当前实例中的几个系统Schema。
 
 在进行恢复时，如果目标实例中已有对应的数据对象，则可能会报告类似下面的错误：
 ```js
@@ -128,9 +128,9 @@ Util.loadDump: While 'Scanning metadata': Duplicate objects found in destination
 ```
 这时要么先将目标实例中对应的数据对象删除，要么加上 `excludeSchemas` 参数设置忽略规则。
 
-##  Schema级备份恢复
-### 备份整个Schema
-调用 `util.dumpSchema` 方法备份单个Schema：
+##  Schema 级备份恢复
+### 备份整个 Schema
+调用 `util.dumpSchema` 方法备份单个 Schema：
 ```js
 util.dumpSchemas(["greatsql"], "/data/backup/20230830/greatsql")
 ```

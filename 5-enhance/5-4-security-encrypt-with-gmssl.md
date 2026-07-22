@@ -24,7 +24,7 @@ ldd (GNU libc) 2.28
 ::: tip 小贴士
 - 点击下载链接后，打开的下载地址应该包含"GM"目录，例如 *https://product.greatdb.com/GreatSQL-8.4.4-5/GM/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz*。
 
-- 若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
+- 若您的 CPU 架构为 ARM 版本请采用 ARM 版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
 :::
 
 将下载的二进制包放到安装目录下，并解压缩：
@@ -34,7 +34,7 @@ curl -o GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz https://product.greatdb.c
 tar xf GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz
 ```
 
-同时修改设置，将GreatSQL加入 `PATH` 环境变量：
+同时修改设置，将 GreatSQL 加入 `PATH` 环境变量：
 ```bash
 echo 'export PATH=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
 source ~/.bash_profile
@@ -284,13 +284,13 @@ PrivateTmp=false
 
 务必确认文件中 `ExecStartPre` 和 `ExecStart` 两个参数指定的目录及文件名是否正确。
 
-**提示**：如果不是安装到默认的 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64` 目录下（不同版本具体目录也有所变化），可能会影响 GreatSQL 的自动初始化操作。这种时候，可以先将GreatSQL二进制包解压缩到 `/usr/local` 目录下，再根据需要自行做软链接，例如：
+**提示**：如果不是安装到默认的 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64` 目录下（不同版本具体目录也有所变化），可能会影响 GreatSQL 的自动初始化操作。这种时候，可以先将 GreatSQL 二进制包解压缩到 `/usr/local` 目录下，再根据需要自行做软链接，例如：
 
 ```bash
 tar xf GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz -C /usr/local
 ln -s /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64 /usr/local/GreatSQL
 ```
-这样既不影响GreatSQL的自动初始化，又能满足自定义需要。
+这样既不影响 GreatSQL 的自动初始化，又能满足自定义需要。
 
 也可以编辑二进制包中的 `mysqld_pre_systemd` 脚本，修改脚本中几处涉及 GreatSQL 安装路径的地方，例如：
 
@@ -302,7 +302,7 @@ ln -s /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64 /usr/local/GreatSQL
 184:        /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysql_ssl_rsa_setup --datadir="$datadir" --uid=mysql >/dev/null 2>&1
 ```
 
-以上几处请自行修改，然后执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
+以上几处请自行修改，然后执行命令重载 systemd，加入 `greatsql` 服务，如果没问题就不会报错：
 
 ```bash
 systemctl daemon-reload
@@ -493,24 +493,24 @@ ERROR 2026 (HY000): SSL connection error: error:1408F10B:SSL routines:ssl3_get_r
 ```
 
 ::: tip 小贴士
-- 目前不支持通过JDBC连接GreatSQL国密服务端。
+- 目前不支持通过 JDBC 连接 GreatSQL 国密服务端。
 
-- 对于C API，需要在 `mysql_real_connect()` 函数之前使用 `mysql_options(mysql, MYSQL_OPT_GM_SSL, &is_gm)` 来设置开启国密认证。
+- 对于 C API，需要在 `mysql_real_connect()` 函数之前使用 `mysql_options(mysql, MYSQL_OPT_GM_SSL, &is_gm)` 来设置开启国密认证。
 :::
 
 ## 采用国密算法加密表空间
 
 GreatSQL 支持数据表空间、系统表空间、Redo Log、Undo Log 的静态数据透明加密。
 
-表空间加密keyring架构包含两层加密，master key 和 tablespace key。
+表空间加密 keyring 架构包含两层加密，master key 和 tablespace key。
 
-master key用于加密tablespace key，加密后的结果存储在tablespace的header中。
+master key 用于加密 tablespace key，加密后的结果存储在 tablespace 的 header 中。
 
-tablespace key用于加密数据，当用户想访问加密的表时，InnoDB会先用master key对之前存储在header中的加密信息进行解密，得到tablespace key。再用tablespace key解密数据信息。
+tablespace key 用于加密数据，当用户想访问加密的表时，InnoDB 会先用 master key 对之前存储在 header 中的加密信息进行解密，得到 tablespace key。再用 tablespace key 解密数据信息。
 
-tablespace key是不会被改变的，而master key可以通过轮换命令进行更新。
+tablespace key 是不会被改变的，而 master key 可以通过轮换命令进行更新。
 
-Master key采用keyring_file插件，key file直接存储在磁盘上。
+Master key 采用 keyring_file 插件，key file 直接存储在磁盘上。
 
 想要生成支持国密的 master keyring file，需使用组件 **component_keyring_file**，
 
@@ -620,7 +620,7 @@ Create Table: CREATE TABLE `t1` (
 -- 取消加密
 greatsql> ALTER TABLE t1 ENCRYPTION='N';
 ```
-**注意：** keyring文件需要做好备份，万一不慎被删除、修改或移走，都会导致被加密的数据库对象无法被正确读取，这时就可以将备份文件恢复回去。
+**注意：** keyring 文件需要做好备份，万一不慎被删除、修改或移走，都会导致被加密的数据库对象无法被正确读取，这时就可以将备份文件恢复回去。
 
 ## 查看元数据
 可以在 `performance_schema` 和 `information_schema` 中查看加密相关元数据信息：
@@ -662,7 +662,7 @@ SELECT SCHEMA_NAME, DEFAULT_ENCRYPTION FROM information_schema.SCHEMATA WHERE DE
 +-------------+--------------------+
 ```
 
-更多详情请见MySQL文档：
+更多详情请见 MySQL 文档：
 - [https://dev.mysql.com/doc/refman/8.0/en/keyring.html](https://dev.mysql.com/doc/refman/8.0/en/keyring.html)
 - [https://dev.mysql.com/doc/refman/8.0/en/innodb-data-encryption.html](https://dev.mysql.com/doc/refman/8.0/en/innodb-data-encryption.html)
 

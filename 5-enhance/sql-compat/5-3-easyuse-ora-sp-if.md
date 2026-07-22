@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-IF
+# Oracle 兼容-存储过程-IF
 ---
 
 
@@ -15,7 +15,7 @@ END IF
 
 在 `ORACLE` 模式下，GreatSQL 在存储过程/存储函数中，可利用 `IF .. ELSIF .. ELSE .. END IF` 语句实现一个基本的条件结构。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
 在 `ORACLE` 模式下，GreatSQL 在存储过程/存储函数中，可利用 `IF .. ELSIF .. ELSE .. END IF` 语句实现一个基本的条件结构。而在 GreatSQL 原生语法结构中，是采用 `IF .. ELSEIF .. ELSE .. END IF` 这种用法。
 

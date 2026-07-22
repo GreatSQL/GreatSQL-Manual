@@ -1,4 +1,4 @@
-# Oracle兼容-函数-INSTRB()函数
+# Oracle 兼容-函数-INSTRB()函数
 ---
 
 
@@ -12,13 +12,13 @@ INSTRB( string, sub_string [, start_position [, nth_appearance ] ] )
 参数：
 - `string`，指定需要在其中搜索子字符串的字符串。
 - `sub_string`，指定需要搜索的子字符串。
-- `start_position`，可选参数，指定字符串从字节搜索开始的位置。默认值为1。`INSTRB()`函数从字符串末尾算起`start_position`的字节数，如果指定的值为负数，则向字符串开头进行搜索。
-- `nth_appearance`，可选参数，指定子字符串的第n个匹配。预设值为1。
+- `start_position`，可选参数，指定字符串从字节搜索开始的位置。默认值为 1。`INSTRB()`函数从字符串末尾算起`start_position`的字节数，如果指定的值为负数，则向字符串开头进行搜索。
+- `nth_appearance`，可选参数，指定子字符串的第 n 个匹配。预设值为 1。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 函数 `INSTRB()` 的作用是按字节在 `string` 字符串中查找 `sub_string` 字符串。
 
-**注意：** 当参数 `string` 和 `sub_string` 的类型不一致时，在GreatSQL和Oracle中的类型转换处理方式可能存在不同，Oracle有些会进行特殊转换处理（如参数sub_string为小数类型,在转换为字符类型时，当整数部分为0时，会舍弃整数部分）。例如：
+**注意：** 当参数 `string` 和 `sub_string` 的类型不一致时，在 GreatSQL 和 Oracle 中的类型转换处理方式可能存在不同，Oracle 有些会进行特殊转换处理（如参数 sub_string 为小数类型,在转换为字符类型时，当整数部分为 0 时，会舍弃整数部分）。例如：
 ```
 -- 在GreatSQL中得到1
 greatsql> SELECT INSTRB('0.3333', 0.3) FROM DUAL;

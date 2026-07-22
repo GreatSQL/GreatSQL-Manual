@@ -1,4 +1,4 @@
-# Oracle兼容-语法-CREATE TYPE
+# Oracle 兼容-语法-CREATE TYPE
 ---
 
 
@@ -18,40 +18,40 @@ CREATE [OR REPLACE] [DEFINER = user] TYPE type_name [AS|IS] VARRAY(n) OF [udt_na
 
 ## 2. 定义和用法
 
-GreatSQL支持用户通过 `CREATE TYPE` 创建自定义数据类型，有几点注意事项：
+GreatSQL 支持用户通过 `CREATE TYPE` 创建自定义数据类型，有几点注意事项：
 
 1. 支持常用的 `INT/VARCHAR` 等类型，暂不支持 `TINYBLOB/BLOB/MEDIUMBLOB/LONGBLOB` 等几个类型。
 
-2. 在 `VARRAY(n)` 中，n的取值范围：[1024, 18446744073709551615]，默认值为1048576，由全局选项 `tf_udt_table_max_rows` 控制。如果是在MGR集群中使用，则必须确保所有节点的 `tf_udt_table_max_rows` 选项值设置一致，否则可能造成MGR运行报错。
+2. 在 `VARRAY(n)` 中，n 的取值范围：[1024, 18446744073709551615]，默认值为 1048576，由全局选项 `tf_udt_table_max_rows` 控制。如果是在 MGR 集群中使用，则必须确保所有节点的 `tf_udt_table_max_rows` 选项值设置一致，否则可能造成 MGR 运行报错。
 
 3. 支持跨库访问用户自定义类型。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-GreatSQL和Oracle自定义类型的使用主要有以下几点不同：
+GreatSQL 和 Oracle 自定义类型的使用主要有以下几点不同：
 
 1. 可以定义具体列类型，暂不支持多层类型嵌套定义。
 
 2. 不支持设置或赋默认值。
 
-3. 执行 `SELECT type_name` 结果的显示，会由于GreatSQL跟Oracle终端网络传输协议不一致而不同。可用设置选项 `udt_format_result = 'DBA'` 控制输出格式为字符串格式如 `col1:value | col2:value2`，详见下面示例。
+3. 执行 `SELECT type_name` 结果的显示，会由于 GreatSQL 跟 Oracle 终端网络传输协议不一致而不同。可用设置选项 `udt_format_result = 'DBA'` 控制输出格式为字符串格式如 `col1:value | col2:value2`，详见下面示例。
 
-4. 在Oracle中，`TYPE, FUNCTION, PACKAGE` 这些数据对象名都不能重名；在GreatSQL中，`TYPE, FUNCTION, PACKAGE` 这些数据对象名也不能重名，例外的是，`FUNCTION` 和 `PACKAGE`可以重名。
+4. 在 Oracle 中，`TYPE, FUNCTION, PACKAGE` 这些数据对象名都不能重名；在 GreatSQL 中，`TYPE, FUNCTION, PACKAGE` 这些数据对象名也不能重名，例外的是，`FUNCTION` 和 `PACKAGE`可以重名。
 
 5. 执行 `SELECT type_table` 返回值为输入的字符串，如果想变为表格的形式输出就使用 `TABLE` 函数。
 
-6. 执行 `SELECT type_table()` 的参数必须为定义时候用的type类型对象，否则会报错。
+6. 执行 `SELECT type_table()` 的参数必须为定义时候用的 type 类型对象，否则会报错。
 
 7. 执行 `CREATE TYPE AS TABLE/VARRAY(n) OF type_name` 语句中，`type_name` 只支持 `UDT` 类型，不支持 `UDT TABLE` 类型，即不支持多层嵌套自定义表的类型。
 
-8. 目前不支持 `SELECT * FROM udt_table` 用法，可以改用 `SELECT * FROM TABLE(udt_table)` 来获取udt_table的值。
+8. 目前不支持 `SELECT * FROM udt_table` 用法，可以改用 `SELECT * FROM TABLE(udt_table)` 来获取 udt_table 的值。
 
 9. 不支持 `CREATE TABLE table_name AS SELECT udt_table() FROM DUAL` 这种用法。
 
 
 ## 4. 示例
 
-- 1. 示例1：`CREATE TYPE`, `SHOW CREATE TYPE`, `SHOW TYPE STATUS`
+- 1. 示例 1：`CREATE TYPE`, `SHOW CREATE TYPE`, `SHOW TYPE STATUS`
 
 ```sql
 -- 先切换到ORACLE模式
@@ -107,7 +107,7 @@ CREATE OR REPLACE TYPE udt1 AS OBJECT(id INT ,c1 VARCHAR(20));
 ```
 
 
-- 2. 示例2：支持将TYPE授权给其他用户
+- 2. 示例 2：支持将 TYPE 授权给其他用户
 
 ```sql
 greatsql> SET sql_mode = Oracle;
@@ -126,7 +126,7 @@ greatsql> CREATE USER u1@localhost IDENTIFIED BY '';
 greatsql> GRANT EXECUTE ON TYPE greatsql.udt1 TO u1@localhost;
 ```
 
-用 `u1` 账户新建连接，使用UDT：
+用 `u1` 账户新建连接，使用 UDT：
 ```sql
 $ mysql -S/data/GreatSQL/mysql.sock -uu1 greatsql
 ...
@@ -155,7 +155,7 @@ greatsql> SELECT udt1(1, 'c1_row1') FROM DUAL;
 1 row in set (0.00 sec)
 ``` 
 
-- 3. 示例3：`CREATE TYPE AS TABLE/VARRAY OF udt_name`
+- 3. 示例 3：`CREATE TYPE AS TABLE/VARRAY OF udt_name`
 
 ```sql
 greatsql> SET sql_mode = Oracle;
@@ -198,7 +198,7 @@ greatsql> SELECT udt1_varray(udt1(1, 'c1_row1'));
 +---------------------------------+
 ```
 
-- 4. 示例4：`CREATE TYPE AS TABLE/VARRAY OF TYPE`
+- 4. 示例 4：`CREATE TYPE AS TABLE/VARRAY OF TYPE`
 
 ```sql
 greatsql> CREATE OR REPLACE TYPE my_int IS VARRAY(100) OF INT;
@@ -220,7 +220,7 @@ greatsql> SELECT my_vchar('1', 'GreatSQL', 'GreatSQL is a branch of MySQL');
 +------------------------------------------------------------+
 ```
 
-## 5. TABLE UDT数据字典
+## 5. TABLE UDT 数据字典
 
 ```sql
 -- 1. 查询 information_schema.ROUTINES 查看所有 UDT
@@ -250,7 +250,7 @@ greatsql> SELECT SPECIFIC_SCHEMA, SPECIFIC_NAME, ORDINAL_POSITION, PARAMETER_NAM
 
 ## 6. 导出备份
 
-在使用 `mysqldump` 导出数据时，可通过指定 `--routines` 选项（默认为关闭），导出UDT对象。
+在使用 `mysqldump` 导出数据时，可通过指定 `--routines` 选项（默认为关闭），导出 UDT 对象。
 
 示例：
 ```

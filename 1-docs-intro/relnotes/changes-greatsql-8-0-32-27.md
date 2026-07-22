@@ -2,35 +2,35 @@
 
 ## 版本信息
 
-- 发布时间：2025年3月10日
+- 发布时间：2025 年 3 月 10 日
 
 - 版本号：8.0.32-27, Revision aa66a385910
 
-- 下载链接：[RPM包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)、[TAR包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)、[源码包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)
+- 下载链接：[RPM 包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)、[TAR包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)、[源码包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)
 
 - 用户手册：[GreatSQL 8.0.32-27 User Manual](https://greatsql.cn/docs/8.0.32-27/)
 
-##  改进提升
+## 改进提升
 
-在GreatSQL 8.0.32-27版本中新增高性能并行查询引擎**Turbo**，升级 Rapid 引擎内核版本，优化MGR大事务压缩传输机制，完善greatdb_ha plugin，InnoDB Page支持Zstd压缩，完善Oracle兼容特性，完善安全性等，并修复了几个可能导致crash或丢数据的bug。
+在 GreatSQL 8.0.32-27 版本中新增高性能并行查询引擎**Turbo**，升级 Rapid 引擎内核版本，优化 MGR 大事务压缩传输机制，完善 greatdb_ha plugin，InnoDB Page 支持 Zstd 压缩，完善 Oracle 兼容特性，完善安全性等，并修复了几个可能导致 crash 或丢数据的 bug。
 
 ### 高可用
 
-- 优化了MGR大事务传输时压缩超过限制的处理机制。
+- 优化了 MGR 大事务传输时压缩超过限制的处理机制。
 
-在MGR中有大事务超过`group_replication_compression_threshold`阈值时会进行LZ4压缩，但由于LZ4自身限制，可能导致压缩失败报错，事务执行失败，报告类似下面的错误
+在 MGR 中有大事务超过 `group_replication_compression_threshold` 阈值时会进行 LZ4 压缩，但由于 LZ4 自身限制，可能导致压缩失败报错，事务执行失败，报告类似下面的错误
 
 ```log
 [GCS] Gcs_packet's payload is too big. Only packets smaller than 2113929216 bytes can be compressed. Payload size is 2197817290
 ```
 
-  GreatSQL对此机制进行调整优化，实现以下两点目标：
+  GreatSQL 对此机制进行调整优化，实现以下两点目标：
 
-  1. 当事务大小超过`group_replication_compression_threshold`阈值则启动压缩。
+  1. 当事务大小超过 `group_replication_compression_threshold` 阈值则启动压缩。
 
-  2. 但当事务大小超过LZ4压缩限制时不再报错，改成继续使用原始未压缩的事务数据进行传输，即类似设置`group_replication_compression_threshold=0`（不启用压缩）时的效果。
+  2. 但当事务大小超过 LZ4 压缩限制时不再报错，改成继续使用原始未压缩的事务数据进行传输，即类似设置 `group_replication_compression_threshold=0`（不启用压缩）时的效果。
 
-- 新增状态变量`Rpl_data_speed`显示当前Binlog限速的状态，可以通过执行`SHOW GLOBAL STATUS LIKE 'Rpl_data_speed'`查看，例如
+- 新增状态变量 `Rpl_data_speed` 显示当前 Binlog 限速的状态，可以通过执行 `SHOW GLOBAL STATUS LIKE 'Rpl_data_speed'` 查看，例如
 
 ```sql
 greatsql> SHOW GLOBAL STATUS LIKE 'Rpl%spee%';
@@ -40,46 +40,46 @@ greatsql> SHOW GLOBAL STATUS LIKE 'Rpl%spee%';
 | Rpl_data_speed | async_rpl=100.00 |
 +----------------+------------------+
 ```
-表示当前的Binlog读取限速为100KB/s，更多详细用法请参考：[Binlog 读取限速](../../5-enhance/5-2-ha-binlog-speed-limit.md)。
+表示当前的 Binlog 读取限速为 100KB/s，更多详细用法请参考：[Binlog 读取限速](../../5-enhance/5-2-ha-binlog-speed-limit.md)。
 
-- 在greatdb_ha plugin中，增加对参数`greatdb_ha_port`相应的TCP端口进行防御，避免用户端发送非法指令后可能导致crash的风险。
-- 修复了启用greatdb_ha plugin时，可能因为Linux系统函数FD_SET中当遇到文件描述符超过1024时导致未定义行为而引发crash的问题。
-- 修复了greatdb_ha plugin中启用VIP功能后，可能存在内存泄漏风险的问题。
+- 在 `greatdb_ha` plugin 中，增加对参数 `greatdb_ha_port` 相应的 TCP 端口进行防御，避免用户端发送非法指令后可能导致 crash 的风险。
+- 修复了启用 `greatdb_ha` plugin 时，可能因为 Linux 系统函数 FD_SET 中当遇到文件描述符超过 1024 时导致未定义行为而引发 crash 的问题。
+- 修复了 `greatdb_ha` plugin 中启用 VIP 功能后，可能存在内存泄漏风险的问题。
 - 修复了在主备两套 MGR 集群间部署主从复制后，当备用集群主节点意外宕机时，可能无法退出进程的问题。
-- 修复了在主备两套 MGR 集群间部署主从复制后，当备用集群主节点执行`kill -19`操作杀掉mysqld进程，在故障恢复后，Slave节点上的sql_thread线程可能长时间未能退出的问题。
+- 修复了在主备两套 MGR 集群间部署主从复制后，当备用集群主节点执行 `kill -19` 操作杀掉 mysqld 进程，在故障恢复后，Slave 节点上的 sql_thread 线程可能长时间未能退出的问题。
 
 ### 高性能
-- 新增高性能并行查询引擎**Turbo**，它通过内嵌DuckDB，使GreatSQL具备多线程并发的向量化查询功能，在实现指数级提升加速SQL查询速度的同时，保持对GreatSQL生态系统的兼容性。相较于 Rapid 引擎，Turbo引擎不需要将数据加载到引擎中，而是在查询过程中，直接并行抽取数据供Turbo引擎使用。
+- 新增高性能并行查询引擎 **Turbo**，它通过内嵌 DuckDB，使 GreatSQL 具备多线程并发的向量化查询功能，在实现指数级提升加速 SQL 查询速度的同时，保持对 GreatSQL 生态系统的兼容性。相较于 Rapid 引擎，Turbo 引擎不需要将数据加载到引擎中，而是在查询过程中，直接并行抽取数据供 Turbo 引擎使用。
 
-首先安装Turbo引擎
+首先安装 Turbo 引擎
 
 ```sql
 greatsql> INSTALL PLUGIN turbo SONAME 'turbo.so';
 ```
 
-就可以直接利用Turbo引擎大幅提升SQL查询效率
+就可以直接利用 Turbo 引擎大幅提升 SQL 查询效率
 
 ```sql
 greatsql> SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_threshold=0)*/ * FROM t1;
 ```
 
-关于Turbo引擎更详细的使用方法请参考：[Turbo引擎](../../5-enhance/5-1-highperf-turbo-engine.md)。
+关于 Turbo 引擎更详细的使用方法请参考：[Turbo 引擎](../../5-enhance/5-1-highperf-turbo-engine.md)。
 
-- 升级 Rapid 引擎内核到正式GA版本，新版本在存储格式稳定性、查询语义一致性等方面实现了重大突破，为用户提供了强有力的稳定性保证。注意，**在新版本中采用新的文件存储格式，和之前的版本不兼容**，因此无法从GreatSQL 8.0.32-25或8.0.32-26版本直接平滑升级到GreatSQL 8.0.32-27，需要先删除旧的 Rapid 引擎数据文件，再次执行全量导入数据，重新启动增量导入任务。详细升级方式请见下方：[升级到 GreatSQL 8.0.32-27](#升级到-greatsql-8-0-32-27)。
-- 在新版本的 Rapid 引擎中，最大可使用并行逻辑CPU核数上限为4个，如果需要获得更高并发性能，可以联系我们提供解决方案。
-- 修复了 Rapid 引擎中一次性删除大批量数据后，查看增量导入任务进度时，DELAY字段显示不准确的问题。
-- 修复了在存储过程中使用`EXPLAIN`查看Rapid表执行计划时，显示无法使用 Rapid 引擎实际上却可以使用的错误问题。
+- 升级 Rapid 引擎内核到正式 GA 版本，新版本在存储格式稳定性、查询语义一致性等方面实现了重大突破，为用户提供了强有力的稳定性保证。注意，**在新版本中采用新的文件存储格式，和之前的版本不兼容**，因此无法从 GreatSQL 8.0.32-25 或 8.0.32-26 版本直接平滑升级到 GreatSQL 8.0.32-27，需要先删除旧的 Rapid 引擎数据文件，再次执行全量导入数据，重新启动增量导入任务。详细升级方式请见下方：[升级到 GreatSQL 8.0.32-27](#升级到-greatsql-8-0-32-27)。
+- 在新版本的 Rapid 引擎中，最大可使用并行逻辑 CPU 核数上限为 4 个，如果需要获得更高并发性能，可以联系我们提供解决方案。
+- 修复了 Rapid 引擎中一次性删除大批量数据后，查看增量导入任务进度时，DELAY 字段显示不准确的问题。
+- 修复了在存储过程中使用 `EXPLAIN` 查看 Rapid 表执行计划时，显示无法使用 Rapid 引擎实际上却可以使用的错误问题。
 - 修复 Rapid 引擎中未先完成一次全量导入任务，而是直接启动增量导入任务发生失败报错后，重启实例后无法正常启动的问题。正常地，正确的做法是先完成一次全量导入后，再启动增量导入任务。
-- 修复 Rapid 引擎参数`rapid_worker_threads`设置问题。当将其设置超过最大值后，再重新设置除默认值之外的其他合法值都会报错，需要重新装载 Rapid 引擎或重启数据库后才恢复正常。
-- 移除 Rapid 引擎参数`rapid_hash_table_memory_limit`，不再使用。
-- 读取Rapid表数据时，error log中不再打印类似下方的冗余信息。
+- 修复 Rapid 引擎参数 `rapid_worker_threads` 设置问题。当将其设置超过最大值后，再重新设置除默认值之外的其他合法值都会报错，需要重新装载 Rapid 引擎或重启数据库后才恢复正常。
+- 移除 Rapid 引擎参数 `rapid_hash_table_memory_limit`，不再使用。
+- 读取 Rapid 表数据时，error log 中不再打印类似下方的冗余信息。
 
 ```log
 [Note] [MY-011825] [InnoDB] thread 62 handle range count: 34 total rows: 2449266
 [Note] [MY-011825] [InnoDB] thread 63 handle range count: 21 total rows: 1648443
 [Note] [MY-011825] [InnoDB] total fetch rows count: 150000000
 ``` 
-- 修复 Rapid 引擎对表中存在虚拟列时的处理方案。在以前，当表中存在虚拟列时，执行`ALTER TABLE ... SECONDARY_LOAD`不会报错，但在执行`SELECT ... /*+ SET_VAR(use_secondary_engine=FORCED) */ `时会报错不支持。在新版本中，当发现表中存在虚拟列时，执行`ALTER TABLE ... SECONDARY_LOAD`直接报告下面的错误表示不支持：
+- 修复 Rapid 引擎对表中存在虚拟列时的处理方案。在以前，当表中存在虚拟列时，执行 `ALTER TABLE ... SECONDARY_LOAD` 不会报错，但在执行 `SELECT ... /*+ SET_VAR(use_secondary_engine=FORCED) */` 时会报错不支持。在新版本中，当发现表中存在虚拟列时，执行 `ALTER TABLE ... SECONDARY_LOAD` 直接报告下面的错误表示不支持：
 
 ```sql
 ERROR 3106 (HY000): 'Rapid engine' is not supported for generated columns.
@@ -101,7 +101,7 @@ ERROR 3877 (HY000): The field c2 type is not supported
 ```
 
 ### 高兼容
-- 在 `TO_DATE` 函数中新增支持`INTERVAL 'n' DAY`运算用法。例如
+- 在 `TO_DATE` 函数中新增支持 `INTERVAL 'n' DAY` 运算用法。例如
 
 ```sql
 greatsql> SELECT TO_DATE('20250212','YYYYMMDD') + (INTERVAL '-1' DAY) AS LASTDAY FROM DUAL;
@@ -111,19 +111,19 @@ greatsql> SELECT TO_DATE('20250212','YYYYMMDD') + (INTERVAL '-1' DAY) AS LASTDAY
 | 2025-02-11 00:00:00 |
 +---------------------+
 ```
-- 优化`TO_NUMBER`函数在大数据量时的执行效率，性能可提升数倍。
-- 修复了`REF CURSOR`在执行过程中表结构发生变化时可能导致报错的问题。
-- 优化动态游标内存管理机制，在动态游标`END LOOP`执行完后及时释放内存。
-- 修复了当源表为单行伪表时，`MERGE INTO`语句更新目标表失败，导致执行结果和在Oracle中不一致的问题。
+- 优化 `TO_NUMBER` 函数在大数据量时的执行效率，性能可提升数倍。
+- 修复了 `REF CURSOR` 在执行过程中表结构发生变化时可能导致报错的问题。
+- 优化动态游标内存管理机制，在动态游标 `END LOOP` 执行完后及时释放内存。
+- 修复了当源表为单行伪表时，`MERGE INTO` 语句更新目标表失败，导致执行结果和在 Oracle 中不一致的问题。
 
 ### 高安全
-- 修复最后登录信息功能中由于未处理Binlog可能导致主从异常问题。
-- 修复审计日志入表功能中由于未处理Binlog可能导致主从异常问题。
-- 修复了审计日志入表功能中，安装和卸载SQL脚本中前后函数名不一致问题。
-- 修复了在设置`sql_log_bin=ON`的时候，本应该禁止修改审计日志表`sys_audit.audit_log`，却可以更新修改的问题。
+- 修复最后登录信息功能中由于未处理 Binlog 可能导致主从异常问题。
+- 修复审计日志入表功能中由于未处理 Binlog 可能导致主从异常问题。
+- 修复了审计日志入表功能中，安装和卸载 SQL 脚本中前后函数名不一致问题。
+- 修复了在设置 `sql_log_bin=ON` 的时候，本应该禁止修改审计日志表 `sys_audit.audit_log`，却可以更新修改的问题。
 
 ### 其他
-- InnoDB Page压缩算法支持Zstd, 使得Page压缩率进一步得到提高，尤其是当表中有大量重复字符类型数据时。可以在创建新表时指定Page压缩算法，例如
+- InnoDB Page 压缩算法支持 Zstd, 使得 Page 压缩率进一步得到提高，尤其是当表中有大量重复字符类型数据时。可以在创建新表时指定 Page 压缩算法，例如
 
 ```sql
 greatsql> CREATE TABLE `t1_zstd` (
@@ -137,31 +137,31 @@ greatsql> CREATE TABLE `t1_zstd` (
 ) ENGINE=InnoDB COMPRESSION='zstd';
 ```
 
-也可以执行`ALTER TABLE`修改表的Page压缩算法，例如
+也可以执行 `ALTER TABLE` 修改表的 Page 压缩算法，例如
 
 ```sql
 greatsql> ALTER TABLE t1 COMPRESSION='zstd';
 ```
 
-更多关于InnoDB Page压缩的使用方法请参考：[InnoDB Page压缩](../../5-enhance/5-5-innodb-page-compression.md)。
+更多关于 InnoDB Page 压缩的使用方法请参考：[InnoDB Page 压缩](../../5-enhance/5-5-innodb-page-compression.md)。
 
 ## 缺陷修复
-- 修复了特定情况下，执行`EXPLAIN FORMAT=TREE`可能导致crash的问题，详见：[Issue#IAL5KK](https://gitee.com/GreatSQL/GreatSQL/issues/IAL5KK)。
-- 合并了MySQL 8.0.38中的bug fix，对应bug id：[#36204344](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-38.html)、[#36356279](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-38.html)。
-- 合并了针对特定情况下执行`ALTER TABLE`可能导致丢失一行数据的问题，合并了Percona团队提交的bug fix，对应的bug id：[#113812](https://bugs.mysql.com/bug.php?id=113812)、[#115511](https://bugs.mysql.com/bug.php?id=115511)、[#115608](https://bugs.mysql.com/bug.php?id=115608)。
-- 修复了在关闭实例时个别表的统计信息并没有实际落盘问题，这可能会造成索引统计信息不准确导致原本正常的SQL执行非常慢。
+- 修复了特定情况下，执行 `EXPLAIN FORMAT=TREE` 可能导致 crash 的问题，详见：[Issue#IAL5KK](https://gitee.com/GreatSQL/GreatSQL/issues/IAL5KK)。
+- 合并了 MySQL 8.0.38 中的 bug fix，对应 bug id：[#36204344](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-38.html)、[#36356279](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-38.html)。
+- 合并了针对特定情况下执行`ALTER TABLE`可能导致丢失一行数据的问题，合并了 Percona 团队提交的 bug fix，对应的 bug id：[#113812](https://bugs.mysql.com/bug.php?id=113812)、[#115511](https://bugs.mysql.com/bug.php?id=115511)、[#115608](https://bugs.mysql.com/bug.php?id=115608)。
+- 修复了在关闭实例时个别表的统计信息并没有实际落盘问题，这可能会造成索引统计信息不准确导致原本正常的 SQL 执行非常慢。
 
 ## 注意事项
 
 ## 升级/降级到 GreatSQL 8.0.32-27
 
 ### 升级到 GreatSQL 8.0.32-27
-- 如果旧版本是GreatSQL 8.0.32-25或8.0.32-26，并且没有使用 Rapid 引擎，则可以直接在原来的`datadir`基础上，修改`basedir`后，原地（in-place）启动 GreatSQL 8.0.32-27 后会完成自动升级。
-- 如果旧版本是 GreatSQL 8.0.32-25或8.0.32-26，并且已启用 Rapid 引擎，**这种情况下无法原地升级**，需要卸载所有 Rapid 引擎表，删除Rapid数据文件，之后才可以直接在原来的`datadir`基础上，修改`basedir`后，原地（in-place）启动GreatSQL 8.0.32-27后会完成自动升级。新版本实例启动后，对所有 Rapid 引擎表执行`ALTER TABLE SECONDARY_LOAD`完成全量数据导入，再执行`SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK()`启动增量导入任务，完成 Rapid 引擎表升级工作。下面是一个升级参考过程：
+- 如果旧版本是 GreatSQL 8.0.32-25 或 8.0.32-26，并且没有使用 Rapid 引擎，则可以直接在原来的 `datadir` 基础上，修改 `basedir` 后，原地（in-place）启动 GreatSQL 8.0.32-27 后会完成自动升级。
+- 如果旧版本是 GreatSQL 8.0.32-25 或 8.0.32-26，并且已启用 Rapid 引擎，**这种情况下无法原地升级**，需要卸载所有 Rapid 引擎表，删除 Rapid 数据文件，之后才可以直接在原来的 `datadir` 基础上，修改 `basedir` 后，原地（in-place）启动 GreatSQL 8.0.32-27 后会完成自动升级。新版本实例启动后，对所有 Rapid 引擎表执行 `ALTER TABLE SECONDARY_LOAD` 完成全量数据导入，再执行 `SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK()` 启动增量导入任务，完成 Rapid 引擎表升级工作。下面是一个升级参考过程：
 
 1. 查询并记录所有 Rapid 引擎表
 
-可以执行下面的SQL，查询当前有哪些表使用了 Rapid 引擎：
+可以执行下面的 SQL，查询当前有哪些表使用了 Rapid 引擎：
 
 ```sql
 greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_ROWS FROM information_schema.TABLES WHERE CREATE_OPTIONS LIKE '%Rapid%';
@@ -179,9 +179,9 @@ greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_ROWS FROM information_schema.TA
 +--------------+----------------+------------+
 ```
 
-2. 正常停止GreatSQL实例进程
+2. 正常停止 GreatSQL 实例进程
 
-在停止GreatSQL实例进程前，先修改`innodb_fast_shutdown=0`后再执行`SHUTDOWN`停止实例
+在停止 GreatSQL 实例进程前，先修改 `innodb_fast_shutdown=0` 后再执行 `SHUTDOWN` 停止实例
 
 ```sql
 greatsql> SET GLOBAL innodb_fast_shutdown=0;
@@ -194,16 +194,16 @@ greatsql> SHUTDOWN;
 cd /data/GreatSQL && rm -f duckdb*
 ```
 
-4. 修改`my.cnf`配置文件中的`basedir`参数，指向GreatSQL 8.0.32-27新版本
+4. 修改 `my.cnf` 配置文件中的 `basedir` 参数，指向 GreatSQL 8.0.32-27 新版本
 
 ```ini
 #my.cnf
 [mysqld]
 basedir=/usr/local/GreatSQL-8.0.32-27-Linux-glibc2.28-x86_64
 ```
-并确保参数`upgrade`不是设置为*NONE*。
+并确保参数 `upgrade` 不是设置为 *NONE*。
 
-5. 启动GreatSQL 8.0.32-27新版本实例
+5. 启动 GreatSQL 8.0.32-27 新版本实例
 
 ```bash
 systemctl start greatsql
@@ -222,7 +222,7 @@ greatsql> ALTER TABLE test.t1 SECONDARY_LOAD;
 ```
 
 ::: tip 小贴士
-由于在升级前没有去掉该表的`SECONDARY_ENGINE=rapid`属性，所以无需重新设置。如果在升级前卸载所有 Rapid 引擎表，则需要重新设置。
+由于在升级前没有去掉该表的 `SECONDARY_ENGINE=rapid` 属性，所以无需重新设置。如果在升级前卸载所有 Rapid 引擎表，则需要重新设置。
 :::
 
 8. 再次启动增量导入任务
@@ -232,12 +232,12 @@ greatsql> SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK('test', 't1');
 ```
 这就完成 Rapid 引擎表的升级操作了。
 
-- 如果旧版本是GreatSQL 8.0.32-24、8.0.25-*、5.7.36-39等系列版本，则可以直接在原来的`datadir`基础上，修改`basedir`后，原地（in-place）启动GreatSQL 8.0.32-27 后会完成自动升级。
-- 如果是MySQL 8.0.*（<= 8.0.32 版本）、Percona Server 8.0.*（<= 8.0.32 版本）等系列版本，则可以直接在原来的`datadir`基础上，修改`basedir`后，原地（in-place）启动 GreatSQL 8.0.32-27后会完成自动升级。
-- 如果是MySQL 8.0.*（> 8.0.32 版本）、Percona Server 8.0.*（> 8.0.32 版本）等系列版本，则需要利用逻辑备份方式导出数据，再导入的方式完成升级，不支持原地（in-place）升级到 GreatSQL 8.0.32-27。
-- 如果是MySQL 5.7.*（>= 5.7.23 版本）、Percona Server 5.7.*（>= 5.7.23 版本）等系列版本，则可以直接在原来的`datadir`基础上，修改`basedir`后，原地（in-place）启动 GreatSQL 8.0.32-27后会完成自动升级。
+- 如果旧版本是 GreatSQL 8.0.32-24、8.0.25-*、5.7.36-39 等系列版本，则可以直接在原来的 `datadir` 基础上，修改 `basedir` 后，原地（in-place）启动 GreatSQL 8.0.32-27 后会完成自动升级。
+- 如果是 MySQL 8.0.*（<= 8.0.32 版本）、Percona Server 8.0.*（<= 8.0.32 版本）等系列版本，则可以直接在原来的 `datadir` 基础上，修改 `basedir` 后，原地（in-place）启动 GreatSQL 8.0.32-27 后会完成自动升级。
+- 如果是 MySQL 8.0.*（> 8.0.32 版本）、Percona Server 8.0.*（> 8.0.32 版本）等系列版本，则需要利用逻辑备份方式导出数据，再导入的方式完成升级，不支持原地（in-place）升级到 GreatSQL 8.0.32-27。
+- 如果是 MySQL 5.7.*（>= 5.7.23 版本）、Percona Server 5.7.*（>= 5.7.23 版本）等系列版本，则可以直接在原来的 `datadir` 基础上，修改 `basedir` 后，原地（in-place）启动 GreatSQL 8.0.32-27 后会完成自动升级。
 
-在以上几个原地升级场景中，务必保证`my.cnf`中参数`upgrade`不能设置为*NONE*，可以设置为默认的*AUTO*或*FORCE*。例如：
+在以上几个原地升级场景中，务必保证 `my.cnf` 中参数 `upgrade` 不能设置为 *NONE*，可以设置为默认的 *AUTO* 或 *FORCE*。例如：
 
 ```ini
 #my.cnf
@@ -258,20 +258,20 @@ upgrade = AUTO
 mysqldump -S/data/MySQL/mysql.sock -A --triggers --routines --events --single-transaction > /data/backup/fulldump.sql
 ```
 
-2. 在GreatSQL 8.0.32-27版本环境中导入逻辑备份文件，完成逻辑恢复
+2. 在 GreatSQL 8.0.32-27 版本环境中导入逻辑备份文件，完成逻辑恢复
 
 ```bash
 mysql -S/data/GreatSQL/mysql.sock -f < /data/backup/fulldump.sql
 ```
 
-3. 修改`my.cnf`，确保设置`upgrade=FORCE`
+3. 修改 `my.cnf`，确保设置 `upgrade=FORCE`
 ```ini
 #my.cnf
 [mysqld]
 upgrade = FORCE
 ```
 
-4. 重启GreatSQL，降级完成
+4. 重启 GreatSQL，降级完成
 
 ```bash
 systemctl restart greatsql
@@ -318,7 +318,7 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |MyRocks 引擎| :heavy_check_mark: | ❌ |
 |支持龙芯架构| :heavy_check_mark: | ❌ |
 | **2. 性能提升扩展** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
-|Rapid 引擎| :heavy_check_mark: | 仅云上HeatWave |
+|Rapid 引擎| :heavy_check_mark: | 仅云上 HeatWave |
 |Turbo 引擎| :heavy_check_mark: | ❌ |
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
 |非阻塞式 DDL| :heavy_check_mark: | ❌ |
@@ -327,7 +327,7 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |并行 LOAD DATA| :heavy_check_mark: | ❌ |
 |InnoDB 事务 ReadView 无锁优化| :heavy_check_mark: | ❌ |
 |InnoDB 事务大锁拆分优化| :heavy_check_mark: | ❌ |
-|InnoDB Page压缩支持Zstd| :heavy_check_mark: | ❌ | 
+|InnoDB Page 压缩支持 Zstd| :heavy_check_mark: | ❌ | 
 |InnoDB 资源组| :heavy_check_mark: | :heavy_check_mark: |
 |自定义 InnoDB 页大小| :heavy_check_mark: | :heavy_check_mark: |
 |Contention-Aware Transaction Scheduling| :heavy_check_mark: | :heavy_check_mark: |
@@ -341,17 +341,17 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 | **3. 面向开发者提升改进** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
 |X API| :heavy_check_mark: | :heavy_check_mark: |
 |JSON| :heavy_check_mark: | :heavy_check_mark: |
-|NoSQL Socket-Level接口| :heavy_check_mark: | :heavy_check_mark: |
+|NoSQL Socket-Level 接口| :heavy_check_mark: | :heavy_check_mark: |
 |InnoDB 全文搜索改进| :heavy_check_mark: | ❌ |
 |更多 Hash/Digest 函数| :heavy_check_mark: | ❌ |
 |Oracle 兼容-数据类型| :heavy_check_mark: | ❌ |
 |Oracle 兼容-函数| :heavy_check_mark: | ❌ |
-|Oracle 兼容-SQL语法| :heavy_check_mark: | ❌ |
+|Oracle 兼容-SQL 语法| :heavy_check_mark: | ❌ |
 |Oracle 兼容-存储程序| :heavy_check_mark: | ❌ |
 | **4. 基础特性提升改进** | GreatSQL 8.0.32-27 | MySQL 8.0.32 |
 |MGR 提升-地理标签| :heavy_check_mark: | ❌ |
 |MGR 提升-仲裁节点| :heavy_check_mark: | ❌ |
-|MGR 提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
+|MGR 提升-读写节点绑定 VIP| :heavy_check_mark: | ❌ |
 |MGR 提升-快速单主模式| :heavy_check_mark: | ❌ |
 |MGR 提升-智能选主机制| :heavy_check_mark: | ❌ |
 |MGR 提升-全新流控算法| :heavy_check_mark: | ❌ |
@@ -384,11 +384,11 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |数据脱敏| :heavy_check_mark: | ❌ |
 |最后登录记录| :heavy_check_mark: | ❌ |
 |SQL Roles| :heavy_check_mark: | :heavy_check_mark: |
-|SHA-2 密码Hashing| :heavy_check_mark: | :heavy_check_mark: |
+|SHA-2 密码 Hashing| :heavy_check_mark: | :heavy_check_mark: |
 |密码轮换策略| :heavy_check_mark: | :heavy_check_mark: |
 |PAM 认证插件| :heavy_check_mark: | 仅企业版 |
 |Keyring 存储在文件中| :heavy_check_mark: | :heavy_check_mark: |
-|Keyring 存储在Hashicorp Vault中| :heavy_check_mark: | 仅企业版 |
+|Keyring 存储在 Hashicorp Vault 中| :heavy_check_mark: | 仅企业版 |
 |InnoDB 数据加密| :heavy_check_mark: | :heavy_check_mark: |
 |InnoDB 日志加密| :heavy_check_mark: | :heavy_check_mark: |
 |InnoDB 各种表空间文件加密| :heavy_check_mark: | :heavy_check_mark: |

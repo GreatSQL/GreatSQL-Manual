@@ -448,7 +448,7 @@ Create Table: CREATE TABLE `orders` (
 /*!50100 PARTITION BY HASH (`id`)
 PARTITIONS 4 */
 
--- 增加2个分区
+-- 增加 2 个分区
 greatsql> ALTER TABLE orders ADD PARTITION PARTITIONS 2;
 
 greatsql> SHOW CREATE TABLE orders\G
@@ -550,7 +550,7 @@ Create Table: CREATE TABLE `orders` (
 /*!50100 PARTITION BY HASH (`id`)
 PARTITIONS 6 */
 
--- 合并分区数到4个（收缩2个）
+-- 合并分区数到 4 个（收缩 2 个）
 greatsql> ALTER TABLE orders COALESCE PARTITION 2;
 
 greatsql> SHOW CREATE TABLE orders\G

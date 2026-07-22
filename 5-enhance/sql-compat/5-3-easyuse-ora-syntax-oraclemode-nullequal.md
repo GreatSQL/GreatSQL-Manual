@@ -10,17 +10,17 @@ SET sql_mode = ORACLE;
 
 ## 2. 定义和用法
 
-在GreatSQL原生 `DEFAULT` 模式下，唯一索引(`UNIQUE KEY`)中的 `NULL` 被视为不同值。
+在 GreatSQL 原生 `DEFAULT` 模式下，唯一索引(`UNIQUE KEY`)中的 `NULL` 被视为不同值。
 
 当切换到 `ORACLE` 模式下之后，唯一索引中的 `NULL` 就会被视为相同值了。 
 
 此外，在 `ORACLE` 模式下，唯一索引可能会报告 `NULL` 值重复冲突。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
 1. 切换到 `ORACLE` 模式下之后，新创建的唯一索引会对 `NULL` 视为相同值处理，而在切换模式前已经存在的唯一索引则保持不变。
 
-2. 仅InnoDB引擎支持该特性。
+2. 仅 InnoDB 引擎支持该特性。
 
 
 ## 4. 示例

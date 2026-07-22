@@ -1,4 +1,4 @@
-# my.cnf参考模板
+# my.cnf 参考模板
 ---
 以下是 GreatSQL 8.4.4-5 的 my.cnf 推荐参考模板。
 
@@ -6,7 +6,7 @@
 #
 # my.cnf example for GreatSQL
 #
-# 下面参数选项设置仅作为参考，且假设服务器可用内存为256G
+# 下面参数选项设置仅作为参考，且假设服务器可用内存为 256G
 #
 [client]
 socket    = /data/GreatSQL/mysql.sock
@@ -147,7 +147,7 @@ report_host = 172.16.0.10
 report_port = 3306
 
 # InnoDB
-innodb_buffer_pool_size = 96G #如果是专用的数据库服务器，则可以设置为物理内存的50%-70%，视实际情况而定
+innodb_buffer_pool_size = 96G #如果是专用的数据库服务器，则可以设置为物理内存的 50%-70%，视实际情况而定
 innodb_buffer_pool_instances = 8
 innodb_data_file_path = ibdata1:12M:autoextend
 innodb_flush_log_at_trx_commit = 1

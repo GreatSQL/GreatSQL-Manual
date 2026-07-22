@@ -1,4 +1,4 @@
-# Oracle兼容-函数-DECODE()函数
+# Oracle 兼容-函数-DECODE()函数
 ---
 
 ## 1. 语法
@@ -14,9 +14,9 @@ DECODE(
 ```
 
 ## 2. 定义和用法
-顾名思义，`DECODE()` 函数的作用是根据表达式编码/输出相应的结果，比较`expr`和`search`的结果，如果一致则返回对应的`result`，如果所有条件都不匹配则返回`default`，如果`default`不存在，则返回NULL。
+顾名思义，`DECODE()` 函数的作用是根据表达式编码/输出相应的结果，比较`expr`和`search`的结果，如果一致则返回对应的`result`，如果所有条件都不匹配则返回`default`，如果`default`不存在，则返回 NULL。
 
-对于`expr=search=NULL`的情况与Oracle行为一致，会返回第一个`search`为NULL的`result`。
+对于`expr=search=NULL`的情况与 Oracle 行为一致，会返回第一个`search`为 NULL 的`result`。
 
 注意：可能值与返回值的评估使用`短路评估`，即：只要存在`expr`=`search`则后续`search`不会被评估。
 

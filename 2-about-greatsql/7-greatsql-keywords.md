@@ -4,7 +4,7 @@
 
 在 GreatSQL 中，**保留字（Reserved Words）** 和 **关键字（Keywords）** 通常有特殊意义，比如`SELECT`/`DELETE`/`BIGINT` 都是保留字。
 
-当使用这些保留字（Reserved Words）作为表名、列名、内置函数名等对象名情况下，需要特殊处理才行（通常建议加上反引号"`"），避免报SQL语法错误。
+当使用这些保留字（Reserved Words）作为表名、列名、内置函数名等对象名情况下，需要特殊处理才行（通常建议加上反引号"`"），避免报 SQL 语法错误。
 
 当使用关键字（Keywords）作为表明、列名、内置函数名等对象名时，无需特殊处理，不会报 SQL 语法错误。
 
@@ -34,7 +34,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 综上，强烈建议在 SQL 开发、编写 SQL 语句时，对象名都用 **"** 或 **`** 将其引用起来，避免报 SQL 语法错误，保证应用程序的容错性。
 
-通过查询视图 `information_schema.KEYWORDS` 也可以找到保留字和关键字的信息（其中RESERVED=1的表示是保留字，其余是关键字）：
+通过查询视图 `information_schema.KEYWORDS` 也可以找到保留字和关键字的信息（其中 RESERVED=1 的表示是保留字，其余是关键字）：
 ```sql
 greatsql> SELECT * FROM information_schema.KEYWORDS WHERE WORD LIKE '%int%';
 +----------------------------------------+----------+

@@ -29,9 +29,9 @@
 |*|Multiplication operator|
 |-|Change the sign of the argument|
 
-## Cast函数与操作符
+## Cast 函数与操作符
 
-Cast类型支持如下：
+Cast 类型支持如下：
 
 * CHAR[(N)]
 * DATE
@@ -198,7 +198,7 @@ Cast类型支持如下：
 
 窗口函数支持包括：
 
-WINDOW和OVER子句与PARTITION BY、ORDER BY和WINDOW frame一起使用。
+WINDOW 和 OVER 子句与 PARTITION BY、ORDER BY 和 WINDOW frame 一起使用。
 
 GreatSQL 支持的非聚合窗口函数。
 

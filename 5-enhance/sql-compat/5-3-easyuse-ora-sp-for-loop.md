@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-FOR LOOP
+# Oracle 兼容-存储过程-FOR LOOP
 ---
 
 
@@ -15,7 +15,7 @@ FOR var IN [REVERSE] expr1..expr2 LOOP .. END LOOP
 
 在 GreatSQL 中支持用 `FOR .. IN expr1 .. expr2 LOOP .. END LOOP` 语法循环读取数据，并赋值给相应变量。在 `FOR ... LOOP` 中，支持前后两个参数表达式和中间的点号连接在一起，例如：`FOR .. IN expr1..expr2 LOOP`；或者只和一个参数连接，例如：`FOR .. IN expr1.. expr2 LOOP` 及 `FOR .. IN expr1 ..expr2 LOOP` 都是可以的。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
 在 `ORACLE` 模式下，GreatSQL 存储过程支持 `FOR .. LOOP` 用法。该用法如下所述：
 
@@ -25,13 +25,13 @@ FOR var IN [REVERSE] expr1..expr2 LOOP .. END LOOP
 
 3. 循环中的 `expr1/expr2` 支持数值类型变量、数值、函数以及表达式等。`expr1/expr2` 如果是 `FLOAT` 类型则会被转换成 `INT` 型（转换时会做四舍五入处理）。
 
-4. 如果 `expr1/expr2` 是时间类型，则会被转换为数值类型进行计算，而不是按照时间规则进行加减计算。在Oracle中不支持该类型，会产生报错。
+4. 如果 `expr1/expr2` 是时间类型，则会被转换为数值类型进行计算，而不是按照时间规则进行加减计算。在 Oracle 中不支持该类型，会产生报错。
 
 5. 在循环 `FOR var IN` 中的变量 `var` 如果是 `FLOAT` 类型则会被转换成 `INT` 型（转换时会做四舍五入处理）。
 
 ## 4. 示例
 
-- 1. 示例1
+- 1. 示例 1
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -111,7 +111,7 @@ Query OK, 0 rows affected (0.00 sec)
 ```
 可以看到，当传入参数是 `FLOAT` 类型是，会被转换成 `INT` 型（转换时会做四舍五入处理）。
 
-- 2. 示例2
+- 2. 示例 2
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -191,7 +191,7 @@ greatsql> CALL p1(1.5, 3.4) //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 3. 示例3
+- 3. 示例 3
 
 ```sql
 greatsql> SET sql_mode = ORACLE;

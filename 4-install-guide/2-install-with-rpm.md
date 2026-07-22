@@ -1,13 +1,13 @@
-# RPM安装
+# RPM 安装
 ---
 
-本节介绍如何用RPM包方式安装 GreatSQL 数据库，假定本次安装是在CentOS 8.x x86_64环境中安装，并且是以root用户身份执行安装操作。
+本节介绍如何用 RPM 包方式安装 GreatSQL 数据库，假定本次安装是在 CentOS 8.x x86_64 环境中安装，并且是以 root 用户身份执行安装操作。
 
 在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
 
-##   MGR 集群规划
+## MGR 集群规划
 
-本次计划在3台服务器上安装 GreatSQL 数据库并部署 MGR 集群：
+本次计划在 3 台服务器上安装 GreatSQL 数据库并部署 MGR 集群：
 
 | node | ip | datadir | port |role|
 | --- | --- | --- | --- | --- |
@@ -18,19 +18,19 @@
 以下安装配置工作先在三个节点都同样操作一遍。
 
 ::: tip 小贴士
-如果只想部署单机运行模式，则只需在一台服务器上安装，并略过MGR相关配置即可，方法参考：[快速上手：RPM安装](../3-quick-start/3-1-quick-start-with-rpm.md)。
+如果只想部署单机运行模式，则只需在一台服务器上安装，并略过 MGR 相关配置即可，方法参考：[快速上手：RPM 安装](../3-quick-start/3-1-quick-start-with-rpm.md)。
 :::
 
-##  下载安装包
+## 下载安装包
 
-查看机器的glibc版本，以选择正确的安装包：
+查看机器的 glibc 版本，以选择正确的安装包：
 ```bash
 $ ldd --version
 
 ...
 ldd (GNU libc) 2.28
 ```
-如果您的glibc版本为2.28或更高版本，请选择带有"el8"标识的rpm包；如果您的glibc版本为2.17，请选择带有"el7"标识的rpm包。
+如果您的 glibc 版本为 2.28 或更高版本，请选择带有"el8"标识的 rpm 包；如果您的 glibc 版本为 2.17，请选择带有"el7"标识的 rpm 包。
 
 [点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5)下载最新的安装包，下载以下几个就可以：
 
@@ -40,7 +40,7 @@ ldd (GNU libc) 2.28
 - greatsql-shared-8.4.4-5.1.el8.x86_64.rpm
 - greatsql-server-8.4.4-5.1.el8.x86_64.rpm
 
-##  安装GreatSQL RPM包
+## 安装 GreatSQL RPM 包
 
 执行下面的命令安装 RPM 包，如果一切顺利的话，相应的过程如下所示：
 ```bash
@@ -59,7 +59,7 @@ Updating / installing...
 这就安装成功了。
 
 **提示**：
-1. 安装GreatSQL RPM包需要先安装其他依赖包，可执行下面命令完成：
+1. 安装 GreatSQL RPM 包需要先安装其他依赖包，可执行下面命令完成：
 
 ```bash
 yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs \
@@ -69,7 +69,7 @@ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs \
 
 如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](./1-install-prepare.md)。
 
-其他部分依赖包，如果通过yum还是无法安装，则加上 `--nodeps --force` 强制忽略即可，例如：
+其他部分依赖包，如果通过 yum 还是无法安装，则加上 `--nodeps --force` 强制忽略即可，例如：
 ```bash
 $ rpm -ivh greatsql*rpm
 
@@ -98,9 +98,9 @@ Updating / installing...
    5:greatsql-devel-8.4.4-5.1.el8   ################################# [100%]
 ```
 
-2. 正式安装GreatSQL RPM包时，可能还需要依赖Perl等其他软件包，此处为快速演示，因此加上 `--nodeps` 参数，忽略相应的依赖关系检查。安装完毕后，如果因为依赖关系无法启动，请再行安装相应软件依赖包。
+2. 正式安装 GreatSQL RPM 包时，可能还需要依赖 Perl 等其他软件包，此处为快速演示，因此加上 `--nodeps` 参数，忽略相应的依赖关系检查。安装完毕后，如果因为依赖关系无法启动，请再行安装相应软件依赖包。
 
-##  启动前准备
+## 启动前准备
 
 ### 创建或修改 /etc/my.cnf 配置文件
 
@@ -264,7 +264,7 @@ performance_schema_instrument = '%lock%=on'
 
 一般修改 *basedir/datadir/innodb_buffer_pool_size* 等几个选项就可以，修改完后保存退出。
 
-### 新建datadir
+### 新建 datadir
 
 新建数据库主目录，并修改权限模式及属主：
 
@@ -274,9 +274,9 @@ chown -R mysql:mysql /data/GreatSQL
 chmod -R 700 /data/GreatSQL
 ```
 
-##  启动GreatSQL
+## 启动 GreatSQL
 
-启动GreatSQL服务前，先创建或修改systemd文件 `vim /lib/systemd/system/mysqld.service`，在 *[Service]* 区间增加下面几行内容，调高一些limit上限，避免出现文件数、线程数不够用的告警。
+启动 GreatSQL 服务前，先创建或修改 systemd 文件 `vim /lib/systemd/system/mysqld.service`，在 *[Service]* 区间增加下面几行内容，调高一些 limit 上限，避免出现文件数、线程数不够用的告警。
 
 ```ini
 # some limits
@@ -302,7 +302,7 @@ TasksAccounting=false
 
 ::: tip 小贴士
 
-RPM方式安装GreatSQL时，systemd服务管理文件 `mysqld.service` 脚本文件默认位于 `/lib/systemd/system/mysqld.service`。请先找到该文件，确认其中涉及 GreatSQL 可执行文件路径是否正确。主要有以下两处：
+RPM 方式安装 GreatSQL 时，systemd 服务管理文件 `mysqld.service` 脚本文件默认位于 `/lib/systemd/system/mysqld.service`。请先找到该文件，确认其中涉及 GreatSQL 可执行文件路径是否正确。主要有以下两处：
 
 ```
 ExecStartPre=/usr/bin/mysqld_pre_systemd
@@ -310,12 +310,12 @@ ExecStart=/usr/sbin/mysqld $MYSQLD_OPTS
 ```
 :::
 
-保存退出，然后再执行命令重载systemd，如果没问题就不会报错：
+保存退出，然后再执行命令重载 systemd，如果没问题就不会报错：
 ```bash
 systemctl daemon-reload
 ```
 
-执行下面的命令启动GreatSQL服务
+执行下面的命令启动 GreatSQL 服务
 ```bash
 systemctl start mysqld
 ```
@@ -361,7 +361,7 @@ $ ls /data/GreatSQL
  binlog.000002   client-cert.pem  '#ib_16384_0.dblwr'   ibdata1         '#innodb_temp'       mysql.sock        public_key.pem       sys
  binlog.index    client-key.pem   '#ib_16384_1.dblwr'   ibtmp1           mysql               mysql.sock.lock   server-cert.pem      undo_001
 ```
-可以看到，GreatSQL服务已经正常启动了。
+可以看到，GreatSQL 服务已经正常启动了。
 
 顺便确认动态库 `jemalloc` 成功加载：
 ```bash
@@ -373,44 +373,44 @@ mysqld  52003 mysql  mem       REG              253,0     608096   68994440 /usr
 
 ::: tip 小贴士
 
-如果是在Docker环境中采用RPM方式安装GreatSQL，或其他特殊安装方式导致在安装完毕后无法直接用systemd方式启动GreatSQL，也就无法在systemd中调用 `mysqld_pre_systemd` 脚本完成初始化后并启动的过程，这时候需要手动初始化，即手动执行 `/usr/bin/mysqld_pre_systemd` 脚本（RPM方式安装后的默认路径）完成初始化：
+如果是在 Docker 环境中采用 RPM 方式安装 GreatSQL，或其他特殊安装方式导致在安装完毕后无法直接用 systemd 方式启动 GreatSQL，也就无法在 systemd 中调用 `mysqld_pre_systemd` 脚本完成初始化后并启动的过程，这时候需要手动初始化，即手动执行 `/usr/bin/mysqld_pre_systemd` 脚本（RPM 方式安装后的默认路径）完成初始化：
 
 ```bash
 $ chmod +x /usr/bin/mysqld_pre_systemd && /usr/bin/mysqld_pre_systemd
 ```
 
-正常的话，就会完成GreatSQL的初始化工作并启动 GreatSQL 数据库服务进程。
+正常的话，就会完成 GreatSQL 的初始化工作并启动 GreatSQL 数据库服务进程。
 
 :::
 
-##  连接登录GreatSQL
+## 连接登录 GreatSQL
 
-RPM方式安装GreatSQL后，会随机生成管理员root的密码，通过搜索日志文件获取：
+RPM 方式安装 GreatSQL 后，会随机生成管理员 root 的密码，通过搜索日志文件获取：
 ```bash
 $ grep -i root /data/GreatSQL/error.log
 
 ...
 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: ahaA(ACmw8wy
 ```
-可以看到，root账户的密码是："ahaA(ACmw8wy" (不包含双引号)，复制到剪贴板里。
+可以看到，root 账户的密码是："ahaA(ACmw8wy" (不包含双引号)，复制到剪贴板里。
 
-首次登录GreatSQL后，要立即修改root密码，否则无法执行其他操作，并且新密码要符合一定安全规则：
+首次登录 GreatSQL 后，要立即修改 root 密码，否则无法执行其他操作，并且新密码要符合一定安全规则：
 ```bash
 $ mysql -uroot -p
-Enter password:     #<--这个地方粘贴上面复制的随机密码
+Enter password:     # <-- 这个地方粘贴上面复制的随机密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
 Server version: 8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-greatsql> status;   #<--想执行一个命令，提示要先修改密码
+greatsql> status;   # <-- 想执行一个命令，提示要先修改密码
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 
-greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@202X';  #<--修改密码
+greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@202X';  # <-- 修改密码
 Query OK, 0 rows affected (0.02 sec)
 
-greatsql> status;   #<--就可以正常执行其他命令了
+greatsql> status;   # <-- 就可以正常执行其他命令了
 --------------
 mysql  Ver 8.4.4-5 for Linux on x86_64 (GreatSQL, Release 5, Revision 39b389cdf3b)
 
@@ -435,7 +435,7 @@ Uptime:                 20 min 8 sec
 Threads: 2  Questions: 7  Slow queries: 0  Opens: 130  Flush tables: 3  Open tables: 46  Queries per second avg: 0.005
 --------------
 
-greatsql> SHOW DATABASES;  #<--查看数据库列表
+greatsql> SHOW DATABASES;  # <-- 查看数据库列表
 +--------------------+
 | Database           |
 +--------------------+
@@ -447,7 +447,7 @@ greatsql> SHOW DATABASES;  #<--查看数据库列表
 4 rows in set (0.01 sec)
 ```
 
-##  关闭/重启GreatSQL
+## 关闭/重启 GreatSQL
 
 执行下面的命令关闭 GreatSQL 数据库。
 ```bash
@@ -461,11 +461,11 @@ systemctl restart mysqld
 
 GreatSQL 数据库安装并初始化完毕。
 
-##  安装GreatSQL Shell
+## 安装 GreatSQL Shell
 
-为了支持仲裁节点特性，需要安装GreatSQL Shell。打开[GreatSQL下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5)，找到 **GreatSQL MySQL Shell**，下载相应的MySQL Shell安装包（目前只提供二进制安装包）。
+为了支持仲裁节点特性，需要安装 GreatSQL Shell。打开[GreatSQL 下载页面](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5)，找到 **GreatSQL MySQL Shell**，下载相应的 MySQL Shell 安装包（目前只提供二进制安装包）。
 
-P.S，如果暂时不想使用仲裁节点特性的话，则可以继续使用相同版本的官方MySQL Shell安装包，可以直接用yum方式安装，此处略过。
+P.S，如果暂时不想使用仲裁节点特性的话，则可以继续使用相同版本的官方 MySQL Shell 安装包，可以直接用 yum 方式安装，此处略过。
 
 本文场景中，选择下面的二进制包：
 
@@ -477,7 +477,7 @@ cd /usr/local/
 tar xf greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64.tar.xz
 ```
 
-修改家目录下的profile文件 `vim ~/.bash_profile`，加入PATH：
+修改家目录下的 profile 文件 `vim ~/.bash_profile`，加入 PATH：
 ```ini
 PATH=$PATH:$HOME/bin:/usr/local/greatsql-shell-8.4.4-4-Linux-glibc2.28-x86_64/bin
 export PATH
@@ -497,7 +497,7 @@ dnf install -y libssh python38 python38-libs python38-pyyaml
 pip3.8 install --user certifi pyclamd
 ```
 
-接下来就可以直接使用mysqlsh了
+接下来就可以直接使用 mysqlsh 了
 ```bash
 $ mysqlsh
 MySQL Shell 8.4.4
@@ -506,13 +506,13 @@ Type '\help' or '\?' for help; '\quit' to exit.
  MySQL  JS >
 ```
 
-GreatSQL Shell就可以正常使用，并继续构建 MGR 集群了。
+GreatSQL Shell 就可以正常使用，并继续构建 MGR 集群了。
 
-##  准备构建 MGR 集群
+## 准备构建 MGR 集群
 
-在这里建议用MySQL Shell来构建 MGR 集群，相对于手工构建方便快捷很多，如果想要体验手工构建的同学可以参考这篇文档：[3. 安装部署 MGR 集群 | 深入浅出MGR](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/deep-dive-mgr-03.md)。
+在这里建议用 MySQL Shell 来构建 MGR 集群，相对于手工构建方便快捷很多，如果想要体验手工构建的同学可以参考这篇文档：[3. 安装部署 MGR 集群 | 深入浅出 MGR](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/deep-dive-mgr-03.md)。
 
-利用MySQL Shell构建 MGR 集群比较简单，主要有几个步骤：
+利用 MySQL Shell 构建 MGR 集群比较简单，主要有几个步骤：
 
 1. 检查实例是否满足条件。
 2. 创建并初始化一个集群。
@@ -520,7 +520,7 @@ GreatSQL Shell就可以正常使用，并继续构建 MGR 集群了。
 
 接下来一步步执行。
 
-### MGR节点预检查
+### MGR 节点预检查
 
 用管理员账号 root 连接到第一个节点：
 ```js
@@ -553,7 +553,7 @@ ERROR: User 'root' can only connect from 'localhost'. New account(s) with proper
 3) Ignore and continue
 4) Cancel
 
-Please select an option [1]: 2  #<-- 选择创建最小权限账号
+Please select an option [1]: 2  # <--  选择创建最小权限账号
 Please provide an account name (e.g: icroot@%) to have it created with the necessary
 privileges or leave empty and press Enter to cancel.
 Account Name: GreatSQL  <-- 输入账号名
@@ -573,7 +573,7 @@ The instance 'GreatSQL-01:3306' is already ready to be used in an InnoDB cluster
 
 在正式初始化 MGR 集群前，再次提醒要先在其他节点完成上述初始化工作。
 
-上述另外两个节点也初始化完毕后，利用mysqlsh客户端，指定新建MGR的管理账号**GreatSQL**登入PRIMARY节点，准备创建 MGR 集群：
+上述另外两个节点也初始化完毕后，利用 mysqlsh 客户端，指定新建 MGR 的管理账号**GreatSQL**登录 PRIMARY 节点，准备创建 MGR 集群：
 ```js
 $ mysqlsh --uri GreatSQL@172.16.16.10:3306
 Please provide the password for 'GreatSQL@172.16.16.10:3306': *************
@@ -607,7 +607,7 @@ MySQL  172.16.16.10:3306 ssl  JS >
 
 ### 逐个添加实例
 
-可以在GreatSQL-01（PRIMARY）节点上直接添加其他节点，也可以用mysqlsh客户端登入其他节点执行添加节点操作。这里采用前者：
+可以在 GreatSQL-01（PRIMARY）节点上直接添加其他节点，也可以用 mysqlsh 客户端登录其他节点执行添加节点操作。这里采用前者：
 ```js
 # 此时mysqlsh客户端还保持连接到GreatSQL-01节点
 # 可以直接添加GreatSQL-02节点
@@ -701,7 +701,7 @@ MySQL  172.16.16.10:3306 ssl  JS > c.status()
     "groupInformationSourceMember": "172.16.16.10:3306"
 }
 ```
-可以看到，一个包含两节点的 MGR 集群已经构建好了，Primary节点是 *172.16.16.10:3306*，接下来还要加入另一个节点：**仲裁节点**。
+可以看到，一个包含两节点的 MGR 集群已经构建好了，Primary 节点是 *172.16.16.10:3306*，接下来还要加入另一个节点：**仲裁节点**。
 
 如果不想体验仲裁节点特性的话，可以照着上面操作再次正常加入 GreatSQL-03 节点作为 Secondary 节点即可，到这里就可以结束 MGR 集群构建工作了。
 
@@ -764,7 +764,7 @@ MySQL  172.16.16.10:3306 ssl  JS > c.status()
 ```
 可以看到一个包含仲裁节点的三节点 MGR 集群已经构建完毕。
 
-在后面的内容中，我们再介绍如何手工方式部署 MGR 集群，以及利用MySQL Router实现读写分离及读可扩展，详见：[读写分离](../6-oper-guide/2-oper-rw-splitting.md)。
+在后面的内容中，我们再介绍如何手工方式部署 MGR 集群，以及利用 MySQL Router 实现读写分离及读可扩展，详见：[读写分离](../6-oper-guide/2-oper-rw-splitting.md)。
 
 
 **扫码关注微信公众号**

@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-WHILE
+# Oracle 兼容-存储过程-WHILE
 ---
 
 
@@ -14,11 +14,11 @@ END LOOP
 
 ## 2. 定义和用法
 
-在 `ORACLE` 模式下，GreatSQL在存储过程/存储函数中，支持用 `WHILE .. LOOP .. END LOOP` 语法实现语句块循环。
+在 `ORACLE` 模式下，GreatSQL 在存储过程/存储函数中，支持用 `WHILE .. LOOP .. END LOOP` 语法实现语句块循环。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-在 `ORACLE` 模式下，GreatSQL在存储过程/存储函数中，可利用 `WHILE .. LOOP .. END LOOP` 语句实现循环结构。而在GreatSQL原生语法结构中，是采用 `WHILE .. DO .. END WHILE` 这种用法。
+在 `ORACLE` 模式下，GreatSQL 在存储过程/存储函数中，可利用 `WHILE .. LOOP .. END LOOP` 语句实现循环结构。而在 GreatSQL 原生语法结构中，是采用 `WHILE .. DO .. END WHILE` 这种用法。
 
 在 `ORACLE` 模式下，将不再支持原生的 `WHILE .. DO .. END WHILE` 语法。
 

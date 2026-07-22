@@ -1,22 +1,22 @@
-# Ansible安装
+# Ansible 安装
 ---
 
-本节介绍如何利用Ansible快速安装GreatSQL并构建包含仲裁节点的 MGR 集群。
+本节介绍如何利用 Ansible 快速安装 GreatSQL 并构建包含仲裁节点的 MGR 集群。
 
 推荐采用更好用的 Ansible 项目 [dbops](https://gitee.com/fanderchan/dbops) 来安装 GreatSQL，本文截止 GreatSQL 8.0.32-25 版本已不再更新。
 
-##  安装准备
+## 安装准备
 
-###  安装Ansible
+### 安装 Ansible
 
-首先利用dnf/yum安装Ansible：
+首先利用 dnf/yum 安装 Ansible：
 ```
 $ yum install -y ansible
 ```
 
-###  配置Ansible
+### 配置 Ansible
 
-修改 `/etc/ansible/hosts` 文件，把要安装GreatSQL的服务器IP加进去，例如：
+修改 `/etc/ansible/hosts` 文件，把要安装 GreatSQL 的服务器 IP 加进去，例如：
 ```
 [greatsql_dbs:children]
 greatsql_mgr_primary
@@ -31,29 +31,29 @@ greatsql_mgr_arbitrator
 172.16.16.12
 ```
 
-上面这个主机列表，分为两个组，一个是选择作为MGR PRIMARY节点（或在多主模式中第一个需要初始化引导的节点）的组 **greatsql_mgr_primary**，只有一个主机。另一组选择作为SECONDARY节点 **greatsql_mgr_secondary**，有两个主机。两个组也可以合并一起，成为一个新的组 **greatsql_dbs**。
+上面这个主机列表，分为两个组，一个是选择作为 MGR PRIMARY 节点（或在多主模式中第一个需要初始化引导的节点）的组 **greatsql_mgr_primary**，只有一个主机。另一组选择作为 SECONDARY 节点 **greatsql_mgr_secondary**，有两个主机。两个组也可以合并一起，成为一个新的组 **greatsql_dbs**。
 
 **提醒**
-1. 请填内网IP地址，因为MGR初始化时，默认使用内网IP地址。
-2. 如果同时还要安装到本机，也请填写内网IP地址。
+1. 请填内网 IP 地址，因为 MGR 初始化时，默认使用内网 IP 地址。
+2. 如果同时还要安装到本机，也请填写内网 IP 地址。
 3. 如果是要采用多主模式，在上面的配置中，把第一个需要初始化引导的节点放在 **greatsql_mgr_primary** 组里，其他节点照常放在 **greatsql_mgr_secondary** 组里。
 
-###  建立SSH信任
-为了简单起见，直接建立SSH信任，方便Ansible一键安装。
+### 建立 SSH 信任
+为了简单起见，直接建立 SSH 信任，方便 Ansible 一键安装。
 
-首先生成ssh key
+首先生成 ssh key
 ```
 $ ssh-keygen
 ```
-使用缺省值，提示输入passphrase时，敲回车使用空的passphrase。
+使用缺省值，提示输入 passphrase 时，敲回车使用空的 passphrase。
 
-将ssh key复制到目标服务器上：
+将 ssh key 复制到目标服务器上：
 ```
 $ ssh-copy-id root@172.16.16.10
 ```
-按提示输入口令，完成后测试使用ssh登录不再提示输入口令。如果是在本机安装，那么ssh-copy-id也要对本机执行一遍。或者手动将ssh key复制到远程主机上，写到 ~/.ssh/authorized_keys 文件中（注意不要折行、断行）。
+按提示输入口令，完成后测试使用 ssh 登录不再提示输入口令。如果是在本机安装，那么 ssh-copy-id 也要对本机执行一遍。或者手动将 ssh key 复制到远程主机上，写到 ~/.ssh/authorized_keys 文件中（注意不要折行、断行）。
 
-###  测试Ansible
+### 测试 Ansible
 随意执行一个指令，测试 ansible 可连接远程主机：
 ```
 $ ansible greatsql_dbs -a "uptime"
@@ -66,9 +66,9 @@ $ ansible greatsql_dbs -a "uptime"
 ```
 这就表示可以正常运行了。
 
-###  下载GreatSQL-Ansible安装包
+### 下载 GreatSQL-Ansible 安装包
 
-打开GreatSQL-Ansible项目主页：[https://gitee.com/GreatSQL/GreatSQL-Ansible](https://gitee.com/GreatSQL/GreatSQL-Ansible)
+打开 GreatSQL-Ansible 项目主页：[https://gitee.com/GreatSQL/GreatSQL-Ansible](https://gitee.com/GreatSQL/GreatSQL-Ansible)
 
 找到页面右侧“发行版”，进入，选择 " **GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal-ansible.tar.xz** " 这个二进制包下载到服务器上：
 
@@ -78,7 +78,7 @@ $ cd /opt/greatsql/; wget -c "https://gitee.com/xxx/GreatSQL-8.0.32-25-Linux-gli
 $ tar -Jxvf GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal-ansible.tar.xz
 ```
 
-解压缩后，能看到除了 *GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal.tar.xz* 安装包之外，还有GreatSQL-ansible一键安装相关文件：
+解压缩后，能看到除了 *GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal.tar.xz* 安装包之外，还有 GreatSQL-ansible 一键安装相关文件：
 ```
 $ cd /opt/greatsql/GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal-ansible
 $ ls -la
@@ -91,14 +91,14 @@ drwxr-xr-x 3 root root      103 Aug  8 11:07 mysql-support-files
 -rw-r--r-- 1 root root      413 Aug  8 14:03 vars.yml
 ```
 几个文件作用分别介绍下：
-- GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal.tar.xz，GreatSQL二进制minimal安装包。
-- greatsql.yml，ansible一键安装脚本。
-- check_mysql.yml，MySQL进程、端口预检查脚本。
+- GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal.tar.xz，GreatSQL 二进制 minimal 安装包。
+- greatsql.yml，ansible 一键安装脚本。
+- check_mysql.yml，MySQL 进程、端口预检查脚本。
 - vars.yml，定义一些变量的脚本，里面的变量名有些需要修改以适应各自不同的安装环境。
 
-##  安装GreatSQL并构建 MGR 集群
+## 安装 GreatSQL 并构建 MGR 集群
 
-###  配置Ansible安装剧本
+### 配置 Ansible 安装剧本
 
 在开始安装前，要先修改 `vars.yml` 这个安装剧本中的几个配置选项：
 ```
@@ -122,26 +122,26 @@ wait_for_start: 60
 |参数名 | 默认值 | 用途 |
 |--- | --- | --- |
 |work_dir|/opt/greatsql|工作目录，将下载的安装包放在本目录，可根据需要自行调整|
-|extract_dir|/usr/local|GreatSQL二进制包解压缩后放在 /usr/local下，【不建议调整】|
-|data_dir|/data/GreatSQL|GreatSQL运行时的datadir，【不建议调整】|
-|file_name|GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal.tar.xz|GreatSQL二进制包文件名，【不建议调整】|
-|base_dir|/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal|GreatSQL的basedir，【不建议调整】|
-|my_cnf|/etc/my.cnf|my.cnf配置文件路径，【不建议调整】|
-|mysql_user|mysql|运行GreatSQL对应的user、group，【不建议调整】|
-|mysql_port|3306|GreatSQL运行时的监听端口，【不建议调整】|
-|mgr_user|GreatSQL|MGR账户|
-|mgr_user_pwd|GreatSQL@2023|MGR账户密码|
-|mgr_seeds|172.16.16.10:33061,172.16.16.11:33061,172.16.16.12:33061|定义MGR运行时各节点的IP+端口列表，【需要自行调整】|
-|mgr_single_mode|是否采用单主模式；0表示否，也就是采用多主模式；1表示是，也就是采用单主模式；默认值：1（即默认采用单主模式）|
-|wait_for_start|60|初次启动时，要先进行一系列数据文件初始化等工作，后面的MGR初始化工作要等待前面的先完成，如果第一安装失败，可以将这个时间加长|
+|extract_dir|/usr/local|GreatSQL 二进制包解压缩后放在 /usr/local 下，【不建议调整】|
+|data_dir|/data/GreatSQL|GreatSQL 运行时的 datadir，【不建议调整】|
+|file_name|GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal.tar.xz|GreatSQL 二进制包文件名，【不建议调整】|
+|base_dir|/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal|GreatSQL 的 basedir，【不建议调整】|
+|my_cnf|/etc/my.cnf|my.cnf 配置文件路径，【不建议调整】|
+|mysql_user|mysql|运行 GreatSQL 对应的 user、group，【不建议调整】|
+|mysql_port|3306|GreatSQL 运行时的监听端口，【不建议调整】|
+|mgr_user|GreatSQL|MGR 账户|
+|mgr_user_pwd|GreatSQL@2023|MGR 账户密码|
+|mgr_seeds|172.16.16.10:33061,172.16.16.11:33061,172.16.16.12:33061|定义 MGR 运行时各节点的 IP+端口列表，【需要自行调整】|
+|mgr_single_mode|是否采用单主模式；0 表示否，也就是采用多主模式；1 表示是，也就是采用单主模式；默认值：1（即默认采用单主模式）|
+|wait_for_start|60|初次启动时，要先进行一系列数据文件初始化等工作，后面的 MGR 初始化工作要等待前面的先完成，如果第一安装失败，可以将这个时间加长|
 
 **提醒：**
-1. 除了修改work_dir和mgr_seeds参数外，其他的都请谨慎修改，否则可能会提示找不到文件目录等错误。
+1. 除了修改 work_dir 和 mgr_seeds 参数外，其他的都请谨慎修改，否则可能会提示找不到文件目录等错误。
 2. 如果是要采用多主模式，在`/etc/ansible/hosts` 文件中，把第一个需要初始化引导的节点放在 **greatsql_mgr_primary** 组里，其他节点照常放在 **greatsql_mgr_secondary** 组里。
 
-###  开始Ansible安装
+### 开始 Ansible 安装
 
-执行下面的命令一键完成GreatSQL的安装、初始化，加入systemd服务、以及MGR初始化等所有工作：
+执行下面的命令一键完成 GreatSQL 的安装、初始化，加入 systemd 服务、以及 MGR 初始化等所有工作：
 ```
 $ cd /opt/greatsql/GreatSQL-8.0.32-25-Linux-glibc2.17-x86_64-minimal-ansible
 $ ls -la
@@ -155,9 +155,9 @@ drwxr-xr-x 3 root root      103 Aug  8 11:07 mysql-support-files
 $ ansible-playbook ./greatsql.yml
 ```
 
-###  检查ansible执行过程输出
+### 检查 ansible 执行过程输出
 
-安装时会先行检查是否已有mysqld进程在运行，或者3306端口上是否已有其他服务，如果是的话，则输出内容可能会是这样的：
+安装时会先行检查是否已有 mysqld 进程在运行，或者 3306 端口上是否已有其他服务，如果是的话，则输出内容可能会是这样的：
 ```
 PLAY [install GreatSQL] *****************************************************************************************************************************
 
@@ -221,7 +221,7 @@ systemd[1]: Starting GreatSQL Server...
 systemd[1]: Started GreatSQL Server.
 ```
 
-检查MGR服务运行状态：
+检查 MGR 服务运行状态：
 ```
 [root@GreatSQL][(none)]> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+

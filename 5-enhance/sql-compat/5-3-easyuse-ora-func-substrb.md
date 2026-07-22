@@ -1,4 +1,4 @@
-# Oracle兼容-函数-SUBSTRB()函数
+# Oracle 兼容-函数-SUBSTRB()函数
 ---
 
 
@@ -9,14 +9,14 @@ SUBSTRB(string, pos [, substring_length] )
 ```
 
 ## 2. 定义和用法
-函数 `SUBSTRB()` 的作用是返回字符型参数 `string` 的一部分。该部分是由 `string` 的第 `pos` 个byte开始，取 `substring_length`个byte长度。
+函数 `SUBSTRB()` 的作用是返回字符型参数 `string` 的一部分。该部分是由 `string` 的第 `pos` 个 byte 开始，取 `substring_length`个 byte 长度。
 
-- 若`pos`为0，视为1。表示`string`的最开始的byte开始（第1个byte）。
-- 若`pos`为正数，表示由`string`的第`pos`个byte开始。
-- 若`pos`为负数，表示由`string`末尾反向数回第`pos`个byte开始。
-- 若`substring_length`未指定，表示取到`string`的最后一个byte为止。
-- 若`substring_length`小于1，则返回NULL。
-- 若传回的内容只包含multi-byte字符（多字节字符，例如中文字符）的一部分，该部分会以空格替代。
+- 若`pos`为 0，视为 1。表示`string`的最开始的 byte 开始（第 1 个 byte）。
+- 若`pos`为正数，表示由`string`的第`pos`个 byte 开始。
+- 若`pos`为负数，表示由`string`末尾反向数回第`pos`个 byte 开始。
+- 若`substring_length`未指定，表示取到`string`的最后一个 byte 为止。
+- 若`substring_length`小于 1，则返回 NULL。
+- 若传回的内容只包含 multi-byte 字符（多字节字符，例如中文字符）的一部分，该部分会以空格替代。
 
 ## 3. 示例
 

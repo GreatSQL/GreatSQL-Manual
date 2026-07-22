@@ -11,7 +11,7 @@
 
 - no-auto-rehash
 
-MySQL 客户端登入时，不读取全部 metadata，避免影响性能以及产生 MDL 等待。
+MySQL 客户端登录时，不读取全部 metadata，避免影响性能以及产生 MDL 等待。
 
 - skip_name_resolve=ON
 
@@ -27,7 +27,7 @@ MySQL 客户端登入时，不读取全部 metadata，避免影响性能以及�
 
 - log_error_verbosity=3
 
-设置为3可以记录更多日志信息，便于问题分析排查。
+设置为 3 可以记录更多日志信息，便于问题分析排查。
 
 - replica_parallel_type=LOGICAL_CLOCK
 - replica_parallel_workers=16
@@ -68,33 +68,33 @@ MySQL 客户端登入时，不读取全部 metadata，避免影响性能以及�
 
 - innodb_buffer_pool_size=96G
 
-如果是专用的数据库服务器，则可以先设置为物理内存的50%。例如物理内存是128GB，则设置`innodb_buffer_pool_size=64G`。
+如果是专用的数据库服务器，则可以先设置为物理内存的 50%。例如物理内存是 128GB，则设置`innodb_buffer_pool_size=64G`。
 
 - innodb_log_buffer_size=64M
 
-设置为32-64MB就能满足大部分业务场景。
+设置为 32-64MB 就能满足大部分业务场景。
 
 - innodb_redo_log_capacity=4G
 
-InnoDB Redo Log一般设置为4GB起步。
+InnoDB Redo Log 一般设置为 4GB 起步。
 
 - innodb_doublewrite_pages=128
 
-默认值为2，不足以应对大部分业务场景，建议调大到128。
+默认值为 2，不足以应对大部分业务场景，建议调大到 128。
 
 - innodb_io_capacity=20000
 - innodb_io_capacity_max=40000
 
-配置高端PCIe SSD卡的话，则可以调整的更高，比如 50000 - 80000
+配置高端 PCIe SSD 卡的话，则可以调整的更高，比如 50000 - 80000
 
 - innodb_read_io_threads=16
 - innodb_write_io_threads=16
 
-设置InnoDB I/O读写线程数，默认值均为4，在高I/O负载场景下可以适当调大。
+设置 InnoDB I/O 读写线程数，默认值均为 4，在高 I/O 负载场景下可以适当调大。
 
 - innodb_thread_concurrency=0
 
-不限制InnoDB并行线程数，使其发挥最大性能。但如果业务端发起的业务请求并行度总是超过服务器逻辑CPU数，则可能导致CPU调度频繁等待，此时可以考虑将本选项设置为逻辑CPU的数量。
+不限制 InnoDB 并行线程数，使其发挥最大性能。但如果业务端发起的业务请求并行度总是超过服务器逻辑 CPU 数，则可能导致 CPU 调度频繁等待，此时可以考虑将本选项设置为逻辑 CPU 的数量。
 
 - innodb_spin_wait_delay=20
 
@@ -102,11 +102,11 @@ InnoDB Redo Log一般设置为4GB起步。
 
 - loose-rapid_memory_limit=1G
 
-设置Rapid引擎运行过程中可使用的内存，默认值1G。如果数据量较大，也应适当提高，一般可以设置为InnoDB表空间文件总大小的10% ~ 30%。
+设置 Rapid 引擎运行过程中可使用的内存，默认值 1G。如果数据量较大，也应适当提高，一般可以设置为 InnoDB 表空间文件总大小的 10% ~ 30%。
 
 - loose-rapid_worker_threads=8
 
-设置Rapid引擎运行过程中可使用的线程数，默认值为4，如果OLAP类查询较多，可以适当提高。
+设置 Rapid 引擎运行过程中可使用的线程数，默认值为 4，如果 OLAP 类查询较多，可以适当提高。
 
 
 **扫码关注微信公众号**

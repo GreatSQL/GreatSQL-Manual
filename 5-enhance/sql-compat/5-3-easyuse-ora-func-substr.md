@@ -1,4 +1,4 @@
-# Oracle兼容-函数-SUBSTR()函数
+# Oracle 兼容-函数-SUBSTR()函数
 ---
 
 
@@ -12,25 +12,25 @@ SUBSTR(string, pos [, substring_length] )
 
 函数 `SUBSTR()` 的作用是返回字符型参数 `string` 的一部分。该部分是由 `string` 的第 `pos` 个字符开始，取 `substring_length` 个字符。
 
-- 若`pos`为0，视为1，表示`string`从第1个字符开始。
+- 若`pos`为 0，视为 1，表示`string`从第 1 个字符开始。
 - 若`pos`为正数，表示由`string`的第`pos`个字符开始。
 - 若`pos`为负数，表示由`string`倒数第`pos`个字符开始。
-- 若`pos`为''（空）时，在Oracle模式下，当做1看待。
+- 若`pos`为''（空）时，在 Oracle 模式下，当做 1 看待。
 - 若`substring_length`未指定，表示取到`string`的最后一个字符为止。
-- 若`substring_length`小于等于0，会传回空字符。
-- 若`string`、`pos`、`substring_length`任意一个值为NULL，则返回NULL。
-- 当`string`中包含转义字符（例如：`\0`、`\'`、`''`、`\"`、`\\`、`\b`、`\B`、`\n`、`\N`、`\r`、`\R`、`\t`、`\T`、`\z`、`\Z`）时，不会视为2个字符，而视为1个字符来处理。
+- 若`substring_length`小于等于 0，会传回空字符。
+- 若`string`、`pos`、`substring_length`任意一个值为 NULL，则返回 NULL。
+- 当`string`中包含转义字符（例如：`\0`、`\'`、`''`、`\"`、`\\`、`\b`、`\B`、`\n`、`\N`、`\r`、`\R`、`\t`、`\T`、`\z`、`\Z`）时，不会视为 2 个字符，而视为 1 个字符来处理。
 
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-因为GreatSQL已原生支持 `SUBSTR()` 函数，因此想要在GreatSQL中使用扩展后的 `SUBSTR()` 函数时，需要先执行 `SET sql_mode = ORACLE;` 激活Oracle兼容模式。
+因为 GreatSQL 已原生支持 `SUBSTR()` 函数，因此想要在 GreatSQL 中使用扩展后的 `SUBSTR()` 函数时，需要先执行 `SET sql_mode = ORACLE;` 激活 Oracle 兼容模式。
 
-在Oracle兼容模式下，与GreatSQL原生的 `SUBSTR()` 函数区别在于两处：
-- 当参数 `pos` 为0时，Oracle兼容模式下视为1；而GreatSQL原生函数仍视为0，且返回结果总是为空值('')。
-- 当返回结果为空值('')时，Oracle兼容模式下返回NULL；而GreatSQL原生函数仍旧返回空值('')。
+在 Oracle 兼容模式下，与 GreatSQL 原生的 `SUBSTR()` 函数区别在于两处：
+- 当参数 `pos` 为 0 时，Oracle 兼容模式下视为 1；而 GreatSQL 原生函数仍视为 0，且返回结果总是为空值('')。
+- 当返回结果为空值('')时，Oracle 兼容模式下返回 NULL；而 GreatSQL 原生函数仍旧返回空值('')。
 
-GreatSQL原生的 `SUBSTR()` 函数是 `SUBSTRING()` 函数的别名，其用法是：
+GreatSQL 原生的 `SUBSTR()` 函数是 `SUBSTRING()` 函数的别名，其用法是：
 ```
 SUBSTRING(str,pos)
 SUBSTRING(str FROM pos)

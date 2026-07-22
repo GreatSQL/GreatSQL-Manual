@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-TYPE IS TABLE
+# Oracle 兼容-存储过程-TYPE IS TABLE
 ---
 
 
@@ -45,7 +45,7 @@ rowtype_attribute: db_table_or_view %ROWTYPE
 
 ## 2. 定义和用法
 
-在GreatSQL中支持用 `TYPE IS TABLE` 方式来自定义数据类型，支持以下几种用法：
+在 GreatSQL 中支持用 `TYPE IS TABLE` 方式来自定义数据类型，支持以下几种用法：
 
 - 1. 用 `TYPE IS TABLE OF` 自定义 `TABLE` 类型。
 
@@ -66,9 +66,9 @@ rowtype_attribute: db_table_or_view %ROWTYPE
 - 9. 用 `RECORD TABLE` 带 `INDEX BY ..` 的类型允许用 `=>` 方式赋默认值。
 
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-在GreatSQL中支持用 `TYPE IS TABLE` 方式来自定义数据类型，该用法如下所述：
+在 GreatSQL 中支持用 `TYPE IS TABLE` 方式来自定义数据类型，该用法如下所述：
 
 1. 在 `TYPE IS TABLE OF .. INDEX BY BINARY_INTEGER` 定义中支持自增长形式的整数型，不支持如手动指定方式的整数型用法。
 
@@ -78,25 +78,25 @@ rowtype_attribute: db_table_or_view %ROWTYPE
 
 4. 支持无限循环嵌套表的 `SELECT` 或 `SET` 赋值。
 
-5. 支持用 `NO_DATA_FOUND` 判断无法查找到数据的 `EXCEPTION` 状态。详见下方示例3。
+5. 支持用 `NO_DATA_FOUND` 判断无法查找到数据的 `EXCEPTION` 状态。详见下方示例 3。
 
-6. 支持不同行和列的 `RECORD TABLE` 赋值。赋值后 `TABLE` 行数与源 `RECORD TABLE` 一致。并支持 `RECORD TABLE` 类型赋默认值。如果该 `RECORD TABLE` 是 `INDEX BY` 的，那么赋默认值时候必须要同时加上行数，比如 `v1 record_table := record_table(1, udt_table(1 => udt_type(1, 'row1')))`，这里的 `1=>` 表示第1行。如果该 `RECORD TABLE` 不是 `INDEX BY`的，那么赋默认值时候就不能加上行号标记。
+6. 支持不同行和列的 `RECORD TABLE` 赋值。赋值后 `TABLE` 行数与源 `RECORD TABLE` 一致。并支持 `RECORD TABLE` 类型赋默认值。如果该 `RECORD TABLE` 是 `INDEX BY` 的，那么赋默认值时候必须要同时加上行数，比如 `v1 record_table := record_table(1, udt_table(1 => udt_type(1, 'row1')))`，这里的 `1=>` 表示第 1 行。如果该 `RECORD TABLE` 不是 `INDEX BY`的，那么赋默认值时候就不能加上行号标记。
 
 7. 不支持单类型的数组定义，比如 `CREATE TYPE v_list_attrs AS VARRAY(10) OF VARCHAR2(80)`。
 
 8. 不支持 `TABLE` 类型作为 `RECORD` 类型使用，不支持类似用法 `table_type employees%ROWTYPE`。
 
-9. 在 `FOR i IN udt_table.FIRST .. udt_table.LAST LOOP` 循环中的 `i` 是整数型，因此 `udt_table` 的行号值不能是非整数型，否则无法正常赋值。如果该 `udt_table` 是空的，不会报错而是直接跳出循环，Oracle则会报错。`udt_table.FIRST` 是 `udt_table` 行号的最小值，`udt_table.LAST` 是行号的最大值。
+9. 在 `FOR i IN udt_table.FIRST .. udt_table.LAST LOOP` 循环中的 `i` 是整数型，因此 `udt_table` 的行号值不能是非整数型，否则无法正常赋值。如果该 `udt_table` 是空的，不会报错而是直接跳出循环，Oracle 则会报错。`udt_table.FIRST` 是 `udt_table` 行号的最小值，`udt_table.LAST` 是行号的最大值。
 
-10. 当指定 `INDEX BY BINARY_INTEGER` 属性时，则不支持非数字的字符类型行号标记用法，例如 `TABLE('a')`，但支持数值型的字符类型行号，比如 `TABLE('1') / TABLE('-1')`。指定 `INDEX BY VARCHAR` 属性时，允许行号参数为字符类型，例如 `TABLE('a')`。此外，指定 `INDEX BY VARCHAR` 时行号会按ASCII码排序，而 `INDEX BY BINARY_INTEGER` 则会按照整数型排序。
+10. 当指定 `INDEX BY BINARY_INTEGER` 属性时，则不支持非数字的字符类型行号标记用法，例如 `TABLE('a')`，但支持数值型的字符类型行号，比如 `TABLE('1') / TABLE('-1')`。指定 `INDEX BY VARCHAR` 属性时，允许行号参数为字符类型，例如 `TABLE('a')`。此外，指定 `INDEX BY VARCHAR` 时行号会按 ASCII 码排序，而 `INDEX BY BINARY_INTEGER` 则会按照整数型排序。
 
-11. 在 `SELECT var(row)` 中，如果 `var(row)` 里有自定义类型数据，将返回 `NULL`。详见下方示例10。
+11. 在 `SELECT var(row)` 中，如果 `var(row)` 里有自定义类型数据，将返回 `NULL`。详见下方示例 10。
 
 12. 在 `SELECT var.COUNT` 中，如果变量名 `var` 与 `TABLE` 名重复，会优先被解析为 `RECORD TABLE` 名，所以 `var.COUNT` 会返回 `TABLE` 的行数。
 
-13. 当 `TYPE IS TABLE OF` 后面不带 `INDEX BY` 时，这个自定义数据类型必须要初始化才能使用。初始化时定义最大行数后就不能再发生变化，后面只支持 `UPDATE` 操作而不支持 `INSERT` 操作。例外情况是在 `SELECT BULK COLLECT INTO var` 时，可以不需要初始化就能直接使用，因为 `BULK COLLECT` 操作会进行初始化和插入数据操作。暂不支持Oracle中用 `EXTEND()` 函数来扩容 `TABLE` 类型。
+13. 当 `TYPE IS TABLE OF` 后面不带 `INDEX BY` 时，这个自定义数据类型必须要初始化才能使用。初始化时定义最大行数后就不能再发生变化，后面只支持 `UPDATE` 操作而不支持 `INSERT` 操作。例外情况是在 `SELECT BULK COLLECT INTO var` 时，可以不需要初始化就能直接使用，因为 `BULK COLLECT` 操作会进行初始化和插入数据操作。暂不支持 Oracle 中用 `EXTEND()` 函数来扩容 `TABLE` 类型。
 
-14. 在 `TYPE IS TABLE OF INDEX BY VARCHAR(v_size)` 定义中，Oracle里参数 `v_size` 的范围是 [1, 32676]，GreatSQL中支持的范围是 [1, 16383]，二者不同。
+14. 在 `TYPE IS TABLE OF INDEX BY VARCHAR(v_size)` 定义中，Oracle 里参数 `v_size` 的范围是 [1, 32676]，GreatSQL 中支持的范围是 [1, 16383]，二者不同。
 
 15. 不支持使用保留关键字作为 `TABLE` 列名，比如 `NAME`、`ANY`、`BULK`、`TABLE` 等。
 
@@ -111,7 +111,7 @@ rowtype_attribute: db_table_or_view %ROWTYPE
 greatsql> SET SESSION sql_generate_invisible_primary_key = 0;
 ```
 
-- 1. 示例1：`TYPE IS RECORD/TYPE IS TABLE`
+- 1. 示例 1：`TYPE IS RECORD/TYPE IS TABLE`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -165,7 +165,7 @@ greatsql> CALL record_sp1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 2. 示例2：`TYPE IS TABLE OF %ROWTYPE`
+- 2. 示例 2：`TYPE IS TABLE OF %ROWTYPE`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -204,7 +204,7 @@ greatsql> CALL table_sp2() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 3. 示例3：`EXCEPTION WHEN NO_DATA_FOUND`
+- 3. 示例 3：`EXCEPTION WHEN NO_DATA_FOUND`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -235,7 +235,7 @@ greatsql> CALL table_sp3() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 4. 示例4：对 `RECORD / TABLE` 类型数据赋值
+- 4. 示例 4：对 `RECORD / TABLE` 类型数据赋值
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -284,7 +284,7 @@ greatsql> CALL table_sp4() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 5. 示例5：`table.COUNT`
+- 5. 示例 5：`table.COUNT`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -323,7 +323,7 @@ greatsql> CALL table_sp5() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 6. 示例6： `TYPE IS TABLE OF TYPE INDEX BY VARCHAR`
+- 6. 示例 6： `TYPE IS TABLE OF TYPE INDEX BY VARCHAR`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -362,7 +362,7 @@ Query OK, 0 rows affected (0.00 sec)
 
 ```
 
-- 7. 示例7： `TYPE IS TABLE OF RECORD INDEX BY VARCHAR`
+- 7. 示例 7： `TYPE IS TABLE OF RECORD INDEX BY VARCHAR`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -404,7 +404,7 @@ greatsql> CALL table_sp7() //
 Query OK, 0 rows affected (0.01 sec)
 ```
 
-- 8. 示例8：`var(row) := record_value`
+- 8. 示例 8：`var(row) := record_value`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -454,7 +454,7 @@ greatsql> CALL table_sp8() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 9. 示例9： `record_value := var(row)`
+- 9. 示例 9： `record_value := var(row)`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -510,7 +510,7 @@ greatsql> CALL table_sp9() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 10. 示例10： `SELECT var(row)`
+- 10. 示例 10： `SELECT var(row)`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -561,7 +561,7 @@ greatsql> CALL table_sp10() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 11. 示例11：`var(row) := var1(row)`
+- 11. 示例 11：`var(row) := var1(row)`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -636,7 +636,7 @@ greatsql> CALL table_sp11() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 12. 示例12： `SELECT var(row) INTO var`
+- 12. 示例 12： `SELECT var(row) INTO var`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -671,7 +671,7 @@ greatsql> CALL table_sp12() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 13. 示例13：`TYPE IS TABLE OF RECORD`中不含 `INDEX BY`
+- 13. 示例 13：`TYPE IS TABLE OF RECORD`中不含 `INDEX BY`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -731,7 +731,7 @@ greatsql> CALL table_sp13() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 14. 示例14： `TYPE IS TABLE OF RECORD` 包含 `INDEX BY` 以及默认值
+- 14. 示例 14： `TYPE IS TABLE OF RECORD` 包含 `INDEX BY` 以及默认值
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -773,7 +773,7 @@ greatsql> CALL table_sp14() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 15. 示例15： `table.FIRST / table.LAST`
+- 15. 示例 15： `table.FIRST / table.LAST`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;

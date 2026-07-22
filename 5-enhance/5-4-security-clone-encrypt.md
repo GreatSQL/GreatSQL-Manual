@@ -70,7 +70,7 @@ $ ls -a
  ..   greatsql   ibdata1.xbcrypt          mysql           sys                 sys_mac.ibd.xbcrypt     undo_001.xbcrypt
 ```
 
-可以看到，无论是 用户表空间文件，还是 系统表空间、Redo Log、Undo Log等文件，全部数据文件都加上了 ".xbcrypt" 后缀，都是加密后的文件。
+可以看到，无论是 用户表空间文件，还是 系统表空间、Redo Log、Undo Log 等文件，全部数据文件都加上了 ".xbcrypt" 后缀，都是加密后的文件。
 
 ## 解密 Clone 加密备份文件
 

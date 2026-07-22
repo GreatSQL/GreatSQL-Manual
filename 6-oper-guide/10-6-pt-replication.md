@@ -142,10 +142,10 @@ Enter password: -- 这里输入密码
 :::
 
 ::: tip 小贴士
-输出的结果为：实时延迟，[1分钟延迟，5分钟延迟，15分钟延迟] 主节点的Server_id。
+输出的结果为：实时延迟，[1 分钟延迟，5 分钟延迟，15 分钟延迟] 主节点的Server_id。
 ::: 
 
-1. 当然也可以使用`--interval`参数控制主库上的更新间隔，默认是1秒。
+1. 当然也可以使用`--interval`参数控制主库上的更新间隔，默认是 1 秒。
 
 2. 如果使用守护进程的方式，要关闭的话可以采用`pt-heartbeat --stop`。
 
@@ -205,7 +205,7 @@ pt-slave-delay [OPTIONS] SLAVE_DSN [MASTER_DSN]
 pt-slave-delay --user=root --ask-pass -S /data/GreatSQL02/mysql.sock --delay=1m --interval=15s --run-time=10m
 ```
 ::: tip 小贴士
-此处将主从延迟设定为1分钟，每15秒进行一次检测，持续运行10分钟。
+此处将主从延迟设定为 1 分钟，每 15 秒进行一次检测，持续运行 10 分钟。
 :::
 
 ::: details 查看运行结果
@@ -226,7 +226,7 @@ Replica_IO_Running: Yes
 Replica_SQL_Running: No
 ```
 
-可以看到SQL线程已关闭，证明此工具精准控制SQL线程的启停，有效实现主从延迟。
+可以看到 SQL 线程已关闭，证明此工具精准控制 SQL 线程的启停，有效实现主从延迟。
 
 ::: tip 小贴士
 也可使用`CHANGE REPLICATION SOURCE TO SOURCE_DELAY=3600;`该命令来控制主从延迟的时间。
@@ -475,7 +475,7 @@ Last_SQL_Error:
 
 ## pt-table-checksum
 
-这款数据校验与修复工具虽广受欢迎，却存在不容忽视的短板：不支持 MySQL/GreatSQL 的 MGR 场景、国内普遍的上云下云业务，以及 MySQL/GreatSQL 与 Oracle 间的异构数据库等多元化场景。为了攻克这些难题，GreatSQL 推出了名为 `gt-checksum` 的校验&修复工具，旨在全面满足各类业务需求！
+这款数据校验与修复工具虽广受欢迎，却存在不容忽视的短板：不支持 MySQL/GreatSQL 的 MGR 场景、国内普遍的上云下云业务，以及 MySQL/GreatSQL 与 Oracle 间的异构数据库等多元化场景。为了攻克这些难题，GreatSQL 推出了名为 `gt-checksum` 的校验 & 修复工具，旨在全面满足各类业务需求！
 
 - [gt-checksum 文档](https://gitee.com/GreatSQL/gt-checksum/blob/master/gt-checksum-manual.md)
 - [Gitee仓库地址](https://gitee.com/GreatSQL/gt-checksum)
@@ -593,7 +593,7 @@ Starting checksum ...
 
 - TS：完成检查的时间。
 - ERRORS：检查时候发生错误和警告的数量。
-- DIFFS：0表示一致，非0表示不一致。
+- DIFFS：0 表示一致，非 0 表示不一致。
 - DIFF_ROWS：主库和从库差异的数据行数。
 - CHUNKS：被划分到表中的块的数目。
 - SKIPPED：由于错误或警告或过大，则跳过块的数目。

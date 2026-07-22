@@ -1,4 +1,4 @@
-# Oracle兼容-函数-CURRENT_TIMESTAMP()函数
+# Oracle 兼容-函数-CURRENT_TIMESTAMP()函数
 ---
 
 
@@ -13,10 +13,10 @@ CURRENT_TIMESTAMP[([n])]
 返回当前时间戳。
 
 参数 `n` 说明：
-1. n的值要小于等于6。
-2. 在ORACLE mode中，`CURRENT_TIMESTAMP` 等价于 `CURRENT_TIMESTAMP(6)`，小数位是6（n=6），而 `CURRENT_TIMESTAMP()` 小数位是0（n=0）。而在DEFAULT mode中，`CURRENT_TIMESTAMP` 和 `CURRENT_TIMESTAMP()` 等价，小数位都是0（n=0）。
-3. 在ORACLE mode中，输出值格式为`dd-mm-yy hh:mm:ss[.dec] am|pm timezone`，而在DEFAULT mode中，输出值格式为`yyyy-mm-dd hh24:mm:ss[.dec]`。
-4. 在ORACLE mode中，时间格式与原有的不一样，这会导致部分函数（如`UNIX_TIMESTAMP()`）当其参数值为`CURRENT_TIMESTAMP`时会显示异常。
+1. n 的值要小于等于 6。
+2. 在 ORACLE mode 中，`CURRENT_TIMESTAMP` 等价于 `CURRENT_TIMESTAMP(6)`，小数位是 6（n=6），而 `CURRENT_TIMESTAMP()` 小数位是 0（n=0）。而在 DEFAULT mode 中，`CURRENT_TIMESTAMP` 和 `CURRENT_TIMESTAMP()` 等价，小数位都是 0（n=0）。
+3. 在 ORACLE mode 中，输出值格式为`dd-mm-yy hh:mm:ss[.dec] am|pm timezone`，而在 DEFAULT mode 中，输出值格式为`yyyy-mm-dd hh24:mm:ss[.dec]`。
+4. 在 ORACLE mode 中，时间格式与原有的不一样，这会导致部分函数（如`UNIX_TIMESTAMP()`）当其参数值为`CURRENT_TIMESTAMP`时会显示异常。
 
 
 ## 3. 示例

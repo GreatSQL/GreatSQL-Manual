@@ -2,7 +2,7 @@
 ---
 
 
-在GreatSQL中，切换到ORACLE模式后，即可支持Oracle风格的排序规则。
+在 GreatSQL 中，切换到 ORACLE 模式后，即可支持 Oracle 风格的排序规则。
 
 ## 1. 语法
 
@@ -13,21 +13,21 @@ order_expr :
     expr [ ASC | DESC ] [ NULLS FIRST | NULLS LAST ]
 ```
 
-## 2. Oracle兼容说明
+## 2. Oracle 兼容说明
 
 GreatSQL 和 Oracle 在 `ORDER BY` 排序时，对于 `NULL` 值的排序处理方式存在差异。
 
-GreatSQL的做法：
+GreatSQL 的做法：
 - 按 `ASC` 排序时，`NULL` 排序在前;
 - 按 `DESC` 排序时，`NULL` 排序在后。
 
-Oracle的做法与GreatSQL相反，即：
+Oracle 的做法与 GreatSQL 相反，即：
 - 按 `ASC` 排序时，`NULL` 排序在后;
 - 按 `DESC` 排序时，`NULL` 排序在前。
 
-可以设置 `SET sql_mode = ORACLE` 切换到ORACLE模式，选择使用Oracle的排序模式。
+可以设置 `SET sql_mode = ORACLE` 切换到 ORACLE 模式，选择使用 Oracle 的排序模式。
 
-在ORACLE模式下，还可以在排序时加上 NULLS FIRST 显式设置在最终结果中将 `NULL` 排序在最前面。
+在 ORACLE 模式下，还可以在排序时加上 NULLS FIRST 显式设置在最终结果中将 `NULL` 排序在最前面。
 也可以加上 NULLS LAST 显式设置在最终结果中将 `NULL` 排序在最后面。
 
 

@@ -1,16 +1,16 @@
-# 单VLAN高可用
+# 单 VLAN 高可用
 ---
 
 本文档主要介绍在单 VLAN 场景中，如何基于 GreatSQL + VIP 构建高可用架构。
 
-GreatSQL支持在单主（Single-Primary）模式下，在读写节点绑定动态VIP，使得高可用切换更便捷。
+GreatSQL 支持在单主（Single-Primary）模式下，在读写节点绑定动态 VIP，使得高可用切换更便捷。
 
 整体架构图如下所示：
 
 ![单 VLAN 高可用方案](./5-ha-single-vlan01.png)
 
 
-## 启用内置vip插件
+## 启用内置 VIP 插件
 
 - 开启新插件
 
@@ -18,7 +18,7 @@ GreatSQL支持在单主（Single-Primary）模式下，在读写节点绑定动�
 plugin_load_add=greatdb_ha.so
 ```
 
-或者在启动数据库实例后， 执行
+或者在启动数据库实例后，执行
 
 ```sql
 INSTALL PLUGIN greatdb_ha SONAME 'greatdb_ha.so';
@@ -26,31 +26,25 @@ INSTALL PLUGIN greatdb_ha SONAME 'greatdb_ha.so';
 
 ## 新增配置参数
 
-- 配置开启内置vip功能
+- 配置开启内置 VIP 功能
 
 ```ini
 loose-greatdb_ha_enable_mgr_vip = ON
 ```
 
-- 配置Primary节点绑定的VIP
+- 配置 Primary 节点绑定的 VIP
 
 ```ini
 loose-greatdb_ha_mgr_vip_ip = "172.17.140.250"
 ```
 
-- 配置ARP包广播重复次数。当节点绑定浮动IP以后，会广播ARP包来更新广播域内的ARP缓存，此参数是广播次数，默认是5次，合法取值范围为3-20
+- 配置 ARP 包广播重复次数。当节点绑定浮动 IP 以后，会广播 ARP 包来更新广播域内的 ARP 缓存，此参数是广播次数，默认是 5 次，合法取值范围为 3-20
 
 ```ini
 loose-greatdb_ha_send_arp_packge_times = 5
 ```
 
-- 配置动态绑定VIP服务专用通信端口，通过该端口进行通信数据传输。当MGR节点发生状态变更时，Primary节点根据预设的VIP绑定关系，按照 **变更小、平均分配** 的原则重新分配VIP绑定关系，并将VIP绑定关系通过专用通信端口发送给Secondary节点，Secondary节点根据绑定关系解绑或绑定指定VIP。
-
-```ini
-loose-greatdb_ha_port = 33062
-```
-
-- 配置要绑定的网卡名，插件会将vip绑定到MGR主（Primary）节点所在机器的指定网卡上，比如配置为eth0，为了防止网卡原有的ip被覆盖，实际绑定后，会绑定在名为eth0:0的网卡上
+- 配置要绑定的网卡名，插件会将 VIP 绑定到 MGR 主（Primary）节点所在机器的指定网卡上，比如配置为 eth0，为了防止网卡原有的 IP 被覆盖，实际绑定后，会绑定在名为 eth0:0 的网卡上
 
 ```ini
 loose-greatdb_ha_mgr_vip_nic = 'eth0'
@@ -62,20 +56,21 @@ loose-greatdb_ha_mgr_vip_nic = 'eth0'
 loose-greatdb_ha_mgr_vip_mask = '255.255.255.0'
 ```
 
-- 目前只支持在单主模式下才能启用内置vip特性，所以还需要设置下面参数：
+- 目前只支持在单主模式下才能启用内置 VIP 特性，所以还需要设置下面参数：
 
 ```ini
 loose-group_replication_single_primary_mode = ON
 loose-group_replication_enforce_update_everywhere_checks = OFF
 ```
 
-- 选项 `greatdb_ha_mgr_vip_broad` 已废弃不再使用。
-- 上述参数如果没有配置，或者配置格式不对时，内置VIP功能会失效（目前没有格式检查报错的功能）。
-- 除了上述新增参数，其他MGR相关参数按照常规单主MGR配置要求即可。
+- 参数 `greatdb_ha_port` 已废弃不再使用，改为通过 MySQL 3306 端口进行 UDF 通信。
+- 参数 `greatdb_ha_mgr_vip_broad` 已废弃不再使用。
+- 上述参数如果没有配置，或者配置格式不对时，内置 VIP 功能会失效（目前没有格式检查报错的功能）。
+- 除了上述新增参数，其他 MGR 相关参数按照常规单主 MGR 配置要求即可。
 - 上述参数支持在线动态修改。
 
 
-上述配置说明的完整示例如下（MGR组内每个实例都需要配置）：
+上述配置说明的完整示例如下（MGR 组内每个实例都需要配置）：
 
 ```ini
 [mysqld]
@@ -85,7 +80,6 @@ loose-greatdb_ha_enable_mgr_vip = ON
 loose-greatdb_ha_mgr_vip_ip = "172.17.140.250"
 loose-greatdb_ha_mgr_vip_mask = "255.255.255.0"
 loose-greatdb_ha_mgr_vip_nic = "eth0"
-loose-greatdb_ha_port = 33062
 loose-greatdb_ha_send_arp_packge_times = 5
 report_host = "172.17.140.10"
 report_port = 3306
@@ -95,12 +89,12 @@ loose-group_replication_single_primary_mode = ON
 loose-group_replication_enforce_update_everywhere_checks = OFF
 ```
 
-当MGR Primary节点上绑定的vip被手动删除或者出现异常配置导致vip绑定行为不对时，可以通过在MGR Primary节点上执行 `set global greatdb_ha_force_change_mgr_vip = on` 命令去重新获取MGR拓扑结构，从而重新绑定vip，该命令执行之后，参数  `greatdb_ha_force_change_mgr_vip` 值仍然为off，这个是符合预期的行为。
+当 MGR Primary 节点上绑定的 VIP 被手动删除或者出现异常配置导致 VIP 绑定行为不对时，可以通过在 MGR Primary 节点上执行 `set global greatdb_ha_force_change_mgr_vip = on` 命令去重新获取 MGR 拓扑结构，从而重新绑定 VIP，该命令执行之后，参数 `greatdb_ha_force_change_mgr_vip` 值仍然为 off，这个是符合预期的行为。
 
 ## 启动说明
-配置VIP需要相关内核权限，获取相关权限有两种方式，以下三选一即可（推荐采用方法一）：
+配置 VIP 需要相关内核权限，获取相关权限有两种方式，以下三选一即可（推荐采用方法一）：
 
-1. 【推荐方法】修改systemd服务文件，增加AmbientCapabilities参数，例如：
+1. 【推荐方法】修改 systemd 服务文件，增加 AmbientCapabilities 参数，例如：
 ```ini
 [Unit]
 Description=GreatSQL Server
@@ -143,17 +137,17 @@ PrivateTmp=false
 #增加这行以保证MGR VIP功能可用
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_RAW
 ```
-然后执行 `systemctl daemon-reload` 重新加载systemd服务，启动GreatSQL就可以。
+然后执行 `systemctl daemon-reload` 重新加载 systemd 服务，启动 GreatSQL 就可以。
 
 **备注**：感谢社区用户 **芬达** 提供的建议方法。
 
-2. 通过setcap命令为mysqld二进制文件添加 `CAP_NET_ADMIN` 和 `CAP_NET_RAW` 的capability。具体命令如下：
+2. 通过 `setcap` 命令为 mysqld 二进制文件添加 `CAP_NET_ADMIN` 和 `CAP_NET_RAW` 的 capability。具体命令如下：
 ```bash
-#执行该命令需要sudo权限或root
+#执行该命令需要 sudo 权限或 root
 setcap CAP_NET_ADMIN,CAP_NET_RAW+ep /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
 ```
 
-然后将GreatSQL二进制包的`lib/private`子目录加载到`LD_LIBRARY_PATH`中：
+然后将 GreatSQL 二进制包的 `lib/private` 子目录加载到 `LD_LIBRARY_PATH` 中：
 ```bash
 $ cat /etc/ld.so.conf.d/greatsql.conf
 
@@ -167,13 +161,13 @@ $ ldconfig && ldconfig -p | grep -i 'libprotobuf.so'
 	libprotobuf.so.3.19.4 (libc6,x86-64) => /usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/lib/private/libprotobuf.so.3.19.4
 ```
 
-之后启动GreatSQL即可。
+之后启动 GreatSQL 即可。
 
-3. 【强烈不推荐】给mysqld进程的启动用户，例如是mysql用户，设置root权限。
+3. 【强烈不推荐】给 mysqld 进程的启动用户，例如是 mysql 用户，设置 root 权限。
 
 **注意**
 - 建议采用 `systemd` 方式管理 GreatSQL 服务，或者对启动用户（如 mysql）开启 sudo 权限，利用 sudo 调用 `systemd` 再启动 GreatSQL 服务，这样能确保 mysqld 进程可获得内核权限，成功绑定 VIP。
-- 当 `setcap` 命令为mysqld二进制文件添加capability以后，需要保证登录系统的用户和启动mysqld的用户保持一致，才能确保mysqld进程可获得内核权限。例如：用root用户登录系统，然后再以普通用户（mysql）启动mysqld进程，setcap无法生效，绑定vip时会失败报错。
+- 当 `setcap` 命令为 mysqld 二进制文件添加 capability 以后，需要保证登录系统的用户和启动 mysqld 的用户保持一致，才能确保 mysqld 进程可获得内核权限。例如：用 root 用户登录系统，然后再以普通用户（mysql）启动 mysqld 进程，setcap 无法生效，绑定 VIP 时会失败报错。
 
 
 

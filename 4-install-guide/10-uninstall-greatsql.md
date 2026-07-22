@@ -5,7 +5,7 @@
 **重要提示**
 在开始卸载 GreatSQL 数据库前，务必做好数据文件备份，避免重要数据丢失。
 
-## 步骤1：关闭 GreatSQL 数据库
+## 步骤 1：关闭 GreatSQL 数据库
 
 在开始卸载前，请先正确关闭 GreatSQL 数据库。
 
@@ -37,7 +37,7 @@ mysqladmin -hlocalhost -uroot -p shutdown
 **严禁直接执行 `kill -9` 命令强制暴力关闭 GreatSQL 数据库，这很可能会造成事务数据丢失**。
 :::
 
-## 步骤2：备份数据文件
+## 步骤 2：备份数据文件
 
 简单起见，可以备份整个 `datadir` 目录下的所有数据文件。假定 `datadir=/data/GreatSQL`，则执行下面的命令完成备份：
 ```bash
@@ -46,7 +46,7 @@ cp -rfp /data/GreatSQL /data/GreatSQL-fullbackup-`date +"%Y%m%d"`
 
 如果 [二进制日志](../2-about-greatsql/4-3-greatsql-binary-log.md) 不是存储在 *datadir* 目录下，那么同时还要备份二进制日志。
 
-## 步骤3：卸载 GreatSQL 数据库
+## 步骤 3：卸载 GreatSQL 数据库
 
 如果是采用 RPM 方式安装 GreatSQL，则执行下面的命令完成卸载：
 
@@ -60,7 +60,7 @@ rpm -qa | grep -i greatsql | xargs rpm -e
 rm -fr /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.17-x86_64
 ```
 
-## 步骤4：清除环境
+## 步骤 4：清除环境
 
 如果设置了 systemd 系统服务，删除相应服务文件，并重新加载。
 

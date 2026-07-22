@@ -1,7 +1,7 @@
 # 并行 LOAD DATA
 ---
 
-## 原生LOAD DATA局限
+## 原生 LOAD DATA 局限
 
 原生的 LOAD DATA 采用单线程读取本地文件（或收取 Client 传来的网络数据包），逐行获取内容并调用数据库 `write_row()` 接口插入数据。当导入的单个文件很大时，单线程处理模式无法充分利用数据库的资源，导致执行时间很长。又由于 LOAD DATA 导入的数据在一个事务内，当 Binlog 事务超过 2GB 时，无法使用 Binlog 在 MGR 成员节点间同步。
 
@@ -13,23 +13,23 @@
 
 ## 无主键表并行导入优化
 
-当 InnoDB 表没有显式定义主键且选项 `sql_generate_invisible_primary_key = OFF` 时，就会使用实例级的 `DB_ROW_ID` 作为隐式的聚集索引键。这种情况下，如果对该表并行导入数据，受限于实例级 `DB_ROW_ID` 锁互斥的影响，随着并发数的增加，性能明显下降。GreatSQL针对这种情况也提供了优化方案，通过设置选项 `innodb_optimize_no_pk_parallel_load = ON` 就能获得更好的并发导入性能。
+当 InnoDB 表没有显式定义主键且选项 `sql_generate_invisible_primary_key = OFF` 时，就会使用实例级的 `DB_ROW_ID` 作为隐式的聚集索引键。这种情况下，如果对该表并行导入数据，受限于实例级 `DB_ROW_ID` 锁互斥的影响，随着并发数的增加，性能明显下降。GreatSQL 针对这种情况也提供了优化方案，通过设置选项 `innodb_optimize_no_pk_parallel_load = ON` 就能获得更好的并发导入性能。
 
 下面是一个性能对比参考，可以看到在关闭 [GIPKs](https://dev.mysql.com/doc/refman/8.0/en/create-table-gipks.html) 的前提下，采用并行 LOAD DATA 方式（设置 `gdb_parallel_load_workers=24`）导入一亿条数据，启用本优化特性后（设置 `innodb_optimize_no_pk_parallel_load = ON`），导入效率大约提升了 5 倍：
 
 
 | 导入数据量 | 优化模式 | 耗时 |
 |----| --- | ---|
-| 1亿行 |  开启 | 190.87297775 秒 |
-| 1亿行 | 关闭 | 966.15685475 秒 |
+| 1 亿行 |  开启 | 190.87297775 秒 |
+| 1 亿行 | 关闭 | 966.15685475 秒 |
 
 ## 相关变量
 
 | 变量名| 含义| 作用域 | 取值范围及单位 | 默认值 |
 | --- | --- | ---- | --- | --- |
-| gdb_parallel_load| 是否开启并行导入(SESSION级设置) |Session | ON/OFF|OFF|
+| gdb_parallel_load| 是否开启并行导入(SESSION 级设置) |Session | ON/OFF|OFF|
 | gdb_parallel_load_chunk_size | 并行导入时，文件切割的大小|Session | 64k-128M，字节|4M|
-| gdb_parallel_load_workers| 并行导入最大worker线程数 | Session | 1-32| 8|
+| gdb_parallel_load_workers| 并行导入最大 worker 线程数 | Session | 1-32| 8|
 | innodb_optimize_no_pk_parallel_load | 是否启用无显式主键表并发导入优化特性 | Global, Session | ON/OFF | OFF |
 
 ## 启用并行`LOAD DATA`
@@ -65,9 +65,9 @@ Worker 线程会创建新的 session 导入文件块，可通过执行 `SHOW PRO
 LOAD /*parallel load worker(chunk_no:xxx)*/ DATA INFILE 'session_id:worker_no' INTO ...
 ```
 
-其中 `chunk_no` 代表文件块的编号，每新产生一个文件块时 `chunk_no` 增加1，可通过文件原始大小除以 `gdb_parallel_load_chunk_size`，得到 `chunk_no` 并大致判断出导入进度。
+其中 `chunk_no` 代表文件块的编号，每新产生一个文件块时 `chunk_no` 增加 1，可通过文件原始大小除以 `gdb_parallel_load_chunk_size`，得到 `chunk_no` 并大致判断出导入进度。
 
-`session_id` 表示初始执行 `load data` 语句的那个 session_id，即 `master_session_id`。而`worker_no` 表示启动的worker线程编号。
+`session_id` 表示初始执行 `load data` 语句的那个 session_id，即 `master_session_id`。而`worker_no` 表示启动的 worker 线程编号。
 
 ## 特殊限制
 

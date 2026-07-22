@@ -4,13 +4,13 @@
 
 本章文档主要介绍如何在各种环境安装 GreatSQL 数据库。
 
-## [CentOS环境安装](./3-1-centos-install.md)
-## [Ubuntu环境安装](./3-2-ubuntu-install.md)
-## [openEuler环境安装](./3-3-openeuler-install.md)
-## [统信UOS环境中安装](./3-4-uos-install.md)
-## [龙蜥Anolis环境安装](./3-5-anolis-install.md)
-## [麒麟Kylin环境安装](./3-6-kylin-install.md)
-## [Arch Linux环境安装](./3-7-arch-install.md)
+## [CentOS 环境安装](./3-1-centos-install.md)
+## [Ubuntu 环境安装](./3-2-ubuntu-install.md)
+## [openEuler 环境安装](./3-3-openeuler-install.md)
+## [统信 UOS 环境中安装](./3-4-uos-install.md)
+## [龙蜥 Anolis 环境安装](./3-5-anolis-install.md)
+## [麒麟 Kylin 环境安装](./3-6-kylin-install.md)
+## [Arch Linux 环境安装](./3-7-arch-install.md)
 ## [初始化测试数据库](./7-load-sampledb.md)
 
 

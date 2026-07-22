@@ -1,6 +1,6 @@
 # 高性能 Turbo 引擎
 
-## Turbo简述
+## Turbo 简述
 
 Turbo 是一个以插件形式存在的高性能并行查询执行引擎，通过内嵌 DuckDB，使 GreatSQL 具备多线程并发的向量化查询功能，在大幅提升 SQL 查询速度的同时，保持对 GreatSQL 生态系统的兼容性。
 
@@ -8,15 +8,15 @@ Turbo 是一个以插件形式存在的高性能并行查询执行引擎，通�
 
 Turbo 引擎采用插件（Plugin）方式嵌入 GreatSQL 中，可以在线动态安装或卸载。
 
-在32C64G测试机环境下，TPC-H SF100测试中22条SQL总耗时214秒左右，下图展示了Turbo在SF100、SF300两种数据量下的测试结果，仅供参考：
+在 32C64G 测试机环境下，TPC-H SF100 测试中 22 条 SQL 总耗时 214 秒左右，下图展示了 Turbo 在 SF100、SF300 两种数据量下的测试结果，仅供参考：
 
 ![GreatSQL TPC-H（Turbo）SF100 vs SF300对比示意图](../10-optimize/greatsql-tpch-turbo-sf100-vs-sf300-20250305.png)
 
-备注：上述测试使用的是Turbo并发线程数不限的版本。
+备注：上述测试使用的是 Turbo 并发线程数不限的版本。
 
-## 启用Turbo引擎
+## 启用 Turbo 引擎
 
-想要使用Turbo引擎，需要安装Turbo plugin：
+想要使用 Turbo 引擎，需要安装 Turbo plugin：
 
 ```sql
 INSTALL PLUGIN turbo SONAME 'turbo.so';
@@ -42,9 +42,9 @@ SHOW PLUGINS;
 
 可以看到，Turbo 引擎已经安装成功。
 
-## 卸载Turbo引擎
+## 卸载 Turbo 引擎
 
-执行下面的SQL命令卸载Turbo引擎：
+执行下面的 SQL 命令卸载 Turbo 引擎：
 
 ```sql
 UNINSTALL PLUGIN turbo;
@@ -52,7 +52,7 @@ UNINSTALL PLUGIN turbo;
 
 卸载过程中，如果当前存在使用 Turbo 执行的未结束查询，需要等待执行完成后才能将插件完全卸载。
 
-## 使用Turbo引擎
+## 使用 Turbo 引擎
 
 安装 Turbo 引擎后，通过下面介绍的方式，即可使用 Turbo 引擎提升查询效率。
 
@@ -64,7 +64,7 @@ UNINSTALL PLUGIN turbo;
 
 2.再设置 `turbo_cost_threshold=0` 或一个较小的阈值。
 
-其中配置参数 `turbo_cost_threshold` 指使用Turbo引擎执行查询的代价阈值。当前查询的代价小于等于此阈值，则不会使用Turbo引擎，这种情况下可通过调小阈值，使当前查询代价大于此阈值，即可使用Turbo引擎。若不调小 `turbo_cost_threshold` 阈值，则可通过下面的 **方式二**，强制使用Turbo引擎。
+其中配置参数 `turbo_cost_threshold` 指使用 Turbo 引擎执行查询的代价阈值。当前查询的代价小于等于此阈值，则不会使用 Turbo 引擎，这种情况下可通过调小阈值，使当前查询代价大于此阈值，即可使用 Turbo 引擎。若不调小 `turbo_cost_threshold` 阈值，则可通过下面的 **方式二**，强制使用 Turbo 引擎。
 
 示例：
 ```sql
@@ -76,7 +76,7 @@ SET turbo_cost_threshold=0;
 EXPLAIN FORMAT=TREE SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_threshold=0) */ * FROM t1;
 ```
 
-查询计划显示中带有 *Turbo scan* 关键字，则说明语句使用了Turbo引擎，如下：
+查询计划显示中带有 *Turbo scan* 关键字，则说明语句使用了 Turbo 引擎，如下：
 
 ```shell
 +---------------------------------------------------------------------------+
@@ -93,17 +93,17 @@ EXPLAIN FORMAT=TREE SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_thres
 
 2. 执行 SQL 查询时指定 HINT 以使用 Turbo 引擎。
 
-示例1：
+示例 1：
 ```sql
 SET turbo_enable=FORCED;
 ```
 
-示例2：
+示例 2：
 ```sql
 SELECT /*+ SET_VAR(turbo_enable=FORCED) */ * FROM t1;
 ```
 
-上述两种方式的差别主要在报错信息上，对于不能使用Turbo引擎的SQL语句（例如查询含有某些不支持的函数）的情况，如果使用方式一，那么会直接使用主引擎（如 InnoDB 引擎）完成查询，可通过查看计划来判断是否使用了Turbo引擎； 对于方式二，则总是强制使用Turbo引擎，但如果无法使用时，则会产生报错，具体报错信息见下例：
+上述两种方式的差别主要在报错信息上，对于不能使用 Turbo 引擎的 SQL 语句（例如查询含有某些不支持的函数）的情况，如果使用方式一，那么会直接使用主引擎（如 InnoDB 引擎）完成查询，可通过查看计划来判断是否使用了 Turbo 引擎； 对于方式二，则总是强制使用 Turbo 引擎，但如果无法使用时，则会产生报错，具体报错信息见下例：
 
 ```sql
 CREATE TABLE t1(c1 INT, c2 VARCHAR(10));
@@ -182,27 +182,27 @@ EXPLAIN: -> Turbo scan
 1 row in set (0.00 sec)
 ```
 
-## Turbo引擎使用说明
+## Turbo 引擎使用说明
 
 ### 语句支持类型描述
 
 查询类型上，仅支持常规 `SELECT` 查询和 `INSERT SELECT`，不支持 `UPDATE/DELETE/ALTER` 等。
 
-#### SELECT查询
+#### SELECT 查询
 
 支持常规查询，不支持以下形式：
 
 * SELECT ... INTO ...;
 
-* SELECT locking语句（... INTO ...FOR UPDATE）;
+* SELECT locking 语句（... INTO ...FOR UPDATE）;
 
-* 不支持SELECT ... FETCH ... WITH TIES;
+* 不支持 SELECT ... FETCH ... WITH TIES;
 
 #### INSERT SELECT
 
-不支持INSERT ... SELECT ... ON DUPLICATE KEY UPDATE语句。
+不支持 INSERT ... SELECT ... ON DUPLICATE KEY UPDATE 语句。
 
-### SELECT查询支持限制描述
+### SELECT 查询支持限制描述
 
 针对常规的`SELECT`查询，有以下限制：
 
@@ -310,7 +310,7 @@ GROUP BY deptno;
 greatsql> SELECT * FROM t1 WHERE (s1,s2) IN (SELECT s1, MAX(s1) FROM t2...);
 ```
 
-这种用法将无法走Turbo引擎，但不会报告语法错误。
+这种用法将无法走 Turbo 引擎，但不会报告语法错误。
 
 #### 其他使用限制说明
 
@@ -328,11 +328,11 @@ greatsql> SELECT * FROM t1 WHERE (s1,s2) IN (SELECT s1, MAX(s1) FROM t2...);
 
 7. 结果集顺序可能和查询主引擎存在差异。注意：Turbo 内部会打乱行的顺序，因此对于不带 `ORDER BY` 的语句（尤其是 `LIMIT` 语句），其执行结果、执行结果的顺序可能和原生结果不同。需要根据实际 SQL 语句判定执行结果是否正确。
 
-### EXPLAIN语句使用限制
+### EXPLAIN 语句使用限制
 
-`EXPLAIN FORMAT=TREE`和`EXPLAIN ANALYZE`操作的执行计划结果中包含Turbo关键字，而`EXPLAIN`操作仍显示为主引擎的计划信息。
+`EXPLAIN FORMAT=TREE`和`EXPLAIN ANALYZE`操作的执行计划结果中包含 Turbo 关键字，而`EXPLAIN`操作仍显示为主引擎的计划信息。
 
-EXPLAIN结果中显示的COST与原生EXPLAIN结果中的COST无关，不能作为不同查询方式COST值进行比较的依据，不具参考价值。
+EXPLAIN 结果中显示的 COST 与原生 EXPLAIN 结果中的 COST 无关，不能作为不同查询方式 COST 值进行比较的依据，不具参考价值。
 
 ### 数据类型支持
 
@@ -383,7 +383,7 @@ ERROR 8700 (HY000): execute turbo query failed: Conversion Error: Could not conv
 
 | System Variable Name | Variable Scope |  Dynamic Variable | Permitted Values | Type | Default | Description |
 | --- | --- | --- | --- | --- | --- | --- |
-|turbo_enable|Session|YES|[ON/OFF/FORCED]|ENUM|OFF|当前会话是否启用Turbo查询|
+|turbo_enable|Session|YES|[ON/OFF/FORCED]|ENUM|OFF|当前会话是否启用 Turbo 查询|
 |turbo_compat_func|Session|YES|[ON/OFF]|Boolean|ON|Turbo 中是否使用 GreatSQL 兼容项的函数，使用的话可以支持更多的 GreatSQL 函数，但性能有影响|
 |turbo_enable_ps_and_sp|Session|YES|[ON/OFF]|Boolean|ON|Turbo 允许运行在存储过程或者预处理语句中|
 |turbo_enable_warning|Session|YES|[ON/OFF]|Boolean|OFF|是否抛出内部的错误信息|
@@ -392,20 +392,20 @@ ERROR 8700 (HY000): execute turbo query failed: Conversion Error: Could not conv
 |turbo_release_retries|Global|YES|[0, ULONG_MAX]|ULONG|600|卸载插件重试次数|
 |turbo_retry_pause|Global|YES|[100, 31536000]|ULONG|1000|卸载插件重试等待时间（ms）|
 |turbo_temp_directory|Global|NO||String|duckdb_dp.data.tmp|临时目录名称，当启用 Turbo 引擎后，不支持修改；启用之前，可修改|
-|turbo_worker_threads|Global|YES|[1, 4]|UINT|4|Turbo执行计划可以使用的线程总数|
-|turbo_condition_pushdown|Session|YES|[ON/OFF]|Boolean|OFF|Turbo执行计划是否启用条件下推|
-|turbo_cost_threshold|Session|YES|[0, DBL_MAX]|Double|100000.000000|使用Turbo执行查询的代价阈值|
+|turbo_worker_threads|Global|YES|[1, 4]|UINT|4|Turbo 执行计划可以使用的线程总数|
+|turbo_condition_pushdown|Session|YES|[ON/OFF]|Boolean|OFF|Turbo 执行计划是否启用条件下推|
+|turbo_cost_threshold|Session|YES|[0, DBL_MAX]|Double|100000.000000|使用 Turbo 执行查询的代价阈值|
 
-InnoDB相关参数：
+InnoDB 相关参数：
 
 | System Variable Name | Variable Scope |  Dynamic Variable | Permitted Values | Type | Default | Description |
 | --- | --- | --- | --- | --- | --- | --- |
-|innodb_parallel_read_threads|Global|YES|[1, 256]|ULONG|4|对于单个sql语句中的单个表，开启n个线程执行扫描|
-|innodb_parallel_max_read_threads|Global|YES|[128, 2048]|ULONG|256|数据库范围内所有sql语句开启的并行读线程数最大值|
+|innodb_parallel_read_threads|Global|YES|[1, 256]|ULONG|4|对于单个 sql 语句中的单个表，开启 n 个线程执行扫描|
+|innodb_parallel_max_read_threads|Global|YES|[128, 2048]|ULONG|256|数据库范围内所有 sql 语句开启的并行读线程数最大值|
 
 ### 新增状态统计信息
 
-Turbo执行状态统计信息，可通过执行如下语句查看：
+Turbo 执行状态统计信息，可通过执行如下语句查看：
 
 ```sql
 SHOW GLOBAL STATUS LIKE 'turbo%';
@@ -422,9 +422,9 @@ SHOW GLOBAL STATUS LIKE 'turbo%';
 
 相较于 Rapid 存储引擎，Turbo 作为并行执行引擎并不做数据存储。使用 Turbo 时，GreatSQL 并行抽取数据供 Turbo 执行并行计算，通过将数据加载到内存来提高并行计算性能。因此执行部分 SQL 查询时可能遇到报告内存不足的错误。如果出现这种情况，可以调整如下几个参数尝试解决问题。
 
-* 增加 `turbo_memory_limit`，在任何时候，增加Turbo引擎可使用的内存都是首选方案。
+* 增加 `turbo_memory_limit`，在任何时候，增加 Turbo 引擎可使用的内存都是首选方案。
 
-* 如果SQL查询的执行计划比较复杂（如大数据量 + 多重HASH JOIN + 多重agg），可尝试适当调低 `turbo_worker_threads`。
+* 如果 SQL 查询的执行计划比较复杂（如大数据量 + 多重 HASH JOIN + 多重 agg），可尝试适当调低 `turbo_worker_threads`。
 
 ::: tip 小贴士
 GreatSQL 社区版的 Turbo 引擎中参数 `turbo_worker_threads` 最大上限为 4，如果需要获得更高并发性能，可以联系我们提供解决方案。
@@ -460,7 +460,7 @@ greatsql> EXPLAIN ANALYZE SELECT * FROM t1;
 
 ## 注意事项
 
-* 当前Turbo引擎的动态库文件仅支持运行在X86/ARM架构下的CentOS 7/8系统，或对应glibc版本分别是2.17和2.28，其他环境暂不支持。
+* 当前 Turbo 引擎的动态库文件仅支持运行在 X86/ARM 架构下的 CentOS 7/8 系统，或对应 glibc 版本分别是 2.17 和 2.28，其他环境暂不支持。
 
 * 由于并行计算、分组处理等操作的差异，在使用 Turbo 计算时，如果不加相同的排序规则，则读取到的数据顺序可能不一致。
 

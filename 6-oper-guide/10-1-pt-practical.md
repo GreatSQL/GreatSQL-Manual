@@ -22,9 +22,9 @@
 
 通过读取行并将其分成单词的方式来执行列对齐。
 
-该工具首先计算每行包含的单词数量，并尝试确定是否有一个占主导地位的数字，将其假设为每行的单词数量。接下来，`pt-align`会排除所有不符合该数量的行，并将下一行视为第一个非标题行。根据每个单词是否看起来像数字，它会决定列的对齐方式。最后，工具会遍历数据集，确定每列的宽度，并将它们格式化打印出来。
+该工具首先计算每行包含的单词数量，并尝试确定是否有一个占主导地位的数字，将其假设为每行的单词数量。接下来，`pt-align` 会排除所有不符合该数量的行，并将下一行视为第一个非标题行。根据每个单词是否看起来像数字，它会决定列的对齐方式。最后，工具会遍历数据集，确定每列的宽度，并将它们格式化打印出来。
 
-`pt-align`工具对于调整 `vmstat` 或 `iostat` 的输出非常有帮助，使其更易于阅读。
+`pt-align` 工具对于调整 `vmstat` 或 `iostat` 的输出非常有帮助，使其更易于阅读。
 
 **用法**
 
@@ -112,7 +112,7 @@ dm-1    0.03 0.02      0.09      452072  1782864
 
 ### 概要
 
-pt-archiver 是一款在线归档工具，不会影响生产，但是用此命令操作的表必须要有主键，它可以实现如下功能：
+`pt-archiver` 是一款在线归档工具，不会影响生产，但是用此命令操作的表必须要有主键，它可以实现如下功能：
 
 - 归档历史数据
 - 在线删除大量数据
@@ -127,7 +127,7 @@ pt-archiver [OPTIONS] --source DSN --where WHERE
 ```
 ---
 
-将表从oltp实例归档到olap的实例中：
+将表从 `oltp` 实例归档到 `olap` 的实例中：
 
 ```bash
 pt-archiver --source h=oltp_server,D=test,t=tbl --dest h=olap_server --file '/var/log/archive/%Y-%m-%d-%D.%t' --where "1=1" --limit 1000 --commit-each
@@ -337,7 +337,7 @@ pt-archiver --source b=true,h=localhost,P=3306,u=root,D=test_db,t=archiver_test 
 ```bash
 pt-archiver --source h=localhost,D=test_db,t=archiver_test,u=root --where '1=1' --no-check-charset --no-delete --file="/data/bk/archiver_test.dat"
 ```
-因文件没有 utf8mb4 编码，所以设置了 `no-check-charset` 不检查字符集。
+因文件没有 `utf8mb4` 编码，所以设置了 `no-check-charset` 不检查字符集。
 
 检查备份情况：
 
@@ -386,7 +386,7 @@ pt-find [OPTIONS] [DATABASES]
 
 ### 最佳实践
 
-#### 查找大于1G的表
+#### 查找大于 1G的表
 
 ```bash
 $ pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --tablesize +1G
@@ -413,7 +413,7 @@ $ pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --mmin +30
 
 ::: tip 小贴士
 
-此查找基于`INFORMATION_SCHEMA.TABLES`表中的`Update_time`列，如果`information_schema_stats_expiry`设置的更新时间过长，将导致`Update_time`列不会实时更新。因此，在这种情况下，将无法准确地检索在过去30分钟内发生修改的表。
+此查找基于`INFORMATION_SCHEMA.TABLES`表中的`Update_time`列，如果`information_schema_stats_expiry`设置的更新时间过长，将导致`Update_time`列不会实时更新。因此，在这种情况下，将无法准确地检索在过去 30 分钟内发生修改的表。
 :::
 
 #### 查找无数据的表
@@ -431,19 +431,19 @@ pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --empty
 
 #### 查找表并修改存储引擎
 
-查找1天内创建的 MyISAM 表：
+查找 1 天内创建的 MyISAM 表：
 
 ```bash
 pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --ctime -1 --engine MyISAM
 ```
 
-查找1天内的 MyISAM 表并修改为 InnoDB：
+查找 1 天内的 MyISAM 表并修改为 InnoDB：
 
 ```bash
 pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --ctime -1 --engine MyISAM --exec "ALTER TABLE %D.%N ENGINE=InnoDB"
 ```
 
-查找1天前的InnoDB表：
+查找 1 天前的 InnoDB 表：
 
 ```bash
 pt-find --socket=/data/GreatSQL/mysql.sock --user=root --port=3306 --ctime +1 --engine InnoDB
@@ -494,7 +494,7 @@ $ pt-find --socket=/data/GreatSQL/mysql.sock --printf "%T\t%D.%N\n" | sort -rn
 :::
 
 ::: tip 小贴士
-输出有些没对齐，可以使用pt-align工具对齐。
+输出有些没对齐，可以使用 `pt-align` 工具对齐。
 
 ```bash
 $ pt-find --socket=/data/GreatSQL/mysql.sock --printf "%T\t%D.%N\n" | sort -rn | pt-align
@@ -555,7 +555,7 @@ insert into product(id,name,price) values(?+)
 ```
 :::
 
-如果SQL语句中字段名或表名有数字，也会被替换：
+如果 SQL 语句中字段名或表名有数字，也会被替换：
 ```bash
 $ pt-fingerprint --query "select a1, b2, c3 from users4 where id = 500 and greatsql = 8032"
 select a?, ?, c? from users? where id = ? and greatsql = ?
@@ -568,7 +568,7 @@ $ pt-fingerprint --match-embedded-numbers --query "select a1, b2, c3 from users4
 select a1, b2, c3 from users4 where id = ? and greatsql = ?
 ```
 ::: tip 小贴士
-`--match-md5-checksums` 参数使用也是同理，避免MD5值被替换。
+`--match-md5-checksums` 参数使用也是同理，避免MD5 值被替换。
 :::
 
 #### 替换文件中语句
@@ -582,7 +582,7 @@ select c from users where
 greatsql = 888;
 ```
 
-替换文件中的所有SQL语句：
+替换文件中的所有 SQL 语句：
 
 ```bash
 pt-fingerprint pt_fingerprint_test_sql.txt
@@ -597,18 +597,18 @@ select c from users where greatsql = ?
 :::
 
 ::: tip 小贴士
-不管文件内格式如何，pt-fingerprint工具都会规范化空格等。<br />
+不管文件内格式如何，`pt-fingerprint` 工具都会规范化空格等。<br />
 
-当然也可以替换[Slow Query Log（慢查询日志）](../2-about-greatsql/4-2-greatsql-slow-log.md)的SQL内容。
+当然也可以替换[Slow Query Log（慢查询日志）](../2-about-greatsql/4-2-greatsql-slow-log.md)的 SQL 内容。
 :::
 
 ## pt-kill
 
-Kill掉符合条件的SQL。
+`Kill` 掉符合条件的 SQL。
 
 ### 概要
 
-pt-kill 工具可以 Kill 掉任何语句，特别出现大量的阻塞，死锁，或某个有问题的 SQL 导致 MySQL/GreatSQL 负载很高的情况。会默认过滤掉复制线程。
+`pt-kill` 工具可以 `Kill` 掉任何语句，特别出现大量的阻塞，死锁，或某个有问题的 SQL 导致 MySQL/GreatSQL 负载很高的情况。会默认过滤掉复制线程。
 
 **用法**
 
@@ -682,7 +682,7 @@ pt-kill --user=root --ask-pass --match-info "select|SELECT" --match-command='Que
 
 - `--match-info`：正则匹配正则运行的 SQL，区分大小写；
 
-- `--interval`：多久运行一次。默认单位秒。默认值30秒
+- `--interval`：多久运行一次。默认单位秒。默认值 30 秒
 
 也可以加上 `--kill` 直接Kill掉符合条件的查询语句：
 
@@ -694,15 +694,15 @@ pt-kill --user=root --ask-pass --match-info "select|SELECT" --match-command='Que
 `--victims` 默认是 `oldest` 只 Kill 最先发起，存在时间最长的查询。`all` Kill 掉所有满足的线程。`all-but-oldest` 只保留最长的不 Kill 其它都 Kill 掉
 :::
 
-#### Kill指定IP的会话
+#### Kill指定 IP 的会话
 
-打印出指定IP的会话：
+打印出指定 IP 的会话：
 
 ```bash
 pt-kill --user=root --ask-pass --match-db='test_db' --match-host "192.168.6.55" --busy-time 30 --victims all --interval 10 --daemonize --print --log=/data/pt_ip.log
 ```
 
-Kill指定IP的会话：
+Kill指定 IP 的会话：
 
 ```bash
 pt-kill --user=root --ask-pass --match-db='test_db' --match-host "192.168.6.55" --busy-time 30 --victims all --interval 10 --daemonize --kill --log=/data/pt_ip.log
@@ -716,13 +716,13 @@ Kill指定用户的会话：
 pt-kill --user=root --ask-pass --match-db='test_db' --match-user "greatsql" --victims all --interval 10 --daemonize --kill --log=/data/pt_user.log
 ```
 
-Kill指定用户大于10秒的空闲链接：
+`Kill` 指定用户大于10秒的空闲链接：
 
 ```bash
 pt-kill --user=root --ask-pass --match-db='db_name' --match-user "greatsql" --victims all --interval 10 --daemonize --kill --match-command='Sleep' --idle-time 10 --log=/data/pt_user.log
 ```
 ::: danger 特别提醒
-pt-kill工具会挂在后台定时Kill符合条件的用户、语句。
+`pt-kill` 工具会挂在后台定时 `Kill` 符合条件的用户、语句。
 若需要停止请使用`kill -9 $(ps -ef| grep pt-kill |grep -v grep |awk '{print $2}')`。
 :::
 
@@ -730,7 +730,7 @@ pt-kill工具会挂在后台定时Kill符合条件的用户、语句。
 
 ### 概要
 
-pt-secure-collect用于收集、清理、打包和加密数据。
+`pt-secure-collect` 用于收集、清理、打包和加密数据。
 
 **用法**
 
@@ -789,7 +789,7 @@ INFO[2024-03-11 17:06:57] Creating tar file "/data/data_collection/data_collecti
 `--mysql-port`和`--mysql-host`虽有默认值但是还是需要指定，否则在调用运行其它工具时会报错。
 :::
 
-可以从输出上看到，pt-secure-collect工具调用了`pt-stalk`、`pt-summary `、`pt-mysql-summary`这三款工具。
+可以从输出上看到，`pt-secure-collect` 工具调用了 `pt-stalk`、`pt-summary`、`pt-mysql-summary` 这三款工具。
 
 进入`data_collection`文件夹即可看到所有的临时文件，以及一个`data_collection.tar.gz`压缩文件：
 

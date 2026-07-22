@@ -2,7 +2,7 @@
 
 **GreatSQL TPC-C 性能测试报告**
 
-**（2026年2月6日）**
+**（2026 年 2 月 6 日）**
 
 **GreatSQL 社区**
 
@@ -20,7 +20,7 @@ GreatSQL 社区文档中所有内容，包括但不限于图片、架构设计�
 
 如若发现本文档存在任何错误，请与 GreatSQL 社区取得直接联系。
 
-GreatSQL社区官网：[https://greatsql.cn](https://greatsql.cn)。
+GreatSQL 社区官网：[https://greatsql.cn](https://greatsql.cn)。
 
 ## 2. 概述
 
@@ -36,40 +36,40 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 下文中提到的 **ibp** 是指 *innodb_buffer_pool_size* 参数简写。
 
-本次测试的目的：对GreatSQL 8.4.4-4（简称GreatSQL）、MySQL 8.4.4（简称MySQL）进行TPC-C性能测试，对比这两个数据库分别在Intel X86和鲲鹏ARM平台下不同的性能表现。
+本次测试的目的：对 GreatSQL 8.4.4-4（简称 GreatSQL）、MySQL 8.4.4（简称 MySQL）进行 TPC-C 性能测试，对比这两个数据库分别在 Intel X86 和鲲鹏 ARM 平台下不同的性能表现。
 
 ## 3. 测试结果
 
 从本次测试的结果来看，可以得到以下几点结论：
 
-1. 总体而言，GreatSQL相对MySQL的性能能提升相当可观，最高可提升42%，绝大多数并发场景下提升10%起。
+1. 总体而言，GreatSQL 相对 MySQL 的性能能提升相当可观，最高可提升 42%，绝大多数并发场景下提升 10%起。
 
-2. GreatSQL相对MySQL的性能抖动更小，tpmC和Latency数据都更平稳。
+2. GreatSQL 相对 MySQL 的性能抖动更小，tpmC 和 Latency 数据都更平稳。
 
-3. 在经过8小时连续压测后，在Intel X86平台下，GreatSQL的tpmC降为原来的90%；在鲲鹏ARM平台降为原来的76%；在海光X86平台降为原来的97%；而MySQL则相应分别降为原来的50%、45%、93%；证明GreatSQL相对MySQL的稳定性更优秀可靠。
+3. 在经过 8 小时连续压测后，在 Intel X86 平台下，GreatSQL 的 tpmC 降为原来的 90%；在鲲鹏 ARM 平台降为原来的 76%；在海光 X86 平台降为原来的 97%；而 MySQL 则相应分别降为原来的 50%、45%、93%；证明 GreatSQL 相对 MySQL 的稳定性更优秀可靠。
 
 以上结论，仅基于本次测试场景的总结。
 
-TPC-C性能对比图如下所示：
+TPC-C 性能对比图如下所示：
 
-- Intel X86下的对比图
+- Intel X86 下的对比图
 
 ![GreatSQL 8.4.4-4 vs MySQL 8.4.4 Warehouses 1000 tpmC under X86](./3-7-greatsql84-mysql84-bmsql1000-tpmc-x86.png)
 
-- 鲲鹏ARM下的对比图
+- 鲲鹏 ARM 下的对比图
 
 ![GreatSQL 8.4.4-4 vs MySQL 8.4.4 Warehouses 1000 tpmC under ARM](./3-7-greatsql84-mysql84-bmsql1000-tpmc-arm.png)
 
-- 海光X86下的对比图
+- 海光 X86 下的对比图
 
 ![GreatSQL 8.4.4-4 vs MySQL 8.4.4 Warehouses 1000 tpmC under Hygon](./3-7-greatsql84-mysql84-bmsql1000-tpmc-hygon.png)
 
 - 测试服务器信息
 
-|        | Intel X86                                                           | 鲲鹏ARM |                                                                 海光X86 |
+|        | Intel X86                                                           | 鲲鹏 ARM |                                                                 海光 X86 |
 | :---   | :---                                                                | :--- | :--- |
-| 服务端 | Dell R840<br/>Intel 6238 x 4, 共176核；256Gi内存；Nvme SSD, 3TB * 1 | Huawei TS200-2280 V2<br/>Kunpeng 920 7270Z x 2, 共256核；内存：2TB内存；存储：Nvme SSD, 3TB | 海光7490<br/>Hygon C86-4G (OPN:7490) * 2，共256核；内存：1.5GB；存储：Nvme SSD, 3TB |
-| 客户端 | Dell R840<br/>Intel 6238 x 4, 共176核；377Gi内存；Nvme SSD, 3TB * 1 | Huawei TS200-2280 V2<br/>Kunpeng 920 7270Z x 2, 共128核；内存：2TB内存；存储：Nvme SSD, 3TB | Huawei TS200-2280<br/>Kunpeng 920 x 2, 共128核；内存：470G；存储：Nvme SSD, 8TB     |
+| 服务端 | Dell R840<br/>Intel 6238 x 4, 共 176 核；256Gi 内存；Nvme SSD, 3TB * 1 | Huawei TS200-2280 V2<br/>Kunpeng 920 7270Z x 2, 共 256 核；内存：2TB 内存；存储：Nvme SSD, 3TB | 海光 7490<br/>Hygon C86-4G (OPN:7490) * 2，共 256 核；内存：1.5GB；存储：Nvme SSD, 3TB |
+| 客户端 | Dell R840<br/>Intel 6238 x 4, 共 176 核；377Gi 内存；Nvme SSD, 3TB * 1 | Huawei TS200-2280 V2<br/>Kunpeng 920 7270Z x 2, 共 128 核；内存：2TB 内存；存储：Nvme SSD, 3TB | Huawei TS200-2280<br/>Kunpeng 920 x 2, 共 128 核；内存：470G；存储：Nvme SSD, 8TB     |
 
 - 测试模式
 
@@ -83,7 +83,7 @@ TPC-C性能对比图如下所示：
 
 1. GreatSQL 8.4.4-4
 - innodbbufferpool_size=180G
-- 只启用NUMA，未进行网卡中断绑定，双1模式+开slow log+pfs
+- 只启用 NUMA，未进行网卡中断绑定，双 1 模式+开 Slow Query Log + PFS
 
 | 并发数  | 32         | 64         | 128        | 256        | 384        | 512        | 768        |
 |---------|------------|------------|------------|------------|------------|------------|------------|
@@ -96,7 +96,7 @@ TPC-C性能对比图如下所示：
 
 2. MySQL 8.4.4
 - innodbbufferpool_size=180G
-- 只启用NUMA，未进行网卡中断绑定，双1模式+开slow log+pfs
+- 只启用 NUMA，未进行网卡中断绑定，双 1 模式+开 Slow Query Log + PFS
 
 | 并发数  | 32         | 64         | 128        | 256        | 384        | 512        | 768        |
 |---------|------------|------------|------------|------------|------------|------------|------------|
@@ -107,17 +107,17 @@ TPC-C性能对比图如下所示：
 | Round 5 | 164966.72  | 284580.72  | 412365.76  | 485594.32  | 472196.95  | 451871.54  | 442050.52  |
 | Avg     | **162007.32** | **277018.61** | **396764.57** | **474598.40** | **461155.72** | **437413.92** | **442050.52** |
 
-| GreatSQL作为基数对比（并发数）  | 32 | 64 | 128     | 256     | 384     | 512     | 768     |
+| GreatSQL 作为基数对比（并发数）  | 32 | 64 | 128     | 256     | 384     | 512     | 768     |
 |-----------------------|---------|---------|---------|---------|---------|---------|---------|
-| 对比MySQL             | **26.03%** | **21.37%** | **24.08%** | **11.06%** | **6.64%** | **2.21%** | **-4.42%** |
+| 对比 MySQL             | **26.03%** | **21.37%** | **24.08%** | **11.06%** | **6.64%** | **2.21%** | **-4.42%** |
 
-结论：**X86平台下，GreatSQL在大部分并发场景下表现比MySQL要更好，tpmC最好成绩高出26%；只在并发768时表现比MySQL略差**。
+结论：**X86 平台下，GreatSQL 在大部分并发场景下表现比 MySQL 要更好，tpmC 最好成绩高出 26%；只在并发 768 时表现比 MySQL 略差**。
 
-### 4.2 鲲鹏ARM 平台测试数据
+### 4.2 鲲鹏 ARM 平台测试数据
 
 1. GreatSQL 8.4.4-4
 - innodb_buffer_pool_size=180G
-- 启用NUMA和网卡中断绑定，双1模式+开slow log+pfs
+- 启用 NUMA 和网卡中断绑定，双 1 模式+开 Slow Query Log + PFS
 
 | 并发数  | 32         | 64         | 128        | 256        | 384        | 512        | 768        |
 |---------|------------|------------|------------|------------|------------|------------|------------|
@@ -130,7 +130,7 @@ TPC-C性能对比图如下所示：
 
 2. MySQL 8.4.4
 - innodb_buffer_pool_size=180G
-- 启用NUMA和网卡中断绑定，双1模式+开slow log+pfs. 
+- 启用 NUMA 和网卡中断绑定，双 1 模式+开 Slow Query Log + PFS. 
 
 | 并发数  | 32         | 64         | 128        | 256        | 384        | 512        | 768        |
 |---------|------------|------------|------------|------------|------------|------------|------------|
@@ -142,17 +142,17 @@ TPC-C性能对比图如下所示：
 | Avg     | **169739.75** | **304804.29** | **497115.42** | **328139.48** | **335886.98** | **383200.64** | **334773.52** |
 
 
-| GreatSQL作为基数对比（并发数）  | 32 | 64 | 128     | 256     | 384     | 512     | 768     |
+| GreatSQL 作为基数对比（并发数）  | 32 | 64 | 128     | 256     | 384     | 512     | 768     |
 |-----------------------|---------|---------|---------|---------|---------|---------|---------|
-| 对比MySQL             | **10.64%** | **11.52%** | **10.43%** | **12.21%** | **12.25%** | **20.28%** | **17.77%** |
+| 对比 MySQL             | **10.64%** | **11.52%** | **10.43%** | **12.21%** | **12.25%** | **20.28%** | **17.77%** |
 
-结论：**鲲鹏ARM平台下，GreatSQL在所有并发场景下表现都比MySQL更好，tpmC成绩高10% ~ 20%，相当可观**。
+结论：**鲲鹏 ARM 平台下，GreatSQL 在所有并发场景下表现都比 MySQL 更好，tpmC 成绩高 10% ~ 20%，相当可观**。
 
-### 4.3 海光X86平台测试数据
+### 4.3 海光 X86 平台测试数据
 
 1. GreatSQL 8.4.4-4
 - innodb_buffer_pool_size=180G
-- 启用NUMA和网卡中断绑定，双1模式+开slow log+pfs
+- 启用 NUMA 和网卡中断绑定，双 1 模式+开 Slow Query Log + PFS
 
 markdown
 | 并发数  | 32         | 64         | 128        | 256        | 384        | 512        | 768        |
@@ -166,7 +166,7 @@ markdown
 
 2. MySQL 8.4.4
 - innodb_buffer_pool_size=180G
-- 启用NUMA和网卡中断绑定，双1模式+开slow log+pfs. 
+- 启用 NUMA 和网卡中断绑定，双 1 模式+开 Slow Query Log + PFS. 
 
 | 并发数  | 32       | 64       | 128      | 256      | 384      | 512      | 768      |
 |-------- |----------|----------|----------|----------|----------|----------|----------|
@@ -177,51 +177,51 @@ markdown
 | Round 5 | 144594.43 | 194054.31 | 229670.81 | 243617.29 | 244382.8 | 248431.44 | 284429.78 |
 | Avg | **142373.56** | **189263.48** | **221378.26** | **233238.97** | **236875.39** | **244023.33** | **275441.49** |
 
-| GreatSQL作为基数对比（并发数）  | 32 | 64 | 128     | 256     | 384     | 512     | 768     |
+| GreatSQL 作为基数对比（并发数）  | 32 | 64 | 128     | 256     | 384     | 512     | 768     |
 |-----------------------|---------|---------|---------|---------|---------|---------|---------|
-| 对比MySQL             | **20.46%** | **35.93%** | **31.84%** | **34.63%** | **36.56%** | **42.90%** | **31.38%** |
+| 对比 MySQL             | **20.46%** | **35.93%** | **31.84%** | **34.63%** | **36.56%** | **42.90%** | **31.38%** |
 
 
-结论：**海光X86平台下，GreatSQL在所有并发场景下表现都比MySQL更好，tpmC成绩高20% ~ 42%，相当可观**。
+结论：**海光 X86 平台下，GreatSQL 在所有并发场景下表现都比 MySQL 更好，tpmC 成绩高 20% ~ 42%，相当可观**。
 
-**提示**：在各平台环境下各并发时的tpmC及Latency曲线请查看 **[报告全文](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/Presentations/41、benchmarksql-greatsql84-vs-mysql84-tpcc-wh1000-report-20260206.pdf)**。
+**提示**：在各平台环境下各并发时的 tpmC 及 Latency 曲线请查看 **[报告全文](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/Presentations/41、benchmarksql-greatsql84-vs-mysql84-tpcc-wh1000-report-20260206.pdf)**。
 
-### 4.4 运行8小时后的tpmC变化
+### 4.4 运行 8 小时后的 tpmC 变化
 
-#### 4.4.1 Intel X86平台
+#### 4.4.1 Intel X86 平台
 
-|                    | 运行20分钟(tpmC) | 运行8小时(tpmC) | tpmC下降值 | 降为原值比率 | 初始表空间 | 8小时后表空间 | 表空间增长比率 | 事务总数 |
+|                    | 运行 20 分钟(tpmC) | 运行 8 小时(tpmC) | tpmC 下降值 | 降为原值比率 | 初始表空间 | 8 小时后表空间 | 表空间增长比率 | 事务总数 |
 |--------------------|------------------|-----------------|------------|--------------|------------|---------------|----------------|----------|
-| GreatSQL（并发256）| 523153.21        | 474228.51       | 48924.70   | 90.65%       | 90G        | 350G          | 388.89%        | 505879211|
-| MySQL（并发256）   | 474598.40        | 237711.26       | 236887.14  | 50.09%       | 90G        | 222G          | 246.67%        | 253552583|
+| GreatSQL（并发 256）| 523153.21        | 474228.51       | 48924.70   | 90.65%       | 90G        | 350G          | 388.89%        | 505879211|
+| MySQL（并发 256）   | 474598.40        | 237711.26       | 236887.14  | 50.09%       | 90G        | 222G          | 246.67%        | 253552583|
 
-tpmC对比图
+tpmC 对比图
 
 ![GreatSQL 8.4.4-4 vs MySQL 8.4.4 BenchmarkSQL run 8h tpmC under x86](./3-7-greatsql84-mysql84-bmsql1000-x86-8h-tpmc.png)
 
-#### 4.4.2 鲲鹏ARM平台
+#### 4.4.2 鲲鹏 ARM 平台
 
-|                    | 运行20分钟(tpmC) | 运行8小时(tpmC) | tpmC下降值 | 降为原值比率 | 初始表空间 | 8小时后表空间 | 表空间增长比率 | 事务总数  |
+|                    | 运行 20 分钟(tpmC) | 运行 8 小时(tpmC) | tpmC 下降值 | 降为原值比率 | 初始表空间 | 8 小时后表空间 | 表空间增长比率 | 事务总数  |
 |---------------------|------------------|-----------------|------------|--------------|------------|---------------|----------------|----------|
-| GreatSQL（并发128） | 548951.89        | 419824.97       | 129126.92  | 76.48%       | 90G        | 320G          | 255.56%        | 447823234|
-| MySQL（并发128）    | 497115.42        | 225635.72       | 271479.70  | 45.39%       | 90G        | 218G          | 142.22%        | 240701779|
+| GreatSQL（并发 128） | 548951.89        | 419824.97       | 129126.92  | 76.48%       | 90G        | 320G          | 255.56%        | 447823234|
+| MySQL（并发 128）    | 497115.42        | 225635.72       | 271479.70  | 45.39%       | 90G        | 218G          | 142.22%        | 240701779|
 
-tpmC对比图
+tpmC 对比图
 
 ![GreatSQL 8.4.4-4 vs MySQL 8.4.4 BenchmarkSQL run 8h tpmC under arm](./3-7-greatsql84-mysql84-bmsql1000-arm-8h-tpmc.png)
 
-#### 4.4.3 海光X86平台
+#### 4.4.3 海光 X86 平台
 
-|                    | 运行20分钟(tpmC) | 运行8小时(tpmC) | tpmC下降值 | 降为原值比率 | 初始表空间 | 8小时后表空间 | 表空间增长比率 | 事务总数 |
+|                    | 运行 20 分钟(tpmC) | 运行 8 小时(tpmC) | tpmC 下降值 | 降为原值比率 | 初始表空间 | 8 小时后表空间 | 表空间增长比率 | 事务总数 |
 |---------------------|------------------|-----------------|-----------|--------------|------------|---------------|----------------|----------|
-| GreatSQL（并发768） | 361870.67        | 353889.88       | 7980.79   | 97.79%       | 90G        | 286G          | 217.78%        | 377483276|
-| MySQL（并发768）    | 275441.49        | 256531.68       | 18909.810 | 93.13%       | 90G        | 233G          | 158.89%        | 273629874|
+| GreatSQL（并发 768） | 361870.67        | 353889.88       | 7980.79   | 97.79%       | 90G        | 286G          | 217.78%        | 377483276|
+| MySQL（并发 768）    | 275441.49        | 256531.68       | 18909.810 | 93.13%       | 90G        | 233G          | 158.89%        | 273629874|
 
-tpmC对比图
+tpmC 对比图
 
 ![GreatSQL 8.4.4-4 vs MySQL 8.4.4 BenchmarkSQL run 8h tpmC under Hygon](./3-7-greatsql84-mysql84-bmsql1000-arm-8h-hygon.png)
 
-**提示**：在各平台环境下持续压测8小时后的tpmC及Latency曲线请查看 **[报告全文](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/Presentations/41、benchmarksql-greatsql84-vs-mysql84-tpcc-wh1000-report-20260206.pdf)**。
+**提示**：在各平台环境下持续压测 8 小时后的 tpmC 及 Latency 曲线请查看 **[报告全文](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/Presentations/41、benchmarksql-greatsql84-vs-mysql84-tpcc-wh1000-report-20260206.pdf)**。
 
 ## 5. 附录
 
@@ -237,13 +237,13 @@ BenchmarkSQL 5.0。
 
 ### 5.3 测试模式
 
-- 利用BenchmarkSQL构造测试数据，设置参数 warehouses=1000。
-- 测试数据库初始大小约90G。
-- 服务器端开启NUMA，并设置innodb_numa_interleave=ON（8.4版本下默认开启）。
-- 鲲鹏ARM环境中对网卡中断进行绑定操作，绑定脚本内容见下方服务端详细信息。
-- 测试过程中开启Binlog及双1模式，其余主要参数详见后面描述。
+- 利用 BenchmarkSQL 构造测试数据，设置参数 warehouses=1000。
+- 测试数据库初始大小约 90G。
+- 服务器端开启 NUMA，并设置 innodb_numa_interleave=ON（8.4 版本下默认开启）。
+- 鲲鹏 ARM 环境中对网卡中断进行绑定操作，绑定脚本内容见下方服务端详细信息。
+- 测试过程中开启 Binlog 及双 1 模式，其余主要参数详见后面描述。
 
-### 5.4 BenchmarkSQL相关参数如下
+### 5.4 BenchmarkSQL 相关参数如下
 
 ```ini
 conn=jdbc:mysql://DBIP:3306/bmsql?useServerPrepStmts=false&prepStmtCacheSize=250&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=GMT&useLocalSessionState=true&maintainTimeStats=false&useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&cacheResultSetMetadata=true&metadataCacheSize=1024&useConfigs=maxPerformance
@@ -384,12 +384,12 @@ loose-kill_idle_transaction=300
 loose-innodb_data_file_async_purge=ON
 ```
 
-**提示**：在各平台环境下各并发时的tpmC及Latency曲线请查看 **[报告全文](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/Presentations/41、benchmarksql-greatsql84-vs-mysql84-tpcc-wh1000-report-20260206.pdf)**。
+**提示**：在各平台环境下各并发时的 tpmC 及 Latency 曲线请查看 **[报告全文](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/Presentations/41、benchmarksql-greatsql84-vs-mysql84-tpcc-wh1000-report-20260206.pdf)**。
 
 ## 参考资料
 
-- [TPC-C官网](https://www.tpc.org/tpcc/)
-- [GreatSQL安装指南](../4-install-guide/0-install-guide.md)
+- [TPC-C 官网](https://www.tpc.org/tpcc/)
+- [GreatSQL 安装指南](../4-install-guide/0-install-guide.md)
 - [BenchmarkSQL 性能测试](./3-4-benchmarksql.md)
 
 **扫码关注微信公众号**

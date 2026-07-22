@@ -2,13 +2,13 @@
 
 ---
 
-## USER_STATISTICS表介绍
+## USER_STATISTICS 表介绍
 
-此表包含有关用户活动的信息。GreatSQL限制了具有 `SUPER` 或 `PROCESS` 权限的用户查看此表。
+此表包含有关用户活动的信息。GreatSQL 限制了具有 `SUPER` 或 `PROCESS` 权限的用户查看此表。
 
 此表提供了关于哪些用户导致最大负载以及是否存在用户滥用等问题。同时，还能够帮助评估服务器容量的接近程度。例如，可以利用此表来确定复制是否可能开始滞后。
 
-USER_STATISTICS表输出结果如下：
+USER_STATISTICS 表输出结果如下：
 
 ```sql
 greatsql>  SELECT * FROM INFORMATION_SCHEMA.USER_STATISTICS\G

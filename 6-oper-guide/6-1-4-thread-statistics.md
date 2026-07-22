@@ -2,15 +2,15 @@
 
 ---
 
-## THREAD_STATISTICS表介绍
+## THREAD_STATISTICS 表介绍
 
-要在此表中填入统计数据，应将附加变量`thread_statistics`设为`ON`
+要在此表中填入统计数据，应将附加变量 `thread_statistics` 设为 `ON`
 
 ```sql
 greatsql> set global thread_statistics = ON;
 ```
 
-THREAD_STATISTICS表输出结果如下：
+THREAD_STATISTICS 表输出结果如下：
 
 ```sql
 greatsql>  SELECT * FROM INFORMATION_SCHEMA.THREAD_STATISTICS\G

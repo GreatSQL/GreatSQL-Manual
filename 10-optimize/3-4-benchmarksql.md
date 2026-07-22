@@ -19,13 +19,13 @@ BenchmarkSQL 支持 MySQL（Percona、GreatSQL）、PostgreSQL、Oracle、SQL Se
 ### 1. 准备环境
 - **下载 BenchmarkSQL**：在[这里下载 BenchmarkSQL 官方最新版本](https://sourceforge.net/projects/benchmarksql/files/)。
 
-这里开个分支，可以选择下载[GreatSQL社区修改后的 BenchmarkSQL 分支版本](https://gitee.com/GreatSQL/benchmarksql)，其好处有几点：
+这里开个分支，可以选择下载[GreatSQL 社区修改后的 BenchmarkSQL 分支版本](https://gitee.com/GreatSQL/benchmarksql)，其好处有几点：
 
 - 无需再做一次下面提到的修改调整；
-- 增加支持MySQL/GreatSQL数据库；
-- 增加MySQL连接驱动mysql-connector-j-8.0.33.jar；
-- 优化bmsql_oorder表，增加o_c_id单列索引；
-- 修改runDatabaseBuild.sh中的AFTER_LOAD的动作，无需再创建索引外键等操作。
+- 增加支持 MySQL/GreatSQL 数据库；
+- 增加 MySQL 连接驱动 mysql-connector-j-8.0.33.jar；
+- 优化 bmsql_oorder 表，增加 o_c_id 单列索引；
+- 修改 runDatabaseBuild.sh 中的 AFTER_LOAD 的动作，无需再创建索引外键等操作。
 
 可以用 git 客户端将代码下载到本地：
 
@@ -34,7 +34,7 @@ $ cd /usr/local
 $ git clone https://gitee.com/GreatSQL/benchmarksql.git
 $ cd benchmarksql
 ```
-之后就可以跳过下方提到的修改 src 目录下几个 java 文件以及 `tableCreates.sql` 这个SQL脚本，直接从修改 `props.mysql` 配置文件开始。
+之后就可以跳过下方提到的修改 src 目录下几个 java 文件以及 `tableCreates.sql` 这个 SQL 脚本，直接从修改 `props.mysql` 配置文件开始。
 
 回到原生 BenchmarkSQL 的路线上，下载完 BenchmarkSQL 压缩包后，解压缩放在 /usr/local 目录下
 
@@ -289,7 +289,7 @@ create table bmsql_stock (
  55         ;;
 ```
 
-访问 [MySQL官网下载站](https://downloads.mysql.com/archives/c-j/)，下载 MySQL 驱动 jar 包：
+访问 [MySQL 官网下载站](https://downloads.mysql.com/archives/c-j/)，下载 MySQL 驱动 jar 包：
 
 ```bash
 $ cd /usr/local/benchmarksql-5.0/lib
@@ -364,23 +364,23 @@ osCollectorInterval=1
 主要参数说明
 - `db=mysql`，指定数据库类型。
 - `driver=com.mysql.jdbc.Driver`，指定驱动程序文件，这里是 MySQL JDBC 驱动。
-- `conn`, `user`, `password`，指定 GreatSQL 数据库连接IP、端口、账号名、密码、默认数据库等。
-- `warehouses`，指定仓库数，仓库数决定性能测试的成绩。对于高配服务器（32C96G以上），建议至少 1000 仓或更高。
+- `conn`, `user`, `password`，指定 GreatSQL 数据库连接 IP、端口、账号名、密码、默认数据库等。
+- `warehouses`，指定仓库数，仓库数决定性能测试的成绩。对于高配服务器（32C96G 以上），建议至少 1000 仓或更高。
 - `loadWorkers`，指定加载数据时的并发数。如果是高配服务器，该值可以设置大一些，例如 100，一般和服务器的逻辑 CPU 核数一样即可。过高的并发可能会导致内存消耗太快，出现报错，导致数据加载需要重新进行。
 - `terminals`，指定性能压测时的并发数。建议并发数不要高于服务器的逻辑 CPU 核数。否则可能产生过多锁等待。
-- `runTxnsPerTerminal`，指定每个终端执行的事务数量。如果该参数配置为非0时，则 `runMins` 参数必须设置为0。
-- `runMins`，指定性能测试持续的时间（分钟）。如果该值设置为非0值时，runTxnsPerTerminal参数必须设置为0。时间越久，越能考验数据库的性能和稳定性。建议不要少于 10 分钟，生产环境中机器建议不少于 1 小时。
+- `runTxnsPerTerminal`，指定每个终端执行的事务数量。如果该参数配置为非 0 时，则 `runMins` 参数必须设置为 0。
+- `runMins`，指定性能测试持续的时间（分钟）。如果该值设置为非 0 值时，runTxnsPerTerminal 参数必须设置为 0。时间越久，越能考验数据库的性能和稳定性。建议不要少于 10 分钟，生产环境中机器建议不少于 1 小时。
 - `limitTxnsPerMin`，每分钟事务总数限制，该参数主要控制每分钟处理的事务数，事务数受 `terminals` 参数的影响，`limitTxnsPerMin/terminals` 运算后结果值必须是正整数。
 - `terminalWarehouseFixed`，终端和仓库的绑定模式，设置为 **true** 时可以运行 4.x 兼容模式，意思为每个终端都有一个固定的仓库。设置为 **false** 时可以均匀的使用数据库整体配置。TPC-C 规则要求每个终端都必须有一个绑定的仓库，所以一般使用默认值 **true**。
-- 下面五个值的总和必须等于100，默认值为：45, 43, 4, 4，4 ，与 TPC-C 测试定义的比例一致，实际操作过程中，可以调整比重来适应各种场景。
-  - `newOrderWeight=45`，新订单事务占总事务的45%。
-  - `paymentWeight=43`，支付订单事务占总事务的43%。
-  - `orderStatusWeight=4`，订单状态事务占总事务的4%。
-  - `deliveryWeight=4`，到货日期事务占总事务的4%。
-  - `stockLevelWeight=4`，查看现存货品的事务占总事务的4%。
+- 下面五个值的总和必须等于 100，默认值为：45, 43, 4, 4，4 ，与 TPC-C 测试定义的比例一致，实际操作过程中，可以调整比重来适应各种场景。
+  - `newOrderWeight=45`，新订单事务占总事务的 45%。
+  - `paymentWeight=43`，支付订单事务占总事务的 43%。
+  - `orderStatusWeight=4`，订单状态事务占总事务的 4%。
+  - `deliveryWeight=4`，到货日期事务占总事务的 4%。
+  - `stockLevelWeight=4`，查看现存货品的事务占总事务的 4%。
 - `resultDirectory`，压测期间收集系统性能数据的目录。
 - `osCollectorScript`，操作系统性能收集脚本。
-- `osCollectorInterval`，操作系统收集操作间隔（单位：秒），默认为1秒。
+- `osCollectorInterval`，操作系统收集操作间隔（单位：秒），默认为 1 秒。
 - `osCollectorSSHAddr`，需要收集系统性能的主机。
 - `osCollectorDevices`，操作系统中被收集服务器的网卡名称和磁盘名称。
 
@@ -451,7 +451,7 @@ Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class 
 测试数据加载完毕。
 
 ::: tip 小贴士
-如果安装的Java运行时版本（JRE）太旧的话，可能会有类似下面的报错信息
+如果安装的 Java 运行时版本（JRE）太旧的话，可能会有类似下面的报错信息
 
 ```log
 # ------------------------------------------------------------
@@ -474,7 +474,7 @@ Exception in thread "main" java.lang.UnsupportedClassVersionError: ExecJDBC has 
     at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:621)
 ```
 
-这种情况下，升级Java版本即可，可参考下面的操作：
+这种情况下，升级 Java 版本即可，可参考下面的操作：
 
 ```bash
 # 先卸载旧版本
@@ -490,7 +490,7 @@ java-17-openjdk.x86_64 : OpenJDK 17 Runtime Environment
 $ yum install -y java-17-openjdk.x86_64
 ```
 
-再次编译java代码：
+再次编译 java 代码：
 
 ```bash
 $ cd /usr/local/benchmarksql-5.0
@@ -500,9 +500,9 @@ $ ant
 这样应该就可以了。
 :::
 
-2. 修改GreatSQL事务隔离级别
+2. 修改 GreatSQL 事务隔离级别
 
-在开始压测之前，要确保先把GreatSQL数据库修改事务隔离级别为RC：
+在开始压测之前，要确保先把 GreatSQL 数据库修改事务隔离级别为 RC：
 
 ```sql
 greatsql> SET GLOBAL transaction_isolation="READ-COMMITTED";
@@ -515,11 +515,11 @@ greatsql> SET GLOBAL transaction_isolation="READ-COMMITTED";
 transaction_isolation="READ-COMMITTED"
 ```
 
-这是因为在默认的RR隔离级别中，对new_order表的事务读如果不显式加上`FOR SHARE`或`FOR UPDATE`锁，则可能会导致事务过程中数据被删除，造成事务失败。
+这是因为在默认的 RR 隔离级别中，对 new_order 表的事务读如果不显式加上`FOR SHARE`或`FOR UPDATE`锁，则可能会导致事务过程中数据被删除，造成事务失败。
 
-在Oracle和PostgreSQL的默认事务隔离级别为RC，为了参考对标，故要求修改GreatSQL的事务隔离级别也为RC。
+在 Oracle 和 PostgreSQL 的默认事务隔离级别为 RC，为了参考对标，故要求修改 GreatSQL 的事务隔离级别也为 RC。
 
-如果一定要在RR级别下测试的话，请手动修改`src/client/jTPCCConnection.java`文件第234行，在末尾加上`FOR SHARE`，例如：
+如果一定要在 RR 级别下测试的话，请手动修改`src/client/jTPCCConnection.java`文件第 234 行，在末尾加上`FOR SHARE`，例如：
 
 ```ini
 229         // PreparedStatements for DELIVERY_BG
@@ -529,7 +529,7 @@ transaction_isolation="READ-COMMITTED"
 233                 "    WHERE no_w_id = ? AND no_d_id = ? " +
 234                 "    ORDER BY no_o_id ASC FOR SHARE");
 ```
-之后回到benchmarksql根目录，重新执行`ant`进行编译代码即可。
+之后回到 benchmarksql 根目录，重新执行`ant`进行编译代码即可。
 
 3. 运行测试
 
@@ -575,7 +575,7 @@ Term-00, Running Average tpmTOTAL: 421384.59    Current tpmTOTAL: 83449452    Me
 ```
 
 上述测试结果中
-- `Measured tpmC (NewOrders)`，表示每分钟执行的事务数（只统计NewOrders事务）。
+- `Measured tpmC (NewOrders)`，表示每分钟执行的事务数（只统计 NewOrders 事务）。
 - `Measured tpmTOTAL`，表示每分钟平均执行事务数（所有事务）。
 - `Transaction Count`，表示总事务数。
 

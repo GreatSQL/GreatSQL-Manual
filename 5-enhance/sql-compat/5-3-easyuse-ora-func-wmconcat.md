@@ -1,4 +1,4 @@
-# Oracle兼容-函数-WM_CONCAT()函数
+# Oracle 兼容-函数-WM_CONCAT()函数
 ---
 
 
@@ -10,15 +10,15 @@ WM_CONCAT([DISTINCT] expr,... [ORDER BY col [ASC|DESC],...]
 ```
 
 ## 2. 定义和用法
-`WM_CONCAT(expr)` 函数的作用是从 `expr` 中连接所有非NULL的字符串。如果没有非NULL的字符串，那么它就会返回NULL。
+`WM_CONCAT(expr)` 函数的作用是从 `expr` 中连接所有非 NULL 的字符串。如果没有非 NULL 的字符串，那么它就会返回 NULL。
 
 用法：`WM_CONCAT([DISTINCT] 要连接的字段列表 [ORDER BY 排序字段 ASC|DESC ] [SEPARATOR '分隔符'])`。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
 - `WM_CONCAT()` 是一个聚合函数，在 Oracle 10g 推出，在 10g 版本中，返回字符串类型，在 11g 版本中返回 clob 类型，在 12c 后已取消该函数。在 Oracle 中，该函数是一个 undocumented function（未公开函数），Oracle 官方不推荐使用的函数。
-- 从网络公开资料中并未看到Oracle的 `WM_CONCAT()` 函数支持 `ORDER BY` 子句。而GreatSQL的 `WM_CONCAT()` 函数是支持 `ORDER BY` 子句的。
-- 在Windowing（窗口函数用法）环境中，`OVER()` 内的 `ORDER BY` 子句，与 `WM_CONCAT()` 中的 `ORDER BY` 子句不可同时出现。
+- 从网络公开资料中并未看到 Oracle 的 `WM_CONCAT()` 函数支持 `ORDER BY` 子句。而 GreatSQL 的 `WM_CONCAT()` 函数是支持 `ORDER BY` 子句的。
+- 在 Windowing（窗口函数用法）环境中，`OVER()` 内的 `ORDER BY` 子句，与 `WM_CONCAT()` 中的 `ORDER BY` 子句不可同时出现。
 - 当 `WM_CONCAT()` 中没有 `ORDER BY` 子句时，允许在 `OVER()` 内使用 `ORDER BY` 子句；当 `OVER()` 中使用 `ORDER BY` 子句时，会将 `ORDER BY` 视为 `PARTITION` 的一部分；`WM_CONCAT()` 内使用 `ORDER BY` 时则是单纯的将结果排序。
 
 ## 4. 示例

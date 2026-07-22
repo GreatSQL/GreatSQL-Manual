@@ -347,7 +347,7 @@ Bye
 2. 连接一直不活跃，直到超时后被断开（超过 `wait_timeout` 设定的阈值）；
 
 ```sql
-greatsql> SET SESSION wait_timeout = 10; /* 修改超时阈值为10秒 */
+greatsql> SET SESSION wait_timeout = 10; /* 修改超时阈值为 10 秒 */
 greatsql> BEGIN;
 greatsql> SELECT * FROM t1;
 +----+----+--------+
@@ -359,9 +359,9 @@ greatsql> SELECT * FROM t1;
 |  4 |  4 | row4   |
 +----+----+--------+
 
-greatsql> DELETE FROM t1 WHERE id=2; /* 执行完DELETE后，该连接不再做任何操作，等待超过10秒 */
+greatsql> DELETE FROM t1 WHERE id=2; /* 执行完 DELETE 后，该连接不再做任何操作，等待超过 10 秒 */
 
-greatsql> SELECT * FROM t1; /* 等待超过10秒后，再次发起查询，会重新建立连接，并且发现刚才的DELETE操作被回滚了 */
+greatsql> SELECT * FROM t1; /* 等待超过 10 秒后，再次发起查询，会重新建立连接，并且发现刚才的 DELETE 操作被回滚了 */
 ERROR 4031 (HY000): The client was disconnected by the server because of inactivity. See wait_timeout and interactive_timeout for configuring this behavior.
 No connection. Trying to reconnect...
 Connection id:    59

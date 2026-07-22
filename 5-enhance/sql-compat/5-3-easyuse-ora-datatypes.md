@@ -1,15 +1,15 @@
-# Oracle兼容-数据类型
+# Oracle 兼容-数据类型
 ---
 
 
-在GreatSQL中，除了原生的数据类型外，还支持包括CLOB、VARCHAR2、NUMBER、PLS_INTEGER等Oracle兼容数据类型。
+在 GreatSQL 中，除了原生的数据类型外，还支持包括 CLOB、VARCHAR2、NUMBER、PLS_INTEGER 等 Oracle 兼容数据类型。
 
-在GreatSQL中，采用映射方式实现数据类型兼容，这属于 **扩展兼容（无需设定 `sql_mode`）** 方案。具体实现方式为：简单别名，即：在解析阶段将关键词进行替换。例如：如果使用CLOB创建的表，
-在系统内会被转换成LONGTEXT。
+在 GreatSQL 中，采用映射方式实现数据类型兼容，这属于 **扩展兼容（无需设定 `sql_mode`）** 方案。具体实现方式为：简单别名，即：在解析阶段将关键词进行替换。例如：如果使用 CLOB 创建的表，
+在系统内会被转换成 LONGTEXT。
 
 具体实现的映射包括：
 
-| Oracle类型    | GreatSQL类型 | 兼容程度 |
+| Oracle 类型    | GreatSQL 类型 | 兼容程度 |
 | ----------- | --------- | ---- |
 | CLOB        | LONGTEXT  | 简单别名 |
 | NUMBER      | DECIMAL   | 简单别名 |
@@ -86,23 +86,23 @@ Create Table: CREATE TABLE `t_pls_integer` (
 `NUMBER` 类型是 `DECIMAL` 的同义词，直接使用即可。
 
 - 1. `NUMBER(P,D)`：指定精度和小数位
-  - P是表示有效数字数的精度。 P范围为1〜65。
-  - D是表示小数点后的位数。 D的范围是0~30。D小于或等于(<=)P。
+  - P 是表示有效数字数的精度。 P 范围为 1〜65。
+  - D 是表示小数点后的位数。 D 的范围是 0~30。D 小于或等于(<=)P。
 
-- 2. `NUMBER`：不指定有效数字精度和小数位数，此时P默认为最大长度65，D默认为最大长度30。
+- 2. `NUMBER`：不指定有效数字精度和小数位数，此时 P 默认为最大长度 65，D 默认为最大长度 30。
 
-- 3. `NUMBER(*,D)`：不指定有效数字精度时P默认长度为38。
+- 3. `NUMBER(*,D)`：不指定有效数字精度时 P 默认长度为 38。
 
 #### 4.2 定义和用法
 
-GreatSQL原生类型 `DECIMAL` 不指定有效数字精度和小数时默认最大长度为10，而 `NUMBER` 默认最大长度为65，小数位最大长度为30。
+GreatSQL 原生类型 `DECIMAL` 不指定有效数字精度和小数时默认最大长度为 10，而 `NUMBER` 默认最大长度为 65，小数位最大长度为 30。
 
-#### 4.3 Oracle兼容说明
+#### 4.3 Oracle 兼容说明
 
-- 在ORACLE中的 `NUMBER` 类型精度 P 范围为 [1, 38]，小数位数 D 范围为 [-84, 127]；在GreatSQL 中 P 和 D 的范围分别为 [1, 38] 和 [0, 30]，且 D 不能大于 P。
-- 在ORACLE中使用 `NUMBER` 类型数据时会自动去除小数部分最后的 "0"，而GreatSQL中在 `DEFAULT` 模式下会保留小数部分的后缀 "0"，在 `ORACLE` 模式下只有返回值类型为 `NUMBER`/`DECIMAL` 时会自动去除小数部分的后缀 "0"。
+- 在 ORACLE 中的 `NUMBER` 类型精度 P 范围为 [1, 38]，小数位数 D 范围为 [-84, 127]；在 GreatSQL 中 P 和 D 的范围分别为 [1, 38] 和 [0, 30]，且 D 不能大于 P。
+- 在 ORACLE 中使用 `NUMBER` 类型数据时会自动去除小数部分最后的 "0"，而 GreatSQL 中在 `DEFAULT` 模式下会保留小数部分的后缀 "0"，在 `ORACLE` 模式下只有返回值类型为 `NUMBER`/`DECIMAL` 时会自动去除小数部分的后缀 "0"。
 
-| 输入                                            | Oracle返回 | GreatSQL返回（ORACLE模式下） |
+| 输入                                            | Oracle 返回 | GreatSQL 返回（ORACLE 模式下） |
 | ----------------------------------------------- | ---------- | -----------  |
 | CAST(123 AS NUMBER(6,3))                        | 123        | 123          |
 | CAST(CAST(123 AS NUMBER(6,3)) AS VARCHAR(1024)) | 123        | 123.000      |

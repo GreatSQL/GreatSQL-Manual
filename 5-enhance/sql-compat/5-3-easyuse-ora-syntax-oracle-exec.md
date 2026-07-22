@@ -4,7 +4,7 @@
 
 ## 1. 语法
 
-在 `ORACLE` 模式下，GreatSQL客户端支持使用 `EXEC` 执行一个语句块。 
+在 `ORACLE` 模式下，GreatSQL 客户端支持使用 `EXEC` 执行一个语句块。 
 
 ```sql
 SET sql_mode = ORACLE;

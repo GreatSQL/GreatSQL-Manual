@@ -2,11 +2,11 @@
 
 ---
 
-## INDEX_STATISTICS表介绍
+## INDEX_STATISTICS 表介绍
 
-此表显示索引使用情况的统计数据。GreatSQL将`TABLE_SCHEMA`、`TABLE_NAME` 和 `INDEX_NAME` 这些列分为三列。用户只能查看具有 `SELECT` 访问权限的表的条目。
+此表显示索引使用情况的统计数据。GreatSQL 将 `TABLE_SCHEMA`、`TABLE_NAME` 和 `INDEX_NAME` 这些列分为三列。用户只能查看具有 `SELECT` 访问权限的表的条目。
 
-例如，可以用此表来查找未使用的索引，并生成 DROP 命令来删除：
+例如，可以用此表来查找未使用的索引，并生成 `DROP` 命令来删除：
 
 ```sql
 greatsql> SELECT * FROM INFORMATION_SCHEMA.INDEX_STATISTICS WHERE TABLE_NAME='sys_dept';

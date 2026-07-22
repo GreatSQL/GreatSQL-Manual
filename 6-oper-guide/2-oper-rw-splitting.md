@@ -1,27 +1,27 @@
 # 读写分离
 ---
 
-本文描述如何为MGR集群构建读写分离方案。
+本文描述如何为 MGR 集群构建读写分离方案。
 
-## InnoDB Cluster简介
-MySQL InnoDB Cluster（简称MIC）是MySQL推出的整套解决方案，由几个部分组成：
-- MySQL Server，核心是Group Replication（组复制），简称MGR。
-- MySQL Shell，可编程的高级客户端，支持标准SQL语法、JavaScript语法、Python语法，以及API接口，可以更方便的管理和使用MySQL服务器。
+## InnoDB Cluster 简介
+MySQL InnoDB Cluster（简称 MIC）是 MySQL 推出的整套解决方案，由几个部分组成：
+- MySQL Server，核心是 Group Replication（组复制），简称 MGR。
+- MySQL Shell，可编程的高级客户端，支持标准 SQL 语法、JavaScript 语法、Python 语法，以及 API 接口，可以更方便的管理和使用 MySQL 服务器。
 - MySQL Router，轻量级中间件，支持透明路由规则（读写分离及读负载均衡）。
 
 MySQL Router 是一个轻量级的中间件，它采用多端口的方案实现读写分离以及读负载均衡，而且同时支持 MySQL 和 MySQL X 协议。
 
 整体系统架构如下图所示：
 
-![MySQL InnoDB Cluster架构](./2-oper-rw-splitting-01.png)
+![MySQL InnoDB Cluster 架构](./2-oper-rw-splitting-01.png)
 
-## MySQL Router安装&初始化
+## MySQL Router 安装 & 初始化
 
-MySQL Router最好和应用服务器部署在一起，所以本次将MySQL Router安装在另一个服务器上，IP地址是 *172.16.16.14*。
+MySQL Router 最好和应用服务器部署在一起，所以本次将 MySQL Router 安装在另一个服务器上，IP 地址是 *172.16.16.14*。
 
-将MySQL Router和应用服务器部署在一起的好处在于，当某个后端数据库服务器发生宕机并下线及导致MGR发生切换时，部署在应用程序端的router程序能通过MGR的metadata信息感知到这个变化，并自动更新MGR拓扑结构，无需在应用程序上做任何变更，也无需针对router再次部署高可用切换方案。
+将 MySQL Router 和应用服务器部署在一起的好处在于，当某个后端数据库服务器发生宕机并下线及导致 MGR 发生切换时，部署在应用程序端的 router 程序能通过 MGR 的 metadata 信息感知到这个变化，并自动更新 MGR 拓扑结构，无需在应用程序上做任何变更，也无需针对 router 再次部署高可用切换方案。
 
-[戳此下载MySQL Router RPM安装包](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，选择下面的安装包：
+[戳此下载 MySQL Router RPM 安装包](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.0.32-25)，选择下面的安装包：
 
 - greatsql-mysql-router-8.0.32-25.1.el8.x86_64.rpm
 
@@ -36,19 +36,19 @@ Updating / installing...
    1:greatsql-mysql-router-8.0.32-25.1################################# [100%]
 ```
 
-MySQL Router对应的服务器端程序文件是 `/usr/bin/mysqlrouter`，第一次启动时要先进行初始化：
+MySQL Router 对应的服务器端程序文件是 `/usr/bin/mysqlrouter`，第一次启动时要先进行初始化：
 ```bash
 # 参数解释
 # 参数 --bootstrap 表示开始初始化
-# 参数 GreatSQL@172.16.16.10:3306 是MGR集群管理员账号
-# --user=mysqlrouter 是运行mysqlrouter进程的系统用户名
+# 参数 GreatSQL@172.16.16.10:3306 是 MGR 集群管理员账号
+# --user=mysqlrouter 是运行 mysqlrouter 进程的系统用户名
 
 $ mysqlrouter --bootstrap GreatSQL@172.16.16.10:3306 --user=mysqlrouter
 
 ...
 Please enter MySQL password for GreatSQL:   <-- 输入密码
-# 然后mysqlrouter开始自动进行初始化
-# 它会自动读取MGR的元数据信息，自动生成配置文件
+# 然后 mysqlrouter 开始自动进行初始化
+# 它会自动读取 MGR 的元数据信息，自动生成配置文件
 # Bootstrapping system MySQL Router instance...
 
 - Creating account(s) (only those that are needed, if any)
@@ -71,12 +71,12 @@ or
 
 the cluster 'GreatSQLMGR' can be reached by connecting to:
 
-## MySQL Classic protocol  <-- MySQL协议的两个端口
+## MySQL Classic protocol  <-- MySQL 协议的两个端口
 
 - Read/Write Connections: localhost:6446
 - Read/Only Connections:  localhost:6447
 
-## MySQL X protocol  <-- MySQL X协议的两个端口
+## MySQL X protocol  <-- MySQL X 协议的两个端口
 
 - Read/Write Connections: localhost:6448
 - Read/Only Connections:  localhost:6449
@@ -100,9 +100,9 @@ tcp        0      0 0.0.0.0:8443            0.0.0.0:*               LISTEN      
 ```
 可以看到 mysqlrouter 服务正常启动了。
 
-## MySQL Router配置
+## MySQL Router 配置
 
-MySQL Router初始化时自动生成的配置文件是 `/etc/mysqlrouter/mysqlrouter.conf`，主要是关于R/W、RO不同端口以及请求转发规则等配置，例如：
+MySQL Router 初始化时自动生成的配置文件是 `/etc/mysqlrouter/mysqlrouter.conf`，主要是关于 R/W、RO 不同端口以及请求转发规则等配置，例如：
 ```ini
 [routing:GreatSQLMGR_rw]
 bind_address=0.0.0.0
@@ -118,18 +118,18 @@ destinations=metadata-cache://GreatSQLMGR/?role=SECONDARY
 routing_strategy=round-robin-with-fallback
 protocol=classic
 ```
-可以根据需要自行修改绑定的IP地址和端口，以及请求转发规则。
+可以根据需要自行修改绑定的 IP 地址和端口，以及请求转发规则。
 
 关于请求转发规则，更详细的解释可参考以下内容：
 
-- [MySQL Router可以配置在MGR主从节点间轮询吗](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/GreatSQL-FAQ.md#24-mysql-router%E5%8F%AF%E4%BB%A5%E9%85%8D%E7%BD%AE%E5%9C%A8mgr%E4%B8%BB%E4%BB%8E%E8%8A%82%E7%82%B9%E9%97%B4%E8%BD%AE%E8%AF%A2%E5%90%97)
-- [routing_strategy参数/选项](https://dev.mysql.com/doc/mysql-router/8.0/en/mysql-router-conf-options.html#option_mysqlrouter_routing_strategy)
+- [MySQL Router 可以配置在 MGR 主从节点间轮询吗](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/GreatSQL-FAQ.md#24-mysql-router%E5%8F%AF%E4%BB%A5%E9%85%8D%E7%BD%AE%E5%9C%A8MGR%E4%B8%BB%E4%BB%8E%E8%8A%82%E7%82%B9%E9%97%B4%E8%BD%AE%E8%AF%A2%E5%90%97)
+- [routing_strategy 参数/选项](https://dev.mysql.com/doc/mysql-router/8.0/en/mysql-router-conf-options.html#option_mysqlrouter_routing_strategy)
 
-修改完配置后，重启mysqlrouter服务即可。
+修改完配置后，重启 mysqlrouter 服务即可。
 
 ## 确认读写分离
 
-现在，用客户端连接到6446（读写）端口，确认连接的是PRIMARY节点：
+现在，用客户端连接到 6446（读写）端口，确认连接的是 PRIMARY 节点：
 ```sql
 -- mysql -h172.16.16.14 -uGreatSQL -p -P6446
 
@@ -150,9 +150,9 @@ greatsql> SELECT MEMBER_ID,MEMBER_HOST,MEMBER_ROLE FROM performance_schema.repli
 | 6f367f17-07e6-11ed-825d-00155d064000 | 172.16.16.12 | ARBITRATOR  |
 +--------------------------------------+--------------+-------------+
 ```
-确实是连接的PRIMARY节点。
+确实是连接的 PRIMARY 节点。
 
-同样地，连接6447（只读）端口，确认连接的是SECONDARY节点：
+同样地，连接 6447（只读）端口，确认连接的是 SECONDARY 节点：
 ```sql
 -- mysql -h172.16.16.14 -uGreatSQL -p -P6447
 
@@ -163,12 +163,12 @@ greatsql> SELECT @@server_uuid;
 | 62edd23f-07fa-11ed-aad1-00155d064000 |
 +--------------------------------------+
 ```
-确实是连接的SECONDARY节点。
+确实是连接的 SECONDARY 节点。
 
-该连接保持住不退出，继续新建到6447端口的连接，查看 `server_uuid`，应该会发现读取到的是另一个 SECONDARY 节点的值，因为 MySQL Router 默认的读负载均衡机制是在几个只读节点间自动轮询，除非所有 SECONDARY 节点都不可用，否则只读请求不会转发到PRIMARY节点。
+该连接保持住不退出，继续新建到 6447 端口的连接，查看 `server_uuid`，应该会发现读取到的是另一个 SECONDARY 节点的值，因为 MySQL Router 默认的读负载均衡机制是在几个只读节点间自动轮询，除非所有 SECONDARY 节点都不可用，否则只读请求不会转发到 PRIMARY 节点。
 
 ::: tip 特别说明
-由于ARBITRATOR角色是在GreatSQL中特有的，原生的MySQL Router并不支持。这个节点不存储用户数据、日志等，仅参与MGR的网络投票，因此当MySQL Router轮询连接到该节点时，可能会出现类似下面的提示：
+由于 ARBITRATOR 角色是在 GreatSQL 中特有的，原生的 MySQL Router 并不支持。这个节点不存储用户数据、日志等，仅参与 MGR 的网络投票，因此当 MySQL Router 轮询连接到该节点时，可能会出现类似下面的提示：
 :::
 
 ```bash
@@ -179,7 +179,7 @@ ERROR 1045 (28000): Access denied for user 'GreatSQL'@'172.16.16.14' (using pass
 ```
 忽略这个错误提示，并尝试重连即可。
 
-当然了，也可以通过修改MySQL Router的配置文件 `/etc/mysqlrouter/mysqlrouter.conf`，把ARBITRATOR节点从只读节点列表中排除，例如：
+当然了，也可以通过修改 MySQL Router 的配置文件 `/etc/mysqlrouter/mysqlrouter.conf`，把 ARBITRATOR 节点从只读节点列表中排除，例如：
 ```ini
 [routing:GreatSQLMGR_ro]
 bind_address=0.0.0.0
@@ -194,20 +194,20 @@ protocol=classic
 
 ## 确认故障自动转移
 
-如果PRIMARY节点宕机或切换，mysqlrouter也能实现自动故障转移，应用端不需要做任何变更，只需最多尝试重连或重新发起请求。
+如果 PRIMARY 节点宕机或切换，mysqlrouter 也能实现自动故障转移，应用端不需要做任何变更，只需最多尝试重连或重新发起请求。
 
-登录MGR集群任意节点：
+登录 MGR 集群任意节点：
 ```js
--- 先用mysqlsh客户端连接
+-- 先用 mysqlsh 客户端连接
 -- mysqlsh --uri GreatSQL@172.16.16.10:3306
--- 在mysqlsh客户端中执行下面的命令
+-- 在 mysqlsh 客户端中执行下面的命令
 
 MySQL  172.16.16.10:3306 ssl  JS > c=dba.getCluster();
-MySQL  172.16.16.10:3306 ssl  JS > c.setPrimaryInstance('172.16.16.11:3306');   <-- 切换PRIMARY节点
+MySQL  172.16.16.10:3306 ssl  JS > c.setPrimaryInstance('172.16.16.11:3306');   <-- 切换 PRIMARY 节点
 Setting instance '172.16.16.11:3306' as the primary instance of cluster 'GreatSQLMGR'...
 
-Instance '172.16.16.10:3306' was switched from PRIMARY to SECONDARY.   <-- 切换了，从PRIMARY到SECONDARY
-Instance '172.16.16.11:3306' was switched from SECONDARY to PRIMARY.   <-- 切换了，从SECONDARY到PRIMARY
+Instance '172.16.16.10:3306' was switched from PRIMARY to SECONDARY.   <-- 切换了，从 PRIMARY 到 SECONDARY
+Instance '172.16.16.11:3306' was switched from SECONDARY to PRIMARY.   <-- 切换了，从 SECONDARY 到 PRIMARY
 Instance '172.16.16.12:3306' remains ARBITRATOR.   <-- 保持不变
 Instance '172.16.16.13:3306' remains SECONDARY.   <-- 保持不变
 
@@ -216,7 +216,7 @@ WARNING: The cluster internal session is not the primary member anymore. For clu
 The instance '172.16.16.11:3306' was successfully elected as primary.
 ```
 
-回到前面连接6446端口的那个会话，再次查询 **server_uuid**，此时会发现连接自动断开了：
+回到前面连接 6446 端口的那个会话，再次查询 **server_uuid**，此时会发现连接自动断开了：
 ```sql
 greatsql> SELECT @@server_uuid;
 ERROR 2013 (HY000): Lost connection to MySQL server during query
@@ -230,19 +230,19 @@ Current database: *** NONE ***
 +--------------------------------------+
 | @@server_uuid                        |
 +--------------------------------------+
-| 6e65ef68-07e6-11ed-a6d8-00155d064000 |   <-- 确认server_uuid变成172.16.16.11节点的值
+| 6e65ef68-07e6-11ed-a6d8-00155d064000 |   <-- 确认 server_uuid 变成 172.16.16.11 节点的值
 +--------------------------------------+
 ```
 这就实现了自动故障转移。
 
-再次查看切换后的MGR集群状态：
+再次查看切换后的 MGR 集群状态：
 ```js
 MySQL  172.16.16.10:3306 ssl  JS >  c.status();
 ...
         "topology": {
             "172.16.16.10:3306": {
                 "address": "172.16.16.10:3306",
-                "memberRole": "SECONDARY",   <-- 切换成SECONDARY节点
+                "memberRole": "SECONDARY",   <-- 切换成 SECONDARY 节点
                 "mode": "R/O",
                 "readReplicas": {},
                 "replicationLag": null,
@@ -252,7 +252,7 @@ MySQL  172.16.16.10:3306 ssl  JS >  c.status();
             },
             "172.16.16.11:3306": {
                 "address": "172.16.16.11:3306",
-                "memberRole": "PRIMARY",   <-- 新的PRIMARY节点
+                "memberRole": "PRIMARY",   <-- 新的 PRIMARY 节点
                 "mode": "R/W",
                 "readReplicas": {},
                 "replicationLag": null,
@@ -263,7 +263,7 @@ MySQL  172.16.16.10:3306 ssl  JS >  c.status();
 ...
 ```
 
-利用MySQL Router构建一套支持读写分离、读负载均衡以及故障自动转移的MGR集群就部署完成。
+利用 MySQL Router 构建一套支持读写分离、读负载均衡以及故障自动转移的 MGR 集群就部署完成。
 
 
 

@@ -189,7 +189,7 @@ greatsql> SELECT t1.c1, t2.c1 FROM t1, t2 GROUP BY t2.c1, t1.c1 HAVING t2.c1 = t
 
 ## 3. 语义检查
 
-- 1. 不能与ANSI连接同时使用。
+- 1. 不能与 ANSI 连接同时使用。
 
 ```sql
 greatsql> SELECT * FROM t1 LEFT JOIN t2 ON t1.c1 = t2.c1 WHERE t1.c1 = t2.c1(+);

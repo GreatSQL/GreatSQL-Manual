@@ -12,7 +12,7 @@ GreatSQL 相较于 MySQL 增加了许多运维特性增强，例如用户统计�
 
 ## [带字典的压缩列](./6-3-compressed-columns.md) 
 
-## [扩展显示InnoDB引擎状态](./6-4-extended-innodb-status.md) 
+## [扩展显示 InnoDB 引擎状态](./6-4-extended-innodb-status.md) 
 
 ## [扩展显示授权](./6-5-extended-show-grants.md)
 

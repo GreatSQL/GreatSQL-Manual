@@ -1,19 +1,19 @@
-# TPC-H性能测试
+# TPC-H 性能测试
 ---
 
 本文主要介绍采用 TPC-H 工具对 GreatSQL 进行性能测试的方法。
 
-## 关于TPC-H
+## 关于 TPC-H
 
-TPC-H是TPC(Transaction Processing Performance Council)组织提供的工具包。主要用于进行OLAP业务场景测试，以评估商业分析中决策支持系统（DSS）的性能。它包含了一整套面向商业的ad-hoc查询和并发数据修改，强调测试的是数据库、平台和I/O性能，关注查询能力。
+TPC-H 是 TPC(Transaction Processing Performance Council)组织提供的工具包。主要用于进行 OLAP 业务场景测试，以评估商业分析中决策支持系统（DSS）的性能。它包含了一整套面向商业的 ad-hoc 查询和并发数据修改，强调测试的是数据库、平台和 I/O 性能，关注查询能力。
 
 官网：[http://www.tpc.org/tpch](http://www.tpc.org/tpch)
 
-## 编译安装TPC-H
+## 编译安装 TPC-H
 
-**1. 下载TPC-H**
+**1. 下载 TPC-H**
 
-访问[TPC-H下载页面](https://www.tpc.org/tpc_documents_current_versions/download_programs/tools-download-request5.asp?bm_type=TPC-H)，下载源码包。
+访问[TPC-H 下载页面](https://www.tpc.org/tpc_documents_current_versions/download_programs/tools-download-request5.asp?bm_type=TPC-H)，下载源码包。
 
 **2. 下载完后，解压缩，并复制 `makefile.suite` 文件**
 
@@ -24,7 +24,7 @@ cd dbgen
 cp makefile.suite Makefile
 ```
 
-**3. 修改Makefile以适配**
+**3. 修改 Makefile 以适配**
 
 参考下方内容，修改 `Makefile` 文件：
 ```ini
@@ -39,7 +39,7 @@ MACHINE = LINUX
 WORKLOAD = TPCH
 ```
 
-**4. 修改tpcd.h文件，在文件末尾新增几行MYSQL宏定义**
+**4. 修改 tpcd.h 文件，在文件末尾新增几行 MYSQL 宏定义**
 
 参考下方内容，修改 `tpcd.h` 文件：
 ```ini
@@ -55,10 +55,10 @@ WORKLOAD = TPCH
 
 **5. 编译**
 
-执行make编译，编译完毕后会生成两个可执行文件：
+执行 make 编译，编译完毕后会生成两个可执行文件：
 
-- dbgen：数据生成工具。在使用InfiniDB官方测试脚本进行测试时，需要用该工具生成tpch相关表数据。
-- qgen：SQL生成工具
+- dbgen：数据生成工具。在使用 InfiniDB 官方测试脚本进行测试时，需要用该工具生成 tpch 相关表数据。
+- qgen：SQL 生成工具
 
 ## 生成测试数据
 
@@ -81,11 +81,11 @@ $ ls -lh
 -rw-r--r-- 1 root root  41M Jul 19 15:36 supplier.tbl
 ```
 
-还可以利用 [pdbgen.sh脚本](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/pdbgen.sh) 来生成测试数据集，它采用并行的方法，每个大表生成多个文件切片，其效率相比直接调用 `dbgen` 至少可以提升一倍。这种多文件切片的方式，也更有利于后续采用 [pload.sh脚本](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/pload.sh)) 实现更高效并发导入。
+还可以利用 [pdbgen.sh 脚本](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/pdbgen.sh) 来生成测试数据集，它采用并行的方法，每个大表生成多个文件切片，其效率相比直接调用 `dbgen` 至少可以提升一倍。这种多文件切片的方式，也更有利于后续采用 [pload.sh 脚本](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/pload.sh)) 实现更高效并发导入。
 
-## 生成TPC-H测试查询SQL
+## 生成 TPC-H 测试查询 SQL
 
-可直接访问[gitee仓库获取相应的SQL](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/tpch/3.0.1/queries)，这些 SQL 脚本文件可直接用于测试 GreatSQL 的 Rapid 引擎，已经加上了相应的 HINT，例如：
+可直接访问[gitee 仓库获取相应的 SQL](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/tpch/3.0.1/queries)，这些 SQL 脚本文件可直接用于测试 GreatSQL 的 Rapid 引擎，已经加上了相应的 HINT，例如：
 
 ```sql
 -- tpch_queries_1.sql
@@ -95,7 +95,7 @@ SELECT /*+ SET_VAR(use_secondary_engine=1) SET_VAR(secondary_engine_cost_thresho
 ...
 ```
 
-也可参考下面的方法手动生成22个TPC-H测试查询SQL：
+也可参考下面的方法手动生成 22 个 TPC-H 测试查询 SQL：
 ```bash
 # 生成22个SQL文件
 for i in $(seq 1 22); do ./qgen -d $i -s 1000 > tpch_queries_"$i".sql; done
@@ -104,7 +104,7 @@ for i in $(seq 1 22); do ./qgen -d $i -s 1000 > tpch_queries_"$i".sql; done
 dos2unix *.sql
 ```
 
-参数 `-s 1000` 表示测试数据集比例因子是 1000，不同比例因子的区别在于第 11 个查询SQL中的条件因子，在 tpch_queries_11.sql 中也已注明：
+参数 `-s 1000` 表示测试数据集比例因子是 1000，不同比例因子的区别在于第 11 个查询 SQL 中的条件因子，在 tpch_queries_11.sql 中也已注明：
 
 ```sql
 -- cat tpch_queries_11.sql
@@ -118,11 +118,11 @@ dos2unix *.sql
 ...
 ```
 
-## 新建TPC-H测试数据库，导入测试数据
+## 新建 TPC-H 测试数据库，导入测试数据
 
-### 初始化TPC-H测试库表
+### 初始化 TPC-H 测试库表
 
-1. 下载 [tpch-create-table.sql文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/tpch-create-table.sql)，导入数据库，完成TPC-H测试库表初始化。
+1. 下载 [tpch-create-table.sql 文件](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/tpch-create-table.sql)，导入数据库，完成 TPC-H 测试库表初始化。
 
 文件内容如下：
 
@@ -229,7 +229,7 @@ create table lineitem ( l_orderkey    bigint not null,
 
 2. 并行导入数据
 
-可以利用GreatSQL提供的 [并行 LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md) 特性并行导入测试数据，提高导入效率：
+可以利用 GreatSQL 提供的 [并行 LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md) 特性并行导入测试数据，提高导入效率：
 ```bash
 mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/region.tbl' into table region FIELDS TERMINATED BY '|'; analyze table region;" tpch
 
@@ -250,11 +250,11 @@ mysql -f -e "load /*+ SET_VAR(gdb_parallel_load=ON) */ data infile '/data/tpch/d
 
 还可以进一步设置并行 LOAD DATA 的并行线程数以及分片大小，详情参考文档：[并行 LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md)。
 
-前面提到，可以使用 [pdbgen.sh脚本](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/pdbgen.sh) 生成（多文件多切片式的）测试数据集，因此可以相应地使用 [pload.sh脚本](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/pload.sh) 在已经开启 并行LOAD DATA 的基础上，实现双重并行导入，其效率相对原生的 LOAD DATA 至少可提升数倍。
+前面提到，可以使用 [pdbgen.sh 脚本](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/pdbgen.sh) 生成（多文件多切片式的）测试数据集，因此可以相应地使用 [pload.sh 脚本](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/pload.sh) 在已经开启 并行 LOAD DATA 的基础上，实现双重并行导入，其效率相对原生的 LOAD DATA 至少可提升数倍。
 
-### 开始TPC-H测试
+### 开始 TPC-H 测试
 
-在开始测试前，先调低 `long_query_time` 的值（甚至可以设置为0），使得可以记录所有TPC-H查询测试请求：
+在开始测试前，先调低 `long_query_time` 的值（甚至可以设置为 0），使得可以记录所有 TPC-H 查询测试请求：
 ```sql
 -- 设置 long_query_time = 1ms
 SET GLOBAL long_query_time = 0.001;
@@ -263,7 +263,7 @@ SET GLOBAL long_query_time = 0.001;
 SET GLOBAL long_query_time = 0;
 ```
 
-在前面 **4. 生成TPC-H测试查询SQL** 中已经生成了测试22个测试查询SQL文件，逐一执行这些查询文件，也可以写个脚本来执行，并分别记录运行耗时：
+在前面 **4. 生成 TPC-H 测试查询 SQL** 中已经生成了测试 22 个测试查询 SQL 文件，逐一执行这些查询文件，也可以写个脚本来执行，并分别记录运行耗时：
 
 编辑脚本 `run-tpch.sh`，内容如下所示：
 ```bash
@@ -316,7 +316,7 @@ done
 ```
 这个脚本最新版本可以看这里 [TPC-H 自动测试脚本 run-tpch.sh](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/run-tpch.sh)。 
 
-在运行查询SQL时，也要观察相关指标：
+在运行查询 SQL 时，也要观察相关指标：
 
 ```sql
 greatsql> SHOW GLOBAL STATUS LIKE 'Secondary_engine_execution_count';
@@ -330,7 +330,7 @@ greatsql> SHOW GLOBAL STATUS LIKE 'Secondary_engine_execution_count';
 
 ## 测试结果
 
-在对GreatSQL 8.0.32-27未限制版本的测试中，利用Rapid引擎运行TPC-H SF100/SF1000数据量级测试时，总耗时分别为：38.016和386.195秒。
+在对 GreatSQL 8.0.32-27 未限制版本的测试中，利用 Rapid 引擎运行 TPC-H SF100/SF1000 数据量级测试时，总耗时分别为：38.016 和 386.195 秒。
 
 |测试数据量 | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 | Q9 | Q10 | Q11 | Q12 | Q13 | Q14 | Q15 | Q16 | Q17 | Q18 | Q19 | Q20 | Q21 | Q22 | 总耗时 | 
 | :---: |  --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -341,7 +341,7 @@ greatsql> SHOW GLOBAL STATUS LIKE 'Secondary_engine_execution_count';
 
 更多关于 GreatSQL 的 TPC-H 测试的详细信息可参考：[GreatSQL TPC-H 性能测试报告](./3-3-benchmark-greatsql-tpch-report.md)。
 
-也可以采用上述测试方法，自行测试Turbo引擎的TPC-H性能表现，关于Turbo引擎的使用方法参考：[Turbo引擎](../5-enhance/5-1-highperf-turbo-engine.md)。
+也可以采用上述测试方法，自行测试 Turbo 引擎的 TPC-H 性能表现，关于 Turbo 引擎的使用方法参考：[Turbo 引擎](../5-enhance/5-1-highperf-turbo-engine.md)。
 
 **扫码关注微信公众号**
 

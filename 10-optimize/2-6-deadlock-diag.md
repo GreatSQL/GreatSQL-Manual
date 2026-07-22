@@ -8,7 +8,7 @@
 
 例如，事务 A 持有数据 R1 上的锁 L1，事务 B 持有数据 R2 上的锁 L2；紧接着，事务 A 继续请求数据 R2 上的锁，事务 A 会被 L2 阻塞；事务 B 继续请求数据 R1 上的锁，这时就产生了循环回路，触发死锁检测，其中有个事务会失败被回滚。
 
-| 时间线 | 事务A | 事务B |
+| 时间线 | 事务 A | 事务 B |
 | --- | --- | --- |
 | t1 | begin; | begin; |
 | t2 | select * from t1 where id=1 for update; | |
@@ -16,7 +16,7 @@
 | t4 | select * from t1 where id=2 for update;<br/>-- 被阻塞||
 | t5 | | select * from t1 where id=1 for update;<br/>-- 触发死锁检测，报告死锁，失败回滚事务<br/>-- ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting transaction|
 
-在InnoDB中，有个死锁检测的后台线程，当检测到死锁后，会马上抛出异常并回滚一个事务（另一个继续执行），InnoDB选择回滚代价较小（锁定或修改的行数较少）的事务，如果两个事务代价一样，则选择启动时间较晚的那个事务。
+在 InnoDB 中，有个死锁检测的后台线程，当检测到死锁后，会马上抛出异常并回滚一个事务（另一个继续执行），InnoDB 选择回滚代价较小（锁定或修改的行数较少）的事务，如果两个事务代价一样，则选择启动时间较晚的那个事务。
 
 选项 `innodb_deadlock_detect` 用于设置是否启用死锁检测，默认打开。
 
@@ -36,7 +36,7 @@ LOCK WAIT 3 lock struct(s), heap size 1128, 2 row lock(s)
 MySQL thread id 13338, OS thread handle 139836330592000, query id 36923052144 localhost root statistics
 select * from t1 where id=2 for update
 
-# 事务A持有的行锁（id=1上的Record Lock）
+# 事务A持有的行锁（id=1上的record lock）
 *** (1) HOLDS THE LOCK(S):
 RECORD LOCKS space id 688 page no 4 n bits 80 index PRIMARY of table `greatsql`.`t1` trx id 5315754291 lock_mode X locks rec but not gap
 Record lock, heap no 2 PHYSICAL RECORD: n_fields 5; compact format; info bits 0
@@ -47,7 +47,7 @@ Record lock, heap no 2 PHYSICAL RECORD: n_fields 5; compact format; info bits 0
  4: len 4; hex 000aee94; asc     ;;
 
 
-# 事务A在等待的行锁（id=2上的Record Lock）
+# 事务A在等待的行锁（id=2上的record lock）
 *** (1) WAITING FOR THIS LOCK TO BE GRANTED:
 RECORD LOCKS space id 688 page no 4 n bits 80 index PRIMARY of table `greatsql`.`t1` trx id 5315754291 lock_mode X locks rec but not gap waiting
 Record lock, heap no 3 PHYSICAL RECORD: n_fields 5; compact format; info bits 0
@@ -66,7 +66,7 @@ LOCK WAIT 3 lock struct(s), heap size 1128, 2 row lock(s)
 MySQL thread id 13339, OS thread handle 139836355770112, query id 36923052145 localhost root statistics
 select * from t1 where id=1 for update
 
-# 事务B持有的行锁（id=2上的Record Lock）
+# 事务B持有的行锁（id=2上的record lock）
 *** (2) HOLDS THE LOCK(S):
 RECORD LOCKS space id 688 page no 4 n bits 80 index PRIMARY of table `greatsql`.`t1` trx id 5315754292 lock_mode X locks rec but not gap
 Record lock, heap no 3 PHYSICAL RECORD: n_fields 5; compact format; info bits 0
@@ -77,7 +77,7 @@ Record lock, heap no 3 PHYSICAL RECORD: n_fields 5; compact format; info bits 0
  4: len 4; hex 000146d3; asc   F ;;
 
 
-# 事务B在等待的行锁（id=1上的Record Lock）
+# 事务B在等待的行锁（id=1上的record lock）
 *** (2) WAITING FOR THIS LOCK TO BE GRANTED:
 RECORD LOCKS space id 688 page no 4 n bits 80 index PRIMARY of table `greatsql`.`t1` trx id 5315754292 lock_mode X locks rec but not gap waiting
 Record lock, heap no 2 PHYSICAL RECORD: n_fields 5; compact format; info bits 0

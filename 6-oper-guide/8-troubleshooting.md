@@ -113,16 +113,16 @@ mysql -h127.0.0.1 -uroot -P3306 -p'xx'
 
 ## GreatSQL 中运行一些查询 SQL 会 hang 住一直无响应
 
-这可能是因为触发了 InnoDB 并行查询的 bug，请尝试升级到 GreatSQL 最新版本，或者修改选项 `force_parallel_execute=OFF` 临时关闭InnoDB并行查询特性。
+这可能是因为触发了 InnoDB 并行查询的 bug，请尝试升级到 GreatSQL 最新版本，或者修改选项 `force_parallel_execute=OFF` 临时关闭 InnoDB 并行查询特性。
 
 可以参考下面的案例：
 
-- [mysqldump导出108353886字节的数据后，hang](https://greatsql.cn/thread-522-1-1.html)
-- [greatsql执行sql卡死](https://greatsql.cn/thread-422-1-1.html)
+- [mysqldump 导出 108353886 字节的数据后，hang](https://greatsql.cn/thread-522-1-1.html)
+- [greatsql 执行sql卡死](https://greatsql.cn/thread-422-1-1.html)
 
 ## GreatSQL 中运行一些 SQL 后数据库 crash 了
 
-可能是因为触发了某些 bug，请尝试升级到 GreatSQL 最新版本，或者参考文章 [MySQL报障之coredump收集处理流程](https://mp.weixin.qq.com/s/CrV9kgIUnUd4GEru93xjdA) 提到的方法，打包收集相应的coredump文件、my.cnf配置文件、错误日志文件以及能稳定复现的方法，然后联系我们报告bug。
+可能是因为触发了某些 bug，请尝试升级到 GreatSQL 最新版本，或者参考文章 [MySQL 报障之coredump收集处理流程](https://mp.weixin.qq.com/s/CrV9kgIUnUd4GEru93xjdA) 提到的方法，打包收集相应的 coredump 文件、my.cnf 配置文件、错误日志文件以及能稳定复现的方法，然后联系我们报告 bug。
 
 可以参考下面的案例：
 
@@ -132,9 +132,9 @@ mysql -h127.0.0.1 -uroot -P3306 -p'xx'
 
 以下几种情况的可能性较大：
 
-- 发生了OOM Killer（out-of-memory killer）
+- 发生了 OOM Killer（out-of-memory killer）
 
-简单说，就是被系统判定为内存占用太多，触发 OOM Killer 机制，杀掉mysqld进程以释放内存。
+简单说，就是被系统判定为内存占用太多，触发 OOM Killer 机制，杀掉 mysqld 进程以释放内存。
 
 可以查看操作系统日志文件 `/var/log/messages`，通常会有类似下面的日志内容
 
@@ -143,9 +143,9 @@ kernel: Out of memory: Kill process 6033 (mysqld) score 615 or sacrifice child
 kernel: Killed process 6033, UID 498, (mysqld) total-vm:56872260kB, anon-rss:3202560kB, file-rss:40kB
 ```
 
-当发生OOM Killer事件时，可以选择适当调低部分设计内存的参数选项，例如 `innodb_buffer_pool_size` 等，也可以适当加大操作系统的物理内存。
+当发生 OOM Killer 事件时，可以选择适当调低部分设计内存的参数选项，例如 `innodb_buffer_pool_size` 等，也可以适当加大操作系统的物理内存。
 
-此外，如果想保护mysqld进程不被OOM Killer机制杀掉，可以调整相应进程的 `oom_score_adj` 设置，将其修改为 -1000，例如：
+此外，如果想保护 mysqld 进程不被 OOM Killer 机制杀掉，可以调整相应进程的 `oom_score_adj` 设置，将其修改为 -1000，例如：
 ```bash
 $ ps -ef | grep mysqld
 ps -ef | grep mysqld | grep -v grep
@@ -161,14 +161,14 @@ $ cat /proc/597099/oom_score_adj
 ```
 
 关于 `oom_score_adj` 的值定义如下：
-- 默认为0，表示不调整分数。
-- 如果改为负数，表示尽量不要被Kill。
-- 如果改为正数，表示可以优先被Kill。
+- 默认为 0，表示不调整分数。
+- 如果改为负数，表示尽量不要被 Kill。
+- 如果改为正数，表示可以优先被 Kill。
 
-更多关于OOM Killer的内容请参考：[深入理解Linux内核OOM killer机制](https://zhuanlan.zhihu.com/p/560714542)。
+更多关于 OOM Killer 的内容请参考：[深入理解 Linux 内核 OOM killer机制](https://zhuanlan.zhihu.com/p/560714542)。
 
 
-- 管理员意外执行kill -9，杀掉mysqld进程。
+- 管理员意外执行 kill -9，杀掉 mysqld 进程。
 
 - 操作系统意外重启。
 
@@ -202,7 +202,7 @@ $ ls -la /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/mysqld
 
 可以采用下面方法修复：
 
-1. 首先，执行 `restorecon` 命令将文件和目录的SELinux安全上下文重置为默认值
+1. 首先，执行 `restorecon` 命令将文件和目录的 SELinux 安全上下文重置为默认值
 ```bash
 restorecon -rv /data/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64/bin/
 ```
@@ -224,13 +224,13 @@ sed -i '/^SELINUX=/c'SELINUX=disabled /etc/selinux/config
 Thread XXX has waited at XXX line XXX for 928 seconds the semaphore
 ```
 
-这可能是因为当时系统负载太高了，也可能是因为叠加了某些 bug 导致。当信号量互斥等待事件 持续太久（约900秒）后，GreatSQL 就会自行重启（不重启的话其他啥也做不了，也没意义）。
+这可能是因为当时系统负载太高了，也可能是因为叠加了某些 bug 导致。当信号量互斥等待事件 持续太久（约 900 秒）后，GreatSQL 就会自行重启（不重启的话其他啥也做不了，也没意义）。
 
 几个可能的原因及可选解决办法
-1. 垃圾SQL太多，需要进行优化垃圾SQL，能看到有些事务修改多行记录，看起来效率也很低
+1. 垃圾 SQL 太多，需要进行优化垃圾 SQL，能看到有些事务修改多行记录，看起来效率也很低
 2. 数据库层面关闭自适应哈希索引（`innodb_adaptive_hash_index = OFF`），也可能是这个引起的
-3. 加强监控，不少事务活跃时间太久了，一直没提交。垃圾SQL（事务）长时间不结束，会占用更多资源，之后一起玩完。参考 [监控告警](../6-oper-guide/3-monitoring-and-alerting.md)。
-4. 可能系统层I/O设备有故障，能看到多个事务处于PREPARED状态，此时可能因为物理I/O设备故障导致无法提交/刷新数据。
+3. 加强监控，不少事务活跃时间太久了，一直没提交。垃圾 SQL（事务）长时间不结束，会占用更多资源，之后一起玩完。参考 [监控告警](../6-oper-guide/3-monitoring-and-alerting.md)。
+4. 可能系统层 I/O 设备有故障，能看到多个事务处于 PREPARED 状态，此时可能因为物理 I/O 设备故障导致无法提交/刷新数据。
 5. 最后建议升级到 GreatSQL 最新版本，相对更稳定可靠。
 
 

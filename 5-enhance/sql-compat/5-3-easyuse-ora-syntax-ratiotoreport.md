@@ -15,25 +15,25 @@ RATIO_TO_REPORT(expr)
 
 想要使用 `RATIO_TO_REPORT` 需要先切换到`ORACLE`模式下，`RATIO_TO_REPORT` 可用于数据占比分析，其分析公式为：`结果 = 字段值/sum(字段)`。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-在GreatSQL和Oracle中的 `RATIO_TO_REPORT` 用法一致，具体实现功能如下：
+在 GreatSQL 和 Oracle 中的 `RATIO_TO_REPORT` 用法一致，具体实现功能如下：
 
 1. `RATIO_TO_REPORT(expr) OVER (query_partition_clause)` 对分组数据进行占比分析。
 
 2. `RATIO_TO_REPORT(expr) OVER ()` 对所有数据进行占比分析。
 
-3. 在Oracle中不支持字符值使用 `RATIO_TO_REPORT`，但因GreatSQL中会自动隐式转换，支持这么用。
+3. 在 Oracle 中不支持字符值使用 `RATIO_TO_REPORT`，但因 GreatSQL 中会自动隐式转换，支持这么用。
 
-4. 在GreatSQL中不支持`ENUM`、`SET`、`JSON`、`GEOMETRY`、时间等多个类型数据使用 `RATIO_TO_REPORT`。
+4. 在 GreatSQL 中不支持`ENUM`、`SET`、`JSON`、`GEOMETRY`、时间等多个类型数据使用 `RATIO_TO_REPORT`。
 
 5. `RATIO_TO_REPORT` 分析的结果小数位数为该字段的小数位加上系统参数 `@@div_precision_increment` 的和。
 
-6. 字段值为`NULL`、`''`及**相加和为0**等几种情况下，`RATIO_TO_REPORT` 的结果为 `NULL`。
+6. 字段值为`NULL`、`''`及**相加和为 0**等几种情况下，`RATIO_TO_REPORT` 的结果为 `NULL`。
 
-7. 在GreatSQL中支持 `BIT` 类型字段用于 `RATIO_TO_REPORT`。
+7. 在 GreatSQL 中支持 `BIT` 类型字段用于 `RATIO_TO_REPORT`。
 
-8. 当于计算时数值过大产生溢出的情况，将按照GreatSQL原生的方式来处理。
+8. 当于计算时数值过大产生溢出的情况，将按照 GreatSQL 原生的方式来处理。
 
 
 ## 4. 示例
@@ -120,7 +120,7 @@ greatsql> SELECT sidec, sidea, RATIO_TO_REPORT(sidec) OVER () c FROM t1;
 6 rows in set (0.01 sec)
 ```
 
-- 3. 字段相加的和为0
+- 3. 字段相加的和为 0
 
 ```
 -- 再新写入两条记录

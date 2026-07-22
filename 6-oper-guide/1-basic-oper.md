@@ -5,9 +5,9 @@
 
 ##  服务管理
 
-无论是RPM、二进制包还是Ansible等何种方式安装GreatSQL，都建议采用 systemd 来管理 GreatSQL 服务。在Docker容器环境中，无需利用systemd来管理GreatSQL，直接整个容器启停即可。
+无论是 RPM、二进制包还是 Ansible 等何种方式安装 GreatSQL，都建议采用 systemd 来管理 GreatSQL 服务。在 Docker 容器环境中，无需利用 systemd 来管理 GreatSQL，直接整个容器启停即可。
 
-如果是RPM包方式安装GreatSQL，则服务名为 `mysqld`，如果采用二进制包和Ansible方式安装，则服务名为 `greatsql`。为了方便，本文中统一约定为 `greatsql`。
+如果是 RPM 包方式安装 GreatSQL，则服务名为 `mysqld`，如果采用二进制包和 Ansible 方式安装，则服务名为 `greatsql`。为了方便，本文中统一约定为 `greatsql`。
 
 **启动服务**
 ```bash
@@ -34,13 +34,13 @@ systemctl status greatsql
 journalctl -ex
 ```
 
-更多关于利用 systemd 管理 GreatSQL 服务的内容请参考：[利用systemd管理GreatSQL](../4-install-guide/8-greatsql-with-systemd.md)。
+更多关于利用 systemd 管理 GreatSQL 服务的内容请参考：[利用 systemd 管理 GreatSQL](../4-install-guide/8-greatsql-with-systemd.md)。
 
 ##  修改参数选项
 
-### SQL命令行修改并立即生效
+### SQL 命令行修改并立即生效
 
-可以通过SQL命令在线修改GreatSQL中的大多数参数选项并立即生效。
+可以通过 SQL 命令在线修改 GreatSQL 中的大多数参数选项并立即生效。
 
 首先，查看要修改的参数选项当前值：
 ```sql
@@ -52,7 +52,7 @@ greatsql> SHOW GLOBAL VARIABLES LIKE 'innodb_buffer_pool_size';
 +-------------------------+------------+
 ```
 
-执行SET命令修改该选项值：
+执行 `SET` 命令修改该选项值：
 ```sql
 -- 修改为8G
 greatsql> SET GLOBAL innodb_buffer_pool_size = 8589934592;
@@ -85,7 +85,7 @@ greatsql> SHOW GLOBAL VARIABLES LIKE 'innodb_buffer_pool_size';
 
 这样就不担心只修改当前值而忘记修改 `my.cnf` 中的选项值了。
 
-不过也可能DBA在排查问题时，只记得查看 `my.cnf` 文件，而忘记检查 `mysqld-auto.cnf` 文件，这个也要注意下。
+不过也可能 DBA 在排查问题时，只记得查看 `my.cnf` 文件，而忘记检查 `mysqld-auto.cnf` 文件，这个也要注意下。
 
 ### 只修改选项值，重启后生效
 
@@ -124,26 +124,26 @@ $ grep innodb_buffer_pool_size /data/GreatSQL/mysqld-auto.cnf
 
 ### 日志管理
 
-数据库运行期间，会生成各种日志，包括 [通用日志（general log）](../2-about-greatsql/4-7-greatsql-general-log.md)、[错误日志（error log）](../2-about-greatsql/4-1-greatsql-error-log.md)、[慢查询日志（slow query log）](../2-about-greatsql/4-2-greatsql-slow-log.md)、[二进制日志（binary log）](../2-about-greatsql/4-3-greatsql-binary-log.md)、[中继日志（relay log）](../2-about-greatsql/4-4-greatsql-relay-log.md) 等。
+数据库运行期间，会生成各种日志，包括 [通用日志（general log）](../2-about-greatsql/4-7-greatsql-general-log.md)、[错误日志（error log）](../2-about-greatsql/4-1-greatsql-error-log.md)、[慢查询日志（slow query log）](../2-about-greatsql/4-2-greatsql-slow-log.md)、[二进制日志（binary log）](../2-about-greatsql/4-3-greatsql-binary-log.md)、[中继日志（Relay Log）](../2-about-greatsql/4-4-greatsql-relay-log.md) 等。
 
-默认情况下，只会启用error log、binary log、relay log，而general log、slow query log则默认不会启用。
+默认情况下，只会启用 error log、binary log、Relay Log，而 general log、slow query log 则默认不会启用。
 
-此外，还有InnoDB存储引擎层的 [redo log（重做日志）](../2-about-greatsql/4-5-greatsql-redo-log.md) 和 [undo log（撤销日志）](../2-about-greatsql/4-6-greatsql-undo-log.md)。
+此外，还有 InnoDB 存储引擎层的 [redo log（重做日志）](../2-about-greatsql/4-5-greatsql-redo-log.md) 和 [undo log（撤销日志）](../2-about-greatsql/4-6-greatsql-undo-log.md)。
 
 | 日志 | 简述 |
 | --- | --- |
-| binary log | 简称binlog，记录对数据库的各种变更操作，主要用于数据库复制和数据恢复 |
+| binary log | 简称 binlog，记录对数据库的各种变更操作，主要用于数据库复制和数据恢复 |
 | error log | 记录 MySQL 启动、运行及停止过程中产生的各种错误信息，便于排查故障 |
-| slow query log | 记录被认定为慢查询类型的SQL语句 |
+| slow query log | 记录被认定为慢查询类型的 SQL 语句 |
 | relay log | 主从复制过程中，从节点上的转储日志，用于从节点应用数据库变更操作，以保持和主节点的数据一致 |
-| general log | 详细记录连接建立和执行的所有SQL语句，通常临时打开用于故障排查或SQL审计 |
-| redo log | InnoDB引擎记录数据页修改的日志，遵循WAL原则，用于保障数据库的crash safe，同时也用于在线热备 |
+| general log | 详细记录连接建立和执行的所有 SQL 语句，通常临时打开用于故障排查或 SQL 审计 |
+| redo log | InnoDB 引擎记录数据页修改的日志，遵循 WAL 原则，用于保障数据库的 crash safe，同时也用于在线热备 |
 | undo log | 记录数据变更前的信息，主要用于事务回滚，同时也用于多版本并发控制 |
 
-### 清理binlog
+### 清理 binlog
 
-数据库运行过程中，随着用户对数据库不断执行各种操作，binlog会不断增加，默认设置是30天（`binlog_expire_logs_seconds
-= 2592000`）才会自动清理，因此当可用磁盘空间较为紧张时，就需要手动执行清理binlog操作。例如：
+数据库运行过程中，随着用户对数据库不断执行各种操作，binlog 会不断增加，默认设置是30天（`binlog_expire_logs_seconds
+= 2592000`）才会自动清理，因此当可用磁盘空间较为紧张时，就需要手动执行清理 binlog 操作。例如：
 ```sql
 -- 列出当前所有binlog
 greatsql> SHOW BINARY LOGS;
@@ -182,14 +182,14 @@ greatsql> SET PERSIST binlog_expire_logs_seconds = 604800;
 ```
 
 ::: warning 警告
-清理binlog前，请务必记得做好备份，避免影响后续的数据库恢复需要。
+清理 binlog 前，请务必记得做好备份，避免影响后续的数据库恢复需要。
 :::
 
-### 清理slow query log
+### 清理 slow query log
 
-当启用记录slow query log时，可能会因为业务压力较大，或者因为`long_query_time`阈值设置太低，或者因为设置了`log_queries_not_using_indexes = ON`而记录大量无索引SQL请求，最终导致slow query log文件过大，也需要定期检查清理。
+当启用记录 slow query log 时，可能会因为业务压力较大，或者因为 `long_query_time` 阈值设置太低，或者因为设置了 `log_queries_not_using_indexes = ON` 而记录大量无索引 SQL 请求，最终导致 slow query log 文件过大，也需要定期检查清理。
 
-下面是适用于大多数业务场景的slow query log设置参考：
+下面是适用于大多数业务场景的 slow query log 设置参考：
 ```ini
 [mysqld]
 slow_query_log = 1
@@ -204,21 +204,21 @@ log_slow_admin_statements = 1
 log_slow_replica_statements = 1
 ```
 
-可以执行下面的命令清理slow query log，清理前也记得先做好备份：
+可以执行下面的命令清理 slow query log，清理前也记得先做好备份：
 ```bash
 cp slow.log slow.log-`date +%Y%m%d`
 echo '' > slow.log
 ```
 
-再连接进入GreatSQL，执行SQL命令
+再连接进入 GreatSQL，执行 SQL 命令
 ```sql
 FLUSH SLOW LOGS;
 ```
-这样就可以清空slow query log了。
+这样就可以清空 slow query log 了。
 
-### 清理general log/error log
+### 清理 general log / error log
 
-和清理slow query log差不多，也是先做好日志文件备份，然后执行SQL命令：
+和清理 slow query log 差不多，也是先做好日志文件备份，然后执行 SQL 命令：
 ```sql
 FLUSH GENERAL LOGS;
 FLUSH ERROR LOGS;
@@ -230,14 +230,14 @@ FLUSH ERROR LOGS;
 
 通常来说，生产环境中的数据表是无需维护的，除非出现以下几种情况：
 
-- 索引统计信息存在严重偏差，影响SQL执行计划。
-- 数据表存在大量碎片/空洞，极可能导致该表物理I/O效率降低。
+- 索引统计信息存在严重偏差，影响 SQL 执行计划。
+- 数据表存在大量碎片/空洞，极可能导致该表物理 I/O 效率降低。
 
 针对上述两种情况，我们可以定期对数据表进行必要的维护工作。
 
 1. 更新索引统计信息
 
-首先，执行下面的SQL，找到那些可能存在索引统计信息不准确的表：
+首先，执行下面的 SQL，找到那些可能存在索引统计信息不准确的表：
 
 ::: tip 工作方式
 
@@ -325,7 +325,7 @@ ORDER BY stat_pct;
 +---------------+-------------------+--------------+--------+--------+----------+
 ```
 
-当然了，在检查分析业务SQL时，通常也会查看其执行计划，如果发现个别SQL执行计划不如预期，也可能是索引统计信息不准确导致，这时也可以人工确认下。
+当然了，在检查分析业务 SQL 时，通常也会查看其执行计划，如果发现个别 SQL 执行计划不如预期，也可能是索引统计信息不准确导致，这时也可以人工确认下。
 
 在业务负载低谷时段执行下面的命令更新索引统计信息：
 ```sql
@@ -340,13 +340,13 @@ greatsql> ANALYZE TABLE t1;
 
 正常情况下，上述维护命令执行很快就能跑完。
 
-不过当该表已被加上MDL锁，则会被阻塞，所以执行前最好检查下。
+不过当该表已被加上 MDL 锁，则会被阻塞，所以执行前最好检查下。
 
 执行 `ANALYZE TABLE` 期间会对数据表加上只读锁，因为还需要将该表从 `table definition cache` 中移除，所以还需要加上 `FLUSH` 锁。
 
-MySQL 8.0.24之前，如果该表上有请求还未结束，这时候再执行 `ANALYZE TABLE`，那么之后对该表的其他请求也会被阻塞，这个情况在8.0.24之后得到解决。
+MySQL 8.0.24 之前，如果该表上有请求还未结束，这时候再执行 `ANALYZE TABLE`，那么之后对该表的其他请求也会被阻塞，这个情况在 8.0.24 之后得到解决。
 
-另外，执行 `ANALYZE TABLE` 操作还会写入binlog，所以从节点也会跟着做一遍。如果不想让其写入binlog，可以加上 `NO_WRITE_TO_BINLOG` 关键字。
+另外，执行 `ANALYZE TABLE` 操作还会写入 binlog，所以从节点也会跟着做一遍。如果不想让其写入 binlog，可以加上 `NO_WRITE_TO_BINLOG` 关键字。
 
 参考文档：
 
@@ -355,11 +355,11 @@ MySQL 8.0.24之前，如果该表上有请求还未结束，这时候再执行 `
 
 2. 重整数据表消除碎片
 
-线上生产环境中的数据表，可能因为表结构设计不合理，或者在经过长时间随机写请求后，产生大量碎片，极可能导致该表物理I/O效率降低。
+线上生产环境中的数据表，可能因为表结构设计不合理，或者在经过长时间随机写请求后，产生大量碎片，极可能导致该表物理 I/O 效率降低。
 
 如果碎片率特别高，而且对性能影响也的确特别严重的话，就需要重整表空间消除碎片了。
 
-首先，执行下面的SQL命令查看哪些表碎片率可能较高：
+首先，执行下面的 SQL 命令查看哪些表碎片率可能较高：
 ```sql
 greatsql> SELECT TABLE_SCHEMA as `db`, TABLE_NAME as `tbl`, 
   1-(TABLE_ROWS*AVG_ROW_LENGTH)/(DATA_LENGTH + INDEX_LENGTH + DATA_FREE) AS `fragment_pct`,
@@ -378,7 +378,7 @@ greatsql> SELECT TABLE_SCHEMA as `db`, TABLE_NAME as `tbl`,
 
 查询结果以碎片率倒序排序，排在前面的碎片率更高。当然了，如果表的数据量很少，可能会导致这个统计不准确，也要识别下。
 
-如果表数据量较小，或者表空间文件较小，则可以直接执行下面的SQL命令重整表空间消除碎片：
+如果表数据量较小，或者表空间文件较小，则可以直接执行下面的 SQL 命令重整表空间消除碎片：
 ```sql
 ALTER TABLE sbtest1 ENGINE = innodb;
 ```
@@ -426,10 +426,10 @@ Successfully altered `greatsql`.`sbtest1`.
 
 - [mysql-toolkit-sql](https://github.com/zhishutech/mysqldba/blob/master/mysql-tools/mysql-toolkit-sql.md)
 - [check_mysql.py](https://github.com/zhishutech/mysqldba/blob/master/mysql-tools/check_mysql.py)
-- [MySQL巡检怎么做](https://github.com/zhishutech/mysqldba/blob/master/mysql-tools/MySQL%E5%B7%A1%E6%A3%80%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F.md)
+- [MySQL 巡检怎么做](https://github.com/zhishutech/mysqldba/blob/master/mysql-tools/MySQL%E5%B7%A1%E6%A3%80%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F.md)
 
-### 配置GreatSQL客户端
-推荐采用下面的GreatSQL客户端配置参数：
+### 配置 GreatSQL 客户端
+推荐采用下面的 GreatSQL 客户端配置参数：
 ```ini
 [mysql]
 loose-skip-binary-as-hex
@@ -438,9 +438,9 @@ no-auto-rehash
 [mysqld]
 ...
 ```
-其中，`no-auto-rehash`尤其重要，可以有效提高登录效率。
+其中，`no-auto-rehash` 尤其重要，可以有效提高登录效率。
 
-因为GreatSQL客户端程序每次登录时，默认都会读取所有数据对象元数据信息，如果当前实例中，数据库对象特别多的话这个过程就会特别慢，甚至有时候还会导致发生MDL锁等待。
+因为 GreatSQL 客户端程序每次登录时，默认都会读取所有数据对象元数据信息，如果当前实例中，数据库对象特别多的话这个过程就会特别慢，甚至有时候还会导致发生 MDL 锁等待。
 
 更多关于客户端配置参数请参考：[客户端的进阶操作](https://mp.weixin.qq.com/s/dM_Kr23h-yXo61uSf8uPNQ)
 

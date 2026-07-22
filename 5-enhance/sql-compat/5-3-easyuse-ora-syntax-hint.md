@@ -1,13 +1,13 @@
-# Oracle兼容-语法-Oracle HINT
+# Oracle 兼容-语法-Oracle HINT
 ---
 
 
 
 ## 1. 语法
 
-在SQL语句中，`HINT` 语法采用 `/*+ ... */` 包含起来，有以下几种不同用法。
+在 SQL 语句中，`HINT` 语法采用 `/*+ ... */` 包含起来，有以下几种不同用法。
 
-- 1. 在DML语句的前部
+- 1. 在 DML 语句的前部
 
 ```sql
 SELECT /*+ hint_name */ ...
@@ -34,7 +34,7 @@ EXPLAIN UPDATE ... WHERE x IN (SELECT /*+ hint_name */ ...)
 
 ## 2. 定义和用法
 
-在GreatSQL中支持数个Oracle风格的HINT语法。
+在 GreatSQL 中支持数个 Oracle 风格的 HINT 语法。
 
 |序号    | GreatSQL                   | Oracle                                    |
 | ---- | -------------------------- | ----------------------------------------- |
@@ -49,7 +49,7 @@ EXPLAIN UPDATE ... WHERE x IN (SELECT /*+ hint_name */ ...)
 | 9    | SKIP_SCAN, NO_SKIP_SCAN   | INDEX_SS, NO_INDEX_SS                     |
 
 
-GreatSQL与Oracle同名对应 `HINT` 有序号 2（`INDEX`、`NO_INDEX`）、6（`MERGE`、`NO_MERGE`）、8（`SEMIJOIN`、`NO_SEMIJOIN`）三个，其余的名字虽然不同或接近，但功能是一样的。
+GreatSQL 与 Oracle 同名对应 `HINT` 有序号 2（`INDEX`、`NO_INDEX`）、6（`MERGE`、`NO_MERGE`）、8（`SEMIJOIN`、`NO_SEMIJOIN`）三个，其余的名字虽然不同或接近，但功能是一样的。
 
 ## 3. 示例
 
@@ -114,7 +114,7 @@ greatsql> DELIMITER ;
 greatsql> CALL fill_t0(10000);
 ```
 
-- 5. 建测试测试表t1,t2,t3,并插入数据
+- 5. 建测试测试表 t1,t2,t3,并插入数据
 
 ```sql
 greatsql> CREATE TABLE t1 (t1_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, t1_val INT UNSIGNED, t1_str VARCHAR(300));

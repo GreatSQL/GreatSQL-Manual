@@ -133,7 +133,7 @@ pt-query-digest /data/GreatSQL/slow.log > /tmp/slow-digest.txt
 
 ```log
 # Profile
-/* 排名、SQL语句ID/标识符、响应总耗时、占比、总请求数、平均每次请求耗时、响应时间Variance-to-mean的比率、SQL语句 */
+/* 排名、SQL 语句ID/标识符、响应总耗时、占比、总请求数、平均每次请求耗时、响应时间Variance-to-mean的比率、SQL 语句 */
 # Rank Query ID           Response time    Calls R/Call V/M   Item
 # ==== ================== ================ ===== ====== ===== ============
 #    1 0xCBFFFDC5A18B5CD4 13077.1621 35.2% 14945 0.8750  0.44 UPDATE wp_statistics_visit

@@ -1,4 +1,4 @@
-# Oracle兼容-语法-SELECT ... FOR UPDATE WAIT n
+# Oracle 兼容-语法-SELECT ... FOR UPDATE WAIT n
 ---
 
 
@@ -10,29 +10,29 @@ SELECT ... FOR UPDATE ... WAIT n
 
 ## 2. 定义和用法
 
-`SELECT ... FOR UPDATE ... WAIT n` 语句的作用是查询数据并加锁，在申请加锁时，如果不能立即获取行锁资源，则可以指定最多等待的时长。当等待n秒后仍未获得锁，会报告语句执行失败。如果该行没有被锁定，那么会马上返回结果而不需要等待。
+`SELECT ... FOR UPDATE ... WAIT n` 语句的作用是查询数据并加锁，在申请加锁时，如果不能立即获取行锁资源，则可以指定最多等待的时长。当等待 n 秒后仍未获得锁，会报告语句执行失败。如果该行没有被锁定，那么会马上返回结果而不需要等待。
 
 关于参数 `n` 的说明：
 
-1. 子句 `WAIT n`中，参数 `n` 的取值范围为：[0, 31536000]，即最久等待1年。
+1. 子句 `WAIT n`中，参数 `n` 的取值范围为：[0, 31536000]，即最久等待 1 年。
 
 2. 当加锁等待时长参数 `n` 比 `innodb_lock_wait_timeout` 选项值更大时，以后者为准。
 
-3. 等待总时长不包括SQL解析等时间，因此实际等待时间可能会大于n秒。
+3. 等待总时长不包括 SQL 解析等时间，因此实际等待时间可能会大于 n 秒。
 
-在GreatSQL中，由于行锁机制和Oracle不同，因此在实际加锁时，是锁定整行数据，无法像Oracle那样只锁定指定的列，不锁定其他列。也就是说，本语法只是兼容Oracle风格用法，实际行锁加锁还和GreatSQL原生行锁机制一样。
+在 GreatSQL 中，由于行锁机制和 Oracle 不同，因此在实际加锁时，是锁定整行数据，无法像 Oracle 那样只锁定指定的列，不锁定其他列。也就是说，本语法只是兼容 Oracle 风格用法，实际行锁加锁还和 GreatSQL 原生行锁机制一样。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-本语法和在Oracle中区别有以下几点：
+本语法和在 Oracle 中区别有以下几点：
 
-1. 在Oracle中无论 `WHERE` 条件是不是索引列，都只会锁定满足条件的数据行；而在GreatSQL中如果非索引列则会锁定全部数据行，在上面已有阐述。
+1. 在 Oracle 中无论 `WHERE` 条件是不是索引列，都只会锁定满足条件的数据行；而在 GreatSQL 中如果非索引列则会锁定全部数据行，在上面已有阐述。
 
 2. 参数 `n` 只支持正整数，其他值会报错。
 
-3. 在Oracle中不支持类似 `SELECT * FROM (SELECT * FROM t1 FOR UPDATE WAIT 1000000) FOR UPDATE WAIT 1` 这种语句；在GreatSQL中，为了兼容原生功能，支持这种语句用法，等待时长以最后一个时间为准（在本案例中即1秒）。但类似 `SELECT * FROM (SELECT * FROM t1 FOR UPDATE WAIT 10) FOR UPDATE NOWAIT` 这种只有一个 `WAIT n` 的语句，则以派生表的动作为准（在本案例中会等待10秒，而不是执行 `NOWAIT` 逻辑）。
+3. 在 Oracle 中不支持类似 `SELECT * FROM (SELECT * FROM t1 FOR UPDATE WAIT 1000000) FOR UPDATE WAIT 1` 这种语句；在 GreatSQL 中，为了兼容原生功能，支持这种语句用法，等待时长以最后一个时间为准（在本案例中即 1 秒）。但类似 `SELECT * FROM (SELECT * FROM t1 FOR UPDATE WAIT 10) FOR UPDATE NOWAIT` 这种只有一个 `WAIT n` 的语句，则以派生表的动作为准（在本案例中会等待 10 秒，而不是执行 `NOWAIT` 逻辑）。
 
-6. 在Oracle中不支持类似 `INSERT INTO t1 SELECT * FROM t1 FOR UPDATE WAIT 3` 这种用法；在GreatSQL中，为了兼容原生功能，也支持这种语句用法，该语句执行时如果遇到锁就等待3秒后再报错。
+6. 在 Oracle 中不支持类似 `INSERT INTO t1 SELECT * FROM t1 FOR UPDATE WAIT 3` 这种用法；在 GreatSQL 中，为了兼容原生功能，也支持这种语句用法，该语句执行时如果遇到锁就等待 3 秒后再报错。
 
 
 ## 4. 示例
@@ -64,7 +64,7 @@ greatsql> SELECT * FROM t2;
 3 rows in set (0.00 sec)
 ```
 
-- 1. 用法1：`FOR UPDATE WAIT n` 。
+- 1. 用法 1：`FOR UPDATE WAIT n` 。
 
 ```
 -- 先切换到ORACLE模式
@@ -84,7 +84,7 @@ greatsql> SELECT * FROM t1 WHERE c1=10 FOR UPDATE WAIT 3;
 ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction
 ```
 
-- 2. 用法2：`FOR UPDATE OF table.column WAIT n`。
+- 2. 用法 2：`FOR UPDATE OF table.column WAIT n`。
 
 ```
 greatsql> SET sql_mode = ORACLE;

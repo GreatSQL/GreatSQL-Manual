@@ -23,7 +23,7 @@ Undo Log（撤销日志）是 InnoDB 存储引擎用来保证事务的一致性�
 这些为了事务回滚而记录的数据，在数据库中称之为 **撤销日志** 或 **回滚日志**，在本文统称为 **Undo Log**。
 
 ::: tip 小贴士
-只读操作 `SELECT` 并不会修改用户数据，所以它不需要记录相应的 Undo 日志。
+只读操作 `SELECT` 并不会修改用户数据，所以它不需要记录相应的 Undo Log。
 :::
 
 ## Undo 表空间
@@ -63,7 +63,7 @@ CREATE UNDO TABLESPACE greatsql_undo_001 ADD DATAFILE 'greatsql_undo_001.ibu';
 在删除之前，需要先将打算删除的 Undo 表空间设置为 inactive（不活跃），就不会再有新的事务分配到这个表空间，待到所有活跃事务都结束后，Purge 线程也清理相关的回滚段后，它就可以将其删除了。
 
 ```sql
--- 查看当前都有哪些Undo表空间文件
+-- 查看当前都有哪些 Undo 表空间文件
 greatsql> SELECT FILE_ID, TABLESPACE_NAME, FILE_NAME, STATUS FROM INFORMATION_SCHEMA.FILES
           WHERE FILE_TYPE LIKE 'UNDO LOG';
 +------------+-------------------+-------------------------+--------+
@@ -123,7 +123,7 @@ SET GLOBAL innodb_undo_log_truncate=ON;
 
 Purge 线程的主要工作是清空释放 Undo 表空间，默认地，每进行 *128* 次 purge 工作后就会确认是否可以清理 Undo 表空间，这个频率由 `innodb_purge_rseg_truncate_frequency` 参数定义，默认值是 *128*，它可以在线动态调整。
 
-如果数据库服务器当前有大事务/长事务一直活跃，长时间没有结束（提交/回滚），或者有大量回滚段等待被清理，那么 Undo 日志文件可能会非常大，甚至能超过 TB 级别，例如：
+如果数据库服务器当前有大事务/长事务一直活跃，长时间没有结束（提交/回滚），或者有大量回滚段等待被清理，那么 Undo Log 文件可能会非常大，甚至能超过 TB 级别，例如：
 
 ```
 2.0T        undo_001
@@ -170,13 +170,13 @@ greatsql> SHOW STATUS LIKE 'Innodb_undo_tablespaces%';
 其中分别解释如下：
 
 - `Innodb_undo_tablespaces_total` 全部 Undo 表空间数目。
-- `Innodb_undo_tablespaces_implicit` 隐式创建（InnoDB初始化时创建）的 Undo 表空间数目。
+- `Innodb_undo_tablespaces_implicit` 隐式创建（InnoDB 初始化时创建）的 Undo 表空间数目。
 - `Innodb_undo_tablespaces_explicit` 显式创建（管理员手动创建）的 Undo 表空间数目。
 - `Innodb_undo_tablespaces_active` 当前活跃的 Undo 表空间数目。
 
 ## Undo Log 存储机制
 
-![Undo Log日志的存储机制](./4-6-greatsql-undo-log-01.png)
+![Undo Log 存储机制](./4-6-greatsql-undo-log-01.png)
 
 如上图，可以看到，Undo Log 里除了存储数据更新前的内容，还需要记录 *ROW_ID（6 字节的 DB_ROW_ID 或是聚集索引键值）*、*TRX_ID（6 字节，事务 ID）*、*ROLL_PTR（7 字节，回滚段指针）*。其中回滚指针总是指向同一条记录的上一个版本，最终会形成一条回滚链，方便找到该条记录的各个历史版本。
 
@@ -234,7 +234,7 @@ InnoDB page size 默认为 16 KB，因此一个回滚段里最多可以支持 10
 
 ### 回滚段与事务
 
-1. 每个事务只会分配到一个回滚段中，一个回滚段在同一时刻可能会服务于多个事务，回滚段和事务是 1对多 的关系。
+1. 每个事务只会分配到一个回滚段中，一个回滚段在同一时刻可能会服务于多个事务，回滚段和事务是 1 对多 的关系。
 
 2. 事务开始时，会分配到一个回滚段，事务过程中数据被修改时，修改前的原始数据会被复制到回滚段。
 
@@ -244,17 +244,17 @@ InnoDB page size 默认为 16 KB，因此一个回滚段里最多可以支持 10
 
 ### 事务中 Undo Log 和 Redo Log 协同
 
-假设有 2 条记录，分别为 A=1 和 B=2 ，在事务中分别修改为3、4。以下是 InnoDB 存储引擎在一个事务中 Undo + Redo 协同的简化过程如下：
+假设有 2 条记录，分别为 A=1 和 B=2 ，在事务中分别修改为 3、4。以下是 InnoDB 存储引擎在一个事务中 Undo + Redo 协同的简化过程如下：
 
 ```sql
 1. 开启事务
-2．记录 A=1 到 Undo Log
+2. 记录 A=1 到 Undo Log
 3. 更新 A=3
-4．记录 A=3 到 Redo Log
-5．记录 B=2 到 Undo Log
+4. 记录 A=3 到 Redo Log
+5. 记录 B=2 到 Undo Log
 6. 更新 B=4
-7．记录 B=4 到 Redo Log
-8．将 Redo Log 刷新到磁盘
+7. 记录 B=4 到 Redo Log
+8. 将 Redo Log 刷新到磁盘
 9. 提交事务
 ```
 
@@ -264,13 +264,13 @@ InnoDB page size 默认为 16 KB，因此一个回滚段里最多可以支持 10
 - 如果是在 8-9 之间发生宕机，则会
   - 扫描 Redo Log 进行恢复。
   - 扫描 Undo Log 发现有事务没完成进行回滚。
-- 若在 9 之后系统宕机，内存映射中变更的数据还来不及刷回磁盘，那么系统恢复之后，可以根据Redo Log把数据刷回磁盘。
+- 若在 9 之后系统宕机，内存映射中变更的数据还来不及刷回磁盘，那么系统恢复之后，可以根据 Redo Log 把数据刷回磁盘。
 
 ::: tip 小贴士
 InnoDB 在进行 crash recovery 时，会进一步检查 Redo Log 和 Binlog，判断该事务是否同时也已经写了 Binlog，是的话就会再次提交。如果一个事务在 Redo Log 中只处于 Prepare 状态，但 Binlog 还没写成功，那就会回滚。
 :::
 
-流程图：![Undo log刷盘流程](./4-6-greatsql-undo-log-03.png)
+流程图：![Undo Log 刷盘流程](./4-6-greatsql-undo-log-03.png)
 
 ## 相关参数变量
 

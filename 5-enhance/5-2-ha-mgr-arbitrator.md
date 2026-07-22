@@ -9,7 +9,7 @@ GreatSQL 中新增 Arbitrator 节点（仲裁节点/投票节点）角色，使�
 
 新增参数`group_replication_arbitrator`用于设置仲裁节点。
 
-若想设定某个成员节点为仲裁节点角色，在其他MGR相关参数已经配置好的前提下，在 `my.cnf` 配置文件中添加如下配置：
+若想设定某个成员节点为仲裁节点角色，在其他 MGR 相关参数已经配置好的前提下，在 `my.cnf` 配置文件中添加如下配置：
 
 ```ini
 [mysqld]

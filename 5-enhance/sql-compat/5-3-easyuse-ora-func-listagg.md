@@ -1,4 +1,4 @@
-# Oracle兼容-函数-LISTAGG()函数
+# Oracle 兼容-函数-LISTAGG()函数
 ---
 
 
@@ -18,7 +18,7 @@ query_partition_clause := ( PARTITION BY column_name [,...] )
 
 1. `measure_expr` 可以是列，常量或基于列的表达式。
 2. `delimiter` 分隔符，可以是 **''**、**字符串文字**、**数字**、**浮点**等。
-3. `order_by_clause` ORDER BY子句决定了列值被拼接的顺序。
+3. `order_by_clause` ORDER BY 子句决定了列值被拼接的顺序。
 4. 当 `ALL` 及 `DISTINCT` 都未指定时，视为 `ALL`。
 5. `OVER query_partition_clause` 不存在时，视为 **聚合（AGGREGATE）** 函数。反之，视为 **分析（ANALYTIC）** 函数。
 6. 目前不支持聚合类函数嵌套使用，例如：
@@ -27,15 +27,15 @@ greatsql> SELECT listagg(sum(id))  FROM t1 GROUP BY id;
 ERROR 1111 (HY000): Invalid use of group function
 ```
 
-## 3. Oracle兼容说明
-1. 在GreatSQL中的 `LISTAGG()` 函数语法参考 Oracle 19c 版本用法，与 Oracle 11g R2 版本的 `WITHIN GROUP` 用法部分有差异。
-2. 目前尚未支持 `LISTAGG OVERFLOW` 语法，仍沿用GreatSQL中的 `group_concat_max_len` 选项限制方式。
+## 3. Oracle 兼容说明
+1. 在 GreatSQL 中的 `LISTAGG()` 函数语法参考 Oracle 19c 版本用法，与 Oracle 11g R2 版本的 `WITHIN GROUP` 用法部分有差异。
+2. 目前尚未支持 `LISTAGG OVERFLOW` 语法，仍沿用 GreatSQL 中的 `group_concat_max_len` 选项限制方式。
 3. 分隔符 `delimiter` 目前只支持字符常量，不支持使用 session/global 设定或运算式（**注意：** 会将数字常量转换为字符常量，转换时可能会因浮点精度或格式问题，不一定如预期呈现，因此建议直接使用字符常量）。
 
 
 ## 4. 示例
 
-说明：GreatSQL中返回结果顺序与Oracle顺序可能会因为使用字符集不同存在排序差异。
+说明：GreatSQL 中返回结果顺序与 Oracle 顺序可能会因为使用字符集不同存在排序差异。
 
 ```sql
 -- 创建测试表，填充测试数据

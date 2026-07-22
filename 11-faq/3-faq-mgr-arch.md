@@ -1,4 +1,4 @@
-# FAQ - 基于MGR的架构方案
+# FAQ - 基于 MGR 的架构方案
 ---
 
 ## 1. GreatSQL 支持读写分离吗
@@ -29,9 +29,9 @@
 在这个架构下，两个 MGR 集群间是相互独立的，如果前端挂载 MySQL Router 的话，需要单独创建对应的连接。
 
 如果担心 MGR 节点因为发生切换，只要原来指向的 Master 没有退出 MGR 集群，则这个主从复制关系还是存在的，不受影响。如果担心原来的 Master 节点退出 MGR 集群而导致复制中断，则可以采用 MySQL 8.0.22 后推出的新特性 **Async Replication Auto failover** 来解决，把各节点都加到复制源中，可以参考下面的资料：
-- [金融应用场景下跨数据中心的MGR架构方案](https://mp.weixin.qq.com/s/A3yJUz6DNvCgIfqD78t_qQ)
+- [金融应用场景下跨数据中心的 MGR 架构方案](https://mp.weixin.qq.com/s/A3yJUz6DNvCgIfqD78t_qQ)
 - [Switching Sources and Replicas with Asynchronous Connection Failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html)
-- [视频：MGR是如何保障数据一致性的](https://www.bilibili.com/video/BV1NT4y1R7Zi)
+- [视频：MGR 是如何保障数据一致性的](https://www.bilibili.com/video/BV1NT4y1R7Zi)
 
 ## 5. MGR 可以像主从复制那样只启动两个节点吗
 MGR 在初始化启动时，是可以只启动两个节点，甚至只有一个节点，但是这样就失去 MGR 的意义了。**因为只要少于三个节点，就没办法进行多数派投票**，当发生网络故障等情况时，无法投票确认哪些节点该被踢出集群。

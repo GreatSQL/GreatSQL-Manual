@@ -184,9 +184,9 @@ return sqrt(dis)
 
 ### 参数规则
 
-* 参数1：VECTOR
-* 参数2：VECTOR
-* 参数3：distance type（可选）
+* 参数 1：VECTOR
+* 参数 2：VECTOR
+* 参数 3：distance type（可选）
 
 ---
 

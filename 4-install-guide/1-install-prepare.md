@@ -6,19 +6,19 @@
 GreatSQL 可以很好地部署和运行在 Intel 架构服务器环境、ARM 架构的服务器环境及主流虚拟化环境，并支持绝大多数的主流硬件网络。
 
 GreatSQL 支持以下几种安装方式：
-- RPM包
+- RPM 包
 - 二进制包
 - Docker
 - Ansible
 - 源码编译
 
-支持x86和ARM、鲲鹏、海光、龙芯等多种 CPU 架构平台。
+支持 x86 和 ARM、鲲鹏、海光、龙芯等多种 CPU 架构平台。
 
-支持CentOS、Ubuntu、统信、openEuler、龙蜥、麒麟等多种常见操作系统。
+支持 CentOS、Ubuntu、统信、openEuler、龙蜥、麒麟等多种常见操作系统。
 
 本章节文档若无特别说明，所有安装环境均是指 **CentOS 8.x x86_64 环境**。
 
-##  硬件环境
+## 硬件环境
 
 GreatSQL 支持部署和运行在 Intel x86_64 架构的 64 位通用硬件服务器平台或者 ARM 架构的硬件服务器平台。
 
@@ -58,11 +58,11 @@ GreatSQL 支持主流的 Linux 操作系统环境。
 | Kylin Linux | V10 及以上的版本 |
 
 ## 挂载数据库专用分区
-建议采用XFS文件系统的分区来存储 GreatSQL 数据库文件，其综合性能、可靠性、安全性、稳定性已经在大量线上场景中得到证实。
+建议采用 XFS 文件系统的分区来存储 GreatSQL 数据库文件，其综合性能、可靠性、安全性、稳定性已经在大量线上场景中得到证实。
 
 以 /dev/nvme0n1 数据盘为例，具体操作步骤如下：
 
-1. **将整个分区都格式化为xfs文件系统**
+1. **将整个分区都格式化为 xfs 文件系统**
 ```bash
 mkfs.xfs -f -L /data /dev/nvme0n1
 ```
@@ -86,7 +86,7 @@ $ mount | grep /data
 
 ## 关闭防火墙及 SELinux
 
-数据库服务器通常运行在内部网络，此外部署MGR时也需要对内网开放多个TCP端口，因此可以关闭防火墙及 SELinux 设置。
+数据库服务器通常运行在内部网络，此外部署 MGR 时也需要对内网开放多个 TCP 端口，因此可以关闭防火墙及 SELinux 设置。
 
 ::: tip 小贴士
 虽然数据部署在内部网络，但也要时刻警惕数据泄漏的风险，做好必要的安全防护措施。
@@ -103,7 +103,7 @@ setenforce 0
 sed -i 's/^SELINUX=.*/SELINUX=disabled/ig' /etc/selinux/config
 ```
 
-## 关闭swap
+## 关闭 swap
 
 运行 GreatSQL 建议配置足够的物理内存。如果内存不足，不建议使用 swap 作为缓冲，因为这会降低性能。建议永久关闭系统 swap。
 ```bash
@@ -116,9 +116,9 @@ sysctl -p
 对于 `vm.swappiness=0` 的设置，业内有以下两种不同看法。
 :::
 
-- 一种观点是：**不建议设置为0**，因为某种意义上存在风险，当系统内存不够用时，不会尝试去使用swap，而直接触发oom-kill机制，这可能会导致GreatSQL服务进程被kill，这在设置非双1的场景中可能会导致部分事务数据丢失。
+- 一种观点是：**不建议设置为 0**，因为某种意义上存在风险，当系统内存不够用时，不会尝试去使用 swap，而直接触发 oom-kill 机制，这可能会导致 GreatSQL 服务进程被 kill，这在设置非双 1 的场景中可能会导致部分事务数据丢失。
 
-- 另一种观点是：**建议设置为0**，因为当使用swap时，通常会导致数据库响应速度下降非常严重，对业务端体验非常差，这种情况下，不如直接kill或重启服务进程，避免引发雪崩效应。
+- 另一种观点是：**建议设置为 0**，因为当使用 swap 时，通常会导致数据库响应速度下降非常严重，对业务端体验非常差，这种情况下，不如直接 kill 或重启服务进程，避免引发雪崩效应。
 
 对于上述两种观点，请用户自行选择判断。
 
@@ -140,7 +140,7 @@ echo 'noop' > /sys/block/nvme0n1/queue/scheduler
 ```
 这样修改后立即生效，无需重启。
 
-2. **确认CPU性能模式设置**
+2. **确认 CPU 性能模式设置**
 
 先检查当前的设置模式
 ```bash
@@ -162,7 +162,7 @@ The governor "powersave" 表示 cpufreq 的节能策略使用 powersave，需要
 
 3. **关闭大页**
 
-建议关闭透明大页（Transparent Huge Pages / THP）。OLTP型数据库内存访问模式通常是稀疏的而非连续的。当高阶内存碎片化比较严重时，分配 THP 页面会出现较高的延迟，反而影响性能。
+建议关闭透明大页（Transparent Huge Pages / THP）。OLTP 型数据库内存访问模式通常是稀疏的而非连续的。当高阶内存碎片化比较严重时，分配 THP 页面会出现较高的延迟，反而影响性能。
 
 先检查当前设置：
 ```bash
@@ -198,9 +198,9 @@ echo "vm.overcommit_memory=1" >> /etc/sysctl.conf
 sysctl -p
 ```
 
-5. **修改mysql用户使用资源上限**
+5. **修改 mysql 用户使用资源上限**
 
-修改 `/etc/security/limits.conf` 系统文件，调高mysql系统账户的上限：
+修改 `/etc/security/limits.conf` 系统文件，调高 mysql 系统账户的上限：
 ```ini
 mysql           soft    nofile         65535
 mysql           hard    nofile         65535
@@ -210,14 +210,14 @@ mysql           soft    nproc          65535
 mysql           hard    nproc          65535
 ```
 
-6. **确认NUMA模式**
-推荐开启NUMA模式以获得更好的性能表现。
+6. **确认 NUMA 模式**
+推荐开启 NUMA 模式以获得更好的性能表现。
 
-开启NUMA并正确设置后，在某次测试中，OLTP性能提升约10% ~ 20%。
+开启 NUMA 并正确设置后，在某次测试中，OLTP 性能提升约 10% ~ 20%。
 
 从 GreatSQL 8.4.4-4 开始支持 [NUMA 亲和性优化](../5-enhance/5-1-highperf-numa-affinity.md)，对高负载场景下的性能优化也有帮助。
 
-以CentOS为例，打开 `/etc/default/grub` 文件，确保文件内容中没有 `NUMA=OFF` 字样，如果有的话就删掉：
+以 CentOS 为例，打开 `/etc/default/grub` 文件，确保文件内容中没有 `NUMA=OFF` 字样，如果有的话就删掉：
 ```ini
 GRUB_TIMEOUT=5
 GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
@@ -229,38 +229,38 @@ GRUB_CMDLINE_LINUX="crashkernel=auto spectre_v2=retpoline rhgb quiet"
 GRUB_DISABLE_RECOVERY="true"
 ```
 
-如果修改了 `/etc/default/grub` 文件，需要重新生成UEFI启动文件：
+如果修改了 `/etc/default/grub` 文件，需要重新生成 UEFI 启动文件：
 ```
 grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
 ```
 
 然后重启操作系统，使之生效。
 
-操作系统层开启NUMA后，还要记得修改GreatSQL配置选项 `innodb_numa_interleave=ON`，确保InnoDB在分配内存时使用正确的NUMA策略。
+操作系统层开启 NUMA 后，还要记得修改 GreatSQL 配置选项 `innodb_numa_interleave=ON`，确保 InnoDB 在分配内存时使用正确的 NUMA 策略。
 
-如果采用手动方式启动GreatSQL服务进程，还可以在启动时加上 `numactl --interleave=all`，例如：
+如果采用手动方式启动 GreatSQL 服务进程，还可以在启动时加上 `numactl --interleave=all`，例如：
 ```bash
 numactl --interleave=all /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld &
 ```
 
-如果采用 `systemd` 来启动 GreatSQL服务进程，则可以修改 `/etc/systemd/system.conf` 配置文件，在 *[Manager]* 这个区间内增加一行：
+如果采用 `systemd` 来启动 GreatSQL 服务进程，则可以修改 `/etc/systemd/system.conf` 配置文件，在 *[Manager]* 这个区间内增加一行：
 ```ini
 NUMAPolicy=interleave
 ```
-修改完毕后，重新加载 `systemd` 配置，确保NUMA策略生效：
+修改完毕后，重新加载 `systemd` 配置，确保 NUMA 策略生效：
 ```bash
 systemctl daemon-reload
 ```
 
 ## 其他
 
-- **配置正确的yum源，并提前安装一些依赖包**
+- **配置正确的 yum 源，并提前安装一些依赖包**
 
-要确认yum源可用，因为安装GreatSQL时还要先安装其他依赖包，通过yum安装最省事。
+要确认 yum 源可用，因为安装 GreatSQL 时还要先安装其他依赖包，通过 yum 安装最省事。
 
-如果需要配置yum源，可以参考[这篇文档](https://developer.aliyun.com/mirror/centos)。
+如果需要配置 yum 源，可以参考[这篇文档](https://developer.aliyun.com/mirror/centos)。
 
-安装GreatSQL RPM包时，要先安装这些相关依赖包。
+安装 GreatSQL RPM 包时，要先安装这些相关依赖包。
 ```bash
 yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
 ```
@@ -279,7 +279,7 @@ $ ls -la /usr/lib64/libjemalloc.so*
 lrwxrwxrwx 1 root root     16 Oct  2  2019 /usr/lib64/libjemalloc.so -> libjemalloc.so.2
 -rwxr-xr-x 1 root root 608096 Oct  2  2019 /usr/lib64/libjemalloc.so.2
 ```
-这样在用systemd方式启动GreatSQL时就会加载 `jemalloc` 动态库了，可以用下面的方法查看确认：
+这样在用 systemd 方式启动 GreatSQL 时就会加载 `jemalloc` 动态库了，可以用下面的方法查看确认：
 
 ```bash
 $ lsof -p 43653 | grep -i jema
@@ -290,29 +290,29 @@ mysqld  52003 mysql  mem       REG              253,0     608096   68994440 /usr
 ```
 
 ::: tip 提醒
-用systemd方式启动GreatSQL时，要确保服务文件中已配置 `EnvironmentFile=-/etc/sysconfig/mysql` 参数，详情参考：[利用systemd管理GreatSQL](./8-greatsql-with-systemd.md#编辑systemd服务配置脚本)。
+用 systemd 方式启动 GreatSQL 时，要确保服务文件中已配置 `EnvironmentFile=-/etc/sysconfig/mysql` 参数，详情参考：[利用 systemd 管理 GreatSQL](./8-greatsql-with-systemd.md#编辑-systemd-服务配置脚本)。
 
-如果是用其他方式启动GreatSQL的话，可以在启动前在终端命令行模式下执行 `export LD_PRELOAD=/usr/lib64/libjemalloc.so`，使得GreatSQL启动时能加载jemalloc库。
+如果是用其他方式启动 GreatSQL 的话，可以在启动前在终端命令行模式下执行 `export LD_PRELOAD=/usr/lib64/libjemalloc.so`，使得 GreatSQL 启动时能加载 jemalloc 库。
 :::
 
-建议采用Jemalloc代替glibc自带的malloc库，其优势在于减少内存碎片和提升高并发场景下内存的分配效率，提高内存管理效率的同时还能降低数据库运行时发生OOM的风险。
+建议采用 Jemalloc 代替 glibc 自带的 malloc 库，其优势在于减少内存碎片和提升高并发场景下内存的分配效率，提高内存管理效率的同时还能降低数据库运行时发生 OOM 的风险。
 
-如果是ARM环境下，可以不必安装配置上述 jemalloc 依赖。
+如果是 ARM 环境下，可以不必安装配置上述 jemalloc 依赖。
 
-- **配置正确的NTP服务**
+- **配置正确的 NTP 服务**
 
-构建MGR需要由多节点组成，各节点间要保证时间同步。
+构建 MGR 需要由多节点组成，各节点间要保证时间同步。
 
 通常采用 NTP 服务来保证时间同步，具体解决方案可参考这篇文档：[How to configure NTP server on RHEL 8 / CentOS 8 Linux](https://linuxconfig.org/redhat-8-configure-ntp-server)。
 
 - **安装其他常用辅助工具包**
 
-建议提前安装DBA常用的辅助工具包：
+建议提前安装 DBA 常用的辅助工具包：
 ```bash
 yum install -y net-tools perf sysstat iotop tmux
 ```
 
-安装完 `sysstat` 包之后，编辑文件 `/etc/cron.d/sysstat`，修改sysstat运行频率（将原先每10分钟运行调整为每1分钟运行）：
+安装完 `sysstat` 包之后，编辑文件 `/etc/cron.d/sysstat`，修改 sysstat 运行频率（将原先每 10 分钟运行调整为每 1 分钟运行）：
 ```ini
 #*/10 * * * * root  /usr/lib64/sa/sa1 1 1
 */1 * * * * root  /usr/lib64/sa/sa1 1 1

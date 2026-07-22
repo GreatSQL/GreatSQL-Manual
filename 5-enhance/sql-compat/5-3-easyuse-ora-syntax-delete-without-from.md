@@ -1,8 +1,8 @@
-# Oracle兼容-语法-DELETE不带FROM
+# Oracle 兼容-语法-DELETE 不带 FROM
 ---
 
 
-GreatSQL在ORACLE模式下支持DELETE不带FROM的语法。
+GreatSQL 在 ORACLE 模式下支持 DELETE 不带 FROM 的语法。
 
 ## 1. 语法
 

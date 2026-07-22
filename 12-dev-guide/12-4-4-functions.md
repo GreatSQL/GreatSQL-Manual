@@ -643,7 +643,7 @@ greatsql> SELECT IFNULL(NULL,20);
 +-----------------+
 1 row in set (0.00 sec)
 ```
-### CASE函数
+### CASE 函数
 作用是根据条件判断结果，返回不同的值。
 
 格式为：CASE WHEN 条件 1 THEN 结果 1 ELSEIF 条件 2 THEN 结果 2 ... ELSE 结果 n END。

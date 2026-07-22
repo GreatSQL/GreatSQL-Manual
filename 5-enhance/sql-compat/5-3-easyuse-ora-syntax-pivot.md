@@ -44,7 +44,7 @@ pivot_in_clause:
 5. `select_expr` 只能使用隐式分组用到的字段以及 `pivot_in_clause` 中交叉聚合后生成的列。
 6. 可以有多个 `aggregate_function`，但只允许有一个 `aggregate_function` 不指定别名，且 `aggregate_function` 不支持 `GROUP_CONCAT()` 和 `WM_CONCAT()` 函数。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
 - 不支持 `XML with ANY` 和 `XML with Subquery` 语法
 

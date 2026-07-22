@@ -1,4 +1,4 @@
-# Oracle兼容-语法-EXECUTE IMMEDIATE
+# Oracle 兼容-语法-EXECUTE IMMEDIATE
 ---
 
 
@@ -36,7 +36,7 @@ BULK COLLECT INTO { collection | :host_array }
 
 ## 2. 定义和用法
 
-`EXECUTE IMMEDIATE` 用于动态执行SQL语句，是指先把一个SQL命令保存到一个字符串中，然后通过 `EXECUTE IMMEDIATE` 命令动态执行字符串中的SQL语句，以实现SQL语句的动态生成。
+`EXECUTE IMMEDIATE` 用于动态执行 SQL 语句，是指先把一个 SQL 命令保存到一个字符串中，然后通过 `EXECUTE IMMEDIATE` 命令动态执行字符串中的 SQL 语句，以实现 SQL 语句的动态生成。
 
 
 `EXECUTE IMMEDIATE` 使用时有以下几点注意事项：
@@ -48,11 +48,11 @@ BULK COLLECT INTO { collection | :host_array }
 - 5. 在 `DYNAMIC_SQL_STMT` 子句中不支持含有 `INTO` 的语法。
 
 
-在GreatSQL和Oracle中的差异点及其他注意事项：
+在 GreatSQL 和 Oracle 中的差异点及其他注意事项：
 
 - `DYNAMIC_SQL_STMT` 子句不支持匿名存储过程（例如：`BEGIN SELECT :1, :2; END;`）运行。
 
-- 在Oracle中，作为 `USING OUT` 时在语法上允许 `USING OUT TO_CHAR(...)` 这种语句运行，但会导致Oracle单个进程断开连接，因此如果用到需要 `USING OUT` 支持存储过程赋值的情况，将会限制只能使用变量或者系统变量作为参数。
+- 在 Oracle 中，作为 `USING OUT` 时在语法上允许 `USING OUT TO_CHAR(...)` 这种语句运行，但会导致 Oracle 单个进程断开连接，因此如果用到需要 `USING OUT` 支持存储过程赋值的情况，将会限制只能使用变量或者系统变量作为参数。
 
 ```sql
 > EXECUTE IMMEDIATE 'CALL p1(?)' USING OUT var;  <--允许
@@ -74,14 +74,14 @@ END;
 EXECUTE IMMEDIATE 'CALL p1(?)' USING OUT a; 
 ```
 
-在GreatSQL中允许这种方式运行，而在Oracle中会报错，要求 `USING IN OUT var` 或者 `USING IN var`; 
+在 GreatSQL 中允许这种方式运行，而在 Oracle 中会报错，要求 `USING IN OUT var` 或者 `USING IN var`; 
 
 ```sql
 > EXECUTE IMMEDIATE 'SELECT ?' USING OUT a;  
 ERROR HY000: Incorrect arguments to using OUT param var only use for call
 ```
 
-上述SQL命令在GreatSQL运行时将会引发报错。
+上述 SQL 命令在 GreatSQL 运行时将会引发报错。
 
 - 同时使用 `USING IN OUT` 与 `INTO` 属于未定义行为，`OUT` 不一定能够正确赋值。
 
@@ -115,7 +115,7 @@ END; //
 
 ## 3. 示例
 
-先创建基本测试表t1：
+先创建基本测试表 t1：
 ```sql
 greatsql> DROP TABLE IF EXISTS t1;
 greatsql> CREATE TABLE IF NOT EXISTS t1
@@ -379,7 +379,7 @@ greatsql> EXECUTE IMMEDIATE 'drop TRIGGER IF EXISTS trig1;';
 ERROR 1295 (HY000): This command is not supported in the prepared statement protocol yet
 ```
 
-- 不支持handler使用。
+- 不支持 handler 使用。
 
 ```sql
 greatsql> EXECUTE IMMEDIATE 'handler test_number open;';
@@ -392,7 +392,7 @@ greatsql> EXECUTE IMMEDIATE 'START TRANSACTION;';
 ERROR 1295 (HY000): This command is not supported in the prepared statement protocol yet
 ```
 
-- 不支持语句中带有INTO。
+- 不支持语句中带有 INTO。
 
 ```sql
 greatsql> EXECUTE IMMEDIATE 'SELECT 1 INTO @v;';

@@ -1,4 +1,4 @@
-# Oracle兼容-函数-REGEXP_REPLACE()函数
+# Oracle 兼容-函数-REGEXP_REPLACE()函数
 ---
 
 
@@ -53,9 +53,9 @@ REGEXP_REPLACE ( source_char, pattern
     - 源字符串被视为单行。
 
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-1. Oracle的正则表达式中数量限定元字符前面可以为空，而GreatSQL中不支持。
+1. Oracle 的正则表达式中数量限定元字符前面可以为空，而 GreatSQL 中不支持。
 
 | REGEXP_REPLACE 输入                    | Oracle                      | GreatSQL                                                                        |
 | -------------------------------------- | --------------------------- | ------------------------------------------------------------------------------ |
@@ -64,7 +64,7 @@ REGEXP_REPLACE ( source_char, pattern
 | REGEXP_REPLACE('123abc', '?', 'xxx')   | xxx1xxx2xxx3xxxaxxxbxxxcxxx | ERROR 3688 (HY000): Syntax error in regular expression on line 1, character 1. |
 | REGEXP_REPLACE('123abc', '{2}', 'xxx') | xxx1xxx2xxx3xxxaxxxbxxxcxxx | ERROR 3688 (HY000): Syntax error in regular expression on line 1, character 1. |
 
-2. Oracle的正则表达式中支持非法花括号表达式，而GreatSQL中不支持。
+2. Oracle 的正则表达式中支持非法花括号表达式，而 GreatSQL 中不支持。
 
 | REGEXP_REPLACE 输入                   | Oracle | GreatSQL                                                                        |
 | ------------------------------------- | ------ | ------------------------------------------------------------------------------ |
@@ -73,7 +73,7 @@ REGEXP_REPLACE ( source_char, pattern
 | REGEXP_REPLACE('123abc', '{}', 'xxx') | 123abc | ERROR 3688 (HY000): Syntax error in regular expression on line 1, character 1. |
 
 
-3. Oracle的正则表达式允许空串的情况，而GreatSQL不允许
+3. Oracle 的正则表达式允许空串的情况，而 GreatSQL 不允许
 
 | REGEXP_REPLACE 输入                             | Oracle                      | GreatSQL                                                                 |
 | ----------------------------------------------- | --------------------------- | ----------------------------------------------------------------------- |
@@ -83,13 +83,13 @@ REGEXP_REPLACE ( source_char, pattern
 
 **其他注意事项**
 
-1. 在Oracle中没有空串，所以在GreatSQL中处理空串时如果想要得到与Oracle一样的结果，则需要修改 `sql_mode` 设置 `SET sql_mode = EMPTYSTRING_EQUAL_NULL`。
+1. 在 Oracle 中没有空串，所以在 GreatSQL 中处理空串时如果想要得到与 Oracle 一样的结果，则需要修改 `sql_mode` 设置 `SET sql_mode = EMPTYSTRING_EQUAL_NULL`。
 
-2. 在Oracle中反斜线 `\` 不表示转义字符，所以在GreatSQL中处理反斜线 `\` 时如果想要得到与Oracle一样的结果，则需要修改 `sql_mode` 设置 `SET sql_mode = NO_BACKSLASH_ESCAPES`。
+2. 在 Oracle 中反斜线 `\` 不表示转义字符，所以在 GreatSQL 中处理反斜线 `\` 时如果想要得到与 Oracle 一样的结果，则需要修改 `sql_mode` 设置 `SET sql_mode = NO_BACKSLASH_ESCAPES`。
 
-3. 最后一个参数如果不指定是否区分大小写，则默认的大小写敏感性由 `REGEXP_REPLACE()` 函数的排序规则（即第一个参数的排序规则）确定，所以在大小写结果上可能与Oracle有差异。
+3. 最后一个参数如果不指定是否区分大小写，则默认的大小写敏感性由 `REGEXP_REPLACE()` 函数的排序规则（即第一个参数的排序规则）确定，所以在大小写结果上可能与 Oracle 有差异。
 
-例如：假设 `REGEXP_REPLACE()` 函数在Oracle的排序规则为 `BINARY`，在 GreatSQL 的排序规则为 `utf8mb4_vi_0900_ai_ci`
+例如：假设 `REGEXP_REPLACE()` 函数在 Oracle 的排序规则为 `BINARY`，在 GreatSQL 的排序规则为 `utf8mb4_vi_0900_ai_ci`
 
 | REGEXP_REPLACE 输入           | Oracle | GreatSQL |
 | ----------------------------- | ------ | ------- |

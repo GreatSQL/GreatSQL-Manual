@@ -1,8 +1,8 @@
 # Changes in GreatSQL 8.0.25-17（2023-3-13）
 
-**GreatSQL 8.0.25-17** 是一个微小改进版本，主要是修复GreatSQL中InnoDB并行查询可能导致查询hang住，甚至crash的问题，其他方面和GreatSQL 8.0.25-16版本是一样的。
+**GreatSQL 8.0.25-17** 是一个微小改进版本，主要是修复 GreatSQL 中 InnoDB 并行查询可能导致查询 hang 住，甚至 crash 的问题，其他方面和 GreatSQL 8.0.25-16 版本是一样的。
 
-推荐使用这份[**my.cnf配置参考**](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.25-17)。
+推荐使用这份[**my.cnf 配置参考**](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.25-17)。
 
 ## 新增特性
 
@@ -11,10 +11,10 @@
 ## 其他调整
 
 
-## bug修复
-01. 修复GreatSQL中InnoDB并行查询可能导致查询hang住，甚至crash的问题。
+## bug 修复
+01. 修复 GreatSQL 中 InnoDB 并行查询可能导致查询 hang 住，甚至 crash 的问题。
 
-## GreatSQL VS MySQL社区版
+## GreatSQL VS MySQL 社区版
 
 | 特性 | GreatSQL 8.0.25-17| MySQL 8.0.25 社区版 |
 |---| --- | --- |
@@ -22,31 +22,31 @@
 | 快速单主模式 | ✅ | ❎ |
 | 地理标签 | ✅ | ❎ |
 | 全新流控算法 | ✅ | ❎ |
-| InnoDB并行查询优化 | ✅ | ❎ |
+| InnoDB 并行查询优化 | ✅ | ❎ |
 | 线程池（Thread Pool） | ✅ | ❎ |
 |审计| ✅ | ❎ |
-| InnoDB事务锁优化 | ✅ | ❎ |
+| InnoDB 事务锁优化 | ✅ | ❎ |
 |SEQUENCE_TABLE(N)函数|✅ | ❎ |
 |InnoDB 表损坏异常处理|✅ | ❎ |
-|强制只能使用InnoDB引擎表|✅ | ❎ |
+|强制只能使用 InnoDB 引擎表|✅ | ❎ |
 |杀掉空闲事务，避免长时间锁等待|✅ | ❎ |
 |Data Masking（数据脱敏/打码）|✅ | ❎ |
-|InnoDB碎片页统计增强|✅ | ❎ |
-|支持MyRocks引擎|✅ | ❎ |
-| InnoDB I/O性能提升 |  ⭐️⭐️⭐️⭐️⭐️ | ⭐️⭐️ | 
+|InnoDB 碎片页统计增强|✅ | ❎ |
+|支持 MyRocks 引擎|✅ | ❎ |
+| InnoDB I/O 性能提升 |  ⭐️⭐️⭐️⭐️⭐️ | ⭐️⭐️ | 
 | 网络分区异常应对 |  ⭐️⭐️⭐️⭐️⭐️ | ⭐️ | 
 | 完善节点异常退出处理 |   ⭐️⭐️⭐️⭐️⭐️ | ⭐️ | 
 | 一致性读性能 |   ⭐️⭐️⭐️⭐️⭐️ | ⭐️ | 
-| 提升MGR吞吐量 |⭐️⭐️⭐️⭐️⭐️ | ⭐️ | 
+| 提升 MGR 吞吐量 |⭐️⭐️⭐️⭐️⭐️ | ⭐️ | 
 | 统计信息增强 |⭐️⭐️⭐️⭐️⭐️ | ⭐️ | 
-| Slow Query Log增强 |⭐️⭐️⭐️⭐️⭐️ | ⭐️ | 
+| Slow Query Log 增强 |⭐️⭐️⭐️⭐️⭐️ | ⭐️ | 
 | 大事务处理 |   ⭐️⭐️⭐️⭐️ | ⭐️ | 
 | 修复多写模式下可能丢数据风险 | ⭐️⭐️⭐️⭐️⭐️ | /  | 
 | 修复单主模式下切主丢数据风险 | ⭐️⭐️⭐️⭐️⭐️ | / | 
 |  MGR 集群启动效率提升 | ⭐️⭐️⭐️⭐️⭐️ |  / | 
 | 集群节点磁盘满处理 |   ⭐️⭐️⭐️⭐️⭐️ | /  | 
-| 修复TCP self-connect问题| ⭐️⭐️⭐️⭐️⭐️ | / | 
-| PROCESSLIST增强 | ⭐️⭐️⭐️⭐️⭐️ | /  | 
+| 修复 TCP self-connect 问题| ⭐️⭐️⭐️⭐️⭐️ | / | 
+| PROCESSLIST 增强 | ⭐️⭐️⭐️⭐️⭐️ | /  | 
 
 
 ## GreatSQL Release Notes

@@ -1,7 +1,7 @@
 # Docker 容器化安装 GreatSQL
 ---
 
-本文详细介绍如何在Docker中部署GreatSQL，并且构建一个 MGR 集群。
+本文详细介绍如何在 Docker 中部署 GreatSQL，并且构建一个 MGR 集群。
 
 本文使用的 Docker 版本是 20.10.10
 
@@ -22,11 +22,11 @@ Docker Compose version v2.15.0
 ```
 
 ::: tip 小贴士
-当使用特定版本的 Docker 或其版本过低（如<=17.12.1）时，可能存在问题，参考：[20. 为什么GreatSQL Docker容器启动失败](../11-faq/5-faq-others.md#_20-为什么greatsql-docker容器启动失败)。
+当使用特定版本的 Docker 或其版本过低（如<=17.12.1）时，可能存在问题，参考：[20. 为什么 GreatSQL Docker 容器启动失败](../11-faq/5-faq-others.md#_20-为什么-greatsql-docker-容器启动失败)。
 :::
 
-##  安装Docker
-直接用yum/dnf安装Docker，非常省事
+## 安装 Docker
+直接用 yum/dnf 安装 Docker，非常省事
 ```bash
 yum install -y docker
 ```
@@ -37,9 +37,9 @@ systemctl enable docker
 systemctl start docker
 ```
 
-##  拉取GreatSQL镜像，并创建容器
-###  拉取镜像
-拉取GreatSQL官方镜像
+## 拉取 GreatSQL 镜像，并创建容器
+### 拉取镜像
+拉取 GreatSQL 官方镜像
 ```bash
 docker pull greatsql/greatsql
 ```
@@ -80,14 +80,14 @@ REPOSITORY                    TAG                 IMAGE ID            CREATED   
 docker.io/greatsql/greatsql   latest              a930afc72d88        8 weeks ago         923 MB
 ```
 
-###  创建新容器
+### 创建新容器
 
 之后，就可以直接创建一个新的容器了，先用常规方式
 ```bash
 docker run -d --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EMPTY_PASSWORD=1 greatsql/greatsql
 ```
 
-容器的命名和容器内主机名均为greatsql。
+容器的命名和容器内主机名均为 greatsql。
 
 确认容器状态：
 ```bash
@@ -97,9 +97,9 @@ docker ps -a | grep greatsql
 4f351e22cea9   greatsql/greatsql     "/docker-entrypoint.…"   About a minute ago   Up About a minute          3306/tcp, 33060-33061/tcp   greatsql
 ...
 ```
-看到容器状态是Up的，表示已正常启动了。
+看到容器状态是 Up 的，表示已正常启动了。
 
-个别时候，可能会发生Docker容器创建异常，例如下面这样
+个别时候，可能会发生 Docker 容器创建异常，例如下面这样
 
 ```bash
 docker logs greatsql
@@ -119,7 +119,7 @@ sestatus
 SELinux status:                 disabled
 ```
 
-如果没有就先关闭 SELinux，参考：[关闭防火墙及selinux](../4-install-guide/1-install-prepare.md#关闭防火墙及selinux)。
+如果没有就先关闭 SELinux，参考：[关闭防火墙及 selinux](../4-install-guide/1-install-prepare.md#关闭防火墙及-selinux)。
 
 如果已经关闭 SELinux 还是会出现上述问题的话，可以在创建 Docker 容器时加上 `--privileged` 参数，例如下面这样
 
@@ -129,9 +129,9 @@ docker run -d --privileged --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EM
 
 这样通常就可以解决上述问题。
 
-这种问题通常是因为安装的Docker版本号较低或特殊版本存在问题导致的，升级版本一般也能解决问题。经测试，使用较早的Docker版本如<=17.12.1的版本（有少部分用户在其他版本也遇到过）就有该问题，个别在Kubernetes环境中安装的Docker可能也有问题。
+这种问题通常是因为安装的 Docker 版本号较低或特殊版本存在问题导致的，升级版本一般也能解决问题。经测试，使用较早的 Docker 版本如<=17.12.1 的版本（有少部分用户在其他版本也遇到过）就有该问题，个别在 Kubernetes 环境中安装的 Docker 可能也有问题。
 
-###  容器管理
+### 容器管理
 
 进入容器查看
 ```bash
@@ -149,13 +149,13 @@ Server version:        8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
 Threads: 2  Questions: 18  Slow queries: 0  Opens: 119  Flush tables: 3  Open tables: 36  Queries per second avg: 0.243
 ```
 
-看到容器已经完成初始化，并且可以直接无密码登入。
+看到容器已经完成初始化，并且可以直接无密码登录。
 
-##  构建 MGR 集群（单主模式）
+## 构建 MGR 集群（单主模式）
 
-手工管理Docker比较麻烦，建议采用 `docker-compose` ，它可以更方便的管理docker容器。
+手工管理 Docker 比较麻烦，建议采用 `docker-compose` ，它可以更方便的管理 docker 容器。
 
-先用yum安装docker-compose，并确认版本号
+先用 yum 安装 docker-compose，并确认版本号
 ```bash
 yum install -y docker-compose
 
@@ -165,7 +165,7 @@ docker-compose --version
 Docker Compose version v2.15.0 
 ```
 
-编辑一个yaml文件，准备部署包含仲裁节点的三节点 MGR 集群：
+编辑一个 yaml 文件，准备部署包含仲裁节点的三节点 MGR 集群：
 
 ```bash
 mkdir -p /data/docker-compose
@@ -240,7 +240,7 @@ networks:
 ```
 :::
 
-关于GreatSQL容器启动选项说明，详见[GreatSQL For Docker文档](https://hub.docker.com/r/greatsql/greatsql)。
+关于 GreatSQL 容器启动选项说明，详见[GreatSQL For Docker 文档](https://hub.docker.com/r/greatsql/greatsql)。
 
 如果不想要仲裁节点，则可以修改最后一个节点的属性 `MYSQL_MGR_ARBITRATOR: 0` 就行了。
 
@@ -274,9 +274,9 @@ mgr4   /docker-entrypoint.sh mysqld   Up      3306/tcp, 33060/tcp, 33061/tcp
 ```
 :::
 
-容器刚创建完还需要过一小段时间才能完成GreatSQL的初始化以及 MGR 集群自动构建，视服务器性能不同而定，一般需要30秒至四分钟左右。
+容器刚创建完还需要过一小段时间才能完成 GreatSQL 的初始化以及 MGR 集群自动构建，视服务器性能不同而定，一般需要 30 秒至四分钟左右。
 
-进入被选为PRIMARY节点的容器mgr2，查看 MGR 集群状态。
+进入被选为 PRIMARY 节点的容器 mgr2，查看 MGR 集群状态。
 
 ::: details 查看运行结果
 ```
@@ -313,9 +313,9 @@ Threads: 11  Questions: 52  Slow queries: 0  Opens: 145  Flush tables: 3  Open t
 
 可以看到，包含仲裁节点的三节点 MGR 集群已自动构建完毕。
 
-##  构建 MGR 集群（多主模式）
+## 构建 MGR 集群（多主模式）
 
-下面是一个docker-compose的配置文件参考 `/data/docker/mgr-multi-primary.yml`:
+下面是一个 docker-compose 的配置文件参考 `/data/docker/mgr-multi-primary.yml`:
 
 ::: details mgr-multi-primary.yml 文件详细内容
 ```
@@ -393,9 +393,9 @@ networks:
 docker-compose -f /data/docker/mgr-multi-primary.yml up -d
 ```
 
-容器启动后，会自行进行MySQL实例的初始化并自动构建 MGR 集群。
+容器启动后，会自行进行 MySQL 实例的初始化并自动构建 MGR 集群。
 
-进入第一个容器，确认实例启动并成为MGR的Primary节点：
+进入第一个容器，确认实例启动并成为 MGR 的 Primary 节点：
 
 ```bash
 docker exec -it mgr2 bash
@@ -415,28 +415,28 @@ mysql
 ```
 可以看到，一个三节点的 MGR 集群已自动构建完毕，运行模式为多主模式。
 
-##  Docker Compose环境变量/参数介绍
+## Docker Compose 环境变量/参数介绍
 - **MYSQL_ROOT_PASSWORD**
-设置MySQL root账号的密码。如果下面指定了MYSQL_ALLOW_EMPTY_PASSWORD=1，则本参数无效。
+设置 MySQL root 账号的密码。如果下面指定了 MYSQL_ALLOW_EMPTY_PASSWORD=1，则本参数无效。
 
 - **MYSQL_DATABASE**
 是否初始化一个新的数据库。
 
 - **MYSQL_ALLOW_EMPTY_PASSWORD**
-是否设置MySQL root账号使用空密码，因为安全原因，不推荐这么做。
+是否设置 MySQL root 账号使用空密码，因为安全原因，不推荐这么做。
 
 - **MYSQL_RANDOM_ROOT_PASSWORD**
-设置MySQL root账号的密码采用随机生成方式。
+设置 MySQL root 账号的密码采用随机生成方式。
 
 - **MYSQL_IBP**
-设置innodb_buffer_pool_size，默认值：128M。
+设置 innodb_buffer_pool_size，默认值：128M。
 
 - **MYSQL_INIT_MGR**
-是否初始化MGR相关设置，默认值：0（否）。如果设置为1（是），则会创建MGR服务所需账号，并设定运行 CHANGE REPLICATION SOURCE TO 设置好MGR复制通道。
+是否初始化 MGR 相关设置，默认值：0（否）。如果设置为 1（是），则会创建 MGR 服务所需账号，并设定运行 CHANGE REPLICATION SOURCE TO 设置好 MGR 复制通道。
 非必选项。
 
 - **MYSQL_MGR_NAME**
-设置group_replication_group_name，默认值："aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"。
+设置 group_replication_group_name，默认值："aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"。
 非必选项。
 
 - **MYSQL_MGR_LOCAL**
@@ -448,35 +448,35 @@ mysql
 如果 MYSQL_INIT_MGR=1 则为必选项。
 
 - **MYSQL_MGR_USER**
-设置MGR服务所需账号，默认值：repl。
+设置 MGR 服务所需账号，默认值：repl。
 非必选项。
 
 - **MYSQL_MGR_USER_PWD**
-设置MGR服务所需账号的密码，默认值：repl4MGR。
+设置 MGR 服务所需账号的密码，默认值：repl4MGR。
 非必选项。
 
 - **MYSQL_SID**
-设置server_id选项，构建 MGR 集群时要求每个节点的server_id是唯一的，默认值：3306+随机数
+设置 server_id 选项，构建 MGR 集群时要求每个节点的 server_id 是唯一的，默认值：3306+随机数
 非必选项。
 
 - **MYSQL_MGR_START_AS_PRIMARY**
-指定当前节点在MGR中以PRIMARY角色启动，每次都会进行MGR初始化引导操作。默认值：0。
-如果 MYSQL_INIT_MGR=1 则至少要有一个节点指定为PRIMARY角色。
+指定当前节点在 MGR 中以 PRIMARY 角色启动，每次都会进行 MGR 初始化引导操作。默认值：0。
+如果 MYSQL_INIT_MGR=1 则至少要有一个节点指定为 PRIMARY 角色。
 
 - **MYSQL_MGR_MULTI_PRIMARY**
 设置是否采用多主模式运行。默认值：0。
 如果 MYSQL_MGR_MULTI_PRIMARY=1，则【有且只能选择一个节点】设置 MYSQL_MGR_START_AS_PRIMARY=1，该节点会采用引导模式启动，其余节点不设置引导模式。
 
 - **MYSQL_MGR_ARBITRATOR**
-指定当前节点在MGR中以ARBITRATOR角色启动，该选项和**MYSQL_MGR_START_AS_PRIMARY**是互斥的，不能同时设置为1。默认值：0。
+指定当前节点在 MGR 中以 ARBITRATOR 角色启动，该选项和**MYSQL_MGR_START_AS_PRIMARY**是互斥的，不能同时设置为 1。默认值：0。
 非必选项。
 
 - **MYSQL_MGR_VIEWID**
-MySQL 8.0.26开始，可以为view change单独指定一个GTID前缀，避免和正常的事务GTID混杂一起，产生问题。默认值：AUTOMATIC。
+MySQL 8.0.26 开始，可以为 view change 单独指定一个 GTID 前缀，避免和正常的事务 GTID 混杂一起，产生问题。默认值：AUTOMATIC。
 非必选项。
 
 
-更多关于如何利用Docker/Docker-Compose完成GreatSQL初始化并构建 MGR 集群的详情请查看 [**GreatSQL-Docker项目**](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL)。
+更多关于如何利用 Docker/Docker-Compose 完成 GreatSQL 初始化并构建 MGR 集群的详情请查看 [**GreatSQL-Docker 项目**](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL)。
 
 
 **扫码关注微信公众号**

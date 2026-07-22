@@ -1,8 +1,8 @@
-# 使用sysbench生成测试数据
+# 使用 sysbench 生成测试数据
 
 **sysbench** 是一个轻量级且功能强大的基准测试工具，用于评估系统的性能。它支持 CPU、内存、线程和 I/O 等性能测试，并且特别适用于数据库的性能测试，如 MySQL 、 GreatSQL 等。通过模拟真实的应用场景和工作负载， sysbench 可以帮助用户快速了解系统的性能瓶颈，并据此进行系统优化和硬件选型。
 
-## 安装sysbench
+## 安装 sysbench
 
 CentOS 系统下安装 sysbench
 ```bash

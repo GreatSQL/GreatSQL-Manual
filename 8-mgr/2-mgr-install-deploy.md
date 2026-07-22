@@ -6,7 +6,7 @@
 
 ## 利用手动方式构建 MGR
 
-###  安装准备
+### 安装准备
 
 准备好下面三台服务器：
 
@@ -31,7 +31,7 @@ bin    COPYING-jemalloc  include  LICENSE         LICENSE-test  mysqlrouter-log-
 cmake  docs              lib      LICENSE.router  man           README                  README-test    share  var
 ```
 
-###  初始化 GreatSQL
+### 初始化 GreatSQL
 首先准备好 */etc/my.cnf* 配置文件：
 ```ini
 #/etc/my.cnf
@@ -64,7 +64,7 @@ mkdir -p /data/GreatSQL && chown -R mysql:mysql /data/GreatSQL
 
 此外，建议把 GreatSQL 加入系统 systemd 服务中，方便管理。具体方法可以参考这篇文章：[利用 systemd 管理 GreatSQL](../4-install-guide/8-greatsql-with-systemd.md)。
 
-###  初始化 MGR 第一个节点
+### 初始化 MGR 第一个节点
 接下来准备初始化 MGR 的第一个节点，也称之为 **引导节点**。
 
 修改 */etc/my.cnf* ，增加以下几行和 MGR 相关的配置参数：
@@ -92,22 +92,22 @@ greatsql> SHOW PLUGINS;
 ...
 ```
 
-如果没正确加载，也可以登入 GreatSQL 自行手动加载这个 plugin：
+如果没正确加载，也可以登录 GreatSQL 自行手动加载这个 plugin：
 ```sql
 INSTALL PLUGIN group_replication SONAME 'group_replication.so';
 ```
 
 接下来，创建 MGR 服务专用账户，并准备配置 MGR 服务通道：
 ```sql
--- 每个节点都要单独创建用户，因此这个操作没必要记录binlog并复制到其他节点
+-- 每个节点都要单独创建用户，因此这个操作没必要记录 binlog 并复制到其他节点
 SET SESSION sql_log_bin=0;
 CREATE USER repl@'%' IDENTIFIED WITH mysql_native_password BY 'repl';
 GRANT BACKUP_ADMIN, REPLICATION SLAVE ON *.* TO `repl`@`%`;
 
--- 创建完用户后继续启用binlog记录
+-- 创建完用户后继续启用 binlog 记录
 greatsql> SET SESSION sql_log_bin=1;
 
--- 配置MGR服务通道
+-- 配置 MGR 服务通道
 -- 通道名字 group_replication_recovery 是固定的，不能修改
 CHANGE REPLICATION SOURCE TO SOURCE_USER='repl', SOURCE_PASSWORD='repl' FOR CHANNEL 'group_replication_recovery';
 ```
@@ -132,7 +132,7 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 ```
 第一个节点初始化完成。
 
-###  继续设置另外两个节点
+### 继续设置另外两个节点
 继续使用下面这份 */etc/my.cnf* 配置文件模板：
 ```ini
 #my.cnf
@@ -185,7 +185,7 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 ```
 看到上面这个集群共有 3 个节点处于 ONLINE 状态，其中 *172.16.16.10* 是 **PRIMARY** 节点，其余两个都是 **SECONDARY** 节点，也就是说当前这个集群采用 **单主** 模式。如果采用多主模式，则所有节点的角色都是 **PRIMARY**。
 
-###  向 MGR 集群中写入数据
+### 向 MGR 集群中写入数据
 接下来连接到 **PRIMARY** 节点，创建测试库表并写入数据：
 ```sql
 -- 先连接进入 GreatSQL
@@ -226,7 +226,7 @@ greatsql> SELECT * FROM t1;
 仲裁节点（投票节点）为 GreatSQL 数据库原生支持的特性，**GreatSQL Shell 可正常识别并对该特性进行相关操作**，而 MySQL Shell 社区版暂不支持识别 GreatSQL 的仲裁节点（投票节点），无法开展对应操作。
 :::
 
-###  安装准备
+### 安装准备
 准备好下面三台服务器：
 
 | IP           | 端口 | 角色 |
@@ -250,7 +250,7 @@ x86_64
 ```
 可以看到是 x86_64 平台下的 glibc 2.28 版本，因此选择二进制包文件：**greatsql-shell-8.0.32-25-glibc2.28-x86_64.tar.xz**。
 
-由于编译环境限制，没有提供全平台的 GreatSQL Shell 二进制包，如果有需要，请参考 [GreatSQL Shell Build仓库](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build) 自行构建适合您的运行环境的二进制包文件。
+由于编译环境限制，没有提供全平台的 GreatSQL Shell 二进制包，如果有需要，请参考 [GreatSQL Shell Build 仓库](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build) 自行构建适合您的运行环境的二进制包文件。
 
 运行 GreatSQL Shell 8.0.32-25 需要依赖 Python 3.8 环境，需要先执行下面命令完成相关依赖安装
 
@@ -261,7 +261,7 @@ pip3.8 install --user certifi pyclamd
 
 接下来直接利用 GreatSQL Shell 部署 MGR
 
-###  利用 GreatSQL Shell 构建 MGR 集群
+### 利用 GreatSQL Shell 构建 MGR 集群
 利用 GreatSQL Shell 构建 MGR 集群比较简单，主要有几个步骤：
 1. 检查实例是否满足条件。
 2. 创建并初始化一个集群。
@@ -269,7 +269,7 @@ pip3.8 install --user certifi pyclamd
 
 首先，用管理员账号 root 连接到第一个节点：
 ```bash
-# 在本地通过socket方式登入
+# 在本地通过 socket 方式登录
 $ mysqlsh -Spath/mysql.sock -u root
 
 Please provide the password for 'root@.%2Fmysql.sock': ********
@@ -287,7 +287,7 @@ Configuring local MySQL instance listening at port 3306 for use in an InnoDB clu
 
 This instance reports its own address as 172.16.16.10:3306
 
-#提示当前的用户是管理员，不能直接用于MGR集群，需要新建一个账号
+#提示当前的用户是管理员，不能直接用于MGR 集群，需要新建一个账号
 ERROR: User 'root' can only connect from 'localhost'. New account(s) with proper source address specification to allow remote connection from all instances must be created to manage the cluster.
 
 1) Create remotely usable account for 'root' with same grants and password
@@ -312,7 +312,7 @@ The instance '172.16.16.10:3306' is already ready to be used in an InnoDB cluste
 
 Successfully enabled parallel appliers.
 ```
-完成检查并创建完新用户后，退出当前的管理员账户，并用新创建的 MGR 专用账户登入，准备初始化创建一个新集群：
+完成检查并创建完新用户后，退出当前的管理员账户，并用新创建的 MGR 专用账户登录，准备初始化创建一个新集群：
 ```js
 -- 先连接进入 GreatSQL
 -- mysqlsh --uri GreatSQL@172.16.16.10:3306
@@ -361,10 +361,10 @@ dba.createCluster("MGR1", {"communicationStack": "xcom"})
 ::: warning 风险提醒
 因目前采用 MySQL 协议可能存在风险，所以建议采用 XCOM 协议。
 
-采用 MySQL 协议的风险可参考文章：[新的MGR MySQL协议报错BUG](https://mp.weixin.qq.com/s/N-poOiG8zAAmLI0-S79zDg)。
+采用 MySQL 协议的风险可参考文章：[新的 MGR MySQL 协议报错 BUG](https://mp.weixin.qq.com/s/N-poOiG8zAAmLI0-S79zDg)。
 :::
 
-接下来，用同样方法先用 root 账号分别登入到另外两个节点，完成节点的检查并创建最小权限级别用户（此过程略过。。。注意各节点上创建的用户名、密码都要一致），之后回到第一个节点，执行 `addInstance()` 添加另外两个节点。
+接下来，用同样方法先用 root 账号分别登录到另外两个节点，完成节点的检查并创建最小权限级别用户（此过程略过。。。注意各节点上创建的用户名、密码都要一致），之后回到第一个节点，执行 `addInstance()` 添加另外两个节点。
 ```js
 MySQL  172.16.16.10:3306 ssl JS > c.addInstance('GreatSQL@172.16.16.11:3306');<--这里要指定 MGR 专用账号
 
@@ -406,7 +406,7 @@ NOTE: 172.16.16.11:3306 is being cloned from 172.16.16.10:3306
     PAGE COPY  ############################################################  100%  Completed
     REDO COPY  ############################################################  100%  Completed
 
-NOTE: 172.16.16.11:3306 is shutting down...  <-- 数据Clone完成，准备重启实例。如果该实例无法完成自动重启，则需要手动启动
+NOTE: 172.16.16.11:3306 is shutting down...  <-- 数据 Clone 完成，准备重启实例。如果该实例无法完成自动重启，则需要手动启动
 
 * Waiting for server restart... ready
 * 172.16.16.11:3306 has restarted, waiting for clone to finish...
@@ -451,7 +451,7 @@ MySQL  172.16.16.10:3306 ssl  JS > c.describe()
 
 至此，利用 GreatSQL Shell 构建一个三节点的 MGR 集群做好了，可以尝试向 Primary 节点写入数据观察测试。
 
-###   GreatSQL Shell 接管现存的 MGR 集群
+### GreatSQL Shell 接管现存的 MGR 集群
 对于已经在运行中的 MGR 集群，也是可以用 GreatSQL Shell 接管的。只需要在调用 `createCluster()` 函数时，加上 `"adoptFromGR":"true"` 选项即可。实际上不加这个选项的话，GreatSQL Shell 也会自动检测到该 MGR 集群已存在，并询问是否要接管。
 
 在这里简单演示下：
@@ -488,7 +488,7 @@ Dba.getCluster: Unable to get an InnoDB cluster handle. The instance '192.168.6.
 
 这种情况下，可以调用 `dba.dropMetadataSchema()` 函数删除元数据，再调用 `dba.createCluster()` 接管集群：
 ```js
-#确保不影响正常业务的话，删除无用MGR元数据
+#确保不影响正常业务的话，删除无用 MGR 元数据
 MySQL  172.16.16.10:3306 ssl  JS > dba.dropMetadataSchema()
 Are you sure you want to remove the Metadata? [y/N]: y
 
@@ -500,7 +500,7 @@ Metadata Schema successfully removed.
 ```
 这样就可以接管了
 
-###  使用 GreatSQL Shell 的窍门
+### 使用 GreatSQL Shell 的窍门
 在 GreatSQL Shell 中，也是可以启用 pager（分页器）的，像下面这样设置即可：
 ```js
 mysqlsh> shell.enablePager()

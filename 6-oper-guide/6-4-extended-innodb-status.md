@@ -1,8 +1,8 @@
-# 扩展显示InnoDB引擎状态
+# 扩展显示 InnoDB 引擎状态
 
 ---
 
-此功能重新组织 `SHOW ENGINE INNODB STATUS` 的输出以提高可读性并提供附加信息。变量`innodb_show_locks_held`控制每个 InnoDB 事务打印时持有的锁数量。
+此功能重新组织 `SHOW ENGINE INNODB STATUS` 的输出以提高可读性并提供附加信息。变量 `innodb_show_locks_held` 控制每个 InnoDB 事务打印时持有的锁数量。
 
 此功能修改了 `SHOW ENGINE INNODB STATUS` 命令如下:
 
@@ -38,7 +38,7 @@
 
 使 InnoDB 将所有锁等待超时错误的信息写入日志文件。
 
-这允许找出有关失败事务的详细信息，最重要的是，找到阻塞事务的详细信息。可以根据 `PROCESSLIST_ID` 字段从`EVENTS_STATEMENTS_CURRENT`表中获取查询字符串，该字段对应于日志输出中的 `thread_id` 。
+这允许找出有关失败事务的详细信息，最重要的是，找到阻塞事务的详细信息。可以根据 `PROCESSLIST_ID` 字段从 `EVENTS_STATEMENTS_CURRENT` 表中获取查询字符串，该字段对应于日志输出中的 `thread_id` 。
 
 考虑到阻塞事务通常是多条语句，可以使用以下查询来获取阻塞线程语句历史记录:
 
@@ -75,7 +75,7 @@ InnoDB 有一个源线程，它根据服务器状态每秒执行一次后台任�
 
 - Innodb_master_thread_active_loops:此变量显示针对活动服务器状态执行上述一秒循环的次数
 - Innodb_master_thread_idle_loops:该变量显示在空闲服务器状态下执行上述一秒循环的次数
-- Innodb_background_log_sync:该变量显示InnoDB源线程写入和刷新重做日志的次数
+- Innodb_background_log_sync:该变量显示 InnoDB 源线程写入和刷新重做日志的次数
 
 ### 等待线程的列表及事件计数器
 
@@ -117,8 +117,8 @@ Hash table size 553253, node heap has 0 buffer(s)
 
 以下状态变量的范围(Scope)都是全局的（Global）、数据类型（Data type）都是数字（Numeric）。
 
-- Innodb_ibuf_free_list:记录当前Insert Buffer中空闲列表的长度
-- Innodb_ibuf_segment_size:记录Insert Buffer每个段的大小
+- Innodb_ibuf_free_list:记录当前 Insert Buffer 中空闲列表的长度
+- Innodb_ibuf_segment_size:记录 Insert Buffer 每个段的大小
 
 ### 日志
 
@@ -147,8 +147,8 @@ Max checkpoint age           5422668288
 
 - Innodb_lsn_current:该变量显示当前日志序列号
 - Innodb_lsn_flushed:该变量显示当前已写入并刷新到磁盘的最大 LSN
-- Innodb_lsn_last_checkpoint:该变量显示最新完成的检查点的LSN
-- Innodb_checkpoint_age:该变量显示当前InnoDB检查点年龄，即当前LSN和最后完成的检查点的LSN之间的差异
+- Innodb_lsn_last_checkpoint:该变量显示最新完成的检查点的 LSN
+- Innodb_checkpoint_age:该变量显示当前 InnoDB 检查点年龄，即当前 LSN 和最后完成的检查点的 LSN 之间的差异
 
 ### InnoDB Buffer Pool 使用统计信息
 
@@ -181,7 +181,7 @@ I/O sum[0]:cur[0], unzip sum[0]:cur[0]
 
 - Innodb_mem_adaptive_hash:该变量显示自适应哈希索引的当前大小（以字节为单位）
 - Innodb_mem_dictionary:该变量显示 InnoDB 内存中数据字典信息的当前大小（以字节为单位）
-- Innodb_mem_total:该变量显示InnoDB在进程堆内存中分配的内存总量（以字节为单位）
+- Innodb_mem_total:该变量显示 InnoDB 在进程堆内存中分配的内存总量（以字节为单位）
 - Innodb_buffer_pool_pages_LRU_flushed:该变量显示已从 LRU 列表中刷新的缓冲池页面总数，即必须刷新太旧的页面，以便为缓冲池腾出空间来读取新数据页面
 - Innodb_buffer_pool_pages_made_not_young:该变量显示由于 innodb_old_blocks_time 变量设置，缓冲池页面在 LRU 列表中未标记为最近访问的次数
 - Innodb_buffer_pool_pages_made_young:此变量显示缓冲池页面由于其访问而被移动到 LRU 列表的年轻端的次数，以防止其从缓冲池中逐出
@@ -211,7 +211,7 @@ LIST OF TRANSACTIONS FOR EACH SESSION:
 - Innodb_max_trx_id:该变量显示下一个空闲交易 ID 号
 - Innodb_oldest_view_low_limit_trx_id:该变量显示最高事务 ID，在该 ID 之上，当前最早打开的读取视图看不到任何事务更改。如果没有开放视野则为零
 - Innodb_purge_trx_id:此变量显示其记录尚未清除的最旧的事务 ID
-- Innodb_purge_undo_no:记录undo日志的purge操作数量
+- Innodb_purge_undo_no:记录 undo 日志的 purge 操作数量
 
 
 **扫码关注微信公众号**

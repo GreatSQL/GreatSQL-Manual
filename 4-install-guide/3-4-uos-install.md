@@ -1,14 +1,14 @@
-# 统信UOS系统中安装GreatSQL
+# 统信 UOS 系统中安装 GreatSQL
 
 ---
 
 ## 准备工作
 
-### 配置yum源
+### 配置 yum 源
 
-开始编译之前，建议先配置好yum源，方便安装一些工具以及必要的依赖包。
+开始编译之前，建议先配置好 yum 源，方便安装一些工具以及必要的依赖包。
 
-这里采用系统安装后默认的yum源，并生成缓存。
+这里采用系统安装后默认的 yum 源，并生成缓存。
 
 ```bash
 yum clean all && yum makecache
@@ -16,9 +16,9 @@ yum clean all && yum makecache
 
 在开始安装前，请根据文档 [安装准备](./1-install-prepare.md) 已经完成准备工作。
 
-### 选择下载GreatSQL二进制包
+### 选择下载 GreatSQL 二进制包
 
-本文使用的统信UOS系统如下：
+本文使用的统信 UOS 系统如下：
 
 ```bash
 # 查看操作系统信息
@@ -44,12 +44,12 @@ ldd (GNU libc) 2.28
 ```
 :::
 
-那么在这个环境下，即 glibc2.28，可选 [GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5) 这个二进制包进行安装。若glibc为2.17，请选择带有"glibc2.17"标识的安装包。
+那么在这个环境下，即 glibc2.28，可选 [GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5) 这个二进制包进行安装。若 glibc 为 2.17，请选择带有"glibc2.17"标识的安装包。
 
-当然了，也可以选择相应的minimal包，minimal版本二进制文件经过strip处理，因此文件尺寸较小，功能上没本质区别，但不支持gdb debug功能，可以放心使用。
+当然了，也可以选择相应的 minimal 包，minimal 版本二进制文件经过 strip 处理，因此文件尺寸较小，功能上没本质区别，但不支持 gdb debug 功能，可以放心使用。
 
 ::: tip 小贴士
-若您的 CPU 架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
+若您的 CPU 架构为 ARM 版本请采用 ARM 版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64.tar.xz`。
 :::
 
 将下载的二进制包放到安装目录下，并解压缩：
@@ -59,14 +59,14 @@ cd /usr/local
 tar xf GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz
 ```
 
-同时修改设置，将GreatSQL加入 `PATH` 环境变量：
+同时修改设置，将 GreatSQL 加入 `PATH` 环境变量：
 
 ```bash
 echo 'export PATH=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin:$PATH' >> ~/.bash_profile
 source ~/.bash_profile
 ```
 
-安装GreatSQL需要先安装其他依赖包，可执行下面命令完成：
+安装 GreatSQL 需要先安装其他依赖包，可执行下面命令完成：
 
 ```bash
 yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 python2 perl-JSON perl-Test-Simple
@@ -74,9 +74,9 @@ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools
 
 如果报告个别依赖包安装失败或者找不到就删掉，然后重试。更详细的请参考：[安装准备](./1-install-prepare.md)。
 
-接下来准备开始安装GreatSQL二进制包。
+接下来准备开始安装 GreatSQL 二进制包。
 
-## 安装GreatSQL
+## 安装 GreatSQL
 
 ### 创建或修改 /etc/my.cnf 配置文件
 
@@ -237,7 +237,7 @@ performance_schema_instrument = '%lock%=on'
 
 一般修改 *basedir/datadir/innodb_buffer_pool_size* 等几个选项就可以，修改完后保存退出。
 
-### 新建mysql用户
+### 新建 mysql 用户
 
 ```bash
 /sbin/groupadd mysql
@@ -255,9 +255,9 @@ chown -R mysql:mysql /data/GreatSQL
 chmod -R 700 /data/GreatSQL
 ```
 
-### 配置GreatSQL systemd服务
+### 配置 GreatSQL systemd 服务
 
-推荐采用systemd来管理GreatSQL服务，执行 `vim /etc/systemd/system/greatsql.service` 命令，添加下面的内容：
+推荐采用 systemd 来管理 GreatSQL 服务，执行 `vim /etc/systemd/system/greatsql.service` 命令，添加下面的内容：
 
 ```ini
 [Unit]
@@ -307,13 +307,13 @@ PrivateTmp=false
 
 务必确认文件中 `ExecStartPre` 和 `ExecStart` 两个参数指定的目录及文件名是否正确。
 
-**提示**：如果不是安装到默认的 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64` 目录下（不同版本具体目录也有所变化），可能会影响 GreatSQL 的自动初始化操作。这种时候，可以先将GreatSQL二进制包解压缩到 `/usr/local` 目录下，再根据需要自行做软链接，例如：
+**提示**：如果不是安装到默认的 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64` 目录下（不同版本具体目录也有所变化），可能会影响 GreatSQL 的自动初始化操作。这种时候，可以先将 GreatSQL 二进制包解压缩到 `/usr/local` 目录下，再根据需要自行做软链接，例如：
 
 ```bash
 tar xf GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz -C /usr/local
 ln -s /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64 /usr/local/GreatSQL
 ```
-这样既不影响GreatSQL的自动初始化，又能满足自定义需要。
+这样既不影响 GreatSQL 的自动初始化，又能满足自定义需要。
 
 也可以编辑二进制包中的 `mysqld_pre_systemd` 脚本，修改脚本中几处涉及 GreatSQL 安装路径的地方，例如：
 
@@ -325,13 +325,13 @@ ln -s /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64 /usr/local/GreatSQL
 184:        /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysql_ssl_rsa_setup --datadir="$datadir" --uid=mysql >/dev/null 2>&1
 ```
 
-以上几处请自行修改，然后执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
+以上几处请自行修改，然后执行命令重载 systemd，加入 `greatsql` 服务，如果没问题就不会报错：
 
 ```bash
 systemctl daemon-reload
 ```
 
-这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
+这就安装成功并将 GreatSQL 添加到系统服务中，后面可以用 `systemctl` 来管理 GreatSQL 服务。
 
 编辑 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd` 文件，将文件中的几处 `/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/` 改为 GreatSQL 实际安装目录。
 
@@ -357,9 +357,9 @@ ldconfig && ldconfig -p | grep libprotobuf.so
 
 这个步骤的作用是加载 GreatSQL 自带的动态依赖库文件，这样在运行 mysql/mysqld 等二进制文件时可能需要用到，避免报错。
 
-## 启动GreatSQL
+## 启动 GreatSQL
 
-执行下面的命令启动GreatSQL服务
+执行下面的命令启动 GreatSQL 服务
 
 ```bash
 systemctl start greatsql
@@ -392,7 +392,7 @@ systemd[1]: greatsql.service: Failed with result 'exit-code'.
 ```
 :::
 
-只需手动创建 `/var/lib/mysql-files` 目录，再次启动GreatSQL服务即可：
+只需手动创建 `/var/lib/mysql-files` 目录，再次启动 GreatSQL 服务即可：
 
 ```bash
 mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
@@ -439,11 +439,11 @@ LISTEN 0      128                *:3306             *:*    users:(("mysqld",pid=
 ```
 :::
 
-可以看到，GreatSQL服务已经正常启动了。
+可以看到，GreatSQL 服务已经正常启动了。
 
-## 连接登入GreatSQL
+## 连接登录 GreatSQL
 
-在上面进行GreatSQL初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
+在上面进行 GreatSQL 初始化时，会为 *root@localhost* 用户生成一个随机密码，记录在 `error.log` 日志文件中，例如下面这样：
 
 ```bash
 grep -i root /data/GreatSQL/error.log
@@ -458,15 +458,15 @@ A temporary password is generated for root@localhost: ji!pjndiw5sJ
 ```
 :::
 
-复制该密码，将用于首次登入GreatSQL所需。
+复制该密码，将用于首次登录 GreatSQL 所需。
 
 ```bash
-mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
+mysql -uroot  -p"ji!pjndiw5sJ"   # <-- 这里输入刚才复制的临时密码
 ```
 
 ::: details 查看运行结果
 ```bash
-$ mysql -uroot  -p"ji!pjndiw5sJ"   #<--这里输入刚才复制的临时密码
+$ mysql -uroot  -p"ji!pjndiw5sJ"   # <-- 这里输入刚才复制的临时密码
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 11
 Server version: 8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
@@ -476,15 +476,15 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ```
 :::
 
-部分GreatSQL二进制包方式安装后，有可能初始化的root密码是空的，这种情况下可以直接登入并修改成安全密码。
+部分 GreatSQL 二进制包方式安装后，有可能初始化的 root 密码是空的，这种情况下可以直接登录并修改成安全密码。
 
-首次登入立刻提醒该密码已过期，需要修改，执行 SQL 命令 `ALTER USER USER() IDENTIFIED BY` 修改即可：
+首次登录立刻提醒该密码已过期，需要修改，执行 SQL 命令 `ALTER USER USER() IDENTIFIED BY` 修改即可：
 
 ```sql
 greatsql> status;
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 
-greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@2022';  #<--修改密码
+greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@2022';  # <-- 修改密码
 Query OK, 0 rows affected (0.02 sec)
 
 greatsql> status;
@@ -514,15 +514,15 @@ Threads: 4  Questions: 11  Slow queries: 0  Opens: 130  Flush tables: 3  Open ta
 
 GreatSQL 数据库安装并初始化完毕。
 
-## 安装MySQL Shell
+## 安装 MySQL Shell
 
-下载GreatSQL Shell二进制包*greatsql-shell-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz*。
+下载 GreatSQL Shell 二进制包*greatsql-shell-8.4.4-5-Linux-glibc2.28-x86_64.tar.xz*。
 
-接下来安装GreatSQL Shell，以及进行MGR初始化等操作和用RPM包方式安装一样，这里就不赘述了。
+接下来安装 GreatSQL Shell，以及进行 MGR 初始化等操作和用 RPM 包方式安装一样，这里就不赘述了。
 
-参考文档[RPM安装并构建 MGR 集群](./2-install-with-rpm.md#安装greatsql-shell)，从“安装MySQL Shell”这节开始及往后内容即可。
+参考文档[RPM 安装并构建 MGR 集群](./2-install-with-rpm.md#安装-greatsql-shell)，从“安装 MySQL Shell”这节开始及往后内容即可。
 
-GreatSQL Shell就可以正常使用，并继续构建 MGR 集群了。
+GreatSQL Shell 就可以正常使用，并继续构建 MGR 集群了。
 
 ::: tip 小贴士
 推荐使用 Docker 来运行 GreatSQL Shell，详情参考 [GreatSQL-Shell Docker](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell)。

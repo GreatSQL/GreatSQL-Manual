@@ -1,9 +1,9 @@
-# Oracle兼容-语法-分层查询（Hierarchical Query）
+# Oracle 兼容-语法-分层查询（Hierarchical Query）
 ---
 
 
 
-GreatSQL支持分层查询（Hierarchical Query）。
+GreatSQL 支持分层查询（Hierarchical Query）。
 
 
 ## 1. 语法
@@ -23,9 +23,9 @@ GreatSQL支持分层查询（Hierarchical Query）。
 如果 `CONNECT BY` 条件导致层次结构中出现循环，则会返回错误。如果一行既是另一行的父项（或祖父项或直系祖先）又是子项（或孙项或直系后代），则会导致循环。
 
 - 2. 对分层查询的处理方式如下：
-  - 1.) 如果存在连接，首先会被评估，无论连接是在FROM子句中还是在WHERE子句中指定。
-  - 2.) CONNECT BY条件被评估。
-  - 3.) 任何剩余的WHERE子句谓语都被评估。
+  - 1.) 如果存在连接，首先会被评估，无论连接是在 FROM 子句中还是在 WHERE 子句中指定。
+  - 2.) CONNECT BY 条件被评估。
+  - 3.) 任何剩余的 WHERE 子句谓语都被评估。
 
 - 3. 对于分层查询的处理顺序为：
   - 1.) 选择层次结构的根行——那些满足 START WITH 条件的行。
@@ -39,11 +39,11 @@ GreatSQL支持分层查询（Hierarchical Query）。
 
 ![分层查询Hierarchical Query](./5-3-easyuse-ora-syntax-hierarchical-query.png)
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-- 1、查询表输出结果的排序和Oracle可能不一致
+- 1、查询表输出结果的排序和 Oracle 可能不一致
      
-由于在遍历查询表数据方式与Oracle不一致，导致 `CONNECT BY` 单一层次内数据排序结果不一致。
+由于在遍历查询表数据方式与 Oracle 不一致，导致 `CONNECT BY` 单一层次内数据排序结果不一致。
 
 ```sql
 -- 初始化测试表及数据
@@ -159,9 +159,9 @@ SQL> SELECT id, name, grade, LEVEL FROM student CONNECT BY PRIOR id = grade;
     
 - 2、与 `LISTAGG` 结合使用输出组合顺序时，`LISTAGG` 的实现依赖 `ORDER BY`，因此在内部查询的时候会根据 `GROUP BY` 进行排序。
     
-- 3、在 `ORACLE` 模式下，`SYSDATE` 的行为与Oracle一致，在 `DEFAULT` 模式下，循环查询可能导致错误。
+- 3、在 `ORACLE` 模式下，`SYSDATE` 的行为与 Oracle 一致，在 `DEFAULT` 模式下，循环查询可能导致错误。
     
-- 4、与上一条类似，在自定义PACKAGE与FUNCTION中可能存在定义包含 `DETERMINISTIC` 的情况，也可能存在导致循环检查失效问题。
+- 4、与上一条类似，在自定义 PACKAGE 与 FUNCTION 中可能存在定义包含 `DETERMINISTIC` 的情况，也可能存在导致循环检查失效问题。
     
 - 5、当 `CONNECT BY` 中存在永真的条件时，不管是否使用了 `PRIOR` 或 `CONNECT_BY_ROOT` 的条件，会报告死循环错误。
     
@@ -169,9 +169,9 @@ SQL> SELECT id, name, grade, LEVEL FROM student CONNECT BY PRIOR id = grade;
 
 - 7、与 `ROWNUM` 伪列结合使用的时候，`ROWNUM` 在 `WHERE` 中作为查询条件结果会产生差异，如下例所示：
      
-与Oracle区别：`ROWNUM` 的值会根据在 `CONNECT BY` 排序后的结果保存，而不重新计算。
+与 Oracle 区别：`ROWNUM` 的值会根据在 `CONNECT BY` 排序后的结果保存，而不重新计算。
 
-  - 示例1：
+  - 示例 1：
 
 ```sql
 greatsql> SELECT LEVEL, ROWNUM FROM DUAL WHERE ROWNUM < 3 AND LEVEL = 2 CONNECT BY LEVEL <= 10;
@@ -189,7 +189,7 @@ SQL> SELECT LEVEL, ROWNUM FROM DUAL WHERE ROWNUM < 3 AND LEVEL = 2 CONNECT BY LE
          2          1
 ```
 
-  - 示例2
+  - 示例 2
 
 ```sql
 greatsql> SELECT LEVEL, SYS_CONNECT_BY_PATH(ROWNUM, '->') FROM DUAL WHERE
@@ -207,7 +207,7 @@ greatsql> SELECT LEVEL, SYS_CONNECT_BY_PATH(ROWNUM, '->') FROM DUAL WHERE
          2                                 ->1->1
 ```
 
-- 8、在GreatSQL中，支持在 `CONNECT BY` 条件中含有 `BLOB` 列，而Oracle不支持。
+- 8、在 GreatSQL 中，支持在 `CONNECT BY` 条件中含有 `BLOB` 列，而 Oracle 不支持。
 
 
 ## 3. 分层查询伪列
@@ -218,23 +218,23 @@ greatsql> SELECT LEVEL, SYS_CONNECT_BY_PATH(ROWNUM, '->') FROM DUAL WHERE
 
 ### 3.1 分层查询伪列 `CONNECT_BY_ISCYCLE`
 
-表示在分层查询中，当前数据是否会导致形成循环。即根据层次关系，当前层数据是否存在其叶子节点也是其父节点。该列只有在同时指定 `NOCYCLE` 关键字时才有意义，当前数据会导致形成环则结果为1，否则为0。
+表示在分层查询中，当前数据是否会导致形成循环。即根据层次关系，当前层数据是否存在其叶子节点也是其父节点。该列只有在同时指定 `NOCYCLE` 关键字时才有意义，当前数据会导致形成环则结果为 1，否则为 0。
 
 ### 3.2 分层查询伪列 `CONNECT_BY_ISLEAF`
 
-表示在分层查询中，当前数据是否是分层查询形成的树结构中的叶子节点。若是叶子节点值为1，否则为0。此信息指示是否可以进一步扩展给定行以显示更多层次结构。
+表示在分层查询中，当前数据是否是分层查询形成的树结构中的叶子节点。若是叶子节点值为 1，否则为 0。此信息指示是否可以进一步扩展给定行以显示更多层次结构。
 
 ### 3.3 分层查询伪列 `LEVEL`
 
-表示在分层查询中，形成的树结构中的当前层数。该列值一直从1开始，即 `START WITH` 对应的数据的层数一直为1，之后子孙节点的LEVEL值依次递增。
+表示在分层查询中，形成的树结构中的当前层数。该列值一直从 1 开始，即 `START WITH` 对应的数据的层数一直为 1，之后子孙节点的 LEVEL 值依次递增。
 
-下图显示了倒置树的节点及其LEVEL值：
+下图显示了倒置树的节点及其 LEVEL 值：
 
 ![Pseudocolumn LEVEL](https://docs.oracle.com/en/database/oracle/oracle-database/21/sqlrf/img/sqlrf001.gif)
 
 ## 4. 分层查询操作符  
 
-GreatSQL提供如下两个标识符，可用于指定层次关系中的某个节点属性。
+GreatSQL 提供如下两个标识符，可用于指定层次关系中的某个节点属性。
 
 ### 4.1 分层查询操作符 `PRIOR`
 
@@ -252,7 +252,7 @@ GreatSQL提供如下两个标识符，可用于指定层次关系中的某个节
 
 **注意：**
 
-1. 只支持基础数据类型，不支持JSON、GEO等特殊的数据类型。
+1. 只支持基础数据类型，不支持 JSON、GEO 等特殊的数据类型。
 
 2. 参数不可以是虚拟列、层次查询函数、操作符、伪列及子查询。
 
@@ -267,7 +267,7 @@ GreatSQL提供如下两个标识符，可用于指定层次关系中的某个节
 SYS_CONNECT_BY_PATH(column_name, DELIMITER)
 ```
 
-其中 `DELIMITER` 表示分隔符。该函数将获取从根节点到当前节点的路径上所有节点名为column_name的值，中间用DELIMITER进行分隔开。`SYS_CONNECT_BY_PATH()`不能在 `CONNECT BY`、`START WITH` 和 `GROUP BY` 等几个子句中使用。
+其中 `DELIMITER` 表示分隔符。该函数将获取从根节点到当前节点的路径上所有节点名为 column_name 的值，中间用 DELIMITER 进行分隔开。`SYS_CONNECT_BY_PATH()`不能在 `CONNECT BY`、`START WITH` 和 `GROUP BY` 等几个子句中使用。
 
 ### 5.2 定义和用法
 
@@ -277,7 +277,7 @@ SYS_CONNECT_BY_PATH(column_name, DELIMITER)
 
 含有伪列的计算，并且存在 `WHERE` 过滤条件，`ROWNUM` 的值，根据在 `CONNECT BY` 排序后的结果将会保存，而不是重新计算，例如：
 
-- GreatSQL运行结果：
+- GreatSQL 运行结果：
 ```sql
 greatsql> SELECT LEVEL, SYS_CONNECT_BY_PATH(ROWNUM, '->') FROM DUAL WHERE ROWNUM < 3 AND LEVEL=2 CONNECT BY LEVEL<=10;
 +-------+--------+
@@ -287,7 +287,7 @@ greatsql> SELECT LEVEL, SYS_CONNECT_BY_PATH(ROWNUM, '->') FROM DUAL WHERE ROWNUM
 +-------+--------+
 ```
 
-- Oracle运行结果：
+- Oracle 运行结果：
 ```sql
 SQL> SELECT LEVEL, SYS_CONNECT_BY_PATH(ROWNUM, '->') FROM DUAL WHERE ROWNUM < 3 AND LEVEL=2 CONNECT BY LEVEL<=10;
 

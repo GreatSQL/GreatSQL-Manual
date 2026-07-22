@@ -72,7 +72,7 @@ greatsql> SELECT 'after test 1', LENGTH('测试'), @@sql_mode;
 
 例如在某个存储过程中，可能用到了 `RAND()` 函数，它的输出结果是随机值，那么结果可能就不同了。
 
-又或者在[存储过程REF CURSOR, SYS_REFCURSOR用法](./sql-compat/5-3-easyuse-ora-sp-ref-cursor.md)案例中，需要确保先设置 `sql_generate_invisible_primary_key = 0`，否则可能导致存储过程运行异常，报告类似下面的错误：
+又或者在[存储过程 REF CURSOR, SYS_REFCURSOR 用法](./sql-compat/5-3-easyuse-ora-sp-ref-cursor.md)案例中，需要确保先设置 `sql_generate_invisible_primary_key = 0`，否则可能导致存储过程运行异常，报告类似下面的错误：
 ```sql
 greatsql> CALL p1()//
 ERROR 1328 (HY000): Incorrect number of FETCH variables

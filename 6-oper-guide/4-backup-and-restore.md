@@ -1,18 +1,18 @@
 # 备份恢复
 ---
 
-本文介绍GreatSQL数据库的几种不同备份恢复方法，主要包括：
+本文介绍 GreatSQL 数据库的几种不同备份恢复方法，主要包括：
 
 ## 逻辑备份恢复
-### [mysqldump逻辑备份恢复](./4-1-mysqldump.md)
-### [OUTFILE逻辑备份恢复](./4-2-outfile.md)
-### [MySQL Shell util逻辑备份恢复](./4-3-shell-util.md)
+### [mysqldump 逻辑备份恢复](./4-1-mysqldump.md)
+### [OUTFILE 逻辑备份恢复](./4-2-outfile.md)
+### [MySQL Shell util 逻辑备份恢复](./4-3-shell-util.md)
 
 ## 物理备份恢复
-### [物理备份恢复、xtrabackup备份恢复](./4-4-physical-backup.md)
+### [物理备份恢复、xtrabackup 备份恢复](./4-4-physical-backup.md)
 
-### CLONE备份恢复
-### [CLONE备份恢复](./4-5-clone.md)
+### CLONE 备份恢复
+### [CLONE 备份恢复](./4-5-clone.md)
 
 可以根据实际情况和业务需要，选择定制不同的备份恢复策略。
 
@@ -24,7 +24,7 @@
 - [mysqldump](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html)
 - [mysqlpump](https://dev.mysql.com/doc/refman/8.0/en/mysqlpump.html)
 - [mydumper](https://github.com/mydumper/mydumper)
-- [如何从mysqldump全量备份中抽取部分库表用于恢复](https://imysql.com/2010/06/01/mysql-faq-how-to-extract-data-from-dumpfile.html)
+- [如何从 mysqldump 全量备份中抽取部分库表用于恢复](https://imysql.com/2010/06/01/mysql-faq-how-to-extract-data-from-dumpfile.html)
 - [XtraBackup](https://docs.percona.com/percona-xtrabackup/latest/manual.html)
 
 

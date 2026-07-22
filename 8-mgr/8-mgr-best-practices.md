@@ -13,13 +13,13 @@ loose-group_replication_single_primary_mode=ON
 #不要启用引导模式
 loose-group_replication_bootstrap_group=OFF 
 
-#默认值150MB，但建议调低在20MB以内，不要使用大事务
+#默认值 150 MB，但建议调低在 20 MB 以内，不要使用大事务
 loose-group_replication_transaction_size_limit = 20M
 
-#大消息分片处理，每个分片10M，避免网络延迟太大
+#大消息分片处理，每个分片 10 M，避免网络延迟太大
 loose-group_replication_communication_max_message_size = 10M
 
-#节点退出后的默认行为，将本节点设置为RO模式
+#节点退出后的默认行为，将本节点设置为 RO 模式
 loose-group_replication_exit_state_action = READ_ONLY
 
 #超过多长时间收不到广播消息就认定为可疑节点，如果网络环境不好，可以适当调高
@@ -28,7 +28,7 @@ loose-group_replication_member_expel_timeout = 5
 #建议关闭原生流控机制
 loose-group_replication_flow_control_mode = "DISABLED"
 
-#AFTER模式下，只要多数派达成一致就可以，不需要全部节点一致
+#AFTER 模式下，只要多数派达成一致就可以，不需要全部节点一致
 loose-group_replication_majority_after_mode = ON
 
 #是否设置为仲裁节点
@@ -37,7 +37,7 @@ loose-group_replication_arbitrator = 0
 #启用快速单主模式
 loose-group_replication_single_primary_fast_mode = 1
 
-#当MGR层耗时超过100ms就记录日志，确认是否MGR层的性能瓶颈问题
+#当 MGR 层耗时超过 100 ms 就记录日志，确认是否 MGR 层的性能瓶颈问题
 loose-group_replication_request_time_threshold = 100
 
 #记录更多日志信息，便于跟踪问题
@@ -50,7 +50,7 @@ log_error_verbosity=3
 - 所有表都必须要有主键。同上，能创建没有主键的表，但无法写入数据，在利用 Clone 构建新节点时也会报错。
 - 尽量不要使用大事务，默认地，事务超过 150MB 会报错，最大可支持 2GB 的事务（在 GreatSQL 未来的版本中，会增加对大事务的支持，提高大事务上限，但依然不建议运行大事务）。
 - 如果是从旧版本进行升级，则不能选择 MINIMAL 模式升级，建议选择 AUTO 模式，即 `upgrade=AUTO`。
-- 由于 MGR 的事务认证线程不支持 `gap lock`，因此建议把所有节点的事务隔离级别都改成 `READ COMMITTED`。基于相同的原因，MGR 集群中也不要使用 `table lock` 及 `name lock`（即 `GET_LOCK()` 函数 ）。
+- 由于 MGR 的事务认证线程不支持 gap lock，因此建议把所有节点的事务隔离级别都改成 `READ COMMITTED`。基于相同的原因，MGR 集群中也不要使用 `table lock` 及 `name lock`（即 `GET_LOCK()` 函数 ）。
 - 在多主（`multi-primary`）模式下不支持串行（`SERIALIZABLE`）隔离级别。
 - 不支持在不同的 MGR 节点上，对同一个表分别执行 DML 和 DDL，可能会造成数据丢失或节点报错退出。
 - 在多主（`multi-primary`）模式下不支持多层级联外键表。另外，为了避免因为使用外键造成 MGR 报错，建议设置 `group_replication_enforce_update_everywhere_checks=ON`。
@@ -71,7 +71,7 @@ log_error_verbosity=3
 - 最好在局域网内部署 MGR，而不要跨公网，网络延迟太大的话，会导致 MGR 性能很差或很容易出错。
 - 建议启用 writeset 模式，即设置以下几个参数
     - `replica_parallel_type = LOGICAL_CLOCK`
-    - `replica_parallel_workers = N`，N>0，可以设置为逻辑CPU数的2倍
+    - `replica_parallel_workers = N`，N>0，可以设置为逻辑 CPU 数的 2 倍
     - `replica_preserve_commit_order = 1`
     - `replica_checkpoint_period = 2`
 

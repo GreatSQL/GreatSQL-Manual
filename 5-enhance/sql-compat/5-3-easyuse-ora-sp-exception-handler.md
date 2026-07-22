@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-Exception Handler
+# Oracle 兼容-存储过程-Exception Handler
 ---
 
 
@@ -44,9 +44,9 @@ END;
  
 - `handler_statement`：异常处理语句，当触发了异常，将会执行指定的处理语句。
 
-- 已预定义好的异常名（表格1）：
+- 已预定义好的异常名（表格 1）：
 
-| Oracle中的异常名    | GreatSQL是否支持 | 映射到GreatSQL中对应的异常名             |
+| Oracle 中的异常名    | GreatSQL 是否支持 | 映射到 GreatSQL 中对应的异常名             |
 | ----------------------- | -------- | -------------------------- |
 | NO_DATA_FOUND           | Y        | ER_SP_FETCH_NO_DATA        |
 | INVALID_CURSOR          | Y        | ER_SP_CURSOR_NOT_OPEN      |
@@ -74,9 +74,9 @@ END;
 
 更多预定义的异常错误信息，详见参考：[Server Error Message Reference](https://dev.mysql.com/doc/mysql-errors/8.0/en/server-error-reference.html)
 
-关于Oracle异常错误，详见参考：[Exception Declaration](https://docs.oracle.com/en/database/oracle/oracle-database/21/lnpls/exception-declaration.html#GUID-AAC8C54F-775C-4E65-B531-0350CFF5B1BD)
+关于 Oracle 异常错误，详见参考：[Exception Declaration](https://docs.oracle.com/en/database/oracle/oracle-database/21/lnpls/exception-declaration.html#GUID-AAC8C54F-775C-4E65-B531-0350CFF5B1BD)
 
-提示：错误号本身不能兼容Oracle，因为它和GreatSQL为各自体系错误信息，不存在复用。
+提示：错误号本身不能兼容 Oracle，因为它和 GreatSQL 为各自体系错误信息，不存在复用。
 
 
 ## 2. 异常声明 `Exception Declaration`
@@ -104,7 +104,7 @@ exception_name EXCEPTION
 PRAGMA EXCEPTION_INIT ( EXCEPTION, ERROR_CODE ) ;
 ```
 
-关于 `EXCEPTION_INIT` 的用法可参考下方示例4、示例6。
+关于 `EXCEPTION_INIT` 的用法可参考下方示例 4、示例 6。
 
 参考：
 
@@ -130,13 +130,13 @@ RAISE [ exception ]
 在异常处理程序中，如果省略异常名称，则该 `RAISE` 语句会重新引发当前异常。
     
 - 参数 `exception` 可以是以下两种
-  - 1. 预定义异常名称 （见上方所示表格1）。
+  - 1. 预定义异常名称 （见上方所示表格 1）。
   - 2. 自定义声明的异常名。 
       
      
 调用 `RAISE` 主动抛出异常的行为等同于 `SIGNAL Statement`，可用的溢出与禁止使用的错误号详见文档：[SIGNAL Statement](https://dev.mysql.com/doc/refman/8.0/en/signal.html)。
  
-关于 `RAISE exception` 的用法可参考下方示例3、示例4。
+关于 `RAISE exception` 的用法可参考下方示例 3、示例 4。
 
 ### 3.2  RAISE_APPLICATION_ERROR
 
@@ -155,7 +155,7 @@ RAISE_APPLICATION_ERROR (ERROR_CODE, MESSAGE)
  ERROR_CODE | SMALLINT UNSIGNED 
  MESSAGE | VARCHAR(128)
       
-关于 `RAISE_APPLICATION_ERROR` 的用法可参考下方示例5。
+关于 `RAISE_APPLICATION_ERROR` 的用法可参考下方示例 5。
 
 
 ## 4. 示例
@@ -167,7 +167,7 @@ greatsql> CREATE TABLE t1 (a INT NOT NULL, b VARCHAR(20) NOT NULL);
 greatsql> INSERT INTO t1 VALUES(1, 'row1'), (2, 'row2'), (3,'row3') ;
 ```
 
-- 1. 示例1，使用预定义异常 `TOO_MANY_ROWS`、`NO_DATA_FOUND`
+- 1. 示例 1，使用预定义异常 `TOO_MANY_ROWS`、`NO_DATA_FOUND`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -224,7 +224,7 @@ Query OK, 0 rows affected (0.00 sec)
 1 row in set (0.00 sec)
 ```
 
-- 2. 示例2，处理 `OTHERS` 异常
+- 2. 示例 2，处理 `OTHERS` 异常
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -256,7 +256,7 @@ Query OK, 0 rows affected (0.00 sec)
 1 row in set (0.00 sec)
 ```
 
-- 3. 示例3，调用 `RAISE` 抛出异常
+- 3. 示例 3，调用 `RAISE` 抛出异常
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -307,7 +307,7 @@ greatsql> CALL exception_sp3() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 4. 示例4，自定义异常
+- 4. 示例 4，自定义异常
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -352,7 +352,7 @@ greatsql> CALL exception_sp4() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 5. 示例5，自定义异常与消息
+- 5. 示例 5，自定义异常与消息
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -367,7 +367,7 @@ greatsql> CALL exception_sp5() //
 ERROR 33306 (HY000): GreatSQL exception in sp
 ```
 
-- 6. 示例6，异常绑定错误号
+- 6. 示例 6，异常绑定错误号
 
 ```
 greatsql> SET sql_mode = ORACLE;

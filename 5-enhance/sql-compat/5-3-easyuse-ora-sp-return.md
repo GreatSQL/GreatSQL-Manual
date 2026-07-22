@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-RETURN
+# Oracle 兼容-存储过程-RETURN
 ---
 
 
@@ -13,7 +13,7 @@ END;
 
 ## 2. 定义和用法
 
-在GreatSQL存储过程中支持用 `RETURN` 跳出，实现程序中断效果。
+在 GreatSQL 存储过程中支持用 `RETURN` 跳出，实现程序中断效果。
 
 
 ## 3. 示例

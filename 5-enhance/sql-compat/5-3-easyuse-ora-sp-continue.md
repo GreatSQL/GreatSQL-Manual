@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-CONTINUE
+# Oracle 兼容-存储过程-CONTINUE
 ------
 
 ## 语法
@@ -23,7 +23,7 @@ GreatSQL 的 `CONTINUE` 用法和 Oracle 一致。
 
 2. `CONTINUE [ LABEL ] WHEN`：如果没有 `WHEN` 子句，`CONTINUE` 语句将直接退出当前循环。如果加上了 `WHEN` 子句，当且仅当 "boolean_expression" 表达式的值为 "TRUE" 时，`CONTINUE` 语句才会退出当前循环。
 
-3. 对于多重嵌套的 `FOR i IN (select_stmt) LOOP` 和 `FOR i IN cursor LOOP` 循环，`CONTINUE` 跳转到之前的任何第 N 层的循环开始处，本层开始到第 N 层之间的 cursor 会执行 `CLOSE cursor` 操作，这样不影响下一次循环。然而对于中间执行过 `OPEN cursor` 的操作不会再执行 `CLOSE cursor` 操作。对于 `OPEN CURSOR FOR sys_refcursor` 也会执行 `CLOSE cursor` 操作，具体见下方[示例1](#示例1)。
+3. 对于多重嵌套的 `FOR i IN (select_stmt) LOOP` 和 `FOR i IN cursor LOOP` 循环，`CONTINUE` 跳转到之前的任何第 N 层的循环开始处，本层开始到第 N 层之间的 cursor 会执行 `CLOSE cursor` 操作，这样不影响下一次循环。然而对于中间执行过 `OPEN cursor` 的操作不会再执行 `CLOSE cursor` 操作。对于 `OPEN CURSOR FOR sys_refcursor` 也会执行 `CLOSE cursor` 操作，具体见下方[示例 1](#示例-1)。
 
 4. `CONTINUE` 只能用于 `FOR ... LOOP` 循环中。
 
@@ -41,7 +41,7 @@ greatsql> CREATE TABLE IF NOT EXISTS t2(id INT NOT NULL, c1 VARCHAR(100) NOT NUL
 greatsql> INSERT INTO t2 VALUES(10, 'row10'), (20, 'row20'), (30, 'row30');
 ```
 
-### 示例1：FOR ... CURSOR LOOP
+### 示例 1：FOR ... CURSOR LOOP
 
 ```sql
 greatsql> SET sql_mode = ORACLE; SET udt_format_result = 'DBA';
@@ -101,7 +101,7 @@ greatsql> CALL p1();
 Query OK, 0 rows affected (0.01 sec)
 ```
 
-### 示例2：`FOR select_stmt LOOP`
+### 示例 2：`FOR select_stmt LOOP`
 
 ```
 greatsql> SET sql_mode = ORACLE; SET udt_format_result = 'DBA';
@@ -183,7 +183,7 @@ greatsql> CALL p1();
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-### 示例3：`FOR i IN ... LOOP`
+### 示例 3：`FOR i IN ... LOOP`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -236,7 +236,7 @@ greatsql> CALL p1();
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-### 示例4：`WHILE ... LOOP`
+### 示例 4：`WHILE ... LOOP`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -328,7 +328,7 @@ greatsql> CALL p1();
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-### 示例5：`LOOP ... END LOOP`
+### 示例 5：`LOOP ... END LOOP`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -394,7 +394,7 @@ greatsql> CALL p1();
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-### 示例6：不用在 `LOOP` 块中，不支持 `CONTINUE` 用法
+### 示例 6：不用在 `LOOP` 块中，不支持 `CONTINUE` 用法
 
 ```sql
 greatsql> SET sql_mode = ORACLE;

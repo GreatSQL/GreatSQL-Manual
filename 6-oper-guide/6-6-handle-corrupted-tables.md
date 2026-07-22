@@ -30,7 +30,7 @@
 
 启用 `innodb_file_per_table` 并使用断言值会导致断言失败，从而导致 InnoDB 故意使服务器崩溃。在检测单表表空间中的损坏数据时，预计会出现这种情况。
 
-启用 `innodb_file_per_table` 并使用警告值会导致 InnoDB 将表损坏作为表损坏，而不是导致服务器崩溃。检测到文件损坏后，除了删除操作外，该数据文件的文件I/O也会失效。
+启用 `innodb_file_per_table` 并使用警告值会导致 InnoDB 将表损坏作为表损坏，而不是导致服务器崩溃。检测到文件损坏后，除了删除操作外，该数据文件的文件 I/O 也会失效。
 
 启用 `innodb_file_per_table` 并使用 salvage 值会导致 InnoDB 允许读取损坏的表空间，但忽略任何损坏的页面。
 

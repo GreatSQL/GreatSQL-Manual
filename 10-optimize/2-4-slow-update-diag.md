@@ -11,7 +11,7 @@
 
 ## Update 生命周期
 
-###  Server 层阶段
+### Server 层阶段
 
 **1. 连接器**
 
@@ -25,21 +25,21 @@ MySQL/GreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select�
 
 优化器会分析 SQL 语句，选择合适的索引，根据预结果集判断是否使用全表扫描。
 
-###  InnoDB 引擎层阶段
+### InnoDB 引擎层阶段
 
-####  事务执行阶段
+#### 事务执行阶段
 
-1. 请求进入 InnoDB 引擎后，首先判断该事务涉及到的数据页是否在buffer pool中（以下简称ibp），不存在则会从磁盘中加载此事务涉及的数据页到ibp中，并对相应的索引数据页加锁。
+1. 请求进入 InnoDB 引擎后，首先判断该事务涉及到的数据页是否在 buffer pool 中（以下简称 ibp），不存在则会从磁盘中加载此事务涉及的数据页到 ibp 中，并对相应的索引数据页加锁。
 
 2. 将修改前的数据写入到 Undo 中，修改后将回滚针执行 Undo log 中修改前的行。
 
-3. 写 redo log buffer 在 BP 中对数据进行修改操作，并将修改后的值写入到 redo log buffer 中等待异步 sync到磁盘。
+3. 写 Redo Log buffer 在 BP 中对数据进行修改操作，并将修改后的值写入到 Redo Log buffer 中等待异步 sync 到磁盘。
 
 4. 写 binlog cache，同时将修改的信息记录到 binlog cache 中，等待落盘。如果 binlog cache 不够用时，会写入到 binlog 临时文件。
 
 5. 写 change buffer。如果这个事务需要在二级索引上做修改，写入到 change buffer page 中，等待之后，事务需要读取该二级索引时进行 merge。
 
-####  事务提交阶段
+#### 事务提交阶段
 
 执行事务提交会进入二阶段提交模式（prepare 阶段和 commit 阶段。
 
@@ -49,31 +49,31 @@ MySQL/GreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select�
 
 2. Redo log prepare。
 
-3. Binlog write&fync: 执行器把 binlog cache 里的完整事务和 redo log prepare 中的 xid 写入到 binlog 中。
+3. Binlog write&fync: 执行器把 binlog cache 里的完整事务和 Redo Log prepare 中的 xid 写入到 binlog 中。
 
 4. Redo log commit commit。
 
 5. 事务提交，释放行记录持有的排它锁。
 
-6. Binlog 和 redo log 落盘后触发刷新脏页操作。
+6. Binlog 和 Redo Log 落盘后触发刷新脏页操作。
 
-7. 如果事务发生ROLLBACK，因为系统异常或显示回滚，所有数据变更会变成原来的，通过回滚日志中数据进行恢复。
+7. 如果事务发生 ROLLBACK，因为系统异常或显示回滚，所有数据变更会变成原来的，通过回滚日志中数据进行恢复。
 
 ## 影响事务提交慢的几种情况
 
 **1. 在事务执行阶段**
 
-1. 因为锁等待，包括行锁以及MDL锁，这是通过观察 `sys.innodb_lock_waits` 和 `sys.schema_table_lock_waits` 就能看到锁等待情况。
+1. 因为锁等待，包括行锁以及 MDL 锁，这是通过观察 `sys.innodb_lock_waits` 和 `sys.schema_table_lock_waits` 就能看到锁等待情况。
 
-1. 因为物理I/O较慢或物理I/O代价较高导致，这时通常IOPS或iowait指标较高。
+1. 因为物理 I/O 较慢或物理 I/O 代价较高导致，这时通常 IOPS 或 iowait 指标较高。
 
-1. 因为buffer pool不够用，需要等待释放部分page，这时通常能看到 `Innodb_buffer_pool_wait_free` 这个状态指标值大于0。
+1. 因为 buffer pool 不够用，需要等待释放部分 page，这时通常能看到 `Innodb_buffer_pool_wait_free` 这个状态指标值大于 0。
 
-1. 因为binlog & redo log两阶段协同提交，导致落盘慢，这时通常能看到类似 `waiting for handler commit` 的线程状态。
+1. 因为 binlog & Redo Log 两阶段协同提交，导致落盘慢，这时通常能看到类似 `waiting for handler commit` 的线程状态。
 
-## UPDATE执行慢排查分析
+## UPDATE 执行慢排查分析
 
-###  排除系统负载干扰
+### 排除系统负载干扰
 
 查看当时实例系统负载情况（IO、CPU、memory），排除系统负载干扰
 
@@ -89,28 +89,28 @@ MySQL/GreatSQL Server 端对一个 SQL 请求进行词法分析（识别 select�
 
 排查当前占用 io 高的线程，有可能是 page clean 导致或日志刷新频繁导致。
 
-###  检查数据库状态
+### 检查数据库状态
 
 执行 `SHOW PROCESSLIST`，查看当前线程是否有下列几种情况：
-- converting HEAP to ondisk、copy to tmp table、Copying to group table、Copying to tmp table等状态。
-- Copying to tmp table on disk、Creating sort index、Creating tmp table等状态。
-- Killed、Rolling back等状态。
-- Sorting result、Sending data、Searching rows for update等状态。
-- Waiting for XX状态。
+- converting HEAP to ondisk、copy to tmp table、Copying to group table、Copying to tmp table 等状态。
+- Copying to tmp table on disk、Creating sort index、Creating tmp table 等状态。
+- Killed、Rolling back 等状态。
+- Sorting result、Sending data、Searching rows for update 等状态。
+- Waiting for XX 状态。
 
 如果有，抓紧分析并优化这些正在执行的 SQL。
 
-###  分析 SQL 语句
+### 分析 SQL 语句
 
 通过 `EXPLAIN` 分析 SQL 的执行情况，是否走索引，是否有额外分组、排序、临时表，以及多表关联查询时驱动表选错等情况。
 
 使用 `PROFILING` 分析 SQL 语句哪个执行阶段最慢。
 
-###  分析应用程序执行 SQL 慢的时间
+### 分析应用程序执行 SQL 慢的时间
 
 观察是单个 SQL 执行慢，还是所有语句都慢，如果是所有 SQL 都慢，有可能是那个时段受到其他外部影响，导致数据库整体性能都很差，需要通过系统层的监控工具辅助排查分析。
 
-###  进行抓包和堆栈分析
+### 进行抓包和堆栈分析
 
 使用 `tcpdump` 进行抓包，分析是 MySQL/GreatSQL 返回慢，还是网络慢。
 

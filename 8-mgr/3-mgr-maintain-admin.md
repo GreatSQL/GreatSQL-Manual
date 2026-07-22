@@ -19,7 +19,7 @@ x86_64
 ```
 可以看到是 x86_64 平台下的 glibc 2.28 版本，因此选择二进制包文件：**greatsql-shell-8.0.32-25-glibc2.28-x86_64.tar.xz**。
 
-由于编译环境限制，没有提供全平台的 GreatSQL Shell 二进制包，如果有需要，请参考 [GreatSQL Shell Build仓库](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build) 自行构建适合您的运行环境的二进制包文件。
+由于编译环境限制，没有提供全平台的 GreatSQL Shell 二进制包，如果有需要，请参考 [GreatSQL Shell Build 仓库](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build) 自行构建适合您的运行环境的二进制包文件。
 
 运行 GreatSQL Shell 8.0.32-25 需要依赖 Python 3.8 环境，需要先执行下面命令完成相关依赖安装
 
@@ -49,14 +49,14 @@ mysqlsh --uri GreatSQL@172.16.16.10:3306
 
 ## 切换主节点
 
-### GreatSQL Shell方式切换主节点
+### GreatSQL Shell 方式切换主节点
 
 当主节点需要进行维护时，或者执行滚动升级时，就可以对其进行切换，将主节点切换到其他节点。
 
-在GreatSQL Shell中，可以调用 `setPrimaryInstance()` 函数进行切换：
+在 GreatSQL Shell 中，可以调用 `setPrimaryInstance()` 函数进行切换：
 
 ```js
-#首先获取mgr cluster对象
+#首先获取 mgr cluster 对象
 MySQL  172.16.16.10:3306 ssl  JS > c=dba.getCluster()
 
 #查看当前各节点列表 
@@ -127,10 +127,10 @@ The instance '172.16.16.11:3306' was successfully elected as primary.
 
 ### 手工方式切换
 
-在命令行模式下，可以使用`group_replication_set_as_primary()`这个udf实现切换，例如：
+在命令行模式下，可以使用 `group_replication_set_as_primary()` 这个 udf 实现切换，例如：
 
 ```sql
-# 将Primary角色切换到第二个节点
+# 将 Primary 角色切换到第二个节点
 greatsql> SELECT group_replication_set_as_primary('b05c0838-6850-11ec-a06b-00155d064000');
 +--------------------------------------------------------------------------+
 | group_replication_set_as_primary('b05c0838-6850-11ec-a06b-00155d064000') |
@@ -149,11 +149,11 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 ```
 
-可以看到`PRIMARY` 角色切换到 *172.16.16.11:3306* 上了
+可以看到 `PRIMARY` 角色切换到 *172.16.16.11:3306* 上了
 
 ## 切换单主/多主模式
 
-### GreatSQL Shell方式切换模式
+### GreatSQL Shell 方式切换模式
 
 调用函数 `switchToMultiPrimaryMode()` 和 `switchToSinglePrimaryMode()` 可以实现切换到多主、单主模式。
 
@@ -244,7 +244,7 @@ START group_replication;
 
 ### 手动方式切换
 
-在命令行模式下，可以调用`group_replication_switch_to_single_primary_mode()` 和 `group_replication_switch_to_multi_primary_mode()` 来切换单主/多主模式
+在命令行模式下，可以调用 `group_replication_switch_to_single_primary_mode()` 和 `group_replication_switch_to_multi_primary_mode()` 来切换单主/多主模式
 
 ```sql
 -- 直接调用函数即可
@@ -266,7 +266,7 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 
 -- 切换成单主模式时可以指定某个节点的 server_uuid，如果不指定则会根据规则自动选择一个新的主节点
--- 在这里，我选择了指定mgr1节点作为新主
+-- 在这里，我选择了指定 mgr1 节点作为新主
 greatsql> SELECT group_replication_switch_to_single_primary_mode('af39db70-6850-11ec-94c9-00155d064000');
 +-----------------------------------------------------------------------------------------+
 | group_replication_switch_to_single_primary_mode('af39db70-6850-11ec-94c9-00155d064000') |
@@ -277,11 +277,11 @@ greatsql> SELECT group_replication_switch_to_single_primary_mode('af39db70-6850-
 
 ## 添加新节点
 
-### GreatSQL Shell方式添加新节点
+### GreatSQL Shell 方式添加新节点
 
-首先，启动一个全新的空实例，确保可以用 root 账户连接登入。
+首先，启动一个全新的空实例，确保可以用 root 账户连接登录。
 
-参考文档：[MGR 节点预检查](../4-install-guide/2-install-with-rpm.md#91mgr节点预检查)，先利用 GreatSQL Shell 调用函数 `dba.configureInstance()` 完成初始化检查工作。
+参考文档：[MGR 节点预检查](../4-install-guide/2-install-with-rpm.md#mgr-节点预检查)，先利用 GreatSQL Shell 调用函数 `dba.configureInstance()` 完成初始化检查工作。
 
 后切换到连接主节点的 GreatSQL Shell 终端上，首先获取 cluster 对象，再进行添加新节点操作：
 
@@ -329,7 +329,7 @@ The instance '172.16.16.13:3306' was successfully added to the cluster.
 
 首先，要先完成 MySQL Server 初始化，创建好 MGR 专用账户、设置好 MGR 服务通道等前置工作，这部分的操作可以参考前文 [**3. 安装部署 MGR 集群**](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/deep-dive-mgr/deep-dive-mgr-03.md)。
 
-接下来，直接执行命令 `start group_replication` 启动 MGR 服务即可，新增的节点会进入分布式恢复这个步骤，它会从已有节点中自动选择一个作为捐献者（donor），并自行决定是直接读取 binlog 进行恢复，还是利用 Clone 进行全量恢复。
+接下来，直接执行命令 `START GROUP_REPLICATION` 启动 MGR 服务即可，新增的节点会进入分布式恢复这个步骤，它会从已有节点中自动选择一个作为捐献者（donor），并自行决定是直接读取 binlog 进行恢复，还是利用 Clone 进行全量恢复。
 
 如果是已经在线运行一段时间的 MGR 集群，有一定存量数据，这时候新节点加入可能会比较慢，建议手动利用 Clone 进行一次全量复制。还记得前面创建 MGR 专用账户时，给加上了 **BACKUP_ADMIN** 授权码，这时候就排上用场了，Clone 需要用到这个权限。
 
@@ -347,11 +347,11 @@ SET GLOBAL super_read_only=0;
 CLONE INSTANCE FROM GreatSQL@172.16.16.11:3306 IDENTIFIED BY 'GreatSQL';
 ```
 
-全量复制完数据后，该节点会进行一次自动重启。重启完毕后，再次确认 `group_replication_group_name`、`group_replication_local_address`、`group_replication_group_seeds` 这些选项值是否正确，如果没问题，执行 `start group_replication` 后，该节点应该就可以正常加入集群了。
+全量复制完数据后，该节点会进行一次自动重启。重启完毕后，再次确认 `group_replication_group_name`、`group_replication_local_address`、`group_replication_group_seeds` 这些选项值是否正确，如果没问题，执行 `START GROUP_REPLICATION` 后，该节点应该就可以正常加入集群了。
 
 ## 删除节点
 
-### GreatSQL Shell方式删除节点
+### GreatSQL Shell 方式删除节点
 
 删除节点比较简单，调用 `removeInstance()` 函数即可：
 
@@ -370,13 +370,13 @@ The instance '172.16.16.13:3306' was successfully removed from the cluster.
 
 ### 手动方式删除节点
 
-在命令行模式下，一个节点想退出 MGR 集群，直接执行 `stop group_replication` 即可，如果这个节点只是临时退出集群，后面还想加回集群，则执行 `start group_replication` 即可自动再加入。而如果是想彻底退出集群，则停止 MGR 服务后，执行 `RESET BINARY LOGS AND GTIDS ; RESET REPLICA ALL;` 重置所有复制（包含 MGR）相关的信息就可以了。
+在命令行模式下，一个节点想退出 MGR 集群，直接执行 `STOP GROUP_REPLICATION` 即可，如果这个节点只是临时退出集群，后面还想加回集群，则执行 `START GROUP_REPLICATION` 即可自动再加入。而如果是想彻底退出集群，则停止 MGR 服务后，执行 `RESET BINARY LOGS AND GTIDS ; RESET REPLICA ALL;` 重置所有复制（包含 MGR）相关的信息就可以了。
 
 ## 异常退出的节点重新加回
 
-### GreatSQL Shell方式重新加回
+### GreatSQL Shell 方式重新加回
 
-在GreatSQL Shell里，可以调用 `rejoinInstance()` 函数将异常的节点重新加回集群：
+在 GreatSQL Shell 里，可以调用 `rejoinInstance()` 函数将异常的节点重新加回集群：
 
 ```js
  MySQL  172.16.16.10:3306 ssl  JS > c.rejoinInstance('172.16.16.13:3306');
@@ -389,7 +389,7 @@ The instance '172.16.16.13:3306' was successfully rejoined to the cluster.
 
 当节点因为网络断开、实例 crash 等异常情况与 MGR 集群断开连接后，这个节点的状态会变成 **UNREACHABLE**，待到超过 `group_replication_member_expel_timeout` + 5 秒后，集群会踢掉该节点。
 
-等到这个节点再次启动并执行 `start group_replication`，正常情况下，该节点应能自动重新加回集群。如果设置了选项 `group_replication_start_on_boot = ON`，实例启动时也会尝试自动加回集群。
+等到这个节点再次启动并执行 `START GROUP_REPLICATION`，正常情况下，该节点应能自动重新加回集群。如果设置了选项 `group_replication_start_on_boot = ON`，实例启动时也会尝试自动加回集群。
 
 ## 重启 MGR 集群
 

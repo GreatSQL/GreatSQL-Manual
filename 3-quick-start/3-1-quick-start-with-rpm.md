@@ -1,11 +1,11 @@
-# RPM安装
+# RPM 安装
 ---
 
 本节介绍如何用 RPM 包方式安装 GreatSQL 数据库，假定本次安装是在 CentOS 8.x x86_64 环境中安装，并且是以 root 用户身份执行安装操作。
 
 ## 下载安装包
 
-[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5)下载最新的安装包，至少下载以下几个RPM包文件：
+[点击此处](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-5)下载最新的安装包，至少下载以下几个 RPM 包文件：
 
 - greatsql-client-8.4.4-5.1.el8.x86_64.rpm
 - greatsql-devel-8.4.4-5.1.el8.x86_64.rpm
@@ -13,10 +13,10 @@
 - greatsql-shared-8.4.4-5.1.el8.x86_64.rpm
 - greatsql-server-8.4.4-5.1.el8.x86_64.rpm
 
-**提示**：建议直接下载RPM集中打包文件，例如 greatsql-8.4.4-5.1.el8.x86_64.rpm-bundle.tar.xz，就无需每个文件单独下载了。
+**提示**：建议直接下载 RPM 集中打包文件，例如 greatsql-8.4.4-5.1.el8.x86_64.rpm-bundle.tar.xz，就无需每个文件单独下载了。
 
 ## 运行环境配置
-关闭selinux和防火墙
+关闭 selinux 和防火墙
 
 ```bash
 #关闭selinux
@@ -30,13 +30,13 @@ systemctl disable iptables
 systemctl stop iptables
 ```
 
-另外，要先确认yum源可用，因为安装GreatSQL时还要先安装其他依赖包，通过yum安装最省事。
+另外，要先确认 yum 源可用，因为安装 GreatSQL 时还要先安装其他依赖包，通过 yum 安装最省事。
 
-如果需要配置yum源，可以参考[配置阿里云YUM源](https://developer.aliyun.com/mirror/centos)。
+如果需要配置 yum 源，可以参考[配置阿里云 YUM 源](https://developer.aliyun.com/mirror/centos)。
 
 ## 安装依赖包
 
-安装GreatSQL RPM包时，要先安装这些相关依赖包。
+安装 GreatSQL RPM 包时，要先安装这些相关依赖包。
 ```bash
 $ yum install -y pkg-config perl libaio-devel numactl-devel numactl-libs net-tools \
   openssl openssl-devel jemalloc jemalloc-devel perl-Data-Dumper perl-Digest-MD5 \
@@ -94,9 +94,9 @@ Updating / installing...
    5:greatsql-devel-8.4.4-5.1.el8   ################################# [100%]
 ```
 
-## 启动GreatSQL
+## 启动 GreatSQL
 
-启动GreatSQL服务前，先修改systemd文件 `vim /lib/systemd/system/mysqld.service`，在 *[Service]* 区间增加下面几行内容，调高一些limit上限，避免出现文件数、线程数不够用的告警。
+启动 GreatSQL 服务前，先修改 systemd 文件 `vim /lib/systemd/system/mysqld.service`，在 *[Service]* 区间增加下面几行内容，调高一些 limit 上限，避免出现文件数、线程数不够用的告警。
 
 ```ini
 # some limits
@@ -123,7 +123,7 @@ TasksAccounting=false
 systemctl daemon-reload
 ```
 
-执行下面的命令启动GreatSQL服务
+执行下面的命令启动 GreatSQL 服务
 
 ```bash
 systemctl start mysqld
@@ -167,7 +167,7 @@ $ ls /var/lib/mysql
 ```
 可以看到，GreatSQL 服务已经正常启动了。
 
-## 连接登入 GreatSQL
+## 连接登录 GreatSQL
 
 RPM 方式安装 GreatSQL 后，会随机生成管理员 root 的密码，通过搜索日志文件获取：
 
@@ -180,7 +180,7 @@ $ grep -i root /var/log/mysqld.log
 
 可以看到，root 账户的密码是："K<f9Iapd#wwp" (不包含双引号)，复制到粘贴板里。
 
-首次登入 GreatSQL 后，要立即修改 root 密码，否则无法执行其他操作，并且新密码要符合一定安全规则：
+首次登录 GreatSQL 后，要立即修改 root 密码，否则无法执行其他操作，并且新密码要符合一定安全规则：
 
 ```bash
 $ mysql -uroot -p

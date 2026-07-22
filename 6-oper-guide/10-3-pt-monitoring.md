@@ -8,7 +8,7 @@
 
 在 Percona Toolkit 中监控类共有以下工具：
 
-- `pt-deadlock-logger`：提取和记录MySQL/GreatSQL死锁。
+- `pt-deadlock-logger`：提取和记录 MySQL/GreatSQL 死锁。
 - `pt-fk-error-logger`：提取和记录外键信息。
 - `pt-mext`：并行查看status样本信息。
 - `pt-query-digest`：分析查询日志，并产生报告。
@@ -92,12 +92,12 @@ CREATE TABLE deadlocks (
 
 - `server`：发生死锁的（源）服务器。
 - `ts`：上次检测到死锁的日期和时间。
-- `thread`：GreatSQL线程编号，和`SHOW FULL PROCESSLIST`中的ID一致。
-- `txn_id`：InnoDB事务ID。
+- `thread`：GreatSQL 线程编号，和 `SHOW FULL PROCESSLIST` 中的 ID 一致。
+- `txn_id`：InnoDB 事务ID。
 - `txn_time`：发生死锁时事务处于活动状态的时间。
 - `user`：连接的数据库用户名。
 - `hostname`：连接的主机。
-- `ip`：连接的 IP 地址。如果指定`--numeric-ip`，则将转换为无符号整数。
+- `ip`：连接的 IP 地址。如果指定 `--numeric-ip`，则将转换为无符号整数。
 - `db`：发生死锁的库。
 - `tbl`：发生死锁的表。
 - `idx`：发生死锁的索引。
@@ -107,7 +107,7 @@ CREATE TABLE deadlocks (
 - `victim`：事务是否被选为可回滚的事务（牺牲品）并进行回滚。
 - `query`：导致死锁的查询。
 
-首先创建上方提供的`deadlocks`表，也可在命令中加入`--create-dest-table`自动创建表：
+首先创建上方提供的 `deadlocks` 表，也可在命令中加入 `--create-dest-table` 自动创建表：
 
 ```sql
 greatsql> CREATE TABLE deadlocks 
@@ -121,7 +121,7 @@ Query OK, 0 rows affected (0.06 sec)
 pt-deadlock-logger h=localhost,P=3306,u=root,p='' --dest h=localhost,P=3307,u=root,p='',D=test_db,t=deadlocks
 ```
 ::: tip 小贴士
-因为没有指定`--run-time`所以该工具会一直在当前窗口运行，如果要转到后台运行可以使用`--daemonize`。
+因为没有指定 `--run-time` 所以该工具会一直在当前窗口运行，如果要转到后台运行可以使用 `--daemonize`。
 :::
 
 人为制造一个死锁：
@@ -135,7 +135,7 @@ pt-deadlock-logger h=localhost,P=3306,u=root,p='' --dest h=localhost,P=3307,u=ro
 |                                             | UPDATE t1 SET c2 = 'GreatSQL' WHERE id = 1;                  |
 |                                             | ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting transaction |
 
-查看`deadlocks`表：
+查看 `deadlocks` 表：
 
 ```bash
 +-----------+---------------------+--------+--------+----------+------+-----------+----+---------+-----+---------+-----------+-----------+-----------+--------+--------------------------------------------+
@@ -147,13 +147,13 @@ pt-deadlock-logger h=localhost,P=3306,u=root,p='' --dest h=localhost,P=3307,u=ro
 2 rows in set (0.00 sec)
 ```
 
-`deadlocks`表中记录了锁的细节、类型、SQL语句，比起直接看`SHOW ENGINE INNODB STATUS`方便。
+`deadlocks` 表中记录了锁的细节、类型、SQL 语句，比起直接看 `SHOW ENGINE INNODB STATUS` 方便。
 
 ## pt-fk-error-logger
 
 ### 概要
 
-pt-fk-error-logger工具的作用和pt-deadlock-logger差不多，pt-fk-error-logger是记录MySQL/GreatSQL外键错误信息。
+`pt-fk-error-logger` 工具的作用和 `pt-deadlock-logger` 差不多，`pt-fk-error-logger` 是记录 MySQL/GreatSQL 外键错误信息。
 
 **用法**
 
@@ -207,7 +207,7 @@ CREATE TABLE foreign_key_errors (
 - `ts`：记录时间
 - `error`：错误描述
 
-将host1主机产生的违反外键约束信息保存在host2主机test_db库下面的foreign_key_errors表中：
+将host1 主机产生的违反外键约束信息保存在host2 主机test_db库下面的foreign_key_errors表中：
 
 ```bash
 pt-fk-error-logger h=localhost,P=3306,u=root,p='',S=/data/GreatSQL01/mysql.sock --dest h=localhost,P=3307,u=root,p='',S=/data/GreatSQL02/mysql.sock,D=test_db,t=foreign_key_errors
@@ -236,7 +236,7 @@ CREATE TABLE `t_fk2` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
-往t_fk1表插入数据：
+往t_fk1 表插入数据：
 
 ```sql
 greatsql> INSERT INTO t_fk1 VALUES(1,1,'a','a');
@@ -244,7 +244,7 @@ greatsql> INSERT INTO t_fk1 VALUES(2,2,'b','b');
 greatsql> INSERT INTO t_fk1 VALUES(3,3,'c','c');
 ```
 
-往t_fk2表插入数据：
+往t_fk2 表插入数据：
 
 ```sql
 greatsql> INSERT INTO t_fk2 VALUES(5,5);
@@ -328,13 +328,13 @@ Binlog_cache_use                            118                    0
 
 上述命令中会有三次迭代，但只会输出第一次的结果，第二次和第一次相差的结果。意味着这会详细的列出每个变量在这一阶段的一个初始值(第一列)以及每两个采样点的差异值。
 
-上面例子中`Aborted_clients`中的84是采样的初始值，后面的0是每两个采样点的差异值。
+上面例子中`Aborted_clients`中的84是采样的初始值，后面的 0 是每两个采样点的差异值。
 
 ## pt-query-digest
 
 ### 概要
 
-pt-query-digest 是用于分析 MySQL/GreatSQL 慢查询的一个工具，它可以分析Binlog、General log、Slowlog，也可以通过 `SHOW PROCESSLIST` 或者通过 `tcpdump` 抓取的 MySQL/GreatSQL 协议数据来进行分析。
+`pt-query-digest` 是用于分析 MySQL/GreatSQL 慢查询的一个工具，它可以分析 Binlog、General log、Slowlog，也可以通过 `SHOW PROCESSLIST` 或者通过 `tcpdump` 抓取的 MySQL/GreatSQL 协议数据来进行分析。
 
 可以把分析结果输出到文件中，分析过程是先对查询语句的条件进行参数化，然后对参数化以后的查询进行分组统计，统计出各查询的执行时间、次数、占比等，可以借助分析结果找出问题进行优化。
 
@@ -409,7 +409,7 @@ pt-query-digest [OPTIONS] [FILES] [DSN]
 | --variations                | 报告这些属性值的变化数量                                     |
 | --version                   | 显示版本                                                     |
 | --[no]version-check         | 版本检查                                                     |
-| --[no]vertical-format       | 垂直输出SQL结果                                              |
+| --[no]vertical-format       | 垂直输出 SQL 结果                                              |
 | --watch-server              | 在解析 tcpdump 时要监视哪个服务器 IP 地址和端口（如“10.0.0.1:3306”）（对于 `--type` tcpdump）；所有其他服务器都将被忽略 |
 
 ### 最佳实践
@@ -449,11 +449,11 @@ Query size        15.50k      30     250  133.39  202.40   52.84  143.84
 ```
 
 - unique：唯一查询数量，即对查询条件进行参数化以后，总共有多少个不同的查询。
-- 95%：把所有值从小到大排列，位置位于95%的那个数。
+- 95%：把所有值从小到大排列，位置位于 95%的那个数。
 - median：中位数，把所有值从小到大排列，位置位于中间那个数。
 
 ::: tip 小贴士
-如果没有命令hostname可能会导致报错`error: Can't exec "hostname"`此时下载`inetutils`即可。
+如果没有命令 `hostname` 可能会导致报错 `error: Can't exec "hostname"` 此时下载 `inetutils` 即可。
 :::
 
 **第二部分**
@@ -525,13 +525,13 @@ select * from tpch.lineitem where l_suppkey=23045\G
 - Rows affected：表示查询影响的行数。
 - Bytes sent：表示查询发送的字节数。
 - Query size：表示查询的大小。
-- Query_time distribution：查询时间的分布，可以看到这个SQL查询执行时间都是10秒以上。
-- Tables：该SQL查询涉及的表。
-- EXPLAIN：查询的SQL语句。
+- Query_time distribution：查询时间的分布，可以看到这个 SQL 查询执行时间都是 10 秒以上。
+- Tables：该 SQL 查询涉及的表。
+- EXPLAIN：查询的 SQL 语句。
 
 #### 分析指定时间内的查询
 
-分析12小时内的查询：
+分析 12 小时内的查询：
 
 ```bash
 pt-query-digest --since=12h ./slow.log
@@ -559,7 +559,7 @@ pt-query-digest --filter '($event->{user} || "") =~ m/^root/i' slow.log
 
 #### 分析其他日志
 
-**分析binlog**
+**分析 binlog**
 
 分析前要先解析：
 
@@ -567,7 +567,7 @@ pt-query-digest --filter '($event->{user} || "") =~ m/^root/i' slow.log
 mysqlbinlog binlog.000023 > binlog.000023.sql
 ```
 
-解析后在分析binlog：
+解析后在分析 binlog：
 ```bash
 pt-query-digest  --type=binlog  binlog.000023.sql > binlog_analysis.log
 ```

@@ -21,18 +21,18 @@ Docker version 20.10.10, build b485636
 ```
 
 ::: tip 小贴士
-当使用特定版本的 Docker 或其版本过低（如<=17.12.1）时，可能存在问题，参考： [20. 为什么GreatSQL Docker容器启动失败](../11-faq/5-faq-others.md#_20-为什么greatsql-docker容器启动失败) 。
+当使用特定版本的 Docker 或其版本过低（如<=17.12.1）时，可能存在问题，参考： [20. 为什么 GreatSQL Docker 容器启动失败](../11-faq/5-faq-others.md#_20-为什么-greatsql-docker-容器启动失败) 。
 :::
 
 ## 安装步骤
 
-### 1. 启动Docker服务
+### 1. 启动 Docker 服务
 
 ```bash
 systemctl start docker
 ```
 
-### 2. 搜索、拉取GreatSQL镜像
+### 2. 搜索、拉取 GreatSQL 镜像
 
 ```bash
 docker search greatsql
@@ -62,7 +62,7 @@ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
 
 ### 3. 创建一个新容器
 
-容器中会安装并启动GreatSQL数据库
+容器中会安装并启动 GreatSQL 数据库
 
 ```bash
 docker run -d --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EMPTY_PASSWORD=1 greatsql/greatsql
@@ -70,7 +70,7 @@ docker run -d --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EMPTY_PASSWORD=
 ...
 4f351e22cea990b177589970ac5374f4b3366d2c0f69e923475f82c51da4b934
 ```
-容器的命名和容器内主机名均为greatsql。
+容器的命名和容器内主机名均为 greatsql。
 
 确认容器状态：
 
@@ -81,9 +81,9 @@ docker ps -a | grep greatsql
 4f351e22cea9   greatsql/greatsql     "/docker-entrypoint.…"   About a minute ago   Up About a minute          3306/tcp, 33060-33061/tcp   greatsql
 ...
 ```
-看到容器状态是Up的，表示已正常启动了。
+看到容器状态是 Up 的，表示已正常启动了。
 
-个别时候，可能会发生Docker容器创建异常，例如下面这样
+个别时候，可能会发生 Docker 容器创建异常，例如下面这样
 
 ```bash
 docker logs greatsql
@@ -103,7 +103,7 @@ sestatus
 SELinux status:                 disabled
 ```
 
-如果没有就先关闭 SELinux，参考：[关闭防火墙及selinux](../4-install-guide/1-install-prepare.html#关闭防火墙及selinux)。
+如果没有就先关闭 SELinux，参考：[关闭防火墙及 SELinux](../4-install-guide/1-install-prepare.md#关闭防火墙及-selinux)。
 
 如果已经关闭 SELinux 还是会出现上述问题的话，可以在创建 Docker 容器时加上 `--privileged` 参数，例如下面这样
 
@@ -113,7 +113,7 @@ docker run -d --privileged --name greatsql --hostname=greatsql -e MYSQL_ALLOW_EM
 
 这样通常就可以解决上述问题。
 
-这种问题通常是因为安装的Docker版本号较低或特殊版本存在问题导致的，升级版本一般也能解决问题。经我个人测试，使用较早的Docker版本如<=18.06.3的版本（有部分用户在20.10.8版本也遇到过）就有该问题，个别在Kubernetes环境中安装的Docker可能也有问题。
+这种问题通常是因为安装的 Docker 版本号较低或特殊版本存在问题导致的，升级版本一般也能解决问题。经我个人测试，使用较早的 Docker 版本如<=18.06.3 的版本（有部分用户在 20.10.8 版本也遇到过）就有该问题，个别在 Kubernetes 环境中安装的 Docker 可能也有问题。
 
 ### 4. 进入容器
 
@@ -128,9 +128,9 @@ docker exec -it greatsql bash
  binlog.000002   ca.pem            duckdb.data.wal  '#ib_16384_1.dblwr'  '#innodb_redo'     mysql.ibd       performance_schema   server-key.pem    undo_001
  binlog.000003   client-cert.pem   error.log         ib_buffer_pool       innodb_status.1   mysql.pid       private_key.pem      slow.log          undo_002
 ```
-可以看到，GreatSQL已经安装并初始化完毕。
+可以看到，GreatSQL 已经安装并初始化完毕。
 
-在容器中登入GreatSQL数据库：
+在容器中登录 GreatSQL 数据库：
 
 ```bash
 [root@greatsql GreatSQL]# mysql -uroot
@@ -147,7 +147,7 @@ Server version:        8.4.4-5 GreatSQL, Release 5, Revision 39b389cdf3b
 Threads: 2  Questions: 6  Slow queries: 0  Opens: 119  Flush tables: 3  Open tables: 36  Queries per second avg: 0.017
 ```
 
-至此，在Docker中安装GreatSQL数据库完成。
+至此，在 Docker 中安装 GreatSQL 数据库完成。
 
 如果想要在 Docker 容器中执行某个 SQL 脚本，需要先将该 SQL 脚本拷贝到容器中，再执行相应的 SQL 脚本，如下例所示：
 

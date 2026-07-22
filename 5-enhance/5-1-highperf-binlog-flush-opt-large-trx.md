@@ -43,7 +43,7 @@ binlog cache 在写入阶段预留：
 - Format Description Event
 - Previous GTID Event
 - GTID Event
-- 对齐 padding 空间（IO_SIZE 对齐）
+- 对齐 padding 空间（ IO_SIZE 对齐）
 
 使其具备“可直接作为 binlog 文件”的结构基础。
 

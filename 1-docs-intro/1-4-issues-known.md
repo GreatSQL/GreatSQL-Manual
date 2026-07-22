@@ -6,7 +6,7 @@
 - 在 GreatSQL 8.0.32-25 以前的版本中，不支持 Rapid 引擎。
 - 从 GreatSQL 8.0.32-26 开始，不再推荐使用 InnoDB 并行查询特性（同时会删除用户手册中的入口链接）。
 -  Rapid 引擎不支持表分区、外键。
-- 在 GreatSQL 8.4.4-5 之前版本中的 Rapid 引擎表，开启增量数据同步任务后，当其InnoDB基本表中有个事务先删除后插入相同主键记录时，会出现报错。例如
+- 在 GreatSQL 8.4.4-5 之前版本中的 Rapid 引擎表，开启增量数据同步任务后，当其 InnoDB 基本表中有个事务先删除后插入相同主键记录时，会出现报错。例如
 
 ```sql
 -- 构造一个先删除后插入的事务
@@ -39,7 +39,7 @@ greatsql> ALTER TABLE t1 SECONDARY_LOAD;
 greatsql> SELECT START_SECONDARY_ENGINE_INCREMENT_LOAD_TASK('test', 't1');
 ```
 
-该问题在GreatSQL 8.4.4-5版本中已得到解决。
+该问题在 GreatSQL 8.4.4-5 版本中已得到解决。
 
 
 **扫码关注微信公众号**

@@ -3,7 +3,7 @@
 
 本文介绍 GreatSQL 数据库如何采用 `OUTFILE` 进行备份恢复。
 
-`OUTFILE` 是指在 GreatSQL 数据库中执行 SELECT 查询，并将查询结果直接输出到外部文件中的做法。
+`OUTFILE` 是指在 GreatSQL 数据库中执行 `SELECT` 查询，并将查询结果直接输出到外部文件中的做法。
 
 `OUTFILE` 导出的文件，可以利用 `LOAD DATA` 再恢复到数据库中。
 
@@ -40,7 +40,7 @@ SELECT * INTO OUTFILE '/tmp/OUTFILE-t1.txt'
 - 遇到需要转义的地方加上\进行转义
 - 行数据间用\n分隔
 
-表 `t1` 的DDL定义如下：
+表 `t1` 的 DDL 定义如下：
 ```sql
 CREATE TABLE `t1` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -64,11 +64,11 @@ vs
 ```
 注意到两个字符串列数据用引号"前后包围起来了，并且原数据中的单引号'、双引号"都做了转义（在其前面加上\，因为列之间已用双引号"包围，所以只需要转义双引号"，无需对单引号'做转义）。
 
-另外，由于 `OUTFILE` 是采用 SELECT 查询方式备份的，因此可以指定只备份部分列，或加上 WHERE 条件只备份部分数据。例如：
+另外，由于 `OUTFILE` 是采用 `SELECT` 查询方式备份的，因此可以指定只备份部分列，或加上 WHERE 条件只备份部分数据。例如：
 ```sql
 SELECT c1,c2 INTO OUTFILE '/tmp/OUTFILE-t1.txt' FROM t1;
 ```
-对表t1只备份其中的 c1,c2 两列数据，不备份 id 列数据，那么在后续的 `LOAD DATA` 导入恢复时就需要做额外处理了。
+对表 t1 只备份其中的 c1,c2 两列数据，不备份 id 列数据，那么在后续的 `LOAD DATA` 导入恢复时就需要做额外处理了。
 
 ##  LOAD DATA 导入恢复
 可以通过 `LOAD DATA` 将 `OUTFILE` 导出的文件恢复到数据库中。
@@ -106,13 +106,13 @@ ERROR 1290 (HY000): The MySQL server is running with the --secure-file-priv opti
 ```sql
 LOAD DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1(c1, c2);
 ```
-因为主键列id定义成自增INT列，导入时如果不指定值也会实现自动填充。
+因为主键列 id 定义成自增 INT 列，导入时如果不指定值也会实现自动填充。
 
 还可以在 `LOAD DATA` 导入时对某列进行动态赋值，例如：
 ```sql
 LOAD DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1(c1, c2) SET id=RAND()*10240;
 ```
-那么id列填充的就是随机INT值了，例如下面这样的：
+那么 id 列填充的就是随机 INT 值了，例如下面这样的：
 ```sql
 greatsql> SELECT * FROM t3;
 +------+----+--------------------+
@@ -125,7 +125,7 @@ greatsql> SELECT * FROM t3;
 ```
 
 ##  LOAD DATA 并行导入
-从 GreatSQL 8.0.32-25 版本开始，`LOAD DATA`执行并行导入，只需在导入时加上HINT `SET_VAR(gdb_parallel_load=ON)` 即可，例如：
+从 GreatSQL 8.0.32-25 版本开始，`LOAD DATA` 执行并行导入，只需在导入时加上 HINT `SET_VAR(gdb_parallel_load=ON)` 即可，例如：
 ```sql
 LOAD /*+ SET_VAR(gdb_parallel_load=ON) */ DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1;
 ```
@@ -135,14 +135,14 @@ LOAD /*+ SET_VAR(gdb_parallel_load=ON) */ DATA INFILE '/tmp/outfile-t1.txt' INTO
 LOAD /*+ SET_VAR(gdb_parallel_load=ON) SET_VAR(gdb_parallel_load_chunk_size=65536) SET_VAR(gdb_parallel_load_workers=16) */ DATA INFILE '/tmp/outfile-t1.txt' INTO TABLE t1;
 ```
 
-更多关于并行LOAD DATA的详细信息请参考文档：[并行LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md)。
+更多关于并行 LOAD DATA 的详细信息请参考文档：[并行 LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md)。
 
 
 **参考资料：**
 
 - [SELECT ... INTO OUTFILE](https://dev.mysql.com/doc/refman/8.0/en/select-into.html)
 - [LOAD DATA](https://dev.mysql.com/doc/refman/8.0/en/load-data.html)
-- [GreatSQL增强特性之：并行LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md)
+- [GreatSQL 增强特性之：并行LOAD DATA](../5-enhance/5-1-highperf-parallel-load.md)
 
 
 

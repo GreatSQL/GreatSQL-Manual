@@ -1,6 +1,6 @@
 # 客户端统计 CLIENT_STATISTICS
 ---
-## CLIENT_STATISTICS表介绍
+## CLIENT_STATISTICS 表介绍
 
 此表包含有关客户端连接的统计信息。可见性限制为具有 `SUPER` 或 `PROCESS` 权限的用户。若没有 `SUPER` 或 `PROCESS` 权限报错如下：
 

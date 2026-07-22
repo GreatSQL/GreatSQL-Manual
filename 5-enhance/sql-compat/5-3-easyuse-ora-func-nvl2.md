@@ -1,4 +1,4 @@
-# Oracle兼容-函数-NVL2()函数
+# Oracle 兼容-函数-NVL2()函数
 ---
 
 
@@ -13,16 +13,16 @@ NVL2(expr1, expr2, expr3)
 
 `NVL2()` 函数作用类似 `IFNULL()`，如果 `expr1` 不为 NULL，则返回 `expr2`；当 `expr1` 为 NULL 时，则返回 `expr3`。
 
-如果expr2和expr3类型不同，则返回的数据类型会依据expr2,expr3的类型自动选择其一并做适当转换。
+如果 expr2 和 expr3 类型不同，则返回的数据类型会依据 expr2,expr3 的类型自动选择其一并做适当转换。
 
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-GreatSQL中的 `NVL2()` 函数使用方法和Oracle中相同，但函数返回值类型与Oracle存在不同。
+GreatSQL 中的 `NVL2()` 函数使用方法和 Oracle 中相同，但函数返回值类型与 Oracle 存在不同。
 
-在Oracle中，如果 `expr2` 和 `expr3` 类型不同，`expr3` 会转换为 `expr2` 的类型，如果不能转换，则会报错。
+在 Oracle 中，如果 `expr2` 和 `expr3` 类型不同，`expr3` 会转换为 `expr2` 的类型，如果不能转换，则会报错。
 
-而在GreatSQL中，则会依据 `expr2` 和 `expr3` 的类型，判断是否可聚合成为`expr2` 或 `expr3` 的类型之一。这个处理方式与 `NVL()`、`COALESCE()`、`IF()`、`CASE()` 等函数一致。
+而在 GreatSQL 中，则会依据 `expr2` 和 `expr3` 的类型，判断是否可聚合成为`expr2` 或 `expr3` 的类型之一。这个处理方式与 `NVL()`、`COALESCE()`、`IF()`、`CASE()` 等函数一致。
 
 ## 4. 示例
 

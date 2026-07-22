@@ -110,9 +110,9 @@ greatsql> SELECT audit_log_rotate();
 +----------------------------------+
 ```
 
-- 设置参数 `audit_log_filter.rotate_on_size` 大于0，默认值为1GB，也即当审计日志文件大于1GB时会自动轮转。如果设置为0则不会自动轮转。
+- 设置参数 `audit_log_filter.rotate_on_size` 大于 0，默认值为 1GB，也即当审计日志文件大于 1GB 时会自动轮转。如果设置为 0 则不会自动轮转。
 
-- 如果参数 `audit_log_filter.max_size` 或 `audit_log_filter.prune_seconds` 的值大于0，并且参数 `audit_log_filter.rotate_on_size` 的值大于0，则日志文件将被自动清理。
+- 如果参数 `audit_log_filter.max_size` 或 `audit_log_filter.prune_seconds` 的值大于 0，并且参数 `audit_log_filter.rotate_on_size` 的值大于 0，则日志文件将被自动清理。
 
 ## 筛选审核日志
 
@@ -143,7 +143,7 @@ greatsql> SELECT audit_log_rotate();
 | user Filter  | 接受特定的用户名作为参数，可以包含多个用户名，支持通配符 |
 | database Filter | 按数据库名称过滤事件，接受数据库名称作为参数，支持通配符 |
 | table Filter | 指定单个表名，允许对数据库中的特定表进行过滤，支持通配符 |
-| operation Filter | `read`: SELECT语句<br/>`write`: INSERT, UPDATE, DELETE语句<br/>`ddl`: DDL语句<br/>`dcl`: DCL语句 |
+| operation Filter | `read`: SELECT 语句<br/>`write`: INSERT, UPDATE, DELETE 语句<br/>`ddl`: DDL 语句<br/>`dcl`: DCL 语句 |
 | event Filter | `status`: 跟踪查询执行状态<br/>`query`: 捕获查询详细信息<br/>`connection`: 监控连接事件 |
 | status Filter | `0`: 成功<br/>`1`: 失败 |
 
@@ -258,11 +258,11 @@ greatsql> SET GLOBAL audit_log_filter.disable=OFF;
 | 函数 | 简介 |
 | :--- | :--- |
 | audit_log_encryption_password_get(keyring_id)   | 此函数返回加密密码，如果不包含参数 `keyring_id`，将返回当前加密密码 |
-| audit_log_encryption_password_set(new_password) | 加密密码，并将新密码存储在 keyring 中，参数 `password` 为字符串，最大长度为766字节 |
+| audit_log_encryption_password_set(new_password) | 加密密码，并将新密码存储在 keyring 中，参数 `password` 为字符串，最大长度为 766 字节 |
 | audit_log_filter_flush()                        | 直接用 `INSERT, UPDATE, DELETE` 修改审计日志过滤器表不会立即生效，调用该函数可更新审计日志过滤策略并使之生效 |
 | audit_log_read()                                | 读取审计日志，并返回 JSON 格式字符串。如果审计日志格式不是 JSON，则产生报错 |
 | audit_log_read_bookmark()                       | 为最近写入的审计日志事件提供书签，以 JSON 字符串形式呈现。如果格式不是 JSON，则产生报错 |
-| audit_log_session_filter_id()                   | 返回当前会话中审计日志过滤器的内部 ID，如果会话没有分配过滤器，则返回0 |
+| audit_log_session_filter_id()                   | 返回当前会话中审计日志过滤器的内部 ID，如果会话没有分配过滤器，则返回 0 |
 | audit_log_filter_remove_filter(filter_name)     | 删除过滤器 |
 | audit_log_filter_remove_user(user_name)         | 从特定用户帐户中删除过滤器 |
 | audit_log_rotate()                              | 日志轮转函数 |
@@ -280,24 +280,24 @@ greatsql> SET GLOBAL audit_log_filter.disable=OFF;
 | audit_log_filter.encryption  | No | Global | Enumeration | NONE    | NONE, AES | 是否启用加密 |
 | audit_log_filter.file        | No | Global | String      | audit_filter.log | / | 审计日志文件名，支持相对路径和绝对路径写法 |
 | audit_log_filter.format      | No | Global | Enumeration | NEW | [OLD](https://docs.percona.com/percona-server/8.4/audit-log-filter-old.html), [NEW](https://docs.percona.com/percona-server/8.4/audit-log-filter-new.html), [JSON](https://docs.percona.com/percona-server/8.4/audit-log-filter-json.html) | 审计日志过滤器格式 |
-| audit_log_filter.format_unix_timestamp | Yes | Global | Boolean | OFF | ON, OFF | 审计日志条目是否增加时间戳，仅支持JSON格式 |
+| audit_log_filter.format_unix_timestamp | Yes | Global | Boolean | OFF | ON, OFF | 审计日志条目是否增加时间戳，仅支持 JSON 格式 |
 | audit_log_filter.handler     | No | Global | String      | FILE | FILE, SYSLOG | 日志过滤器处理器<br/>1. **FILE** - 将日志写入`audit_log_filter.file`文件<br/>2. **SYSLOG** - 将日志写入系统日志文件 |
-| audit_log_filter.key_derivation_iterations_count_mean | Yes | Global | Integer | 60000 | 1000-1000000 | 定义基于密码的派生例程在计算加密密钥和iv值时使用的迭代的平均值。随机数表示实际迭代计数，并且偏离该值不超过10% |
-| audit_log_filter.max_size    | Yes| Global | Integer     | 1GB     | 0-18446744073709551615 | 超过该值就自动清理日志文件，单位：字节，设置为0则不自动清理。建议设置为 `audit_log_filter.rotate_on_size` 的7倍左右 |
+| audit_log_filter.key_derivation_iterations_count_mean | Yes | Global | Integer | 60000 | 1000-1000000 | 定义基于密码的派生例程在计算加密密钥和 iv 值时使用的迭代的平均值。随机数表示实际迭代计数，并且偏离该值不超过 10% |
+| audit_log_filter.max_size    | Yes| Global | Integer     | 1GB     | 0-18446744073709551615 | 超过该值就自动清理日志文件，单位：字节，设置为 0 则不自动清理。建议设置为 `audit_log_filter.rotate_on_size` 的 7 倍左右 |
 | audit_log_filter.password_history_keep_days | Yes | Global | Integer | 0 | / | 定义何时可以删除密码，并以天为单位进行测量 |
-| audit_log_filter.prune_seconds    | Yes | Global | Integer | 0 | 0-1844674073709551615 | 设置审计日志文件自动清理的时长，单位：秒，设置为0则不自动清理 |
-| audit_log_filter.read_buffer_size | Yes | Global | Integer | 32768 | / | 从审计日志文件中读取的缓冲区大小，单位：字节，仅支持JSON格式文件 |
-| audit_log_filter.rotate_on_size   | Yes | Global | Integer | 1GB   | / | 超过该值就自动轮转日志文件，单位：字节，设置为<4096时则不自动轮转，还可以手动调用 `audit_log_rotate()` 函数轮转日志文件 |
+| audit_log_filter.prune_seconds    | Yes | Global | Integer | 0 | 0-1844674073709551615 | 设置审计日志文件自动清理的时长，单位：秒，设置为 0 则不自动清理 |
+| audit_log_filter.read_buffer_size | Yes | Global | Integer | 32768 | / | 从审计日志文件中读取的缓冲区大小，单位：字节，仅支持 JSON 格式文件 |
+| audit_log_filter.rotate_on_size   | Yes | Global | Integer | 1GB   | / | 超过该值就自动轮转日志文件，单位：字节，设置为<4096 时则不自动轮转，还可以手动调用 `audit_log_rotate()` 函数轮转日志文件 |
 | audit_log_filter.strategy    | No | Global | Enumeration | ASYNCHRONOUS | ASYNCHRONOUS<br/>PERFORMANCE<br/>SEMISYNCHRONOUS</br>SYNCHRONOUS | 设置日志记录策略。<br/>1. **ASYNCHRONOUS** - 异步，等到有外部缓冲空间时写入<br/>2. **PERFORMANCE** - 高性能，如果外部缓冲区没有足够空间，请放弃请求<br/>SEMISYNCHRONOUS - 操作系统允许缓存<br/>3. **SYNCHRONOUS** - 同步，每次都调用 `sync()` |
-| audit_log_filter.syslog_tag  | No | Global | String      | audit-filter | / | 设置syslog标签 |
-| audit_log_filter.syslog_facility  | No | Global | String | LOG_USER | / | 设置syslog的facility值 |
-| audit_log_filter.syslog_priority  | No | Global | String | LOG_INFO | / | 设置syslog的优先级 |
+| audit_log_filter.syslog_tag  | No | Global | String      | audit-filter | / | 设置 syslog 标签 |
+| audit_log_filter.syslog_facility  | No | Global | String | LOG_USER | / | 设置 syslog 的 facility 值 |
+| audit_log_filter.syslog_priority  | No | Global | String | LOG_INFO | / | 设置 syslog 的优先级 |
 
 ### 状态变量
 
 | 状态变量 | 描述 |
 | :--- | :--- |
-| audit_log_filter_current_size   | 审计日志文件当前大小，如果日志被轮转，将重置为0 |
+| audit_log_filter_current_size   | 审计日志文件当前大小，如果日志被轮转，将重置为 0 |
 | audit_log_filter_direct_writes  | 审计事件绕过缓冲区直接写入日志文件的总次数 |
 | audit_log_filter_max_drop_size  | 在高性能模式下，事件丢弃总次数 |
 | audit_log_filter_events         | 审计日志过滤器调用的总次数 |
@@ -413,7 +413,7 @@ $ mysql -h127.0.0.1 -ugreatsql -pXX -P3306 db1 -e "SELECT * FROM t1 LIMIT 1"
 
 审计日志过滤器有以下限制：
 
-- 仅记录SQL语句，NoSQL API（如Memcached API）所做的语句不会被记录。
+- 仅记录 SQL 语句，NoSQL API（如 Memcached API）所做的语句不会被记录。
 
 - 仅记录顶级语句，存储过程或触发器中的语句不记录。不记录 `LOAD DATA` 等语句的文件内容。
 

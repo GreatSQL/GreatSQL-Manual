@@ -51,7 +51,7 @@ pt-config-diff [OPTIONS] CONFIG CONFIG [CONFIG...]
 
 ### 最佳实践
 
-首先创建两个配置文件(这里为了示范方便配置文件内容较少)，创建 `test_my_1.cnf`配置文件：
+首先创建两个配置文件(这里为了示范方便配置文件内容较少)，创建 `test_my_1.cnf` 配置文件：
 
 ```ini
 [client]
@@ -422,7 +422,7 @@ Specify --databases or --all-databases to dump and summarize schemas
        Transaction States | 3xnot started
 ```
 
-以上显示InnoDB 存储引擎的重要配置变量。缓冲池填充百分比和脏百分比是模糊舍入的。最后几行来自 `SHOW INNODB STATUS` 的输出。
+以上显示 InnoDB 存储引擎的重要配置变量。缓冲池填充百分比和脏百分比是模糊舍入的。最后几行来自 `SHOW INNODB STATUS` 的输出。
 
 ```bash
 # MyISAM #####################################################
@@ -454,7 +454,7 @@ Specify --databases or --all-databases to dump and summarize schemas
          binlog_ignore_db | 
 ```
 
-以上显示二进制日志的配置和状态。如果存在大小为0的二进制日志，则可能是二进制日志索引与磁盘上实际存在的二进制日志不同步。
+以上显示二进制日志的配置和状态。如果存在大小为 0 的二进制日志，则可能是二进制日志索引与磁盘上实际存在的二进制日志不同步。
 
 ```bash
 # Noteworthy Variables #######################################
@@ -554,7 +554,7 @@ pt-variable-advisor localhost --source-of-variables pt_va.txt
 ::: tip 小贴士
 除了非常明显的错误，否则这个建议没有太多的意义。
 
-这里也推荐一个网页版的[MySQL/GreatSQL状态诊断工具](https://imysql.com/my-state-diag.html)。
+这里也推荐一个网页版的 [MySQL/GreatSQL 状态诊断工具](https://imysql.com/my-state-diag.html)。
 :::
 
 **扫码关注微信公众号**

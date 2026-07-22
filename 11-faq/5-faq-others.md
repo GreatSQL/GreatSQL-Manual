@@ -9,7 +9,7 @@
 - 所有表最好都要有主键（建议全局设置选项 `sql_require_primary_key=ON`）。同上，能创建没有主键的表，但无法写入数据，在利用 Clone 构建新节点时也会报错（例外情况：在创建表之前，设置选项 `sql_generate_invisible_primary_key=ON`，这样 InnoDB 就会自动为该表创建一个不可见主键，详见：[Generated Invisible Primary Keys](https://dev.mysql.com/doc/refman/8.0/en/create-table-gipks.html)）。
 - 不要使用大事务，默认情况下，事务超过 150MB 会报错，最大可支持 2GB 的事务（在 GreatSQL 未来的版本中，会增加对大事务的支持，提高大事务上限）。
 - 如果是从旧版本进行升级，则不能选择 MINIMAL 模式升级，建议选择 AUTO 模式，即 `upgrade=AUTO`。
-- 由于 MGR 的事务认证线程不支持 `gap lock`，因此建议把所有节点的事务隔离级别都改成 `READ COMMITTED`。基于相同的原因，MGR 集群中也不要使用 `table lock` 及 `name lock`（即 `GET_LOCK()` 函数）。
+- 由于 MGR 的事务认证线程不支持 gap lock，因此建议把所有节点的事务隔离级别都改成 `READ COMMITTED`。基于相同的原因，MGR 集群中也不要使用 `table lock` 及 `name lock`（即 `GET_LOCK()` 函数）。
 - 在多主（`multi-primary`）模式下不支持串行（`SERIALIZABLE`）隔离级别。
 - 不支持在不同的 MGR 节点上，对同一个表分别执行 DML 和 DDL，可能会造成数据丢失或节点报错退出。
 - 在多主（`multi-primary`）模式下不支持多层级联外键表。另外，为了避免因为使用外键造成 MGR 报错，建议设置 `group_replication_enforce_update_everywhere_checks=ON`。
@@ -30,7 +30,7 @@
 - 最好在局域网内部署 MGR，而不要跨公网，网络延迟太大的话，会导致 MGR 性能很差或很容易出错。
 - 建议启用 writeset 模式，即设置以下几个参数：
     - `replica_parallel_type=LOGICAL_CLOCK`
-    - `replica_parallel_workers=N`，N>0，可以设置为逻辑 CPU 数的 2 倍
+    - `replica_parallel_workers=N`，N > 0，可以设置为逻辑 CPU 数的 2 倍
     - `replica_preserve_commit_order=1`
     - `replica_checkpoint_period=2`
 
@@ -170,14 +170,14 @@ ALTER TABLE t1 SECONDARY_LOAD;
 
 - 由于 MGR 的事务认证线程不支持 gap lock，因此建议把所有节点的事务隔离级别都改成 READ COMMITTED。基于相同的原因，MGR 集群中也不要使用 table lock 及 name lock（即 GET_LOCK() 函数）。
 
-这句话的意思是，由于 MGR 的事务认证线程不支持gap lock，因此在 MGR 中，不能实现跨节点间的RR隔离级别保证。也就是说，在 s1、s2 两个 MGR 节点间，无法像是在同一个本地节点间实现RR隔离级别保证。
+这句话的意思是，由于 MGR 的事务认证线程不支持 gap lock，因此在 MGR 中，不能实现跨节点间的 RR 隔离级别保证。也就是说，在 s1、s2 两个 MGR 节点间，无法像是在同一个本地节点间实现 RR 隔离级别保证。
 
 例如下面这样：
 
 
-**案例1：**
+**案例 1：**
 
-|时间线 | 节点1 | 节点2|
+|时间线 | 节点 1 | 节点 2|
 |--- |---|---|
 |T1|begin;<br/>select * from t1;<br/>\|  1 \|<br/>\|  3 \|<br/>\|10 \| | begin;<br/>select * from t1 where id>=3;<br/>\|  3 \|<br/>\| 10 \| |
 |T2|insert into t1 select 6;<br/>commit;<br/>select * from t1;<br/>\|  1 \|<br/>\|  3 \|<br/>\|  6 \|<br/>\| 10 \|||
@@ -185,19 +185,19 @@ ALTER TABLE t1 SECONDARY_LOAD;
 |T4||begin;<br/>select * from t1 where id>=3 for update; -- 可以看到新插入的记录<br/>\|  3 \|<br/>\|  6 \|<br/>\| 10 \||
 
 ::: tip 小贴士
-表t1，只有一个主键列id，已有3条数据：1、3、10，采用RR级别。
+表 t1，只有一个主键列 id，已有 3 条数据：1、3、10，采用 RR 级别。
 :::
 
-**案例2（先删掉上面插入的6这条记录）：**
+**案例 2（先删掉上面插入的 6 这条记录）：**
 
-|时间线 | 节点1 | 节点2|
+|时间线 | 节点 1 | 节点 2|
 |--- |---|---|
 |T1|begin;<br/>select * from t1;<br/>\|  1 \|<br/>\|  3 \|<br/>\| 10 \|||
 |T2| | begin;<br/>select * from t1 where id>=3 for update; -- 加锁<br/>\|  3 \|<br/>\| 10 \||
-|T3|insert into t1 select 6; -- 不会被阻塞（如果是在同一个节点上执行，RR级别，这个SQL下会被阻塞）<br/>commit;<br/>select * from t1;<br/>\|  1 \|<br/>\|  3 \|<br/>\|  6 \|<br/>\| 10 \|||
-|T4||select * from t1 where id>=3 for update; -- 这里无论是否加for update，都会触发死锁<br/>ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting transaction|
+|T3|insert into t1 select 6; -- 不会被阻塞（如果是在同一个节点上执行，RR 级别，这个 SQL 下会被阻塞）<br/>commit;<br/>select * from t1;<br/>\|  1 \|<br/>\|  3 \|<br/>\|  6 \|<br/>\| 10 \|||
+|T4||select * from t1 where id>=3 for update; -- 这里无论是否加 for update，都会触发死锁<br/>ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting transaction|
 
-综上，在 MGR 中，即便本地节点选择的是RR级别，依然无法跨节点实现gap lock加锁，因此也就无法跨节点保证RR级别。但**如果写入事务都在同一个节点的话，则设置RR是有意义的**。
+综上，在 MGR 中，即便本地节点选择的是 RR 级别，依然无法跨节点实现 gap lock 加锁，因此也就无法跨节点保证 RR 级别。但**如果写入事务都在同一个节点的话，则设置 RR 是有意义的**。
 
 ## 11. GreatSQL 性能表现如何
 
@@ -206,10 +206,10 @@ GreatSQL 相对于 MySQL 官方社区版本有非常大的性能提升，尤其�
 从 GreatSQL 8.0.32-25 版本开始，支持大规模并行、高性能的内存查询加速 AP 引擎，可将数据分析性能提升几个数量级。在 32C64G 测试机环境下，TPC-H 100G 测试中 22 条 SQL 总耗时仅需不到 80 秒。更详细内容参考：[Rapid 引擎](../5-enhance/5-1-highperf-rapid-engine.md)。
 
 更多关于 GreatSQL 性能提升方面的内容可以参考下面几个测评报告：
-- [GreatSQL重磅特性，InnoDB并行并行查询优化测试](https://mp.weixin.qq.com/s/pK90W9xT_V59yvgxRwcn8A)
-- [GreatSQL & NVIDIA InfiniBand NVMe SSD性能测试](https://mp.weixin.qq.com/s/F9804_7H1WiJ6xD0E1AueQ)
-- [GreatSQL & DapuStor Roealsen5 NVMe SSD性能测试](https://mp.weixin.qq.com/s/QrIZ8Fu69Bzq5MvNZwtTww)
-- GreatSQL TPC-H 性能测试报告：[在线报告](../10-optimize/3-3-benchmark-greatsql-tpch-report.md)、[PDF文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/Presentations/27%E3%80%81benchmark-greatsql-tpch-report-20240228.pdf)
+- [GreatSQL 重磅特性，InnoDB 并行查询优化测试](https://mp.weixin.qq.com/s/pK90W9xT_V59yvgxRwcn8A)
+- [GreatSQL & NVIDIA InfiniBand NVMe SSD 性能测试](https://mp.weixin.qq.com/s/F9804_7H1WiJ6xD0E1AueQ)
+- [GreatSQL & DapuStor Roealsen5 NVMe SSD 性能测试](https://mp.weixin.qq.com/s/QrIZ8Fu69Bzq5MvNZwtTww)
+- GreatSQL TPC-H 性能测试报告：[在线报告](../10-optimize/3-3-benchmark-greatsql-tpch-report.md)、[PDF 文档下载](https://gitee.com/GreatSQL/GreatSQL-Doc/raw/master/Presentations/27%E3%80%81benchmark-greatsql-tpch-report-20240228.pdf)
 
 ## 12. 运行 GreatSQL 时，必须先安装 jemalloc 包吗
 
@@ -223,17 +223,17 @@ GreatSQL 相对于 MySQL 官方社区版本有非常大的性能提升，尤其�
 
 是的，支持，详情参考：[数据脱敏](../5-enhance/5-4-security-data-masking.md)。
 
-## 14. 什么是双1 或 双0？
+## 14. 什么是双 1 或 双 0？
 
-通常地，事务提交后为了保证用户数据不丢失，或者保证在 mysqld 进程意外 crash 后不丢失已提交的数据，需要确认以下两个选项值均设置为 1，这称为 **双1**：
+通常地，事务提交后为了保证用户数据不丢失，或者保证在 mysqld 进程意外 crash 后不丢失已提交的数据，需要确认以下两个选项值均设置为 1，这称为 **双 1**：
 - sync_binlog = 1
 - innodb_flush_log_at_trx_commit = 1
 
-在一些测试环境或离线分析等特殊场合，对数据安全要求没那么高的时候，就可以将上述两个选项值修改为 0，这称为 **双0**：
+在一些测试环境或离线分析等特殊场合，对数据安全要求没那么高的时候，就可以将上述两个选项值修改为 0，这称为 **双 0**：
 - sync_binlog = 0
 - innodb_flush_log_at_trx_commit = 0
 
-在修改成双0后，事务提交/数据写入性能通常会有较大幅度提升。
+在修改成双 0 后，事务提交/数据写入性能通常会有较大幅度提升。
 
 上述这两个选项只能修改全局设置，不能只在某个会话（session）中修改，例如：
 ```sql
@@ -384,9 +384,9 @@ Transaction check error:
 
 用源码重编译 GreatSQL 的方法参考：[源码编译安装 GreatSQL](../4-install-guide/6-install-with-source-code.md)。
 
-**2. 用其他版本的 mysql 客户端替代**
+**2. 用其他版本的 MySQL 客户端替代**
 
-下载 GreatSQL for glibc2.17 版本二进制包，使用这个版本的 mysql 客户端二进制文件，例如：
+下载 GreatSQL for glibc2.17 版本二进制包，使用这个版本的 MySQL 客户端二进制文件，例如：
 
 ```bash
 $ /usr/local/GreatSQL-8.0.32-27-Linux-glibc2.17-x86_64/bin/mysql -uXX -pXX

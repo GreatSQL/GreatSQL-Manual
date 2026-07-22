@@ -1,4 +1,4 @@
-# Oracle兼容-语法-CREATE FORCE VIEW
+# Oracle 兼容-语法-CREATE FORCE VIEW
 ---
 
 
@@ -14,17 +14,17 @@ CREATE [ OR REPLACE ] FORCE VIEW name [ ( column_name [, ...] ) ]
 正常情况下，如果基表不存在，创建视图就会失败。但是可以使用本功能完成强制创建视图（前提：创建视图的语句无语法错误）。
 
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
 1. 不支持 `PREPARE stmt FROM` 和 `EXECUTE IMMEDIATE` 两种场景。
 
-2. 强制创建视图后，不支持 `ALTER VIEW new_view compile` 的语法，这点与Oracle不同。
+2. 强制创建视图后，不支持 `ALTER VIEW new_view compile` 的语法，这点与 Oracle 不同。
 
-3. 错误提示结果可能与Oracle存在不同。如果 query（查询语句）不合理，当基表创建时报错为 `ER_VIEW_INVALID`，也存在创建基表 `referenc view` 的其它错误。
+3. 错误提示结果可能与 Oracle 存在不同。如果 query（查询语句）不合理，当基表创建时报错为 `ER_VIEW_INVALID`，也存在创建基表 `referenc view` 的其它错误。
 
-4. 如果基表不存在，强制创建视图时的约束检测只会进行简单的列同名、表名重复的约束检测，这点与Oracle不同。
+4. 如果基表不存在，强制创建视图时的约束检测只会进行简单的列同名、表名重复的约束检测，这点与 Oracle 不同。
 
-5. 在Oracle中的强制创建视图时，在语法解析过程中，会对SQL语句进行规则检查，有些语句会直接报错，而GreatSQL则需要到prepare解析取值时才报错。当基表不存在时，Oracle会有自己的规则检测报错信息。
+5. 在 Oracle 中的强制创建视图时，在语法解析过程中，会对 SQL 语句进行规则检查，有些语句会直接报错，而 GreatSQL 则需要到 prepare 解析取值时才报错。当基表不存在时，Oracle 会有自己的规则检测报错信息。
 
 
 ## 4. 示例
@@ -124,7 +124,7 @@ greatsql> CREATE FORCE VIEW v1 AS SELECT a,a FROM t1;
 ERROR 1060 (42S21): Duplicate column name 'a'
 ```
 
-### 4.5 部分错误信息和Oracle不一致
+### 4.5 部分错误信息和 Oracle 不一致
 
 ```
 -- 1. 列重名

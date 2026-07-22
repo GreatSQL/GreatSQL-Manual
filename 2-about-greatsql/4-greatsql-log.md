@@ -18,7 +18,7 @@
 
 ## [Relay Log/中继日志](./4-4-greatsql-relay-log.md)
 
-**中继日志（Relay log）** 用于主从复制环境中的 Slave 服务器，转储记录了 Master 服务器上的所有数据变更语句，相当于是 Master 服务器上 Binlog 在 Slave 服务器上另存一份为 Relay Log。当 Master 服务器上执行对数据的修改操作后，就会记录相应的 Binlog Event，这些 Event 会被传送到 Slave 服务器上并转储为 Relay Log中。然后 Slave 服务器读取本地的 Relay Log 并将这些 Event 重新执行，就实现了和 Master 服务器数据同步。
+**中继日志（Relay log）** 用于主从复制环境中的 Slave 服务器，转储记录了 Master 服务器上的所有数据变更语句，相当于是 Master 服务器上 Binlog 在 Slave 服务器上另存一份为 Relay Log。当 Master 服务器上执行对数据的修改操作后，就会记录相应的 Binlog Event，这些 Event 会被传送到 Slave 服务器上并转储为 Relay Log 中。然后 Slave 服务器读取本地的 Relay Log 并将这些 Event 重新执行，就实现了和 Master 服务器数据同步。
 
 ## [Redo Log/重做日志](./4-5-greatsql-redo-log.md)
 

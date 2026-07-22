@@ -8,7 +8,7 @@
 - world database
 - sakila database
 
-## 基本的SELECT语句
+## 基本的 SELECT 语句
 最基本的 SELECT 语句如下：
 ```sql
 greatsql> SELECT 1; 
@@ -28,7 +28,7 @@ greatsql> SELECT 9/2;
 +--------+
 1 row in set (0.00 sec)
 ```
-## SELECT … FROM语句
+## SELECT … FROM 语句
 语法如下：
 ```sql
 SELECT   标识选择哪些列

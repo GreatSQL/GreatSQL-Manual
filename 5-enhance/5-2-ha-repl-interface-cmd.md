@@ -9,13 +9,13 @@
 
 版本升级后会出现以下问题：
 1. 存量运维脚本直接执行报错，自动化复制管理流程失效；
-2. 监控程序读取不到复制延迟、IO/SQL线程状态，监控面板断数据；
+2. 监控程序读取不到复制延迟、IO/SQL 线程状态，监控面板断数据；
 3. 批量变更、灾备切换、数据同步脚本需要大规模重构，改造成本极高；
 4. 客户侧自研运维平台、中间件适配工作量大，拉长数据库升级周期。
 
-原有方案只能全部改写脚本适配新版 `Source/Replica` 语法，人力与时间成本高，因此 **恢复Master/Slave旧版复制兼容接口**特性，新旧两套语法完全并行共存，无需改造存量运维代码。
+原有方案只能全部改写脚本适配新版 `Source/Replica` 语法，人力与时间成本高，因此 **恢复 Master/Slave 旧版复制兼容接口**特性，新旧两套语法完全并行共存，无需改造存量运维代码。
 
-## 二、Master/Slave兼容接口特性介绍
+## 二、Master/Slave 兼容接口特性介绍
 
 本特性为内核复制兼容增强层，不改动底层复制同步核心逻辑，仅在 SQL 解析、结果输出、错误提示外层做双向映射适配：
 1. 完整恢复以前高频使用的 `Master/Slave` 复制管理 SQL 语法，新旧语法均可正常执行；
@@ -33,7 +33,7 @@
 
 ### 3.1 复制管理语句新旧对应
 
-| 旧版Master/Slave语法 | 新版Source/Replica标准语法 |
+| 旧版 Master/Slave 语法 | 新版 Source/Replica 标准语法 |
 |---------------------|---------------------------|
 | `CHANGE MASTER TO` | `CHANGE REPLICATION SOURCE TO` |
 | `START SLAVE` | `START REPLICA` |
@@ -47,11 +47,11 @@
 | `PURGE MASTER LOGS` | `PURGE BINARY LOGS` |
 
 ### 3.2 CHANGE MASTER TO 参数映射
-旧 `MASTER_*` 选项会自动映射为内部 `SOURCE_*` 参数，完整兼容：`MASTER_HOST`/`MASTER_USER`/`MASTER_PASSWORD`/`MASTER_PORT`/`MASTER_AUTO_POSITION`/`MASTER_LOG_FILE`/`MASTER_LOG_POS`/`MASTER_CONNECT_RETRY`/`MASTER_RETRY_COUNT`/`MASTER_DELAY`/SSL全套参数/压缩参数/心跳参数/公钥参数等。
+旧 `MASTER_*` 选项会自动映射为内部 `SOURCE_*` 参数，完整兼容：`MASTER_HOST`/`MASTER_USER`/`MASTER_PASSWORD`/`MASTER_PORT`/`MASTER_AUTO_POSITION`/`MASTER_LOG_FILE`/`MASTER_LOG_POS`/`MASTER_CONNECT_RETRY`/`MASTER_RETRY_COUNT`/`MASTER_DELAY`/SSL 全套参数/压缩参数/心跳参数/公钥参数等。
 
 ## 四、使用示例
 
-### 示例1：使用旧版语法搭建主从复制（存量脚本无需修改）
+### 示例 1：使用旧版语法搭建主从复制（存量脚本无需修改）
 ```sql
 CHANGE MASTER TO
 MASTER_HOST='127.0.0.1',

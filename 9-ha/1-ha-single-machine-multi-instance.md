@@ -16,7 +16,7 @@
 
 ## 单机多实例部署 MGR 集群
 
-首先，参考文档：[单机多实例](../6-oper-guide/5-multi-instances.md) 完成单机多实例环境部署，并构建MGR集群。
+首先，参考文档：[单机多实例](../6-oper-guide/5-multi-instances.md) 完成单机多实例环境部署，并构建 MGR 集群。
 ```sql
 greatsql> SELECT MEMBER_ID,MEMBER_HOST,MEMBER_PORT,MEMBER_ROLE FROM performance_schema.replication_group_members;
 +--------------------------------------+-------------+-------------+-------------+
@@ -30,19 +30,19 @@ greatsql> SELECT MEMBER_ID,MEMBER_HOST,MEMBER_PORT,MEMBER_ROLE FROM performance_
 ```
 这是一个单机 4 实例的 MGR 集群，其中包含 1 个 ARBITRATOR 节点。
 
-## 部署MySQL Router
+## 部署 MySQL Router
 
-在前文 [读写分离](../6-oper-guide/2-oper-rw-splitting.md) 中介绍过，MySQL Router最好是和应用程序端部署在一起。
+在前文 [读写分离](../6-oper-guide/2-oper-rw-splitting.md) 中介绍过，MySQL Router 最好是和应用程序端部署在一起。
 
-MySQL Router的部署方法可以参考文档：[读写分离](../6-oper-guide/2-oper-rw-splitting.md)。
+MySQL Router 的部署方法可以参考文档：[读写分离](../6-oper-guide/2-oper-rw-splitting.md)。
 
-应用程序端只需连接到router的读写分离端口，而无需关注后端数据库实际拓扑结构，当Primary节点发生切换时，或者某个Secondary节点下线时，都不影响应用程序端的使用。
+应用程序端只需连接到 Router 的读写分离端口，而无需关注后端数据库实际拓扑结构，当 Primary 节点发生切换时，或者某个 Secondary 节点下线时，都不影响应用程序端的使用。
 
 此时高可用架构图大致如下所示：
 
-![MySQL Router单机多实例高可用方案](./1-ha-single-machine-multi-instance01.png)
+![MySQL Router 单机多实例高可用方案](./1-ha-single-machine-multi-instance01.png)
 
-在本案中，因为是单机多实例环境，因此直接把MySQL Router和数据库服务器部署在一起，没有分开。
+在本案中，因为是单机多实例环境，因此直接把 MySQL Router 和数据库服务器部署在一起，没有分开。
 
 
 **扫码关注微信公众号**

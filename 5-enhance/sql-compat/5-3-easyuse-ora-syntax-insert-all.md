@@ -1,4 +1,4 @@
-# Oracle兼容-语法-INSERT ALL
+# Oracle 兼容-语法-INSERT ALL
 ---
 
 
@@ -46,7 +46,7 @@ EXPLAIN insert_all_stmt
 
 1. 插入的目标只能是表，不能是视图，不能是集合表达式  
 
-2. 插入结束后，函数 `LAST_INSERT_ID()` 返回值为0，避免多表插入歧义。
+2. 插入结束后，函数 `LAST_INSERT_ID()` 返回值为 0，避免多表插入歧义。
 
 3. 运行`EXPLAIN FORMAT=JSON` 查看执行计划的输出结果只会展示插入第一张表。
 

@@ -1,4 +1,4 @@
-# Oracle兼容-函数-ADD_MONTHS()函数
+# Oracle 兼容-函数-ADD_MONTHS()函数
 ---
 
 
@@ -12,14 +12,14 @@ ADD_MONTHS(date, n)
 
 `ADD_MONTHS()` 函数的作用是对日期函数进行操作，在数据查询的过程中进行日期的按月增加,  `ADD_MONTHS()`的返回类型为 `DATETIME`。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-在GreatSQL中 `ADD_MONTHS(date, n)` 函数的参数输入格式检查、输出结果等行为与Oracle存在一定程度差异，二者差异描述如下表：
+在 GreatSQL 中 `ADD_MONTHS(date, n)` 函数的参数输入格式检查、输出结果等行为与 Oracle 存在一定程度差异，二者差异描述如下表：
 
-| 说明 | 示例 | Oracle返回值 | GreatSQL返回值 |
+| 说明 | 示例 | Oracle 返回值 | GreatSQL 返回值 |
 | ---------------------------------------------------------- | -------------------- | --------------- | ------------------------------------------------------------ |
-|对日期格式的支持范围不同 | `ADD_MONTHS('03-MAR-97', 1)`; | 03-APR-97 | 返回NULL,并提示`Warning:Incorrect datetime value: '03-MAR-97'` |
-|计算后的日期超过系统支持的范围时，处理方式不同 | `ADD_MONTHS('2022-02-28', 95746)`| 报ORA-01841错误| 返回NULL, 并提示 `Warning:datetime field overflow`|
+|对日期格式的支持范围不同 | `ADD_MONTHS('03-MAR-97', 1)`; | 03-APR-97 | 返回 NULL,并提示`Warning:Incorrect datetime value: '03-MAR-97'` |
+|计算后的日期超过系统支持的范围时，处理方式不同 | `ADD_MONTHS('2022-02-28', 95746)`| 报 ORA-01841 错误| 返回 NULL, 并提示 `Warning:datetime field overflow`|
 
 
 ## 4. 示例

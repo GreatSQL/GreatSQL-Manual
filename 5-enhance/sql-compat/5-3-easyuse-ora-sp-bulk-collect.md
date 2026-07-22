@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-BULK COLLECT
+# Oracle 兼容-存储过程-BULK COLLECT
 ---
 
 
@@ -16,9 +16,9 @@ GreatSQL 存储过程中支持用 `SELECT|FETCH .. BULK COLLECT INTO` 获取多�
 
 - 2. 支持用 `FETCH .. BULK COLLECT INTO .. LIMIT n` 语法取游标中的多行数据，并赋值给 `TABLE` 类型变量。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-在 `ORACLE` 模式下，GreatSQL存储过程支持 `[SELECT|FETCH] .. BULK COLLECT INTO` 用法。该用法如下所述：
+在 `ORACLE` 模式下，GreatSQL 存储过程支持 `[SELECT|FETCH] .. BULK COLLECT INTO` 用法。该用法如下所述：
 
 1. 在 `[SELECT|FETCH] .. BULK COLLECT INTO var` 中的变量 `var` 只支持一层表类型，比如 `var`，不支持 `a.b.var` 这种变量类型。
 
@@ -51,7 +51,7 @@ greatsql> INSERT INTO t1 VALUES(1, 'row1'), (2, 'row2'), (3,'row3') ;
 greatsql> CREATE TABLE t2 (a INT NOT NULL, b VARCHAR(20) NOT NULL);
 ```
 
-- 1. 示例1：`SELECT BULK COLLECT`
+- 1. 示例 1：`SELECT BULK COLLECT`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -92,7 +92,7 @@ greatsql> CALL bulk_sp1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 2. 示例2：`FETCH BULK COLLECT`
+- 2. 示例 2：`FETCH BULK COLLECT`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -132,7 +132,7 @@ greatsql> SELECT * FROM t2 //
 1 row in set (0.01 sec)
 ```
 
-- 3. 示例3：`FETCH BULK COLLECT INTO batch`
+- 3. 示例 3：`FETCH BULK COLLECT INTO batch`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;

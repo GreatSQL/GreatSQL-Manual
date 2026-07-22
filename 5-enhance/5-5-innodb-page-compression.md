@@ -1,4 +1,4 @@
-# InnoDB Page压缩
+# InnoDB Page 压缩
 ---
 
 ## 简介
@@ -8,9 +8,9 @@ InnoDB Page Compression（透明页压缩）是一种基于文件系统的表空
 在 GreatSQL 中的 InnoDB 引擎 Page 压缩支持 Zstd 算法，它可以使得 Page 压缩率进一步得到提高，尤其是当表中有大量重复字符类型数据时。
 
 ## 使用方法
-### 启用Page压缩
+### 启用 Page 压缩
 
-可以在执行`CREATE TABLE`创建新表时指定启用Page压缩，例如
+可以在执行`CREATE TABLE`创建新表时指定启用 Page 压缩，例如
 
 ```sql
 greatsql> CREATE TABLE `t1_zstd` (
@@ -24,7 +24,7 @@ greatsql> CREATE TABLE `t1_zstd` (
 ) ENGINE=InnoDB COMPRESSION='zstd';
 ```
 
-也可以执行`ALTER TABLE`修改表的Page压缩算法，例如
+也可以执行`ALTER TABLE`修改表的 Page 压缩算法，例如
 
 ```sql
 greatsql> ALTER TABLE t1 COMPRESSION='zstd';
@@ -33,9 +33,9 @@ greatsql> OPTIMIZE TABLE t1;
 
 需要执行`OPTIMIZE TABLE`才能生效。
 
-### 禁用Page压缩
+### 禁用 Page 压缩
 
-可以执行`ALTER TABLE`修改表禁用Page压缩，例如
+可以执行`ALTER TABLE`修改表禁用 Page 压缩，例如
 
 ```sql
 greatsql> ALTER TABLE t1 COMPRESSION='None';
@@ -46,7 +46,7 @@ greatsql> OPTIMIZE TABLE t1;
 
 ## 新增参数
 
-针对Page压缩新增参数`innodb_page_zstd_compression_level`。
+针对 Page 压缩新增参数`innodb_page_zstd_compression_level`。
 
 | System Variable Name	| innodb_page_zstd_compression_level |
 | --- | --- | 
@@ -58,7 +58,7 @@ greatsql> OPTIMIZE TABLE t1;
 | Default	| 6 |
 | Description	| 指定 InnoDB Page 压缩使用 Zstd 时的压缩级别，0 表示最低压缩级别，9 表示最高压缩级别 |
 
-## Page压缩效果评估
+## Page 压缩效果评估
 
 1. 先创建一个普通表
 
@@ -139,7 +139,7 @@ $ du --block-size=1 test/t1_*ibd
 
 首先修改 `my.cnf` 配置文件，设置 `innodb_page_zstd_compression_level=9`，将压缩率设置为最高级别，并重启数据库实例。
 
-**例1：有大量短文本，且重复率较高**
+**例 1：有大量短文本，且重复率较高**
 
 1. 基础表结构如下
 
@@ -196,9 +196,9 @@ greatsql> SELECT SPACE, NAME, FS_BLOCK_SIZE, FILE_SIZE, ALLOCATED_SIZE FROM INFO
 +-------+--------------+---------------+-----------+----------------+
 ```
 
-压缩后的数据只有原来的59%，效果还不错。
+压缩后的数据只有原来的 59%，效果还不错。
 
-**例2：有大量长文本，且重复率较高**
+**例 2：有大量长文本，且重复率较高**
 
 1. 基础表结构如下
 
@@ -240,7 +240,7 @@ greatsql> SELECT COUNT(DISTINCT(id)),  COUNT(DISTINCT(c1)), COUNT(DISTINCT(c2)),
 +---------------------+---------------------+---------------------+---------------------+---------------------+
 ```
 
-表中 `c1/c2/c4` 三个列的数据全部是重复的，`id`不重复，`c3`列重复率约为5%。
+表中 `c1/c2/c4` 三个列的数据全部是重复的，`id`不重复，`c3`列重复率约为 5%。
 
 4. 查看压缩效果
 
@@ -258,7 +258,7 @@ greatsql> SELECT SPACE, NAME, FS_BLOCK_SIZE, FILE_SIZE, ALLOCATED_SIZE FROM INFO
 
 以上两个例子中，表 `t2/t3` 在加载完测试数据后，都再次执行 `OPTIMIZE TABLE` 重建整个表空间。
 
-关于InnoDB Page压缩更多细节内容请参考：[InnoDB Page Compression](https://dev.mysql.com/doc/refman/8.0/en/innodb-page-compression.html)。
+关于 InnoDB Page 压缩更多细节内容请参考：[InnoDB Page Compression](https://dev.mysql.com/doc/refman/8.0/en/innodb-page-compression.html)。
 
 **扫码关注微信公众号**
 

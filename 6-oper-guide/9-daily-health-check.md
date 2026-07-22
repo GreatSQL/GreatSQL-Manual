@@ -168,9 +168,9 @@ Average:     all   13.99    0.00    2.63    0.13    0.00    0.69    0.00    0.00
 从上述结果来看，服务器当前的用户态 CPU 负载较高，不过由于服务器的核数较多，所以整体 CPU 资源还有较大余量。
 
 如果存在以下三种情况，应当尽早介入性能优化相关工作：
-- 当%usr列的数值持续较大（>=20）时，说明当前服务器的CPU负载较高，有较大的可能是当前GreatSQL数据库中运行的SQL请求效率较低。
-- 当%sys列的数值持续较大（>=10）时，则有较大可能是当前GreatSQL数据库中存在较多的行锁等待，或者当前因为物理内存不足引发Swap交换。
-- 当%iowait列的数值持续较大（>=10）时，则说明当前服务器上的磁盘I/O负载较高。
+- 当 %usr 列的数值持续较大（>=20）时，说明当前服务器的 CPU 负载较高，有较大的可能是当前 GreatSQL 数据库中运行的 SQL 请求效率较低。
+- 当 %sys 列的数值持续较大（>=10）时，则有较大可能是当前 GreatSQL 数据库中存在较多的行锁等待，或者当前因为物理内存不足引发 Swap 交换。
+- 当 %iowait 列的数值持续较大（>=10）时，则说明当前服务器上的磁盘 I/O 负载较高。
 
 ### 3. 检查内存状态
 
@@ -219,12 +219,12 @@ $ top
 - 检查参数 `read_buffer_size / read_rnd_buffer_size / join_buffer_size / sort_buffer_size` 等设置是否过大，通常设置不超过 4MB 就够用；
 - 检查参数 `tmp_table_size / max_heap_table_size` 等设置是否过大，通常设置不超过 128MB 就够用；
 
-以上内存相关参数设置都可以在线动态调整，可以先分别适当调低。如果不确定怎么设置合适，可以利用 [my.cnf生成工具](https://imysql.com/my-cnf-wizard.html) 生成一份 my.cnf 参考模板。
+以上内存相关参数设置都可以在线动态调整，可以先分别适当调低。如果不确定怎么设置合适，可以利用 [my.cnf 生成工具](https://imysql.com/my-cnf-wizard.html) 生成一份 my.cnf 参考模板。
 
-此外，还可以执行下面的SQL查看当前GreatSQL数据库的内存消耗占比较高的模块和线程是什么：
+此外，还可以执行下面的 SQL 查看当前 GreatSQL 数据库的内存消耗占比较高的模块和线程是什么：
 
 ```sql
--- 查询GreatSQL数据库中内存消耗占比较高的模块
+-- 查询 GreatSQL 数据库中内存消耗占比较高的模块
 SELECT EVENT_NAME, SUM_NUMBER_OF_BYTES_ALLOC FROM
   performance_schema.memory_summary_global_by_event_name
     ORDER BY SUM_NUMBER_OF_BYTES_ALLOC DESC LIMIT 10;
@@ -243,7 +243,7 @@ SELECT EVENT_NAME, SUM_NUMBER_OF_BYTES_ALLOC FROM
 | memory/temptable/physical_ram                |                 428880672 |
 +----------------------------------------------+---------------------------+
 
--- 查询GreatSQL数据库中内存消耗占比较高的线程
+-- 查询 GreatSQL 数据库中内存消耗占比较高的线程
 SELECT THREAD_ID, EVENT_NAME, SUM_NUMBER_OF_BYTES_ALLOC FROM
   performance_schema.memory_summary_by_thread_by_event_name 
     ORDER BY SUM_NUMBER_OF_BYTES_ALLOC DESC LIMIT 20;
@@ -273,7 +273,7 @@ SELECT THREAD_ID, EVENT_NAME, SUM_NUMBER_OF_BYTES_ALLOC FROM
 +-----------+-------------------------------+---------------------------+
 ```
 
-从上面的查询结果可大致推断出这样的结果：当前数据库中因为有些SQL请求可能没有索引需要扫描大量数据，或者需要对大量数据进行分组、排序而产生内存临时表等方面可能得原因消耗过多内存，可以结合分析数据库中的SQL查询状态以及慢查询SQL，尽快优化这些SQL请求。
+从上面的查询结果可大致推断出这样的结果：当前数据库中因为有些 SQL 请求可能没有索引需要扫描大量数据，或者需要对大量数据进行分组、排序而产生内存临时表等方面可能得原因消耗过多内存，可以结合分析数据库中的 SQL 查询状态以及慢查询 SQL，尽快优化这些 SQL 请求。
 
 如果形势紧急，可以考虑执行下面的操作尝试回收部分内存碎片：
 
@@ -314,8 +314,8 @@ nvme0n1p1         0.00     0.00  560.00 29020.00     8.69   545.89    38.40     
 - Device: 磁盘设备名称为 *nvme0n1p1*。
 - rrqm/s: 每秒合并的读请求为 0.00。
 - wrqm/s: 每秒合并的写请求为 0.00。
-- r/s: 每秒完成的读请求为 600左右。
-- w/s: 每秒完成的写请求为 30000左右。
+- r/s: 每秒完成的读请求为 600 左右。
+- w/s: 每秒完成的写请求为 30000 左右。
 - rkB/s: 每秒读取的数据量为 10MB 左右。
 - wkB/s: 每秒写入的数据量为 560MB 左右。
 - avgrq-sz: 平均每次 I/O 请求处理的数据量为 38KB。

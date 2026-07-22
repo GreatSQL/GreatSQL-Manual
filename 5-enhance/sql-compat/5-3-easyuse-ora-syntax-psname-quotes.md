@@ -2,9 +2,9 @@
 ---
 
 
-GreatSQL支持在ORACLE模式（`sql_mode = ORACLE`）下，存储过程名用双引号括起来使用。
+GreatSQL 支持在 ORACLE 模式（`sql_mode = ORACLE`）下，存储过程名用双引号括起来使用。
 
-如果不是在ORACLE模式下，这么用会触发报告语法错误。
+如果不是在 ORACLE 模式下，这么用会触发报告语法错误。
 
 ## 1. 语法
 

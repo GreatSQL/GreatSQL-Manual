@@ -1,7 +1,7 @@
 # 访问数据库
 ---
 
-成功安装 GreatSQL 后，就可以登入连接 GreatSQL 数据库，并执行 SQL 语句来操作和管理数据库。
+成功安装 GreatSQL 后，就可以登录连接 GreatSQL 数据库，并执行 SQL 语句来操作和管理数据库。
 
 GreatSQL 中除去部分新增的 [Oracle 兼容语法](../5-enhance/5-3-easyuse.md) 特性外，绝大多数语法和 MySQL 是完全一样的。
 
@@ -9,7 +9,7 @@ MySQL 相关 SQL 语法详见手册：[SQL Statements](https://dev.mysql.com/doc
 
 本文档中所有操作都采用命令行模式下的 Cli 工具来演示。
 
-## 连接登入GreatSQL数据库
+## 连接登录 GreatSQL 数据库
 
 有多种方式连入：
 
@@ -17,16 +17,16 @@ MySQL 相关 SQL 语法详见手册：[SQL Statements](https://dev.mysql.com/doc
 # 本机直接连入
 $ mysql -uroot -p
 
-# 本机指定socket文件连入
+# 本机指定 socket 文件连入
 $ mysql -S/var/lib/mysql/mysql.sock -uroot -p
 
-# 指定主机IP连入（假定本机IP地址是 172.17.0.3 ）
+# 指定主机 IP 连入（假定本机 IP 地址是 172.17.0.3 ）
 $ mysql -h172.17.0.3 -uroot -p
 ```
 
-## 修改root用户密码
+## 修改 root 用户密码
 
-二进制及Docker方式快速安装GreatSQL后，数据库中的管理员用户root默认是空密码，安全起见，可以先修改密码：
+二进制及 Docker 方式快速安装 GreatSQL 后，数据库中的管理员用户 root 默认是空密码，安全起见，可以先修改密码：
 
 ```sql
 -- 先查看当前用户
@@ -41,33 +41,33 @@ greatsql> SELECT USER();
 greatsql> ALTER USER USER() IDENTIFIED BY 'GreatSQL@202X';
 Query OK, 0 rows affected (0.02 sec)
 ```
-修改完成后，再次用root用户连入的话就可以用新密码了。
+修改完成后，再次用 root 用户连入的话就可以用新密码了。
 
 ## 创建新用户
 
-平时操作数据库时，尽量少用最高权限的root用户，避免误操作删除数据。最好创建新用户，并且只授予部分权限。
+平时操作数据库时，尽量少用最高权限的 root 用户，避免误操作删除数据。最好创建新用户，并且只授予部分权限。
 
 ```sql
--- 先以root用户登入
+-- 先以 root 用户登录
 -- mysql -uroot 
 
 -- 创建新用户
 CREATE USER GreatSQL@'172.17.0.0/16' IDENTIFIED BY 'GreatSQL-202X';
 
 
--- 创建一个新的用户库，并对GreatSQL用户授予读写权限
+-- 创建一个新的用户库，并对 GreatSQL 用户授予读写权限
 CREATE DATABASE GreatSQL;
 GRANT ALL ON GreatSQL.* TO GreatSQL@'172.17.0.0/16';
 ```
 
 ## 操作 GreatSQL 读写数据
 
-切换到普通用户GreatSQL登入，创建测试表，写入数据：
+切换到普通用户 GreatSQL 登录，创建测试表，写入数据：
 ```sql
--- 先以普通用户登入GreatSQL
+-- 先以普通用户登录 GreatSQL
 -- mysql -h172.17.0.3 -uGreatSQL -p'GreatSQL-202X'
 
--- 切换到GreatSQL数据库下
+-- 切换到 GreatSQL 数据库下
 greatsql> USE GreatSQL;
 Database changed
 
@@ -100,7 +100,7 @@ greatsql> SELECT * FROM t1;
 ```
 成功。
 
-更多相关SQL命令/语法详见手册：[SQL Statements](https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html)。
+更多相关 SQL 命令/语法详见手册：[SQL Statements](https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html)。
 
 更多基于 GreatSQL 的应用开发内容请参考：[应用开发](../12-dev-guide/12-dev-guide.md)。
 

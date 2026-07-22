@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-EXIT WHEN
+# Oracle 兼容-存储过程-EXIT WHEN
 ---
 
 
@@ -10,7 +10,7 @@ EXIT (label) / EXIT (label) WHEN
 
 ## 2. 定义和用法
 
-GreatSQL存储过程中支持用 `EXIT (label)/EXIT (label) WHEN` 退出当前循环。该用法如下所述：
+GreatSQL 存储过程中支持用 `EXIT (label)/EXIT (label) WHEN` 退出当前循环。该用法如下所述：
 
 1. 退出时可带标签，也可不带标签。
 
@@ -25,7 +25,7 @@ greatsql> CREATE TABLE t1 (a INT NOT NULL, b VARCHAR(20) NOT NULL);
 greatsql> INSERT INTO t1 VALUES(1, 'row1'), (2, 'row2'), (3,'row3') ;
 ```
 
-- 1. 示例1
+- 1. 示例 1
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -60,7 +60,7 @@ greatsql> CALL sp_loop1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 2. 示例2
+- 2. 示例 2
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -88,7 +88,7 @@ greatsql> CALL sp_loop2() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 3. 示例3
+- 3. 示例 3
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -137,7 +137,7 @@ greatsql> CALL sp_loop3() //
 Query OK, 0 rows affected (0.01 sec)
 ```
 
-- 4. 示例4
+- 4. 示例 4
 
 ```
 greatsql> SET sql_mode = ORACLE;

@@ -1,20 +1,20 @@
-# 单IDC高可用
+# 单 IDC 高可用
 ---
 
 本文档主要介绍在单 IDC 场景中，如何基于 GreatSQL + MySQL Router 构建高可用架构。
 
-## 单IDC高可用方案选择
+## 单 IDC 高可用方案选择
 
-单IDC场景下的高可用方案也比较简单，一般可以选用以下几种：
+单 IDC 场景下的高可用方案也比较简单，一般可以选用以下几种：
 
 1. lvs/haproxy。
-2. MySQL Router中间件。
+2. MySQL Router 中间件。
 
-本文重点讨论利用MySQL Router构建高可用的解决方案，lvs/haproxy方案请自行搜索。
+本文重点讨论利用 MySQL Router 构建高可用的解决方案，lvs/haproxy 方案请自行搜索。
 
-## MySQL Router + GreatSQL MGR 实现单IDC内高可用
+## MySQL Router + GreatSQL MGR 实现单 IDC 内高可用
 
-首先，构建一个三节点的MGR集群，该集群包含Primary、Secondary、Arbitrator三种节点。
+首先，构建一个三节点的 MGR 集群，该集群包含 Primary、Secondary、Arbitrator 三种节点。
 ```sql
 greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
@@ -26,11 +26,11 @@ greatsql> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+--------------+-------------+--------------+-------------+----------------+
 ```
 
-还是老样子，把MySQL Router部署在应用服务器端而非数据库服务器端，这样就不需要针对MySQL Router部署高可用方案。
+还是老样子，把 MySQL Router 部署在应用服务器端而非数据库服务器端，这样就不需要针对 MySQL Router 部署高可用方案。
 
 整体架构看起来像是这样：
 
-![MySQL Router + GreatSQL MGR 实现单IDC高可用方案](./2-ha-single-idc01.png)
+![MySQL Router + GreatSQL MGR 实现单 IDC 高可用方案](./2-ha-single-idc01.png)
 
 
 

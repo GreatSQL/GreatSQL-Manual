@@ -1,4 +1,4 @@
-# Oracle兼容-函数-REGEXP_COUNT()函数
+# Oracle 兼容-函数-REGEXP_COUNT()函数
 ---
 
 
@@ -9,7 +9,7 @@ REGEXP_COUNT ( source_char, pattern [, position [, match_param]])
 ```
 
 ## 2. 定义和用法
-`REGEXP_COUNT` 函数的作用是统计正则匹配字符串 `pattern` 在 字符串 `source_char` 中出现的次数。如果未找到匹配结果，则返回0。
+`REGEXP_COUNT` 函数的作用是统计正则匹配字符串 `pattern` 在 字符串 `source_char` 中出现的次数。如果未找到匹配结果，则返回 0。
 
 - `source_char`：需要查找匹配的字符串。
 - `pattern`：正则表达式或字符文本。

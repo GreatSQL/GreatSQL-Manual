@@ -5,7 +5,7 @@
 
 ## 使用 INSERT 插入数据
 
-### VALUES的方式添加
+### VALUES 的方式添加
 #### 指定列名
 ```sql
 INSERT INTO 表名(column1 [, column2, …, columnn]) 
@@ -42,7 +42,7 @@ Query OK, 2 rows affected (0.05 sec)
 Records: 2  Duplicates: 0  Warnings: 0
 ```
 
-## INSERT ... SELECT语句添加
+## INSERT ... SELECT 语句添加
 还可以将 SELECT 语句查询的结果插入到表中，此时不需要把每一条记录的值一个一个输入，只需要使用一条 INSERT 语句和一条 SELECT 语句组成的组合语句即可快速地从一个或多个表中向一个表中插入多行
 ```sql
 INSERT INTO 目标表名

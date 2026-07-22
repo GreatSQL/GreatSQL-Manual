@@ -13,8 +13,8 @@ GreatSQL 中增加一个新的工作模式：**单主快速模式**，在这个�
 
 系统参数 `group_replication_single_primary_fast_mode` 可选值有：0、1、2，不同值分别表示如下：
 - 0，表示不采取快速单主模式，这是默认值。
-- 1，表示采用快速单主模式，支持并发回放。**强烈建议设置为1，即启用快速单主模式**。
-- 2，表示采用快速单主模式，但不支持并行回放，加速Relay Log落盘，且让从库消耗更少的资源。
+- 1，表示采用快速单主模式，支持并发回放。**强烈建议设置为 1，即启用快速单主模式**。
+- 2，表示采用快速单主模式，但不支持并行回放，加速 Relay Log 落盘，且让从库消耗更少的资源。
 
 | System Variable Name    | group_replication_single_primary_fast_mode |
 | --- | --- |
@@ -23,7 +23,7 @@ GreatSQL 中增加一个新的工作模式：**单主快速模式**，在这个�
 | Type | Enumeration |
 | Permitted Values |    [0 | 1 | 2] |
 | Default    | 0 |
-| Description    | 设置是否启用快速单主模式，强烈建议启用（即设置为1）。|
+| Description    | 设置是否启用快速单主模式，强烈建议启用（即设置为 1）。|
 
 
 ## 优化机制解读

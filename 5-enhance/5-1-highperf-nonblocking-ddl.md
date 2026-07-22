@@ -23,14 +23,14 @@ SET lock_ddl_polling_mode = ON;
 SET lock_ddl_polling_runtime = 1000;
 ```
 
-上述设置的作用是，每间隔1秒尝试申请MDL-X锁，最多不超过MDL锁的总等待时长（100秒）。
+上述设置的作用是，每间隔 1 秒尝试申请 MDL-X 锁，最多不超过 MDL 锁的总等待时长（100 秒）。
 
 4. 新增选项
 
 | System Variable Name | Variable Scope |  Dynamic Variable | Permitted Values | Type | Default | Description |
 | --- | --- | --- | --- | --- | --- | --- |
 |lock_ddl_polling_mode|Session|YES|[ON/OFF]|ENUM|OFF|是否启用非阻塞式 DDL 特性，默认：不启用|
-|lock_ddl_polling_runtime|Session|YES|[200, 31536000]|Integer|1000|非阻塞式 DDL 请求时，每次DDL请求尝试申请MDL-X锁的间隔时长，默认：1000 毫秒（1秒）|
+|lock_ddl_polling_runtime|Session|YES|[200, 31536000]|Integer|1000|非阻塞式 DDL 请求时，每次 DDL 请求尝试申请 MDL-X 锁的间隔时长，默认：1000 毫秒（1 秒）|
 
 
 原生的 MDL 锁申请是独占式的，也就是在发起 DDL 操作时，需要先申请 MDL-X 锁，如果不能立即申请到，则会被阻塞，直至达到 `lock_wait_timeout` 选项设定的阈值。

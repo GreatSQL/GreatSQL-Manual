@@ -1,4 +1,4 @@
-# Oracle兼容-语法-ANY/ALL
+# Oracle 兼容-语法-ANY/ALL
 ---
 
 
@@ -19,7 +19,7 @@ comp_op:
 
 ## 2. 定义和用法
 
-GreatSQL兼容支持 `ANY/ALL` 语法对多个表达式进行比较。
+GreatSQL 兼容支持 `ANY/ALL` 语法对多个表达式进行比较。
 
 `ANY/ALL` 是采用等价转换方式来实现的。
 
@@ -39,11 +39,11 @@ GreatSQL兼容支持 `ANY/ALL` 语法对多个表达式进行比较。
  x >= ALL(a,b,c) | x >= GREATEST(a,b,c)
 
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-GreatSQL原生支持`ROW`类型的比较，因为 `IN` 与 `NOT IN` 支持表达式查找，所以`= ANY`、`!= ANY` 也支持。
+GreatSQL 原生支持`ROW`类型的比较，因为 `IN` 与 `NOT IN` 支持表达式查找，所以`= ANY`、`!= ANY` 也支持。
 
-其他表达式和Oracle一致，都不支持。
+其他表达式和 Oracle 一致，都不支持。
 
 ## 4. 示例
 

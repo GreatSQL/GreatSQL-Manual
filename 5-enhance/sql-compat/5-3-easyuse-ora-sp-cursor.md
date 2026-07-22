@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-游标（`CURSOR`）
+# Oracle 兼容-存储过程-游标（`CURSOR`）
 ---
 
 
@@ -23,9 +23,9 @@
 
 ## 2. 定义和用法
 
-GreatSQL在 `ORACLE` 模式下支持以下几种游标用法：
+GreatSQL 在 `ORACLE` 模式下支持以下几种游标用法：
 
-- 1. 用法1：用 `FOR ... IN CURSOR() LOOP ... END LOOP` 语法循环读取数据到游标中。
+- 1. 用法 1：用 `FOR ... IN CURSOR() LOOP ... END LOOP` 语法循环读取数据到游标中。
 
 ```sql
 [ FOR rows IN
@@ -36,31 +36,31 @@ GreatSQL在 `ORACLE` 模式下支持以下几种游标用法：
   LOOP statement... END LOOP [label] ;
 ```
 
-- 2. 语法2：读取游标中的多列数据，并赋值给一个变量，实现 `%ROWTYPE` 功能。
+- 2. 语法 2：读取游标中的多列数据，并赋值给一个变量，实现 `%ROWTYPE` 功能。
 
 ```sql
 FETCH CURSOR INTO var
 ```
 
-- 3. 语法3：支持定义游标时附带参数，并采用 `OPEN CURSOR(var_list)` 方式打开游标。
+- 3. 语法 3：支持定义游标时附带参数，并采用 `OPEN CURSOR(var_list)` 方式打开游标。
 
 ```sql
 CURSOR cursor_name (column_name datatype) IS ...
 ```
 
-- 4. 语法4：支持参数定义为 `CURSOR%ROWTYPE` 类型，用于存放多列。
+- 4. 语法 4：支持参数定义为 `CURSOR%ROWTYPE` 类型，用于存放多列。
 
 ```sql
 cursor_name CURSOR%ROWTYPE
 ```
 
-- 5. 用法5：支持参数定义为 `TABLE%ROWTYPE` 类型，用于存放多列。
+- 5. 用法 5：支持参数定义为 `TABLE%ROWTYPE` 类型，用于存放多列。
 
 ```sql
 cursor_name TABLE%ROWTYPE
 ```
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
 GreatSQL 在 `ORACLE` 模式下的游标在存储过程中读取数据的用法与 Oracle 基本一致，仅 `%ROWCOUNT` 还不支持。
 
@@ -99,7 +99,7 @@ greatsql> CREATE TABLE IF NOT EXISTS t(id INT NOT NULL, c1 VARCHAR(100) NOT NULL
 greatsql> INSERT INTO t VALUES(1, 'row1'), (2, 'row2'), (3, 'row3');
 ```
 
-- 1. 示例1：`FOR LOOP`循环读取数据
+- 1. 示例 1：`FOR LOOP`循环读取数据
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -138,7 +138,7 @@ greatsql> CALL sp1_cur_loop() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 2. 示例2：`CURSOR%ROWTYPE` 继承数据类型
+- 2. 示例 2：`CURSOR%ROWTYPE` 继承数据类型
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -189,7 +189,7 @@ greatsql> CALL sp2_cur_rowtype() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 3. 示例3：声明游标时带参数
+- 3. 示例 3：声明游标时带参数
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -227,7 +227,7 @@ greatsql> CALL sp3_cur_var() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 4. 示例4：支持表中包含 `UDT` 类型
+- 4. 示例 4：支持表中包含 `UDT` 类型
 
 ```sql
 greatsql> SET sql_mode = ORACLE;

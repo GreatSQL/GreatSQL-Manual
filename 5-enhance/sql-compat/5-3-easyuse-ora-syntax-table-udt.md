@@ -23,56 +23,56 @@
 
 ## 2. 定义和用法
 
-GreatSQL支持用户自定义TABLE类型，支持以下几种用法：
+GreatSQL 支持用户自定义 TABLE 类型，支持以下几种用法：
 
-- 语法1：执行 `CREATE TABLE(udt_name udt_type)` 创建UDT列。
+- 语法 1：执行 `CREATE TABLE(udt_name udt_type)` 创建 UDT 列。
 
-- 语法2：向UDT列插入UDT值。
+- 语法 2：向 UDT 列插入 UDT 值。
 
-- 语法3：添加和删除UDT列(注：alter不支持modify操作)。
+- 语法 3：添加和删除 UDT 列(注：alter 不支持 modify 操作)。
 
-- 语法4：可设置 `udt_format_result` 会话选项指定UDT类型数据的输出格式。
-
-
-GreatSQL的TABLE UDT有以下几条限制：
-
-1. TABLE UDT不能跨Schema使用。
-
-2. 在ORACLE模式下，关键词 `TYPE` 不能作为Schema名或User名。
-
-3. 目前只支持 `name = udt_type()` 函数，UDT列不支持用在其他内置函数。
-
-4. UDT列不支持 `TINYBLOB/BLOB/MEDIUMBLOB/LONGBLOB` 等几个数据类型。
+- 语法 4：可设置 `udt_format_result` 会话选项指定 UDT 类型数据的输出格式。
 
 
-## 3. Oracle兼容说明
+GreatSQL 的 TABLE UDT 有以下几条限制：
+
+1. TABLE UDT 不能跨 Schema 使用。
+
+2. 在 ORACLE 模式下，关键词 `TYPE` 不能作为 Schema 名或 User 名。
+
+3. 目前只支持 `name = udt_type()` 函数，UDT 列不支持用在其他内置函数。
+
+4. UDT 列不支持 `TINYBLOB/BLOB/MEDIUMBLOB/LONGBLOB` 等几个数据类型。
 
 
-GreatSQL中的TABLE UDT与Oracle兼容情况说明如下：
+## 3. Oracle 兼容说明
 
-1. 不支持对UDT列设定默认值，也不支持设置为 `PRIMARY KEY/FOREIGN KEY/CONSTRAINT/NULL/NOT NULL/INVISIBLE/VIRTUAL` 等属性。
 
-2. 只允许对UDT列插入UDT值，其他类型值不允许插入UDT列；UDT值也不允许插入其他类型列。
+GreatSQL 中的 TABLE UDT 与 Oracle 兼容情况说明如下：
 
-3. 不支持对UDT列执行 `CREATE INDEX/ORDER BY/GROUP BY/PARTITION BY/CREATE VIEW/ALTER MODIFY` 等操作行为。
+1. 不支持对 UDT 列设定默认值，也不支持设置为 `PRIMARY KEY/FOREIGN KEY/CONSTRAINT/NULL/NOT NULL/INVISIBLE/VIRTUAL` 等属性。
 
-4. 只能添加和删除UDT列，不支持 `MODIFY` 修改UDT列。
+2. 只允许对 UDT 列插入 UDT 值，其他类型值不允许插入 UDT 列；UDT 值也不允许插入其他类型列。
 
-5. 支持 `CREATE VIEW`，mysql.routines的table_count值不改变。区别是如果使用udt type的table删除而view没有删除，也支持删除该udt type。
+3. 不支持对 UDT 列执行 `CREATE INDEX/ORDER BY/GROUP BY/PARTITION BY/CREATE VIEW/ALTER MODIFY` 等操作行为。
 
-6. UDT列的成员列不允许单独使用在独立的SQL语句中，比如 `udt_type.id` 这种用法（Oracle支持该用法）。
+4. 只能添加和删除 UDT 列，不支持 `MODIFY` 修改 UDT 列。
 
-7. UDT列不支持用在大部分内置函数中，除了在查询条件中用于比大小以及 `ISNULL/IS NOT NULL`，比如 `WHERE c1 = udt_type1(1, 'r1')`。
+5. 支持 `CREATE VIEW`，mysql.routines 的 table_count 值不改变。区别是如果使用 udt type 的 table 删除而 view 没有删除，也支持删除该 udt type。
 
-8. UDT列不支持 `CREATE TEMPORARY TABLE` 用法。
+6. UDT 列的成员列不允许单独使用在独立的 SQL 语句中，比如 `udt_type.id` 这种用法（Oracle 支持该用法）。
 
-9. 执行 `SHOW CREATE TABLE WITH udt_type` 显示的UDT列类型就是TYPE的名字。
+7. UDT 列不支持用在大部分内置函数中，除了在查询条件中用于比大小以及 `ISNULL/IS NOT NULL`，比如 `WHERE c1 = udt_type1(1, 'r1')`。
 
-10. 选项`udt_format_result` 默认值为 `BINARY`，即输出结果显式为BINARY格式，否则正常显示格式（`udt_format_result = DBA`）。
+8. UDT 列不支持 `CREATE TEMPORARY TABLE` 用法。
+
+9. 执行 `SHOW CREATE TABLE WITH udt_type` 显示的 UDT 列类型就是 TYPE 的名字。
+
+10. 选项`udt_format_result` 默认值为 `BINARY`，即输出结果显式为 BINARY 格式，否则正常显示格式（`udt_format_result = DBA`）。
 
 11. 不支持 `BLOB/MEDIUM_BLOB/LONG_BLOB/TINY_BLOB` 等数据类型。
 
-12. 对于跨库表的操作，要求UDT type和UDT table指定的Schema名一致，具体如下：
+12. 对于跨库表的操作，要求 UDT type 和 UDT table 指定的 Schema 名一致，具体如下：
 ```
 greatsql> use greatsql;
 
@@ -93,11 +93,11 @@ greatsql> ALTER TABLE db2.t1 ADD c2 udt_type1;
 
 13. 插入语句 `INSERT INTO t1 VALUES udt_type(NULL)` 和 `INSERT INTO t1 VALUES(NULL)` 实际写入值是不一样的，写入完后执行 `SELECT * FROM t1 WHERE udt_type IS NULL` 查询的结果是后者，而非前者。
 
-14. 在类似 `SELECT * FROM t1 WHERE udt_type1 [<|=|>] udt_type1` 的比较查询中，如果是字符串则会按照 `BINARY` 格式进行比较；而在Oracle中是当小于或者大于的时候直接报错，而等于的时候直接返回空值。这点与Oracle不一致。
+14. 在类似 `SELECT * FROM t1 WHERE udt_type1 [<|=|>] udt_type1` 的比较查询中，如果是字符串则会按照 `BINARY` 格式进行比较；而在 Oracle 中是当小于或者大于的时候直接报错，而等于的时候直接返回空值。这点与 Oracle 不一致。
 
-15. 在类似 `SELECT * FROM t1 WHERE udt_type1 [<|=|>] udt_type2` 的比较查询中，由于 `udt_type1` 的 `udt name` 不等于 `udt_type2` 的 `udt name`，所以会报错；而Oracle是在等于查询的时候直接返回空值，这点与Oracle不一致。
+15. 在类似 `SELECT * FROM t1 WHERE udt_type1 [<|=|>] udt_type2` 的比较查询中，由于 `udt_type1` 的 `udt name` 不等于 `udt_type2` 的 `udt name`，所以会报错；而 Oracle 是在等于查询的时候直接返回空值，这点与 Oracle 不一致。
 
-16. 通过查询系统表 `information_schema.COLUMNS` 的 `extra` 列中是否带有 `udt_name` 信息，就可知道哪些表的列带有udt类型。例如：
+16. 通过查询系统表 `information_schema.COLUMNS` 的 `extra` 列中是否带有 `udt_name` 信息，就可知道哪些表的列带有 udt 类型。例如：
 ```sql
 greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, DATA_TYPE, EXTRA FROM information_schema.COLUMNS WHERE TABLE_NAME = 'udt_t1';
 +--------------+------------+-------------+-----------+-----------------+
@@ -113,7 +113,7 @@ greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, DATA_TYPE, EXTRA FROM in
 ## 4. 示例
 
 
-- 1. 示例1：`CREATE TABLE` 用法
+- 1. 示例 1：`CREATE TABLE` 用法
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -128,7 +128,7 @@ greatsql> CREATE TABLE t1(id INT, c1 udt_t1);
 ERROR 1235 (42000): This version of MySQL doesn't yet support 'create table with udt table'
 ```
 
-- 2. 示例2：`INSERT INTO TABLE` 用法
+- 2. 示例 2：`INSERT INTO TABLE` 用法
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -146,7 +146,7 @@ greatsql> SELECT * FROM udt_t1;
 1 row in set (0.00 sec)
 ```
 
-- 3. 示例3：`ALTER TABLE ADD`
+- 3. 示例 3：`ALTER TABLE ADD`
 
 ```sql
 greatsql> SET SQL_MODE=ORACLE;
@@ -169,7 +169,7 @@ Create Table: CREATE TABLE `udt_t1` (
 1 row in set (0.00 sec)
 ```
 
-- 4. 示例4：`ALTER TABLE DROP`
+- 4. 示例 4：`ALTER TABLE DROP`
 
 ```sql
 greatsql> SET SQL_MODE=ORACLE;
@@ -189,7 +189,7 @@ Create Table: CREATE TABLE `udt_t1` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 ```
 
-- 5. 示例5：`DROP TABLE/DROP TYPE`
+- 5. 示例 5：`DROP TABLE/DROP TYPE`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -206,7 +206,7 @@ Query OK, 0 rows affected (0.00 sec)
 ```
 
 
-- 6. 示例6：`CREATE VIEW`
+- 6. 示例 6：`CREATE VIEW`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -223,7 +223,7 @@ character_set_client: utf8mb4
 collation_connection: utf8mb4_0900_ai_ci
 ```
 
-- 7. 示例7：查询与函数
+- 7. 示例 7：查询与函数
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -308,7 +308,7 @@ greatsql> SELECT c2 = c1, c2 > c1, c2 < c1 FROM udt_t1;
 2 rows in set (0.00 sec)
 ```
 
-- 8. 示例8：`UPDATE SET`
+- 8. 示例 8：`UPDATE SET`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -342,7 +342,7 @@ greatsql> SELECT * FROM udt_t1;
 2 rows in set (0.00 sec)
 ```
 
-- 9. 示例9：`CURSOR`
+- 9. 示例 9：`CURSOR`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -384,7 +384,7 @@ greatsql> CALL p1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 10. 示例10：`%TYPE`
+- 10. 示例 10：`%TYPE`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -436,7 +436,7 @@ greatsql> CALL p1(1,10) //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 11. 示例11：udt_format_result
+- 11. 示例 11：udt_format_result
 
 客户端建立新连接，加上参数 `--binary-as-hex`：
 ```
@@ -478,7 +478,7 @@ greatsql> SELECT * FROM udt_t1;
 2 rows in set (0.00 sec)
 ```
 
-## 5. TABLE UDT数据字典
+## 5. TABLE UDT 数据字典
 
 ```sql
 -- 1. 查询 information_schema.ROUTINES 查看所有 UDT

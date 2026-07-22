@@ -1,4 +1,4 @@
-# Oracle兼容-语法-GLOBAL|PRIVATE TEMPORARY TABLE
+# Oracle 兼容-语法-GLOBAL|PRIVATE TEMPORARY TABLE
 ---
 
 
@@ -27,17 +27,17 @@ create_private_temporary:
 
 ## 2. 定义和用法
 
-GreatSQL中支持创建 `GLOBAL|PRIVATE` 两种不同的临时表。
+GreatSQL 中支持创建 `GLOBAL|PRIVATE` 两种不同的临时表。
 
 - 1. 创建`GLOBAL TEMPORARY TABLE`。
   - 会立即创建一个临时表定义，但不会立即创建临时表实体。
-  - 具体创建时机为SQL语句有插入的操作时。若创建后，在当时的SQL没有插入任何记录，则会在该SQL结束时，删除该临时表实例。
+  - 具体创建时机为 SQL 语句有插入的操作时。若创建后，在当时的 SQL 没有插入任何记录，则会在该 SQL 结束时，删除该临时表实例。
   - `ON COMMIT` 子句指定 `DELETE ROWS` 时，表示在当前事务结束时，会删除该临时表实例；
   - `ON COMMIT` 子句指定 `PRESERVE ROWS` 时，则在当前事务结束时，会保留该临时表实例及内容。
   - 当省略 `ON COMMIT` 子句时，默认为 `DELETE ROWS`。
   - 当前连接会话结束时，会删除该临时表实例。
   - 执行 `TRUNCATE` 语句也会删除该临时表实例。
-  - 当系统内有任何该临时表的实例创建时，不可以对该临时表进行DDL操作，例如：`ALTER TABLE`, `CREATE INDEX`等操作。
+  - 当系统内有任何该临时表的实例创建时，不可以对该临时表进行 DDL 操作，例如：`ALTER TABLE`, `CREATE INDEX`等操作。
   - 执行 `DROP TABLE` 可以立即删除当前会话该临时表实例（若存在的话）及临时表定义。若是由其他会话创建该临时表的实例时，则只会删除当前会话的临时表实例，并会在删除临时表定义时报错。
   - 执行 `SHOW CREATE TABLE` 可以显示当前会话是否已经创建临时表实例。若当前会话存在该临时表实例时（例如：对该表有写入数据）, 此时会显示为 `CREATE TEMPORARY TABLE`，不带 `GLOBAL` 标识。
 
@@ -50,16 +50,16 @@ GreatSQL中支持创建 `GLOBAL|PRIVATE` 两种不同的临时表。
   - 执行 `DROP TABLE` 会删除该临时表。
 
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-1. 临时表的维护及使用，是基于GreatSQL的临时表。因此任一临时表都只能在当前语句中被引用一次。例如：t1是临时表，则 `SELECT * FROM t1 UNION SELECT * FROM t1` 会报错，见下方详细案例。
-2. 在MGR环境中，其中一个节点创建临时表实例时，在其他节点的DDL操作并不会被锁阻塞，只会依照目前MGR环境中的DDL操作规则，对临时表定义进行操作。
-3. 与GreatSQL临时表相同，`SHOW TABLES` 命令不会显示已创建的 `GLOBAL|PRIVATE TEMPORARY TABLE` 临时表实例。
-4. 如果同时使用GreatSQL原生的 `TEMPORARY TABLE` 创建同名的 `GLOBAL TEMPORARY TABLE`，会让后续SQL语句以原生的 `TEMPORARY TABLE` 为主。
-5. 与GreatSQL常规临时表支持的数据类型一致，当临时表中包含 `BLOB` 类型列时不会报错。
+1. 临时表的维护及使用，是基于 GreatSQL 的临时表。因此任一临时表都只能在当前语句中被引用一次。例如：t1 是临时表，则 `SELECT * FROM t1 UNION SELECT * FROM t1` 会报错，见下方详细案例。
+2. 在 MGR 环境中，其中一个节点创建临时表实例时，在其他节点的 DDL 操作并不会被锁阻塞，只会依照目前 MGR 环境中的 DDL 操作规则，对临时表定义进行操作。
+3. 与 GreatSQL 临时表相同，`SHOW TABLES` 命令不会显示已创建的 `GLOBAL|PRIVATE TEMPORARY TABLE` 临时表实例。
+4. 如果同时使用 GreatSQL 原生的 `TEMPORARY TABLE` 创建同名的 `GLOBAL TEMPORARY TABLE`，会让后续 SQL 语句以原生的 `TEMPORARY TABLE` 为主。
+5. 与 GreatSQL 常规临时表支持的数据类型一致，当临时表中包含 `BLOB` 类型列时不会报错。
 6. 不支持对 `GLOBAL TEMPORARY TABLE` 创建触发器。但触发器及视图内可以引用 `GLOBAL TEMPORARY TABLE`。
 7. 执行 `RENAME TABLE` 与 `ALTER TABLE .. RENAME` 语句时，必须当时没有 `GLOBAL TEMPORARY TABLE` 临时表同名实例(Oracle 没有这个限制)。
-8. 每个 `GLOBAL TEMPORARY TABLE` 实例的 `AUTO_INCREMENT` 字段都一律由1开始（Oracle没这个约束）。
+8. 每个 `GLOBAL TEMPORARY TABLE` 实例的 `AUTO_INCREMENT` 字段都一律由 1 开始（Oracle 没这个约束）。
 9. 当创建临时表实例后，在任何会话中删除 `GLOBAL TEMPORARY TABLE` 所在的数据库时，该临时表实例会继续存在。若之后继续创建同名的数据库及同名的 `GLOBAL TEMPORARY TABLE`，并不会对已经生成的临时表实例有影响。
 10. 由于在 `PRIVATE TEMPORARY TABLE` 中是不支持指定主键的，因此在创建 `PRIVATE TEMPORARY TABLE` 时不能显式指定主键，也必须设置 `sql_generate_invisible_primary_key=0`，避免隐式创建主键，否则会提示不支持该用法。
 11. 执行 `TRUNCATE` 语句会终止当前事务，会对当前事务中创建的临时表有影响。
@@ -76,7 +76,7 @@ Query OK, 0 rows affected (0.01 sec)
 greatsql> INSERT INTO t1 VALUES (1);
 Query OK, 1 row affected (0.00 sec)
 
--- 1. 普通临时表在同一个SQL语句中，只能被引用一次
+-- 1. 普通临时表在同一个SQL 语句中，只能被引用一次
 greatsql> SELECT * FROM t1 UNION SELECT * FROM t1;
 ERROR 1137 (HY000): Can not reopen table: 't1'
 
@@ -134,7 +134,7 @@ greatsql> INSERT INTO gtt2 SELECT 1, 'c12' FROM DUAL;
 Query OK, 0 rows affected (0.04 sec)
 Records: 1  Duplicates: 0  Warnings: 0
 
--- SQL语句执行结束后还能查询到数据
+-- SQL 语句执行结束后还能查询到数据
 greatsql> SELECT * FROM gtt2;
 +----+------+
 | id | c1   |

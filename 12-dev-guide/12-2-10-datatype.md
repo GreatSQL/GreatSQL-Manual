@@ -150,7 +150,7 @@ greatsql> SHOW WARNINGS;
 greatsql> INSERT INTO t1 VALUES(0, 123.4321, 123.4321, 123.4321, 123.4321, 123.4321, 123.4321);
 Query OK, 1 row affected, 2 warnings (0.00 sec)
 
--- 查询结果表明DOUBLE比FLOAT精度更高
+-- 查询结果表明 DOUBLE 比 FLOAT 精度更高
 greatsql> SELECT * FROM t1;
 +----+---------+---------+---------+---------+----------+------+
 | id | c1      | c2      | c3      | c4      | c5       | c6   |
@@ -186,7 +186,7 @@ greatsql> CREATE TABLE t1(
 
 -- 插入时尾部总是包含三个空格
 greatsql> INSERT INTO t1 VALUES(0, 'abcde', 'abcde   '), (0, '', '   '), 
-  (0, 'GreatSQL数据库', 'GreatSQL数据库   ');
+  (0, 'GreatSQL 数据库', 'GreatSQL 数据库   ');
 
 greatsql> INSERT INTO t1 VALUES(0, NULL, NULL);
 ERROR 1048 (23000): Column 'c1' cannot be null
@@ -197,7 +197,7 @@ greatsql> SELECT id, c1, LENGTH(c1), c2, LENGTH(c2) FROM t1;
 +----+-------------------+------------+----------------------+------------+
 |  1 | abcde             |          5 | abcde                |          8 |
 |  2 |                   |          0 |                      |          3 |
-|  3 | GreatSQL数据库    |         17 | GreatSQL数据库       |         20 |
+|  3 | GreatSQL 数据库    |         17 | GreatSQL 数据库       |         20 |
 +----+-------------------+------------+----------------------+------------+
 
 -- VARCHAR列定义长度不能超过16383，否则报错
@@ -477,7 +477,7 @@ greatsql> CREATE TABLE t1(
 ERROR 1118 (42000): Row size too large. The maximum row size for the used table type, not counting BLOBs, is 65535. This includes storage overhead, check the manual. You have to change some columns to TEXT or BLOBs
 
 -- 计算所有列总长度，ROW_SIZE=65531 未超
--- 超过255字节的VARCHAR列要额外增加2字节
+-- 超过 255 字节的 VARCHAR 列要额外增加 2 字节
 greatsql> SELECT 4 + (200*4+2) + (600*4+2) + (6000*4+2) + (9580*4+2) AS ROW_SIZE;
 +----------+
 | ROW_SIZE |
@@ -493,7 +493,7 @@ greatsql> SELECT 4 + (200*4+2) + (600*4+2) + (6000*4+2) + (9581*4+2) AS ROW_SIZE
 |    65536 |
 +----------+
 
--- 包含TEXT类型
+-- 包含 TEXT 类型
 greatsql> CREATE TABLE t1(
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   c1 VARCHAR(200) NOT NULL,

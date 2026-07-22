@@ -28,9 +28,9 @@ Query OK, 0 rows affected (0.05 sec)
 
 只有具有 `ACCESS_PROCFS` 动态权限的用户才能访问 `INFORMATION_SCHEMA.PROCFS` 视图。在插件启动期间，此动态权限会注册到服务器。
 
-安装插件后，通过执行以下命令授予用户对`INFORMATION_SCHEMA.PROCFS`视图的访问权限：
+安装插件后，通过执行以下命令授予用户对 `INFORMATION_SCHEMA.PROCFS` 视图的访问权限：
 
-root用户不包含此权限，需要给自己授权
+root 用户不包含此权限，需要给自己授权
 
 ```sql
 greatsql> GRANT ACCESS_PROCFS ON *.* TO 'user'@'host';
@@ -44,7 +44,7 @@ SELinux 策略或 AppArmor 配置文件可能会阻止访问 ProcFS 插件所需
 
 授权用户可以通过在 WHERE 子句中指定确切的文件名来获取单个文件的信息。未包含的文件将被忽略并视为不存在。
 
-所有符合`procfs_files_spec`的文件都会被打开、读取、存储在内存中，最后返回给客户端。添加 WHERE 子句以只返回特定文件对于限制插件对服务器性能的影响至关重要。不使用 WHERE 子句会导致服务器上出现冗长的查询响应时间、高负载和高内存使用率。WHERE 子句可以包含相等操作符、LIKE 操作符或 IN 操作符。LIKE 操作符限制了文件匹配模式。
+所有符合 `procfs_files_spec` 的文件都会被打开、读取、存储在内存中，最后返回给客户端。添加 WHERE 子句以只返回特定文件对于限制插件对服务器性能的影响至关重要。不使用 WHERE 子句会导致服务器上出现冗长的查询响应时间、高负载和高内存使用率。WHERE 子句可以包含相等操作符、LIKE 操作符或 IN 操作符。LIKE 操作符限制了文件匹配模式。
 
 以下示例返回 `proc/version` ：
 
@@ -61,19 +61,19 @@ CONTENTS: Linux version 6.6.3-arch1-1 (linux@archlinux) (gcc (GCC) 13.2.1 202308
 若不加 WHERE 条件则输出所有信息。
 :::
 
-例如可以查看DEV信息：
+例如可以查看 DEV 信息：
 
 ```sql
 greatsql> SELECT * FROM INFORMATION_SCHEMA.PROCFS WHERE FILE = '/proc/net/dev' \G
 ```
 
-以及查看CPU信息：
+以及查看 CPU 信息：
 
 ```sql
 greatsql> SELECT * FROM INFORMATION_SCHEMA.PROCFS WHERE FILE = '/proc/cpuinfo' \G
 ```
 
-## 新增表PROCFS
+## 新增表 PROCFS
 
 INFORMATION_SCHEMA.PROCFS 视图的架构定义是：
 

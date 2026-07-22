@@ -40,7 +40,7 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 ### [高兼容](../5-enhance/5-3-easyuse.md)
 
-GreatSQL 实现 100% 完全兼容 MySQL 及 Percona Server for MySQL 用法，支持大多数常见 Oracle 用法，包括 [数据类型兼容](../5-enhance/5-3-easyuse.md#数据类型兼容)、[函数兼容](../5-enhance/5-3-easyuse.md#函数兼容)、[SQL 语法兼容](../5-enhance/5-3-easyuse.md#sql语法兼容)、[存储程序兼容](../5-enhance/5-3-easyuse.md#存储程序兼容) 等众多兼容扩展用法。
+GreatSQL 实现 100% 完全兼容 MySQL 及 Percona Server for MySQL 用法，支持大多数常见 Oracle 用法，包括 [数据类型兼容](../5-enhance/5-3-easyuse.md#数据类型兼容)、[函数兼容](../5-enhance/5-3-easyuse.md#函数兼容)、[SQL 语法兼容](../5-enhance/5-3-easyuse.md#sql-语法兼容)、[存储程序兼容](../5-enhance/5-3-easyuse.md#存储程序兼容) 等众多兼容扩展用法。
 
 更多信息详见文档：[高兼容](../5-enhance/5-3-easyuse.md)。
 

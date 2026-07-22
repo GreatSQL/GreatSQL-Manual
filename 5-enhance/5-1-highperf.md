@@ -1,7 +1,7 @@
 # GreatSQL 高性能
 ---
 
-相对 MySQL 及 Percona 的性能表现更稳定优异，支持 Rapid 引擎、事务无锁化、并行LOAD DATA、异步删除大表、线程池、非阻塞式 DDL、NUMA 亲和调度优化 等特性，在 TPC-C 测试中相对 MySQL 性能提升超过 30%，在 TPC-H 测试中的性能表现是 MySQL 的十几倍甚至上百倍。
+相对 MySQL 及 Percona 的性能表现更稳定优异，支持 Rapid 引擎、事务无锁化、并行 LOAD DATA、异步删除大表、线程池、非阻塞式 DDL、NUMA 亲和调度优化 等特性，在 TPC-C 测试中相对 MySQL 性能提升超过 30%，在 TPC-H 测试中的性能表现是 MySQL 的十几倍甚至上百倍。
 
 - 支持 [大规模并行、基于内存查询、高压缩比的高性能 Rapid 引擎](./5-1-highperf-rapid-engine.md)，可将数据分析性能提升几个数量级。在 32C64G 测试机环境下，TPC-H SF100 测试中 22 条 SQL 总耗时仅需不到 80 秒。并且针对 TPC-H 测试数据的压缩比平均可达到 7 倍多。
 
@@ -18,7 +18,7 @@ GreatSQL 采用全新的无锁哈希结构，显著减少了锁的临界区消�
 
 - 支持 [并行 LOAD DATA](./5-1-highperf-parallel-load.md)，适用于频繁导入大批量数据的应用场景，性能可提升约 20+ 倍；对于无显式定义主键的场景亦有优化提升。
 
-- 支持 [异步删除大表](./5-1-highperf-async-purge-big-table.md)，提高InnoDB引擎运行时性能的稳定性。
+- 支持 [异步删除大表](./5-1-highperf-async-purge-big-table.md)，提高 InnoDB 引擎运行时性能的稳定性。
 
 - 支持 [线程池](./5-1-highperf-thread-pool.md)，降低了线程创建和销毁的代价，保证高并发下，性能稳定不会明显衰退。
 

@@ -8,7 +8,7 @@
 在 GreatSQL 中不再使用原生的利用机制，而是优化了流控算法。除了评估认证数据库队列大小因素，同时也评估大事务处理和主从节点的同步等多项因素，流控粒度更细致，不再出现原生 MGR 中每 1 秒小抖动问题。
 
 优化后再启用流控，事务性能更平稳，没有特别大的起伏波动。优化前后效果如下图所示：
-![GreatSQL解决了事务认证队列清理时每60秒性能抖动问题](./GreatSQL-vs-MySQL-MGR-60sGC.jpg)
+![GreatSQL 解决了事务认证队列清理时每60秒性能抖动问题](./GreatSQL-vs-MySQL-MGR-60sGC.jpg)
 
 当系统参数 `group_replication_flow_control_mode` 设置为 **DISABLED** 时，表示关闭流控。当设置为 **QUOTA** 时，将开启流控并采用新的流控机制。
 
@@ -25,7 +25,7 @@
 | Default       | 600 |
 | Description   | 单位：秒。<br/>用于控制 MGR 主从节点复制延迟阈值，当 MGR 主从节点因为大事务等原因延迟超过阈值时，就会触发流控机制 |
 
-该选项默认为600，可在线动态修改，例如：
+该选项默认为 600，可在线动态修改，例如：
 ```sql
 SET GLOBAL group_replication_flow_control_replay_lag_behind=600;
 ```

@@ -103,7 +103,7 @@ ATOMDB™ 数据库管理客户端是一款服务广大开发者的工具软件�
 
 ![atomdb2](./12-1-2-cw-gui-09.png)
 
-选择 GreatDB ，点击 Next 即可。
+选择 GreatDB，点击 Next 即可。
 
 ![atomdb3](./12-1-2-cw-gui-10.png)
 

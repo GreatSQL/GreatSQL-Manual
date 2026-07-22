@@ -1,8 +1,8 @@
-# Oracle兼容-语法-字符串列设置CURRENT_TIMESTAMP默认值
+# Oracle 兼容-语法-字符串列设置 CURRENT_TIMESTAMP 默认值
 ---
 
 
-GreatSQL支持对 `VARCHAR/VARCHAR2` 类型列设置默认值为 `CURRENT_TIMESTAMP`。
+GreatSQL 支持对 `VARCHAR/VARCHAR2` 类型列设置默认值为 `CURRENT_TIMESTAMP`。
 
 ## 1. 语法
 
@@ -13,9 +13,9 @@ VARCHAR2(n) DEFAULT CURRENT_TIMESTAMP[([fsp])]
 ```
 
 参数备注：
-1. 参数 `n` 值必须大于等于48。
+1. 参数 `n` 值必须大于等于 48。
 
-2. 参数 `fsp` 可以指定时间精度，最大值为6。
+2. 参数 `fsp` 可以指定时间精度，最大值为 6。
 
 
 ## 2. 示例

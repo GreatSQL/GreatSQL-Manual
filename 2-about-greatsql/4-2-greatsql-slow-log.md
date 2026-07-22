@@ -4,7 +4,7 @@
 
 GreatSQL 的慢查询日志，用来记录在 GreatSQL 中响应时间超过阈值的语句，当一次请求响应时长超过 `long_query_time`，则会被记录到慢查询日志中。一般也简称为 *慢日志* 或 *Slow Log*。
 
-参数 `long_query_time` 默认值为 10，单位是 *秒*，可以设置为小数，例如 0.01 表示 0.01 秒，即 10 ms（毫秒）。一般建议 `long_query_time` 参数值不高于 0.05，即所有响应耗时超过 50 ms的请求都被当做慢查询请求。
+参数 `long_query_time` 默认值为 10，单位是 *秒*，可以设置为小数，例如 0.01 表示 0.01 秒，即 10 ms（毫秒）。一般建议 `long_query_time` 参数值不高于 0.05，即所有响应耗时超过 50 ms 的请求都被当做慢查询请求。
 
 Slow Log 可以有效帮助发现那些响应较慢的 SQL 请求，利用 [`mysqldumpslow`](https://dev.mysql.com/doc/refman/8.0/en/mysqldumpslow.html) 或  [`pt-query-digest`](../12-dev-guide/12-7-4-sql-optimize-slowsql.md#利用-pt-query-digest-分析慢查询-sql) 工具针对这些慢查询进行优化，可以显著提高 GreatSQL 的整体响应效率，避免严重的性能瓶颈风险。当 GreatSQL 数据库发生 SQL 请求被阻塞，或 SQL 请求明显变慢的时候，应当尽快检查 Slow Log，找到那些可能造成这些原因的慢查询。
 
@@ -34,7 +34,7 @@ greatsql> SELECT * FROM performance_schema.global_variables WHERE VARIABLE_NAME 
 
 看到 Slow Log 已经启用，日志文件全路径是 `/data/GreatSQL/slow.log`，判定是否慢查询的阈值为 50 ms。
 
-### 关于 long_query_time阈值
+### 关于 long_query_time 阈值
 
 再看判定慢查询响应时长阈值设置参数 `long_query_time`，执行如下命令：
 
@@ -231,11 +231,11 @@ SELECT * FROM `student` WHERE id > 1000 AND `name` = 'Yunxi';
 7. *InnoDB_IO_* 等几个指标表示 InnoDB 逻辑读相关数据。
 8. *InnoDB_rec_lock_wait* 表示是否有行锁等待。
 9. *InnoDB_queue_wait* 表示是否有排队等待。
-10. *InnoDB_pages_distinct* 表示该 SQL 总共读取了多少个InnoDB Page，是个非常重要的指标，可以用来辅助判断当前该表的碎片率是否较高。
+10. *InnoDB_pages_distinct* 表示该 SQL 总共读取了多少个 InnoDB Page，是个非常重要的指标，可以用来辅助判断当前该表的碎片率是否较高。
 
 ## 慢查询日志分析工具
 
-在生产环境中，如果要手工分析日志，查找、分析SQL，显然是个体力活，GreatSQL 提供了日志分析工具 `mysqldumpslow` ，或者是可以使用另一个工具 `pt-query-digest`。
+在生产环境中，如果要手工分析日志，查找、分析 SQL，显然是个体力活，GreatSQL 提供了日志分析工具 `mysqldumpslow` ，或者是可以使用另一个工具 `pt-query-digest`。
 
 利用 `pt-query-digest` 工具可以对 通用日志、慢查询日志、二进制日志，以及 `PROCESSLIST` 和 `tcpdump` 抓包结果进行分析 GreatSQL 的运行状况。分析结果可以输出到文件中，或直接写回到数据库中。
 

@@ -38,7 +38,7 @@ merge_insert_clause:
 - `delete_condition` 是根据更新后的内容来运算。当运算结果为真时，才会删除。
 - `insert_condition` 是根据更新前的内容来运算。当运算结果为真时，才会插入新内容。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
 在原生 `UPDATE ... RIGHT OUTER JOIN ON` 的基础上，实现 `MERGE INTO` 语法兼容。但有以下限制：
 

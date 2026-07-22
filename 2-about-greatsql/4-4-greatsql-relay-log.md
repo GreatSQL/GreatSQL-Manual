@@ -111,7 +111,7 @@ $ ls -la relay-log*
 
 - `max_relay_log_size`
 
-  设置每个 Relay Log 文件的大小上限，如果该值为0，则表示和 `max_binlog_size` 一样。
+  设置每个 Relay Log 文件的大小上限，如果该值为 0，则表示和 `max_binlog_size` 一样。
 
 - `sync_relay_log`
 
@@ -132,7 +132,7 @@ $ ls -la relay-log*
 
 ### 查看中继日志事件
 
-[和 Binlog 类似，支持采用 `mysqlbinlog` 工具来解析查看中继日志，也支持用 `SHOW` 命令来查看](./4-3-greatsql-binary-log.md#_查看_Binlog)，用法如下：
+[和 Binlog 类似，支持采用 `mysqlbinlog` 工具来解析查看中继日志，也支持用 `SHOW` 命令来查看](./4-3-greatsql-binary-log.md#查看-binlog)，用法如下：
 
 ```sql
 SHOW RELAYLOG EVENTS [IN 'log_name'] [FROM pos] [LIMIT [offset,] row_count]
@@ -175,12 +175,12 @@ greatsql> SHOW REPLICA STATUS\G
 ## 使用注意事项
 
 1. **磁盘空间管理**：确保有足够的磁盘空间来存储中继日志，特别是在复制负载较大时，避免因空间不足导致复制中断。
-2. **定期监控**：使用`SHOW REPLICA STATUS`命令定期监控复制状态，确保中继日志正常工作，及时发现和处理复制延迟或错误。
-3. **自动清理**：启用`relay_log_purge`参数，自动清理不再需要的中继日志文件，避免磁盘空间被耗尽。
+2. **定期监控**：使用 `SHOW REPLICA STATUS` 命令定期监控复制状态，确保中继日志正常工作，及时发现和处理复制延迟或错误。
+3. **自动清理**：启用 `relay_log_purge` 参数，自动清理不再需要的中继日志文件，避免磁盘空间被耗尽。
 4. **安全性**：保护中继日志文件的访问权限，防止未经授权的访问和修改，确保数据安全。
 5. **一致性检查**：定期检查从服务器的数据一致性，确保复制过程没有遗漏或错误的事件应用。
 
-通过合理的配置和管理，可以确保MySQL中继日志在复制过程中高效、可靠地工作，保障数据的一致性和系统的稳定性。
+通过合理的配置和管理，可以确保 MySQL 中继日志在复制过程中高效、可靠地工作，保障数据的一致性和系统的稳定性。
 
 
 **扫码关注微信公众号**

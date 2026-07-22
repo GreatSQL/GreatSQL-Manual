@@ -83,7 +83,7 @@ INFO[2024-05-08T17:07:49+08:00] 100000 rows inserted
 - `t3`：表名
 - `100000`：要插入的行数
 - `--user=root`：用户名
-- `--password=root`：密码
+- `--password=GreatSQL@2024`：密码
 
 `mysql_random_data_load` 不关心这个表有哪些列，它都能自动进行填充。
 
@@ -123,7 +123,7 @@ tcol28: 0.42
 1 row in set (0.00 sec)
 ```
 
-## Shell脚本生成随机数据
+## Shell 脚本生成随机数据
 
 也可以自己写脚本生成随机数据，利用 Shell 脚本，生成多条 Insert 语句，然后导入到数据库中执行。
 
@@ -141,14 +141,14 @@ CREATE TABLE `test_shell` (
     PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
-### 创建Shell脚本文件
+### 创建 Shell 脚本文件
 
 在使用 `vi` 或 `vim` 编辑器创建一个新的 Shell 脚本文件
 
 ```bash
 vim random_data.sh
 ```
-### 编写Shell脚本
+### 编写 Shell 脚本
 进入文件后，按下 `i` 键，左下方出现 `--- INSERT ---` 表示进入编辑模式，然后输入/粘贴以下内容
 ```ini
 #!/bin/bash  
@@ -224,14 +224,14 @@ echo "Insert语句已生成并保存到$output_file文件中"
 
 按下 `Esc` 键退出插入模式，并输入 `:wq` 命令保存文件并退出
 
-### 执行Shell脚本
+### 执行 Shell 脚本
 
 使用 `sh` 命令运行该 Shell 脚本，生成 Insert 语句
 ```bash
 $ sh random_data.sh 
 Insert语句已生成并保存到insert_sql.sql文件中
 ```
-### 查看生成的Insert语句
+### 查看生成的 Insert 语句
 
 使用 `tail` 命令查看生成的 Insert 语句文件，截取部分内容如下：
 ```bash

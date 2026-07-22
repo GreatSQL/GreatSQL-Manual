@@ -4,7 +4,7 @@
 本节介绍使用 REPLACE 命令替换 GreatSQL 中的数据。
 
 ## REPLACE INTO 语句
-可以理解为是 `INSTER` 的增强版，如果存在则更新，如果不存在则插入。
+可以理解为是 `INSERT` 的增强版，如果存在则更新，如果不存在则插入。
 `REPLACE INTO` 语句语法格式如下：
 
 ```sql

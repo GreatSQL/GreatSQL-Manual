@@ -12,28 +12,28 @@
 greatsql> CREATE USER grantee@localhost IDENTIFIED BY 'grantee1';
 Query OK, 0 rows affected (0.06 sec)
 ```
-以及创建grantee匿名用户
+以及创建 grantee 匿名用户
 
 ```sql
 greatsql> CREATE USER grantee IDENTIFIED BY 'grantee2';
 Query OK, 0 rows affected (0.06 sec)
 ```
 
-再创建一个DATABASE
+再创建一个 DATABASE
 
 ```sql
 greatsql> CREATE DATABASE db2;
 Query OK, 1 row affected (0.06 sec)
 ```
 
-授权grantee用户
+授权 grantee 用户
 
 ```sql
 greatsql> GRANT ALL PRIVILEGES ON db2.* TO grantee WITH GRANT OPTION;
 Query OK, 0 rows affected (0.01 sec)
 ```
 
-若只使用`SHOW GRANTS`查看不会显示用户的所有授权：
+若只使用 `SHOW GRANTS` 查看不会显示用户的所有授权：
 
 ```sql
 greatsql> SHOW GRANTS FOR 'grantee'@'localhost';

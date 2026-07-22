@@ -1,4 +1,4 @@
-# Oracle兼容-语法-SELECT ... FOR UPDATE ... OF COLUMN
+# Oracle 兼容-语法-SELECT ... FOR UPDATE ... OF COLUMN
 ---
 
 
@@ -23,7 +23,7 @@ SELECT ... FOR UPDATE OF column_list [locked_row_action]
 
 `SELECT ... FOR UPDATE OF column_list` 语句的作用是查询数据并加锁。
 
-在GreatSQL中，由于行锁机制和Oracle不同，因此在实际加锁时，是锁定整行数据，无法像Oracle那样只锁定指定的列，不锁定其他列。也就是说，本语法只是兼容Oracle风格用法，实际行锁加锁还和GreatSQL原生行锁机制一样。
+在 GreatSQL 中，由于行锁机制和 Oracle 不同，因此在实际加锁时，是锁定整行数据，无法像 Oracle 那样只锁定指定的列，不锁定其他列。也就是说，本语法只是兼容 Oracle 风格用法，实际行锁加锁还和 GreatSQL 原生行锁机制一样。
 
 
 有几点注意事项：
@@ -37,17 +37,17 @@ SELECT ... FOR UPDATE OF column_list [locked_row_action]
 4. 在查询加锁请求中，如果 `WHERE` 条件是索引列，那么当前事务会锁定满足条件数据行，如果不是索引列，那么会锁定所有数据行。
 
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-本语法和在Oracle中区别有以下几点：
+本语法和在 Oracle 中区别有以下几点：
 
-1. 在Oracle中无论 `WHERE` 条件是不是索引列，都只会锁定满足条件的数据行；而在GreatSQL中如果非索引列则会锁定全部数据行，在上面已有阐述。
+1. 在 Oracle 中无论 `WHERE` 条件是不是索引列，都只会锁定满足条件的数据行；而在 GreatSQL 中如果非索引列则会锁定全部数据行，在上面已有阐述。
 
-2. 在GreatSQL中，支持类似 `INSERT [ALL] INTO t1 SELECT a.* FROM t1 a JOIN t2 b ON a.c1=b.c1 WHERE a.c1=12 FOR UPDATE OF a.c1 NOWAIT;` 请求语句，而Oracle不支持。
+2. 在 GreatSQL 中，支持类似 `INSERT [ALL] INTO t1 SELECT a.* FROM t1 a JOIN t2 b ON a.c1=b.c1 WHERE a.c1=12 FOR UPDATE OF a.c1 NOWAIT;` 请求语句，而 Oracle 不支持。
 
 3. 都支持存在重复列的情况，例如：`SELECT * FROM t1 a JOIN t2 b ON a.c1=b.c1 WHERE a.c1=12 FOR UPDATE OF a.c1, a.c1;`。
 
-4. 在Oracle中支持子查询，但在GreatSQL中不支持，类似：`SELECT * FROM (SELECT * FROM t1) t WHERE c1=10 FOR UPDATE OF t;`。
+4. 在 Oracle 中支持子查询，但在 GreatSQL 中不支持，类似：`SELECT * FROM (SELECT * FROM t1) t WHERE c1=10 FOR UPDATE OF t;`。
 
 
 ## 4. 示例

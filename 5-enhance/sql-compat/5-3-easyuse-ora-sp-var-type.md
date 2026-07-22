@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-%TYPE
+# Oracle 兼容-存储过程-%TYPE
 ---
 
 
@@ -10,7 +10,7 @@ var_name (ref_var_name | table_name.column_name | ref_rowtype)%TYPE [:= init_val
 
 ## 2. 定义和用法
 
-在GreatSQL中支持用 `%TYPE` 来声明变量类型，利用 `%TYPE` 声明可使得变量的数据类型与其他某个变量或列的数据类型相同。
+在 GreatSQL 中支持用 `%TYPE` 来声明变量类型，利用 `%TYPE` 声明可使得变量的数据类型与其他某个变量或列的数据类型相同。
 
 可以被 `%TYPE` 应用的变量类型有：
 
@@ -19,9 +19,9 @@ var_name (ref_var_name | table_name.column_name | ref_rowtype)%TYPE [:= init_val
 - `%ROWTYPE`类型
 - `%ROWTYPE`类型中某列
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-在 `ORACLE` 模式下，GreatSQL支持用 `%TYPE` 来声明变量类型。该用法如下所述：
+在 `ORACLE` 模式下，GreatSQL 支持用 `%TYPE` 来声明变量类型。该用法如下所述：
 
 1. 支持所有已兼容的数据类型。
 
@@ -44,7 +44,7 @@ greatsql> CREATE TABLE t1 (a INT NOT NULL, b VARCHAR(20) NOT NULL);
 greatsql> INSERT INTO t1 VALUES(1, 'row1'), (2, 'row2'), (3,'row3') ;
 ```
 
-- 1. 示例1
+- 1. 示例 1
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -76,7 +76,7 @@ greatsql> CALL vtype_sp1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 2. 示例2
+- 2. 示例 2
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -104,7 +104,7 @@ greatsql> CALL vtype_sp2() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 3. 示例3
+- 3. 示例 3
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -127,7 +127,7 @@ END; //
 Query OK, 0 rows affected (0.01 sec)
 ```
 
-- 4. 示例4
+- 4. 示例 4
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -180,7 +180,7 @@ greatsql> CALL vtype_sp3() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 5. 示例5
+- 5. 示例 5
 
 ```
 -- 在示例4的基础上继续

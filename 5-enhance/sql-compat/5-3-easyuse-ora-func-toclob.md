@@ -1,4 +1,4 @@
-# Oracle兼容-函数-TO_CLOB()函数
+# Oracle 兼容-函数-TO_CLOB()函数
 ---
 
 
@@ -13,9 +13,9 @@ TO_CLOB( expression )
 
 在 GreatSQL 中 `CLOB` 兼容类型有：`CLOB`、`TINYTEXT`、`TEXT`、`MEDIUMTEXT`、`LONGTEXT` 等。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-1. `TO_CLOB()` 函数在转换时，若出现字符集编码冲突，会有告警提示，同时返回结果可能为NULL。
+1. `TO_CLOB()` 函数在转换时，若出现字符集编码冲突，会有告警提示，同时返回结果可能为 NULL。
 
 例如：当数据库编码（`character_set_database`）为`utf8mb4`时，进行如下操作：
 ```
@@ -42,11 +42,11 @@ greatsql> SHOW WARNINGS;
 +---------+------+----------------------------------------+
 ```
 
-2. 由于GreatSQL和Oracle对某些数据类型的处理和显式本身就存在差异，例如日期时间、LOB等类型，这可能导致 `TO_CLOB()` 函数在GreatSQL中得到的结果和Oracle不一致。因此，在GreatSQL中 `TO_CLOB()` 函数的重点是 **转换成CLOB兼容类型并设置编码格式，而不保证输出的内容和Oracle严格一致**。
+2. 由于 GreatSQL 和 Oracle 对某些数据类型的处理和显式本身就存在差异，例如日期时间、LOB 等类型，这可能导致 `TO_CLOB()` 函数在 GreatSQL 中得到的结果和 Oracle 不一致。因此，在 GreatSQL 中 `TO_CLOB()` 函数的重点是 **转换成 CLOB 兼容类型并设置编码格式，而不保证输出的内容和 Oracle 严格一致**。
 
-**例1：日期类型转换**
+**例 1：日期类型转换**
 
-- 在Oracle中的输出为：
+- 在 Oracle 中的输出为：
 
 ```sql
 SQL> SELECT SYSDATE, TO_CLOB(SYSDATE) FROM DUAL;
@@ -56,7 +56,7 @@ SYSDATE   TO_CLOB(SYSDATE)
 06-NOV-23 06-NOV-23
 ```
 
-- 在GreatSQL上输出为：
+- 在 GreatSQL 上输出为：
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -76,9 +76,9 @@ greatsql> SELECT SYSDATE, TO_CLOB(SYSDATE) FROM DUAL;
 +---------------------+---------------------+
 ```
 
-**例2：LOB类型转换**
+**例 2：LOB 类型转换**
 
-- 在Oracle中的输出为：
+- 在 Oracle 中的输出为：
 
 ```sql
 -- 初始化数据
@@ -105,7 +105,7 @@ SQL> SELECT id,TO_CLOB(a),TO_CLOB(b) FROM t_clob;
          3 414243313233                                            ABC123
 ```
 
-- 在GreatSQL上输出为：
+- 在 GreatSQL 上输出为：
 
 ```sql
 -- 初始化数据
@@ -136,7 +136,7 @@ greatsql> SELECT id,TO_CLOB(a),TO_CLOB(b) FROM t_clob;
 +------+------------+------------+
 ```
 
-3. 当参数 `expression `中包含转义字符（例如：\0 \\' '' \\" \\\\等），不是当做2个字符，而是当做1个字符处理。
+3. 当参数 `expression `中包含转义字符（例如：\0 \\' '' \\" \\\\等），不是当做 2 个字符，而是当做 1 个字符处理。
 
 如下例所示，执行 `SELECT TO_CLOB('\\') FROM DUAL;`，得到结果分别不同：
 
@@ -150,7 +150,7 @@ TO_CLOB('\\')
 \\
 ```
 
-- 在GreatSQL上输出为：
+- 在 GreatSQL 上输出为：
 
 ```
 greatsql> SET sql_mode = ORACLE;

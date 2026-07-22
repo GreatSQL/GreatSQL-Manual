@@ -24,9 +24,9 @@ GreatSQL 对此情况进行了优化，新增选项 `group_replication_communica
 当新成员节点加入 MGR 时，新成员节点只会选择那些延迟小于 `group_replication_donor_threshold` 的节点作为 Donor 节点。
 
 假设 `group_replication_donor_threshold = 100`，那么：
-1. 现在 MGR 中有两个节点A、B，它们的 GTID 分别是 [1-300]、[1-280]，新节点 C 加入，由于 A & B 节点的 GTID 差值小于预设阈值，则随机选择 A 或 B 其中一个节点作为 Donor 节点。
-2. 现在 MGR 中有两个节点A、B，它们的 GTID 分别是 [1-400]、[1-280]，新节点 C 加入，由于 A & B 节点的 GTID 差值大于预设阈值，则只会选择 A 作为 Donor 节点。
-3. 现在 MGR 中有三个节点A、B、C，它们的 GTID 分别是 [1-400]、[1-350]、[1-280]，新节点 D 加入，由于 C 节点的 GTID 差值大于预设阈值，A & B 节点 GTID 延迟小于预设阈值，则会随机选择 A 或 B 其中一个作为 Donor 节点。
+1. 现在 MGR 中有两个节点 A、B，它们的 GTID 分别是 [1-300]、[1-280]，新节点 C 加入，由于 A & B 节点的 GTID 差值小于预设阈值，则随机选择 A 或 B 其中一个节点作为 Donor 节点。
+2. 现在 MGR 中有两个节点 A、B，它们的 GTID 分别是 [1-400]、[1-280]，新节点 C 加入，由于 A & B 节点的 GTID 差值大于预设阈值，则只会选择 A 作为 Donor 节点。
+3. 现在 MGR 中有三个节点 A、B、C，它们的 GTID 分别是 [1-400]、[1-350]、[1-280]，新节点 D 加入，由于 C 节点的 GTID 差值大于预设阈值，A & B 节点 GTID 延迟小于预设阈值，则会随机选择 A 或 B 其中一个作为 Donor 节点。
 
 | System Variable Name  | group_replication_donor_threshold |
 | --- | --- |

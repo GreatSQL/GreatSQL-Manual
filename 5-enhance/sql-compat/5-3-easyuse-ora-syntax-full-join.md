@@ -1,10 +1,10 @@
-# Oracle兼容-语法-FULL JOIN
+# Oracle 兼容-语法-FULL JOIN
 ---
 
 
 ## 1. 语法
 
-在GreatSQL中支持 **全连接**(`FULL JOIN`)。目前除了暂不支持 `USING()` 语法外，`FULL JOIN` 与既有的 `LEFT/RIGHT JOIN` 的使用方式完全一致。
+在 GreatSQL 中支持 **全连接**(`FULL JOIN`)。目前除了暂不支持 `USING()` 语法外，`FULL JOIN` 与既有的 `LEFT/RIGHT JOIN` 的使用方式完全一致。
 
 `FULL OUTER JOIN` 与 `FULL JOIN` 等价。
 
@@ -38,7 +38,7 @@ join_specification: {
 }
 ```
 
-## 2. Oracle兼容说明
+## 2. Oracle 兼容说明
 
 - 1. 不支持 `USING()` 语法
 

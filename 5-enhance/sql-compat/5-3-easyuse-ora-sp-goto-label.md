@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-GOTO
+# Oracle 兼容-存储过程-GOTO
 ---
 
 
@@ -8,7 +8,7 @@
 GOTO label
 ```
 
-label后面的语句块支持以下几种用法：
+label 后面的语句块支持以下几种用法：
 ```sql
 {
   sp_proc_stmt_statement
@@ -49,9 +49,9 @@ GreatSQL 的存储过程中支持用 `label` 标记位置，并用 `GOTO label` 
 
 注意：谨慎使用 `GOTO` 语法，容易造成死循环。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-GreatSQL的存储过程中支持用 `label` 标记位置，并用 `GOTO label` 跳到指定标记位置。该用法如下所述：
+GreatSQL 的存储过程中支持用 `label` 标记位置，并用 `GOTO label` 跳到指定标记位置。该用法如下所述：
 
 1. 如果 `GOTO` 语句退出游标 `FOR LOOP` 循环语句块，则游标将会被关闭。
 
@@ -65,9 +65,9 @@ GreatSQL的存储过程中支持用 `label` 标记位置，并用 `GOTO label` �
 
 6. 不能利用 `GOTO` 语句将控制从异常处理程序转移回当前块（但它可以将控制从异常处理程序转移到封闭块）。
 
-7. 可以利用 `GOTO` 可以跳转到除了以上提到的几种情况之外的任何地方，GreatSQL原生的 `LEAVE label` 只能在 `LOOP` 和 `BEGIN END` 模块内使用。
+7. 可以利用 `GOTO` 可以跳转到除了以上提到的几种情况之外的任何地方，GreatSQL 原生的 `LEAVE label` 只能在 `LOOP` 和 `BEGIN END` 模块内使用。
 
-8. 只支持单个label标记，不支持多个label同时标记位置。如下例所示：
+8. 只支持单个 label 标记，不支持多个 label 同时标记位置。如下例所示：
 
 ```
 <<label1>>
@@ -81,7 +81,7 @@ GreatSQL的存储过程中支持用 `label` 标记位置，并用 `GOTO label` �
 ## 4. 示例
 
 
-- 1. 示例1：往前跳转
+- 1. 示例 1：往前跳转
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -115,7 +115,7 @@ greatsql> SELECT @v_str //
 1 row in set (0.00 sec)
 ```
 
-- 2. 示例2：往回跳转
+- 2. 示例 2：往回跳转
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -146,7 +146,7 @@ greatsql> SELECT @v_str //
 1 row in set (0.00 sec)
 ```
 
-- 3. 示例3：支持条件判断处理
+- 3. 示例 3：支持条件判断处理
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -230,7 +230,7 @@ greatsql> SELECT @ret //
 1 row in set (0.00 sec)
 ```
 
-- 4. 示例4：不能跳转到`CASE WHEN`语句块
+- 4. 示例 4：不能跳转到`CASE WHEN`语句块
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -253,7 +253,7 @@ END; //
 ERROR 1308 (42000): GOTO with no matching label: label1
 ```
 
-- 5. 示例5：不能跳转到另一个 `CASE WHEN` 语句块
+- 5. 示例 5：不能跳转到另一个 `CASE WHEN` 语句块
 
 ```sql
 greatsql> SET sql_mode = ORACLE;

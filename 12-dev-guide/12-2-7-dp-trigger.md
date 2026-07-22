@@ -25,7 +25,7 @@ CREATE TRIGGER trigger_name
 BEFORE | AFTER trigger_event ON table_name
 FOR EACH ROW
 BEGIN
-    -- 触发器主体逻辑，可以包含多条SQL语句
+    -- 触发器主体逻辑，可以包含多条SQL 语句
     ...
 END;
 ```

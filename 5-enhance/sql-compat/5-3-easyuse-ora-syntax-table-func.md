@@ -17,12 +17,12 @@ expr_list:
 
 ## 2. 定义和用法
 
-GreatSQL支持用TABLE函数获取自定义表类型数据的用法。
+GreatSQL 支持用 TABLE 函数获取自定义表类型数据的用法。
 
 ## 3. 示例
 
 
-- 1. 示例1：`SELECT FROM TABLE()`
+- 1. 示例 1：`SELECT FROM TABLE()`
 
 ```sql
 -- 先切换到ORACLE模式
@@ -69,7 +69,7 @@ greatsql> SELECT a.id, a.c1 FROM ud_tbl2 b,
 4 rows in set (0.00 sec)
 ```
 
-- 2. 示例2：`CREATE TABLE AS ... SELECT FROM TABLE()`
+- 2. 示例 2：`CREATE TABLE AS ... SELECT FROM TABLE()`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -91,7 +91,7 @@ greatsql> SELECT * FROM ud_tbl2;
 2 rows in set (0.00 sec)
 ```
 
-- 3. 示例3：`INSERT INTO ... SELECT FROM TABLE()`
+- 3. 示例 3：`INSERT INTO ... SELECT FROM TABLE()`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -118,7 +118,7 @@ greatsql> SELECT * FROM ud_tbl2;
 4 rows in set (0.00 sec)
 ```
 
-- 4. 示例4：`SELECT FROM TABLE() WHERE`
+- 4. 示例 4：`SELECT FROM TABLE() WHERE`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -157,7 +157,7 @@ greatsql> SELECT * FROM TABLE(my_int('1', 0, NULL));
 3 rows in set (0.00 sec)
 ```
 
-- 5. 示例5：`EXPLAIN SELECT FROM TABLE()`
+- 5. 示例 5：`EXPLAIN SELECT FROM TABLE()`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -189,7 +189,7 @@ Message: /* select#1 */ select "greatsql"."udt_table_-5015528632416731088"."id" 
 
 ## 4. 导出备份
 
-在使用 `mysqldump` 导出数据时，可通过指定 `--routines` 选项（默认为关闭），导出TABLE FUNCTION对象。
+在使用 `mysqldump` 导出数据时，可通过指定 `--routines` 选项（默认为关闭），导出 TABLE FUNCTION 对象。
 
 示例：
 ```

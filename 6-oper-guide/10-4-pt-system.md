@@ -278,7 +278,7 @@ $ ls /tmp/hugefile_* 2>/dev/null | wc -l
 100
 ```
 
-接下来就可以把这些切割后的文件导入到 GreatSQL 数据库中了，此时可以用 GreatSQL 的并行 LOAD DATA 特性，最大导入的加速比大概为20倍。
+接下来就可以把这些切割后的文件导入到 GreatSQL 数据库中了，此时可以用 GreatSQL 的并行 LOAD DATA 特性，最大导入的加速比大概为 20 倍。
 
 使用 LOAD 语句增加 HINT 启用：
 
@@ -328,7 +328,7 @@ pt-ioprofile [OPTIONS] [FILE]
 直接使用即可，默认 `--cell` 为 times 既 I/O 操作的时间，默认监听 30 秒的 mysqld 进程，并给出 30 秒内的分析结果
 
 ::: tip 小贴士
-是要等待30秒后给出分析结果，并不是实时出结果。
+是要等待 30 秒后给出分析结果，并不是实时出结果。
 :::
 
 ```bash
@@ -385,7 +385,7 @@ Tracing process ID 657147
 
 ### 概要
 
-pt-stalk 工具的功能是出现问题时收集 GreatSQL 数据库和系统的诊断信息，可以解决更细粒度的现场故障采集。
+`pt-stalk` 工具的功能是出现问题时收集 GreatSQL 数据库和系统的诊断信息，可以解决更细粒度的现场故障采集。
 
 **用法**
 
@@ -413,7 +413,7 @@ pt-stalk [OPTIONS]
 | --cycles           | 在触发`--collect`之前，`--variable`必须大于`--threshold`多少次 |
 | --daemonize        | 守护进程，后台运行                                           |
 | --defaults-file    | 只从给定文件中读取 MySQL/GreatSQL 选项                             |
-| --dest             | 保存`--collect`的诊断数据的位置，不要选择和GreatSQL同一个目录，最好是独立的目录，因为该工具会删除目录下超过一定日期的文件，可能会造成误删。默认目录`/var/lib/pt-stalk` |
+| --dest             | 保存`--collect`的诊断数据的位置，不要选择和 GreatSQL 同一个目录，最好是独立的目录，因为该工具会删除目录下超过一定日期的文件，可能会造成误删。默认目录`/var/lib/pt-stalk` |
 | --disk-bytes-free  | 如果磁盘的可用空间少于次值的设定就不使用`--collect`。防止磁盘被该工具的诊断数据填满 |
 | --disk-pct-free    | 如果磁盘的可用空间少于次值的百分比就不使用`--collect` 。这可以防止该工具用诊断数据填充磁盘，和`--disk-bytes-free`差不多，一个是具体值一个是百分比 |
 | --function         | 设置触发条件，默认值监视`SHOW GLOBAL STATUS`，也可以通过此参数修改为`SHOW PROCESSLIST` |
@@ -468,7 +468,7 @@ pt-stalk --function status --variable Threads_running --cycles 5 --threshold 500
 
 #### 立即收集主机和数据库信息
 
-不等待触发发生，立即收集在60秒内主机和数据库的信息，等待180秒后结束自动退出：
+不等待触发发生，立即收集在 60 秒内主机和数据库的信息，等待 180 秒后结束自动退出：
 
 ```bash
 pt-stalk --no-stalk --run-time=60 --iterations=1 --user=root --password=
@@ -516,7 +516,7 @@ pt-sift FILE|PREFIX|DIRECTORY
 
 ### 最佳实践
 
-#### 显示所有pt-stalk收集的信息
+#### 显示所有 pt-stalk 收集的信息
 
 可以直接使用`pt-sift`命令，并加上`pt-stalk`工具收集的信息存放地址：
 
@@ -710,7 +710,7 @@ Unable to collect information
 Unable to collect information
 ```
 
-该段是RAID控制器。生成自`lvs`：
+该段是 RAID 控制器。生成自`lvs`：
 
 ```bash
 # RAID Controller ############################################

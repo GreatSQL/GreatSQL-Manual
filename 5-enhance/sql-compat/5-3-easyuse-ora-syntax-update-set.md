@@ -26,21 +26,21 @@ UPDATE [LOW_PRIORITY] [IGNORE] table_reference
 
 在 GreatSQL 中，支持执行 `UPDATE ... SET` 同时更新多表，类似 Oracle 用法。主要有以下两种形式：
 
-- 用法1，多表更新
+- 用法 1，多表更新
 
 `UPDATE t1, t2 ... tn SET(column1,column2) = (value1, value2)`
 
 这种写法支持同时更新多表中的同名多列。
 
-- 用法2，单表更新，更新值源自子查询
+- 用法 2，单表更新，更新值源自子查询
 
 `UPDATE TABLE t1 SET(a,b) = (SELECT * FROM t2) WHERE`
 
-这种用法只支持更新单表，且只支持单条SELECT语句赋值，不支持多个SELECT语句，与Oracle行为一致。
+这种用法只支持更新单表，且只支持单条 SELECT 语句赋值，不支持多个 SELECT 语句，与 Oracle 行为一致。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-在Oracle中不支持上述提到的 *用法1*，即同时更新多表，只有在GreatSQL中才支持。
+在 Oracle 中不支持上述提到的 *用法 1*，即同时更新多表，只有在 GreatSQL 中才支持。
 
 ## 4. 示例
 
@@ -53,7 +53,7 @@ greatsql> INSERT INTO t1 VALUES (1, 'rt1c2', 'rt1c3');
 greatsql> INSERT INTO t2 VALUES (1, 'rt2c2', 'rt2c3');
 ```
 
-- 1. 示例1：多表更新
+- 1. 示例 1：多表更新
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -77,7 +77,7 @@ greatsql> SELECT * FROM t2;
 +----+-------+-------+
 ```
 
-- 2. 示例2：更新值源自子查询
+- 2. 示例 2：更新值源自子查询
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -103,7 +103,7 @@ greatsql> SELECT * FROM t2;
 +----+-------+-------+
 ```
 
-- 3. 示例3：更新值源自子查询
+- 3. 示例 3：更新值源自子查询
 
 ```sql
 -- 对t1, t2表重新初始化

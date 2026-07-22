@@ -2,7 +2,7 @@
 
 **GreatSQL TPC-C 性能测试报告**
 
-**（2025年10月28日）**
+**（2025 年 10 月 28 日）**
 
 **GreatSQL 社区**
 
@@ -20,9 +20,9 @@ GreatSQL 社区文档中所有内容，包括但不限于图片、架构设计�
 
 如若发现本文档存在任何错误，请与 GreatSQL 社区取得直接联系。
 
-GreatSQL社区官网：[https://greatsql.cn](https://greatsql.cn)。
+GreatSQL 社区官网：[https://greatsql.cn](https://greatsql.cn)。
 
-##  概述
+## 概述
 
 本次测试针对 GreatSQL 数据库基于 [BenchmarkSQL](./3-4-benchmarksql.md) 的标准 TPC-C 场景的测试。
 
@@ -68,111 +68,111 @@ MySQL 8.4.4 vs GreatSQL 8.4.4-4 性能数据对比（去掉最高和最低两个
 
 ## 测试结果详细数据
 
-### ibp=128G，并发32线程
+### ibp=128G，并发 32 线程
 
 |  | MySQL | GreatSQL |
 |:---| :--- | :--- |
-| 第1轮  | 286969.41  | 382516.68 |
-| 第2轮  | 279723.36  | 382302.13 |
-| 第3轮  | 280372.18  | 381040.98 |
-| 第4轮  | 274132.02  | 381374.43 |
-| 第5轮  | 280027.81  | 378869.58 |
+| 第 1 轮  | 286969.41  | 382516.68 |
+| 第 2 轮  | 279723.36  | 382302.13 |
+| 第 3 轮  | 280372.18  | 381040.98 |
+| 第 4 轮  | 274132.02  | 381374.43 |
+| 第 5 轮  | 280027.81  | 378869.58 |
 | 平均值 | 280244.956 | 381220.76 |
 
-- IBP=128G & 32并发模式下，GreatSQL vs MySQL 压测 tpmC 平均值对比
+- IBP=128G & 32 并发模式下，GreatSQL vs MySQL 压测 tpmC 平均值对比
 
-**提示**：下图是将5次结果中最高及最低值去掉后求平均值的结果，下同。
+**提示**：下图是将 5 次结果中最高及最低值去掉后求平均值的结果，下同。
 
 ![GreatSQL 8.4.4-4 vs MySQL 8.4.4 ibp128G 32th TPC-C BenchmarkSQL](./3-5-greatsql84-vs-mysql84-128g-32th-tpcc-benchmarksql-data-detail.png)
 
-- GreatSQL vs MySQL 压测过程中tpmC曲线图（第一个图GreatSQL，第二个图MySQL，下同）
+- GreatSQL vs MySQL 压测过程中 tpmC 曲线图（第一个图 GreatSQL，第二个图 MySQL，下同）
 
 ![GreatSQL 8.4.4-4 ibp128G 32th TPC-C BenchmarkSQL tpmC 曲线](./3-5-greatsql84-128g-32th-tpm_nopm.png)
 
 ![MySQL 8.4.4 ibp128G 32th TPC-C BenchmarkSQL tpmC 曲线](./3-5-mysql84-128g-32th-tpm_nopm.png)
 
-- GreatSQL vs MySQL 压测过程中Latency曲线图
+- GreatSQL vs MySQL 压测过程中 Latency 曲线图
 
 ![GreatSQL 8.4.4-4 ibp128G 32th TPC-C BenchmarkSQL Latency 曲线](./3-5-greatsql84-128g-32th-latency.png)
 
 ![MySQL 8.4.4 ibp128G 32th TPC-C BenchmarkSQL Latency 曲线](./3-5-mysql84-128g-32th-latency.png)
 
-### ibp=128G，并发64线程
+### ibp=128G，并发 64 线程
 
 |  | MySQL | GreatSQL |
 |:---| :--- | :--- |
-| 第1轮  | 506900.77 | 566486.67  |
-| 第2轮  | 512427.77 | 579877.81  |
-| 第3轮  | 491107.14 | 555160.13  |
-| 第4轮  | 487895.74 | 569257.52  |
-| 第5轮  | 497028.03 | 546783.18  |
+| 第 1 轮  | 506900.77 | 566486.67  |
+| 第 2 轮  | 512427.77 | 579877.81  |
+| 第 3 轮  | 491107.14 | 555160.13  |
+| 第 4 轮  | 487895.74 | 569257.52  |
+| 第 5 轮  | 497028.03 | 546783.18  |
 | 平均值 | 499071.89 | 563513.062 |
 
-- IBP=128G & 64并发模式下，GreatSQL vs MySQL 压测 tpmC 平均值对比
+- IBP=128G & 64 并发模式下，GreatSQL vs MySQL 压测 tpmC 平均值对比
 
 ![GreatSQL 8.4.4-4 vs MySQL 8.4.4 ibp128G 64th TPC-C BenchmarkSQL](./3-5-greatsql84-vs-mysql84-128g-64th-tpcc-benchmarksql-data-detail.png)
 
-GreatSQL vs MySQL 压测过程中tpmC曲线图
+GreatSQL vs MySQL 压测过程中 tpmC 曲线图
 
 ![GreatSQL 8.4.4-4 ibp128G 64th TPC-C BenchmarkSQL tpmC 曲线](./3-5-greatsql84-128g-64th-tpm_nopm.png)
 
 ![MySQL 8.4.4 ibp128G 64th TPC-C BenchmarkSQL tpmC 曲线](./3-5-mysql84-128g-64th-tpm_nopm.png)
 
-GreatSQL vs MySQL 压测过程中Latency曲线图
+GreatSQL vs MySQL 压测过程中 Latency 曲线图
 
 ![GreatSQL 8.4.4-4 ibp128G 64th TPC-C BenchmarkSQL Latency 曲线](./3-5-greatsql84-128g-64th-latency.png)
 
 ![MySQL 8.4.4 ibp128G 64th TPC-C BenchmarkSQL Latency 曲线](./3-5-mysql84-128g-64th-latency.png)
 
-### ibp=256G，并发32线程
+### ibp=256G，并发 32 线程
 
 |  | MySQL | GreatSQL |
 |:---| :--- | :--- |
-| 第1轮  | 276821.06  | 333481.77  |
-| 第2轮  | 283915.16  | 328236.77  |
-| 第3轮  | 276522.46  | 324354.07  |
-| 第4轮  | 270659.67  | 330646.82  |
-| 第5轮  | 273418.77  | 308513.04  |
+| 第 1 轮  | 276821.06  | 333481.77  |
+| 第 2 轮  | 283915.16  | 328236.77  |
+| 第 3 轮  | 276522.46  | 324354.07  |
+| 第 4 轮  | 270659.67  | 330646.82  |
+| 第 5 轮  | 273418.77  | 308513.04  |
 | 平均值 | 276267.424 | 325046.494 |
 
-- IBP=256G & 32并发模式下，GreatSQL vs MySQL 压测 tpmC 平均值对比
+- IBP=256G & 32 并发模式下，GreatSQL vs MySQL 压测 tpmC 平均值对比
 
 ![GreatSQL 8.4.4-4 vs MySQL 8.4.4 ibp256G 32th TPC-C BenchmarkSQL](./3-5-greatsql84-vs-mysql84-256g-32th-tpcc-benchmarksql-data-detail.png)
 
-GreatSQL vs MySQL 压测过程中tpmC曲线图
+GreatSQL vs MySQL 压测过程中 tpmC 曲线图
 
 ![GreatSQL 8.4.4-4 ibp256G 32th TPC-C BenchmarkSQL tpmC 曲线](./3-5-greatsql84-256g-32th-tpm_nopm.png)
 
 ![MySQL 8.4.4 ibp256G 32th TPC-C BenchmarkSQL tpmC 曲线](./3-5-mysql84-256g-32th-tpm_nopm.png)
 
-GreatSQL vs MySQL 压测过程中Latency曲线图
+GreatSQL vs MySQL 压测过程中 Latency 曲线图
 
 ![GreatSQL 8.4.4-4 ibp256G 32th TPC-C BenchmarkSQL Latency 曲线](./3-5-greatsql84-256g-32th-latency.png)
 
 ![MySQL 8.4.4 ibp256G 32th TPC-C BenchmarkSQL Latency 曲线](./3-5-mysql84-256g-32th-latency.png)
 
-### ibp=256G，并发64线程
+### ibp=256G，并发 64 线程
 
 |  | MySQL | GreatSQL |
 |:---| :--- | :--- |
-| 第1轮  | 475981.6	  | 568142.02  |
-| 第2轮  | 481056.84  | 573354.02  |
-| 第3轮  | 466132.71  | 558700.58  |
-| 第4轮  | 455036.67  | 560343.33  |
-| 第5轮  | 451479.67  | 567334.47  |
+| 第 1 轮  | 475981.6	  | 568142.02  |
+| 第 2 轮  | 481056.84  | 573354.02  |
+| 第 3 轮  | 466132.71  | 558700.58  |
+| 第 4 轮  | 455036.67  | 560343.33  |
+| 第 5 轮  | 451479.67  | 567334.47  |
 | 平均值 | 465937.498 | 565574.884 |
 
-- IBP=256G & 64并发模式下，GreatSQL vs MySQL 压测 tpmC 平均值对比
+- IBP=256G & 64 并发模式下，GreatSQL vs MySQL 压测 tpmC 平均值对比
 
 ![GreatSQL 8.4.4-4 vs MySQL 8.4.4 ibp256G 64th TPC-C BenchmarkSQL](./3-5-greatsql84-vs-mysql84-256g-64th-tpcc-benchmarksql-data-detail.png)
 
-GreatSQL vs MySQL 压测过程中tpmC曲线图
+GreatSQL vs MySQL 压测过程中 tpmC 曲线图
 
 ![GreatSQL 8.4.4-4 ibp256G 64th TPC-C BenchmarkSQL tpmC 曲线](./3-5-greatsql84-256g-64th-tpm_nopm.png)
 
 ![MySQL 8.4.4 ibp256G 64th TPC-C BenchmarkSQL tpmC 曲线](./3-5-mysql84-256g-64th-tpm_nopm.png)
 
-GreatSQL vs MySQL 压测过程中Latency曲线图
+GreatSQL vs MySQL 压测过程中 Latency 曲线图
 
 ![GreatSQL 8.4.4-4 ibp256G 64th TPC-C BenchmarkSQL Latency 曲线](./3-5-greatsql84-256g-64th-latency.png)
 
@@ -192,13 +192,13 @@ BenchmarkSQL 5.0。
 
 ### 测试模式
 
-- 利用BenchmarkSQL构造测试数据，设置参数 warehouses=2000。
-- 测试数据库初始大小约182G。
-- 因为没有额外测试机，BenchmarkSQL测试程序和MySQL/GreatSQL数据库服务运行在同一台服务器上。
+- 利用 BenchmarkSQL 构造测试数据，设置参数 warehouses=2000。
+- 测试数据库初始大小约 182G。
+- 因为没有额外测试机，BenchmarkSQL 测试程序和 MySQL/GreatSQL 数据库服务运行在同一台服务器上。
 - 测试过程中只修改 innodb_buffer_pool_size 参数分别为：128G 和 256G。
-- 测试过程中开启Binlog及双1模式，其余主要参数详见后面描述。
+- 测试过程中开启 Binlog 及双 1 模式，其余主要参数详见后面描述。
 
-### BenchmarkSQL相关参数如下
+### BenchmarkSQL 相关参数如下
 
 ```ini
 warehouses=2000
@@ -335,7 +335,7 @@ innodb_change_buffering=none
 loose-kill_idle_transaction=300
 loose-innodb_data_file_async_purge=ON
 ```
-###  测试环境
+### 测试环境
 
 **服务器详细信息**
 
@@ -428,7 +428,7 @@ $ cat /sys/block/nvme0n1/queue/scheduler
 [mq-deadline] kyber bfq none
 ```
 
-NVMe SSD设备简单测速
+NVMe SSD 设备简单测速
 
 ```bash
 $ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
@@ -461,8 +461,8 @@ $ dmesg | grep -i numa
 
 ## 参考资料
 
-- [TPC-C官网](https://www.tpc.org/tpcc/)
-- [GreatSQL安装指南](../4-install-guide/0-install-guide.md)
+- [TPC-C 官网](https://www.tpc.org/tpcc/)
+- [GreatSQL 安装指南](../4-install-guide/0-install-guide.md)
 - [BenchmarkSQL 性能测试](./3-4-benchmarksql.md)
 
 **扫码关注微信公众号**

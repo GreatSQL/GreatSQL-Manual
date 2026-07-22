@@ -61,7 +61,6 @@
 | greatdb_ha_mgr_vip_label |
 | greatdb_ha_mgr_vip_mask |
 | greatdb_ha_mgr_vip_nic |
-| greatdb_ha_port |
 | greatdb_ha_send_arp_packge_times |
 | greatdb_ha_vip_tope |
 | group_replication_applier_batch_size_threshold |

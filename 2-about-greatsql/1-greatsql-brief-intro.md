@@ -9,7 +9,7 @@ GreatSQL 致力于保持开源的开放性。GreatSQL 采用 [GPLv2 协议](http
 
 GreatSQL 数据库由 [GreatSQL 社区](https://greatsql.cn) 主导负责运营维护，已有[众多社区维护者、爱好者及用户](https://greatsql.cn/docs/community/6-thanks.html)参与，包括提交代码、功能测试验证、发现 Bug 以及文档改进等多方面贡献。
 
-关于 GreatSQL 的优势特性详见：[GreatSQL优势特性](../1-docs-intro/1-3-greatsql-features.md)。
+关于 GreatSQL 的优势特性详见：[GreatSQL 优势特性](../1-docs-intro/1-3-greatsql-features.md)。
 
 **扫码关注微信公众号**
 

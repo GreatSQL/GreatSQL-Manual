@@ -20,7 +20,7 @@ Binlog 主要的应用场景有以下几种：
 - 用于主从复制或 MGR 组复制。无论主从复制还是 MGR 组复制，都是基于 Binlog 实现的逻辑复制。
 - 用于审计。由于 Binlog 中记录了对数据库的所有变更操作，因此一定程度上也可以用于审计，从中发现一些可能潜在的违规或风险操作。
 
-综上，可以说 GreatSQL 数据库的数据备份、主从复制、MGR 都离不开Binlog。
+综上，可以说 GreatSQL 数据库的数据备份、主从复制、MGR 都离不开 Binlog。
 
 ![Binary Log](./4-3-greatsql-binary-log-01.png#pic_center)
 

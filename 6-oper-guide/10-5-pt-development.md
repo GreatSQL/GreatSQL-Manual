@@ -116,7 +116,7 @@ ALTER TABLE `test_db`.`test_table` DROP INDEX `idx_name`;
 ```
 :::
 
-由上述输出的检查信息中，可以看到表 `test_table` 中存在冗余索引，并且给出对应可以删除重复索引的SQL命令。
+由上述输出的检查信息中，可以看到表 `test_table` 中存在冗余索引，并且给出对应可以删除重复索引的 SQL 命令。
 
 结尾的统计信息：
 
@@ -234,7 +234,7 @@ pt-online-schema-change [OPTIONS] DSN
 
 ### 最佳实践
 
-先创建一张表，并插入1万条数据：
+先创建一张表，并插入 1 万条数据：
 
 ```sql
 greatsql> CREATE TABLE test_db.ptosc (id INT PRIMARY KEY AUTO_INCREMENT,k BIGINT NOT NULL,c VARCHAR(255) NOT NULL,pad VARCHAR(255) NOT NULL);
@@ -404,7 +404,7 @@ pt-online-schema-change --host=localhost --user=root --ask-pass --alter "drop fo
 
 ### 概要
 
-显示当前数据库中所有用户的授权情况，并以 GRANT 语句显示，方便复制到其他数据库上执行。
+显示当前数据库中所有用户的授权情况，并以 `GRANT` 语句显示，方便复制到其他数据库上执行。
 
 **用法**
 
@@ -485,7 +485,7 @@ pt-upgrade [OPTIONS] LOGS|RESULTS DSN [DSN]
 3. Warnings，返回的警告是否相同。
 4. Query time，查询的相差时间。
 5. Query errors，查询错误，在一个数据库出错，则会报告为“查询错误”。
-6. SQL errors，SQL错误，在两个数据库都出错，则会报告为“SQL 错误”。
+6. SQL errors，SQL 错误，在两个数据库都出错，则会报告为“SQL 错误”。
 
 ### 选项
 
@@ -532,7 +532,7 @@ pt-upgrade [OPTIONS] LOGS|RESULTS DSN [DSN]
 pt-upgrade h=host1 h=host2 slow.log
 ```
 
-使用 `--type` 参数轻松指定文件类型，支持慢日志、通用日志、二进制日志（经 mysqlbinlog 解析）、原始 SQL 语句和 tcpdump 。若未指定，则默认为慢日志。
+使用 `--type` 参数轻松指定文件类型，支持慢日志、通用日志、二进制日志（经 `mysqlbinlog` 解析）、原始 SQL 语句和 `tcpdump`。若未指定，则默认为慢日志。
 
 接下来做个简单的示范，创建一个 `pt_upgrade_test.sql` 文件包含了若干条测试语句：
 

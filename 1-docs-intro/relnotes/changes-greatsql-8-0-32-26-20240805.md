@@ -2,15 +2,15 @@
 
 ## 版本信息
 
-- 发布时间：2024年08月05日
+- 发布时间：2024 年 08 月 05 日
 
 - 版本号：8.0.32-26, Revision a68b3034c3d
 
-- 下载链接：[RPM包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)、[TAR包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)、[源码包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)
+- 下载链接：[RPM 包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)、[TAR包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)、[源码包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-26)
 
 - 用户手册：[GreatSQL 8.0.32-26 User Manual](https://greatsql.cn/docs/8.0.32-26/)
 
-##  特性增强
+## 特性增强
 
 GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**高安全** 等多方面都有增强新特性，包括 Clone 增量备份、压缩备份，MGR 新加入成员节点时自动选择最新数据节点为 donor 节点，NUMA 亲和性优化，非阻塞式 DDL，无主键表导入优化，更多 Oracle 兼容用法，最后登录信息，基于规则的数据脱敏功能等多个新特性。
 
@@ -22,14 +22,14 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 当新成员节点加入 MGR 时，新成员节点只会选择那些延迟小于 `group_replication_donor_threshold` 的节点作为 donor 节点。
 
 假设 `group_replication_donor_threshold = 100`，那么：
-1. 现在 MGR 中有两个节点A、B，它们的 GTID 分别是 [1-300]、[1-280]，新节点 C 加入，由于 A & B 节点的 GTID 差值小于预设阈值，则随机选择 A 或 B 其中一个节点作为 donor 节点。
-2. 现在 MGR 中有两个节点A、B，它们的 GTID 分别是 [1-400]、[1-280]，新节点 C 加入，由于 A & B 节点的 GTID 差值大于预设阈值，则只会选择 A 作为 donor 节点。
-3. 现在 MGR 中有三个节点A、B、C，它们的 GTID 分别是 [1-400]、[1-350]、[1-280]，新节点 D 加入，由于 C 节点的 GTID 差值大于预设阈值，A & B 节点 GTID 延迟小于预设阈值，则会随机选择 A 或 B 其中一个作为 donor 节点。
+1. 现在 MGR 中有两个节点 A、B，它们的 GTID 分别是 [1-300]、[1-280]，新节点 C 加入，由于 A & B 节点的 GTID 差值小于预设阈值，则随机选择 A 或 B 其中一个节点作为 donor 节点。
+2. 现在 MGR 中有两个节点 A、B，它们的 GTID 分别是 [1-400]、[1-280]，新节点 C 加入，由于 A & B 节点的 GTID 差值大于预设阈值，则只会选择 A 作为 donor 节点。
+3. 现在 MGR 中有三个节点 A、B、C，它们的 GTID 分别是 [1-400]、[1-350]、[1-280]，新节点 D 加入，由于 C 节点的 GTID 差值大于预设阈值，A & B 节点 GTID 延迟小于预设阈值，则会随机选择 A 或 B 其中一个作为 donor 节点。
 
 - 在主从复制中，由从节点向主节点发起 Binlog 读取请求，如果读取太快或并发太多线程就会加大主节点的压力。新增参数 `rpl_read_binlog_speed_limit` 用于控制从节点上向主节点发起 Binlog 读取请求的限速，这对于控制主从复制中的网络带宽使用率、降低主节点压力、或在数据恢复过程中降低消耗资源非常有用。该参数可在从节点端设置生效。详见：[Binlog 读取限速](../../5-enhance/5-2-ha-binlog-speed-limit.md)。
-- 优化了在 [快速单主模式](../../5-enhance/5-2-ha-mgr-fast-mode.md) 下 relay log 应用逻辑，提升 MGR 整体性能；并优化了当 relay log 存在堆积时的 applier 线程的内存消耗异常情况。
+- 优化了在 [快速单主模式](../../5-enhance/5-2-ha-mgr-fast-mode.md) 下 Relay Log 应用逻辑，提升 MGR 整体性能；并优化了当 Relay Log 存在堆积时的 applier 线程的内存消耗异常情况。
 - 优化了 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 中的故障检测效率，特别是发生网络故障时，备用集群能更快完成主从复制通道调整，降低主从复制链路断开的时间，提高整体可用性。以设置 `MASTER_RETRY_COUNT = 2` 为例（`slave_net_timeout` 和 `MASTER_CONNECT_RETRY` 默认值均为 60），在主从复制通道间发生网络故障时导致的复制中断持续约 3 分钟，优化后故障影响时长缩短到 10 - 20 秒以内。可以利用 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 实现两个  MGR 集群间的主从复制，实现跨机房间的高可用切换方案。
-- [地理标签](../../5-enhance/5-2-ha-mgr-zoneid.md) 功能中包含两个参数 `group_replication_zone_id`（默认值为 0）和 `group_replication_zone_id_sync_mode`（默认值为ON）。在旧版本中，要求各个节点的 `group_replication_zone_id_sync_mode` 保持一致，否则无法加入 MGR。新版本中，允许仲裁节点设置不同的 `group_replication_zone_id_sync_mode`。例如，节点 A1、A2 设置 `group_replication_zone_id = 0` & `zone_id_sync_mode = ON`；节点 B1、B2 设置 `group_replication_zone_id = 1`，它们也必须设置 `zone_id_sync_mode = ON`；仲裁投票节点C 设置 `group_replication_zone_id = 2`，但可以设置 `group_replication_zone_id_sync_mode = OFF`。
+- [地理标签](../../5-enhance/5-2-ha-mgr-zoneid.md) 功能中包含两个参数 `group_replication_zone_id`（默认值为 0）和 `group_replication_zone_id_sync_mode`（默认值为 ON）。在旧版本中，要求各个节点的 `group_replication_zone_id_sync_mode` 保持一致，否则无法加入 MGR。新版本中，允许仲裁节点设置不同的 `group_replication_zone_id_sync_mode`。例如，节点 A1、A2 设置 `group_replication_zone_id = 0` & `zone_id_sync_mode = ON`；节点 B1、B2 设置 `group_replication_zone_id = 1`，它们也必须设置 `zone_id_sync_mode = ON`；仲裁投票节点 C 设置 `group_replication_zone_id = 2`，但可以设置 `group_replication_zone_id_sync_mode = OFF`。
 - 当启用 greatdb_ha Plugin 时，新增支持 IPv6。
 
 更多信息详见文档：[高可用](../../5-enhance/5-2-ha.md)。
@@ -38,7 +38,7 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 
 - 支持非阻塞式 DDL 操作。当执行 DDL 操作的表上有大事务或大查询未结束时，会导致 DDL 请求长时间等待 MDL 锁。利用该特性，可以避免数据库因为必须尽快完成 DDL 操作而导致业务请求大量被阻塞的问题。详见：[非阻塞式 DDL](../../5-enhance/5-1-highperf-nonblocking-ddl.md)。
 - NUMA 亲和性优化。通过 NUMA 亲和性调度优化，将前端用户线程和后台线程绑定到固定 NUMA 节点上以提升线程处理性能。详见：[NUMA 亲和性优化](../../5-enhance/5-1-highperf-numa-affinity.md)。
-- 无显式主键表并行导入性能优化。对无显式主键表并行导入数据时，会随着并发数的增加，性能明显下降，GreatSQL针对这种情况也提供了优化方案。详见：[并行 LOAD DATA](../../5-enhance/5-1-highperf-parallel-load.md)。
+- 无显式主键表并行导入性能优化。对无显式主键表并行导入数据时，会随着并发数的增加，性能明显下降，GreatSQL 针对这种情况也提供了优化方案。详见：[并行 LOAD DATA](../../5-enhance/5-1-highperf-parallel-load.md)。
 
 更多信息详见文档：[高性能](../../5-enhance/5-1-highperf.md)。
 
@@ -51,7 +51,7 @@ GreatSQL 8.0.32-26 版本在 **高可用**、**高性能**、**高兼容**、**�
 更多信息详见文档：[高兼容](../../5-enhance/5-3-easyuse.md)。
 
 ### 高安全
-- 新增支持记录指定用户的最后一次登入时间，便于管理员查询，进一步提升数据库安全性。详见：[最后登录信息](../../5-enhance/5-4-security-last-login.md)。
+- 新增支持记录指定用户的最后一次登录时间，便于管理员查询，进一步提升数据库安全性。详见：[最后登录信息](../../5-enhance/5-4-security-last-login.md)。
 - 新增支持基于规则的数据脱敏功能。详见：[数据脱敏](../../5-enhance/5-4-security-data-masking.md)。
 
 更多信息详见文档：[高安全](../../5-enhance/5-4-security.md)。
@@ -116,9 +116,9 @@ Records: 1  Duplicates: 0  Warnings: 0
 
 - 修复了开启线程池后，当逻辑 CPU 核数大于 128 时会触发 coredump 的问题，详见：[mysqld debug version will core if the number of cpu cores is larger than 128](https://github.com/GreatSQL/GreatSQL/issues/5)。
 - 修复了在 greatdb_ha Plugin 中启用 VIP 后因系统环境问题或配置不当可能导致 GreatSQL 在启动 MGR 后发生 coredump 的问题，详见：[Issue#I9VTF8](https://gitee.com/GreatSQL/GreatSQL/issues/I9VTF8?from=project-issue)。
-- 修复了用RPM包和TAR二进制包不同方式安装会造成 `lower_case_table_names` 的默认设置不同的问题。
+- 修复了用 RPM 包和 TAR 二进制包不同方式安装会造成 `lower_case_table_names` 的默认设置不同的问题。
 - 修复了在空跑或低负载时，进程 CPU 消耗较高的问题。
-- 修复了 默认安装多了sys_audit库 问题，详见：[Issue#I8TL52](https://gitee.com/GreatSQL/GreatSQL/issues/I8TL52?from=project-issue)。
+- 修复了 默认安装多了 sys_audit 库 问题，详见：[Issue#I8TL52](https://gitee.com/GreatSQL/GreatSQL/issues/I8TL52?from=project-issue)。
 - 修复了 merge view 后导致 assert fail 问题，详见：[Issue#IABSE6](https://gitee.com/GreatSQL/GreatSQL/issues/IABSE6?from=project-issue)。
 - 修复了 full join 执行计划不正确问题，详见：[Issue#IADFD7](https://gitee.com/GreatSQL/GreatSQL/issues/IADFD7?from=project-issue)。
 
@@ -158,19 +158,19 @@ upgrade = AUTO
 mysqldump -S/data/MySQL/mysql.sock -A --triggers --routines --events --single-transaction > /data/backup/fulldump.sql
 ```
 
-2. 在GreatSQL 8.0.32-26版本环境中导入逻辑备份文件，完成逻辑恢复
+2. 在 GreatSQL 8.0.32-26 版本环境中导入逻辑备份文件，完成逻辑恢复
 
 ```bash
 mysql -S/data/GreatSQL/mysql.sock -f < /data/backup/fulldump.sql
 ```
 
-3. 修改my.cnf，确保 upgrade = FORCE 设置
+3. 修改 my.cnf，确保 upgrade = FORCE 设置
 ```ini
 [mysqld]
 upgrade = FORCE
 ```
 
-4. 重启GreatSQL，降级完成
+4. 重启 GreatSQL，降级完成
 
 ```bash
 systemctl restart greatsql
@@ -217,7 +217,7 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |MyRocks 引擎| :heavy_check_mark: | ❌ |
 |支持龙芯架构| :heavy_check_mark: | ❌ |
 | **2. 性能提升扩展** | GreatSQL 8.0.32-26 | MySQL 8.0.32 |
-|AP 引擎| :heavy_check_mark: | 仅云上HeatWave |
+|AP 引擎| :heavy_check_mark: | 仅云上 HeatWave |
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
 |非阻塞式 DDL| :heavy_check_mark: | ❌ |
 |无主键表导入优化 | :heavy_check_mark: | ❌ |
@@ -238,17 +238,17 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 | **3. 面向开发者提升改进** | GreatSQL 8.0.32-26 | MySQL 8.0.32 |
 |X API| :heavy_check_mark: | :heavy_check_mark: |
 |JSON| :heavy_check_mark: | :heavy_check_mark: |
-|NoSQL Socket-Level接口| :heavy_check_mark: | :heavy_check_mark: |
+|NoSQL Socket-Level 接口| :heavy_check_mark: | :heavy_check_mark: |
 |InnoDB 全文搜索改进| :heavy_check_mark: | ❌ |
 |更多 Hash/Digest 函数| :heavy_check_mark: | ❌ |
 |Oracle 兼容-数据类型| :heavy_check_mark: | ❌ |
 |Oracle 兼容-函数| :heavy_check_mark: | ❌ |
-|Oracle 兼容-SQL语法| :heavy_check_mark: | ❌ |
+|Oracle 兼容-SQL 语法| :heavy_check_mark: | ❌ |
 |Oracle 兼容-存储程序| :heavy_check_mark: | ❌ |
 | **4. 基础特性提升改进** | GreatSQL 8.0.32-26 | MySQL 8.0.32 |
 |MGR 提升-地理标签| :heavy_check_mark: | ❌ |
 |MGR 提升-仲裁节点| :heavy_check_mark: | ❌ |
-|MGR 提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
+|MGR 提升-读写节点绑定 VIP| :heavy_check_mark: | ❌ |
 |MGR 提升-快速单主模式| :heavy_check_mark: | ❌ |
 |MGR 提升-智能选主机制| :heavy_check_mark: | ❌ |
 |MGR 提升-全新流控算法| :heavy_check_mark: | ❌ |
@@ -280,11 +280,11 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |数据脱敏| :heavy_check_mark: | ❌ |
 |最后登录记录| :heavy_check_mark: | ❌ |
 |SQL Roles| :heavy_check_mark: | :heavy_check_mark: |
-|SHA-2 密码Hashing| :heavy_check_mark: | :heavy_check_mark: |
+|SHA-2 密码 Hashing| :heavy_check_mark: | :heavy_check_mark: |
 |密码轮换策略| :heavy_check_mark: | :heavy_check_mark: |
 |PAM 认证插件| :heavy_check_mark: | 仅企业版 |
 |Keyring 存储在文件中| :heavy_check_mark: | :heavy_check_mark: |
-|Keyring 存储在Hashicorp Vault中| :heavy_check_mark: | 仅企业版 |
+|Keyring 存储在 Hashicorp Vault 中| :heavy_check_mark: | 仅企业版 |
 |InnoDB 数据加密| :heavy_check_mark: | :heavy_check_mark: |
 |InnoDB 日志加密| :heavy_check_mark: | :heavy_check_mark: |
 |InnoDB 各种表空间文件加密| :heavy_check_mark: | :heavy_check_mark: |

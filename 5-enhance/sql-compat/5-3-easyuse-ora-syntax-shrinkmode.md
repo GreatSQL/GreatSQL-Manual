@@ -12,7 +12,7 @@ SET SESSION shrink_sql_mode = 'modes';
 ## 2. 定义和用法
 
 
-可通过设置 `shrink_sql_mode` 参数实现从组合模式（ORACLE, ANSI, TRADITIONAL等）模式中移除指定的模式，可以同时移除多个模式。
+可通过设置 `shrink_sql_mode` 参数实现从组合模式（ORACLE, ANSI, TRADITIONAL 等）模式中移除指定的模式，可以同时移除多个模式。
 
 当 `shrink_sql_mode` 参数值为空的时候，则当前的 `sql_mode` 还原为完整展开的结果。
 

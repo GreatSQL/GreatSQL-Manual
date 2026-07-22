@@ -55,7 +55,7 @@ Trx read view will not see trx with id >= 2801, sees < 2800
 遇到上述长时间锁等待问题时，可以查询 `sys.innodb_lock_waits` 确认锁等待源头，将造成锁等待的源头事务提交，或根据 `sql_kill_blocking_query` 或 `sql_kill_blocking_connection` 提供的建议，杀掉相应的连接，回滚该事务，避免造成更多锁阻塞，影响更多业务系统。
 
 更重要的是，要及时监控长事务或造成很多锁的事务，详情参考以下内容
-- [锁、等待事件](../6-oper-guide/3-monitoring-and-alerting.md#_2-锁、等待事件)
+- [锁、等待事件](../6-oper-guide/3-monitoring-and-alerting.md#锁、等待事件)
 - [行锁观测监控](./12-6-3-trx-mvcc-and-locking.md#行锁观测监控) 
 
 

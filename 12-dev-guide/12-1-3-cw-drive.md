@@ -1,7 +1,7 @@
 # 选择驱动连接
 ---
 
-## 使用Java连接
+## 使用 Java 连接
 
 前置条件
 
@@ -54,7 +54,7 @@ jdbc:mysql://host:port/schema_name?useSSL=false&serverTimezone=Asia/Shanghai&use
 - `password`：连接的密码
 - `characterEncoding`：字符编码，默认为 UTF-8
 
-## 使用Golang连接
+## 使用 Golang 连接
 
 前置条件
 
@@ -119,7 +119,7 @@ func main() {
 
 输出 `Connected to the database!` 即为连接 GreatSQL 成功
 
-## 使用Python连接
+## 使用 Python 连接
 
 前置条件
 

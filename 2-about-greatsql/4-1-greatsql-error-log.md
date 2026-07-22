@@ -62,7 +62,7 @@ greatsql> SHOW VARIABLES LIKE 'log_error';
 以下是错误日志相关的参数。
 
 - `log_error` 错误日志文件路径，支持指定为全路径或相对路径。
-- `log_error_services` 设置使用哪些错误日志服务组件，以控制如何处理和存储错误日志。该参数可以设置为 0、1 或多个可选值；在后一种情况下，组件列表可以用分号或逗号（从 GreatSQL 8.0.12开始）分隔，每个服务名称代表一个日志处理组件，这些组件可以过滤、格式化或存储日志消息。
+- `log_error_services` 设置使用哪些错误日志服务组件，以控制如何处理和存储错误日志。该参数可以设置为 0、1 或多个可选值；在后一种情况下，组件列表可以用分号或逗号（从 GreatSQL 8.0.12 开始）分隔，每个服务名称代表一个日志处理组件，这些组件可以过滤、格式化或存储日志消息。
 
 默认情况下，`log_error_services` 具有以下可选值：
 
@@ -96,7 +96,7 @@ greatsql> SELECT @@GLOBAL.log_error_services;
 
 - `log_timestamps` 控制日志显示时间
 
-从 GreatSQL 5.7.2 开始新增了 `log_timestamps` 这个参数，用于设置 [错误日志](#)、[通用日志](./4-7-greatsql-general-log.md) 中时间戳的记录方式。参数默认值为 *UTC*（简单说就是 UTC+0 时区），这会使得日志中记录的时间采用比中国采用的时区慢 8 小时，日志查看起来就没那么方便了。
+从 GreatSQL 5.7.2 开始新增了 `log_timestamps` 这个参数，用于设置 [错误日志](#什么是错误日志)、[通用日志](./4-7-greatsql-general-log.md) 中时间戳的记录方式。参数默认值为 *UTC*（简单说就是 UTC+0 时区），这会使得日志中记录的时间采用比中国采用的时区慢 8 小时，日志查看起来就没那么方便了。
 
 ```sql
 greatsql> SHOW GLOBAL VARIABLES LIKE 'log_timestamps';

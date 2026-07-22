@@ -19,7 +19,7 @@ greatsql> SELECT * FROM (SELECT ROWNUM rn, x FROM t1) t1 WHERE t1.rn BETWEEN 3 A
 greatsql> SELECT * FROM employees WHERE ROWNUM > 1;
 ```
 
-解释：对获取到的第一行记录，其 `rownum` 编号为1， 而 `where rownum > 1` 不满足条件（1>1 为 false），跳过；第二行记录，它的编号仍然为1，还是不满足条件（`rownum >1` 为false），所以该查询结果永远为空。
+解释：对获取到的第一行记录，其 `rownum` 编号为 1， 而 `where rownum > 1` 不满足条件（1>1 为 false），跳过；第二行记录，它的编号仍然为 1，还是不满足条件（`rownum >1` 为 false），所以该查询结果永远为空。
 
 ```sql
 greatsql> SELECT * FROM t1;
@@ -43,11 +43,11 @@ greatsql> SELECT rownum, ida FROM t1 ORDER BY age;
 
 **解释**：因为 `ORDER BY` 操作是在最后步骤完成的，此时可能会对 `rownum` 的最终显示顺序有影响。
 
-### 2.1 对rownum值的限制
-假定WHERE条件中，`rownum` 设定的值为N，则对N的要求是：
+### 2.1 对 rownum 值的限制
+假定 WHERE 条件中，`rownum` 设定的值为 N，则对 N 的要求是：
 
-1. 条件值N必须是大于等于1的正数，否则查询结果是空集。
-2. 条件 `rownum > N` 返回结果是空集。因为对于取到的第一行记录，`rownum` 编号为1， 不符合条件（`rownum > N`），则该行被丢弃。第二行记录，依然编号为1，也不满足， 依次类推，结果集为空。上面的例子已有演示。
+1. 条件值 N 必须是大于等于 1 的正数，否则查询结果是空集。
+2. 条件 `rownum > N` 返回结果是空集。因为对于取到的第一行记录，`rownum` 编号为 1， 不符合条件（`rownum > N`），则该行被丢弃。第二行记录，依然编号为 1，也不满足， 依次类推，结果集为空。上面的例子已有演示。
 3. 当条件为 `rownum <= 1` 时，只可以返回第一行记录。
 4. 当条件为 `rownum >= 1` 时，会返回所有记录。
 
@@ -56,11 +56,11 @@ greatsql> SELECT rownum, ida FROM t1 ORDER BY age;
 ```sql
 greatsql> SELECT * FROM t1 WHERE c1=? AND c2=? AND rownum <= N;
 ```
-上述SQL语句中包含多个过滤条件，`rownum` 过滤条件会放在最后判断执行。
+上述 SQL 语句中包含多个过滤条件，`rownum` 过滤条件会放在最后判断执行。
 
 ## 3. 其他使用限制说明
 
-### 3.1 对JOIN的支持不同
+### 3.1 对 JOIN 的支持不同
 在外连接语法中，不支持 `rownum` 作为 `join key` 使用，而内连接可以。因为在外连接中使用 `rownum` 会导致语义不明确。
 
 ```sql
@@ -84,7 +84,7 @@ greatsql> SELECT * FROM t1 JOIN t2 ON t1.ida = rownum;
 ERROR 1235 (42000): This version of MySQL doesn't yet support 'ROWNUM & IN/ALL/ANY/SOME subquery';
 ```
 
-### 3.3 查询结果与Oracle可能不一样
+### 3.3 查询结果与 Oracle 可能不一样
 
 1. 因数据输出顺序不一致，在此基础上做 `rownum` 过滤，会导致最终显示结果可能也不一样。
 

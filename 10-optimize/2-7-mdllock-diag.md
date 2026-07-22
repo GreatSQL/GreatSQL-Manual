@@ -6,7 +6,7 @@
 ## 关于 MDL 锁
 在[**UPDATE 执行慢排查分析**](./2-4-slow-update-diag.md)一文中提到，当执行 `SHOW PROCESSLIST` 时，可能会看到一种状态是 `Waiting for XX metadata lock`，这就意味着当前发生了 MDL 锁等待。
 
-MDL 锁全称为 Metadata Lock（元数据锁）。在 MySQL/GreatSQL 中，DDL 是不支持事务特性的，当事务和 DDL 同时操作同一个表，可能会出现各种意想不到问题，如事务特性被破坏、binlog 顺序错乱等。为了解决类似这些问题，MySQL 在 5.5 开始引入了 MDL 锁（Metadata Locking）。也就是说，MDL 锁的作用是保证表元数据的一致性，避免 DDL 和 DML 并行导致元数据不一致。
+MDL 锁全称为 metadata lock（元数据锁）。在 MySQL/GreatSQL 中，DDL 是不支持事务特性的，当事务和 DDL 同时操作同一个表，可能会出现各种意想不到问题，如事务特性被破坏、binlog 顺序错乱等。为了解决类似这些问题，MySQL 在 5.5 开始引入了 MDL 锁（metadata locking）。也就是说，MDL 锁的作用是保证表元数据的一致性，避免 DDL 和 DML 并行导致元数据不一致。
 
 MDL 锁的范围主要包括以下几种：
 - **GLOBAL**，即全局读锁，例如执行 `FLUSH TABLES WITH READ LOCK`。
@@ -23,9 +23,9 @@ MDL 锁的范围主要包括以下几种：
 
 MDL 锁是 Server 层的锁，对象级锁。
 
-发起DML请求时，会对表同时申请MDL共享锁（只读锁）；发起DDL请求时，会对表同时申请MDL排他锁（写锁）。申请MDL加锁的操作会形成一个队列，队列中写锁获取优先级高于读锁。
+发起 DML 请求时，会对表同时申请 MDL 共享锁（只读锁）；发起 DDL 请求时，会对表同时申请 MDL 排他锁（写锁）。申请 MDL 加锁的操作会形成一个队列，队列中写锁获取优先级高于读锁。
 
-通过查询 `performance_schema.metadata_locks` 可以看到当前的MDL加锁及锁等待信息，不过要先进行相应的设置：
+通过查询 `performance_schema.metadata_locks` 可以看到当前的 MDL 加锁及锁等待信息，不过要先进行相应的设置：
 ```sql
 -- 1. 打开PFS中MDL观测开关
 UPDATE setup_consumers SET ENABLED = 'YES' WHERE NAME ='global_instrumentation';
@@ -33,17 +33,17 @@ UPDATE setup_consumers SET ENABLED = 'YES' WHERE NAME ='global_instrumentation';
 UPDATE setup_instruments SET ENABLED = 'YES' WHERE NAME =‘wait/lock/metadata/sql/mdl';
 ```
 
-下面模拟几种场景，分别观察MDL锁的不同加锁表现。
+下面模拟几种场景，分别观察 MDL 锁的不同加锁表现。
 
-**1. 发起一个事务，提交DML请求**
+**1. 发起一个事务，提交 DML 请求**
 
-在会话1中发起下面的请求：
+在会话 1 中发起下面的请求：
 ```sql
 BEGIN;
 UPDATE t1 SET k=RAND()*102400 WHERE id = 3;
 ```
 
-在另一个会话中，观察MDL加锁情况：
+在另一个会话中，观察 MDL 加锁情况：
 ```sql
 greatsql> SELECT * FROM performance_schema.metadata_locks\G
 *************************** 1. row ***************************
@@ -60,14 +60,14 @@ OBJECT_INSTANCE_BEGIN: 139835142929568
        OWNER_EVENT_ID: 18
 ```
 
-**2. 发起一个显式LOCK WRITE请求**
+**2. 发起一个显式 LOCK WRITE 请求**
 
-会话1：
+会话 1：
 ```sql
 LOCK TABLE t1 WRITE;
 ```
 
-会话2：
+会话 2：
 ```sql
 greatsql> SELECT * FROM performance_schema.metadata_locks;
 +---------------+--------------------+----------------+-------------+-----------------------+----------------------+---------------+-------------+-------------------+-----------------+----------------+
@@ -83,14 +83,14 @@ greatsql> SELECT * FROM performance_schema.metadata_locks;
 可以看到，**LOCK WRITE** 请求实际上要申请好几个排他锁。
 
 
-**3. 发起一个显式LOCK READ请求**
+**3. 发起一个显式 LOCK READ 请求**
 
-会话1：
+会话 1：
 ```sql
 LOCK TABLE t1 READ;
 ```
 
-会话2：
+会话 2：
 ```sql
 greatsql> SELECT * FROM performance_schema.metadata_locks\G
 *************************** 1. row ***************************
@@ -108,14 +108,14 @@ OBJECT_INSTANCE_BEGIN: 139835167440320
 ```
 如果是 **LOCK READ** 请求则简单了很多，只有一个表级对象共享锁。
 
-**4. 发起一个DDL请求**
+**4. 发起一个 DDL 请求**
 
-会话1：
+会话 1：
 ```sql
 ALTER TABLE t1 ADD c2 INT UNSIGNED NOT NULL;
 ```
 
-会话2：
+会话 2：
 ```sql
 greatsql> SELECT * FROM performance_schema.metadata_locks\G
 +---------------+--------------------+------------------+-------------+-----------------------+---------------------+---------------+-------------+--------------------+-----------------+----------------+
@@ -135,13 +135,13 @@ greatsql> SELECT * FROM performance_schema.metadata_locks\G
 
 **5. 发起一个备份锁**
 
-会话1：
+会话 1：
 
 ```sql
 LOCK INSTANCE FOR BACKUP;
 ```
 
-会话2：
+会话 2：
 ```sql
 greatsql> SELECT * FROM performance_schema.metadata_locks\G
 *************************** 1. row ***************************
@@ -158,15 +158,15 @@ OBJECT_INSTANCE_BEGIN: 139835167443600
        OWNER_EVENT_ID: 48
 ```
 
-**6. 发起FTWRL锁**
+**6. 发起 FTWRL 锁**
 
-会话1：
+会话 1：
 
 ```sql
 FLUSH TABLES WITH READ LOCK;
 ```
 
-会话2：
+会话 2：
 ```sql
 greatsql> SELECT * FROM performance_schema.metadata_locks\G
 *************************** 1. row ***************************
@@ -194,19 +194,19 @@ OBJECT_INSTANCE_BEGIN: 139835061536608
       OWNER_THREAD_ID: 11649
        OWNER_EVENT_ID: 62
 ```
-看到除了GLOBAL锁，还有COMMIT锁。
+看到除了 GLOBAL 锁，还有 COMMIT 锁。
 
-## 查看分析MDL锁等待
+## 查看分析 MDL 锁等待
 
-MDL锁是比较粗粒度的锁，一旦出现写锁等待，不但当前操作会被阻塞，同时还会阻塞后续该表的所有操作，如下例所示：
+MDL 锁是比较粗粒度的锁，一旦出现写锁等待，不但当前操作会被阻塞，同时还会阻塞后续该表的所有操作，如下例所示：
 
-| 会话1 | 会话2 | 会话3|
+| 会话 1 | 会话 2 | 会话 3|
 | --- | --- | --- |
-| BEGIN;<br/>SELECT * FROM t1 WHERE id = 3 FOR UPDATE;<br/>-- 发起事务，申请加行锁，以及MDL锁| | |
-| | ALTER TABLE t1 ADD c2 INT UNSIGNED NOT NULL;<br/>-- 被会话1阻塞 | |
-| | | SELECT * FROM t1 WHERE id=5;<br/>-- 被MDL阻塞，进入等待|
+| BEGIN;<br/>SELECT * FROM t1 WHERE id = 3 FOR UPDATE;<br/>-- 发起事务，申请加行锁，以及 MDL 锁| | |
+| | ALTER TABLE t1 ADD c2 INT UNSIGNED NOT NULL;<br/>-- 被会话 1 阻塞 | |
+| | | SELECT * FROM t1 WHERE id=5;<br/>-- 被 MDL 阻塞，进入等待|
 
-这时，如果执行 `SHOW PROCESSLIST` 就可以看到会话2 & 3的状态都是等待获得MDL锁：
+这时，如果执行 `SHOW PROCESSLIST` 就可以看到会话 2 & 3 的状态都是等待获得 MDL 锁：
 
 ```sql
 | 13365 | root     | localhost    | greatsql | Sleep     |      41 |                                    | NULL                                        |      41867 |         1 |             1 |
@@ -214,7 +214,7 @@ MDL锁是比较粗粒度的锁，一旦出现写锁等待，不但当前操作�
 | 13368 | root     | localhost    | greatsql | Query     |       5 | Waiting for table metadata lock    | SELECT * FROM t1 WHERE id=5                 |       5701 |         0 |             0 |
 ```
 
-查看 `performance_schema.metadata_locks` 可以看到当前MDL锁的状态是这样的：
+查看 `performance_schema.metadata_locks` 可以看到当前 MDL 锁的状态是这样的：
 
 ```sql
 greatsql> SELECT * FROM performance_schema.metadata_locks;
@@ -314,20 +314,20 @@ sql_kill_blocking_connection: KILL 13366
      sql_kill_blocking_query: KILL QUERY 13366
 sql_kill_blocking_connection: KILL 13366
 ```
-在上述输出结果中，甚至还提供了解除MDL锁等待的方法，通过KILL持有MDL锁的连接或正在执行的SQL以释放MDL锁。不过这种是比较粗暴的做法，最好是找到持有MDL锁的那个事务，主动发起COMMIT/ROLLBACK结束这个事务，或执行 `UNLOCK TABLES`，就可以释放相应的MDL锁了。
+在上述输出结果中，甚至还提供了解除 MDL 锁等待的方法，通过 KILL 持有 MDL 锁的连接或正在执行的 SQL 以释放 MDL 锁。不过这种是比较粗暴的做法，最好是找到持有 MDL 锁的那个事务，主动发起 COMMIT/ROLLBACK 结束这个事务，或执行 `UNLOCK TABLES`，就可以释放相应的 MDL 锁了。
 
-## MDL锁等待优化建议
+## MDL 锁等待优化建议
 
-MDL锁等待超时阈值由选项 `lock_wait_timeout` 定义，默认值是 **31536000** 秒（即：一年），这个值太大了，建议调低，在 [GreatSQL my.cnf模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25) 中的建议参考值是 **3600**。
+MDL 锁等待超时阈值由选项 `lock_wait_timeout` 定义，默认值是 **31536000** 秒（即：一年），这个值太大了，建议调低，在 [GreatSQL my.cnf 模板](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.0.32-25) 中的建议参考值是 **3600**。
 
-除此外，还应该定期监控MDL锁及MDL锁等待状态，一旦发现有超过设定阈值时长的MDL锁等待发生，应立即发出告警，通知DBA及时检查处理。
+除此外，还应该定期监控 MDL 锁及 MDL 锁等待状态，一旦发现有超过设定阈值时长的 MDL 锁等待发生，应立即发出告警，通知 DBA 及时检查处理。
 
-以下是几个容易造成较大范围MDL锁等待的操作，尽量放在业务低谷期间执行：
+以下是几个容易造成较大范围 MDL 锁等待的操作，尽量放在业务低谷期间执行：
 - 备份实例，或备份单表。
-- 表DDL操作。
+- 表 DDL 操作。
 - 长时间未结束的事务。
-- 较早的某些版本可能存在bug，导致频繁执行 `SHOW TABLE STATUS` 时也会造成MDL锁等待。 
-- 个别图形化数据库管理工具可能在鼠标点中某个数据对象时，也会主动请求MDL锁。
+- 较早的某些版本可能存在 bug，导致频繁执行 `SHOW TABLE STATUS` 时也会造成 MDL 锁等待。 
+- 个别图形化数据库管理工具可能在鼠标点中某个数据对象时，也会主动请求 MDL 锁。
 
 **参考资料**
 - [Metadata Locking](https://dev.mysql.com/doc/refman/8.0/en/metadata-locking.html)

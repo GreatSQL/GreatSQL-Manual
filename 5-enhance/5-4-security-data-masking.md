@@ -137,7 +137,7 @@ greatsql> SELECT mask_outer('123456789', 2, 2);
 | mask_canada_sin(str [,mask_char])    | 屏蔽加拿大社会保险号码。                         |
 | mask_iban(str [,mask_char])          | 屏蔽国际银行账号。                               |
 | mask_uk_nin(str [,mask_char])        | 屏蔽英国国民保险号码。                           |
-| mask_uuid(str [,mask_char])          | 屏蔽UUID。                                       |
+| mask_uuid(str [,mask_char])          | 屏蔽 UUID。                                       |
 
 `mask_pan()` 的示例：
 
@@ -184,14 +184,14 @@ greatsql> SELECT mask_ssn('555-55-5555');
 | 范围                           | 描述                                                         |
 | ------------------------------ | ------------------------------------------------------------ |
 | gen_range(lower, upper)        | 根据选定范围生成随机数并支持负数。                           |
-| gen_rnd_email([name_size, surname_size, domain])                | 生成随机电子邮件地址。<br/>**name_size**：指定名称部分中的字符数。默认数字是五。最小数字是1。最大数字是1024。<br/>**surname_size**：指定姓氏部分的字符数。默认数字是七。最小数字是1。最大数字是1024。<br/>**domain**：指定使用的域名，默认是 example.com。                   |
+| gen_rnd_email([name_size, surname_size, domain])                | 生成随机电子邮件地址。<br/>**name_size**：指定名称部分中的字符数。默认数字是五。最小数字是 1。最大数字是 1024。<br/>**surname_size**：指定姓氏部分的字符数。默认数字是七。最小数字是 1。最大数字是 1024。<br/>**domain**：指定使用的域名，默认是 example.com。                   |
 | gen_rnd_pan()                  | 生成随机主帐号。此功能只能用于测试目的。                     |
 | gen_rnd_us_phone()             | 生成随机的电话号码。生成的号码添加 1 拨号代码，属于 555 区号。 |
 | gen_rnd_ssn()                  | 生成 AAA-BBB-CCCC 格式的随机。此功能只能用于测试目的。       |
 | gen_rnd_canada_sin()           | 生成加拿大社会保险号码。                                     |
-| gen_rnd_iban([country, size])  | 生成国际银行账号。<br/>**country**：两个字符的国家代码，例如：CN，默认值是ZZ。<br/>**字符数**：字符数。|
+| gen_rnd_iban([country, size])  | 生成国际银行账号。<br/>**country**：两个字符的国家代码，例如：CN，默认值是 ZZ。<br/>**字符数**：字符数。|
 | gen_rnd_uk_nin()               | 生成英国国民保险号。                  |
-| gen_rnd_uuid()                 | 生成一个UUID。                        |
+| gen_rnd_uuid()                 | 生成一个 UUID。                        |
 
 `gen_range(lower, upper)` 的示例：
 
@@ -332,7 +332,7 @@ sys_masking.policy_enable | 策略使能
 sys_masking.drop_policy| 删除策略
 sys_masking.policy_delete_label | 删除策略与标签的关系
 sys_masking.policy_delete_user |  删除策略与账户的关系
-sys_masking.drop_label_by_id|  根据标签id删除脱敏标签
+sys_masking.drop_label_by_id|  根据标签 id 删除脱敏标签
 sys_masking.drop_label_by_name | 根据标签名称删除脱敏标签
 
 
@@ -551,7 +551,7 @@ sys_masking.create_label('db_name', 'table_name', 'field_name', 'label_name');
 - db_name，数据库名，不区分大小写，不能为空。
 - table_name，表名，不区分大小写，不能为空。
 - field_name，字段名，不区分大小写，不能为空。
-- label_name，标签名，不区分大小写，不能为空，且必须大于等于3个字符长度。
+- label_name，标签名，不区分大小写，不能为空，且必须大于等于 3 个字符长度。
 - 上述所有参数名，都必须加上引号，否则会报错。
 
 如下例所示，对数据对象 `greatsql.t1.c1`（库.表.列）创建标签 "label1"：
@@ -571,7 +571,7 @@ sys_masking.create_policy('policy_name', 'mask_function', 'args')
 添加完脱敏策略后，再将策略应用到指定标签上，使其生效。默认地，脱敏策略对所有账户生效，除了 `sys_masking.masking_policy_users` 中配置的账户以及拥有超级权限的账户之外。
 
 参数：
-- policy_name，策略名，不区分大小写，不能为空，且必须大于等于3个字符长度。
+- policy_name，策略名，不区分大小写，不能为空，且必须大于等于 3 个字符长度。
 - mask_function，脱敏函数名，可选值为 `[maskall | mask_inside]`。
 - args，剩余参数将作为 "mask_function" 函数的参数，如果有多个参数可以用逗号 "," 进行分割，如果置空或写成 NULL（注意：NULL 和 'NULL' 是不同的） 或 ''，将使用默认参数。
 - 上述所有参数名，都必须加上引号，否则会报错。
@@ -596,8 +596,8 @@ sys_masking.policy_add_label('policy_name', 'label_name')
 功能：将脱敏策略应用于指定标签，并使其立即生效。一个标签只能被应用一个策略，否则会报错，提示 `ERROR 1644 (45000): label has already bind policy`。
 
 参数： 
-- policy_name，策略名，不区分大小写，不能为空，且必须大于等于3个字符长度。
-- label_name，标签名，不区分大小写，不能为空，且必须大于等于3个字符长度。
+- policy_name，策略名，不区分大小写，不能为空，且必须大于等于 3 个字符长度。
+- label_name，标签名，不区分大小写，不能为空，且必须大于等于 3 个字符长度。
 - 上述所有参数名，都必须加上引号，否则会报错。
 
 如下例所示，将策略 "policy1" 应用于标签 "label1"：
@@ -615,7 +615,7 @@ sys_masking.policy_add_user('policy_name', 'user_name')
 功能: 添加排除策略的特殊账户，"配置了排除策略的账户" 和 "拥有超级权限的账户"，脱敏策略对这些账户都不会生效。
        
 参数:
-- policy_name，策略名，不区分大小写，不能为空，且必须大于等于3个字符长度。
+- policy_name，策略名，不区分大小写，不能为空，且必须大于等于 3 个字符长度。
 - user_name，授权账户名，不区分大小写，不能为空，格式为 "user@host"，要对应 `mysql.user` 中的授权账户名，否则可能不能正确生效。
 - 上述所有参数名，都必须加上引号，否则会报错。
 
@@ -634,7 +634,7 @@ sys_masking.policy_enable('policy_name', policy_enabled)
 功能：将制定策略设置为启用/禁用状态。策略创建完成后默认立即生效，该函数可以满足在不删除策略的情况下使其失效，方便后续重用。
 
 参数:
-- policy_name，策略名，不区分大小写，不能为空，且必须大于等于3个字符长度；策略名参数必须加上引号，否则会报错。
+- policy_name，策略名，不区分大小写，不能为空，且必须大于等于 3 个字符长度；策略名参数必须加上引号，否则会报错。
 - policy_enabled，策略启用与否开关，默认为 "1"，表示启用策略；如果设置为 "0"，则表示禁用策略。
 
 如下例所示，执行 SQL 命令修改策略 "policy1" 状态为启用/禁用：
@@ -656,7 +656,7 @@ sys_masking.drop_policy('policy_name')
 功能：删除策略，并会删除与该策略相对应的排除用户规则、标签应用等关联关系。注意：这个关联删除并不会做二次提醒，而是直接删除。
 
 参数：  
-- policy_name，策略名，不区分大小写，不能为空，且必须大于等于3个字符长度；策略名参数必须加上引号，否则会报错。
+- policy_name，策略名，不区分大小写，不能为空，且必须大于等于 3 个字符长度；策略名参数必须加上引号，否则会报错。
 
 如下例所示，删除策略 "policy1"：
 
@@ -673,8 +673,8 @@ sys_masking.policy_delete_label('policy_name', 'label_name')
 功能：删除策略与标签的对应关系，使该策略不再作用与该标签。
 
 参数：
-- policy_name，策略名，不区分大小写，不能为空，且必须大于等于3个字符长度。
-- label_name，标签名，不区分大小写，不能为空，且必须大于等于3个字符长度。
+- policy_name，策略名，不区分大小写，不能为空，且必须大于等于 3 个字符长度。
+- label_name，标签名，不区分大小写，不能为空，且必须大于等于 3 个字符长度。
 - 上述所有参数名，都必须加上引号，否则会报错。
 
 如下例所示，删除策略 "policy1" 与标签 "label1" 的关系：
@@ -692,7 +692,7 @@ sys_masking.policy_delete_user('policy_name', 'user_name')
 功能：删除策略与账号的排除关系。
 
 参数：
-- policy_name，策略名，不区分大小写，不能为空，且必须大于等于3个字符长度。
+- policy_name，策略名，不区分大小写，不能为空，且必须大于等于 3 个字符长度。
 - user_name，授权账户名，不区分大小写，不能为空，格式为 "user@host"，要对应 `mysql.user` 中的授权账户名，否则可能不能正确生效。
 - 上述所有参数名，都必须加上引号，否则会报错。
 
@@ -712,7 +712,7 @@ sys_masking.drop_label_by_name(label)
 功能：根据标签名称删除脱敏标签
 
 参数： 
-- label_name，标签名，不区分大小写，不能为空，且必须大于等于3个字符长度。
+- label_name，标签名，不区分大小写，不能为空，且必须大于等于 3 个字符长度。
 
 如下例所示，删除标签 "label1"：
 
@@ -759,10 +759,10 @@ greatsql> CALL sys_masking.drop_label_by_id(2);
 函数 `maskall()` 工作方式如下面几个例子所示：
 
 ```sql
-greatsql> SELECT maskall('GreatSQL数据库') AS c1, 
-                 maskall('GreatSQL数据库', 'a') AS c2,
-		 maskall('GreatSQL数据库', '赞喔') AS c3,
-		 maskall('GreatSQL数据库', '\0') AS c4 FROM DUAL;
+greatsql> SELECT maskall('GreatSQL 数据库') AS c1, 
+                 maskall('GreatSQL 数据库', 'a') AS c2,
+		 maskall('GreatSQL 数据库', '赞喔') AS c3,
+		 maskall('GreatSQL 数据库', '\0') AS c4 FROM DUAL;
 +-------------+-------------+-----------------------------------+-------------+
 | c1          | c2          | c3                                | c4          |
 +-------------+-------------+-----------------------------------+-------------+
@@ -781,13 +781,13 @@ greatsql> SELECT maskall('GreatSQL数据库') AS c1,
 - 如果 margin1 == margin2，并且 margin1 和 margin2 都是整数，则意味着不进行脱敏替换字符。
 
 ```sql
-greatsql> SELECT mask_inside('GreatSQL数据库', 1, 3) AS c1,
-	         mask_inside('GreatSQL数据库', 0, 4) AS c2,
-		 mask_inside('GreatSQL数据库', 1, 3, '*#') AS c3,
-		 mask_inside('GreatSQL数据库', 0, 4, '#*') AS c4,
-		 mask_inside('GreatSQL数据库', 1, 3, '赞喔') AS c5,
-		 mask_inside('GreatSQL数据库', 1, 2, '\0') AS c6,
-		 mask_inside('GreatSQL数据库', 0, -1, '\0')  AS c7 FROM DUAL;
+greatsql> SELECT mask_inside('GreatSQL 数据库', 1, 3) AS c1,
+	         mask_inside('GreatSQL 数据库', 0, 4) AS c2,
+		 mask_inside('GreatSQL 数据库', 1, 3, '*#') AS c3,
+		 mask_inside('GreatSQL 数据库', 0, 4, '#*') AS c4,
+		 mask_inside('GreatSQL 数据库', 1, 3, '赞喔') AS c5,
+		 mask_inside('GreatSQL 数据库', 1, 2, '\0') AS c6,
+		 mask_inside('GreatSQL 数据库', 0, -1, '\0')  AS c7 FROM DUAL;
 +-------------------+-------------------+-------------------+-------------------+-----------------------+-------------------+-------------+
 | c1                | c2                | c3                | c4                | c5                    | c6                | c7          |
 +-------------------+-------------------+-------------------+-------------------+-----------------------+-------------------+-------------+
@@ -832,7 +832,7 @@ create_time| 创建时间
 
 列名称 |     |
  ---- | --- |
-label_id | 标签id
+label_id | 标签 id
 label_name| 标签名
 db_name|数据库名
 table_name| 表名
@@ -877,7 +877,7 @@ DROP TABLESPACE gdb_sys_masking;
 FLUSH PRIVILEGES;
 ```
 
-推荐相关阅读：[MySQL企业版之数据脱敏功能](https://mp.weixin.qq.com/s/74pUYuPRUp-BkvjI0ysoCg)。
+推荐相关阅读：[MySQL 企业版之数据脱敏功能](https://mp.weixin.qq.com/s/74pUYuPRUp-BkvjI0ysoCg)。
 
 
 

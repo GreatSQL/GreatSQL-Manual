@@ -1,36 +1,36 @@
-# FAQ - MGR运维部署
+# FAQ - MGR 运维部署
 ---
 
-## 1. 可以使用MySQL Shell来管理GreatSQL吗
+## 1. 可以使用 MySQL Shell 来管理 GreatSQL 吗
 
-是可以的，最好采用相同版本号的MySQL Shell即可。
+是可以的，最好采用相同版本号的 MySQL Shell 即可。
 
 GreatSQL 8.0.25-16 起，如果有仲裁节点，则需要用 MySQL Shell for GreatSQL 版本才能管理，否则只能在命令行下管理。
 
-MySQL Shell for GreatSQL下载链接 [https://gitee.com/GreatSQL/GreatSQL/releases](https://gitee.com/GreatSQL/GreatSQL/releases)
+MySQL Shell for GreatSQL 下载链接 [https://gitee.com/GreatSQL/GreatSQL/releases](https://gitee.com/GreatSQL/GreatSQL/releases)
 。
 
-## 2. MGR最多可支持多少个节点
-MGR最多可支持9个节点，无论是单主还是多主模式。
+## 2. MGR 最多可支持多少个节点
+MGR 最多可支持 9 个节点，无论是单主还是多主模式。
 
-## 3. MGR可以设置为自启动吗
-设置选项 `group_replication_start_on_boot = ON` 即可。但是当MGR第一个节点初始化启动时，或者整个MGR集群都关闭再重启时，第一个节点都必须先采用引导模式 `group_replication_bootstrap_group = ON`。
+## 3. MGR 可以设置为自启动吗
+设置选项 `group_replication_start_on_boot = ON` 即可。但是当 MGR 第一个节点初始化启动时，或者整个 MGR 集群都关闭再重启时，第一个节点都必须先采用引导模式 `group_replication_bootstrap_group = ON`。
 
-当整个MGR集群都关闭再重启时，也可以用MySQL Shell实现一键自动快速拉起，详见：[万答#12，MGR整个集群挂掉后，如何才能自动选主，不用手动干预](https://mp.weixin.qq.com/s/07o1poO44zwQIvaJNKEoPA)。
+当整个 MGR 集群都关闭再重启时，也可以用 MySQL Shell 实现一键自动快速拉起，详见：[万答#12，MGR 整个集群挂掉后，如何才能自动选主，不用手动干预](https://mp.weixin.qq.com/s/07o1poO44zwQIvaJNKEoPA)。
 
-## 4. 为什么启动MGR后，多了个33061端口
+## 4. 为什么启动 MGR 后，多了个 33061 端口
 默认情况下，当启用 MGR 服务后，GreatSQL 会监听 33061 端口，该端口用于 MGR 节点间的通信。因此当服务器间有防火墙策略时，记得针对该端口开放。
 
 也可以自行定义该端口，例如 `group_replication_local_address=192.168.0.1:33062`。
 
-## 5. 部署MGR时，务必对所有节点都设置hostname吗
+## 5. 部署 MGR 时，务必对所有节点都设置 hostname 吗
 这个不是必须的。
 
 之所以要在每个节点上都加上各节点的 hostname 对照表，是因为在 MGR 节点间通信过程中，可能收到的主机名和本地实际配置的不一致。
 
 这种情况下，也可以在每个节点上自行设置 `report_host` 及 `report_port` 来解决这个问题。如果想启用 GreatSQL MGR 支持绑定动态 VIP 特性，也建议要设置 `report_host` 和 `report_port`，详见：[GreatSQL 高可用特性之内置动态 VIP](../5-enhance/5-2-ha-mgr-vip.md)。
 
-## 6. 可以跨公网部署MGR吗
+## 6. 可以跨公网部署 MGR 吗
 可以的，但非常不推荐。
 
 此外，由于 MGR 默认的 allowlist 不包含公网地址，因此需要将公网地址加进去，例如：
@@ -54,7 +54,7 @@ fe80::/10 prefix  - link-local unicast addresses
 ```
 有时候 Docker 容器的 IP 地址不在上述范围中，也会导致 MGR 服务无法启动。
 
-## 7. 怎么查看MGR当前是单主还是多主模式
+## 7. 怎么查看 MGR 当前是单主还是多主模式
 执行下面的命令：
 ```sql
 greatsql> SELECT * FROM performance_schema.replication_group_members;
@@ -178,7 +178,7 @@ mysqlrouter --bootstrap mymgr@192.168.1.1:4306 --name=MGR2 --directory=/etc/mysq
 ```
 然后每个实例用各自目录下的 `start.sh` 和 `stop.sh` 脚本启停即可。
 
-关于 MySQL Router 多实例部署的方法，可以参考这篇参考文档：[**《叶问》38期，MGR 整个集群挂掉后，如何才能自动选主，不用手动干预**](https://mp.weixin.qq.com/s/9eLnQ2EJIMQnZuEvScIhiw)。
+关于 MySQL Router 多实例部署的方法，可以参考这篇参考文档：[**《叶问》38 期，MGR 整个集群挂掉后，如何才能自动选主，不用手动干预**](https://mp.weixin.qq.com/s/9eLnQ2EJIMQnZuEvScIhiw)。
 
 ## 10. MySQL Shell 8.0 能管理 MySQL/GreatSQL 5.7 的 MGR 集群吗
 答案是肯定的。
@@ -242,9 +242,9 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 这通常是因为缺少 `mysql_innodb_cluster_metadata` 这个必须的元数据信息库。
 
-这是需试用 GreatSQL Shell 接管 MGR 集群，它会创建 `mysql_innodb_cluster_metadata` 这个元数据 Schema，然后就可以用 Router 接入了。
+这是需要使用 GreatSQL Shell 接管 MGR 集群，它会创建 `mysql_innodb_cluster_metadata` 这个元数据 Schema，然后就可以用 Router 接入了。
 
-详情参考：[MySQL Shell 接管现存的 MGR 集群](../8-mgr/2-mgr-install-deploy.md#3-mysql-shell接管现存的mgr集群)。
+详情参考：[MySQL Shell 接管现存的 MGR 集群](../8-mgr/2-mgr-install-deploy.md#greatsql-shell-接管现存的-mgr-集群)。
 
 
 ## 16. 有个成员节点无法加入 MGR 集群，且报错 Old incarnation，这是什么情况
@@ -279,7 +279,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 5. 手动启动 MGR 集群（先启动 Primary 节点，后启动 Secondary 节点），更推荐用 GreatSQL Shell 启动 MGR 集群，详情参考：[重启 MGR 集群，如何自动选主](https://mp.weixin.qq.com/s/07o1poO44zwQIvaJNKEoPA)；
 
-更多关于 GreatSQL 版本升级或迁移的内容请参考：[GreatSQL 5.7 升级到 8.0](../7-migrate-and-upgrade/1-upgrade-to-greatsql8.md#升级greatsql-8-0-25到8-0-32)。
+更多关于 GreatSQL 版本升级或迁移的内容请参考：[GreatSQL 8.0 升级到 8.4](../7-migrate-and-upgrade/1-upgrade-to-greatsql8.md)。
 
 ## 18. 为什么手动搭建 MGR 时报 caching_sha2_password 错，或某个节点状态一直处于 RECOVERING
 

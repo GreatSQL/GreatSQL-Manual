@@ -6,7 +6,7 @@
 - world sample database
 - Sakila sample database
 
-##  下载测试数据集压缩包
+## 下载测试数据集压缩包
 上述三个测试数据集下载地址分别是：
 - [https://github.com/datacharmer/test_db](https://github.com/datacharmer/test_db)
 - [https://downloads.mysql.com/docs/world-db.tar.gz](https://downloads.mysql.com/docs/world-db.tar.gz)
@@ -25,11 +25,11 @@ drwxr-xr-x 2  500  500       60 Aug  1 06:06 world-db   #<--world 测试数据�
 -rw------- 1 root root    92916 Aug  1 06:06 world-db.tar.gz
 ```
 
-##  导入测试数据集
-###  导入employees数据集
-employees测试数据文件包中提供了导入方法说明文档 *README.md*，基本上照着做就行。
+## 导入测试数据集
+### 导入 employees 数据集
+employees 测试数据文件包中提供了导入方法说明文档 *README.md*，基本上照着做就行。
 
-在 Linux 终端命令行模式下，执行下面的命令导入测试数据（在这里，采用具有最高权限的root账户导入，所以略过创建测试账户这个环节，下同）：
+在 Linux 终端命令行模式下，执行下面的命令导入测试数据（在这里，采用具有最高权限的 root 账户导入，所以略过创建测试账户这个环节，下同）：
 ```bash
 mysql -f < employees.sql
 ```
@@ -124,8 +124,8 @@ greatsql> SOURCE /tmp/testdb/test_db/test_employees_md5.sql;
 
 看起来验证无误。
 
-###  导入world数据集
-执行下面的命令导入world数据集：
+### 导入 world 数据集
+执行下面的命令导入 world 数据集：
 ```sql
 SOURCE /tmp/testdb/world-db/world.sql;
 ```
@@ -159,8 +159,8 @@ greatsql> SELECT COUNT(*) FROM countrylanguage;
 :::
 导入完毕。
 
-###  导入Sakila数据集
-执行下面的命令初始化Sakila测试数据库：
+### 导入 Sakila 数据集
+执行下面的命令初始化 Sakila 测试数据库：
 
 ```sql
 SOURCE /tmp/testdb/sakila-db/sakila-schema.sql;

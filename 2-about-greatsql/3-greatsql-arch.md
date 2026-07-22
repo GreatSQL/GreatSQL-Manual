@@ -40,7 +40,7 @@ ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: N
 
 #### SQL Interface/SQL 接口
 
-SQL 接口的主要作用是**接收用户的SQL请求，并且返回用户需要查询的结果**。比如 `SELECT` 请求。GreatSQL 实现 100% 完全兼容 MySQL 及 Percona Server For MySQL 用法，支持大多数常见 Oracle 用法。
+SQL 接口的主要作用是**接收用户的 SQL 请求，并且返回用户需要查询的结果**。比如 `SELECT` 请求。GreatSQL 实现 100% 完全兼容 MySQL 及 Percona Server For MySQL 用法，支持大多数常见 Oracle 用法。
 
 #### Parser/解析器
 
@@ -150,7 +150,7 @@ greatsql> SHOW ENGINES;
 
 **架构说明**
 
-和上面的传统主从异步复制架构相比，能看到半同步复制的主要区别在于：一个事务要在 Slave 节点上被应用（apply）了，才能向 Master 节点返回 ACK 信息，然后 Master 节点上才能完成 commit。选项 `rpl_semi_sync_master_wait_point` 用于设置 Master 节点什么时候提交事务，可选值有 AFTER_SYNC(默认)、AFTER_COMMIT，**建议采用默认的AFTER_SYNC**。该选项的详细解读见：[rpl_semi_sync_master_wait_point](https://dev.mysql.com/doc/refman/8.0/en/replication-options-source.html#sysvar_rpl_semi_sync_master_wait_point)。
+和上面的传统主从异步复制架构相比，能看到半同步复制的主要区别在于：一个事务要在 Slave 节点上被应用（apply）了，才能向 Master 节点返回 ACK 信息，然后 Master 节点上才能完成 commit。选项 `rpl_semi_sync_master_wait_point` 用于设置 Master 节点什么时候提交事务，可选值有 AFTER_SYNC(默认)、AFTER_COMMIT，**建议采用默认的 AFTER_SYNC**。该选项的详细解读见：[rpl_semi_sync_master_wait_point](https://dev.mysql.com/doc/refman/8.0/en/replication-options-source.html#sysvar_rpl_semi_sync_master_wait_point)。
 
 事实上，如果业务系统要求数据一致性等级较高的话，强烈建议选择组复制架构。
 
@@ -167,33 +167,33 @@ MGR 是 Group Replication 的缩写，即组复制。
 
 因为上述几个明显的缺点，因此推出了全新的高可用解决方案 -- 组复制。
 
-MGR 是 5.7.17/8.0 开始引入的，但随着 5.7 版本逐渐退出历史舞台（已于2020年10月起不再做大的功能更新，只有修修补补以及针对安全更新），更多 MGR 相关特性都只在 8.0 上才支持。
+MGR 是 5.7.17/8.0 开始引入的，但随着 5.7 版本逐渐退出历史舞台（已于 2020 年 10 月起不再做大的功能更新，只有修修补补以及针对安全更新），更多 MGR 相关特性都只在 8.0 上才支持。
 
-### MGR技术概要
+### MGR 技术概要
 
 MGR 具备以下几个特点：
 
 1. 基于 shared-nothing 模式，所有节点都有一份完整数据，发生故障时可以直接切换。
 1. 提供了数据一致性保障，默认是最终一致性，可根据业务特征需要自行调整一致性级别。
 1. 支持在线添加、删除节点，节点管理更方便。
-1. 支持故障自动检测及自动切换，发生故障时能自动切换到新的主节点，再配合MySQL Router中间件，应用层无需干预或调整。
+1. 支持故障自动检测及自动切换，发生故障时能自动切换到新的主节点，再配合 MySQL Router 中间件，应用层无需干预或调整。
 1. 支持单节点、多节点写入两种模式，可根据架构或业务需要选择哪种方案，不过强烈建议选用单主模式。
 
-### MGR技术架构
+### MGR 技术架构
 
 首先来个 MGR 技术架构图：
 
-![MGR技术架构图](./3-greatsql-arch-05.png#pic_center)
+![MGR 技术架构图](./3-greatsql-arch-05.png#pic_center)
 
 **架构说明**
 
 | 名称| 描述 |
 | --- | --- |
-| Member | 成员，即MGR中的节点。MGR成员可选角色有Primary（主节点），可响应读写请求；或者Secondary（从节点），只能响应只读请求。|
-| Primary | 称为主要节点，主节点，MGR节点角色之一。响应读写事务请求。|
-| Secondary | 称为辅助节点，从节点，MGR节点角色之一。只能响应只读事务请求。|
-| Consensus | 共识。在MGR中，一个事务发起后，要广播到各个节点，当多数派节点达成共识（Consensus）后，这个事务才可以被提交。所谓的多数派就是超过半数的节点达成一致，例如总共3个节点，则至少2个节点达成一致。|
-| certify | 事务认证。在MGR中，一个事务需要进行认证，确认不存在冲突，并且多数派达成一致后，才可以被提交。|
+| Member | 成员，即 MGR 中的节点。MGR 成员可选角色有 Primary（主节点），可响应读写请求；或者 Secondary（从节点），只能响应只读请求。|
+| Primary | 称为主要节点，主节点，MGR 节点角色之一。响应读写事务请求。|
+| Secondary | 称为辅助节点，从节点，MGR 节点角色之一。只能响应只读事务请求。|
+| Consensus | 共识。在 MGR 中，一个事务发起后，要广播到各个节点，当多数派节点达成共识（Consensus）后，这个事务才可以被提交。所谓的多数派就是超过半数的节点达成一致，例如总共 3 个节点，则至少 2 个节点达成一致。|
+| certify | 事务认证。在 MGR 中，一个事务需要进行认证，确认不存在冲突，并且多数派达成一致后，才可以被提交。|
 
 MGR 是以 Plugin 方式嵌入 GreatSQL，部署更灵活方便。
 
@@ -207,14 +207,14 @@ MGR 支持单主和多主两种模式，在单主模式下，各节点会自动�
 
 **单主（Single-Primary）模式**
 
-![MGR单主模式](./3-greatsql-arch-06.png#pic_center)
+![MGR 单主模式](./3-greatsql-arch-06.png#pic_center)
 **架构说明**
 
 如上图所示，一开始 S1 节点是 Primary 角色，提供读写服务。当它发生故障时，剩下的 S2-S5 节点会再投票选举出 S2 作为新的 Primary 角色提供读写服务，而 S1 节点在达到一定超时阈值后，就会被踢出。
 
 **多主（Multi-Primary）模式**
 
-![MGR多主模式](./3-greatsql-arch-07.png#pic_center)
+![MGR 多主模式](./3-greatsql-arch-07.png#pic_center)
 **架构说明**
 
 如上图所示，一开始 S1-S5 所有节点都是 Primary 角色，都可以提供读写服务，任何一个节点发生故障时，只需要把指向这个节点的流量切换下就行。

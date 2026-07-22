@@ -12,7 +12,7 @@ Redo Log 对 InnoDB 很重要，主要以下几点原因：
 
 没有 Redo Log，InnoDB 无法提供数据恢复和事务持久性保障，严重影响数据可靠性和数据库性能。
 
-![Redo log作用](./4-5-greatsql-redo-Log-01.png)
+![Redo Log 作用](./4-5-greatsql-redo-Log-01.png)
 
 ## 配置 Redo Log
 
@@ -84,7 +84,7 @@ greatsql> SELECT FILE_ID, FILE_NAME, START_LSN, END_LSN, SIZE_IN_BYTES, IS_FULL,
 当发生这种风险时，可能[错误日志](./4-1-greatsql-error-log.md)中会有类似下面的提示：
 
 ```
-[ERROR] [MY-013598] [InnoDB] Server was killed when Innodb Redo logging was disabled. Data files could be corrupt. You can try to restart the database with innodb_force_recovery=6
+[ERROR] [MY-013598] [InnoDB] Server was killed when Innodb Redo Logging was disabled. Data files could be corrupt. You can try to restart the database with innodb_force_recovery=6
 ```
 这就只能采用最高等级的 InnoDB 恢复了，有较大可能性会导致数据丢失，甚至实例都无法启动。
 
@@ -96,7 +96,7 @@ greatsql> SELECT FILE_ID, FILE_NAME, START_LSN, END_LSN, SIZE_IN_BYTES, IS_FULL,
 
 以一个 Update 事务为例，描述 Redo Log 流转过程，如下图所示：
 
-![Redo log刷盘流程](./4-5-greatsql-redo-Log-04.png)
+![Redo Log 刷盘流程](./4-5-greatsql-redo-Log-04.png)
 
 流程说明：
 
@@ -169,7 +169,7 @@ Redo Log Checkpoint 机制用于标识 Redo Log 中已持久化到磁盘的数�
   
 2. 性能开销
 
-  - 两阶段提交会增加磁盘IO操作，尤其是在高并发场景下，可能会影响数据库的性能。
+  - 两阶段提交会增加磁盘 IO 操作，尤其是在高并发场景下，可能会影响数据库的性能。
   - 两阶段提交涉及多个日志系统之间的协调，增加了事务处理的复杂性。
 
 总之，2PC 机制在 GreatSQL 中扮演着至关重要的角色，是确保数据一致性和完整性的重要手段。虽然它带来了一定的性能开销和复杂性，但其在保证数据不丢失和主从库同步方面发挥着不可替代的作用。
@@ -181,11 +181,11 @@ Redo Log 相关的调整优化操作，主要参考以下几条原则：
 - 加大 Redo Log 容量有利于降低 checkpoint 的频率，缩小则可能会导致产生过多的没必要的刷盘操作，甚至于可能导致 Redo Log 不够用，导致数据库发生丢失损坏风险。
 - 适当调大 `innodb_log_buffer_size` 可以在内存中缓冲更多的事务数据，降低刷盘频率。
 - 适当调整 `innodb_log_write_ahead_size`，一般建议和操作系统或文件系统块大小设置一致，例如 *4KB*。设置过小就比较容易发生 *写时读*，而设置太大则可能导致 *fsync* 性能受到一定影响（因为一次性要刷新多个数据块）。
-- 从 8.0.11 开始新增专门的 log writer 线程负责将 redo log 记录写入 log buffer，并再将其从 log buffer 写入 Redo Log 文件。从 8.0.22 开始，可以通过设置 `innodb_log_writer_threads` 来启用或禁用该线程。在高并发场景建议启用，在低并发场景可以关闭。
+- 从 8.0.11 开始新增专门的 log writer 线程负责将 Redo Log 记录写入 log buffer，并再将其从 log buffer 写入 Redo Log 文件。从 8.0.22 开始，可以通过设置 `innodb_log_writer_threads` 来启用或禁用该线程。在高并发场景建议启用，在低并发场景可以关闭。
 - 优化用户线程等待 Redo 刷新时的自旋延迟（spin delay）。自旋延迟可以减少用户响应时延（latency）。在低并发场景下，降低响应时延并不急迫，在这期间避免使用自旋延迟反而还能降低能耗；而在高并发场景下，应尽量减少自旋延迟。通过下面几个参数变量可以设置自旋延迟高低水位边界。
   - `innodb_log_wait_for_flush_spin_hwm` 定义用户线程在等待刷新 Redo 时不再自旋的最大平均日志刷新时间。默认值：*400（微秒）*。
   - `innodb_log_spin_cpu_abs_lwm` 定义 CPU 使用率的最小值，低于该值时，用户线程在等待刷新 Redo 时不再自旋。该值表示所有 CPU 核心的总和。默认值：*80(%)*。当有多个 CPU 核心时，它可以定义超过 100；例如：150，即第一个 CPU 核心使用率 100%，第二个核心使用率 50%。
-  - `innodb_log_spin_cpu_pct_hwm` 定义 CPU 使用率的最大值，高于该值时，用户线程在等待刷新 Redo 时不再自旋。该值表示所有 CPU 核心总处理能力的百分比。默认值：*50(%)*。例如，在有 4 个 CPU 核的时候，其中 2 个 CPU 核 100% 的使用率就是CPU处理能力总和的 50%。另外，该参数会考虑到 CPU 亲和性设置；例如，如果一台服务器有 48 个 CPU 核，但 mysqld 进程设置了仅固定在 4 个 CPU 核上，则会忽略其他 44 个 CPU 核。
+  - `innodb_log_spin_cpu_pct_hwm` 定义 CPU 使用率的最大值，高于该值时，用户线程在等待刷新 Redo 时不再自旋。该值表示所有 CPU 核心总处理能力的百分比。默认值：*50(%)*。例如，在有 4 个 CPU 核的时候，其中 2 个 CPU 核 100% 的使用率就是 CPU 处理能力总和的 50%。另外，该参数会考虑到 CPU 亲和性设置；例如，如果一台服务器有 48 个 CPU 核，但 mysqld 进程设置了仅固定在 4 个 CPU 核上，则会忽略其他 44 个 CPU 核。
 
 
 ## 相关参数变量
@@ -207,11 +207,11 @@ Redo Log 相关的调整优化操作，主要参考以下几条原则：
 
 - `innodb_log_write_ahead_size`
 
-  配置 Redo Log 预写块大小，单位：*字节*，默认值：*8192*（字节），取值范围：[*512字节 - innodb_page_size*]。为了避免 *写时读（read-on-write）*，建议将其设置为和操作系统或文件系统缓存块大小一致。当 Redo Log 预写块大小和操作系统（或文件系统）缓存块大小不一致时，就会发生 *写时读* 的情况。它必须设置为 InnoDB Redo Log 块大小（*512字节*）的整数倍。当设置为最小值即 *512字节* 时就不再对 Redo Log 进行 *预写*。设置过小就比较容易发生 *写时读*，而设置太大则可能导致 *fsync* 性能受到一定影响（因为一次性要刷新多个数据块）。
+  配置 Redo Log 预写块大小，单位：*字节*，默认值：*8192*（字节），取值范围：[*512 字节 - innodb_page_size*]。为了避免 *写时读（read-on-write）*，建议将其设置为和操作系统或文件系统缓存块大小一致。当 Redo Log 预写块大小和操作系统（或文件系统）缓存块大小不一致时，就会发生 *写时读* 的情况。它必须设置为 InnoDB Redo Log 块大小（*512 字节*）的整数倍。当设置为最小值即 *512 字节* 时就不再对 Redo Log 进行 *预写*。设置过小就比较容易发生 *写时读*，而设置太大则可能导致 *fsync* 性能受到一定影响（因为一次性要刷新多个数据块）。
 
 - `innodb_log_writer_threads`
 
-  从 8.0.11 开始新增专门的 log writer 线程负责将 redo log 记录写入 log buffer，并再将其从 log buffer 写入 Redo Log 文件。从 8.0.22 开始，可以通过设置 `innodb_log_writer_threads` 来启用或禁用该线程。
+  从 8.0.11 开始新增专门的 log writer 线程负责将 Redo Log 记录写入 log buffer，并再将其从 log buffer 写入 Redo Log 文件。从 8.0.22 开始，可以通过设置 `innodb_log_writer_threads` 来启用或禁用该线程。
 
 - `innodb_log_wait_for_flush_spin_hwm`
 
@@ -231,9 +231,9 @@ Redo Log 相关的调整优化操作，主要参考以下几条原则：
   - **0**：事务提交时不刷新重做日志缓冲区到磁盘。每秒刷新一次。**性能最好，安全性最差**。
   - **1**：每个事务提交时都将重做日志缓冲区写入磁盘，并刷新文件系统缓冲区。**性能最差，安全性最好**。
   - **2**：事务提交时只将重做日志缓冲区写入文件系统缓冲区，每秒刷新一次。**性能和安全性的折中选择**。
-  - 为了保证数据安全可靠，请务必同时设置 `innodb_flush_log_at_trx_commit=1` & `sync_binlog=1`，即俗称设置为 **双1**。
+  - 为了保证数据安全可靠，请务必同时设置 `innodb_flush_log_at_trx_commit=1` & `sync_binlog=1`，即俗称设置为 **双 1**。
 
-![Redo log buffer不同刷盘模式](./4-5-greatsql-redo-Log-06.png)
+![Redo Log buffer 不同刷盘模式](./4-5-greatsql-redo-Log-06.png)
 
 ::: tip 小贴士
 DDL 变更以及其他 InnoDB 内部活动相关日志刷新不受本参数影响。
@@ -257,7 +257,7 @@ greatsql> SHOW GLOBAL STATUS LIKE 'innodb%redo%';
 | Innodb_redo_log_checkpoint_lsn      | 22026843368 | <= 完成 checkpoint 的 LSN
 | Innodb_redo_log_current_lsn         | 22026843368 | <= 最新 LSN
 | Innodb_redo_log_flushed_to_disk_lsn | 22026843368 | <= 已刷新到磁盘的 LSN
-| Innodb_redo_log_logical_size        | 512         | <= 数据块大小（单位：字节），表示在用Redo Log的LSN范围，从重做日志使用者所需的最旧块到最近写入的块
+| Innodb_redo_log_logical_size        | 512         | <= 数据块大小（单位：字节），表示在用 Redo Log 的 LSN 范围，从重做日志使用者所需的最旧块到最近写入的块
 | Innodb_redo_log_physical_size       | 33554432    | <= 物理大小（已使用 Redo Log）
 | Innodb_redo_log_capacity_resized    | 536870912   | <= Redo Log 的总容量大小，512MB
 | Innodb_redo_log_resize_status       | OK          | <= Redo Log 调整大小的进度和状态

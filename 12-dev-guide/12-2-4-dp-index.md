@@ -189,7 +189,7 @@ CREATE INDEX idx_b ON t1 (b) INVISIBLE ;
 在 t1 表中创建不可见索引 idx_b，此时该索引不可见。
 
 ### 创建/修改不可见性索引
-#### ALTER TABLE创建索引
+#### ALTER TABLE 创建索引
 语法如下：
 ```sql
 ALTER TABLE table_name ADD [UNIQUE | FULLTEXT | SPATIAL] INDEX
@@ -200,7 +200,7 @@ ALTER TABLE table_name ADD [UNIQUE | FULLTEXT | SPATIAL] INDEX
 ALTER TABLE t1 ADD INDEX idx_b (b) INVISIBLE ;
 ```
 在 t1 表中创建不可见索引 idx_b，此时该索引不可见。
-#### ALTER TABLE修改索引可见性
+#### ALTER TABLE 修改索引可见性
 已存在的索引可通过如下语句切换可见状态：
 ```sql
 ALTER TABLE table_name ALTER INDEX index_name INVISIBLE|VISIBLE ;

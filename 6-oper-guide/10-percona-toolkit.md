@@ -2,10 +2,10 @@
 
 ---
 
-Percona Toolkit简称（PT工具），是一组高级命令行工具，用于管理 MySQL/GreatSQL 的工具。可以用它来执行各种难以手动执行的 MySQL/GreatSQL 和系统任务。其功能包括检查主从复制的数据一致性、检查重复索引、定位 I/O 占用高的表文件、在线 DDL 等，DBA 熟悉掌握 PT工具 后将极大提高工作效率。
+Percona Toolkit 简称（PT 工具），是一组高级命令行工具，用于管理 MySQL/GreatSQL 的工具。可以用它来执行各种难以手动执行的 MySQL/GreatSQL 和系统任务。其功能包括检查主从复制的数据一致性、检查重复索引、定位 I/O 占用高的表文件、在线 DDL 等，DBA 熟悉掌握 PT 工具 后将极大提高工作效率。
 
 ::: tip 小贴士
-`$`为命令提示符、`greatsql>`为GreatSQL数据库提示符。
+`$` 为命令提示符、`greatsql>` 为 GreatSQL 数据库提示符。
 :::
 
 ### 使用包管理器安装
@@ -22,12 +22,12 @@ Percona Toolkit简称（PT工具），是一组高级命令行工具，用于管
    sudo yum install percona-toolkit
    ```
 
-### 使用TAR包安装
+### 使用 TAR 包安装
 
 选择合适的版本和规格下载 [Percona Toolkit](https://www.percona.com/downloads) 。
 
 ::: tip 小贴士
-选择合适自己的CPU架构和操作系统版本Percona Toolkit包。
+选择合适自己的 CPU 架构和操作系统版本 Percona Toolkit 包。
 :::
 
 创建 pt 文件夹，并将下载的安装包保存于此。
@@ -77,9 +77,9 @@ pt-online-schema-change 3.5.7
 ```
 :::
 
-### 使用RPM包安装
+### 使用 RPM 包安装
 
-> 以下示范环境为 Centos7 - X86_64架构 - ldd (GNU libc) 2.17。
+> 以下示范环境为 Centos7 - X86_64 架构 - ldd (GNU libc) 2.17。
 
 下载好 Percona Toolkit 3.5.7 版本 CentOS 7.x RPM 包。
 
@@ -108,7 +108,7 @@ pt-online-schema-change 3.5.7
 
 ## Percona Toolkit 包含的工具
 
-Percona Toolkit 3.5.7 版本中拥有39个工具，将这 39 个工具分为七大类(实用类、配置类、监控类、系统类、开发类、复制类、性能类）
+Percona Toolkit 3.5.7 版本中拥有39 个工具，将这 39 个工具分为七大类(实用类、配置类、监控类、系统类、开发类、复制类、性能类）
 
 ```bash
 $ ls
@@ -130,7 +130,7 @@ pt-find                   pt-kill                  pt-pmp                   pt-s
 | [pt-archiver](./10-1-pt-practical.md#pt-archiver)            | 将表中的行存档到另一个表或文件中                      |
 | [pt-find](./10-1-pt-practical.md#pt-find)                | 查找表并执行命令                                      |
 | [pt-fingerprint](./10-1-pt-practical.md#pt-fingerprint)         | 将查询转成密文                                        |
-| [pt-kill](./10-1-pt-practical.md#pt-kill)                | Kill掉符合条件的SQL                                   |
+| [pt-kill](./10-1-pt-practical.md#pt-kill)                | Kill 掉符合条件的 SQL                                   |
 | pt-k8s-debug-collector | 从 k8s/OpenShift 集群收集调试数据（日志、资源状态等） |
 | [pt-secure-collect](./10-1-pt-practical.md#pt-secure-collect)       | 收集、清理、打包和加密数据                            |
 
@@ -180,7 +180,7 @@ pt-find                   pt-kill                  pt-pmp                   pt-s
 | [pt-heartbeat](./10-6-pt-replication.md#pt-heartbeat)            | 监控 MySQL/GreatSQL 复制延迟               |
 | [pt-slave-delay](./10-6-pt-replication.md#pt-slave-delay)          | 设定从落后主的时间                       |
 | [pt-slave-find](./10-6-pt-replication.md#pt-slave-find)           | 查找和打印所有 MySQL/GreatSQL 复制层级关系 |
-| [pt-slave-restart](./10-6-pt-replication.md#pt-slave-restart)        | 监控 Slave 错误，并尝试重启Slave           |
+| [pt-slave-restart](./10-6-pt-replication.md#pt-slave-restart)        | 监控 Slave 错误，并尝试重启 Slave           |
 | [pt-table-checksum](./10-6-pt-replication.md#pt-table-checksum)       | 校验主从复制一致性                       |
 | [pt-table-sync](./10-6-pt-replication.md#pt-table-sync)           | 高效同步表数据                           |
 | [pt-galera-log-explainer](./10-6-pt-replication.md#pt-galera-log-explainer) | 对多个 Galera 日志进行过滤、聚合和汇总     |

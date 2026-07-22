@@ -1,4 +1,4 @@
-# Oracle兼容-函数-TO_TIMESTAMP()函数
+# Oracle 兼容-函数-TO_TIMESTAMP()函数
 ---
 
 ## 1. 语法
@@ -18,7 +18,7 @@ TO_TIMESTAMP(string , fmt)
 | YYYY/RRRR               | 4-digit year                                                                                       | 2021                                                                                                                                                                                                                                                                                                                                                                               |
 | YYY                     | 3-digit year                                                                                       | 021                                                                                                                                                                                                                                                                                                                                                                                |
 | YY                      | 2-digit year                                                                                       | 21                                                                                                                                                                                                                                                                                                                                                                                 |
-| RR                      | 2-digit year                                                                                       | 与YY类似，但会因指定的年号与当前年份的后两位数字返回不同的值：<br/>- 当前年份后两位为[00,49]:<br/>  'RR'对应年号在[00,49], 返回年号前两位数值与当前年份相同<br/>  'RR'对应年号在[50,99], 返回年号前两位数值比当前年份小1<br/>- 当前年份后两位为[50,99]:<br/>  'RR'对应年号在[00,49], 返回年号前两位数值比当前年份大1<br/>  'RR'对应年号在[50,99], 返回年号前两位数值与当前年份相同 |
+| RR                      | 2-digit year                                                                                       | 与 YY 类似，但会因指定的年号与当前年份的后两位数字返回不同的值：<br/>- 当前年份后两位为[00,49]:<br/>  'RR'对应年号在[00,49], 返回年号前两位数值与当前年份相同<br/>  'RR'对应年号在[50,99], 返回年号前两位数值比当前年份小 1<br/>- 当前年份后两位为[50,99]:<br/>  'RR'对应年号在[00,49], 返回年号前两位数值比当前年份大 1<br/>  'RR'对应年号在[50,99], 返回年号前两位数值与当前年份相同 |
 | Y| 1-digit year| 1|
 | DD| Day of month (1-31)||
 | HH, HH12| Hour of day (1-12).||
@@ -28,8 +28,8 @@ TO_TIMESTAMP(string , fmt)
 | MON| Abbreviated name of the month.| JAN,FEB|
 | MONTH| Name of the month.| JANUARY|
 | SS| Second (0-59).||
-| AM| Meridian indicator with or without periods.| 格式与PM等价，最后的date值取决于第一个参数字串中对应位置值|
-| PM| Meridian indicator with or without periods.| 格式与AM等价，最后的date值取决于第一个参数字串中对应位置值|
+| AM| Meridian indicator with or without periods.| 格式与 PM 等价，最后的 date 值取决于第一个参数字串中对应位置值|
+| PM| Meridian indicator with or without periods.| 格式与 AM 等价，最后的 date 值取决于第一个参数字串中对应位置值|
 | FF[1-6]| Fractional seconds||
 | D| Day of week (1-7). This element depends on the NLS territory of the session.||
 | DDD| Day of year (1-366).||
@@ -46,38 +46,38 @@ TO_TIMESTAMP(string , fmt)
 
 函数返回结果说明：
 
-- 参数 `fmt` 中指定日期格式，`string` 被成功解析后，将返回一个带日期的timestamp值(日期+时间，如：`2023-01-01 00:00:00.00000`)
-- 当无法根据 `fmt` 从 `string` 中获取合法日期时间值时，将返回NULL。
-- 返回的 `timestamp` 值，微秒部分长度为6位，微秒部分的值根据FF指示器来确定，具体示例如下：
+- 参数 `fmt` 中指定日期格式，`string` 被成功解析后，将返回一个带日期的 timestamp 值(日期+时间，如：`2023-01-01 00:00:00.00000`)
+- 当无法根据 `fmt` 从 `string` 中获取合法日期时间值时，将返回 NULL。
+- 返回的 `timestamp` 值，微秒部分长度为 6 位，微秒部分的值根据 FF 指示器来确定，具体示例如下：
 
 | TO_TIMESTAMP() 输入 | 说明 | 输出结果 |
 | ------------------------------------------------------------ | -------------------------------------------- | ------------------------------------------------------------ |
-| TO_TIMESTAMP('11:00:00.123456', 'HH:Mi:SS') | 未指定FF格式，微秒部分全部置零 | NULL |
-| TO_TIMESTAMP('11:00:00.123456', 'HH:Mi:SS.ff') | 指定FF但未指定位数，默认保留全部6位微秒 | 2023-05-01 11:00:00.123456 |
-| TO_TIMESTAMP('11:00:00.123456', 'HH:Mi:SS.ff6') | 指定FF并指定位数为6，正确解析 | 2023-05-01 11:00:00.123456 |
-| TO_TIMESTAMP('11:00:00.123456', 'HH:Mi:SS.ff2') | 指定FF并指定位数为2，但微秒部分有6位，解析失败 | NULL |
-| TO_TIMESTAMP('11:00:00.123456', 'HH:Mi:SS.ff0')<br/><br/>TO_TIMESTAMP('11:00:00.123456', 'HH:Mi:SS.ff7') | 指定FF但位数指示器超出合法范围(1~6),提示错误 | ERROR 1525 (HY000): Incorrect string value: 'please check the format string' |
+| TO_TIMESTAMP('11:00:00.123456', 'HH:Mi:SS') | 未指定 FF 格式，微秒部分全部置零 | NULL |
+| TO_TIMESTAMP('11:00:00.123456', 'HH:Mi:SS.ff') | 指定 FF 但未指定位数，默认保留全部 6 位微秒 | 2023-05-01 11:00:00.123456 |
+| TO_TIMESTAMP('11:00:00.123456', 'HH:Mi:SS.ff6') | 指定 FF 并指定位数为 6，正确解析 | 2023-05-01 11:00:00.123456 |
+| TO_TIMESTAMP('11:00:00.123456', 'HH:Mi:SS.ff2') | 指定 FF 并指定位数为 2，但微秒部分有 6 位，解析失败 | NULL |
+| TO_TIMESTAMP('11:00:00.123456', 'HH:Mi:SS.ff0')<br/><br/>TO_TIMESTAMP('11:00:00.123456', 'HH:Mi:SS.ff7') | 指定 FF 但位数指示器超出合法范围(1~6),提示错误 | ERROR 1525 (HY000): Incorrect string value: 'please check the format string' |
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-- 对指定格式包含HH或HH12时，GreatSQL与Oracle在显示12点时，返回值不同。如下例所示：
+- 对指定格式包含 HH 或 HH12 时，GreatSQL 与 Oracle 在显示 12 点时，返回值不同。如下例所示：
 
-| TO_TIMESTAMP()输入| Oracle返回| GreatSQL返回|
+| TO_TIMESTAMP()输入| Oracle 返回| GreatSQL 返回|
 | ------------- | ----------------------- | ------------ |
 | TO_TIMESTAMP('12','HH12') | 2023-09-01 12:00:00.000000000 | 2023-05-01 00:00:00.000000 |
 | TO_TIMESTAMP('12','HH')   | 2023-09-01 12:00:00.000000000 | 2023-05-01 00:00:00.000000 |
 
-- 微秒部分不同：Oracle返回值微秒部分为9位，GreatSQL为6位。
+- 微秒部分不同：Oracle 返回值微秒部分为 9 位，GreatSQL 为 6 位。
 
-| TO_TIMESTAMP()输入| Oracle返回| GreatSQL返回 |
+| TO_TIMESTAMP()输入| Oracle 返回| GreatSQL 返回 |
 | -------------------------------------- | ------------------ | ---------------------------------------------------------------------------- |
 | TO_TIMESTAMP('11:00:00.123456', 'HH:Mi:SS.ff')     | 11.00.00.123456000 | 2023-05-01 11:00:00.123456 |
 | TO_TIMESTAMP('11:00:00.123456', 'HH:Mi:SS.ff6')    | 11.00.00.123456    | 2023-05-01 11:00:00.123456 |
 | TO_TIMESTAMP('11:00:00.123456789', 'HH:Mi:SS.ff9') | 11.00.00.123456789 | ERROR 1525 (HY000): Incorrect string value: 'please check the format string' |
 
-- 格式支持不同：Oracle的YY格式可以读取2位/3位/4位年份数字，GreatSQL只能读取2位年份数字。二者差异示例如下：
+- 格式支持不同：Oracle 的 YY 格式可以读取 2 位/3 位/4 位年份数字，GreatSQL 只能读取 2 位年份数字。二者差异示例如下：
 
-| TO_TIMESTAMP()输入| Oracle返回| GreatSQL返回 |
+| TO_TIMESTAMP()输入| Oracle 返回| GreatSQL 返回 |
 | --------------------- | ----------------------------------------- | ----------- |
 | TO_TIMESTAMP('20121018', 'YYMMDD')    | 2012-10-18 | NULL        |
 | TO_TIMESTAMP('2012-10-18','YY-MM-DD') | 2012-10-18 | NULL        |

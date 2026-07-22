@@ -24,8 +24,8 @@ $ mysqlrouter --bootstrap GreatSQL@172.16.16.10:3306 --user=mysqlrouter
 
 Please enter MySQL password for GreatSQL:   <-- 输入密码
 
-# 然后mysqlrouter开始自动进行初始化
-# 它会自动读取MGR的元数据信息，自动生成配置文件
+# 然后 mysqlrouter 开始自动进行初始化
+# 它会自动读取 MGR 的元数据信息，自动生成配置文件
 Please enter MySQL password for GreatSQL:
 # Bootstrapping system MySQL Router instance...
 
@@ -48,19 +48,19 @@ or
 
 the cluster 'MGR1' can be reached by connecting to:
 
-## MySQL Classic protocol  <-- MySQL协议的两个端口
+## MySQL Classic protocol  <-- MySQL 协议的两个端口
 
 - Read/Write Connections: localhost:6446
 - Read/Only Connections:  localhost:6447
 
-## MySQL X protocol  <-- MySQL X协议的两个端口
+## MySQL X protocol  <-- MySQL X 协议的两个端口
 
 - Read/Write Connections: localhost:6448
 - Read/Only Connections:  localhost:6449
 ```
-如果想自定义名字和目录，还可以在初始化时自行指定 `--name` 和 `--directory` 选项，这样可以实现在同一个服务器上部署多个Router实例，参考这篇文章：[MySQL Router可以在同一个系统环境下跑多实例吗](https://mp.weixin.qq.com/s/9eLnQ2EJIMQnZuEvScIhiw)
+如果想自定义名字和目录，还可以在初始化时自行指定 `--name` 和 `--directory` 选项，这样可以实现在同一个服务器上部署多个 Router 实例，参考这篇文章：[MySQL Router 可以在同一个系统环境下跑多实例吗](https://mp.weixin.qq.com/s/9eLnQ2EJIMQnZuEvScIhiw)
 
-##  启动mysqlrouter服务
+## 启动 mysqlrouter 服务
 这就初始化完毕了，按照上面的提示，直接启动 **mysqlrouter** 服务即可：
 ```bash
 $ systemctl start mysqlrouter
@@ -77,7 +77,7 @@ tcp        0      0 0.0.0.0:8443            0.0.0.0:*               LISTEN      
 ```
 可以看到 **mysqlrouter** 服务正常启动了。
 
-**mysqlrouter** 初始化时自动生成的配置文件是 `/etc/mysqlrouter/mysqlrouter.conf`，主要是关于R/W、RO不同端口的配置，例如：
+**mysqlrouter** 初始化时自动生成的配置文件是 `/etc/mysqlrouter/mysqlrouter.conf`，主要是关于 R/W、RO 不同端口的配置，例如：
 
 ```ini
 [routing:greatsqlMGR_rw]
@@ -87,12 +87,12 @@ destinations=metadata-cache://greatsqlMGR/?role=PRIMARY
 routing_strategy=first-available
 protocol=classic
 ```
-可以根据需要自行修改绑定的IP地址和端口，也可以在初始化时指定 `--conf-base-port` 选项自定义初始端口号。
+可以根据需要自行修改绑定的 IP 地址和端口，也可以在初始化时指定 `--conf-base-port` 选项自定义初始端口号。
 
-##  确认读写分离效果
-现在，用客户端连接到6446（读写）端口，确认连接的是PRIMARY节点：
+## 确认读写分离效果
+现在，用客户端连接到 6446（读写）端口，确认连接的是 PRIMARY 节点：
 ```sql
--- 连接登入GreatSQL
+-- 连接登录GreatSQL
 -- mysql -h172.16.16.10 -u GreatSQL -p -P6446
 
 -- 记住下面几个 MEMBER_ID
@@ -111,12 +111,12 @@ greatsql> SELECT @@server_uuid;
 +--------------------------------------+
 | 4ebd3504-11d9-11ec-8f92-70b5e873a570 |
 +--------------------------------------+
-# 确实是连接的PRIMARY节点
+# 确实是连接的 PRIMARY 节点
 ```
 
-同样地，连接6447（只读）端口，确认连接的是SECONDARY节点：
+同样地，连接 6447（只读）端口，确认连接的是 SECONDARY 节点：
 ```sql
--- 连接登入GreatSQL
+-- 连接登录GreatSQL
 -- mysql -h172.16.16.10 -u GreatSQL -p -P6447
 
 greatsql> SELECT @@server_uuid;
@@ -125,20 +125,20 @@ greatsql> SELECT @@server_uuid;
 +--------------------------------------+
 | 549b92bf-11d9-11ec-88e1-70b5e873a570 |
 +--------------------------------------+
-# 确实是连接的SECONDARY节点
+# 确实是连接的 SECONDARY 节点
 ```
 
-##  确认只读负载均衡效果
+## 确认只读负载均衡效果
 MySQL Router 连接读写节点（Primary 节点）默认的策略是 **first-available**，即只连接第一个可用的节点。Router 连接只读节点（Secondary 节点）默认的策略是 **round-robin-with-fallback**，会在各个只读节点间轮询。
 
 保持 6447 端口原有的连接不退出，继续新建到 6447 端口的连接，查看 **server_uuid**，这时应该会发现读取到的是其他只读节点的值，因为 **mysqlrouter** 的读负载均衡机制是在几个只读节点间自动轮询。在默认的 **round-robin-with-fallback** 策略下，只有当所有只读节点都不可用时，只读请求才会打到 PRIMARY 节点上。
 
 关于 Router 的连接策略，可以参考 FAQ 文档中的：[24. MySQL Router 可以配置在 MGR 主从节点间轮询吗](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/GreatSQL-FAQ.md)，或者 MySQL Router 官方文档：[routing_strategy 参数/选项](https://dev.mysql.com/doc/mysql-router/8.0/en/mysql-router-conf-options.html#option_mysqlrouter_routing_strategy)
 
-##  确认故障自动转移功能
+## 确认故障自动转移功能
 接下来模拟 PRIMARY 节点宕机或切换时，**mysqlrouter** 也能实现自动故障转移。
 
-登入 MGR 集群任意节点：
+登录 MGR 集群任意节点：
 ```js
 $ mysqlsh --uri GreatSQL@172.16.16.10:3306
 ...
@@ -148,8 +148,8 @@ MySQL  172.16.16.10:3306 ssl  JS >  c.setPrimaryInstance('172.16.16.11:3306');  
 
 Setting instance '172.16.16.11:3306' as the primary instance of cluster 'MGR1'...
 
-Instance '172.16.16.10:3306' was switched from PRIMARY to SECONDARY.   <-- 切换了，从PRIMARY到SECONDARY
-Instance '172.16.16.11:3306' was switched from SECONDARY to PRIMARY.   <-- 切换了，从SECONDARY到PRIMARY
+Instance '172.16.16.10:3306' was switched from PRIMARY to SECONDARY.   <-- 切换了，从 PRIMARY 到 SECONDARY
+Instance '172.16.16.11:3306' was switched from SECONDARY to PRIMARY.   <-- 切换了，从 SECONDARY 到 PRIMARY
 Instance '172.16.16.12:3306' remains SECONDARY.   <-- 保持不变
 
 WARNING: The cluster internal session is not the primary member anymore. For cluster management operations please obtain a fresh cluster handle using dba.getCluster().
@@ -157,7 +157,7 @@ WARNING: The cluster internal session is not the primary member anymore. For clu
 The instance '172.16.16.11:3306' was successfully elected as primary.
 ```
 
-回到前面连接6446端口的那个会话，再次查询 **server_uuid**，此时会发现连接自动断开了：
+回到前面连接 6446 端口的那个会话，再次查询 **server_uuid**，此时会发现连接自动断开了：
 
 ```sql
 greatsql> SELECT @@server_uuid;
@@ -172,7 +172,7 @@ Current database: *** NONE ***
 +--------------------------------------+
 | @@server_uuid                        |
 +--------------------------------------+
-| 549b92bf-11d9-11ec-88e1-70b5e873a570 |   <-- 确认server_uuid变成新的
+| 549b92bf-11d9-11ec-88e1-70b5e873a570 |   <-- 确认 server_uuid 变成新的
 +--------------------------------------+
 ```
 这就实现了自动故障转移。

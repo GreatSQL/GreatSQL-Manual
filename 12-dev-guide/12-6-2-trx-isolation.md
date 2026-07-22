@@ -16,13 +16,13 @@
 
 GreatSQL 支持四种隔离级别，隔离级别越高，事务间的相互影响越小，允许出现的问题情况越少。分为以下四个级别：
 
-1. 读未提交（Read Uncommitted），简称 RU
+1. 读未提交（Read Uncommitted），简称 **RU**
 
-2. 读已提交（Read Committed），简称 RC
+2. 读已提交（Read Committed），简称 **RC**
 
-3. 可重复读（Repeatable Read），简称 RR
+3. 可重复读（Repeatable Read），简称 **RR**
 
-4. 可串行化（Serializable），简称 SR
+4. 可串行化（Serializable），简称 **SR**
 
 GreatSQL 默认的事务隔离级别是可重复读（Repeatable Read）。可以通过设置事务隔离级别来控制事务的并发行为和数据一致性，从而满足不同业务场景的需求。需要注意的是，隔离级别越高，事务的并发性越低，性能开销也会增加。因此，在选择隔离级别时需要根据具体业务需求和性能要求进行权衡。
 

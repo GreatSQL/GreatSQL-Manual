@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-FORALL LOOP
+# Oracle 兼容-存储过程-FORALL LOOP
 ---
 
 
@@ -15,7 +15,7 @@ FORALL var IN expr1..expr2 INSERT INTO .. VALUES var(n)
 
 在 GreatSQL 中支持用 `FORALL .. LOOP` 循环读取 `expr1` 和 `expr2` 之间的所有值，并再赋值给变量 `var`，之后再执行 `INSERT INTO .. VALUES var(i)` 写入数据。在 `FORALL ... LOOP` 中，支持前后两个参数表达式和中间的点号连接在一起，例如：`FORALL .. IN expr1..expr2 LOOP`；或者只和一个参数连接，例如：`FORALL .. IN expr1.. expr2 LOOP` 及 `FORALL .. IN expr1 ..expr2 LOOP` 都是可以的。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
 在 `ORACLE` 模式下，GreatSQL 存储过程支持 `FORALL .. LOOP` 用法。该用法如下所述：
 
@@ -23,7 +23,7 @@ FORALL var IN expr1..expr2 INSERT INTO .. VALUES var(n)
 
 2. 支持用参数获取表中指定的数据，比如 `n := 100; SELECT dr_table(n).col_name`，同时还支持用表达式获取数据，比如 `SELECT dr_table(n+1).col_name`。
 
-3. 对于含有 `UDT` 字段的表，可以采用类似 `t1%ROWTYPE` 作为TABLE，此时可以单独查询 `UDT` 字段中的某个子列。
+3. 对于含有 `UDT` 字段的表，可以采用类似 `t1%ROWTYPE` 作为 TABLE，此时可以单独查询 `UDT` 字段中的某个子列。
 
 4. 在 `FORALL var IN expr` 中的表达式 `expr`如果是 `RECORD TABLE` 那么必须 `INDEX BY INT` 这种数值类型的，如果是 `INDEX BY VARCHAR` 这种字符串类型就会报错。
 
@@ -46,7 +46,7 @@ greatsql> INSERT INTO t1 VALUES(1, 't1_row1'), (2, 't1_row2'), (3,'t1_row3') ;
 greatsql> INSERT INTO t2 VALUES(1, 't2_row1'), (2, 't2_row2'), (3,'t2_row3') ;
 ```
 
-- 1. 示例1：`FORALL LOOP`
+- 1. 示例 1：`FORALL LOOP`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -87,7 +87,7 @@ greatsql> SELECT * FROM t2; //
 4 rows in set (0.00 sec)
 ```
 
-- 2. 示例2：`BULK COLLECT INTO AND FORALL`
+- 2. 示例 2：`BULK COLLECT INTO AND FORALL`
 
 ```sql
 -- 在示例1的基础上继续

@@ -3,7 +3,7 @@
 
 本文介绍如何在 Docker 环境中将 GreatSQL 源码编译到二进制包以及 RPM 包。
 
-本文的宿主运行环境是 CentOS 8 x86_64，其他环境适配请自行修改Dockerfile及相关脚本中的参数。
+本文的宿主运行环境是 CentOS 8 x86_64，其他环境适配请自行修改 Dockerfile 及相关脚本中的参数。
 
 ```bash
 $ cat /etc/redhat-release
@@ -12,8 +12,8 @@ CentOS Linux release 8.4.2105
 $ uname -a
 Linux greatsql 4.18.0-305.19.1.el8_4.x86_64 #1 SMP Wed Sep 15 15:39:39 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 ```
-##  准备工作
-###  配置 yum 源
+## 准备工作
+### 配置 yum 源
 
 开始编译之前，建议先配置好 yum 源，方便安装一些工具
 
@@ -30,14 +30,14 @@ yum clean all
 yum makecache
 ```
 
-###  安装 Docker
+### 安装 Docker
 下载 Docker 的 yum 源，并清理生成新的 yum 缓存
 ```bash
 wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo && \
 yum clean all && yum makecache
 ```
 
-安装 Docker，启动 Docker 并验证版本（Docker 版本最好不低于20.x版本，这里指定了具体版本号）
+安装 Docker，启动 Docker 并验证版本（Docker 版本最好不低于 20.x 版本，这里指定了具体版本号）
 
 ```bash
 yum install -y docker-ce-cli-1:26.1.3-1.el8.x86_64 docker-ce-3:26.1.3-1.el8.x86_64 docker-compose-plugin-2.6.0-3.el8.x86_64 docker-buildx-plugin-0.14.0-1.el8.x86_64 --allowerasing
@@ -95,10 +95,10 @@ microdnf update -y && microdnf clean all
 
 2. 如果是在 ARM 架构下，可以不用安装 jemalloc, jemalloc-devel 这两个包。
 
-3. 上述前置工具软件包安装完毕后，执行 `gcc -v` 查看gcc版本号，通常来说版本号不要低于gcc 10，否则可能导致编译失败。
+3. 上述前置工具软件包安装完毕后，执行 `gcc -v` 查看 gcc 版本号，通常来说版本号不要低于 gcc 10，否则可能导致编译失败。
 :::
 
-**2. 下载GreatSQL、boost源码包**
+**2. 下载 GreatSQL、boost 源码包**
 
 ```bash
 mkdir -p /opt && \
@@ -112,7 +112,7 @@ tar xf patchelf-0.14.5.tar.gz && \
 tar xjf boost_1_84_0.tar.bz2
 ```
 
-**3. 编译安装patchelf**
+**3. 编译安装 patchelf**
 
 ```bash
 cd /opt/patchelf-0.14.5 && ./bootstrap.sh && ./configure && \
@@ -136,7 +136,7 @@ apt install -y patchelf
 rpm -ivh /opt/rpcgen-1.3.1-4.el8.x86_64.rpm
 ```
 
-如果你的编译环境中可以直接通过 yum/dnf/apt 方式直接安装 rpcgen 包的话，就无需额外下载rpm包和安装，可以通过 yum/dnf/apt 安装 rpcgen：
+如果你的编译环境中可以直接通过 yum/dnf/apt 方式直接安装 rpcgen 包的话，就无需额外下载 rpm 包和安装，可以通过 yum/dnf/apt 安装 rpcgen：
 
 ```bash
 # yum/dnf 安装
@@ -212,9 +212,9 @@ make -j14 install >> ${MAKELOG} 2>&1
 ```
 ::: tip 小贴士
 
-1. 编译工作需要消耗大量 CPU 资源，根据机器配置不同，可能需要的时间也不同，请耐心等待。在普通的 16 核 PC 工作机上约耗时10分钟。
+1. 编译工作需要消耗大量 CPU 资源，根据机器配置不同，可能需要的时间也不同，请耐心等待。在普通的 16 核 PC 工作机上约耗时 10 分钟。
 
-2. 以服务器上有16核 CPU 为例，建议指定 "make -j14" 参数，不要把所有CPU都跑满。
+2. 以服务器上有 16 核 CPU 为例，建议指定 "make -j14" 参数，不要把所有 CPU 都跑满。
  
 3. 如果是 ARM 架构的服务器，可以不用添加 "-ljemalloc" 参数。
 :::
@@ -280,7 +280,7 @@ curl -kOL -o /opt/rpmbuild/SPECS/greatsql.spec https://gitee.com/GreatSQL/GreatS
 
 **4. 准备 src.rpm 包**
 
-执行下面的命令构建GreatSQL src.rpm包：
+执行下面的命令构建 GreatSQL src.rpm 包：
 ```bash
 cd /opt/rpmbuild && \
 rpmbuild --nodebuginfo --define "_smp_mflags -j14" --define 'dist .ol8' --define "_topdir /opt/rpmbuild/" -bs ./SPECS/greatsql.spec
@@ -339,9 +339,9 @@ docker cp greatsql_build:/opt/rpmbuild/RPMS /opt
 
 **延伸阅读**
 
-- [在Linux下源码编译安装GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source.md)
-- [麒麟OS+龙芯环境编译GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source-under-kylin-and-loongson.md)
-- [openEuler、龙蜥Anolis、统信UOS系统下编译GreatSQL二进制包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-under-openeuler-anolis-uos.md)
+- [在 Linux 下源码编译安装 GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source.md)
+- [麒麟 OS+龙芯环境编译 GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source-under-kylin-and-loongson.md)
+- [openEuler、龙蜥 Anolis、统信 UOS 系统下编译 GreatSQL 二进制包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-under-openeuler-anolis-uos.md)
 
 **扫码关注微信公众号**
 

@@ -1,4 +1,4 @@
-# Oracle兼容-语法-DATETIME INTERVAL加减运算
+# Oracle 兼容-语法-DATETIME INTERVAL 加减运算
 ---
 
 
@@ -10,18 +10,18 @@ DATETIME_expr [+|-] INTERVAL expr type
 
 ## 2. 定义和用法
 
-GreatSQL支持对 `DATETIME` 类型数据进行 `INTERVAL` 加减运算。
+GreatSQL 支持对 `DATETIME` 类型数据进行 `INTERVAL` 加减运算。
 
 若位于另一端的表达式是一个日期或日期时间值，则 `INTERVAL expr type` 只允许在 `+` 操作符的两端。对于 `–` 操作符，`INTERVAL expr type` 只允许在其右端，因为从一个时间间隔中提取一个日期或日期时间值无意义。
 
-1. 在Oracle中 `INTERVAL` 可作为字段类型建表等操作中使用，但GreatSQL不存在该类型，因此目前不支持 `INTERVAL` 作为字段类型使用。
+1. 在 Oracle 中 `INTERVAL` 可作为字段类型建表等操作中使用，但 GreatSQL 不存在该类型，因此目前不支持 `INTERVAL` 作为字段类型使用。
 
-2. 目前支持范围仅为语法中日期值或时间值与 `INTERVAL` 加减操作，鉴于目前 `GreatSQL` 中 `INTERVAL` 语法实现方式，在Oracle语法中 `INTERVAL` 内对精度的设置例如：`YEAR(3)`，目前在兼容语法中精度值不具有实际使用意义。
+2. 目前支持范围仅为语法中日期值或时间值与 `INTERVAL` 加减操作，鉴于目前 `GreatSQL` 中 `INTERVAL` 语法实现方式，在 Oracle 语法中 `INTERVAL` 内对精度的设置例如：`YEAR(3)`，目前在兼容语法中精度值不具有实际使用意义。
 
 
 ## 3. 示例
 
-**说明：** 目前GreatSQL中`SYSDATE`、`NOW`、`SYSTIMESTAMP` 等时间类型与Oracle返回时间值存在差异，因此下面示例中以固定年月时间演示 `INTERVAL` 与时间值加减语法操作后在 `GreatSQL` 中返回与Oracle返回做对比。
+**说明：** 目前 GreatSQL 中`SYSDATE`、`NOW`、`SYSTIMESTAMP` 等时间类型与 Oracle 返回时间值存在差异，因此下面示例中以固定年月时间演示 `INTERVAL` 与时间值加减语法操作后在 `GreatSQL` 中返回与 Oracle 返回做对比。
 
 - 1. `'2000-01-01 00:00:00' + INTERVAL '80' SECOND`
 
@@ -206,7 +206,7 @@ TO_DATE('2000-01-01 00:00:00')  - INTERVAL '09:08:07'  HOUR to SECOND
 1999-12-31 14:51:53
 ```
 
-**注意：** GreatSQL中若 `INTERVAL` 后数据与 `type` 关键字指定不一致时返回NULL。
+**注意：** GreatSQL 中若 `INTERVAL` 后数据与 `type` 关键字指定不一致时返回 NULL。
 
 - 11. `'2000-01-01 00:00:00'  + INTERVAL '09:08:07.666666' HOUR TO SECOND(7)`
 
@@ -234,7 +234,7 @@ TO_DATE('2000-01-01 00:00:00')  + INTERVAL '09:08:07.666666' HOUR TO SECOND(7)
 2000-01-01 09:08:07
 ```
 
-**注意：** 在GreatSQL中若 `INTERVAL` 运算后数据与 `type` 关键字指定不一致时返回NULL。
+**注意：** 在 GreatSQL 中若 `INTERVAL` 运算后数据与 `type` 关键字指定不一致时返回 NULL。
 
 - 12. `'2000-01-01 00:00:00'  - INTERVAL '09:08:07.666666' HOUR TO SECOND(7)`
 
@@ -414,8 +414,8 @@ TO_DATE('2000-01-01 00:00:00')  - INTERVAL '123-2' YEAR(3) TO MONTH
 
 **注意：**
 
-- 1. 对于极限年份的处理GreatSQL与Oracle不同。
-- 2. 当输入时间或日期值不满足与 `INTERVAL` 格式内容减运算时，GreatSQL返回NULL。
+- 1. 对于极限年份的处理 GreatSQL 与 Oracle 不同。
+- 2. 当输入时间或日期值不满足与 `INTERVAL` 格式内容减运算时，GreatSQL 返回 NULL。
 
 ```sql
 -- GreatSQL

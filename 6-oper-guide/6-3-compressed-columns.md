@@ -52,22 +52,22 @@ greatsql> CREATE TABLE t1(
 
 压缩字典可以表示为字符串形式的单词列表（逗号或任何其他字符可以用作分隔符，但不是必需的）。换句话说， `a, bb, ccc` 、 `a bb ccc` 和 `abbccc` 将具有相同的效果。然而，后者更为紧凑。引用符号引用由常规 SQL 引用处理。支持的最大字典长度为 32506 字节（ `zlib` 限制）。
 
-压缩字典存储在新的系统InnoDB表中。由于该表是数据字典类型，因此允许并发读取，但写入是序列化的，并且读取会被写入阻塞。不支持通过旧的读视图读取表，类似于InnoDB内部DDL事务。
+压缩字典存储在新的系统 InnoDB 表中。由于该表是数据字典类型，因此允许并发读取，但写入是序列化的，并且读取会被写入阻塞。不支持通过旧的读视图读取表，类似于 InnoDB 内部 DDL 事务。
 
 **与 innodb_force_recovery 变量交互**
 
-压缩字典操作被视为 DDL 操作，但当`innodb_force_recovery` 设置为 `3` 时例外：值小于 `3` 时，允许压缩字典操作，并且值 >= `3` ，它们是被禁止的。
+压缩字典操作被视为 DDL 操作，但当 `innodb_force_recovery` 设置为 `3` 时例外：值小于 `3` 时，允许压缩字典操作，并且值 >= `3` ，它们是被禁止的。
 
 ## 自定义压缩键
 
-创建一个名为`dictionary_data`的变量，并将其值设置为字符串`'one' 'two' 'three' 'four'`。
+创建一个名为 `dictionary_data` 的变量，并将其值设置为字符串`'one' 'two' 'three' 'four'`。
 
 ```sql
 greatsql> SET @dictionary_data = 'one' 'two' 'three' 'four';
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-创建一个名为`numbers`的压缩字典，并使用前面定义的`dictionary_data`变量作为字典的内容:
+创建一个名为 `numbers` 的压缩字典，并使用前面定义的 `dictionary_data` 变量作为字典的内容:
 
 ```sql
 greatsql> CREATE COMPRESSION_DICTIONARY numbers (@dictionary_data);
@@ -120,7 +120,7 @@ greatsql> INSERT INTO t1 VALUES(0, @json_value, @json_value);
 Query OK, 1 row affected (0.05 sec)
 ```
 
-## 新增INFORMATION_SCHEMA表
+## 新增 INFORMATION_SCHEMA 表
 
 此功能新增了两个新的 `INFORMATION_SCHEMA` 表
 
@@ -166,7 +166,7 @@ greatsql> select * from INFORMATION_SCHEMA.COMPRESSION_DICTIONARY_TABLES;
 | ------------ | --------------------------------------------- |
 | TABLE_SCHEMA | 表模式（库名）                                |
 | TABLE_NAME   | 表名 来自 INFORMATION_SCHEMA.INNODB_TABLES 表 |
-| COLUMN_NAME  | 列名 来自INFORMATION_SCHEMA.INNODB_COLUMNS 表 |
+| COLUMN_NAME  | 列名 来自 INFORMATION_SCHEMA.INNODB_COLUMNS 表 |
 | DICT_NAME    | 字典名                                        |
 
 ## 功能限制
@@ -181,7 +181,7 @@ greatsql> select * from INFORMATION_SCHEMA.COMPRESSION_DICTIONARY_TABLES;
 
 要导出和导入包含压缩列的表空间，请首先使用 `ALTER TABLE ... MODIFY ... COLUMN_FORMAT DEFAULT` 解压缩它们。
 
-## mysqldump 命令行参数
+## `mysqldump` 命令行参数
 
 默认情况下，如果没有其他选项， `mysqldump` 将生成 GreatSQL 兼容的 SQL 输出。
 
@@ -198,9 +198,9 @@ greatsql> select * from INFORMATION_SCHEMA.COMPRESSION_DICTIONARY_TABLES;
 /*!50633 CREATE COMPRESSION_DICTIONARY <dictionary>(...); */
 ```
 
-两个新选项 add-drop-compression-dictionary 和skip-add-drop-compression-dictionary 将控制是否跳过上一段中的 `/\*!50633 DROP COMPRESSION_DICTIONARY IF EXISTS <dictionary> \*/` 部分。默认情况下，将使用 add-drop-compression-dictionary 模式。
+两个新选项 add-drop-compression-dictionary 和 skip-add-drop-compression-dictionary 将控制是否跳过上一段中的 `/\*!50633 DROP COMPRESSION_DICTIONARY IF EXISTS <dictionary> \*/` 部分。默认情况下，将使用 add-drop-compression-dictionary 模式。
 
-当同时指定 enable-compressed-columns-with-dictionaries 和 `--tab=<dir>` （每个表的单独文件）选项时，将使用以下片段在每个输出文件中创建必要的压缩字典（无论add-drop-compression-dictionary 和skip-add-drop-compression-dictionary 选项）。
+当同时指定 enable-compressed-columns-with-dictionaries 和 `--tab=<dir>` （每个表的单独文件）选项时，将使用以下片段在每个输出文件中创建必要的压缩字典（无论 add-drop-compression-dictionary 和 skip-add-drop-compression-dictionary 选项）。
 
 ```sql
 /*!50633 CREATE COMPRESSION_DICTIONARY IF NOT EXISTS <dictionary>(...); */

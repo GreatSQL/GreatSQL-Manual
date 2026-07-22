@@ -1,21 +1,21 @@
-# 利用systemd管理GreatSQL
+# 利用 systemd 管理 GreatSQL
 ---
 
-无论是在CentOS、Ubuntu，还是openEuler、Anolis、UOS等系统环境下，都推荐采用systemd来管理 GreatSQL 数据库。
+无论是在 CentOS、Ubuntu，还是 openEuler、Anolis、UOS 等系统环境下，都推荐采用 systemd 来管理 GreatSQL 数据库。
 
-##  关于systemd
+## 关于 systemd
 
-systemd 是Linux系统启动和服务器守护进程管理器，负责在系统启动或运行时，激活系统资源，服务器进程和其它进程，systemd被设计用来改进原来sysvinit中的多个缺点。
+systemd 是 Linux 系统启动和服务器守护进程管理器，负责在系统启动或运行时，激活系统资源，服务器进程和其它进程，systemd 被设计用来改进原来 sysvinit 中的多个缺点。
 
-CentOS的systemd服务配置脚本存放在 `/usr/lib/systemd/` 目录下，并区分 system 和 user，每一个服务配置脚本以 **.service** 结尾，例如 `/usr/lib/systemd/system/sshd.service`。
+CentOS 的 systemd 服务配置脚本存放在 `/usr/lib/systemd/` 目录下，并区分 system 和 user，每一个服务配置脚本以 **.service** 结尾，例如 `/usr/lib/systemd/system/sshd.service`。
 
-##  编辑systemd服务配置脚本
+## 编辑 systemd 服务配置脚本
 
-如果是采用RPM方式安装，则会默认利用systemd来管理GreatSQL，服务名是 *mysql*，相应的服务配置文件是 `/lib/systemd/system/mysqld.service`。
+如果是采用 RPM 方式安装，则会默认利用 systemd 来管理 GreatSQL，服务名是 *mysql*，相应的服务配置文件是 `/lib/systemd/system/mysqld.service`。
 
 另一个服务配置文件 `/lib/systemd/system/mysqld@.service` 是用于管理单机多实例场景的，可以参考这篇文章：[单机多实例](../6-oper-guide/5-multi-instances.md)。
 
-如果是采用二进制包安装GreatSQL，需要手动编辑服务配置文件，内容参考如下内容：
+如果是采用二进制包安装 GreatSQL，需要手动编辑服务配置文件，内容参考如下内容：
 
 ```ini
 [Unit]
@@ -65,21 +65,21 @@ PrivateTmp=false
 
 其中，
 
-- `ExecStartPre=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd` 用于GreatSQL首次启动时，进行初始化；
-- `ExecStart=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS` 是GreatSQL服务主进程，还可以自定义配置文件路径，例如：`ExecStart=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/greatsql.cnf $MYSQLD_OPTS`。
+- `ExecStartPre=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd` 用于 GreatSQL 首次启动时，进行初始化；
+- `ExecStart=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS` 是 GreatSQL 服务主进程，还可以自定义配置文件路径，例如：`ExecStart=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld --defaults-file=/etc/greatsql.cnf $MYSQLD_OPTS`。
 
 务必确认文件中 `ExecStartPre` 和 `ExecStart` 两个参数指定的目录及文件名是否正确。
 
 **提示**：如果不是安装到默认的 `/usr/local/` 目录下，请编辑 `bin/mysqld_pre_systemd` 脚本，修改脚本中几处涉及 GreatSQL 安装路径的地方。
 
-执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
+执行命令重载 systemd，加入 `greatsql` 服务，如果没问题就不会报错：
 ```bash
 systemctl daemon-reload
 ```
 
-这就安装成功并将GreatSQL添加到系统服务中，后面可以用 `systemctl` 来管理GreatSQL服务。
+这就安装成功并将 GreatSQL 添加到系统服务中，后面可以用 `systemctl` 来管理 GreatSQL 服务。
 
-下面分别是启动、关闭、重启GreatSQL服务操作：
+下面分别是启动、关闭、重启 GreatSQL 服务操作：
 ```bash
 systemctl start greatsql
 systemctl stop greatsql
@@ -102,7 +102,7 @@ mysqld_pre_systemd[1257969]: chmod: cannot access '': No such file or directory
 ```
 :::
 
-需手动创建 `/var/lib/mysql-files` 目录，再次启动GreatSQL服务即可：
+需手动创建 `/var/lib/mysql-files` 目录，再次启动 GreatSQL 服务即可：
 ```bash
 mkdir -p /var/lib/mysql-files && chown -R mysql:mysql /var/lib/mysql-files
 systemctl start greatsql

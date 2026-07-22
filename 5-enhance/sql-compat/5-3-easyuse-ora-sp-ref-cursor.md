@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-REF CURSOR, SYS_REFCURSOR
+# Oracle 兼容-存储过程-REF CURSOR, SYS_REFCURSOR
 ---
 
 
@@ -28,27 +28,27 @@
 
 ## 2. 定义和用法
 
-在 `ORACLE` 模式下，GreatSQL存储过程/存储函数支持以下几种 `REF CURSOR, SYS_REFCURSOR` 用法：
+在 `ORACLE` 模式下，GreatSQL 存储过程/存储函数支持以下几种 `REF CURSOR, SYS_REFCURSOR` 用法：
 
-- 1. 语法1：支持用 `var SYS_REFCURSOR` 语法来定义 `SYS_REFCURSOR`。
+- 1. 语法 1：支持用 `var SYS_REFCURSOR` 语法来定义 `SYS_REFCURSOR`。
 
 ```sql
 var SYS_REFCURSOR
 ```
 
-- 2. 语法2：支持用 `TYPE ... IS REF CURSOR` 语法定义 `REF CURSOR`。
+- 2. 语法 2：支持用 `TYPE ... IS REF CURSOR` 语法定义 `REF CURSOR`。
 
 ```sql
 TYPE type_name IS REF CURSOR
 ```
 
-- 3. 语法3：支持用 `OPEN ... FOR` 打开 `REF CURSOR`。
+- 3. 语法 3：支持用 `OPEN ... FOR` 打开 `REF CURSOR`。
 
 ```sql
 OPEN cursor_name FOR {select_statement | dynamic_string}
 ```
 
-- 4. 语法4：`FOR rows IN (select_stmt) LOOP` 会隐式创建 `REF CURSOR`，这里的 `rows` 不需要提前定义，且只在当前 `FOR ... LOOP` 语句块中有效。
+- 4. 语法 4：`FOR rows IN (select_stmt) LOOP` 会隐式创建 `REF CURSOR`，这里的 `rows` 不需要提前定义，且只在当前 `FOR ... LOOP` 语句块中有效。
 
 ```sql
 FOR rows IN
@@ -58,44 +58,44 @@ FOR rows IN
 LOOP statement... END LOOP [label] ;
 ```
 
-更多关于 `FOR rows IN CURSOR` 用法参考：[Oracle兼容-存储过程-游标（`CURSOR`）](./5-3-easyuse-ora-sp-ref-cursor.md)。
+更多关于 `FOR rows IN CURSOR` 用法参考：[Oracle 兼容-存储过程-游标（`CURSOR`）](./5-3-easyuse-ora-sp-ref-cursor.md)。
 
 
-- 5. 语法5：`FUNCTION RETURN SYS_REFCURSOR` 支持函数返回 `REF CURSOR` 类型数据。对于 `FUNCTION` 不支持变量中包含 `SYS_REFCURSOR` 类型参数。
+- 5. 语法 5：`FUNCTION RETURN SYS_REFCURSOR` 支持函数返回 `REF CURSOR` 类型数据。对于 `FUNCTION` 不支持变量中包含 `SYS_REFCURSOR` 类型参数。
 
 ```sql
 CREATE [OR REPLACE] FUNCTION sp_name(var_list) RETURN SYS_REFCURSOR AS routine_body
 ```
 
-- 6. 语法6：支持存储过程的参数带 `OUT SYS_REFCURSOR`，并支持 `REF CURSOR` 类型返回结果。
+- 6. 语法 6：支持存储过程的参数带 `OUT SYS_REFCURSOR`，并支持 `REF CURSOR` 类型返回结果。
 
 ```sql
 CREATE [OR REPLACE] sp_name(var_list) AS routine_body
 ```
 
-- 7. 语法7：支持将 `REF CURSOR` 作为参数来赋值，二者享有共同的 `REF CURSOR` 状态。`cursor1` 和 `cursor2` 都是 `REF CURSOR` 类型，享有共同的 `REF CURSOR` 状态。如果其中一个重新 `OPEN CURSOR FOR` 或者 `CLOSE CURSOR`，那么会影响所有关联 `REF CURSOR`。如果只是其中一个被赋值，那么不会影响另外的关联 `REF CURSOR`，只会影响其他被赋值的 `REF CURSOR`（详见下方示例12）。
+- 7. 语法 7：支持将 `REF CURSOR` 作为参数来赋值，二者享有共同的 `REF CURSOR` 状态。`cursor1` 和 `cursor2` 都是 `REF CURSOR` 类型，享有共同的 `REF CURSOR` 状态。如果其中一个重新 `OPEN CURSOR FOR` 或者 `CLOSE CURSOR`，那么会影响所有关联 `REF CURSOR`。如果只是其中一个被赋值，那么不会影响另外的关联 `REF CURSOR`，只会影响其他被赋值的 `REF CURSOR`（详见下方示例 12）。
 
 ```sql
 cursor1 := cursor2
 ```
 
-- 8. 语法8：采用 `SELECT cursor1 INTO cursor2` 语法就可以进行 `REF CURSOR` 赋值，二者享有共同的 `REF CURSOR` 状态。
+- 8. 语法 8：采用 `SELECT cursor1 INTO cursor2` 语法就可以进行 `REF CURSOR` 赋值，二者享有共同的 `REF CURSOR` 状态。
 
 ```sql
 SELECT cursor1 INTO cursor2
 ```
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-在 `ORACLE` 模式下，GreatSQL存储过程/存储函数中 `REF CURSOR, SYS_REFCURSOR` 用法与Oracle用法基本一致。
+在 `ORACLE` 模式下，GreatSQL 存储过程/存储函数中 `REF CURSOR, SYS_REFCURSOR` 用法与 Oracle 用法基本一致。
 
-GreatSQL在兼容性差异主要有以下几点：
+GreatSQL 在兼容性差异主要有以下几点：
 
 1. 只支持在存储过程/存储函数内部中使用 `SYS_REFCURSOR`，也支持作为参数传入和输出。
 
 2. `REF CURSOR` 和 `SYS_REFCURSOR` 的参数也作为存储过程/存储函数的参数，因此不能再定义同名参数。
 
-3. 如果只定义了 `REF CURSOR` 或 `SYS_REFCURSOR` 而没有定义具体SQL语句，则这个游标无法使用。
+3. 如果只定义了 `REF CURSOR` 或 `SYS_REFCURSOR` 而没有定义具体 SQL 语句，则这个游标无法使用。
 
 4. 语句 `OPEN sp_name FOR` 可以用在 `LOOP .. END LOOP` 语句块里。
 
@@ -103,13 +103,13 @@ GreatSQL在兼容性差异主要有以下几点：
 
 6. 游标 `cur1` 没有定义的话，`cur1%ISOPEN` 依然可以被使用而不会报错；而 `cur1%FOUND, cur1%NOTFOUND, cur1%ROWCOUNT` 则会报错。
 
-7. 对于 `CALL sp1(IN var_name)` 中的参数 `var_name` 只能执行 `FETCH` 和 `CLOSE` 操作，不能进行赋值和 `OPEN FOR` 操作，这点与Oracle行为一致。
+7. 对于 `CALL sp1(IN var_name)` 中的参数 `var_name` 只能执行 `FETCH` 和 `CLOSE` 操作，不能进行赋值和 `OPEN FOR` 操作，这点与 Oracle 行为一致。
 
-8. 对于 `CALL sp1(var_name)` 中的 `var_name` 必须为`REF CURSOR`类型，否则会报错（详见下方示例11）。
+8. 对于 `CALL sp1(var_name)` 中的 `var_name` 必须为`REF CURSOR`类型，否则会报错（详见下方示例 11）。
 
-9. 如果被关联的游标关闭以后，在Oracle中该游标是不能再被打开只能被赋值使用；但在GreatSQL允许再次被打开使用，也可以再被赋值使用，这点二者不一样（详见下方示例13）。
+9. 如果被关联的游标关闭以后，在 Oracle 中该游标是不能再被打开只能被赋值使用；但在 GreatSQL 允许再次被打开使用，也可以再被赋值使用，这点二者不一样（详见下方示例 13）。
 
-10. 在`ORACLE`模式下，`SELECT` 结果为 `SYS_REFCURSOR` 的存储函数结果的输出为 `NULL` (详见下方示例10)。
+10. 在`ORACLE`模式下，`SELECT` 结果为 `SYS_REFCURSOR` 的存储函数结果的输出为 `NULL` (详见下方示例 10)。
 
 ## 4. 示例
 
@@ -124,7 +124,7 @@ greatsql> CREATE TABLE t1 (a INT NOT NULL, b VARCHAR(20) NOT NULL);
 greatsql> INSERT INTO t1 VALUES(1, 'row1'), (2, 'row2'), (3,'row3') ;
 ```
 
-- 1. 示例1：`SYS_REFCURSOR, OPEN CURSOR`
+- 1. 示例 1：`SYS_REFCURSOR, OPEN CURSOR`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -172,7 +172,7 @@ greatsql> CALL p1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 2. 示例2：`SYS_REFCURSOR, OPEN CURSOR FOR`
+- 2. 示例 2：`SYS_REFCURSOR, OPEN CURSOR FOR`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -217,7 +217,7 @@ greatsql> CALL p1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 3. 示例3：`FOR ident in (SELECT_stmt) LOOP`
+- 3. 示例 3：`FOR ident in (SELECT_stmt) LOOP`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -257,7 +257,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 ```
 
-- 4. 示例4：`REF CURSOR`
+- 4. 示例 4：`REF CURSOR`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -298,7 +298,7 @@ greatsql> CALL p1() //
 Query OK, 0 rows affected (0.01 sec)
 ```
 
-- 5. 示例5：`duplicate var with declared and FOR LOOP`
+- 5. 示例 5：`duplicate var with declared and FOR LOOP`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -321,7 +321,7 @@ END; //
 > CALL p1() //
 ```
 
-- 6. 示例6：`FUNCTION RETURN SYS_REFCURSOR`
+- 6. 示例 6：`FUNCTION RETURN SYS_REFCURSOR`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -371,7 +371,7 @@ greatsql> CALL p1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 7. 示例7：`PROCEDURE WITH OUT SYS_REFCURSOR`
+- 7. 示例 7：`PROCEDURE WITH OUT SYS_REFCURSOR`
 
 ```
 greatsql> SET sql_mode = ORACLE;
@@ -413,7 +413,7 @@ greatsql> CALL p1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 8. 示例8：`SET REF CURSOR`
+- 8. 示例 8：`SET REF CURSOR`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -464,7 +464,7 @@ greatsql> CALL p1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 9. 示例9：`SELECT REF CURSOR INTO REF CURSOR`
+- 9. 示例 9：`SELECT REF CURSOR INTO REF CURSOR`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -514,7 +514,7 @@ greatsql> CALL p1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 10. 示例10：`SELECT SYS_REFCURSOR FUNCTION`
+- 10. 示例 10：`SELECT SYS_REFCURSOR FUNCTION`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -541,7 +541,7 @@ greatsql> CALL p1() //
 ERROR 1235 (42000): This version of MySQL doesn't yet support 'REF CURSOR used in table'
 ```
 
-- 11. 示例11：参数返回
+- 11. 示例 11：参数返回
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -565,7 +565,7 @@ greatsql> CALL p1() //
 ERROR 7553 (HY000): inconsistent datatypes: udt type and non udt type
 ```
 
-- 12. 示例12：`OPEN FOR` 和 `CLOSE` 以及赋值对其他 `REF CURSOR` 的影响
+- 12. 示例 12：`OPEN FOR` 和 `CLOSE` 以及赋值对其他 `REF CURSOR` 的影响
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -692,7 +692,7 @@ greatsql> CALL p1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 13. 示例13：`CLOSE REF CURSOR` 对关联游标的影响
+- 13. 示例 13：`CLOSE REF CURSOR` 对关联游标的影响
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -738,7 +738,7 @@ greatsql> CALL p1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 14. 示例14：`in SYS_REFCURSOR`
+- 14. 示例 14：`in SYS_REFCURSOR`
 
 ```
 greatsql> SET sql_mode = ORACLE;

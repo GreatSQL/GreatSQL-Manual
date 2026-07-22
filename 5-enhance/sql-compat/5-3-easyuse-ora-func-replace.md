@@ -1,4 +1,4 @@
-# Oracle兼容-函数-REPLACE()函数
+# Oracle 兼容-函数-REPLACE()函数
 ---
 
 
@@ -16,12 +16,12 @@ REPLACE(char, search_string [, replace_string])
 - `search_string`：搜索字符串。
 - `replace_string`：替换后的字符串。本参数可选，当未指定时，则认为 `replace_string` 为空字符串。
 
-当 `char`、`search_string`、`replace_string` 中包含转义字符（例如：`\0`、`\'`、`''`、`\"`、`\\`、`\b`、`\B`、`\n`、`\N`、`\r`、`\R`、`\t`、`\T`、`\z`、`\Z`）时，不会视为2个字符，而视为1个字符来处理。
+当 `char`、`search_string`、`replace_string` 中包含转义字符（例如：`\0`、`\'`、`''`、`\"`、`\\`、`\b`、`\B`、`\n`、`\N`、`\r`、`\R`、`\t`、`\T`、`\z`、`\Z`）时，不会视为 2 个字符，而视为 1 个字符来处理。
 
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-因为GreatSQL已原生支持 `REPLACE()` 函数，因此想要在GreatSQL中使用扩展后的 `REPLACE()` 函数时，需要先执行 `SET sql_mode = ORACLE;` 激活Oracle兼容模式。
+因为 GreatSQL 已原生支持 `REPLACE()` 函数，因此想要在 GreatSQL 中使用扩展后的 `REPLACE()` 函数时，需要先执行 `SET sql_mode = ORACLE;` 激活 Oracle 兼容模式。
 
 在原生默认模式（`SET sql_mode = DEFAULT`）下，参数 `replace_string` 必须指定，不能为空。
 

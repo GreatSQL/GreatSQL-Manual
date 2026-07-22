@@ -186,9 +186,9 @@ group_replication_enforce_update_everywhere_checks=OFF
 
 ## 启动说明
 
-启用内置VIP功能需要部分内核权限，获取相关权限有几种方式，以下三选一即可（推荐采用方法一）：
+启用内置 VIP 功能需要部分内核权限，获取相关权限有几种方式，以下三选一即可（推荐采用方法一）：
 
-- 【推荐方法】方案1：利用 systemd 提权。
+- 【推荐方法】方案 1：利用 systemd 提权。
 
 修改 systemd 服务文件，增加 `AmbientCapabilities` 参数，例如：
 ```ini
@@ -237,7 +237,7 @@ AmbientCapabilities=CAP_NET_ADMIN CAP_NET_RAW
 
 **备注**：感谢社区用户 **芬达** 提供的建议方法。
 
-- 方案2：利用 `setcap` 提权。
+- 方案 2：利用 `setcap` 提权。
 
 利用系统命令 `setcap` 为 mysqld 二进制文件添加 `CAP_NET_ADMIN` 和 `CAP_NET_RAW` 的 capability，实现提权。
 
@@ -265,7 +265,7 @@ $ ldconfig && ldconfig -p | grep -i 'libprotobuf.so'
 
 之后启动 GreatSQL 即可。
 
-- 方案3：用 root 权限启动 mysqld 进程。
+- 方案 3：用 root 权限启动 mysqld 进程。
 
 给 mysqld 进程的启动用户，例如是 mysql 用户，加上 root 权限，或者直接用 root 用户启动 mysqld 进程。
 
@@ -291,7 +291,7 @@ $ ldconfig && ldconfig -p | grep -i 'libprotobuf.so'
   - 参数 `-U` 的作用是无理由的（强制的）ARP 模式去更新别的主机上的 ARP CACHE 列表中的本机的信息，不需要响应；
   - 参数 `-I bond00` 是指定绑定 VIP 的那个网卡名；
   - 参数 `-c 3` 表示发送 3 次请求；
-  - 参数*172.17.140.250*是VIP地址。
+  - 参数*172.17.140.250*是 VIP 地址。
 
 也可以采用下面的方法：
 
@@ -350,7 +350,7 @@ GreatSQL Docker 镜像默认不支持在 Docker 中使用内置 VIP 功能。原
 docker run -itd --privileged --hostname t1 --name t1 centos:8 bash
 ```
 
-2. 进入容器，查看初始IP信息。
+2. 进入容器，查看初始 IP 信息。
 
 ```bash
 [root@t1 /]# ip a
@@ -379,7 +379,7 @@ docker run -itd --privileged --hostname t1 --name t1 centos:8 bash
 -rwxr-xr-x 1 root root 67858088 Jul 30 08:18 /usr/sbin/mysqld
 ```
 
-4. 修改 **/etc/my.cnf** 配置文件，修改启动用户为root（只展示部分相关内容）：
+4. 修改 **/etc/my.cnf** 配置文件，修改启动用户为 root（只展示部分相关内容）：
 
 ```ini
 [mysqld]

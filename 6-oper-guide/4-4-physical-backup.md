@@ -1,50 +1,50 @@
 # 物理备份恢复
 ---
 
-本文介绍GreatSQL数据库如何进行物理备份恢复。
+本文介绍 GreatSQL 数据库如何进行物理备份恢复。
 
 ## 文件层物理备份恢复
 可以采用多种方式在文件系统层进行物理备份：
-- 在停机维护时，通过文件系统层copy整个数据文件目录，即`datadir`指向的目录，包括ibdata1、redo、undo等文件。
-- 在主从复制架构的从节点停机维护时，copy整个数据文件目录。
-- 在MGR架构的从节点停机维护时，copy整个数据文件目录。
+- 在停机维护时，通过文件系统层 copy 整个数据文件目录，即 `datadir` 指向的目录，包括 ibdata1、Redo、Undo 等文件。
+- 在主从复制架构的从节点停机维护时，copy 整个数据文件目录。
+- 在 MGR 架构的从节点停机维护时，copy 整个数据文件目录。
 
 ::: warning 注意
 
 1. 如果想要通过文件系统层进行物理备份，则在停机维护前，最好先设置 `innodb_fast_shutdown=0`，然后再关闭该实例，以确保可以获得一份干净的数据文件。
-2. 进行物理备份时，还要同时备份相应的my.cnf配置文件，因为在恢复时相关的参数选项要保持一致。
+2. 进行物理备份时，还要同时备份相应的 my.cnf 配置文件，因为在恢复时相关的参数选项要保持一致。
 3. 如果`datadir`目录下有`mysqld-auto.cnf`这个配置文件，也要备份。
 4. 在`datadir`目录下的`auto.cnf`文件记录的是该实例的`server_uuid`，在做恢复时如果不需要保留原值，则可以删除该文件，在实例启动时会自动重新生成一个新的`server_uuid`。通常也不建议保留，因为有可能会和现有的实例产生冲突。
 :::
 
-需要恢复时，直接将物理备份文件copy到相应目录下，修改文件属主及权限模式，确认相应的my.cnf中的配置无误后，直接启动GreatSQL服务进程即可。
+需要恢复时，直接将物理备份文件 copy 到相应目录下，修改文件属主及权限模式，确认相应的 my.cnf 中的配置无误后，直接启动 GreatSQL 服务进程即可。
 
-## xtrabackup备份恢复
+## xtrabackup 备份恢复
 `XtraBackup` 是由 Percona 公司出品的开源免费备份工具，它能很方便的对 MySQL 数据库进行在线热备，并且支持压缩、加密、流式备份等多种方式。
 
-这是`Xtrabackup`安装包[下载地址](https://www.percona.com/downloads/Percona-XtraBackup-LATEST/)，这是[文档地址](https://docs.percona.com/percona-xtrabackup)。
+这是 `Xtrabackup` 安装包[下载地址](https://www.percona.com/downloads/Percona-XtraBackup-LATEST/)，这是[文档地址](https://docs.percona.com/percona-xtrabackup)。
 
 本文环境选择的是 XtraBackup 8.0.32-27 版本。
 
-可根据个人喜好选择RPM包或二进制包，安装步骤略过。
+可根据个人喜好选择 RPM 包或二进制包，安装步骤略过。
 
-`Xtrabackup`备份的流程大致如下：
+`Xtrabackup` 备份的流程大致如下：
 
 1. 发起备份，初始化检查等；
-2. 备份系统表空间文件ibdata1及各表空间.ibd文件；
-3. 备份其它非InnoDB表；
-4. 执行操作 `FLUSH NO_WRITE_TO_BINLOG BINARY LOGS`，刷新binlog；
-5. 从`p_s.log_status`中获取最新的redo log lsn，以及binlog点位信息；
-6. 备份最新的binlog文件（步骤4刷新后新产生的binlog文件）；
-7. 更新备份目标目录下的binlog.index文件；
-8. 更新xtrabackup_binlog_info文件；
+2. 备份系统表空间文件 ibdata1 及各表空间 .ibd 文件；
+3. 备份其它非 InnoDB 表；
+4. 执行操作 `FLUSH NO_WRITE_TO_BINLOG BINARY LOGS`，刷新 binlog；
+5. 从 `p_s.log_status` 中获取最新的 Redo Log LSN，以及 binlog 点位信息；
+6. 备份最新的 binlog 文件（步骤 4 刷新后新产生的 binlog 文件）；
+7. 更新备份目标目录下的 binlog.index 文件；
+8. 更新 xtrabackup_binlog_info 文件；
 9. 执行操作`FLUSH NO_WRITE_TO_BINLOG ENGINE LOGS`；
-10. 备份ib_buffer_pool文件；
+10. 备份 ib_buffer_pool 文件；
 11. 备份结束。
 
-而在Xtrabackup 2.X及更早的版本中，第5步这里直接执行FTWRL，不管是否只有InnoDB表。
+而在 Xtrabackup 2.X 及更早的版本中，第 5 步这里直接执行 FTWRL，不管是否只有 InnoDB 表。
 
-在 GreatSQL 8.0 中（XtraBackup 也相应升级到 8.x 版本），仅存在InnoDB表的话，不再执行FTWRL，而是直接读元数据。
+在 GreatSQL 8.0 中（XtraBackup 也相应升级到 8.x 版本），仅存在 InnoDB 表的话，不再执行 FTWRL，而是直接读元数据。
 
 ### 常规全量备份
 
@@ -70,9 +70,9 @@ ibdata1         mysql          performance_schema             db2   xtrabackup_b
 
 备份完毕后，目标目录下的几个文件作用分别是：
 
-- backup-my.cnf，记录执行xtrabackup相关选项参数，用于后续恢复
-- xtrabackup_binlog_info，记录备份时的binlog及GTID信息，用于将数据恢复后作为从节点时设置主从复制相关选项
-- xtrabackup_checkpoints，记录本次备份redo log的lsn及checkpoint信息，用于数据全量/增量恢复时的事务恢复点位判断
+- backup-my.cnf，记录执行 xtrabackup 相关选项参数，用于后续恢复
+- xtrabackup_binlog_info，记录备份时的 binlog 及 GTID 信息，用于将数据恢复后作为从节点时设置主从复制相关选项
+- xtrabackup_checkpoints，记录本次备份 Redo Log 的 LSN 及 checkpoint 信息，用于数据全量/增量恢复时的事务恢复点位判断
 - xtrabackup_info，记录本次备份常规信息
 
 ### 只备份部分库表
@@ -95,13 +95,13 @@ ib_buffer_pool  binlog.000006  mysql.ibd     db2  undo_002  xtrabackup_checkpoin
 ```bash
 xtrabackup --backup --compress --datadir=/data/GreatSQL/ --target-dir=/backup/GreatSQL/full/`date +'%Y%m%d'`/
 ```
-通常而言，大概有4倍左右的压缩比。
+通常而言，大概有 4 倍左右的压缩比。
 
 ### 并行压缩，并且流式备份
 ```bash
 xtrabackup --backup --stream=xbstream --compress --compress-threads=4 --datadir=/data/GreatSQL/ > /backup/GreatSQL/full/xbk-`date +'%Y%m%d'`.xbstream
 ```
-并发4个线程压缩，并且采用流文件方式备份。
+并发 4 个线程压缩，并且采用流文件方式备份。
 
 ### 增量备份
 
@@ -114,13 +114,13 @@ XtraBackup 还支持增量备份，即在上一次备份的基础上，只备份
 xtrabackup --backup --incremental-basedir=/backup/GreatSQL/full/`date +'%Y%m%d'`/ --target-dir=/backup/GreatSQL/inc-backup/`date +'%Y%m%d%H'`/
 ```
 
-查看`xtrabackup_info`和`xtrabackup_checkpoints`文件内容：
+查看 `xtrabackup_info` 和 `xtrabackup_checkpoints` 文件内容：
 ```bash
 $ cat xtrabackup_info
 
 ...
-innodb_from_lsn = 91534393  <--全备的LSN
-innodb_to_lsn = 98570737  <--本次增备后的LSN
+innodb_from_lsn = 91534393  <--全备的 LSN
+innodb_to_lsn = 98570737  <--本次增备后的 LSN
 partial = N
 incremental = Y  <--表示增备
 format = file
@@ -136,7 +136,7 @@ last_lsn = 98574379
 flushed_lsn = 98574369
 ```
 
-**建议：** 增量备份总是基于上一次全量备份的基础，不要基于上一次增量备份，这样在还原时会更方便。例如每天0点做一次全量备份，每小时做一次增量备份，执行增备时指定基于0点的全备。
+**建议：** 增量备份总是基于上一次全量备份的基础，不要基于上一次增量备份，这样在还原时会更方便。例如每天 0 点做一次全量备份，每小时做一次增量备份，执行增备时指定基于 0 点的全备。
 
 ### 全备还原
 
@@ -153,7 +153,7 @@ Number of pools: 1
 230825 16:54:30 completed OK!
 ```
 
-预处理没问题的话，就可以将数据文件copy/move到数据库目录下，用于拉起。
+预处理没问题的话，就可以将数据文件 copy/move 到数据库目录下，用于拉起。
 
 目标目录需要先清空，否则会报错。
 ```bash
@@ -165,7 +165,7 @@ $ xtrabackup --copy-back --target-dir=./ --datadir=/data/GreatSQL
 230825 17:01:08 [01]        ...done
 230825 17:01:08 completed OK!
 
-# 如果不想copy，而是move的话，修改下即可
+# 如果不想 copy，而是 move 的话，修改下即可
 $ xtrabackup --move-back --target-dir=./ --datadir=/data/GreatSQL
 
 ...
@@ -196,7 +196,7 @@ xtrabackup --decompress --target-dir=.
 
 ### 增量备份还原
 
-假定每天0点做一次全备，每小时做一次相对0点的增备，现在需要还原到当天8:00的增备时间点。可以像下面这么做：
+假定每天 0 点做一次全备，每小时做一次相对 0 点的增备，现在需要还原到当天 8:00 的增备时间点。可以像下面这么做：
 
 首先，在全备文件目录下执行下面的操作（不执行事务回滚操作）：
 ```bash
@@ -231,7 +231,7 @@ Applying /backup/GreatSQL/inc-backup/2023082508//ibdata1.delta to ./ibdata1...
 230825 10:49:58 completed OK!
 ```
 
-之后将还原后的数据文件copy/move到目标目录即可：
+之后将还原后的数据文件 copy/move 到目标目录即可：
 ```bash
 $ xtrabackup --copy-back --target-dir=/backup/GreatSQL/full/20230825 --datadir=/data/GreatSQL
 

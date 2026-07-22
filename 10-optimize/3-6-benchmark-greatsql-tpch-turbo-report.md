@@ -1,9 +1,9 @@
-# GreatSQL TPC-H（Turbo引擎）性能测试报告
+# GreatSQL TPC-H（Turbo 引擎）性能测试报告
 ---
 
-**GreatSQL TPC-H（Turbo引擎）性能测试报告**
+**GreatSQL TPC-H（Turbo 引擎）性能测试报告**
 
-**（2025年3月5日）**
+**（2025 年 3 月 5 日）**
 
 **GreatSQL 社区**
 
@@ -21,17 +21,17 @@ GreatSQL 社区文档中所有内容，包括但不限于图片、架构设计�
 
 如若发现本文档存在任何错误，请与 GreatSQL 社区取得直接联系。
 
-GreatSQL社区官网：[https://greatsql.cn](https://greatsql.cn)。
+GreatSQL 社区官网：[https://greatsql.cn](https://greatsql.cn)。
 
-##  概述
+## 概述
 
-本次测试针对GreatSQL数据库Turbo引擎基于标准 TPC-H 场景的测试。
+本次测试针对 GreatSQL 数据库 Turbo 引擎基于标准 TPC-H 场景的测试。
 
 TPC-H（商业智能计算测试）是美国交易处理效能委员会（TPC，TransactionProcessing Performance Council）组织制定的用来模拟决策支持类应用的一个测试集。目前，学术界和工业界普遍采用 TPC-H 来评价决策支持技术方面应用的性能。这种商业测试可以全方位评测系统的整体商业计算综合能力，对厂商的要求更高，同时也具有普遍的商业实用意义，目前在银行信贷分析和信用卡分析、电信运营分析、税收分析、烟草行业决策分析中都有广泛的应用，TPC-H 查询包含八张数据表和 22 条复杂 SQL 查询，大多数查询包含多表联接（JOIN）、子查询和聚合查询等。
 
 GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上满足金融级应用场景，具有 **高可用**、**高性能**、**高兼容**、**高安全** 等特性，可作为 MySQL 或 Percona 的理想可选替换。
 
-##  测试环境信息
+## 测试环境信息
 
 | 配置 | 备注 | 
 |   ---    | --- |
@@ -128,7 +128,7 @@ $ df -hT | grep ssd
 /dev/nvme0n1            xfs       3.0T  1.5T  1.5T  49% /ssd2
 ```
 
-NVMe SSD设备简单测速
+NVMe SSD 设备简单测速
 
 ```bash
 $ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
@@ -138,18 +138,18 @@ $ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
 21474836480 bytes (21 GB) copied, 8.69131 s, 2.5 GB/s
 ```
 
-**提示**：在下面运行TPC-H测试时，设置了Turbo引擎最大可使用的内存及线程数。
+**提示**：在下面运行 TPC-H 测试时，设置了 Turbo 引擎最大可使用的内存及线程数。
 
 ```sql
 SET GLOBAL turbo_memory_limit=68719476736;
 SET GLOBAL turbo_worker_threads=32;
 ```
 
-##  测试表结构和数据量
+## 测试表结构和数据量
 
 各表数据量对比：
 
-|表名|TPC-H SF100数据量|TPC-H SF300数据量|备注|
+|表名|TPC-H SF100 数据量|TPC-H SF300 数据量|备注|
 | ---       | ---      | ---       | ---        | 
 |region     |5         |5          |地区信息    |
 |nation     |25        |25         |国家表      |
@@ -162,15 +162,15 @@ SET GLOBAL turbo_worker_threads=32;
 
 各表结构关系如下图所示：
 
-![TPC-H各表结构关系示意图](./tpch-tables.jpg)
+![TPC-H 各表结构关系示意图](./tpch-tables.jpg)
 
-##  测试结果
+## 测试结果
 
-GreatSQL 8.0.32-27中新增的高性能并行查询引擎Turbo，使得其在实时TPC-H性能测试表现明显优于MySQL社区版、Percona Server MySQL、MariaDB等数据库。
+GreatSQL 8.0.32-27 中新增的高性能并行查询引擎 Turbo，使得其在实时 TPC-H 性能测试表现明显优于 MySQL 社区版、Percona Server MySQL、MariaDB 等数据库。
 
-在TPC-H SF100场景下，运行完全部22个TPC-H查询SQL总耗时为**214.951秒**。在TPC-H SF300场景下，运行完全部22个TPC-H查询SQL总耗时为**2241.448秒**。
+在 TPC-H SF100 场景下，运行完全部 22 个 TPC-H 查询 SQL 总耗时为**214.951 秒**。在 TPC-H SF300 场景下，运行完全部 22 个 TPC-H 查询 SQL 总耗时为**2241.448 秒**。
 
-每条SQL详细耗时如下：
+每条 SQL 详细耗时如下：
 
 | TPC-H Query（Turbo） |GreatSQL TPC-H SF100（32C64G）耗时（秒）|GreatSQL TPC-H SF300（32C64G）耗时（秒）|
 | ---   | ---    | ---      |
@@ -202,14 +202,14 @@ GreatSQL TPC-H（Turbo）SF100 vs SF300（32C64G）对比示意图如下
 
 ![GreatSQL TPC-H（Turbo）SF100 vs SF300对比示意图](./greatsql-tpch-turbo-sf100-vs-sf300-20250305.png)
 
-备注：上述测试使用的是Turbo并发线程数不限的版本。
+备注：上述测试使用的是 Turbo 并发线程数不限的版本。
 
-##  测试步骤
+## 测试步骤
 ### 安装 GreatSQL
-请参考GreatSQL手册内容：[安装指南](../4-install-guide/0-install-guide.md)，完成GreatSQL安装。
+请参考 GreatSQL 手册内容：[安装指南](../4-install-guide/0-install-guide.md)，完成 GreatSQL 安装。
 
 ### 生成 TPC-H 测试数据
-请参考GreatSQL手册内容：[TPC-H性能测试](./3-2-benchmark-tpch.md)，完成TPC-H工具编译安装。
+请参考 GreatSQL 手册内容：[TPC-H 性能测试](./3-2-benchmark-tpch.md)，完成 TPC-H 工具编译安装。
 
 运行 TPC-H `dbgen` 工具，生成数据文件，一共会生成 8 个表对应的 tbl 数据文件，例如：
 
@@ -233,7 +233,7 @@ $ ls -l *tbl
 
 ### 创建 TPC-H 测试数据库表并导入数据
 
-参考GreatSQL社区提供的TPC-H数据库表初始化脚本：[tpch-create-table.sql](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/tpch-create-table.sql)，完成TPC-H测试数据库表创建。
+参考 GreatSQL 社区提供的 TPC-H 数据库表初始化脚本：[tpch-create-table.sql](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/tpch-create-table.sql)，完成 TPC-H 测试数据库表创建。
 
 ```bash
 $ mysql -f < tpch-create-table.sql
@@ -256,27 +256,27 @@ Database: tpch100
 +----------+
 ```
 
-利用GreatSQL的 **[parallel load data特性](../5-enhance/5-1-highperf-parallel-load.md)** 并行导入TPC-H测试数据。
+利用 GreatSQL 的 **[parallel load data 特性](../5-enhance/5-1-highperf-parallel-load.md)** 并行导入 TPC-H 测试数据。
 
-需要先修改GreatSQL选项`secure_file_priv`设置，指向上述 workdir 所在目录，重启GreatSQL使之生效。
+需要先修改 GreatSQL 选项`secure_file_priv`设置，指向上述 workdir 所在目录，重启 GreatSQL 使之生效。
 
-参考GreatSQL社区提供的并发导入脚本：[load-data-parallel.sh](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/load-data-parallel.sh)，完成数据导入。
+参考 GreatSQL 社区提供的并发导入脚本：[load-data-parallel.sh](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/load-data-parallel.sh)，完成数据导入。
 
 也可以参考 [pload.sh](https://gitee.com/GreatSQL/tpch/blob/greatsql-8.0.32-27/pload.sh) 脚本做法，并行导入数据。
 
 **提示**：运行`LOAD DATA`导入数据时，可能会在 `tmpdir` 产生临时文件，因此要保证 `tmpdir` 有足够的剩余可用磁盘空间。
 
-### 确认Turbo引擎设置
+### 确认 Turbo 引擎设置
 
-数据导入完成后，在开始运行TPC-H测试前，要先加载Turbo引擎，并修改可用内存及并发线程数等相关设置。
+数据导入完成后，在开始运行 TPC-H 测试前，要先加载 Turbo 引擎，并修改可用内存及并发线程数等相关设置。
 
-1. 安装Turbo引擎
+1. 安装 Turbo 引擎
 
 ```sql
 INSTALL PLUGIN turbo SONAME 'turbo.so';
 ```
 
-2. 查看Turbo引擎已安装成功
+2. 查看 Turbo 引擎已安装成功
 
 ```sql
 greatsql> SELECT * FROM information_schema.PLUGINS WHERE PLUGIN_NAME='turbo'\G
@@ -303,15 +303,15 @@ greatsql> SET GLOBAL turbo_worker_threads=32;
 
 ### 执行 TPC-H 测试
 
-执行[GreatSQL社区提供的Turbo引擎专用TPC-H性能测试脚本](https://gitee.com/GreatSQL/tpch/tree/greatsql-8.0.32-27/queries-turbo)，完成测试，并记录各个SQL的耗时。
+执行[GreatSQL 社区提供的 Turbo 引擎专用 TPC-H 性能测试脚本](https://gitee.com/GreatSQL/tpch/tree/greatsql-8.0.32-27/queries-turbo)，完成测试，并记录各个 SQL 的耗时。
 
 该测试脚本大概工作模式如下：
 
-1. 总共有22个查询SQL，每个查询SQL分别执行。
+1. 总共有 22 个查询 SQL，每个查询 SQL 分别执行。
 
-2. 每个查询SQL先运行2次完成数据预热。
+2. 每个查询 SQL 先运行 2 次完成数据预热。
 
-3. 每个SQL再执行3次，每次执行SQL都会记录其起止时间，及其耗时，如下面例所示：
+3. 每个 SQL 再执行 3 次，每次执行 SQL 都会记录其起止时间，及其耗时，如下面例所示：
 
 ```bash
 [2023-09-27 01:38:45] BEGIN RUN TPC-H Q1 1 times
@@ -322,13 +322,13 @@ greatsql> SET GLOBAL turbo_worker_threads=32;
 [2023-09-27 01:38:47] TPC-H Q1 END, COST: 0.787s
 ```
 
-上述结果中的 COST: 1.301s ，即为本SQL的运行耗时：1.301秒。
+上述结果中的 COST: 1.301s ，即为本 SQL 的运行耗时：1.301 秒。
 
-4. 继续执行下一个查询SQL，直至22个查询SQL全部执行完毕。
+4. 继续执行下一个查询 SQL，直至 22 个查询 SQL 全部执行完毕。
 
 可以参考自动化执行脚本 [run-tpch.sh](https://gitee.com/GreatSQL/tpch/blob/greatsql-8.0.32-27/run-tpch.sh) 的做法，修改几个参数后即可自动执行。
 
-**提示**：在运行`tpch_queries_11.sql`这个SQL脚本时，需要根据数据量大小调整第17-20行相关的参数。例如当测试数据量是SF100时，调整成如下
+**提示**：在运行`tpch_queries_11.sql`这个 SQL 脚本时，需要根据数据量大小调整第 17-20 行相关的参数。例如当测试数据量是 SF100 时，调整成如下
 
 ```sql
 SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_threshold=0) */ /*+ Q11 */
@@ -363,8 +363,8 @@ ORDER BY
     value DESC;
 ```
 
-##  附录
-### 创建测试表DDL
+## 附录
+### 创建测试表 DDL
 
 ```sql
 -- DROP DATABASE IF EXISTS tpch;
@@ -466,7 +466,7 @@ create table lineitem ( l_orderkey    integer not null,
                                 key lineitem_fk2 (l_partkey,l_suppkey) );
 ```
 
-### 22条TPC-H测试SQL
+### 22 条 TPC-H 测试 SQL
 
 ```sql
 -- tpch_queries_1.sql
@@ -1198,10 +1198,10 @@ ORDER BY
 
 ### 参考资料
 
-- TPC-H官网：[http://www.tpc.org/tpch](http://www.tpc.org/tpch)
-- GreatSQL安装指南：[https://greatsql.cn/docs/4-install-guide/0-install-guide.html](https://greatsql.cn/docs/4-install-guide/0-install-guide.html)
-- TPC-H性能测试指南：[https://greatsql.cn/docs/10-optimize/3-2-benchmark-tpch.html](https://greatsql.cn/docs/10-optimize/3-2-benchmark-tpch.html)
-- TPC-H性能测试工具包：[https://gitee.com/GreatSQL/tpch](https://gitee.com/GreatSQL/tpch)
+- TPC-H 官网：[http://www.tpc.org/tpch](http://www.tpc.org/tpch)
+- GreatSQL 安装指南：[https://greatsql.cn/docs/4-install-guide/0-install-guide.html](https://greatsql.cn/docs/4-install-guide/0-install-guide.html)
+- TPC-H 性能测试指南：[https://greatsql.cn/docs/10-optimize/3-2-benchmark-tpch.html](https://greatsql.cn/docs/10-optimize/3-2-benchmark-tpch.html)
+- TPC-H 性能测试工具包：[https://gitee.com/GreatSQL/tpch](https://gitee.com/GreatSQL/tpch)
 
 **扫码关注微信公众号**
 

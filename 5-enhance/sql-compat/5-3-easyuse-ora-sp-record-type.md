@@ -1,4 +1,4 @@
-# Oracle兼容-存储过程-TYPE IS RECORD
+# Oracle 兼容-存储过程-TYPE IS RECORD
 ---
 
 
@@ -16,11 +16,11 @@ var var_def
 
 ## 2. 定义和用法
 
-在GreatSQL中支持用 `TYPE IS RECORD()` 方式来自定义数据类型，同时也支持用 `var var_def` 方式自定义数据类型。
+在 GreatSQL 中支持用 `TYPE IS RECORD()` 方式来自定义数据类型，同时也支持用 `var var_def` 方式自定义数据类型。
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-在GreatSQL中支持用 `TYPE IS RECORD()` 方式来自定义数据类型，同时也支持用 `var var_def` 方式自定义数据类型。该用法如下所述：
+在 GreatSQL 中支持用 `TYPE IS RECORD()` 方式来自定义数据类型，同时也支持用 `var var_def` 方式自定义数据类型。该用法如下所述：
 
 1. 支持无限循环嵌套，支持定义时设置默认值，也支持 `RECORD` 和 `TABLE` 混用，比如 `a.b(1).c`。
 
@@ -32,7 +32,7 @@ var var_def
 
 1. 支持无限循环嵌套的 `SELECT`、`SET` 赋值。
 
-1. 支持用参数赋值的方法定义 `RECORD` 字段，例如`v1 VARCHAR(20) := v2`，详见下面示例2。如果该参数同为 `RECORD` 内的参数，则赋值失败。
+1. 支持用参数赋值的方法定义 `RECORD` 字段，例如`v1 VARCHAR(20) := v2`，详见下面示例 2。如果该参数同为 `RECORD` 内的参数，则赋值失败。
 
 1. 不支持单类型的数组定义，比如 `CREATE TYPE v1 AS VARRAY(10) OF VARCHAR2(80);`。
 
@@ -52,7 +52,7 @@ var var_def
 ## 4. 示例
 
 
-- 1. 示例1：`TYPE IS RECORD/TYPE IS TABLE`
+- 1. 示例 1：`TYPE IS RECORD/TYPE IS TABLE`
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -104,7 +104,7 @@ Query OK, 0 rows affected (0.00 sec)
 
 更多用法请参考：ora_type_is_table.md
 
-- 2. 示例2：`TYPE RECORD` + 默认赋值
+- 2. 示例 2：`TYPE RECORD` + 默认赋值
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -173,7 +173,7 @@ greatsql> CALL record_sp1() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 3. 示例3：TYPE IS UDT TYPE AND SET DEFAULT VALUE
+- 3. 示例 3：TYPE IS UDT TYPE AND SET DEFAULT VALUE
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -221,7 +221,7 @@ greatsql> CALL record_sp3() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 4. 示例4：TYPE IS RECORD TYPE AND SET DEFAULT VALUE
+- 4. 示例 4：TYPE IS RECORD TYPE AND SET DEFAULT VALUE
 
 ```sql
 greatsql> SET sql_mode = ORACLE;
@@ -273,7 +273,7 @@ greatsql> CALL record_sp4() //
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-- 5. 示例5：TYPE IS UDT TABLE TYPE AND SET DEFAULT VALUE
+- 5. 示例 5：TYPE IS UDT TABLE TYPE AND SET DEFAULT VALUE
 
 ```sql
 greatsql> SET sql_mode = ORACLE;

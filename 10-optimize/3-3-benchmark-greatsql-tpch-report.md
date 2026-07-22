@@ -3,7 +3,7 @@
 
 **GreatSQL TPC-H 性能测试报告**
 
-**（2024年11月02日）**
+**（2024 年 11 月 02 日）**
 
 **GreatSQL 社区**
 
@@ -21,11 +21,11 @@ GreatSQL 社区文档中所有内容，包括但不限于图片、架构设计�
 
 如若发现本文档存在任何错误，请与 GreatSQL 社区取得直接联系。
 
-GreatSQL社区官网：[https://greatsql.cn](https://greatsql.cn)。
+GreatSQL 社区官网：[https://greatsql.cn](https://greatsql.cn)。
 
-##  概述
+## 概述
 
-本次测试针对GreatSQL数据库基于标准 TPC-H 场景的测试。
+本次测试针对 GreatSQL 数据库基于标准 TPC-H 场景的测试。
 
 TPC-H（商业智能计算测试）是美国交易处理效能委员会（TPC，TransactionProcessing Performance Council）组织制定的用来模拟决策支持类应用的一个测试集。目前，学术界和工业界普遍采用 TPC-H 来评价决策支持技术方面应用的性能。这种商业测试可以全方位评测系统的整体商业计算综合能力，对厂商的要求更高，同时也具有普遍的商业实用意义，目前在银行信贷分析和信用卡分析、电信运营分析、税收分析、烟草行业决策分析中都有广泛的应用，TPC-H 查询包含八张数据表和 22 条复杂 SQL 查询，大多数查询包含多表联接（JOIN）、子查询和聚合查询等。
 
@@ -59,9 +59,9 @@ GreatSQL 8.0.32-27 测试结果详见：[GreatSQL 8.0.32-27 TPC-H 性能测试�
 
 ## 测试结果详细数据
 
-每条SQL详细耗时如下表所示：
+每条 SQL 详细耗时如下表所示：
 
-| TPC-H Query | GreatSQL 8.4.4-4<br/>SF100耗时（秒）| GreatSQL 8.4.4-4<br/>SF300耗时（秒）| GreatSQL 8.0.32-27<br/>SF100耗时（秒）| GreatSQL 8.0.32-27<br/>SF300耗时（秒）|
+| TPC-H Query | GreatSQL 8.4.4-4<br/>SF100 耗时（秒）| GreatSQL 8.4.4-4<br/>SF300 耗时（秒）| GreatSQL 8.0.32-27<br/>SF100 耗时（秒）| GreatSQL 8.0.32-27<br/>SF300 耗时（秒）|
 | :---  | :---    | :---     | :---    | :---     |
 | Q1	| 3.908 	| 11.530 	| 1.184 	| 3.537   |
 | Q2	| 0.424 	| 1.090 	| 0.924 	| 3.865   |
@@ -87,7 +87,7 @@ GreatSQL 8.0.32-27 测试结果详见：[GreatSQL 8.0.32-27 TPC-H 性能测试�
 | Q22	| 0.568 	| 1.765 	| 2.513 	| 3.286   |
 | 总耗时| **48.605** 	| **221.876** 	| **77.696** 	| **386.195**|
 
-GreatSQL 8.4.4-4 vs 8.0.32-27 Rapid 引擎 TPC-H 基准测试每条SQL耗时对比示意图如下：
+GreatSQL 8.4.4-4 vs 8.0.32-27 Rapid 引擎 TPC-H 基准测试每条 SQL 耗时对比示意图如下：
 
 ![GreatSQL 8.4 vs 8.0 Rapid 引擎 TPC-H 测试对比示意图](./greatsql-84-vs-80-tpch-sf100-vs-sf300-detail-20251102.png)
 
@@ -95,7 +95,7 @@ GreatSQL 8.4.4-4 vs 8.0.32-27 Rapid 引擎 TPC-H 基准测试每条SQL耗时对�
 
 ### 测试步骤
 
-参考手册内容 [TPC-H性能测试](./3-2-benchmark-tpch.md)，执行 TPC-H 测试，详细过程不赘述。
+参考手册内容 [TPC-H 性能测试](./3-2-benchmark-tpch.md)，执行 TPC-H 测试，详细过程不赘述。
 
 ### 测试工具
 
@@ -120,11 +120,11 @@ rapid_memory_limit=64G
 rapid_worker_threads=32
 ```
 
-###  测试表结构和数据量
+### 测试表结构和数据量
 
 各表数据量对比：
 
-|表名|TPC-H SF100数据量|TPC-H SF300数据量|备注|
+|表名|TPC-H SF100 数据量|TPC-H SF300 数据量|备注|
 | ---       | ---      | ---       | ---        | 
 |region     |5         |5          |地区信息    |
 |nation     |25        |25         |国家表      |
@@ -135,18 +135,18 @@ rapid_worker_threads=32
 |orders     |150000000 |450000000  |订单表      |
 |lineitem   |600037902 |1799989091 |订单明细表  |
 
-Rapid引擎表空间压缩比：
+Rapid 引擎表空间压缩比：
 
-|库名|InnoDB表空间文件总大小|Rapid引擎表空间总大小|压缩比|
+|库名|InnoDB 表空间文件总大小|Rapid 引擎表空间总大小|压缩比|
 | ---        | ---         | ---        | --- |
 |TPC-H SF100 |184570593436 |28728373248 |6.42 |
 |TPC-H SF300 |591644573888 |74334864443 |7.96 |
 
 各表结构关系如下图所示：
 
-![TPC-H各表结构关系示意图](./tpch-tables.jpg)
+![TPC-H 各表结构关系示意图](./tpch-tables.jpg)
 
-###  测试环境
+### 测试环境
 
 **服务器详细信息**
 
@@ -239,7 +239,7 @@ $ cat /sys/block/nvme0n1/queue/scheduler
 [mq-deadline] kyber bfq none
 ```
 
-NVMe SSD设备简单测速
+NVMe SSD 设备简单测速
 
 ```bash
 $ dd oflag=direct if=/dev/zero of=./zero bs=1M count=20480
@@ -270,7 +270,7 @@ $ dmesg | grep -i numa
 [    0.000000] Kernel command line: BOOT_IMAGE=(hd0,gpt2)/vmlinuz-4.18.0-240.el8.x86_64 root=/dev/mapper/cl-root ro crashkernel=auto resume=/dev/mapper/cl-swap rd.lvm.lv=cl/root rd.lvm.lv=cl/swap numa=off
 ```
 
-### 测试表DDL
+### 测试表 DDL
 
 ```sql
 -- DROP DATABASE IF EXISTS tpch;
@@ -372,7 +372,7 @@ create table lineitem ( l_orderkey    integer not null,
                                 key lineitem_fk2 (l_partkey,l_suppkey) ) secondary_engine = rapid;
 ```
 
-### 22条TPC-H测试SQL
+### 22 条 TPC-H 测试 SQL
 
 ```sql
 -- tpch_queries_1.sql
@@ -1105,11 +1105,11 @@ ORDER BY
 
 ### 参考资料
 
-- TPC-H官网：[http://www.tpc.org/tpch](http://www.tpc.org/tpch)
-- GreatSQL安装指南：[https://greatsql.cn/docs/4-install-guide/0-install-guide.html](https://greatsql.cn/docs/4-install-guide/0-install-guide.html)
-- TPC-H性能测试指南：[https://greatsql.cn/docs/10-optimize/3-2-benchmark-tpch.html](https://greatsql.cn/docs/10-optimize/3-2-benchmark-tpch.html)
-- TPC-H测试建表DDL及查询SQL：[https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/tpch/3.0.1](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/tpch/3.0.1)
-- duckdb_dbgen.py脚本：[https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/duckdb_dbgen.py](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/duckdb_dbgen.py)
+- TPC-H 官网：[http://www.tpc.org/tpch](http://www.tpc.org/tpch)
+- GreatSQL 安装指南：[https://greatsql.cn/docs/4-install-guide/0-install-guide.html](https://greatsql.cn/docs/4-install-guide/0-install-guide.html)
+- TPC-H 性能测试指南：[https://greatsql.cn/docs/10-optimize/3-2-benchmark-tpch.html](https://greatsql.cn/docs/10-optimize/3-2-benchmark-tpch.html)
+- TPC-H 测试建表 DDL 及查询 SQL：[https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/tpch/3.0.1](https://gitee.com/GreatSQL/GreatSQL-Doc/tree/master/tpch/3.0.1)
+- duckdb_dbgen.py 脚本：[https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/duckdb_dbgen.py](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/tpch/3.0.1/duckdb_dbgen.py)
 
 
 **扫码关注微信公众号**

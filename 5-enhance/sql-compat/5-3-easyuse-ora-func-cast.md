@@ -1,4 +1,4 @@
-# Oracle兼容-函数-CAST()函数
+# Oracle 兼容-函数-CAST()函数
 ---
 
 
@@ -9,7 +9,7 @@ CAST(expr AS VARCHAR(N))
 ```
 
 ## 2. 定义和用法
-在原生 `CAST()` 函数的基础上，增加了在语法层面对VARCHAR(N)类型的支持。
+在原生 `CAST()` 函数的基础上，增加了在语法层面对 VARCHAR(N)类型的支持。
 
 ## 3. 示例
 

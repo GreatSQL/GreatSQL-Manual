@@ -1,4 +1,4 @@
-# Oracle兼容-语法-DATETIME加减运算
+# Oracle 兼容-语法-DATETIME 加减运算
 ---
 
 
@@ -11,14 +11,14 @@ SELECT SYSDATE - SYSDATE FROM DUAL;
 ```
 ## 2. 定义和用法
 
-在GreatSQL中支持对 `DATETIME` 类型数据做加减运算，例如增加1秒、1天，使用该运算行为模式需要切换到ORACLE模式下。
+在 GreatSQL 中支持对 `DATETIME` 类型数据做加减运算，例如增加 1 秒、1 天，使用该运算行为模式需要切换到 ORACLE 模式下。
 
 1. 只支持加减运算，不支持其他运算类型。
 2. 对 `TIME` 类型运算前，会先被转换成 `DATETIME` 类型。
 3. 会先将时间戳的值转换为日期值，并将 `NUMBER` 算术日期时间和间隔表达式中的常量解释为天数。
-4. 年份范围为：[0,9999]，不支持公元前的年份，溢出时将返回**NULL**，并产生warning。
-5. 当计算结果包含无限循环小数时，默认只保留**10位**，即：`div_precincrement` 选项默认值(4) + 6 = 10。
-6. 对YEAR类型加减运算时，默认转换将失败，会返回**NULL**，并产生warning。
+4. 年份范围为：[0,9999]，不支持公元前的年份，溢出时将返回**NULL**，并产生 warning。
+5. 当计算结果包含无限循环小数时，默认只保留**10 位**，即：`div_precincrement` 选项默认值(4) + 6 = 10。
+6. 对 YEAR 类型加减运算时，默认转换将失败，会返回**NULL**，并产生 warning。
 
 ```
 greatsql> SET sql_mode = ORACLE;
@@ -43,7 +43,7 @@ greatsql> SELECT TO_DATE('00:00:00','HH24:MI:SS') -  TO_DATE('00:00:01','HH24:MI
 +----------------------------------------------------------------------+
 ```
 
-**DATETIME类型运算兼容矩阵**
+**DATETIME 类型运算兼容矩阵**
 
 Operand & Operator|DATETIME| TIMESTAMP|TIME|NUMBER
 --| -- | -- | -- | --
@@ -75,12 +75,12 @@ Operand & Operator|DATETIME| TIMESTAMP|TIME|NUMBER
 
 上表是 `DATETIME` 类型算术运算的兼容矩阵，破折号代表不支持的操作。
 
-## 3. 与Oracle差异说明
+## 3. 与 Oracle 差异说明
 
-1. 默认日期差异日期保留精度不一致，在GreatSQL中默认保留10位小数精度，而Oracle中根据不同的精度数据不一样。
-2. 时间范围最大与最小范围不一致。在GreatSQL中年份范围是 [0,9999]，而Oracle中的范围是 [-4713,9999]。
-3. 加减字符串运算行为不同，例如字符串'a'，在Oracle中转换失败将会报错，而在GreatSQL中将转换为 '0' 并产生警告，之后再进行运算。
-4. 在GreatSQL中，`TIMESTAMP - TIMESTAMP` 返回的结果是 `DECIMAL` 类型， Oracle 中返回 `INTERVAL` 类型。
+1. 默认日期差异日期保留精度不一致，在 GreatSQL 中默认保留 10 位小数精度，而 Oracle 中根据不同的精度数据不一样。
+2. 时间范围最大与最小范围不一致。在 GreatSQL 中年份范围是 [0,9999]，而 Oracle 中的范围是 [-4713,9999]。
+3. 加减字符串运算行为不同，例如字符串'a'，在 Oracle 中转换失败将会报错，而在 GreatSQL 中将转换为 '0' 并产生警告，之后再进行运算。
+4. 在 GreatSQL 中，`TIMESTAMP - TIMESTAMP` 返回的结果是 `DECIMAL` 类型， Oracle 中返回 `INTERVAL` 类型。
 
 ## 4. 示例
 

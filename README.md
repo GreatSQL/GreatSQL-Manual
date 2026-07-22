@@ -14,16 +14,16 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 ![GreatSQL LOGO](./greatsql-logo.png "GreatSQL LOGO")
 
-## 下载GreatSQL
+## 下载 GreatSQL
 
 - [下载 GreatSQL 最新版本](https://gitee.com/GreatSQL/GreatSQL/releases/GreatSQL-8.4.4-5)
 - [下载 GreatSQL 历史版本](https://gitee.com/GreatSQL/GreatSQL/releases/)
 
-## GreatSQL核心特性
+## GreatSQL 核心特性
 
 ### [高可用](./5-enhance/5-2-ha.md)
 
-针对 MGR 及主从复制进行了大量改进和提升工作，支持 地理标签、仲裁节点、读写动态 VIP、快速单主模式、智能选主 等特性，并针对 流控算法、事务认证队列清理算法、节点加入&退出机制、recovery机制、大事务传输压缩等多个 MGR 底层工作机制算法进行深度优化，进一步提升优化了 MGR 的高可用保障及性能稳定性。
+针对 MGR 及主从复制进行了大量改进和提升工作，支持 地理标签、仲裁节点、读写动态 VIP、快速单主模式、智能选主 等特性，并针对 流控算法、事务认证队列清理算法、节点加入&退出机制、recovery 机制、大事务传输压缩等多个 MGR 底层工作机制算法进行深度优化，进一步提升优化了 MGR 的高可用保障及性能稳定性。
 
 - 支持 [地理标签](./5-enhance/5-2-ha-mgr-zoneid.md) 特性，提升多机房架构数据可靠性。
 - 支持 [仲裁节点](./5-enhance/5-2-ha-mgr-arbitrator.md) 特性，用更低的服务器成本实现更高可用。
@@ -36,24 +36,24 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 - 在主从复制中，从节点向主节点发起 Binlog 读取请求时支持限速控制。
 - 优化了 [asynchronous connection failover](https://dev.mysql.com/doc/refman/8.0/en/replication-asynchronous-connection-failover.html) 中的故障检测效率，降低主从复制链路断开的时间，提高整体可用性。
 - 支持在跨机房容灾场景中的 [主主双向复制防止回路](./5-enhance/5-2-ha-repl-server-mode.md) 机制。
-- 兼容 [`CHANGE MASTER TO`、`START SLAVE` 等全套旧版主从复制语法与配套状态变量、报错信息](./5-enhance/5-2-ha-repl-interface-cmd.md)。解决从低版本升级至8.4后旧复制管理语句执行报错问题，大幅降低数据库大版本升级改造工作量。
+- 兼容 [`CHANGE MASTER TO`、`START SLAVE` 等全套旧版主从复制语法与配套状态变量、报错信息](./5-enhance/5-2-ha-repl-interface-cmd.md)。解决从低版本升级至 8.4 后旧复制管理语句执行报错问题，大幅降低数据库大版本升级改造工作量。
 - 优化了 MGR 节点加入、退出时可能导致性能剧烈抖动的问题。
-- 解决了个别节点上磁盘空间爆满时导致MGR集群整体被阻塞的问题。
+- 解决了个别节点上磁盘空间爆满时导致 MGR 集群整体被阻塞的问题。
 - 优化了 MGR 事务认证队列清理算法，高负载下不复存在每 60 秒性能抖动问题。
 - 解决了 MGR 中长事务造成无法选主的问题。
 - 修复了 MGR recovery 过程中长时间等待的问题。
-- 优化了MGR大事务传输时压缩超过限制的处理机制。
+- 优化了 MGR 大事务传输时压缩超过限制的处理机制。
 
 更多信息详见文档：[高可用](./5-enhance/5-2-ha.md)。
 
 ### [高性能](./5-enhance/5-1-highperf.md)
-相对 MySQL 及 Percona Server For MySQL 的性能表现更稳定优异，支持 Rapid 引擎、Turbo引擎、事务无锁化、并行 LOAD DATA、异步删除大表、线程池、非阻塞式 DDL、NUMA 亲和调度优化 等特性，在 [TPC-C 测试中相对 MySQL 性能提升超过 30%](./10-optimize/3-5-benchmark-greatsql-vs-mysql-tpcc-report.md)，在 [TPC-H 测试中的性能表现是 MySQL 的十几倍甚至上百倍](./10-optimize/3-3-benchmark-greatsql-tpch-report.md)。
+相对 MySQL 及 Percona Server For MySQL 的性能表现更稳定优异，支持 Rapid 引擎、Turbo 引擎、事务无锁化、并行 LOAD DATA、异步删除大表、线程池、非阻塞式 DDL、NUMA 亲和调度优化 等特性，在 [TPC-C 测试中相对 MySQL 性能提升超过 30%](./10-optimize/3-5-benchmark-greatsql-vs-mysql-tpcc-report.md)，在 [TPC-H 测试中的性能表现是 MySQL 的十几倍甚至上百倍](./10-optimize/3-3-benchmark-greatsql-tpch-report.md)。
 
 - 支持 [大规模并行、基于内存查询、高压缩比的高性能 Rapid 引擎](./5-enhance/5-1-highperf-rapid-engine.md)，可将数据分析性能提升几个数量级。
-- 支持 [高性能并行查询引擎Turbo](./5-enhance/5-1-highperf-turbo-engine.md)，使GreatSQL具备多线程并发的向量化实时查询功能。并且支持 [Turbo 引擎向量相似度查询](./5-enhance/5-1-highperf-vector-search.md)。
-- 支持[大事务 binlog 独立落盘优化特性](./5-enhance/5-1-highperf-binlog-flush-opt-large-trx.md)，该特性可**降低 30%~70% 的大事务提交延迟，提升 10%~40% 的高并发TPS**，保障系统稳定性。
+- 支持 [高性能并行查询引擎 Turbo](./5-enhance/5-1-highperf-turbo-engine.md)，使 GreatSQL 具备多线程并发的向量化实时查询功能。并且支持 [Turbo 引擎向量相似度查询](./5-enhance/5-1-highperf-vector-search.md)。
+- 支持[大事务 binlog 独立落盘优化特性](./5-enhance/5-1-highperf-binlog-flush-opt-large-trx.md)，该特性可**降低 30%~70% 的大事务提交延迟，提升 10%~40% 的高并发 TPS**，保障系统稳定性。
 - 优化 [主从/组复制中从节点的并行复制回放机制](./5-enhance/5-1-highperf-parallel-replica.md)，有效减少调度阻塞，提升备节点并行回放吞吐能力，降低复制延迟，增强集群高可用稳定性。
-- 支持 [SQL Digest维度的执行计划变更异常捕获功能](./5-enhance/5-1-highperf-execplan-baseline.md)，持续采集并缓存执行计划基线信息，通过差分比对识别执行计划变化及存疑SQL，解决数据库重启/升级后执行计划漂移不可见等问题。
+- 支持 [SQL Digest 维度的执行计划变更异常捕获功能](./5-enhance/5-1-highperf-execplan-baseline.md)，持续采集并缓存执行计划基线信息，通过差分比对识别执行计划变化及存疑 SQL，解决数据库重启/升级后执行计划漂移不可见等问题。
 - 优化 InnoDB 事务系统，实现了大锁拆分及无锁化等多种优化方案，OLTP 场景整体性能提升约 20%。
 - 支持 [并行 LOAD DATA](./5-enhance/5-1-highperf-parallel-load.md)，适用于频繁导入大批量数据的应用场景，性能可提升约 20 多倍；对于无显式定义主键的场景亦有优化提升。
 - 支持 [异步删除大表](./5-enhance/5-1-highperf-async-purge-big-table.md)，提高 InnoDB 引擎运行时性能的稳定性。
@@ -65,7 +65,7 @@ GreatSQL 数据库是一款 **开源免费** 数据库，可在普通硬件上�
 
 ### [高兼容](./5-enhance/5-3-easyuse.md)
 
-GreatSQL 实现 100% 完全兼容 MySQL 及 Percona Server For MySQL 语法，支持大多数常见 Oracle 语法，包括 [数据类型兼容](./5-enhance/5-3-easyuse.md#数据类型兼容)、[函数兼容](./5-enhance/5-3-easyuse.md#函数兼容)、[SQL 语法兼容](./5-enhance/5-3-easyuse.md#sql语法兼容)、[存储程序兼容](./5-enhance/5-3-easyuse.md#存储程序兼容) 等众多兼容扩展用法。
+GreatSQL 实现 100% 完全兼容 MySQL 及 Percona Server For MySQL 语法，支持大多数常见 Oracle 语法，包括 [数据类型兼容](./5-enhance/5-3-easyuse.md#数据类型兼容)、[函数兼容](./5-enhance/5-3-easyuse.md#函数兼容)、[SQL 语法兼容](./5-enhance/5-3-easyuse.md#sql-语法兼容)、[存储程序兼容](./5-enhance/5-3-easyuse.md#存储程序兼容) 等众多兼容扩展用法。
 
 更多信息详见文档：[高兼容](./5-enhance/5-3-easyuse.md)。
 
@@ -83,7 +83,7 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 
 ### [其他](./5-enhance/5-5-others.md)
 - 支持 [Clone 在线全量热备、增备及恢复](./5-enhance/5-5-clone-compressed-and-incrment-backup.md)，结合 Binlog 可实现恢复到指定时间点。此外，Clone 备份还支持压缩功能。
-- 支持 [InnoDB Page透明压缩采用Zstd算法](./5-enhance/5-5-innodb-page-compression.md)，进一步提高数据压缩率，尤其是当有大量长文本重复数据时。
+- 支持 [InnoDB Page 透明压缩采用 Zstd 算法](./5-enhance/5-5-innodb-page-compression.md)，进一步提高数据压缩率，尤其是当有大量长文本重复数据时。
 - 支持 **mysqlbinlog 显示实际更改的行数** 特性，在 `mysqlbinlog` 的输出中，加上参数 `-vvv` 后，可以补充展示每个事务的实际影响行数 `affected rows`，增强 binlog 解析的可观测性与运维统计能力。
 
 ## 安装 GreatSQL
@@ -92,7 +92,7 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 
 运行 GreatSQL 时如果有 jemalloc 支持，则数据库进程的内存分配会更稳定、高效，因此建议安装 jemalloc（非必须）。
 
-如果是ARM环境下，可以不必安装配置 jemalloc 依赖。
+如果是 ARM 环境下，可以不必安装配置 jemalloc 依赖。
 
 以 CentOS 8 x86_64 系统为例，采用类似下面的方法安装 jemalloc 软件包：
 
@@ -104,14 +104,14 @@ yum install -y epel-release
 yum -y install jemalloc jemalloc-devel
 ```
 
-也可以把自行安装的动态库so文件路径加到系统配置文件中，例如：
+也可以把自行安装的动态库 so 文件路径加到系统配置文件中，例如：
 
 ```bash
 cat /etc/ld.so.conf
 /usr/local/lib64/
 ```
 
-而后执行下面的操作加载libjemalloc库，并确认是否已存在
+而后执行下面的操作加载 libjemalloc 库，并确认是否已存在
 
 
 ```bash
@@ -184,18 +184,18 @@ $ systemctl status mysqld
 
 想要 GreatSQL 更高效运行，建议参考这份 my.cnf 配置模板：[my.cnf for GreatSQL 8.4.4-5](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/my.cnf-example-greatsql-8.4.4-5)。
 
-### 编译GreatSQL源码
+### 编译 GreatSQL 源码
 
-如果想要用GreatSQL源码编译二进制包，可以利用GreatSQL-Build这个Docker镜像来完成，该项目详见：[GreatSQL-Build Docker镜像](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Build)。
+如果想要用 GreatSQL 源码编译二进制包，可以利用 GreatSQL-Build 这个 Docker 镜像来完成，该项目详见：[GreatSQL-Build Docker 镜像](https://gitee.com/GreatSQL/GreatSQL-Docker/tree/master/GreatSQL-Build)。
 
-如果想要自行手动编译GreatSQL源码，可以参考以下几篇文档：
+如果想要自行手动编译 GreatSQL 源码，可以参考以下几篇文档：
 
-- [在CentOS环境下源码编译安装GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source.md)
-- [在CentOS环境下编译GreatSQL RPM包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-rpm-under-centos.md)
-- [openEuler、龙蜥Anolis、统信UOS系统下编译GreatSQL二进制包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-under-openeuler-anolis-uos.md)
-- [在麒麟OS+龙芯环境下源码编译安装GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source-under-kylin-and-loongson.md)
+- [在 CentOS 环境下源码编译安装 GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source.md)
+- [在 CentOS 环境下编译 GreatSQL RPM 包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-rpm-under-centos.md)
+- [openEuler、龙蜥 Anolis、统信 UOS 系统下编译 GreatSQL 二进制包](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-under-openeuler-anolis-uos.md)
+- [在麒麟 OS+龙芯环境下源码编译安装 GreatSQL](https://gitee.com/GreatSQL/GreatSQL-Doc/blob/master/docs/build-greatsql-with-source-under-kylin-and-loongson.md)
 
-**提醒**：需要用下载[GreatSQL源码包](https://gitee.com/GreatSQL/GreatSQL/releases)进行编译，而不是直接用`git clone`本项目得到的源码包编译，因为缺少部分子模块的代码。
+**提醒**：需要用下载[GreatSQL 源码包](https://gitee.com/GreatSQL/GreatSQL/releases)进行编译，而不是直接用`git clone`本项目得到的源码包编译，因为缺少部分子模块的代码。
 
 ## 版本历史
 
@@ -224,7 +224,7 @@ $ systemctl status mysqld
 |MyRocks 引擎| :heavy_check_mark: | ❌ |
 |支持龙芯架构| :heavy_check_mark: | ❌ |
 | **2. 性能提升扩展** | GreatSQL 8.4.4-5 | MySQL 8.4.4 |
-|Rapid 引擎| :heavy_check_mark: | 仅云上HeatWave |
+|Rapid 引擎| :heavy_check_mark: | 仅云上 HeatWave |
 |Turbo 引擎| :heavy_check_mark: | ❌ |
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
 |非阻塞式 DDL| :heavy_check_mark: | ❌ |
@@ -232,7 +232,7 @@ $ systemctl status mysqld
 |并行 LOAD DATA| :heavy_check_mark: | ❌ |
 |InnoDB 事务 ReadView 无锁优化| :heavy_check_mark: | ❌ |
 |InnoDB 事务大锁拆分优化| :heavy_check_mark: | ❌ |
-|InnoDB page压缩支持zstd| :heavy_check_mark: | ❌ | 
+|InnoDB page 压缩支持 zstd| :heavy_check_mark: | ❌ | 
 |InnoDB 资源组| :heavy_check_mark: | :heavy_check_mark: |
 |自定义 InnoDB 页大小| :heavy_check_mark: | :heavy_check_mark: |
 |Contention-Aware Transaction Scheduling| :heavy_check_mark: | :heavy_check_mark: |
@@ -246,17 +246,17 @@ $ systemctl status mysqld
 | **3. 面向开发者提升改进** | GreatSQL 8.4.4-5 | MySQL 8.4.4 |
 |X API| :heavy_check_mark: | :heavy_check_mark: |
 |JSON| :heavy_check_mark: | :heavy_check_mark: |
-|NoSQL Socket-Level接口| :heavy_check_mark: | :heavy_check_mark: |
+|NoSQL Socket-Level 接口| :heavy_check_mark: | :heavy_check_mark: |
 |InnoDB 全文搜索改进| :heavy_check_mark: | ❌ |
 |更多 Hash/Digest 函数| :heavy_check_mark: | ❌ |
 |Oracle 兼容-数据类型| :heavy_check_mark: | ❌ |
 |Oracle 兼容-函数| :heavy_check_mark: | ❌ |
-|Oracle 兼容-SQL语法| :heavy_check_mark: | ❌ |
+|Oracle 兼容-SQL 语法| :heavy_check_mark: | ❌ |
 |Oracle 兼容-存储程序| :heavy_check_mark: | ❌ |
 | **4. 基础特性提升改进** | GreatSQL 8.4.4-5 | MySQL 8.4.4 |
 |MGR 提升-地理标签| :heavy_check_mark: | ❌ |
 |MGR 提升-仲裁节点| :heavy_check_mark: | ❌ |
-|MGR 提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
+|MGR 提升-读写节点绑定 VIP| :heavy_check_mark: | ❌ |
 |MGR 提升-快速单主模式| :heavy_check_mark: | ❌ |
 |MGR 提升-智能选主机制| :heavy_check_mark: | ❌ |
 |MGR 提升-全新流控算法| :heavy_check_mark: | ❌ |
@@ -288,11 +288,11 @@ $ systemctl status mysqld
 |审计| :heavy_check_mark: | 仅企业版 |
 |数据脱敏| :heavy_check_mark: | ❌ |
 |SQL Roles| :heavy_check_mark: | :heavy_check_mark: |
-|SHA-2 密码Hashing| :heavy_check_mark: | :heavy_check_mark: |
+|SHA-2 密码 Hashing| :heavy_check_mark: | :heavy_check_mark: |
 |密码轮换策略| :heavy_check_mark: | :heavy_check_mark: |
 |PAM 认证插件| :heavy_check_mark: | 仅企业版 |
 |Keyring 存储在文件中| :heavy_check_mark: | :heavy_check_mark: |
-|Keyring 存储在Hashicorp Vault中| :heavy_check_mark: | 仅企业版 |
+|Keyring 存储在 Hashicorp Vault 中| :heavy_check_mark: | 仅企业版 |
 |InnoDB 数据加密| :heavy_check_mark: | :heavy_check_mark: |
 |InnoDB 日志加密| :heavy_check_mark: | :heavy_check_mark: |
 |InnoDB 各种表空间文件加密| :heavy_check_mark: | :heavy_check_mark: |
@@ -314,7 +314,7 @@ $ systemctl status mysqld
 
 GreatSQL 8.4.4-5 基于 Percona Server for MySQL 8.4.4-5 版本，它在 MySQL 8.4.4 基础上做了大量的改进和提升以及众多新特性，详情请见：[**Percona Server for MySQL feature comparison**](https://docs.percona.com/percona-server/8.4/feature-comparison.html)，这其中包括线程池、审计、数据脱敏等 MySQL 企业版才有的特性，以及 performance_schema 提升、information_schema 提升、性能和可扩展性提升、用户统计增强、PROCESSLIST 增强、Slow Log 增强等大量改进和提升，这里不一一重复列出。
 
-GreatSQL同时也是gitee（码云）平台上的GVP项目，详见：[https://gitee.com/gvp/database-related](https://gitee.com/gvp/database-related) **数据库相关**类目。
+GreatSQL 同时也是 gitee（码云）平台上的 GVP 项目，详见：[https://gitee.com/gvp/database-related](https://gitee.com/gvp/database-related) **数据库相关**类目。
 
 ## 许可/Licensing
 

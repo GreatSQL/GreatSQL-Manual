@@ -2,17 +2,17 @@
 
 ## 版本信息
 
-- 发布时间：2025年10月15日
+- 发布时间：2025 年 10 月 15 日
 
 - 版本号：8.4.4-4, Revision d73de75905d
 
-- 下载链接：[RPM包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-4)、[TAR包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-4)、[源码包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-4)
+- 下载链接：[RPM 包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-4)、[TAR包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-4)、[源码包](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.4.4-4)
 
 - 用户手册：[GreatSQL 8.4.4-4 User Manual](https://greatsql.cn/docs/8.4.4-4/)
 
-##  特性增强
+## 特性增强
 
-GreatSQL 8.4.4-4版本在Percona Server for MySQL 8.4.4-4版本的基础上，主要在 **高可用**、**高性能**、**高兼容**、**高安全**四个方面进行了多项特性增强，使得 GreatSQL 可在普通硬件上满足金融级应用场景，可作为 MySQL 或 Percona Server for MySQL 的理想可选替换。
+GreatSQL 8.4.4-4 版本在 Percona Server for MySQL 8.4.4-4 版本的基础上，主要在 **高可用**、**高性能**、**高兼容**、**高安全**四个方面进行了多项特性增强，使得 GreatSQL 可在普通硬件上满足金融级应用场景，可作为 MySQL 或 Percona Server for MySQL 的理想可选替换。
 
 ### [高可用](../../5-enhance/5-2-ha.md)
 
@@ -34,15 +34,15 @@ GreatSQL 8.4.4-4版本在Percona Server for MySQL 8.4.4-4版本的基础上，�
 - 优化了 MGR 事务认证队列清理算法，高负载下不复存在每 60 秒性能抖动问题。
 - 解决了 MGR 中长事务造成无法选主的问题。
 - 修复了 MGR recovery 过程中长时间等待的问题。
-- 优化了MGR大事务传输时压缩超过限制的处理机制。
+- 优化了 MGR 大事务传输时压缩超过限制的处理机制。
 
 更多信息详见文档：[高可用](../../5-enhance/5-2-ha.md)。
 
 ### [高性能](../../5-enhance/5-1-highperf.md)
-相对 MySQL 及 Percona Server For MySQL 的性能表现更稳定优异，支持 Rapid 引擎、Turbo引擎、事务无锁化、并行 LOAD DATA、异步删除大表、线程池、非阻塞式 DDL、NUMA 亲和调度优化 等特性，在 [TPC-C 测试中相对 MySQL 性能提升超过 30%](../../10-optimize/3-5-benchmark-greatsql-vs-mysql-tpcc-report.md)，在 [TPC-H 测试中的性能表现是 MySQL 的十几倍甚至上百倍](../../10-optimize/3-3-benchmark-greatsql-tpch-report.md)。
+相对 MySQL 及 Percona Server for MySQL 的性能表现更稳定优异，支持 Rapid 引擎、Turbo 引擎、事务无锁化、并行 LOAD DATA、异步删除大表、线程池、非阻塞式 DDL、NUMA 亲和调度优化 等特性，在 [TPC-C 测试中相对 MySQL 性能提升超过 30%](../../10-optimize/3-5-benchmark-greatsql-vs-mysql-tpcc-report.md)，在 [TPC-H 测试中的性能表现是 MySQL 的十几倍甚至上百倍](../../10-optimize/3-3-benchmark-greatsql-tpch-report.md)。
 
 - 支持 [大规模并行、基于内存查询、高压缩比的高性能 Rapid 引擎](../../5-enhance/5-1-highperf-rapid-engine.md)，可将数据分析性能提升几个数量级。
-- 支持 [高性能并行查询引擎Turbo](../../5-enhance/5-1-highperf-turbo-engine.md)，使GreatSQL具备多线程并发的向量化实时查询功能。
+- 支持 [高性能并行查询引擎 Turbo](../../5-enhance/5-1-highperf-turbo-engine.md)，使 GreatSQL 具备多线程并发的向量化实时查询功能。
 - 优化 InnoDB 事务系统，实现了大锁拆分及无锁化等多种优化方案，OLTP 场景整体性能提升约 20%。
 - 支持 [并行 LOAD DATA](../../5-enhance/5-1-highperf-parallel-load.md)，适用于频繁导入大批量数据的应用场景，性能可提升约 20 多倍；对于无显式定义主键的场景亦有优化提升。
 - 支持 [异步删除大表](../../5-enhance/5-1-highperf-async-purge-big-table.md)，提高 InnoDB 引擎运行时性能的稳定性。
@@ -54,13 +54,13 @@ GreatSQL 8.4.4-4版本在Percona Server for MySQL 8.4.4-4版本的基础上，�
 
 ### [高兼容](../../5-enhance/5-3-easyuse.md)
 
-GreatSQL 实现 100% 完全兼容 MySQL 及 Percona Server For MySQL 语法，支持大多数常见 Oracle 语法，包括 [数据类型兼容](../../5-enhance/5-3-easyuse.md#数据类型兼容)、[函数兼容](../../5-enhance/5-3-easyuse.md#函数兼容)、[SQL 语法兼容](../../5-enhance/5-3-easyuse.md#sql语法兼容)、[存储程序兼容](../../5-enhance/5-3-easyuse.md#存储程序兼容) 等众多兼容扩展用法。
+GreatSQL 实现 100% 完全兼容 MySQL 及 Percona Server for MySQL 语法，支持大多数常见 Oracle 语法，包括 [数据类型兼容](../../5-enhance/5-3-easyuse.md#数据类型兼容)、[函数兼容](../../5-enhance/5-3-easyuse.md#函数兼容)、[SQL 语法兼容](../../5-enhance/5-3-easyuse.md#sql-语法兼容)、[存储程序兼容](../../5-enhance/5-3-easyuse.md#存储程序兼容) 等众多兼容扩展用法。
 
 更多信息详见文档：[高兼容](../../5-enhance/5-3-easyuse.md)。
 
 ### [高安全](../../5-enhance/5-4-security.md)
 
-GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国密加密、敏感数据脱敏、存储登录历史等多个安全提升特性，进一步保障业务数据安全，更适用于金融级应用场景。
+GreatSQL 支持逻辑备份加密、Clone 备份加密、审计、表空间国密加密、敏感数据脱敏、存储登录历史等多个安全提升特性，进一步保障业务数据安全，更适用于金融级应用场景。
 
 - 支持 [mysqldump 逻辑备份加密](../../5-enhance/5-4-security-mysqldump-encrypt.md)，提供了利用 mysqldump 逻辑备份的安全加密需求。
 - 支持 [Clone 备份加密](../../5-enhance/5-4-security-clone-encrypt.md)，提供了利用 Clone 物理备份的安全加密需求。
@@ -72,11 +72,11 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 
 ### [其他](../../5-enhance/5-5-others.md)
 - 支持 [Clone 在线全量热备、增备及恢复](../../5-enhance/5-5-clone-compressed-and-incrment-backup.md)，结合 Binlog 可实现恢复到指定时间点。此外，Clone 备份还支持压缩功能。
-- 支持 [InnoDB Page透明压缩采用Zstd算法](../../5-enhance/5-5-innodb-page-compression.md)，进一步提高数据压缩率，尤其是当有大量长文本重复数据时。
+- 支持 [InnoDB Page 透明压缩采用 Zstd 算法](../../5-enhance/5-5-innodb-page-compression.md)，进一步提高数据压缩率，尤其是当有大量长文本重复数据时。
 
 ## 注意事项
 
-从8.0升级到8.4版本，对现有运维管控系统最大的影响是，原先包含 `MASTER/SLAVE` 关键字的指令不再可用，相应的主要改动详见下表
+从 8.0 升级到 8.4 版本，对现有运维管控系统最大的影响是，原先包含 `MASTER/SLAVE` 关键字的指令不再可用，相应的主要改动详见下表
 
 | 旧指令 | 新指令 |
 | :--- | :--- | 
@@ -144,7 +144,7 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 
   **1. 查询并记录所有 Rapid 引擎表**
   
-  可以执行下面的SQL，查询当前有哪些表使用了 Rapid 引擎：
+  可以执行下面的 SQL，查询当前有哪些表使用了 Rapid 引擎：
   
   ```sql
   greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_ROWS FROM information_schema.TABLES WHERE CREATE_OPTIONS LIKE '%Rapid%';
@@ -162,9 +162,9 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
   +--------------+----------------+------------+
   ```
   
-  **2. 正常停止GreatSQL实例进程**
+  **2. 正常停止 GreatSQL 实例进程**
   
-  在停止GreatSQL实例进程前，先修改`innodb_fast_shutdown=0`后再执行`SHUTDOWN`停止实例
+  在停止 GreatSQL 实例进程前，先修改 `innodb_fast_shutdown=0` 后再执行 `SHUTDOWN` 停止实例
   
   ```sql
   greatsql> SET GLOBAL innodb_fast_shutdown=0;
@@ -177,16 +177,16 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
   cd /data/GreatSQL && rm -f duckdb*
   ```
   
-  **4. 修改`my.cnf`配置文件中的`basedir`参数，指向GreatSQL 8.4.4-4新版本**
+  **4. 修改 `my.cnf` 配置文件中的 `basedir` 参数，指向 GreatSQL 8.4.4-4 新版本**
   
   ```ini
   #my.cnf
   [mysqld]
   basedir=/usr/local/GreatSQL-8.4.4-4-Linux-glibc2.28-x86_64
   ```
-  并确保参数`upgrade`不是设置为*NONE*。
+  并确保参数 `upgrade` 不是设置为 *NONE*。
   
-  **5. 启动GreatSQL 8.4.4-4新版本实例**
+  **5. 启动 GreatSQL 8.4.4-4 新版本实例**
   
   ```bash
   systemctl start greatsql
@@ -205,7 +205,7 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
   ```
   
   ::: tip 小贴士
-  由于在升级前没有去掉该表的`SECONDARY_ENGINE=rapid`属性，所以无需重新设置。如果在升级前卸载所有 Rapid 引擎表，则需要重新设置。
+  由于在升级前没有去掉该表的 `SECONDARY_ENGINE=rapid` 属性，所以无需重新设置。如果在升级前卸载所有 Rapid 引擎表，则需要重新设置。
   :::
   
   **8. 再次启动增量导入任务**
@@ -219,7 +219,7 @@ GreatSQL 支持逻辑备份加密、CLONE 备份加密、审计、表空间国�
 - 如果是 MySQL 8.0 或 Percona Server 8.0 等系列版本，则可以直接在原来的 `datadir` 基础上，修改 `basedir` 后，原地（in-place）启动 GreatSQL 8.4.4-4 后会完成自动升级。
 - 其他情况下，最好采用导入逻辑备份文件方式升级到 GreatSQL 8.4.4-4 版本。
 
-在以上几个原地升级场景中，务必保证`my.cnf`中参数`upgrade`不能设置为*NONE*，可以设置为默认的*AUTO*或*FORCE*。例如：
+在以上几个原地升级场景中，务必保证 `my.cnf` 中参数 `upgrade` 不能设置为 *NONE*，可以设置为默认的 *AUTO* 或 *FORCE*。例如：
 
 ```ini
 #my.cnf
@@ -231,7 +231,7 @@ upgrade = AUTO
 
 ### 降级到 GreatSQL 8.4.4-4
 
-如果是要从 MySQL/Percona 8.4 系列较高的小版本降级到 GreatSQL 8.4.4-4 版本，可以采用原地降级方式快速完成版本降级操作。即可以直接在原来的 `datadir` 基础上，修改 `basedir` 后，并增加设置参数`upgrade=FORCE`，原地（in-place）启动 GreatSQL 8.4.4-4 后会完成自动降级。
+如果是要从 MySQL/Percona 8.4 系列较高的小版本降级到 GreatSQL 8.4.4-4 版本，可以采用原地降级方式快速完成版本降级操作。即可以直接在原来的 `datadir` 基础上，修改 `basedir` 后，并增加设置参数 `upgrade=FORCE`，原地（in-place）启动 GreatSQL 8.4.4-4 后会完成自动降级。
 
 如果是要从 MySQL/Percona 9.0 及之后的版本降级到 GreatSQL 8.4.4-4 版本，则需要采取逻辑备份 + 逻辑导入方式完成降级操作，并且在逻辑备份导入完成后的首次重启时，务必设置 `upgrade=FORCE` 强制升级所有数据表，包括系统表。
 
@@ -242,20 +242,20 @@ upgrade = AUTO
 mysqldump -S/data/MySQL/mysql.sock -A --triggers --routines --events --single-transaction > /data/backup/fulldump.sql
 ```
 
-**2. 在GreatSQL 8.4.4-4版本环境中导入逻辑备份文件，完成逻辑恢复**
+**2. 在 GreatSQL 8.4.4-4 版本环境中导入逻辑备份文件，完成逻辑恢复**
 
 ```bash
 mysql -S/data/GreatSQL/mysql.sock -f < /data/backup/fulldump.sql
 ```
 
-**3. 修改`my.cnf`，确保设置`upgrade=FORCE`**
+**3. 修改 `my.cnf`，确保设置 `upgrade=FORCE`**
 ```ini
 #my.cnf
 [mysqld]
 upgrade = FORCE
 ```
 
-**4. 重启GreatSQL，降级完成**
+**4. 重启 GreatSQL，降级完成**
 
 ```bash
 systemctl restart greatsql
@@ -285,7 +285,7 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 | **1.主要特性** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 | :--- | :---: | :---: |
 | 开源 |  :heavy_check_mark: |  :heavy_check_mark: |
-|ACID 完整性| :heavy_check_mark: | :heavy_check_mark: |
+| ACID 完整性 | :heavy_check_mark: | :heavy_check_mark: |
 |MVCC 特性| :heavy_check_mark:     | :heavy_check_mark: |
 |支持行锁| :heavy_check_mark: | :heavy_check_mark: |
 |Crash 自动修复| :heavy_check_mark: | :heavy_check_mark: |
@@ -303,7 +303,7 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |MyRocks 引擎| :heavy_check_mark: | ❌ |
 |支持龙芯架构| :heavy_check_mark: | ❌ |
 | **2. 性能提升扩展** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
-|Rapid 引擎| :heavy_check_mark: | 仅云上HeatWave |
+|Rapid 引擎| :heavy_check_mark: | 仅云上 HeatWave |
 |Turbo 引擎| :heavy_check_mark: | ❌ |
 |NUMA 亲和性优化| :heavy_check_mark: | ❌ |
 |非阻塞式 DDL| :heavy_check_mark: | ❌ |
@@ -311,7 +311,7 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |并行 LOAD DATA| :heavy_check_mark: | ❌ |
 |InnoDB 事务 ReadView 无锁优化| :heavy_check_mark: | ❌ |
 |InnoDB 事务大锁拆分优化| :heavy_check_mark: | ❌ |
-|InnoDB Page压缩支持Zstd| :heavy_check_mark: | ❌ | 
+|InnoDB Page 压缩支持 Zstd| :heavy_check_mark: | ❌ | 
 |InnoDB 资源组| :heavy_check_mark: | :heavy_check_mark: |
 |自定义 InnoDB 页大小| :heavy_check_mark: | :heavy_check_mark: |
 |Contention-Aware Transaction Scheduling| :heavy_check_mark: | :heavy_check_mark: |
@@ -325,17 +325,17 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 | **3. 面向开发者提升改进** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |X API| :heavy_check_mark: | :heavy_check_mark: |
 |JSON| :heavy_check_mark: | :heavy_check_mark: |
-|NoSQL Socket-Level接口| :heavy_check_mark: | :heavy_check_mark: |
+|NoSQL Socket-Level 接口| :heavy_check_mark: | :heavy_check_mark: |
 |InnoDB 全文搜索改进| :heavy_check_mark: | ❌ |
 |更多 Hash/Digest 函数| :heavy_check_mark: | ❌ |
 |Oracle 兼容-数据类型| :heavy_check_mark: | ❌ |
 |Oracle 兼容-函数| :heavy_check_mark: | ❌ |
-|Oracle 兼容-SQL语法| :heavy_check_mark: | ❌ |
+|Oracle 兼容-SQL 语法| :heavy_check_mark: | ❌ |
 |Oracle 兼容-存储程序| :heavy_check_mark: | ❌ |
 | **4. 基础特性提升改进** | GreatSQL 8.4.4-4 | MySQL 8.4.4 |
 |MGR 提升-地理标签| :heavy_check_mark: | ❌ |
 |MGR 提升-仲裁节点| :heavy_check_mark: | ❌ |
-|MGR 提升-读写节点绑定VIP| :heavy_check_mark: | ❌ |
+|MGR 提升-读写节点绑定 VIP| :heavy_check_mark: | ❌ |
 |MGR 提升-快速单主模式| :heavy_check_mark: | ❌ |
 |MGR 提升-智能选主机制| :heavy_check_mark: | ❌ |
 |MGR 提升-全新流控算法| :heavy_check_mark: | ❌ |
@@ -367,11 +367,11 @@ ERROR 1728 (HY000): Cannot load from mysql.procs_priv. The table is probably cor
 |审计| :heavy_check_mark: | 仅企业版 |
 |数据脱敏| :heavy_check_mark: | ❌ |
 |SQL Roles| :heavy_check_mark: | :heavy_check_mark: |
-|SHA-2 密码Hashing| :heavy_check_mark: | :heavy_check_mark: |
+|SHA-2 密码 Hashing| :heavy_check_mark: | :heavy_check_mark: |
 |密码轮换策略| :heavy_check_mark: | :heavy_check_mark: |
 |PAM 认证插件| :heavy_check_mark: | 仅企业版 |
 |Keyring 存储在文件中| :heavy_check_mark: | :heavy_check_mark: |
-|Keyring 存储在Hashicorp Vault中| :heavy_check_mark: | 仅企业版 |
+|Keyring 存储在 Hashicorp Vault 中| :heavy_check_mark: | 仅企业版 |
 |InnoDB 数据加密| :heavy_check_mark: | :heavy_check_mark: |
 |InnoDB 日志加密| :heavy_check_mark: | :heavy_check_mark: |
 |InnoDB 各种表空间文件加密| :heavy_check_mark: | :heavy_check_mark: |

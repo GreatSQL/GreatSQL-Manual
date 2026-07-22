@@ -1,4 +1,4 @@
-# Oracle兼容-函数-TO_DATE()函数
+# Oracle 兼容-函数-TO_DATE()函数
 ---
 
 ## 1. 语法
@@ -18,7 +18,7 @@ TO_DATE(string , fmt)
 | YYYY/RRRR | 4-digit year | 2023 |
 | YYY | 3-digit year | 023 |
 | YY | 2-digit year | 23 |
-| RR | 2-digit year | 与YY类似，但会因指定的年号与当前年份的后两位数字返回不同的值：<br/>- 当前年份后两位为[00,49]:<br/>  'RR'对应年号在[00,49], 返回年号前两位数值与当前年份相同<br/>  'RR'对应年号在[50,99], 返回年号前两位数值比当前年份小1<br/>- 当前年份后两位为[50,99]:<br/>  'RR'对应年号在[00,49], 返回年号前两位数值比当前年份大1<br/>  'RR'对应年号在[50,99], 返回年号前两位数值与当前年份相同 |
+| RR | 2-digit year | 与 YY 类似，但会因指定的年号与当前年份的后两位数字返回不同的值：<br/>- 当前年份后两位为[00,49]:<br/>  'RR'对应年号在[00,49], 返回年号前两位数值与当前年份相同<br/>  'RR'对应年号在[50,99], 返回年号前两位数值比当前年份小 1<br/>- 当前年份后两位为[50,99]:<br/>  'RR'对应年号在[00,49], 返回年号前两位数值比当前年份大 1<br/>  'RR'对应年号在[50,99], 返回年号前两位数值与当前年份相同 |
 | Y | 1-digit year | 1 |
 | DD | Day of month (1-31) | |
 | HH, HH12 | Hour of day (1-12). | |
@@ -28,8 +28,8 @@ TO_DATE(string , fmt)
 | MON | Abbreviated name of the month. | JAN,FEB |
 | MONTH | Name of the month. | JANUARY |
 | SS | Second (0-59). | |
-| AM/A.M. | Meridian indicator with or without periods. | 格式与PM等价，最后的date值取决于第一个参数字串中对应位置值 |
-| PM/P.M. | Meridian indicator with or without periods. | 格式与AM等价，最后的date值取决于第一个参数字串中对应位置值 |
+| AM/A.M. | Meridian indicator with or without periods. | 格式与 PM 等价，最后的 date 值取决于第一个参数字串中对应位置值 |
+| PM/P.M. | Meridian indicator with or without periods. | 格式与 AM 等价，最后的 date 值取决于第一个参数字串中对应位置值 |
 | D | Day of week (1-7). This element depends on the NLS territory of the session. | |
 | DDD | Day of year (1-366). | |
 | `-` `/` `,` `.` `;` `:` | Punctuation is reproduced in the result.                                                           | Any non-alphanumeric character is allowed to match the punctuation characters in the format model. |
@@ -52,7 +52,7 @@ TO_DATE(string , fmt)
 | ----------------------- | ------------------------------------------------------------ |
 | year   | 本年(即'SELECT NOW()' 所在年份) |
 | month  | 本月(即'SELECT NOW()' 所在月份) |
-| day    | 每月1日 |
+| day    | 每月 1 日 |
 | hour   | 0 |
 | minute | 0 |
 | second | 0 |
@@ -64,18 +64,18 @@ TO_DATE(string , fmt)
 | TO_DATE('202310', 'YYYYMM') | 2023-10-01 00:00:00 |
 | TO_DATE('11', 'HH')     | 2023-05-01 11:00:00 |
 
-## 3. Oracle兼容说明
+## 3. Oracle 兼容说明
 
-- 对指定格式包含HH或HH12时，GreatSQL与Oracle在显示12点时，返回值不同。例如：
+- 对指定格式包含 HH 或 HH12 时，GreatSQL 与 Oracle 在显示 12 点时，返回值不同。例如：
 
-| TO_DATE()输入   | Oracle返回          | GreatSQL返回 |
+| TO_DATE()输入   | Oracle 返回          | GreatSQL 返回 |
 | ------------- | ------------------- | ----------- |
 | TO_DATE('12','HH12') | 2023-05-01 12:00:00 | 2023-05-01 00:00:00    |
 | TO_DATE('12','HH')   | 2023-05-01 12:00:00 | 2023-05-01 00:00:00    |
 
-- 在Oracle中，`YY/RR` 格式可以读取 2位/3位/4位 年份数字，而GreatSQL只能读取2位年份数字。
+- 在 Oracle 中，`YY/RR` 格式可以读取 2 位/3 位/4 位 年份数字，而 GreatSQL 只能读取 2 位年份数字。
 
-| TO_DATE()输入   | Oracle返回          | GreatSQL返回 |
+| TO_DATE()输入   | Oracle 返回          | GreatSQL 返回 |
 | ------------------------- | ---------- | ----------- |
 | TO_DATE('20121018', 'YYMMDD')    | 2012-10-18 | NULL        |
 | TO_DATE('2012-10-18','YY-MM-DD') | 2012-10-18 | NULL        |

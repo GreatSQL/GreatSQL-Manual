@@ -28,9 +28,9 @@ systemctl disable iptables
 systemctl stop iptables
 ```
 
-另外，要先确认yum源可用，因为安装GreatSQL时还要先安装其他依赖包，通过yum安装最省事。
+另外，要先确认 yum 源可用，因为安装 GreatSQL 时还要先安装其他依赖包，通过 yum 安装最省事。
 
-如果需要配置yum源，可以参考[配置阿里云YUM源](https://developer.aliyun.com/mirror/centos)。
+如果需要配置 yum 源，可以参考[配置阿里云 YUM 源](https://developer.aliyun.com/mirror/centos)。
 
 ## 安装依赖包
 
@@ -57,7 +57,7 @@ tar xf GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal.tar.xz
 ```
 
 ::: tip 小贴士
-若您的CPU架构为ARM版本请采用ARM版本的安装包`GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64-minimal.tar.xz`。
+若您的 CPU 架构为 ARM 版本请采用 ARM 版本的安装包 `GreatSQL-8.4.4-5-Linux-glibc2.28-aarch64-minimal.tar.xz`。
 :::
 
 修改 *PATH* 环境变量，添加 GreatSQL 安装目录，方便执行命令，无需每次都指定全路径：
@@ -119,7 +119,7 @@ PrivateTmp=false
 
 **提示**：如果不是安装到默认的 `/usr/local/` 目录下，请编辑 `bin/mysqld_pre_systemd` 脚本，修改脚本中几处涉及 GreatSQL 安装路径的地方。
 
-执行命令重载systemd，加入 `greatsql` 服务，如果没问题就不会报错：
+执行命令重载 systemd，加入 `greatsql` 服务，如果没问题就不会报错：
 
 ```bash
 systemctl daemon-reload
@@ -230,9 +230,9 @@ $ ls /var/lib/mysql
 ```
 可以看到，GreatSQL 服务已经正常启动了。
 
-## 连接登入 GreatSQL
+## 连接登录 GreatSQL
 
-采用二进制包安装 GreatSQL 后，查看参数 `log-error` 指定的日志文件（`log-error=/var/log/mysqld.log`）查看初始化密码，即可登入。
+采用二进制包安装 GreatSQL 后，查看参数 `log-error` 指定的日志文件（`log-error=/var/log/mysqld.log`）查看初始化密码，即可登录。
 
 ```bash
 $ grep -i root /var/log/mysqld.log
@@ -252,7 +252,7 @@ $ grep -i root /data/GreatSQL/error.log
 A temporary password is generated for root@localhost: ji!pjndiw5sJ
 ```
 
-复制密码即可登入GreatSQL
+复制密码即可登录 GreatSQL
 
 ```bash
 $ /usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64-minimal/bin/mysql -uroot
@@ -307,15 +307,15 @@ greatsql> SHOW DATABASES;  #<--查看数据库列表
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'PASSWORD';
 ```
 
-## 关闭/重启GreatSQL
+## 关闭/重启 GreatSQL
 
-执行下面的命令关闭GreatSQL数据库。
+执行下面的命令关闭 GreatSQL 数据库。
 
 ```bash
 systemctl stop greatsql
 ```
 
-执行下面的命令重启GreatSQL数据库。
+执行下面的命令重启 GreatSQL 数据库。
 
 ```bash
 systemctl restart greatsql
