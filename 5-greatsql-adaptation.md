@@ -34,6 +34,8 @@ GreatSQL 社区面向数据库产业生态上下游厂商，包括如操作系�
 
 通过社区产品兼容适配互认的申请单位，可提供一张 PNG 格式的 LOGO 图片，用于在下方 LOGO 墙中展示，LOGO 图片格式参考下方 LOGO 墙。
 
+![GreatSQL 兼容适配申请流程图](./5-greatsql-adaptation-flowchart.png)
+
 ## 兼容适配认证通过列表
 
 ### 兼容适配认证通过企业 LOGO 墙
