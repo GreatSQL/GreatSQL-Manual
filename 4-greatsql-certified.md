@@ -292,7 +292,7 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 405  | [张*雄](https://greatsql.cn/home.php?mod=space&uid=2714) | GCA-DBA-2025242954  | 455  | [薛*琦](https://greatsql.cn/home.php?mod=space&uid=2846) | GCA-DBA-2026453119 |
 | 406  | [高*舟](https://greatsql.cn/home.php?mod=space&uid=2712) | GCA-DBA-2025585973  | 456  | [张*禹](https://greatsql.cn/home.php?mod=space&uid=2847) | GCA-DBA-2026975211 |
 | 407  | [卞*](https://greatsql.cn/home.php?mod=space&uid=2720)   | GCA-DBA-2025879951  | 457  | [王*瑞](https://greatsql.cn/home.php?mod=space&uid=1872) | GCA-DBA-2026727904 |
-| 408  | [林*明](https://greatsql.cn/home.php?mod=space&uid=2723) | GCA-DBA-2025542062  | 458  |      |          |
+| 408  | [林*明](https://greatsql.cn/home.php?mod=space&uid=2723) | GCA-DBA-2025542062  | 458  | [李*](https://greatsql.cn/home.php?mod=space&uid=2855)   | GCA-DBA-2026608227 |
 | 409  | [唐*](https://greatsql.cn/home.php?mod=space&uid=2722)   | GCA-DBA-2025719683  | 459  |      |          |
 | 410  | [陈*雄](https://greatsql.cn/home.php?mod=space&uid=2725) | GCA-DBA-2025199841  | 460  |      |          |
 | 411  | [高*](https://greatsql.cn/home.php?mod=space&uid=2726)   | GCA-DBA-2025911550  | 461  |      |          |
@@ -402,8 +402,8 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 58   | [闫*](https://greatsql.cn/home.php?mod=space&uid=2153)   | GCP-DBA-2025250249 | 158  | [薛*琦](https://greatsql.cn/home.php?mod=space&uid=2846)    |    GCP-DBA-2026456420    |
 | 59   | [齐*阮](https://greatsql.cn/home.php?mod=space&uid=2151) | GCP-DBA-2025260796 | 159  | [陈*怡](https://greatsql.cn/home.php?mod=space&uid=2850)    |    GCP-DBA-2026890310    |
 | 60   | [崔*飞](https://greatsql.cn/home.php?mod=space&uid=2037) | GCP-DBA-2025561463 | 160  | [吕*飞](https://greatsql.cn/home.php?mod=space&uid=1486)    |    GCP-DBA-2026590103    |
-| 61   | [卢*彦](https://greatsql.cn/home.php?mod=space&uid=2178) | GCP-DBA-2025307423 | 161  |                                                          |                    |
-| 62   | [赵*璐](https://greatsql.cn/home.php?mod=space&uid=2177) | GCP-DBA-2025578272 | 162  |                                                          |                    |
+| 61   | [卢*彦](https://greatsql.cn/home.php?mod=space&uid=2178) | GCP-DBA-2025307423 | 161  | [杨*鹏](https://greatsql.cn/home.php?mod=space&uid=2840)    |    GCP-DBA-2026778394    |
+| 62   | [赵*璐](https://greatsql.cn/home.php?mod=space&uid=2177) | GCP-DBA-2025578272 | 162  | [李*](https://greatsql.cn/home.php?mod=space&uid=2855)      |    GCP-DBA-2026026551    |
 | 63   | [王*昆](https://greatsql.cn/home.php?mod=space&uid=1332) | GCP-DBA-2025275268 | 163  |                                                          |                    |
 | 64   | [周*文](https://greatsql.cn/home.php?mod=space&uid=2122) | GCP-DBA-2025835836 | 164  |                                                          |                    |
 | 65   | [李*扬](https://greatsql.cn/home.php?mod=space&uid=2236) | GCP-DBA-2025545739 | 165  |                                                          |                    |
