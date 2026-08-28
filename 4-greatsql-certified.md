@@ -294,10 +294,10 @@ GCA 考核难度相对较低，总题数：25题；25题不定项选择题；总
 | 407  | [卞*](https://greatsql.cn/home.php?mod=space&uid=2720)   | GCA-DBA-2025879951  | 457  | [王*瑞](https://greatsql.cn/home.php?mod=space&uid=1872) | GCA-DBA-2026727904 |
 | 408  | [林*明](https://greatsql.cn/home.php?mod=space&uid=2723) | GCA-DBA-2025542062  | 458  | [李*](https://greatsql.cn/home.php?mod=space&uid=2855)   | GCA-DBA-2026608227 |
 | 409  | [唐*](https://greatsql.cn/home.php?mod=space&uid=2722)   | GCA-DBA-2025719683  | 459  | [张*](https://greatsql.cn/home.php?mod=space&uid=2856)   | GCA-DBA-2026323692 |
-| 410  | [陈*雄](https://greatsql.cn/home.php?mod=space&uid=2725) | GCA-DBA-2025199841  | 460  |      |          |
-| 411  | [高*](https://greatsql.cn/home.php?mod=space&uid=2726)   | GCA-DBA-2025911550  | 461  |      |          |
-| 412  | [黄*杰](https://greatsql.cn/home.php?mod=space&uid=2721) | GCA-DBA-2025236917  | 462  |      |          |
-| 413  | [周*要](https://greatsql.cn/home.php?mod=space&uid=2729) | GCA-DBA-2025207378  | 463  |      |          |
+| 410  | [陈*雄](https://greatsql.cn/home.php?mod=space&uid=2725) | GCA-DBA-2025199841  | 460  | [熊*安](https://greatsql.cn/home.php?mod=space&uid=2861) | GCA-DBA-2026372414 |
+| 411  | [高*](https://greatsql.cn/home.php?mod=space&uid=2726)   | GCA-DBA-2025911550  | 461  | [陈*石](https://greatsql.cn/home.php?mod=space&uid=2862) | GCA-DBA-2026561514 |
+| 412  | [黄*杰](https://greatsql.cn/home.php?mod=space&uid=2721) | GCA-DBA-2025236917  | 462  | [郑*玮](https://greatsql.cn/home.php?mod=space&uid=2863) | GCA-DBA-2026747809 |
+| 413  | [周*要](https://greatsql.cn/home.php?mod=space&uid=2729) | GCA-DBA-2025207378  | 463  | [杨*涵](https://greatsql.cn/home.php?mod=space&uid=2864) | GCA-DBA-2026088333 |
 | 414  | [王*楝](https://greatsql.cn/home.php?mod=space&uid=2727) | GCA-DBA-2025161882  | 464  |      |          |
 | 415  | [韩*宁](https://greatsql.cn/home.php?mod=space&uid=2728) | GCA-DBA-2025801328  | 465  |      |          |
 | 416  | [刘*东](https://greatsql.cn/home.php?mod=space&uid=2732) | GCA-DBA-2025260354  | 466  |      |          |
