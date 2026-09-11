@@ -64,10 +64,6 @@ module.exports = {
         path: '3-community-toc',
       },
       {
-        title: '培训认证',
-        path: '4-greatsql-certified',
-      },
-      {
         title: '兼容性列表',
         path: '5-greatsql-adaptation',
       },
