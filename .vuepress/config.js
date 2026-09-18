@@ -25,6 +25,14 @@ module.exports = {
   plugins: [ 
       ['@vuepress/back-to-top'],
       ['@vuepress/nprogress'],
+      [
+        'fulltext-search',
+        {
+          tokenize: 'full',
+          split: /\s+/,
+          encode: 'icase'
+        }
+      ],
       '@vuepress/medium-zoom', {
         selector: 'img.zoom-custom-imgs',
         options: {
