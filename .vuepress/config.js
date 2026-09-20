@@ -33,6 +33,15 @@ module.exports = {
           encode: 'icase'
         }
       ],
+      'vuepress-plugin-right-anchor',{
+        showDepth: 3,
+        expand: {
+          trigger: 'click',  //'hover' | 'click'
+          clickModeDefaultOpen: true
+        },
+        customClass: 'your-customClass',
+        disableGlobalUI: false,
+      },
       '@vuepress/medium-zoom', {
         selector: 'img.zoom-custom-imgs',
         options: {
@@ -72,7 +81,7 @@ module.exports = {
         path: '3-community-toc',
       },
       {
-        title: '兼容性列表',
+        title: '兼容适配流程说明',
         path: '5-greatsql-adaptation',
       },
       {
