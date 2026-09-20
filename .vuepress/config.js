@@ -25,6 +25,14 @@ module.exports = {
   plugins: [ 
       ['@vuepress/back-to-top'],
       ['@vuepress/nprogress'],
+      [
+        'fulltext-search',
+        {
+          tokenize: 'full',
+          split: /\s+/,
+          encode: 'icase'
+        }
+      ],
       'vuepress-plugin-right-anchor',{
         showDepth: 3,
         ignore: [
