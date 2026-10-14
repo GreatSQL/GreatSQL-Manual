@@ -1,18 +1,35 @@
-$accentColor = #B4171D
+// $accentColor = #B4171D
 // $nprogressColor = #B4171D
-$nprogressColor = red
+// $nprogressColor = red
 
 // 颜色
-//$accentColor = #3eaf7c
-$accentColor = #da5961
-$textColor = #2c3e50
+//$accentColor = #3eaf7c //绿色
+//$accentColor = #da5961 //暗红色
+$accentColor = #fb6052 //胭脂红
+
+//$textColor = #2c3e50 //淡黑色
+$textColor = #000000 //黑色
+
 $borderColor = #eaecef
-$codeBgColor = #282c34
+
+$codeBgColor = #333  //灰黑
+$codeBgColor = #282c34 //亮黑
+
+$codeTextColor = #000000
 $arrowBgColor = #ccc
+
 //$badgeTipColor = #42b983
 $badgeTipColor = #DA5961
+
 $badgeWarningColor = darken(#ffe564, 35%)
 $badgeErrorColor = #DA5961
+
+$grayTextColor = #666
+$lightTextColor = #636363
+$navbarColor = #fff
+$headerColor = #fff
+
+$nprogressColor = $accentColor
 
 // 布局
 $navbarHeight = 3.6rem
@@ -25,6 +42,10 @@ $MQNarrow = 959px
 $MQMobile = 719px
 $MQMobileNarrow = 419px
 
+// code
+$lineNumbersWrapperWidth ?= 2.5rem
+$codeLang ?= js ts html md vue css sass scss less stylus go java c sh shell bash sql ini yaml py docker dockerfile makefile
+
 //vuepress-plugin-right-anchor
 $rightAnchorBgColor = #fff;
 $rightAnchorTextColor = $textColor;
@@ -34,3 +55,21 @@ $rightAnchorBtnTextColor = $rightAnchorTextColor;
 $rightAnchorBtnBgColor = $rightAnchorBgColor;
 // menu
 $rightAnchorMenuTextColor = $rightAnchorTextColor;
+
+
+// 自定义代码高亮样式
+.hljs {
+  background-color: #282c34;
+  color: #abb2bf;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #5c6370;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal {
+  color: #c678dd;
+}
