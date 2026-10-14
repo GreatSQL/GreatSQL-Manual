@@ -4,8 +4,23 @@ module.exports = {
   title: 'GreatSQL用户手册',
   base: '/docs/8.4.4-5/',
   debug: false,
-  head: [["script",
-         {},
+  head: [
+    // 首帧设置配色主题，避免页面刷新时白屏闪烁（light/dark/auto 三态）
+    ["script",
+      {},
+      `(function(){
+        var m = 'auto';
+        try { m = localStorage.getItem('greatsql-theme-mode') || 'auto'; } catch(e) {}
+        if (['light','dark','auto'].indexOf(m) < 0) { m = 'auto'; }
+        var t = (m === 'auto')
+          ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          : m;
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.setAttribute('data-theme-mode', m);
+      })();`,
+    ],
+    ["script",
+      {},
 	  `var _hmt = _hmt || [];
 	  (function() {
 	    var hm = document.createElement("script");

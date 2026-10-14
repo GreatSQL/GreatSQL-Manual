@@ -1,0 +1,497 @@
+// =============================================================
+// 配色主题变量（浅色为默认，html[data-theme='dark'] 切换深色）
+// 由 enhanceApp.js + config.js head 内联脚本共同控制 data-theme
+// =============================================================
+
+:root
+  --bg-color: #ffffff
+  --content-bg: #ffffff
+  --text-color: #333333
+  --heading-color: #2d3e50
+  --muted-text: #666666
+  --border-color: #eaecef
+  --navbar-bg: #ffffff
+  --navbar-border: #e1e1e1
+  --navbar-link: #2c3e50
+  --sidebar-bg: #f8f8f8
+  --sidebar-link: #2c3e50
+  --link-color: #3498db
+  --link-hover: #2980b9
+  --accent-color: #fb6052
+  --code-inline-bg: #f5f5f5
+  --code-inline-text: #e74c3c
+  --pre-bg: #f9f9f9
+  --pre-text: #2c3e50
+  --code-block-bg: #282c34
+  --table-border: #dddddd
+  --table-th-bg: #f2f2f2
+  --table-td-bg: #ffffff
+  --table-hover: #f1f1f1
+  --right-anchor-bg: #ffffff
+  --dropdown-bg: #ffffff
+  --search-bg: #ffffff
+  --footer-bg: #ffffff
+  --home-bg: #ffffff
+
+html[data-theme='dark']
+  --bg-color: #1a1a1a
+  --content-bg: #1e1e1e
+  --text-color: #d0d0d0
+  --heading-color: #e6e6e6
+  --muted-text: #9a9a9a
+  --border-color: #383838
+  --navbar-bg: #1e1e1e
+  --navbar-border: #333333
+  --navbar-link: #cccccc
+  --sidebar-bg: #161616
+  --sidebar-link: #cccccc
+  --link-color: #5ba7e8
+  --link-hover: #7cbdf0
+  --accent-color: #ff7a6e
+  --code-inline-bg: rgba(255, 255, 255, 0.12)
+  --code-inline-text: #ff9084
+  --pre-bg: #262626
+  --pre-text: #d0d0d0
+  --code-block-bg: #282c34
+  --table-border: #3a3a3a
+  --table-th-bg: #2a2a2a
+  --table-td-bg: #1e1e1e
+  --table-hover: #2a2a2a
+  --right-anchor-bg: #1e1e1e
+  --dropdown-bg: #242424
+  --search-bg: #2a2a2a
+  --footer-bg: #1a1a1a
+  --home-bg: #1a1a1a
+
+// 代码高亮：保持统一的深色代码块风格（prism-tomorrow）
+@import '~prismjs/themes/prism-tomorrow.css'
+
+// =============================================================
+// 全局样式（含深色模式组件适配，颜色均由上方 CSS 变量驱动）
+// 注：VuePress 1.x 已弃用 .vuepress/styles/override.styl，
+//     全部自定义样式统一放在本文件（加载顺序在主题样式之后，可覆盖）
+// =============================================================
+
+/* 1. 全局背景色和文字颜色 */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: inline; /* 默认行内显示，保证 shields badges 等行内图标横向并排 */
+  margin: 0;
+}
+
+/* 单独成行的整幅插图（如 GreatSQL LOGO）仍保持块级居中显示 */
+p > img:only-child {
+  display: block;
+  margin: 0 auto;
+}
+
+.btn {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #2980b9;
+}
+
+/* 2. 标题颜色 */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--heading-color);
+}
+
+/* 3. 链接样式 */
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+/* 4. 行内代码 / 普通 pre */
+code {
+  background-color: var(--code-inline-bg);
+  color: var(--code-inline-text);
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+pre {
+  background-color: var(--pre-bg);
+  color: var(--pre-text);
+  padding: 16px;
+  border-radius: 8px;
+  overflow: auto;
+  border: 1px solid var(--border-color);
+}
+
+/* 5. 导航栏样式 */
+.navbar {
+  background-color: var(--navbar-bg);
+  border-bottom: 1px solid var(--navbar-border);
+}
+
+.navbar a {
+  color: var(--navbar-link);
+}
+
+.navbar a:hover {
+  color: var(--link-color);
+}
+
+/* 6. 侧边栏背景 */
+.sidebar {
+  background-color: var(--sidebar-bg);
+  color: var(--text-color);
+}
+
+.sidebar a {
+  color: var(--sidebar-link);
+}
+
+.sidebar a:hover {
+  color: var(--link-color);
+}
+
+/* 7. 表格样式 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th, table td {
+  border: 1px solid var(--table-border);
+  padding: 8px;
+}
+
+table th {
+  background-color: var(--table-th-bg);
+  color: var(--text-color);
+}
+
+table td {
+  background-color: var(--table-td-bg);
+  color: var(--text-color);
+}
+
+table tr:hover {
+  background-color: var(--table-hover);
+}
+
+/* 8. 深色模式组件适配（颜色由 CSS 变量驱动，自动随 data-theme 切换） */
+
+/* 正文内容区背景 */
+.theme-default-content {
+  background-color: var(--content-bg);
+}
+
+/* 搜索框 */
+.search-box input {
+  background-color: var(--search-bg);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+.search-box .suggestions {
+  background-color: var(--dropdown-bg);
+  border-color: var(--border-color);
+}
+.search-box .suggestions .suggestion a {
+  color: var(--text-color);
+}
+.search-box .suggestions .suggestion a:hover {
+  background-color: var(--table-hover);
+}
+.search-box .suggestions .suggestion.focused a {
+  background-color: var(--table-hover);
+}
+
+/* 导航栏下拉菜单 */
+.dropdown-wrapper .nav-dropdown {
+  background-color: var(--dropdown-bg);
+}
+.dropdown-wrapper .nav-dropdown .dropdown-item a {
+  color: var(--navbar-link);
+}
+.dropdown-wrapper .nav-dropdown .dropdown-item a:hover {
+  color: var(--link-color);
+}
+
+/* 侧边栏子项与分组 */
+.sidebar-heading {
+  color: var(--text-color);
+}
+.sidebar-heading:hover {
+  color: var(--link-color);
+}
+.sidebar-group a.sidebar-link {
+  color: var(--sidebar-link);
+}
+.sidebar-group a.sidebar-link:hover {
+  color: var(--link-color);
+}
+.sidebar-group a.sidebar-link.active {
+  color: var(--accent-color);
+  border-left-color: var(--accent-color);
+}
+
+/* 分页 / 编辑链接 */
+.page-nav,
+.page-edit {
+  color: var(--muted-text);
+}
+.page-nav .inner a,
+.page-edit a {
+  color: var(--link-color);
+}
+
+/* 首页（hero / feature / footer） */
+.home .hero h1 {
+  color: var(--heading-color);
+}
+.home .hero .description {
+  color: var(--muted-text);
+}
+.home .feature h2 {
+  color: var(--heading-color);
+}
+.home .feature p {
+  color: var(--muted-text);
+}
+.home .footer {
+  color: var(--muted-text);
+  border-top-color: var(--border-color);
+}
+
+/* 页脚 */
+.footer {
+  color: var(--muted-text);
+}
+
+/* 提示块文字 */
+.custom-block {
+  color: var(--text-color);
+}
+
+/* 引用 */
+blockquote {
+  color: var(--muted-text);
+}
+
+/* right-anchor 右侧锚点插件 */
+.right-anchor {
+  background-color: var(--right-anchor-bg) !important;
+}
+.right-anchor .right-anchor-btn {
+  color: var(--text-color);
+}
+
+/* =============================================================
+ * 配色模式切换按钮（白天 / 黑夜 / 自动）
+ * 由 enhanceApp.js 注入到导航栏最右侧（"查看源码"右侧），
+ * 避免与右上角目录按钮（right-anchor）重叠
+ * ============================================================= */
+.theme-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  align-self: center;
+  width: 32px;
+  height: 32px;
+  margin-left: .6rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background-color: transparent;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+.theme-switch-btn:hover {
+  transform: scale(1.1);
+  background-color: var(--table-hover);
+}
+.theme-switch-btn svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+// =============================================================
+// 深色模式硬编码颜色兜底覆盖
+// VuePress 主题自带的若干规则在编译产物中晚于本文件加载，且使用
+// 硬编码色值（#000 / #fff / #404040 等），会覆盖上面基于 CSS 变量的
+// 规则，导致深色模式下文字/背景仍是深色。这里统一用
+// html[data-theme='dark'] 提高优先级，确保深色模式全部切换为亮色系。
+// =============================================================
+
+/* 全局正文兜底（段落/列表/表格等继承 body 颜色） */
+html[data-theme='dark'] body {
+  color: var(--text-color);
+}
+html[data-theme='dark'] .theme-default-content {
+  color: var(--text-color);
+}
+
+/* 导航栏右侧区域：搜索框 → 查看源码（含站点名） */
+html[data-theme='dark'] .navbar .links {
+  background-color: var(--navbar-bg);
+}
+html[data-theme='dark'] .navbar .site-name {
+  color: var(--navbar-link);
+}
+html[data-theme='dark'] .nav-links a.router-link-active {
+  color: var(--navbar-link);
+}
+html[data-theme='dark'] .nav-links a:hover {
+  color: var(--link-color);
+}
+html[data-theme='dark'] .dropdown-wrapper .dropdown-title,
+html[data-theme='dark'] .dropdown-wrapper .mobile-dropdown-title {
+  color: var(--navbar-link);
+}
+
+/* 搜索框（vuepress-plugin-fulltext-search 自带样式晚加载且硬编码白色） */
+html[data-theme='dark'] .search-box input {
+  background-color: var(--search-bg);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+html[data-theme='dark'] .search-box .suggestions {
+  background-color: var(--dropdown-bg);
+  border-color: var(--border-color);
+}
+html[data-theme='dark'] .search-box .suggestion a {
+  color: var(--text-color);
+}
+html[data-theme='dark'] .search-box .suggestion.focused {
+  background-color: var(--table-hover);
+}
+html[data-theme='dark'] .search-box .suggestion a .suggestion-row .page-title {
+  background-color: var(--table-th-bg);
+  border-color: var(--border-color);
+}
+
+/* 左侧侧边栏（未展开内容/分组标题） */
+html[data-theme='dark'] .sidebar-heading {
+  color: var(--text-color);
+}
+html[data-theme='dark'] a.sidebar-link {
+  color: var(--sidebar-link);
+}
+html[data-theme='dark'] a.sidebar-link:hover {
+  color: var(--link-color);
+}
+html[data-theme='dark'] a.sidebar-link.active {
+  color: var(--accent-color);
+  border-left-color: var(--accent-color);
+}
+
+/* 右侧目录（vuepress-plugin-right-anchor 按钮/菜单） */
+html[data-theme='dark'] .ra-button,
+html[data-theme='dark'] .ra-menu {
+  background-color: var(--dropdown-bg);
+}
+html[data-theme='dark'] .ra-button,
+html[data-theme='dark'] .ra-menu-item {
+  color: var(--text-color);
+}
+
+/* 正文行内代码（主题 .theme-default-content code 硬编码 #333） */
+html[data-theme='dark'] .theme-default-content :not(pre) > code {
+  color: var(--code-inline-text);
+  background-color: var(--code-inline-bg);
+}
+
+/* 页面底部：编辑链接 / 最后更新时间 */
+html[data-theme='dark'] .page-edit .edit-link a {
+  color: var(--link-color);
+}
+html[data-theme='dark'] .page-edit .last-updated .prefix,
+html[data-theme='dark'] .page-edit .last-updated .time {
+  color: var(--muted-text);
+}
+
+/* 首页（home） */
+html[data-theme='dark'] .home .hero .description {
+  color: var(--muted-text);
+}
+html[data-theme='dark'] .home .feature h2 {
+  color: var(--heading-color);
+}
+html[data-theme='dark'] .home .feature p,
+html[data-theme='dark'] .home .footer {
+  color: var(--muted-text);
+}
+
+/* 提示/警告/危险/折叠 等自定义块（custom-block）深色适配
+   主题默认：tip=浅灰底、warning=浅黄底、danger=浅红底、details=浅灰底，
+   深色模式下浅色底与亮色文字冲突（小贴士白底灰字、警告暗黄底灰字）。
+   这里统一换成低饱和度深色底 + 亮色文字，提高可读性。 */
+html[data-theme='dark'] .custom-block.tip,
+html[data-theme='dark'] .custom-block.warning,
+html[data-theme='dark'] .custom-block.danger {
+  color: #e8e8e8; /* 正文统一亮色 */
+}
+
+/* 小贴士（tip）：深绿灰底 + 亮绿标题 */
+html[data-theme='dark'] .custom-block.tip {
+  background-color: #1d2b25;
+  border-color: #42b983;
+}
+html[data-theme='dark'] .custom-block.tip .custom-block-title {
+  color: #5fd6a3;
+}
+
+/* 警告（warning）：深黄褐底 + 亮黄文字 */
+html[data-theme='dark'] .custom-block.warning {
+  background-color: #2b2517;
+  border-color: #e6c200;
+  color: #eadf9e;
+}
+html[data-theme='dark'] .custom-block.warning .custom-block-title {
+  color: #f2da5f;
+}
+
+/* 危险（danger）：深红褐底 + 亮红文字 */
+html[data-theme='dark'] .custom-block.danger {
+  background-color: #2b1c1e;
+  border-color: #d9534f;
+  color: #f2b0ac;
+}
+html[data-theme='dark'] .custom-block.danger .custom-block-title {
+  color: #f58a85;
+}
+
+/* 折叠块（details）与块内链接 */
+html[data-theme='dark'] .custom-block.details {
+  background-color: #262626;
+  border: 1px solid var(--border-color);
+}
+html[data-theme='dark'] .custom-block.details summary,
+html[data-theme='dark'] .custom-block.details h4 {
+  color: var(--heading-color);
+}
+html[data-theme='dark'] .custom-block.tip a,
+html[data-theme='dark'] .custom-block.warning a,
+html[data-theme='dark'] .custom-block.danger a {
+  color: var(--link-hover);
+}
