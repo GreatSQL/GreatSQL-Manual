@@ -369,6 +369,19 @@ html[data-theme='dark'] .dropdown-wrapper .mobile-dropdown-title {
   color: var(--navbar-link);
 }
 
+/* 导航栏版本切换下拉菜单（主题硬编码白色背景，深色兜底） */
+html[data-theme='dark'] .dropdown-wrapper .nav-dropdown {
+  background-color: var(--dropdown-bg);
+  border: 1px solid var(--border-color);
+}
+html[data-theme='dark'] .dropdown-wrapper .nav-dropdown .dropdown-item a {
+  color: var(--navbar-link);
+}
+html[data-theme='dark'] .dropdown-wrapper .nav-dropdown .dropdown-item a:hover,
+html[data-theme='dark'] .dropdown-wrapper .nav-dropdown .dropdown-item a.router-link-active {
+  color: var(--link-color);
+}
+
 /* 搜索框（vuepress-plugin-fulltext-search 自带样式晚加载且硬编码白色） */
 html[data-theme='dark'] .search-box input {
   background-color: var(--search-bg);
