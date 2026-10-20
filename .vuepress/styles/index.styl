@@ -508,3 +508,60 @@ html[data-theme='dark'] .custom-block.warning a,
 html[data-theme='dark'] .custom-block.danger a {
   color: var(--link-hover);
 }
+
+// =============================================================
+// 代码块折行 / 取消折行
+// 由 enhanceApp.js 在代码块右上角注入 .code-wrap-btn 按钮（复制按钮左侧），
+// 点击切换 wrapped 类，超宽代码自动换行，无需左右横向滚动（参考 TiDB 文档体验）。
+// 代码块背景始终为深色，因此按钮颜色不依赖浅/深色主题变量。
+// =============================================================
+
+.code-wrap-btn {
+  position: absolute;
+  top: 9px;
+  right: 52px;          /* 放在右上角复制按钮的左侧，互不重叠 */
+  z-index: 5;           /* 高于语言标签(3)与代码内容，保证可点击 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background-color: transparent;
+  color: hsla(0, 0%, 100%, 0.6);
+  cursor: pointer;
+  opacity: 0.6;         /* 常显便于发现，悬停变亮 */
+  transition: opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+div[class*='language-']:hover .code-wrap-btn,
+.code-wrap-btn:focus-visible {
+  opacity: 1;
+}
+.code-wrap-btn:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #fff;
+}
+.code-wrap-btn svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  fill: currentColor;
+}
+/* 已开启折行：图标变为绿色提示 */
+.code-wrap-btn.is-wrapped {
+  color: #42b983;
+}
+
+/* 折行状态：pre 内代码自动换行，宽行不再横向溢出 */
+div[class*='language-'].wrapped pre,
+div[class*='language-'].wrapped pre[class*='language-'] {
+  overflow-x: auto;
+}
+div[class*='language-'].wrapped pre code,
+div[class*='language-'].wrapped pre code[class*='language-'] {
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-wrap: break-word;
+}

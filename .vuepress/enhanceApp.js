@@ -106,4 +106,43 @@ export default ({ Vue, router }) => {
   router.afterEach(placeBtn)
   window.addEventListener('load', placeBtn)
   placeBtn() // 首次渲染兜底（导航栏可能尚未挂载，no-op）
+
+  // ========== 代码块折行 / 取消折行 ==========
+  // 在每个 ``` / ```bash / ```sql / ```sh 等围栏代码块右上角注入一个"折行"切换按钮，
+  // 点击后在代码块容器上切换 wrapped 类，由 index.styl 控制 pre 内的代码自动换行，
+  // 避免超宽代码需要左右横向滚动才能阅读（参考 PingCAP TiDB 文档体验）。
+  const CODE_WRAP_ICON =
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3 3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z"/></svg>'
+
+  const injectCodeWrapButtons = () => {
+    document.querySelectorAll('div[class*="language-"]').forEach(block => {
+      // 已注入过的不重复处理（路由切换/组件更新时兜底调用）
+      if (block.querySelector('.code-wrap-btn')) return
+      const pre = block.querySelector('pre')
+      if (!pre) return
+
+      const btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'code-wrap-btn'
+      btn.setAttribute('aria-label', '代码折行显示')
+      btn.setAttribute('aria-pressed', 'false')
+      btn.title = '代码折行显示'
+      btn.innerHTML = CODE_WRAP_ICON
+
+      btn.addEventListener('click', () => {
+        const on = block.classList.toggle('wrapped')
+        btn.classList.toggle('is-wrapped', on)
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false')
+        btn.setAttribute('aria-label', on ? '取消代码折行' : '代码折行显示')
+        btn.title = on ? '取消代码折行' : '代码折行显示'
+      })
+
+      block.appendChild(btn)
+    })
+  }
+
+  router.afterEach(() => setTimeout(injectCodeWrapButtons, 50))
+  Vue.mixin({ updated() { setTimeout(injectCodeWrapButtons, 120) } })
+  window.addEventListener('load', () => setTimeout(injectCodeWrapButtons, 50))
+  setTimeout(injectCodeWrapButtons, 100) // 首屏兜底
 }
