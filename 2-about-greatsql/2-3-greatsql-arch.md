@@ -18,7 +18,7 @@ GreatSQL和MySQL一样，是个单机系统。同样地，GreatSQL也是三层�
 
 经典主从单向复制架构如下图所示：
 
-![传统主从复制技术架构图](/deep-dive-mgr/deep-dive-mgr-02-01.jpg)
+![传统主从复制技术架构图](./3-greatsql-arch-03.png)
 
 **架构说明**
 
@@ -39,7 +39,7 @@ GreatSQL和MySQL一样，是个单机系统。同样地，GreatSQL也是三层�
 
 半同步复制架构如下图所示：
 
-![半同步复制技术架构图](/deep-dive-mgr/deep-dive-mgr-02-02.jpg)
+![半同步复制技术架构图](./3-greatsql-arch-04.png)
 
 **架构说明**
 
@@ -79,7 +79,7 @@ MGR具备以下几个特点：
 
 首先来个MGR的技术架构图：
 
-![MGR技术架构图](/deep-dive-mgr/deep-dive-mgr-02-03.jpg)
+![MGR 技术架构图](./3-greatsql-arch-05.png#pic_center)
 
 **架构说明**
 
@@ -103,14 +103,14 @@ MGR支持单主和多主两种模式，在单主模式下，各节点会自动�
 
 **单主（Single-Primary）模式**
 
-![MGR单主模式](/deep-dive-mgr/single-primary-election.png)
+![MGR 单主模式](./3-greatsql-arch-06.png#pic_center)
 **架构说明**
 
 如上图所示，一开始S1节点是Primary角色，提供读写服务。当它发生故障时，剩下的S2-S5节点会再投票选举出S2作为新的Primary角色提供读写服务，而S1节点再达到一定超时阈值后，就会被踢出。
 
 **多主（Multi-Primary）模式**
 
-![MGR多主模式](/deep-dive-mgr/multi-primary.png)
+![MGR 多主模式](./3-greatsql-arch-07.png#pic_center)
 **架构说明**
 
 如上图所示，一开始S1-S5所有节点都是Primary角色，都可以提供读写服务，任何一个节点发生故障时，只需要把指向这个节点的流量切换下就行。
@@ -138,4 +138,4 @@ MySQL数据库架构通常有以下几种方案：
 
 扫码关注微信公众号
 
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/141935_2ea2c196_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")
+![greatsql-wx](../greatsql-wx.jpg)

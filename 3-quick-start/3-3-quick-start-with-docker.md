@@ -92,4 +92,4 @@ Threads: 2  Questions: 6  Slow queries: 0  Opens: 119  Flush tables: 3  Open tab
 
 扫码关注微信公众号
 
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/141935_2ea2c196_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")
+![greatsql-wx](../greatsql-wx.jpg)
