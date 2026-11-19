@@ -1,0 +1,9 @@
+# MGR Data Consistency
+
+> 🚧 **English translation in progress.** This page is a temporary placeholder and will be replaced with the translated content.
+
+For now, please read the [Chinese version](/8-mgr/6-mgr-data-security.html).
+
+---
+
+*This placeholder was auto-generated in Phase 1 (i18n scaffolding).*
