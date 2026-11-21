@@ -893,9 +893,9 @@ module.exports = [
             path: '/en/10-optimize/3-performance-benchmark',
 	    sidebarDepth: 0,
             children: [
-	      {title: 'sysbench测试', path: '/en/10-optimize/3-1-benchmark-sysbench'},
-	      {title: 'BenchmarkSQL测试', path: '/en/10-optimize/3-4-benchmarksql'},
-	      {title: 'TPC-H测试', path: '/en/10-optimize/3-2-benchmark-tpch'},
+	      {title: 'sysbench Benchmark', path: '/en/10-optimize/3-1-benchmark-sysbench'},
+	      {title: 'BenchmarkSQL Benchmark', path: '/en/10-optimize/3-4-benchmarksql'},
+	      {title: 'TPC-H Benchmark', path: '/en/10-optimize/3-2-benchmark-tpch'},
 	    ],
 	  },
         ]
@@ -906,14 +906,14 @@ module.exports = [
         sidebarDepth: 0,
         //path: '/en/13-reference/1-index',
         children: [
-	  {title: '索引', path: '/en/13-reference/1-index'},
-	  {title: '保留字、关键字', path: '/en/2-about-greatsql/7-greatsql-keywords'},
-	  {title: '系统参数变量、状态变量', path: '/en/13-reference/3-variables'},
-	  {title: '优势特性', path: '/en/1-docs-intro/1-3-greatsql-features'},
-	  {title: 'SQL兼容性', path: '/en/5-enhance/5-3-easyuse'},
-	  {title: '应用开发', path: '/en/12-dev-guide/12-dev-guide'},
-	  {title: '为什么升级到GreatSQL 8.4', path: '/en/7-migrate-and-upgrade/1-upgrade-to-greatsql8'},
-	  {title: '认证资质与荣誉', path: '/en/13-reference/8-credential-and-honor'},
+	  {title: 'Index', path: '/en/13-reference/1-index'},
+	  {title: 'Reserved Words & Keywords', path: '/en/2-about-greatsql/7-greatsql-keywords'},
+	  {title: 'System & Status Variables', path: '/en/13-reference/3-variables'},
+	  {title: 'Key Features', path: '/en/1-docs-intro/1-3-greatsql-features'},
+	  {title: 'SQL Compatibility', path: '/en/5-enhance/5-3-easyuse'},
+	  {title: 'Application Development', path: '/en/12-dev-guide/12-dev-guide'},
+	  {title: 'Why Upgrade to GreatSQL 8.4', path: '/en/7-migrate-and-upgrade/1-upgrade-to-greatsql8'},
+	  {title: 'Certifications & Honors', path: '/en/13-reference/8-credential-and-honor'},
         ]
       },
       {
