@@ -1,13 +1,13 @@
 # GreatSQL User Manual (English)
 
 > 🌐 **Bilingual site.** This is the English edition of the GreatSQL 8.4.4-5 User Manual.
-> The Chinese edition is available at [GreatSQL用户手册](/).
+> The Chinese edition is available at [Chinese User Manual](/).
 >
-> 🚧 **Translation status:** The English documentation is being translated progressively.
-> Chapters marked as *placeholder* are not translated yet — please read the [Chinese version](/)
-> for now. This placeholder page will be replaced as translations are published.
+> ✅ **Translation status:** All chapters have been translated into English and are fully
+> available on this site. Screenshots in the English pages are shared with the Chinese
+> edition (they have not been re-made for English).
 
-Last updated: 2026-10-20.
+Last updated: 2026-11-19.
 
 Documentation applies to: **GreatSQL 8.4.4-5**.
 
@@ -27,22 +27,23 @@ MySQL or Percona Server for MySQL.
 
 ## Documentation Chapters
 
-| Chapter | Status |
-| --- | --- |
-| [1. Documentation Introduction](/en/1-docs-intro/) | Placeholder |
-| [2. About GreatSQL](/en/2-about-greatsql/) | Placeholder |
-| [3. Quick Start](/en/3-quick-start/) | Placeholder |
-| [4. Installation Guide](/en/4-install-guide/) | Placeholder |
-| [5. GreatSQL Enhancements](/en/5-enhance/) | Placeholder |
-| [6. Operations & Maintenance](/en/6-oper-guide/) | Placeholder |
-| [7. Migration & Upgrade](/en/7-migrate-and-upgrade/) | Placeholder |
-| [8. MGR (Group Replication)](/en/8-mgr/) | Placeholder |
-| [9. High Availability Architectures](/en/9-ha/) | Placeholder |
-| [10. Performance Optimization](/en/10-optimize/) | Placeholder |
-| [11. FAQ](/en/11-faq/) | Placeholder |
-| [12. Application Development](/en/12-dev-guide/) | Placeholder |
-| [13. Reference Guide](/en/13-reference/) | Placeholder |
-| [14. Online Demo](/en/14-greatsql-demo/) | Placeholder |
+| Chapter | Files | Status |
+| --- | --- | --- |
+| [1. Documentation Introduction](/en/1-docs-intro/1-docs-intro) | 16/16 | ✅ Translated |
+| [2. About GreatSQL](/en/2-about-greatsql/0-about-greatsql) | 14/14 | ✅ Translated |
+| [3. Quick Start](/en/3-quick-start/3-quick-start) | 6/6 | ✅ Translated |
+| [4. Installation Guide](/en/4-install-guide/0-install-guide) | 18/18 | ✅ Translated |
+| [5. GreatSQL Enhancements](/en/5-enhance/5-enhance) | 141/141 | ✅ Translated |
+| [6. Operations & Maintenance](/en/6-oper-guide/0-oper-guide) | 36/36 | ✅ Translated |
+| [7. Migration & Upgrade](/en/7-migrate-and-upgrade/0-migrate-and-upgrade) | 5/5 | ✅ Translated |
+| [8. MGR (Group Replication)](/en/8-mgr/0-mgr-fundamentals) | 9/9 | ✅ Translated |
+| [9. High Availability Architectures](/en/9-ha/0-ha) | 6/6 | ✅ Translated |
+| [10. Performance Optimization](/en/10-optimize/0-optimize) | 17/17 | ✅ Translated |
+| [11. FAQ](/en/11-faq/0-faq) | 6/6 | ✅ Translated |
+| [12. Application Development](/en/12-dev-guide/12-dev-guide) | 47/47 | ✅ Translated |
+| [13. Reference Guide](/en/13-reference/1-index) | 8/8 | ✅ Translated |
+| [14. Online Demo](/en/14-greatsql-demo/greatsql-live-demo) | 3/3 | ✅ Translated |
+| **Total** | **332/332** | **All chapters translated** |
 
 ## Core Features
 
