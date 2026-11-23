@@ -7,7 +7,7 @@
 > available on this site. Screenshots in the English pages are shared with the Chinese
 > edition (they have not been re-made for English).
 
-Last updated: 2026-11-19.
+Last updated: 2026-11-23.
 
 Documentation applies to: **GreatSQL 8.4.4-5**.
 

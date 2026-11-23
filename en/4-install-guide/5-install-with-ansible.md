@@ -208,7 +208,7 @@ $ systemctl status greatsql
    Loaded: loaded (/usr/lib/systemd/system/greatsql.service; disabled; vendor preset: disabled)
    Active: active (running) since Tue 2023-08-08 12:26:08 CST; 1h 58min ago
      Docs: man:mysqld(8)
-           http://dev.mysql.com/doc/refman/en/using-systemd.html
+           https://dev.mysql.com/doc/refman/8.4/en/using-systemd.html
   Process: 77972 ExecStartPre=/usr/local/GreatSQL-8.0.32-25-Linux-glibc2.28-x86_64-minimal/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
  Main PID: 78043 (mysqld)
    Status: "Server is operational"

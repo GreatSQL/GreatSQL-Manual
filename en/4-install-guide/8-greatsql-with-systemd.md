@@ -21,7 +21,7 @@ If GreatSQL is installed with the binary package, the service configuration file
 [Unit]
 Description=GreatSQL Server
 Documentation=man:mysqld(8)
-Documentation=http://dev.mysql.com/doc/refman/en/using-systemd.html
+Documentation=https://dev.mysql.com/doc/refman/8.4/en/using-systemd.html
 After=network.target
 After=syslog.target
 [Install]

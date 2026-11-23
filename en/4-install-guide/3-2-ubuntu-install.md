@@ -264,7 +264,7 @@ It is recommended to use systemd to manage the GreatSQL service. Execute the `vi
 [Unit]
 Description=GreatSQL Server
 Documentation=man:mysqld(8)
-Documentation=http://dev.mysql.com/doc/refman/en/using-systemd.html
+Documentation=https://dev.mysql.com/doc/refman/8.4/en/using-systemd.html
 After=network.target
 After=syslog.target
 [Install]
@@ -376,7 +376,7 @@ $ systemctl status greatsql
    Loaded: loaded (/etc/systemd/system/greatsql.service; disabled; vendor preset: disabled)
    Active: failed (Result: exit-code) since ...
      Docs: man:mysqld(8)
-           http://dev.mysql.com/doc/refman/en/using-systemd.html
+           https://dev.mysql.com/doc/refman/8.4/en/using-systemd.html
   Process: 1258165 ExecStart=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld $MYSQLD_OPTS (code=exited, status=1/FAILURE)
   Process: 1257969 ExecStartPre=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
  Main PID: 1258165 (code=exited, status=1/FAILURE)
@@ -408,7 +408,7 @@ $ systemctl status greatsql
    Loaded: loaded (/etc/systemd/system/greatsql.service; disabled; vendor preset: disabled)
    Active: active (running) since Tue 2024-07-12 10:08:06 CST; 6min ago
      Docs: man:mysqld(8)
-           http://dev.mysql.com/doc/refman/en/using-systemd.html
+           https://dev.mysql.com/doc/refman/8.4/en/using-systemd.html
   Process: 60129 ExecStartPre=/usr/local/GreatSQL-8.4.4-5-Linux-glibc2.28-x86_64/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
  Main PID: 60231 (mysqld)
    Status: "Server is operational"

@@ -329,7 +329,7 @@ $ systemctl status mysqld
    Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)
    Active: active (running) since ...
      Docs: man:mysqld(8)
-           http://dev.mysql.com/doc/refman/en/using-systemd.html
+           https://dev.mysql.com/doc/refman/8.4/en/using-systemd.html
   Process: 51902 ExecStartPre=/usr/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
  Main PID: 52003 (mysqld)
    Status: "Server is operational"

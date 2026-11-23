@@ -195,7 +195,7 @@ Modify the systemd service file and add the `AmbientCapabilities` parameter. For
 [Unit]
 Description=GreatSQL Server
 Documentation=man:mysqld(8)
-Documentation=http://dev.mysql.com/doc/refman/en/using-systemd.html
+Documentation=https://dev.mysql.com/doc/refman/8.4/en/using-systemd.html
 After=network.target
 After=syslog.target
 [Install]
