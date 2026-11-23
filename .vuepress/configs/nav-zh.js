@@ -2,9 +2,12 @@
 module.exports = [
       { text: '8.4.4-5', 
         items: [
-        {text: '8.4.4-5',   link: 'https://greatsql.cn/docs/8.4.4-5/',   target: '_self'},
-        {text: '8.4.4-4',   link: 'https://greatsql.cn/docs/8.4.4-4/',   target: '_self'},
-        {text: '8.0.32-27', link: 'https://greatsql.cn/docs/8.0.32-27/', target: '_self'},
+        {text: '8.4.4-5（简体中文）',   link: 'https://greatsql.cn/docs/8.4.4-5/',     target: '_self'},
+        {text: '8.4.4-5（English）',   link: 'https://greatsql.cn/docs/8.4.4-5/en/',   target: '_self'},
+        {text: '8.4.4-4（简体中文）',   link: 'https://greatsql.cn/docs/8.4.4-4/',     target: '_self'},
+        {text: '8.4.4-4（English）',   link: 'https://greatsql.cn/docs/8.4.4-4/en/',   target: '_self'},
+        {text: '8.0.32-27（简体中文）', link: 'https://greatsql.cn/docs/8.0.32-27/',   target: '_self'},
+        {text: '8.0.32-27（English）', link: 'https://greatsql.cn/docs/8.0.32-27/en/', target: '_self'},
         {text: '8.0.32-26', link: 'https://greatsql.cn/docs/8.0.32-26/', target: '_self'},
         {text: '8.0.32-25', link: 'https://greatsql.cn/docs/8.0.32-25/', target: '_self'},
         {text: '8.0.32-24', link: 'https://greatsql.cn/docs/8.0.32-24/', target: '_self'},
