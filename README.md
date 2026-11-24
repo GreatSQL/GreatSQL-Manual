@@ -4,9 +4,11 @@
 [![](https://img.shields.io/badge/License-GPL_v2.0-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/blob/master/LICENSE)
 [![](https://img.shields.io/badge/release-8.0.32_27-blue.svg)](https://gitee.com/GreatSQL/GreatSQL/releases/tag/GreatSQL-8.0.32-27)
 
-最后更新：2025-10-14。
+最后更新：2026-11-24。
 
 本文档适用版本：GreatSQL 8.0.32-27。
+
+> 🌐 **双语站点**：本手册提供 [英文版（English User Manual）](/en/)，中英内容同步更新。
 
 ## 关于 GreatSQL
 

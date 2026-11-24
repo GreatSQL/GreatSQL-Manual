@@ -1,0 +1,217 @@
+# Importing Test Data
+---
+
+After installing the GreatSQL database, if it is used for teaching or testing scenarios, several common test datasets can be imported, mainly:
+- Employees sample database
+- world sample database
+- Sakila sample database
+
+## Downloading the Test Dataset Packages
+The download addresses of the above three test datasets are respectively:
+- [https://github.com/datacharmer/test_db](https://github.com/datacharmer/test_db)
+- [https://downloads.mysql.com/docs/world-db.tar.gz](https://downloads.mysql.com/docs/world-db.tar.gz)
+- [https://downloads.mysql.com/docs/sakila-db.tar.gz](https://downloads.mysql.com/docs/sakila-db.tar.gz)
+
+Download them to the local machine respectively, and decompress them to the `/tmp/testdb` directory:
+
+```bash
+$ ls -l /tmp/testdb
+
+drwxr-xr-x 2  500  500      100 Aug  1 06:06 sakila-db  #<--sakila test dataset
+-rw------- 1 root root   732290 Aug  1 06:06 sakila-db.tar.gz
+drwx------ 4 root root      460 Aug 29 15:33 test_db    #<--employees test dataset
+-rw------- 1 root root 35607473 Aug 29 15:32 test_db-1.0.7.tar.gz
+drwxr-xr-x 2  500  500       60 Aug  1 06:06 world-db   #<--world test dataset
+-rw------- 1 root root    92916 Aug  1 06:06 world-db.tar.gz
+```
+
+## Importing Test Datasets
+### Importing the employees Dataset
+The employees test data package provides the import method documentation *README.md*. Basically, just follow it.
+
+In the Linux terminal command line mode, execute the following command to import the test data (here, the root account with the highest privileges is used for import, so the step of creating a test account is skipped; the same applies below):
+```bash
+mysql -f < employees.sql
+```
+
+::: details View the result
+```bash
+$ mysql -f < employees.sql
+
+...
+INFO
+CREATING DATABASE STRUCTURE
+INFO
+storage engine: InnoDB
+INFO
+LOADING departments
+INFO
+LOADING employees
+INFO
+LOADING dept_emp
+INFO
+LOADING dept_manager
+INFO
+LOADING titles
+INFO
+LOADING salaries
+data_load_time_diff
+00:02:28
+```
+:::
+
+After the import is complete, connect to GreatSQL and execute the following SQL command to complete data validation and confirm that the import result is correct:
+```sql
+SOURCE /tmp/testdb/test_db/test_employees_md5.sql;
+```
+
+::: details View the result
+```sql
+greatsql> SOURCE /tmp/testdb/test_db/test_employees_md5.sql;
++----------------------+
+| INFO                 |
++----------------------+
+| TESTING INSTALLATION |
++----------------------+
+...
++--------------+------------------+----------------------------------+
+| table_name   | expected_records | expected_crc                     |
++--------------+------------------+----------------------------------+
+| departments  |                9 | d1af5e170d2d1591d776d5638d71fc5f |
+| dept_emp     |           331603 | ccf6fe516f990bdaa49713fc478701b7 |
+| dept_manager |               24 | 8720e2f0853ac9096b689c14664f847e |
+| employees    |           300024 | 4ec56ab5ba37218d187cf6ab09ce1aa1 |
+| salaries     |          2844047 | fd220654e95aea1b169624ffe3fca934 |
+| titles       |           443308 | bfa016c472df68e70a03facafa1bc0a8 |
++--------------+------------------+----------------------------------+
+...
++--------------+------------------+----------------------------------+
+| table_name   | found_records    | found_crc                        |
++--------------+------------------+----------------------------------+
+| departments  |                9 | d1af5e170d2d1591d776d5638d71fc5f |
+| dept_emp     |           331603 | ccf6fe516f990bdaa49713fc478701b7 |
+| dept_manager |               24 | 8720e2f0853ac9096b689c14664f847e |
+| employees    |           300024 | 4ec56ab5ba37218d187cf6ab09ce1aa1 |
+| salaries     |          2844047 | fd220654e95aea1b169624ffe3fca934 |
+| titles       |           443308 | bfa016c472df68e70a03facafa1bc0a8 |
++--------------+------------------+----------------------------------+
+...
++--------------+---------------+-----------+
+| table_name   | records_match | crc_match |
++--------------+---------------+-----------+
+| departments  | OK            | ok        |
+| dept_emp     | OK            | ok        |
+| dept_manager | OK            | ok        |
+| employees    | OK            | ok        |
+| salaries     | OK            | ok        |
+| titles       | OK            | ok        |
++--------------+---------------+-----------+
+..
++------------------+
+| computation_time |
++------------------+
+| 00:02:15         |
++------------------+
+...
++---------+--------+
+| summary | result |
++---------+--------+
+| CRC     | OK     |
+| count   | OK     |
++---------+--------+
+```
+:::
+
+It looks validated correctly.
+
+### Importing the world Dataset
+Execute the following command to import the world dataset:
+```sql
+SOURCE /tmp/testdb/world-db/world.sql;
+```
+
+::: details View the result
+```sql
+greatsql> SOURCE /tmp/testdb/world-db/world.sql;
+...
+
+greatsql> SELECT COUNT(*) FROM city;
++----------+
+| count(*) |
++----------+
+|     4079 |
++----------+
+
+greatsql> SELECT COUNT(*) FROM country;
++----------+
+| count(*) |
++----------+
+|      239 |
++----------+
+
+greatsql> SELECT COUNT(*) FROM countrylanguage;
++----------+
+| count(*) |
++----------+
+|      984 |
++----------+
+```
+:::
+The import is complete.
+
+### Importing the Sakila Dataset
+Execute the following commands to initialize the Sakila test database:
+
+```sql
+SOURCE /tmp/testdb/sakila-db/sakila-schema.sql;
+SOURCE /tmp/testdb/sakila-db/sakila-data.sql;
+```
+
+::: details View the result
+```sql
+greatsql> SOURCE /tmp/testdb/sakila-db/sakila-schema.sql;
+greatsql> SOURCE /tmp/testdb/sakila-db/sakila-data.sql;
+
+greatsql> SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE, ENGINE, TABLE_ROWS 
+  FROM information_schema.TABLES WHERE table_schema = 'sakila';
++--------------+----------------------------+------------+--------+------------+
+| TABLE_SCHEMA | TABLE_NAME                 | TABLE_TYPE | ENGINE | TABLE_ROWS |
++--------------+----------------------------+------------+--------+------------+
+| sakila       | actor                      | BASE TABLE | InnoDB |        200 |
+| sakila       | actor_info                 | VIEW       | NULL   |       NULL |
+| sakila       | address                    | BASE TABLE | InnoDB |        603 |
+| sakila       | category                   | BASE TABLE | InnoDB |         16 |
+| sakila       | city                       | BASE TABLE | InnoDB |        600 |
+| sakila       | country                    | BASE TABLE | InnoDB |        109 |
+| sakila       | customer                   | BASE TABLE | InnoDB |        599 |
+| sakila       | customer_list              | VIEW       | NULL   |       NULL |
+| sakila       | film                       | BASE TABLE | InnoDB |       1000 |
+| sakila       | film_actor                 | BASE TABLE | InnoDB |       5462 |
+| sakila       | film_category              | BASE TABLE | InnoDB |       1000 |
+| sakila       | film_list                  | VIEW       | NULL   |       NULL |
+| sakila       | film_text                  | BASE TABLE | InnoDB |       1000 |
+| sakila       | inventory                  | BASE TABLE | InnoDB |       4581 |
+| sakila       | language                   | BASE TABLE | InnoDB |          6 |
+| sakila       | nicer_but_slower_film_list | VIEW       | NULL   |       NULL |
+| sakila       | payment                    | BASE TABLE | InnoDB |      16500 |
+| sakila       | rental                     | BASE TABLE | InnoDB |      16010 |
+| sakila       | sales_by_film_category     | VIEW       | NULL   |       NULL |
+| sakila       | sales_by_store             | VIEW       | NULL   |       NULL |
+| sakila       | staff                      | BASE TABLE | InnoDB |          2 |
+| sakila       | staff_list                 | VIEW       | NULL   |       NULL |
+| sakila       | store                      | BASE TABLE | InnoDB |          2 |
++--------------+----------------------------+------------+--------+------------+
+```
+:::
+
+The import is complete.
+
+Next, queries and tests can be run.
+
+For more details about the test databases, refer to [**Other MySQL Documentation**](https://dev.mysql.com/doc/index-other.html).
+
+
+
+**Scan the QR code to follow our WeChat Official Account**
+
+![greatsql-wx](../greatsql-wx.jpg)

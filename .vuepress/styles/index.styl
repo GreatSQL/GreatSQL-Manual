@@ -565,3 +565,27 @@ div[class*='language-'].wrapped pre code[class*='language-'] {
   word-break: break-all;
   overflow-wrap: break-word;
 }
+
+// 中/英语言切换按钮（替代默认主题的语言下拉菜单）
+.lang-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  align-self: center;
+  margin-left: .6rem;
+  padding: .2rem .7rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: transparent;
+  color: var(--navbar-link);
+  font-size: .9rem;
+  line-height: 1.5;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.lang-switch-btn:hover {
+  color: var(--link-color);
+  border-color: var(--link-color);
+  background-color: var(--table-hover);
+}
