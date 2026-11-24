@@ -4,6 +4,17 @@ module.exports = {
   title: '',
   base: '/docs/community/',
   debug: false,
+  // 多语言站点元信息（HTML lang、站点标题、描述按 locale 区分）
+  locales: {
+    '/': {
+      lang: 'zh-CN',
+    },
+    '/en/': {
+      lang: 'en-US',
+      title: 'GreatSQL Community',
+      description: 'GreatSQL Community',
+    },
+  },
   head: [
     // 首帧设置配色主题，避免页面刷新时白屏闪烁（light/dark/auto 三态）
     ["script",
@@ -50,6 +61,10 @@ module.exports = {
       ],
       'vuepress-plugin-right-anchor',{
         showDepth: 3,
+        // 英文站首页（/en/）不显示右侧锚点目录
+        ignore: [
+          '/en/',
+        ],
         expand: {
           trigger: 'click',  //'hover' | 'click'
           clickModeDefaultOpen: true
@@ -82,34 +97,52 @@ module.exports = {
     search: true,
     searchMaxSuggestions: 10,
     branch: 'community',
-    sidebar: [
-      {
-        title: '参与贡献',
-        path: '/',
+    // ========== 多语言（i18n）配置 ==========
+    // 中英文双站：/（中文，源文件在仓库根目录）+ /en/（英文，源文件在 en/ 目录）
+    // 导航栏「语言」下拉由 VuePress 默认主题根据 locales 自动渲染，enhanceApp.js 会隐藏该
+    // 下拉并注入自定义中英一键直切按钮（文案 English/简体中文）
+    locales: {
+      '/': {
+        label: '简体中文',
+        selectText: '语言',
+        ariaLabel: '选择语言',
+        nav: [
+          { text: 'GreatSQL社区', link: 'https://greatsql.cn/' },
+          { text: 'Gitee', link: 'https://gitee.com/GreatSQL/GreatSQL' },
+          { text: 'Github', link: 'https://github.com/GreatSQL/GreatSQL' },
+          { text: '错误反馈', link: 'https://greatsql.cn/forum-39-1.html' },
+        ],
+        sidebar: [
+          {
+            title: '参与贡献',
+            path: '/',
+          },
+          {
+            title: '社区行为守则',
+            path: '2-community-rules',
+          },
+          {
+            title: '社区治理',
+            path: '3-community-toc',
+          },
+          {
+            title: '兼容适配流程说明',
+            path: '5-greatsql-adaptation',
+          },
+          {
+            title: '致谢',
+            path: '6-thanks',
+          },
+        ],
       },
-      {
-        title: '社区行为守则',
-        path: '2-community-rules',
+      '/en/': {
+        label: 'English',
+        selectText: 'Languages',
+        ariaLabel: 'Select language',
+        nav: require('./configs/nav-en.js'),
+        sidebar: require('./configs/sidebar-en.js'),
       },
-      {
-        title: '社区治理',
-        path: '3-community-toc',
-      },
-      {
-        title: '兼容适配流程说明',
-        path: '5-greatsql-adaptation',
-      },
-      {
-        title: '致谢',
-        path: '6-thanks',
-      },
-    ],
-    nav: [
-      { text: 'GreatSQL社区', link: 'https://greatsql.cn/' },
-      { text: 'Gitee', link: 'https://gitee.com/GreatSQL/GreatSQL' },
-      { text: 'Github', link: 'https://github.com/GreatSQL/GreatSQL' },
-      { text: '错误反馈', link: 'https://greatsql.cn/forum-39-1.html' },
-    ],
+    },
     footer: {
         copyright: '©2023 GreatSQL All Rights Reserved. ( 京ICP备06057874号 )'
     }

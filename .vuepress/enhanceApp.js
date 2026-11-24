@@ -8,6 +8,13 @@ const MODE_LABEL = {
   auto: '自动模式'
 }
 
+// 英文环境下的配色模式文案（i18n）
+const MODE_LABEL_EN = {
+  light: 'Light mode',
+  dark: 'Dark mode',
+  auto: 'Auto mode'
+}
+
 // 各模式按钮图标（SVG，随当前文字颜色渲染）
 const MODE_ICON = {
   light:
@@ -44,6 +51,12 @@ function readSavedMode() {
 }
 
 export default ({ Vue, router }) => {
+  // 当前是否为英文站点（/en/ 路径前缀）
+  const isEnLocale = () =>
+    router.currentRoute && router.currentRoute.path.indexOf('/en/') === 0
+  // 根据当前 locale 选择文案：L('中文', 'English')
+  const L = (zh, en) => (isEnLocale() ? en : zh)
+
   // 路由切换事件处理（保留原有百度 PV 统计）
   router.beforeEach((to, from, next) => {
     if (typeof _hmt != "undefined") {
@@ -80,7 +93,10 @@ export default ({ Vue, router }) => {
 
   const updateBtn = () => {
     btn.innerHTML = MODE_ICON[currentMode] || MODE_ICON.auto
-    btn.title = MODE_LABEL[currentMode] + '（点击切换）'
+    btn.title = isEnLocale()
+      ? MODE_LABEL_EN[currentMode] + ' (click to switch)'
+      : MODE_LABEL[currentMode] + '（点击切换）'
+    btn.setAttribute('aria-label', L('切换配色模式', 'Switch color mode'))
   }
 
   btn.addEventListener('click', () => {
@@ -103,7 +119,94 @@ export default ({ Vue, router }) => {
       host.appendChild(btn)
     }
   }
-  router.afterEach(placeBtn)
+  router.afterEach(() => { placeBtn(); updateBtn() })
   window.addEventListener('load', placeBtn)
   placeBtn() // 首次渲染兜底（导航栏可能尚未挂载，no-op）
+
+  // ========== 语言切换（中/英一键直切，替代默认主题的「语言」下拉菜单） ==========
+  // 默认主题 NavLinks 会自动把「语言」下拉追加到导航栏最右侧（标题为 语言/Languages），
+  // 这里将其移除，改为注入一个按钮：中文站显示 English，英文站显示 简体中文，
+  // 点击优先跳转当前页面对应的另一语言页面，目标页不存在时回退到语言首页。
+  const langBtn = document.createElement('button')
+  langBtn.type = 'button'
+  langBtn.className = 'lang-switch-btn'
+
+  // 隐藏 NavLinks 渲染的语言下拉（仅匹配标题为 语言/Languages 的 dropdown-wrapper，
+  // 避免误删其他下拉）。
+  // 注意：不能用 item.remove() 直接删除该节点 —— 该节点仍存在于 Vue 的 vnode 树中，
+  // NavLinks 重渲染时 Vue 会尝试重建被删除的节点，由于 DOM 已被手动改动，patch 会把
+  // 新节点 appendChild 到文本节点上抛 HierarchyRequestError，导致 Vue 渲染中断，
+  // 出现「语言切换后页面不更新」「侧边栏无法展开」等连锁故障。
+  // 改为仅隐藏（display:none 是行内样式，Vue 的 patch 不会清除无 style 数据的节点样式），
+  // 保持 DOM 与 vnode 树一致，避免破坏 Vue 的 diff 流程。
+  const removeLangDropdown = () => {
+    const host = document.querySelector('.navbar .nav-links')
+    if (!host) return
+    host.querySelectorAll('.dropdown-wrapper').forEach(w => {
+      const title = w.querySelector('.dropdown-title .title')
+      if (title) {
+        const t = title.textContent.trim()
+        if (t === '语言' || t === 'Languages') {
+          const item = w.closest('.nav-item')
+          if (item) item.style.display = 'none'
+        }
+      }
+    })
+  }
+
+  // 计算目标语言页面：站内路径 + 用于探测静态文件是否存在的完整 URL
+  // vuepress 1.x 的页面路由 path 带 .html 后缀（如 /2-community-rules.html），
+  // 首页为 '/' 或 '/en/'，探测 URL 直接从 path 推导即可
+  const langTarget = () => {
+    const path = router.currentRoute.path
+    const en = path === '/en/' || path.indexOf('/en/') === 0
+    const targetPath = en
+      ? (path === '/en/' ? '/' : path.replace(/^\/en/, ''))
+      : (path === '/' ? '/en/' : '/en' + path)
+    // 从当前 URL 推断站点 base（如 /docs/community/），再拼目标页面静态文件地址；
+    // 优先使用 vue-router 的 options.base（VuePress 已注入站点 base 固定值），
+    // 避免从 location.pathname 反推在无尾斜杠等边界 URL（如访问 /docs/community）下推导错误
+    const P = window.location.pathname
+    let base = router.options && router.options.base
+    if (!base || !base.endsWith('/')) {
+      base = P.endsWith(path)
+        ? P.slice(0, P.length - path.length)
+        : P.slice(0, P.lastIndexOf('/') + 1)
+      base = base.endsWith('/') ? base : base + '/'
+    }
+    const pathPart = targetPath === '/' ? '' : targetPath.replace(/^\//, '')
+    return { targetPath, probeUrl: base + pathPart }
+  }
+
+  const updateLangBtn = () => {
+    langBtn.textContent = isEnLocale() ? '简体中文' : 'English'
+    const label = L('切换至英文版', 'Switch to Chinese version')
+    langBtn.setAttribute('aria-label', label)
+    langBtn.title = label
+  }
+
+  langBtn.addEventListener('click', () => {
+    const { targetPath, probeUrl } = langTarget()
+    const fallback = isEnLocale() ? '/' : '/en/'
+    fetch(probeUrl, { method: 'HEAD', cache: 'no-store' })
+      .then(res => router.push(res.ok ? targetPath : fallback))
+      .catch(() => router.push(fallback))
+  })
+
+  // 将按钮插入到导航链接之后（原语言下拉所在区域）。路由切换后 Vue 可能重建
+  // NavLinks，语言下拉会再次出现，因此每次路由切换都重新移除+兜底插入
+  const ensureLangSwitch = () => {
+    removeLangDropdown()
+    const host = document.querySelector('.navbar .links')
+    if (!host) return
+    if (langBtn.parentNode === host) return
+    const navLinks = host.querySelector('.nav-links')
+    host.insertBefore(langBtn, navLinks ? navLinks.nextSibling : null)
+  }
+  router.afterEach(() => { ensureLangSwitch(); updateLangBtn() })
+  window.addEventListener('load', ensureLangSwitch)
+  ensureLangSwitch()
+  updateLangBtn()
+  // Vue 挂载(SSR hydrate)后可能重建导航栏 DOM，语言下拉会再次出现，延迟再兜底一次
+  setTimeout(ensureLangSwitch, 200)
 }
