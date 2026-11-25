@@ -4,6 +4,9 @@ module.exports = {
   title: 'GreatSQL用户手册',
   base: '/docs/8.0.32-26/',
   debug: false,
+  // 关闭 VuePress 默认对所有路由 chunk 的 prefetch：
+  // 页面 chunk（合计约 22MB）不再在首页空闲时被全部下载，首屏关键资源不再被抢带宽
+  shouldPrefetch: () => false,
   head: [
     // 首帧设置配色主题，避免页面刷新时白屏闪烁（light/dark/auto 三态）
     ["script",
@@ -24,9 +27,9 @@ module.exports = {
 	  `var _hmt = _hmt || [];
 	  (function() {
 	    var hm = document.createElement("script");
+	    hm.async = true; // 异步加载百度统计，不阻塞首屏渲染
 	    hm.src = "https://hm.baidu.com/hm.js?764bde358e08c602c0d5f94f7b05eda4";
-	    var s = document.getElementsByTagName("script")[0]; 
-	    s.parentNode.insertBefore(hm, s);
+	    document.head.appendChild(hm);
 	  })();`,
   ]],
   description: "GreatSQL User Manual",
@@ -40,8 +43,10 @@ module.exports = {
   plugins: [ 
       ['@vuepress/back-to-top'],
       ['@vuepress/nprogress'],
+      // 全文搜索：由官方 vuepress-plugin-fulltext-search 改造为异步/Worker 加载版
+      // （搜索数据不再打进 app.js 主包，改为首次使用搜索时懒加载 search-data.json + Web Worker 建索引）
       [
-        'fulltext-search',
+        require('./plugins/fulltext-search-async.js'),
         {
           tokenize: 'full',
           split: /\s+/,
@@ -992,9 +997,12 @@ module.exports = {
     nav: [
       { text: '8.0.32-26', 
         items: [
-        {text: '8.4.4-5',   link: 'https://greatsql.cn/docs/8.4.4-5/',   target: '_self'},
-        {text: '8.4.4-4',   link: 'https://greatsql.cn/docs/8.4.4-4/',   target: '_self'},
-        {text: '8.0.32-27', link: 'https://greatsql.cn/docs/8.0.32-27/', target: '_self'},
+        {text: '8.4.4-5（简体中文）',   link: 'https://greatsql.cn/docs/8.4.4-5/',     target: '_self'},
+        {text: '8.4.4-5（English）',   link: 'https://greatsql.cn/docs/8.4.4-5/en/',   target: '_self'},
+        {text: '8.4.4-4（简体中文）',   link: 'https://greatsql.cn/docs/8.4.4-4/',     target: '_self'},
+        {text: '8.4.4-4（English）',   link: 'https://greatsql.cn/docs/8.4.4-4/en/',   target: '_self'},
+        {text: '8.0.32-27（简体中文）', link: 'https://greatsql.cn/docs/8.0.32-27/',   target: '_self'},
+        {text: '8.0.32-27（English）', link: 'https://greatsql.cn/docs/8.0.32-27/en/', target: '_self'},
         {text: '8.0.32-26', link: 'https://greatsql.cn/docs/8.0.32-26/', target: '_self'},
         {text: '8.0.32-25', link: 'https://greatsql.cn/docs/8.0.32-25/', target: '_self'},
         {text: '8.0.32-24', link: 'https://greatsql.cn/docs/8.0.32-24/', target: '_self'},
