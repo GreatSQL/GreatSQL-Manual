@@ -1,1 +1,3 @@
 .vuepress/dist/
+# 全文搜索构建产物（由 fulltext-search-async 插件每次构建自动生成）
+.vuepress/public/search-data.json
